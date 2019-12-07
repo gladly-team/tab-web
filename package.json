@@ -9,15 +9,16 @@
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\"",
-    "graphcool-init": "graphcool init --schema schema/init-schema.graphql",
-    "relay": "relay-compiler --src ./ --exclude '**/.next/**' '**/node_modules/**' '**/test/**'  '**/__generated__/**' --exclude '**/schema/**' --schema ./schema/schema.graphql",
-    "schema": "graphql get-schema exampleApp" 
+    "relay": "relay-compiler --src ./ --artifactDirectory ./relay/__generated__ --exclude '**/.next/**' '**/node_modules/**' '**/test/**'  '**/__generated__/**' --exclude '**/schema/**' --schema ./schema/schema.graphql",
+    "schema": "graphql get-schema exampleApp"
   },
   "dependencies": {
+    "isomorphic-unfetch": "^3.0.0",
     "next": "^9.1.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-relay": "^7.1.0"
+    "react-relay": "^7.1.0",
+    "relay-runtime": "^7.1.0"
   },
   "devDependencies": {
     "babel-plugin-relay": "^7.1.0",
