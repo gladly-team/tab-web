@@ -1,16 +1,24 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import withData from '../lib/withData'
 import BlogPosts from '../components/BlogPosts'
 
-const Index = props => (
-  <div>
-    <p>Hello Next.js</p>
+const Index = props => {
+  const { viewer } = props
+  return (
     <div>
-      <BlogPosts viewer={props.viewer} />
+      <p>Hello Next.js</p>
+      <div>
+        <BlogPosts viewer={viewer} />
+      </div>
     </div>
-  </div>
-)
+  )
+}
+
+Index.propTypes = {
+  viewer: PropTypes.shape({}).isRequired,
+}
 
 export default withData(Index, {
   query: graphql`
