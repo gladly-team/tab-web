@@ -3,21 +3,17 @@
 /* eslint react/jsx-props-no-spreading: 0 */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { UserContext, useAuth } from '../utils/auth/hooks'
+import { useAuth } from '../utils/auth/hooks'
 
 const App = props => {
   const { Component, pageProps } = props
-  const { initializing, user } = useAuth()
+  const { initializing } = useAuth()
 
   if (initializing) {
     return <div>Loading...</div>
   }
 
-  return (
-    <UserContext.Provider value={{ user }}>
-      <Component {...pageProps} />
-    </UserContext.Provider>
-  )
+  return <Component {...pageProps} />
 }
 
 App.propTypes = {
