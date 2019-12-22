@@ -11,7 +11,7 @@ const App = props => {
 
   // FIXME: we need to get the session on the server-side to
   // render HTML. Right now, the SSR only returns this "loading"
-  // message.
+  // message. Or, remove this to render the app with a null user.
   if (initializing) {
     return <div>Loading...</div>
   }
