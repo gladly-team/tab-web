@@ -9,6 +9,9 @@ const App = props => {
   const { Component, pageProps } = props
   const { initializing } = useAuth()
 
+  // FIXME: we need to get the session on the server-side to
+  // render HTML. Right now, the SSR only returns this "loading"
+  // message.
   if (initializing) {
     return <div>Loading...</div>
   }
