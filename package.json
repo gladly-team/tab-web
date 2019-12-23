@@ -13,6 +13,7 @@
     "schema": "graphql get-schema exampleApp"
   },
   "dependencies": {
+    "dotenv": "^8.2.0",
     "firebase": "^7.6.1",
     "isomorphic-unfetch": "^3.0.0",
     "lodash": "^4.17.15",

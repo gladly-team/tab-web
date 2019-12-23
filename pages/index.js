@@ -11,7 +11,7 @@ const Index = props => {
 
   return (
     <div>
-      <p>Hi there!</p>
+      <p>Hi there! {process.env.TEST_VAR}</p>
       {!user ? (
         <p>You are not signed in.</p>
       ) : (
