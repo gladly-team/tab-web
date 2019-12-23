@@ -17,7 +17,6 @@
 
 # misc
 .DS_Store
-.env*
 
 # debug
 npm-debug.log*
@@ -26,3 +25,7 @@ yarn-error.log*
 
 # Relay artifacts
 __generated__/
+
+# Local dotenv files
+# https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
+.env.*local
