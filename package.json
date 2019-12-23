@@ -9,7 +9,10 @@
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\"",
-    "relay": "relay-compiler --src ./ --artifactDirectory ./relay/__generated__ --exclude '**/.next/**' '**/node_modules/**' '**/test/**'  '**/__generated__/**' --exclude '**/schema/**' --schema ./schema/schema.graphql"
+    "relay": "relay-compiler --src ./ --artifactDirectory ./relay/__generated__ --exclude '**/.next/**' '**/node_modules/**' '**/test/**'  '**/__generated__/**' --exclude '**/schema/**' --schema ./schema/schema.graphql",
+    "graphql": "graphql",
+    "graphql:validate": "graphql validate",
+    "schema": "graphql codegen"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
@@ -25,6 +28,9 @@
     "relay-runtime": "^7.1.0"
   },
   "devDependencies": {
+    "@graphql-codegen/schema-ast": "^1.9.1",
+    "@test-graphql-cli/codegen": "^4.0.0-alpha-4fa9f36.520",
+    "@test-graphql-cli/validate": "^4.0.0-alpha-4fa9f36.520",
     "babel-plugin-relay": "^7.1.0",
     "eslint": "^6.7.2",
     "eslint-config-airbnb": "^18.0.1",
