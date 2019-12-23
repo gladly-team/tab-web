@@ -1,0 +1,4 @@
+projects:
+  default:
+    # TODO: add schema fetching
+    schema: schema/schema.graphql
