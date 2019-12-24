@@ -29,8 +29,8 @@
   },
   "devDependencies": {
     "@graphql-codegen/schema-ast": "^1.9.1",
-    "@test-graphql-cli/codegen": "^4.0.0-alpha-4fa9f36.520",
-    "@test-graphql-cli/validate": "^4.0.0-alpha-4fa9f36.520",
+    "@test-graphql-cli/codegen": "4.0.0-alpha-df0d2bc.481",
+    "@test-graphql-cli/validate": "4.0.0-alpha-df0d2bc.481",
     "babel-plugin-relay": "^7.1.0",
     "eslint": "^6.7.2",
     "eslint-config-airbnb": "^18.0.1",
@@ -40,7 +40,8 @@
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^2.3.0",
-    "graphql-cli": "^4.0.0-alpha-0097289.519",
+    "graphql": "^14.5.8",
+    "graphql-cli": "4.0.0-alpha-df0d2bc.481",
     "prettier": "^1.19.1",
     "relay-compiler": "^7.1.0"
   }
