@@ -1,7 +1,0 @@
-projects:
-  exampleApp:
-    schemaPath: schema/schema.graphql
-    extensions:
-      endpoints:
-        # TODO: env var
-        dev: https://api.graph.cool/relay/v1/next-js-with-relay-modern-example

@@ -26,6 +26,7 @@ yarn-error.log*
 # Relay artifacts
 __generated__/
 
-# Local dotenv files
+# Local dotenv files. We're following the file structure used in
+# create-react-app and documented in the Ruby dotenv:
 # https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
 .env.*local

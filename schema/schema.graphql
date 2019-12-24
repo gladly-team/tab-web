@@ -1,6 +1,3 @@
-# source: https://api.graph.cool/relay/v1/next-js-with-relay-modern-example
-# timestamp: Fri Dec 06 2019 15:24:02 GMT-0800 (Pacific Standard Time)
-
 type BlogPost implements Node {
   content: String!
   createdAt: DateTime!

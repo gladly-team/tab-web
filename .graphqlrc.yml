@@ -1,0 +1,8 @@
+projects:
+  default:
+    # TODO: load dotenv env vars when calling graphql-cli.
+    schema: ${RELAY_ENDPOINT}
+    extensions:
+      codegen:
+        ./schema/schema.graphql:
+            - schema-ast
