@@ -12,7 +12,7 @@
     "relay": "relay-compiler --src ./ --artifactDirectory ./relay/__generated__ --exclude '**/.next/**' '**/node_modules/**' '**/test/**'  '**/__generated__/**' --exclude '**/schema/**' --schema ./schema/schema.graphql",
     "graphql": "graphql",
     "graphql:validate": "graphql validate",
-    "schema": "graphql codegen"
+    "schema": "NODE_ENV=production graphql codegen"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
