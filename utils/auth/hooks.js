@@ -4,6 +4,7 @@ import React from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import initFirebase from './initFirebase'
+import { setSession } from './firebaseSessionHandler'
 
 initFirebase()
 
@@ -20,6 +21,9 @@ export const useAuth = () => {
 
   function onChange(user) {
     setState({ initializing: false, user })
+
+    // Call server to update session.
+    setSession(user)
   }
 
   React.useEffect(() => {

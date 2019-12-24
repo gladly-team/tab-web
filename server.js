@@ -51,6 +51,7 @@ app.prepare().then(() => {
     const { token } = req.body
     console.log('=== Token! ===', token)
 
+    // TODO
     // firebase
     //   .auth()
     //   .verifyIdToken(token)
@@ -61,7 +62,7 @@ app.prepare().then(() => {
     //   .then(decodedToken => res.json({ status: true, decodedToken }))
     //   .catch(error => res.json({ error }))
 
-    return undefined
+    return res.json({ status: true })
   })
 
   server.post('/api/logout', (req, res) => {
