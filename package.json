@@ -10,8 +10,8 @@
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\"",
     "relay": "relay-compiler --src ./ --artifactDirectory ./relay/__generated__ --exclude '**/.next/**' '**/node_modules/**' '**/test/**'  '**/__generated__/**' --exclude '**/schema/**' --schema ./schema/schema.graphql",
-    "graphql": "graphql",
-    "graphql:validate": "graphql validate",
+    "graphql": "NODE_ENV=production graphql",
+    "graphql:validate": "NODE_ENV=production graphql validate",
     "schema": "NODE_ENV=production graphql codegen"
   },
   "dependencies": {
