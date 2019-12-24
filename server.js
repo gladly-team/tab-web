@@ -48,8 +48,8 @@ app.prepare().then(() => {
       return res.sendStatus(400)
     }
 
-    const { token } = req.body
-    console.log('=== Token! ===', token)
+    // TODO
+    const { token } = req.body // eslint-disable-line
 
     // TODO
     // firebase

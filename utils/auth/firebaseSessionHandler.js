@@ -9,9 +9,6 @@ export const setSession = user => {
   // Log in.
   if (user) {
     return user.getIdToken().then(token => {
-      // eslint-disable-next-line
-      console.log('=== Token on client ===', token)
-
       return fetch('/api/login', {
         method: 'POST',
         // eslint-disable-next-line no-undef
