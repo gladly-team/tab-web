@@ -7,7 +7,9 @@ if (!NODE_ENV) {
   )
 }
 
-// Set env vars from appropiate `.env` files. See:
+// Set env vars from appropiate `.env` files. We're following the
+// file structure used in create-react-app and documented in the
+// Ruby dotenv. See:
 // https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
 const dotEnvPath = './.env'
 const dotEnvFiles = [
