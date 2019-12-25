@@ -29,11 +29,10 @@ const firebase = admin.initializeApp({
 
 // Ensure that session secrets are set.
 if (
-  !dev &&
   !(process.env.SESSION_SECRET_CURRENT && process.env.SESSION_SECRET_PREVIOUS)
 ) {
   throw new Error(
-    'Session secret must be set as env vars `SESSION_SECRET_CURRENT` and `SESSION_SECRET_PREVIOUS`.'
+    'Session secrets must be set as env vars `SESSION_SECRET_CURRENT` and `SESSION_SECRET_PREVIOUS`.'
   )
 }
 
@@ -56,7 +55,7 @@ app.prepare().then(() => {
       secret: sessionSecrets,
       saveUninitialized: true,
       // TODO: use another store, like DynamoDB
-      store: new FileStore({ secret: sessionSecrets }),
+      store: new FileStore({ secret: sessionSecrets[0] }),
       resave: false,
       rolling: true,
       httpOnly: true,
