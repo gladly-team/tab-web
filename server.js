@@ -8,19 +8,24 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const FileStore = require('session-file-store')(session)
 const next = require('next')
-// const admin = require('firebase-admin')
+const admin = require('firebase-admin')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
 
-// const firebase = admin.initializeApp(
-//   {
-//     credential: admin.credential.cert(require('./credentials/server')),
-//   },
-//   'server'
-// )
+const firebasePrivateKey = process.env.FIREBASE_PRIVATE_KEY
+
+const firebase = admin.initializeApp({
+  credential: admin.credential.cert({
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+    // https://stackoverflow.com/a/41044630/1332513
+    privateKey: firebasePrivateKey.replace(/\\n/g, '\n'),
+  }),
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+})
 
 app.prepare().then(() => {
   const server = express()
@@ -48,21 +53,19 @@ app.prepare().then(() => {
       return res.sendStatus(400)
     }
 
-    // TODO
-    const { token } = req.body // eslint-disable-line
+    const { token } = req.body
 
-    // TODO
-    // firebase
-    //   .auth()
-    //   .verifyIdToken(token)
-    //   .then(decodedToken => {
-    //     req.session.decodedToken = decodedToken
-    //     return decodedToken
-    //   })
-    //   .then(decodedToken => res.json({ status: true, decodedToken }))
-    //   .catch(error => res.json({ error }))
-
-    return res.json({ status: true })
+    firebase
+      .auth()
+      .verifyIdToken(token)
+      .then(decodedToken => {
+        // TODO
+        console.log('decoded token', decodedToken)
+        // req.session.decodedToken = decodedToken
+        return decodedToken
+      })
+      .then(decodedToken => res.json({ status: true, decodedToken }))
+      .catch(error => res.json({ error }))
   })
 
   server.post('/api/logout', (req, res) => {
