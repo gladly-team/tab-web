@@ -27,19 +27,44 @@ const firebase = admin.initializeApp({
   databaseURL: process.env.FIREBASE_DATABASE_URL,
 })
 
+// Ensure that session secrets are set.
+if (
+  !dev &&
+  !(process.env.SESSION_SECRET_CURRENT && process.env.SESSION_SECRET_PREVIOUS)
+) {
+  throw new Error(
+    'Session secret must be set as env vars `SESSION_SECRET_CURRENT` and `SESSION_SECRET_PREVIOUS`.'
+  )
+}
+
+// An array is useful for rotating secrets without invalidating old sessions.
+// "If an array of secrets is provided, only the first element will
+//  be used to sign the session ID cookie, while all the elements will
+//  be considered when verifying the signature in requests."
+// https://github.com/expressjs/session#secret
+const sessionSecrets = [
+  process.env.SESSION_SECRET_CURRENT,
+  process.env.SESSION_SECRET_PREVIOUS,
+]
+
 app.prepare().then(() => {
   const server = express()
 
   server.use(bodyParser.json())
   server.use(
     session({
-      secret: 'geheimnis', // FIXME: real secret
+      secret: sessionSecrets,
       saveUninitialized: true,
-      store: new FileStore({ secret: 'geheimnis' }), // FIXME: real secret
+      // TODO: use another store, like DynamoDB
+      store: new FileStore({ secret: sessionSecrets }),
       resave: false,
       rolling: true,
       httpOnly: true,
-      cookie: { maxAge: 604800000 }, // week
+      cookie: {
+        // TODO: set other options, such as "secure", "sameSite", etc.
+        // https://github.com/expressjs/session#cookie
+        maxAge: 604800000, // week
+      },
     })
   )
 
