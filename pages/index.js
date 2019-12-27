@@ -4,10 +4,6 @@ import { graphql } from 'react-relay'
 import withData from '../lib/withData'
 import BlogPosts from '../components/BlogPosts'
 
-// FIXME: we need to set up the Firebase auth client-side,
-// too. We may want to merge it with session logic.
-// import { useAuth } from '../utils/auth/hooks'
-
 const Index = props => {
   const { authUser, viewer } = props
 
