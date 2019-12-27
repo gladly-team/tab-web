@@ -88,6 +88,7 @@ app.prepare().then(() => {
 
   server.post('/api/logout', (req, res) => {
     req.session.decodedToken = null
+    req.session.token = null
     res.json({ status: true })
   })
 
