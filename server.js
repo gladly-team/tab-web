@@ -67,11 +67,6 @@ app.prepare().then(() => {
     })
   )
 
-  // server.use((req, res, next) => {
-  //   req.firebaseServer = firebase
-  //   next()
-  // })
-
   server.post('/api/login', (req, res) => {
     if (!req.body) {
       return res.sendStatus(400)
@@ -79,13 +74,12 @@ app.prepare().then(() => {
 
     const { token } = req.body
 
-    firebase
+    return firebase
       .auth()
       .verifyIdToken(token)
       .then(decodedToken => {
-        // TODO
-        console.log('decoded token', decodedToken)
-        // req.session.decodedToken = decodedToken
+        req.session.decodedToken = decodedToken
+        req.session.token = token
         return decodedToken
       })
       .then(decodedToken => res.json({ status: true, decodedToken }))
