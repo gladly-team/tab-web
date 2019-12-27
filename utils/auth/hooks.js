@@ -1,6 +1,6 @@
 /* eslint import/prefer-default-export: 0 */
 
-import React from 'react'
+import { useEffect, useState } from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import initFirebase from './initFirebase'
@@ -11,7 +11,7 @@ initFirebase()
 // https://benmcmahen.com/using-firebase-with-react-hooks/
 
 export const useAuth = () => {
-  const [state, setState] = React.useState(() => {
+  const [state, setState] = useState(() => {
     const user = firebase.auth().currentUser
     return {
       initializing: !user,
@@ -26,7 +26,7 @@ export const useAuth = () => {
     setSession(user)
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Listen for auth state changes.
     const unsubscribe = firebase.auth().onAuthStateChanged(onChange)
 

@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import { isClientSide } from '../utils/ssr'
+import initFirebase from '../utils/auth/initFirebase'
+
+// Init the Firebase app.
+initFirebase()
 
 const firebaseAuthConfig = {
   // Either 'popup' or 'redirect'
@@ -30,11 +35,23 @@ const firebaseAuthConfig = {
 }
 
 const FirebaseAuth = () => {
+  // Do not SSR FirebaseUI, because it is not supported.
+  // https://github.com/firebase/firebaseui-web/issues/213
+  const [renderAuth, setRenderAuth] = useState(false)
+  useEffect(() => {
+    if (isClientSide()) {
+      setRenderAuth(true)
+    }
+  }, [])
   return (
-    <StyledFirebaseAuth
-      uiConfig={firebaseAuthConfig}
-      firebaseAuth={firebase.auth()}
-    />
+    <div>
+      {renderAuth ? (
+        <StyledFirebaseAuth
+          uiConfig={firebaseAuthConfig}
+          firebaseAuth={firebase.auth()}
+        />
+      ) : null}
+    </div>
   )
 }
 
