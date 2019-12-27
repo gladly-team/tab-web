@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import withData from '../lib/withData'
 import BlogPosts from '../components/BlogPosts'
+import Link from '../components/Link'
 
 const Index = props => {
   const { authUser, viewer } = props
@@ -11,7 +12,12 @@ const Index = props => {
     <div>
       <p>Hi there!</p>
       {!authUser ? (
-        <p>You are not signed in.</p>
+        <p>
+          You are not signed in.{' '}
+          <Link to="/auth">
+            <a>Sign in</a>
+          </Link>
+        </p>
       ) : (
         <p>You're signed in. Email: {authUser.email}</p>
       )}
