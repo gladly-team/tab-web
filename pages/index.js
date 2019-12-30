@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import withData from '../lib/withData'
-import BlogPosts from '../components/BlogPosts'
 import Link from '../components/Link'
 
 const Index = props => {
-  const { authUser, viewer } = props
+  const { authUser, app } = props
+  const { moneyRaised } = app
 
   return (
     <div>
@@ -22,7 +22,7 @@ const Index = props => {
         <p>You're signed in. Email: {authUser.email}</p>
       )}
       <div>
-        <BlogPosts viewer={viewer} />
+        <div>Money raised: {moneyRaised}</div>
       </div>
     </div>
   )
@@ -32,7 +32,9 @@ Index.propTypes = {
   authUser: PropTypes.shape({
     email: PropTypes.string,
   }),
-  viewer: PropTypes.shape({}).isRequired,
+  app: PropTypes.shape({
+    moneyRaised: PropTypes.number.isRequired,
+  }).isRequired,
 }
 
 Index.defaultProps = {
@@ -42,8 +44,8 @@ Index.defaultProps = {
 export default withData(Index, {
   query: graphql`
     query pagesIndexQuery {
-      viewer {
-        ...BlogPosts_viewer
+      app {
+        moneyRaised
       }
     }
   `,
