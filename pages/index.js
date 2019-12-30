@@ -2,20 +2,24 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import withData from '../lib/withData'
-import { useAuth } from '../utils/auth/hooks'
 import BlogPosts from '../components/BlogPosts'
+import Link from '../components/Link'
 
 const Index = props => {
-  const { viewer } = props
-  const { user } = useAuth()
+  const { authUser, viewer } = props
 
   return (
     <div>
       <p>Hi there!</p>
-      {!user ? (
-        <p>You are not signed in.</p>
+      {!authUser ? (
+        <p>
+          You are not signed in.{' '}
+          <Link to="/auth">
+            <a>Sign in</a>
+          </Link>
+        </p>
       ) : (
-        <p>You're signed in. Email: {user.email}</p>
+        <p>You're signed in. Email: {authUser.email}</p>
       )}
       <div>
         <BlogPosts viewer={viewer} />
@@ -25,7 +29,14 @@ const Index = props => {
 }
 
 Index.propTypes = {
+  authUser: PropTypes.shape({
+    email: PropTypes.string,
+  }),
   viewer: PropTypes.shape({}).isRequired,
+}
+
+Index.defaultProps = {
+  authUser: null,
 }
 
 export default withData(Index, {

@@ -30,3 +30,6 @@ __generated__/
 # create-react-app and documented in the Ruby dotenv:
 # https://github.com/bkeepers/dotenv#what-other-env-files-can-i-use
 .env.*local
+
+# For server.js session storage.
+sessions
