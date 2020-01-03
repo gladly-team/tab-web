@@ -3,5 +3,21 @@
   "version": 2,
   "scope": "gladly-team",
   "cleanUrls": true,
-  "trailingSlash": true
+  "trailingSlash": true,
+  "env": {
+    "FIREBASE_CLIENT_EMAIL": "@environment-firebase-client-email",
+    "FIREBASE_DATABASE_URL": "@environment-firebase-database-url",
+    "FIREBASE_PRIVATE_KEY": "@environment-firebase-private-key",
+    "FIREBASE_PROJECT_ID": "@environment-firebase-project-id",
+  },
+  "build": {
+    "env": {
+      "FIREBASE_PUBLIC_API_KEY": "@environment-firebase-public-api-key",
+      "FIREBASE_AUTH_DOMAIN": "@environment-firebase-auth-domain",
+      "FIREBASE_DATABASE_URL": "@environment-firebase-database-url",
+      "FIREBASE_PROJECT_ID": "@environment-firebase-project-id",
+      "GRAPHQL_SCHEMA_LOCATION": "@environment-graphql-schema-location",
+      "RELAY_ENDPOINT": "@environment-relay-endpoint," 
+    }
+  }
 }
