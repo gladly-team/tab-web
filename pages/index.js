@@ -5,8 +5,9 @@ import withData from '../lib/withData'
 import Link from '../components/Link'
 
 const Index = props => {
-  const { authUser, app } = props
+  const { authUser, app, user } = props
   const { moneyRaised } = app
+  const { tabs, vcCurrent } = user
 
   return (
     <div>
@@ -23,6 +24,8 @@ const Index = props => {
       )}
       <div>
         <div>Money raised: {moneyRaised}</div>
+        <div>Tabs: {tabs}</div>
+        <div>Hearts: {vcCurrent}</div>
       </div>
     </div>
   )
@@ -35,6 +38,10 @@ Index.propTypes = {
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
   }).isRequired,
+  user: PropTypes.shape({
+    tabs: PropTypes.number.isRequired,
+    vcCurrent: PropTypes.number.isRequired,
+  }).isRequired,
 }
 
 Index.defaultProps = {
@@ -42,10 +49,15 @@ Index.defaultProps = {
 }
 
 export default withData(Index, {
+  // The withData HOC adds the userId variable.
   query: graphql`
-    query pagesIndexQuery {
+    query pagesIndexQuery($userId: String!) {
       app {
         moneyRaised
+      }
+      user(userId: $userId) {
+        tabs
+        vcCurrent
       }
     }
   `,
