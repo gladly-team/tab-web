@@ -67,6 +67,10 @@ app.prepare().then(() => {
     })
   )
 
+  // FIXME: these API endpoints aren't working on Now. Probably need
+  //   to define the custom server.js for deployment.
+  //   Or, we may want to use the serverless structure:
+  //   https://nextjs.org/docs/api-routes/introduction
   server.post('/api/login', (req, res) => {
     if (!req.body) {
       return res.sendStatus(400)
