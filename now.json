@@ -1,0 +1,7 @@
+{
+  "name": "tab-web",
+  "version": 2,
+  "scope": "gladly-team",
+  "cleanUrls": true,
+  "trailingSlash": true,
+}
