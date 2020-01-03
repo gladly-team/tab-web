@@ -5,19 +5,20 @@
   "cleanUrls": true,
   "trailingSlash": true,
   "env": {
-    "FIREBASE_CLIENT_EMAIL": "@environment-firebase-client-email",
-    "FIREBASE_DATABASE_URL": "@environment-firebase-database-url",
-    "FIREBASE_PRIVATE_KEY": "@environment-firebase-private-key",
-    "FIREBASE_PROJECT_ID": "@environment-firebase-project-id"
+    "FIREBASE_CLIENT_EMAIL": "next-js-firebase-admin-sdk@dev-tab-for-a-cause.iam.gserviceaccount.com",
+    "FIREBASE_DATABASE_URL": "https://dev-tab-for-a-cause.firebaseio.com",
+    // "FIREBASE_PRIVATE_KEY": "@environment-firebase-private-key",
+    "FIREBASE_PROJECT_ID": "dev-tab-for-a-cause"
   },
   "build": {
+    // TODO: use production values
     "env": {
-      "FIREBASE_PUBLIC_API_KEY": "@environment-firebase-public-api-key",
-      "FIREBASE_AUTH_DOMAIN": "@environment-firebase-auth-domain",
-      "FIREBASE_DATABASE_URL": "@environment-firebase-database-url",
-      "FIREBASE_PROJECT_ID": "@environment-firebase-project-id",
-      "GRAPHQL_SCHEMA_LOCATION": "@environment-graphql-schema-location",
-      "RELAY_ENDPOINT": "@environment-relay-endpoint"
+      "FIREBASE_PUBLIC_API_KEY": "AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4",
+      "FIREBASE_AUTH_DOMAIN": "dev-tab-for-a-cause.firebaseapp.com",
+      "FIREBASE_DATABASE_URL": "https://dev-tab-for-a-cause.firebaseio.com",
+      "FIREBASE_PROJECT_ID": "dev-tab-for-a-cause",
+      "GRAPHQL_SCHEMA_LOCATION": "./schema/schema.graphql",
+      "RELAY_ENDPOINT": "https://dev-tab2017.gladly.io/graphql"
     }
   }
 }
