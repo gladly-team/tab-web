@@ -7,11 +7,9 @@
   "env": {
     "FIREBASE_CLIENT_EMAIL": "next-js-firebase-admin-sdk@dev-tab-for-a-cause.iam.gserviceaccount.com",
     "FIREBASE_DATABASE_URL": "https://dev-tab-for-a-cause.firebaseio.com",
-    // "FIREBASE_PRIVATE_KEY": "@environment-firebase-private-key",
     "FIREBASE_PROJECT_ID": "dev-tab-for-a-cause"
   },
   "build": {
-    // TODO: use production values
     "env": {
       "FIREBASE_PUBLIC_API_KEY": "AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4",
       "FIREBASE_AUTH_DOMAIN": "dev-tab-for-a-cause.firebaseapp.com",
