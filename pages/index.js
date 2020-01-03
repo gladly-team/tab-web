@@ -44,7 +44,7 @@ Index.defaultProps = {
 export default withData(Index, {
   // The withData HOC adds the userId variable.
   query: graphql`
-    query pagesIndexQuery($userId: String!) {
+    query pagesIndexQuery {
       app {
         moneyRaised
       }
