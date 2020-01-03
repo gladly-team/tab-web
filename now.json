@@ -8,7 +8,7 @@
     "FIREBASE_CLIENT_EMAIL": "@environment-firebase-client-email",
     "FIREBASE_DATABASE_URL": "@environment-firebase-database-url",
     "FIREBASE_PRIVATE_KEY": "@environment-firebase-private-key",
-    "FIREBASE_PROJECT_ID": "@environment-firebase-project-id",
+    "FIREBASE_PROJECT_ID": "@environment-firebase-project-id"
   },
   "build": {
     "env": {
@@ -17,7 +17,7 @@
       "FIREBASE_DATABASE_URL": "@environment-firebase-database-url",
       "FIREBASE_PROJECT_ID": "@environment-firebase-project-id",
       "GRAPHQL_SCHEMA_LOCATION": "@environment-graphql-schema-location",
-      "RELAY_ENDPOINT": "@environment-relay-endpoint," 
+      "RELAY_ENDPOINT": "@environment-relay-endpoint"
     }
   }
 }
