@@ -5,14 +5,13 @@
 
 const express = require('express')
 const bodyParser = require('body-parser')
-const session = require('express-session')
-const FileStore = require('session-file-store')(session)
-const next = require('next')
+const cookieSession = require('cookie-session')
+const nextJs = require('next')
 const admin = require('firebase-admin')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
+const app = nextJs({ dev })
 const handle = app.getRequestHandler()
 
 const firebasePrivateKey = process.env.FIREBASE_PRIVATE_KEY
@@ -51,21 +50,23 @@ app.prepare().then(() => {
 
   server.use(bodyParser.json())
   server.use(
-    session({
-      secret: sessionSecrets,
-      saveUninitialized: true,
-      // TODO: use another store, like DynamoDB
-      store: new FileStore({ secret: sessionSecrets[0] }),
-      resave: false,
-      rolling: true,
+    cookieSession({
+      name: 'tabWebSession',
+      keys: sessionSecrets,
+      // TODO: set other options, such as "secure", "sameSite", etc.
+      // https://github.com/expressjs/cookie-session#cookie-options
+      maxAge: 604800000, // week
       httpOnly: true,
-      cookie: {
-        // TODO: set other options, such as "secure", "sameSite", etc.
-        // https://github.com/expressjs/session#cookie
-        maxAge: 604800000, // week
-      },
+      overwrite: true,
     })
   )
+
+  // Update a value in the cookie so that the set-cookie will be sent.
+  // Only changes every minute so that it's not sent with every request.
+  server.use((req, res, next) => {
+    req.session.nowInMinutes = Math.floor(Date.now() / 60e3)
+    next()
+  })
 
   // FIXME: these API endpoints aren't working on Now. Probably need
   //   to define the custom server.js for deployment.
