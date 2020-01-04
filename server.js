@@ -7,12 +7,10 @@
 require('./env')
 
 const express = require('express')
-const bodyParser = require('body-parser')
 const nextJs = require('next')
 
+const commonMiddleware = require('./utils/middleware/commonMiddleware')
 const { verifyIdToken } = require('./utils/auth/firebaseAdmin')
-const cookieSession = require('./utils/middleware/cookieSession')
-const cookieSessionRefresh = require('./utils/middleware/cookieSessionRefresh')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
@@ -22,12 +20,7 @@ const handle = app.getRequestHandler()
 app.prepare().then(() => {
   const server = express()
 
-  server.use(bodyParser.json())
-  server.use(cookieSession)
-
-  // Update a value in the cookie so that the set-cookie will be sent.
-  // Only changes every minute so that it's not sent with every request.
-  server.use(cookieSessionRefresh)
+  server.use(commonMiddleware)
 
   // FIXME: these API endpoints aren't working on Now. Probably need
   //   to define the custom server.js for deployment.
