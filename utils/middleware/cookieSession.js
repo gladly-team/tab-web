@@ -17,12 +17,19 @@ const sessionSecrets = [
   process.env.SESSION_SECRET_PREVIOUS,
 ]
 
-module.exports = cookieSession({
-  name: 'tabWebSession',
-  keys: sessionSecrets,
-  // TODO: set other options, such as "secure", "sameSite", etc.
-  // https://github.com/expressjs/cookie-session#cookie-options
-  maxAge: 604800000, // week
-  httpOnly: true,
-  overwrite: true,
-})
+module.exports = handler => (req, res) => {
+  const addSession = cookieSession({
+    name: 'tabWebSession',
+    keys: sessionSecrets,
+    // TODO: set other options, such as "secure", "sameSite", etc.
+    // https://github.com/expressjs/cookie-session#cookie-options
+    maxAge: 604800000, // week
+    httpOnly: true,
+    overwrite: true,
+  })
+
+  // Example:
+  // https://github.com/billymoon/micro-cookie-session
+  addSession(req, res, () => {})
+  return handler(req, res)
+}

@@ -1,5 +1,7 @@
-const bodyParser = require('body-parser')
 const cookieSession = require('./cookieSession')
 const cookieSessionRefresh = require('./cookieSessionRefresh')
 
-module.exports = [bodyParser.json(), cookieSession, cookieSessionRefresh]
+// Load environment variables.
+require('../../env')
+
+module.exports = handler => cookieSession(cookieSessionRefresh(handler))

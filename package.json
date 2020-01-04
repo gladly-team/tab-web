@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development node server.js",
+    "dev": "NODE_ENV=development next dev",
     "build": "NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production node server.js",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
