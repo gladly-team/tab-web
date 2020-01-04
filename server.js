@@ -12,6 +12,7 @@ const nextJs = require('next')
 
 const { verifyIdToken } = require('./utils/auth/firebaseAdmin')
 const cookieSession = require('./utils/middleware/cookieSession')
+const cookieSessionRefresh = require('./utils/middleware/cookieSessionRefresh')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
@@ -26,10 +27,7 @@ app.prepare().then(() => {
 
   // Update a value in the cookie so that the set-cookie will be sent.
   // Only changes every minute so that it's not sent with every request.
-  server.use((req, res, next) => {
-    req.session.nowInMinutes = Math.floor(Date.now() / 60e3)
-    next()
-  })
+  server.use(cookieSessionRefresh)
 
   // FIXME: these API endpoints aren't working on Now. Probably need
   //   to define the custom server.js for deployment.
