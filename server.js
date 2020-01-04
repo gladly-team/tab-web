@@ -36,10 +36,8 @@ if (
 }
 
 // An array is useful for rotating secrets without invalidating old sessions.
-// "If an array of secrets is provided, only the first element will
-//  be used to sign the session ID cookie, while all the elements will
-//  be considered when verifying the signature in requests."
-// https://github.com/expressjs/session#secret
+// The first will be used to sign cookies, and the rest to validate them.
+// https://github.com/expressjs/cookie-session#keys
 const sessionSecrets = [
   process.env.SESSION_SECRET_CURRENT,
   process.env.SESSION_SECRET_PREVIOUS,
