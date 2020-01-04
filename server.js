@@ -1,30 +1,22 @@
 /* eslint no-console: 0 */
 
-// From:
+// Adapted from:
 // https://github.com/zeit/next.js/blob/canary/examples/with-firebase-authentication/server.js
+
+// Load environment variables.
+require('./env')
 
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookieSession = require('cookie-session')
 const nextJs = require('next')
-const admin = require('firebase-admin')
+
+const { verifyIdToken } = require('./utils/auth/firebaseAdmin')
 
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
 const app = nextJs({ dev })
 const handle = app.getRequestHandler()
-
-const firebasePrivateKey = process.env.FIREBASE_PRIVATE_KEY
-
-const firebase = admin.initializeApp({
-  credential: admin.credential.cert({
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    // https://stackoverflow.com/a/41044630/1332513
-    privateKey: firebasePrivateKey.replace(/\\n/g, '\n'),
-  }),
-  databaseURL: process.env.FIREBASE_DATABASE_URL,
-})
 
 // Ensure that session secrets are set.
 if (
@@ -77,9 +69,7 @@ app.prepare().then(() => {
 
     const { token } = req.body
 
-    return firebase
-      .auth()
-      .verifyIdToken(token)
+    return verifyIdToken(token)
       .then(decodedToken => {
         req.session.decodedToken = decodedToken
         req.session.token = token
