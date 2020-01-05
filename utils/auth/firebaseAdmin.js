@@ -4,9 +4,8 @@ import * as admin from 'firebase-admin'
 const verifyIdToken = token => {
   const firebasePrivateKey = process.env.FIREBASE_PRIVATE_KEY
 
-  let firebase
   if (!admin.apps.length) {
-    firebase = admin.initializeApp({
+    admin.initializeApp({
       credential: admin.credential.cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
@@ -17,7 +16,7 @@ const verifyIdToken = token => {
     })
   }
 
-  return firebase
+  return admin
     .auth()
     .verifyIdToken(token)
     .catch(error => {
