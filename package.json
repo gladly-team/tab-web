@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "NODE_ENV=development next dev",
     "build": "NODE_ENV=production yarn run relay && next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "NODE_ENV=production next start",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\"",
