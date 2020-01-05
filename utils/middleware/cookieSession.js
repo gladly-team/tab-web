@@ -1,4 +1,4 @@
-const cookieSession = require('cookie-session')
+import cookieSession from 'cookie-session'
 
 // Ensure that session secrets are set.
 if (
@@ -17,7 +17,7 @@ const sessionSecrets = [
   process.env.SESSION_SECRET_PREVIOUS,
 ]
 
-module.exports = handler => (req, res) => {
+export default handler => (req, res) => {
   const addSession = cookieSession({
     name: 'tabWebSession',
     keys: sessionSecrets,

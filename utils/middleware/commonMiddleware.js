@@ -1,7 +1,7 @@
-const cookieSession = require('./cookieSession')
-const cookieSessionRefresh = require('./cookieSessionRefresh')
+import cookieSession from './cookieSession'
+import cookieSessionRefresh from './cookieSessionRefresh'
 
 // Load environment variables.
 require('../../env')
 
-module.exports = handler => cookieSession(cookieSessionRefresh(handler))
+export default handler => cookieSession(cookieSessionRefresh(handler))
