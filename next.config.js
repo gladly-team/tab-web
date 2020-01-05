@@ -1,6 +1,7 @@
 require('./env.js')
 
 module.exports = {
+  // Public, build-time env vars.
   // https://nextjs.org/docs#build-time-configuration
   env: {
     FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
