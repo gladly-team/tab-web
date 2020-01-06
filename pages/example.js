@@ -11,10 +11,7 @@ const Example = props => {
 
   return (
     <div>
-      <p>
-        This page is an example of using withUser with a component child (not a
-        render prop).
-      </p>
+      <p>This page does not use withUser.</p>
       <Link to="/">
         <a>Home</a>
       </Link>
@@ -48,14 +45,12 @@ Example.defaultProps = {
   authUser: null,
 }
 
-export default withUser(
-  withData(Example, {
-    query: graphql`
-      query exampleQuery {
-        app {
-          moneyRaised
-        }
+export default withData(Example, {
+  query: graphql`
+    query exampleQuery {
+      app {
+        moneyRaised
       }
-    `,
-  })
-)
+    }
+  `,
+})
