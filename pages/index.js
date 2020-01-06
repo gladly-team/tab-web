@@ -34,8 +34,6 @@ const Index = props => {
   )
 }
 
-Index.displayName = 'Index'
-
 Index.propTypes = {
   authUser: PropTypes.shape({
     email: PropTypes.string,
@@ -52,9 +50,9 @@ Index.defaultProps = {
 // TODO: once the deployed server is working, re-add user-specific
 // data removed in this PR:
 // https://github.com/gladly-team/tab-web/pull/10
-export default withUser(user => {
-  console.log('user', user)
-  return withData(Index, {
+export default withUser(
+  withData(Index, {
+    // The withData HOC adds the userId variable.
     query: graphql`
       query pagesIndexQuery {
         app {
@@ -63,4 +61,4 @@ export default withUser(user => {
       }
     `,
   })
-})
+)
