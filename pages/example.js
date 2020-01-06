@@ -5,13 +5,19 @@ import withData from '../lib/withData'
 import withUser from '../lib/withUser'
 import Link from '../components/Link'
 
-const Index = props => {
+const Example = props => {
   const { authUser, app } = props
   const { moneyRaised } = app
 
   return (
     <div>
-      <p>Hi there!</p>
+      <p>
+        This page is an example of using withUser with a component child (not a
+        render prop).
+      </p>
+      <Link to="/">
+        <a>Home</a>
+      </Link>
       {!authUser ? (
         <p>
           You are not signed in.{' '}
@@ -23,18 +29,13 @@ const Index = props => {
         <p>You're signed in. Email: {authUser.email}</p>
       )}
       <div>
-        <Link to="/example">
-          <a>Another example page</a>
-        </Link>
-      </div>
-      <div>
         <div>Money raised: {moneyRaised}</div>
       </div>
     </div>
   )
 }
 
-Index.propTypes = {
+Example.propTypes = {
   authUser: PropTypes.shape({
     email: PropTypes.string,
   }),
@@ -43,18 +44,14 @@ Index.propTypes = {
   }).isRequired,
 }
 
-Index.defaultProps = {
+Example.defaultProps = {
   authUser: null,
 }
 
-// TODO: once the deployed server is working, re-add user-specific
-// data removed in this PR:
-// https://github.com/gladly-team/tab-web/pull/10
 export default withUser(
-  withData(Index, {
-    // The withData HOC adds the userId variable.
+  withData(Example, {
     query: graphql`
-      query pagesIndexQuery {
+      query exampleQuery {
         app {
           moneyRaised
         }
