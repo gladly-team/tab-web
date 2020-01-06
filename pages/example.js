@@ -32,6 +32,8 @@ const Example = props => {
   )
 }
 
+Example.displayName = 'Example'
+
 Example.propTypes = {
   authUser: PropTypes.shape({
     email: PropTypes.string,

@@ -34,6 +34,8 @@ const Index = props => {
   )
 }
 
+Index.displayName = 'Index'
+
 Index.propTypes = {
   authUser: PropTypes.shape({
     email: PropTypes.string,
