@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import withData from '../lib/withData'
+import withUser from '../lib/withUser'
 import Link from '../components/Link'
 
 const Index = props => {
@@ -44,13 +45,15 @@ Index.defaultProps = {
 // TODO: once the deployed server is working, re-add user-specific
 // data removed in this PR:
 // https://github.com/gladly-team/tab-web/pull/10
-export default withData(Index, {
-  // The withData HOC adds the userId variable.
-  query: graphql`
-    query pagesIndexQuery {
-      app {
-        moneyRaised
+export default withUser(
+  withData(Index, {
+    // The withData HOC adds the userId variable.
+    query: graphql`
+      query pagesIndexQuery {
+        app {
+          moneyRaised
+        }
       }
-    }
-  `,
-})
+    `,
+  })
+)
