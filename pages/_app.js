@@ -17,12 +17,11 @@ const App = props => {
   // Note: we need to destroy the session when logging out with the Firebase
   // JS SDK.
   const { user: authUserFromClient } = useAuth()
-  console.log('_app.js authUserFromClient', authUserFromClient)
   const authUser =
     createAuthUser(authUserFromClient) || authUserFromSession || null
 
   return (
-    <UserContext.Provider value={authUser}>
+    <UserContext.Provider value={{ user: authUser, userToken: authUserToken }}>
       <Component {...pageProps} />
     </UserContext.Provider>
   )
@@ -43,10 +42,9 @@ App.getInitialProps = async ({ Component, ctx }) => {
   const authUserToken = get(req, 'session.token', null)
 
   // Explicitly add the user to a custom prop in the getInitialProps
-  // context for ease of use.
+  // context for ease of use in child components.
   set(ctx, 'tabCustomData.authUser', authUserFromSession)
   set(ctx, 'tabCustomData.authUserToken', authUserToken)
-  console.log('_app.js authUserFromSession', authUserFromSession)
 
   let pageProps = {}
   if (Component.getInitialProps) {

@@ -12,12 +12,13 @@ initFirebase()
 
 export const UserContext = React.createContext({
   user: null,
+  userToken: null,
 })
 
-// export const useSession = () => {
-//   const { user } = React.useContext(UserContext)
-//   return user
-// }
+export const useAuthUser = () => {
+  const { user } = React.useContext(UserContext)
+  return user
+}
 
 export const useAuth = () => {
   const [state, setState] = useState(() => {
