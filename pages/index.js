@@ -56,9 +56,6 @@ Index.defaultProps = {
   authUser: null,
 }
 
-// TODO: once the deployed server is working, re-add user-specific
-// data removed in this PR:
-// https://github.com/gladly-team/tab-web/pull/10
 export default withUser(
   withData(Index, authUser => {
     const userId = authUser.uid
