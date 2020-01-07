@@ -2,11 +2,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
+import withAuthUserInfo from '../lib/withAuthUserInfo'
 import withData from '../lib/withData'
 import Link from '../components/Link'
 
 const Index = props => {
-  const { AuthUser, app, user } = props
+  const { AuthUserInfo, app, user } = props
+  const AuthUser = get(AuthUserInfo, 'AuthUser', null)
   const { moneyRaised } = app
   const { tabs, vcCurrent } = user
 
@@ -40,10 +42,13 @@ const Index = props => {
 Index.displayName = 'Index'
 
 Index.propTypes = {
-  AuthUser: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    emailVerified: PropTypes.bool.isRequired,
+  AuthUserInfo: PropTypes.shape({
+    AuthUser: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      emailVerified: PropTypes.bool.isRequired,
+    }),
+    token: PropTypes.string,
   }),
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
@@ -55,10 +60,10 @@ Index.propTypes = {
 }
 
 Index.defaultProps = {
-  AuthUser: null,
+  AuthUserInfo: null,
 }
 
-export default withData(Index, authUser => {
+export default withData(withAuthUserInfo(Index), authUser => {
   const userId = get(authUser, 'id')
   return {
     query: graphql`
