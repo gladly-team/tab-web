@@ -35,17 +35,12 @@ const Example = props => {
 Example.displayName = 'Example'
 
 Example.propTypes = {
-  authUser: PropTypes.shape({
-    email: PropTypes.string,
-  }),
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
   }).isRequired,
 }
 
-Example.defaultProps = {
-  authUser: null,
-}
+Example.defaultProps = {}
 
 export default withData(Example, () => ({
   query: graphql`

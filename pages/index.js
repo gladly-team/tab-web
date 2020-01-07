@@ -42,6 +42,7 @@ Index.displayName = 'Index'
 
 Index.propTypes = {
   authUser: PropTypes.shape({
+    id: PropTypes.string,
     email: PropTypes.string,
   }),
   app: PropTypes.shape({
@@ -59,7 +60,7 @@ Index.defaultProps = {
 
 export default withUser(
   withData(Index, authUser => {
-    const userId = get(authUser, 'uid')
+    const userId = get(authUser, 'id')
     return {
       query: graphql`
         query pagesIndexQuery($userId: String!) {
