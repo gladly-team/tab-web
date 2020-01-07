@@ -18,15 +18,9 @@ const App = props => {
   // Note: we need to destroy the session when logging out with the Firebase
   // JS SDK. We also need to destroy the "__TAB_WEB_AUTH_USER_INFO" script.
   const { user: firebaseUser } = useFirebaseAuth()
-  console.log('firebaseUser', firebaseUser)
   const AuthUserFromClient = createAuthUser(firebaseUser)
   const { AuthUser: AuthUserFromSession, token } = AuthUserInfo
   const AuthUser = AuthUserFromClient || AuthUserFromSession || null
-
-  console.log('AuthUserFromSession', AuthUserFromSession)
-  console.log('AuthUserFromClient', AuthUserFromClient)
-  console.log('AuthUser', AuthUser)
-
   return (
     <AuthUserInfoContext.Provider value={{ AuthUser, token }}>
       <Component {...pageProps} />
