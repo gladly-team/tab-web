@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
 import withData from '../lib/withData'
-import withUser from '../lib/withUser'
 import Link from '../components/Link'
 
 const Index = props => {

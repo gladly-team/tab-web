@@ -15,7 +15,7 @@ const Example = props => {
         console.log('AuthUser value:', value)
         return (
           <div>
-            <p>This page does not use withUser.</p>
+            <p>This page does not require user auth.</p>
             <Link to="/">
               <a>Home</a>
             </Link>
