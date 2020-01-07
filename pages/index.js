@@ -53,14 +53,17 @@ Index.defaultProps = {
 // data removed in this PR:
 // https://github.com/gladly-team/tab-web/pull/10
 export default withUser(
-  withData(Index, {
-    // The withData HOC adds the userId variable.
-    query: graphql`
-      query pagesIndexQuery {
-        app {
-          moneyRaised
+  withData(Index, authUser => {
+    const userId = authUser.uid
+    console.log('userId', userId)
+    return {
+      query: graphql`
+        query pagesIndexQuery {
+          app {
+            moneyRaised
+          }
         }
-      }
-    `,
+      `,
+    }
   })
 )
