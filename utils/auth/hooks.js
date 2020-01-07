@@ -1,6 +1,6 @@
 /* eslint import/prefer-default-export: 0 */
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import initFirebase from './initFirebase'
@@ -9,6 +9,15 @@ import { setSession } from './firebaseSessionHandler'
 initFirebase()
 
 // https://benmcmahen.com/using-firebase-with-react-hooks/
+
+export const UserContext = React.createContext({
+  user: null,
+})
+
+// export const useSession = () => {
+//   const { user } = React.useContext(UserContext)
+//   return user
+// }
 
 export const useAuth = () => {
   const [state, setState] = useState(() => {
