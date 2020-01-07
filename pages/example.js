@@ -12,6 +12,7 @@ const Example = props => {
   return (
     <UserContext.Consumer>
       {value => {
+        // TODO: create HOC
         console.log('AuthUser value:', value)
         return (
           <div>

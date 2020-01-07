@@ -6,8 +6,11 @@ import Document, { Html, Head, Main, NextScript } from 'next/document'
 
 class CustomDocument extends Document {
   render() {
+    // Store initial props from request data that we need to use again on
+    // the client. See:
     // https://github.com/zeit/next.js/issues/3043#issuecomment-334521241
     // https://github.com/zeit/next.js/issues/2252#issuecomment-353992669
+    // Alternatively, we can use a store, like Redux.
     const { authUserFromSession, authUserToken } = this.props
     const authInfo = {
       authUserFromSession,

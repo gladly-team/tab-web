@@ -1,4 +1,5 @@
 /* eslint react/jsx-props-no-spreading: 0 */
+/* globals window */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { get, set } from 'lodash/object'
@@ -30,16 +31,28 @@ const App = props => {
 App.getInitialProps = async ({ Component, ctx }) => {
   const { req, res } = ctx
 
-  // Add session info to the request.
+  // Get the AuthUser object and token.
+  let authUserFromSession = null
+  let authUserToken = null
   if (isServerSide()) {
+    // If server-side, get session info from the request.
     addSession(req, res)
+    authUserFromSession = createAuthUser(get(req, 'session.decodedToken', null))
+    authUserToken = get(req, 'session.token', null)
+  } else {
+    // If client-side, get the auth info from stored data. We store it
+    // in _document.js. See:
+    // https://github.com/zeit/next.js/issues/2252#issuecomment-353992669
+    try {
+      const sessionInfo = JSON.parse(
+        window.document.getElementById('__TAB_WEB_AUTH_INFO').textContent
+      )
+      ;({ authUserFromSession, authUserToken } = sessionInfo)
+    } catch (e) {
+      // TODO: log error
+      console.error(e) // eslint-disable-line no-console
+    }
   }
-
-  // Get the user and user token from the session.
-  const authUserFromSession = createAuthUser(
-    get(req, 'session.decodedToken', null)
-  )
-  const authUserToken = get(req, 'session.token', null)
 
   // Explicitly add the user to a custom prop in the getInitialProps
   // context for ease of use in child components.
