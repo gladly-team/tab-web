@@ -3,24 +3,24 @@ import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import withData from '../lib/withData'
 import Link from '../components/Link'
-import { UserContext } from '../utils/auth/hooks'
+import { AuthUserInfoContext } from '../utils/auth/hooks'
 
 const Example = props => {
-  const { authUser, app } = props
+  const { AuthUser, app } = props
   const { moneyRaised } = app
 
   return (
-    <UserContext.Consumer>
-      {value => {
+    <AuthUserInfoContext.Consumer>
+      {AuthUserInfo => {
         // TODO: create HOC
-        console.log('AuthUser value:', value)
+        console.log('AuthUserInfo value:', AuthUserInfo)
         return (
           <div>
             <p>This page does not require user auth.</p>
             <Link to="/">
               <a>Home</a>
             </Link>
-            {!authUser ? (
+            {!AuthUser ? (
               <p>
                 You are not signed in.{' '}
                 <Link to="/auth">
@@ -28,7 +28,7 @@ const Example = props => {
                 </Link>
               </p>
             ) : (
-              <p>You're signed in. Email: {authUser.email}</p>
+              <p>You're signed in. Email: {AuthUser.email}</p>
             )}
             <div>
               <div>Money raised: {moneyRaised}</div>
@@ -36,7 +36,7 @@ const Example = props => {
           </div>
         )
       }}
-    </UserContext.Consumer>
+    </AuthUserInfoContext.Consumer>
   )
 }
 
@@ -46,14 +46,15 @@ Example.propTypes = {
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
   }).isRequired,
-  authUser: PropTypes.shape({
-    id: PropTypes.string,
-    email: PropTypes.string,
+  AuthUser: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    emailVerified: PropTypes.bool.isRequired,
   }),
 }
 
 Example.defaultProps = {
-  authUser: null,
+  AuthUser: null,
 }
 
 export default withData(Example, () => ({

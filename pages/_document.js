@@ -11,19 +11,15 @@ class CustomDocument extends Document {
     // https://github.com/zeit/next.js/issues/3043#issuecomment-334521241
     // https://github.com/zeit/next.js/issues/2252#issuecomment-353992669
     // Alternatively, we can use a store, like Redux.
-    const { authUserFromSession, authUserToken } = this.props
-    const authInfo = {
-      authUserFromSession,
-      authUserToken,
-    }
+    const { AuthUserInfo } = this.props
     return (
       <Html>
         <Head>
           <script
-            id="__TAB_WEB_AUTH_INFO"
+            id="__TAB_WEB_AUTH_USER_INFO"
             type="application/json"
             dangerouslySetInnerHTML={{
-              __html: JSON.stringify(authInfo, null, 2),
+              __html: JSON.stringify(AuthUserInfo, null, 2),
             }}
           />
         </Head>
@@ -37,21 +33,22 @@ class CustomDocument extends Document {
 }
 
 CustomDocument.getInitialProps = async ctx => {
-  // Get the AuthUser and user token. This is set in _app.js.
-  const authUserFromSession = get(ctx, 'tabCustomData.authUser', null)
-  const authUserToken = get(ctx, 'tabCustomData.authUserToken', null)
+  // Get the AuthUserInfo object. This is set in _app.js.
+  const AuthUserInfo = get(ctx, 'tabCustomData.AuthUserInfo', null)
 
   const initialProps = await Document.getInitialProps(ctx)
-  return { ...initialProps, authUserFromSession, authUserToken }
+  return { ...initialProps, AuthUserInfo }
 }
 
 CustomDocument.propTypes = {
-  authUserFromSession: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    emailVerified: PropTypes.bool.isRequired,
-  }),
-  authUserToken: PropTypes.string,
+  AuthUserInfo: PropTypes.shape({
+    AuthUser: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      emailVerified: PropTypes.bool.isRequired,
+    }),
+    token: PropTypes.string,
+  }).isRequired,
 }
 
 export default CustomDocument

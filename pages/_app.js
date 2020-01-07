@@ -3,51 +3,57 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { get, set } from 'lodash/object'
-import { UserContext, useAuth } from '../utils/auth/hooks'
-import { createAuthUser } from '../utils/auth/user'
+import { AuthUserInfoContext, useFirebaseAuth } from '../utils/auth/hooks'
+import { createAuthUser, createAuthUserInfo } from '../utils/auth/user'
 import { addSession } from '../utils/middleware/cookieSession'
 import { isServerSide } from '../utils/ssr'
 
 const App = props => {
-  const { authUserFromSession, authUserToken, Component, pageProps } = props
+  const { AuthUserInfo, Component, pageProps } = props
 
   // We'll use the authed user from client-side auth (Firebase JS SDK)
   // when available. On the server side, we'll use the authed user from
   // the session. This allows us to server-render while also using Firebase's
   // client-side auth functionality.
   // Note: we need to destroy the session when logging out with the Firebase
-  // JS SDK.
-  const { user: authUserFromClient } = useAuth()
-  const authUser =
-    createAuthUser(authUserFromClient) || authUserFromSession || null
+  // JS SDK. We also need to destroy the "__TAB_WEB_AUTH_USER_INFO" script.
+  const { user: firebaseUser } = useFirebaseAuth()
+  console.log('firebaseUser', firebaseUser)
+  const AuthUserFromClient = createAuthUser(firebaseUser)
+  const { AuthUser: AuthUserFromSession, token } = AuthUserInfo
+  const AuthUser = AuthUserFromClient || AuthUserFromSession || null
+
+  console.log('AuthUserFromSession', AuthUserFromSession)
+  console.log('AuthUserFromClient', AuthUserFromClient)
+  console.log('AuthUser', AuthUser)
 
   return (
-    <UserContext.Provider value={{ user: authUser, userToken: authUserToken }}>
+    <AuthUserInfoContext.Provider value={{ AuthUser, token }}>
       <Component {...pageProps} />
-    </UserContext.Provider>
+    </AuthUserInfoContext.Provider>
   )
 }
 
 App.getInitialProps = async ({ Component, ctx }) => {
   const { req, res } = ctx
 
-  // Get the AuthUser object and token.
-  let authUserFromSession = null
-  let authUserToken = null
+  // Get the AuthUserInfo object.
+  let AuthUserInfo
   if (isServerSide()) {
-    // If server-side, get session info from the request.
+    // If server-side, get AuthUserInfo from the session in the request.
     addSession(req, res)
-    authUserFromSession = createAuthUser(get(req, 'session.decodedToken', null))
-    authUserToken = get(req, 'session.token', null)
+    AuthUserInfo = createAuthUserInfo({
+      firebaseUser: get(req, 'session.decodedToken', null),
+      token: get(req, 'session.token', null),
+    })
   } else {
-    // If client-side, get the auth info from stored data. We store it
+    // If client-side, get AuthUserInfo from stored data. We store it
     // in _document.js. See:
     // https://github.com/zeit/next.js/issues/2252#issuecomment-353992669
     try {
-      const sessionInfo = JSON.parse(
-        window.document.getElementById('__TAB_WEB_AUTH_INFO').textContent
+      AuthUserInfo = JSON.parse(
+        window.document.getElementById('__TAB_WEB_AUTH_USER_INFO').textContent
       )
-      ;({ authUserFromSession, authUserToken } = sessionInfo)
     } catch (e) {
       // TODO: log error
       console.error(e) // eslint-disable-line no-console
@@ -56,8 +62,7 @@ App.getInitialProps = async ({ Component, ctx }) => {
 
   // Explicitly add the user to a custom prop in the getInitialProps
   // context for ease of use in child components.
-  set(ctx, 'tabCustomData.authUser', authUserFromSession)
-  set(ctx, 'tabCustomData.authUserToken', authUserToken)
+  set(ctx, 'tabCustomData.AuthUserInfo', AuthUserInfo)
 
   let pageProps = {}
   if (Component.getInitialProps) {
@@ -65,26 +70,25 @@ App.getInitialProps = async ({ Component, ctx }) => {
   }
   return {
     pageProps,
-    authUserFromSession,
-    authUserToken,
+    AuthUserInfo,
   }
 }
 
 App.propTypes = {
-  authUserFromSession: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    emailVerified: PropTypes.bool.isRequired,
-  }),
-  authUserToken: PropTypes.string,
+  AuthUserInfo: PropTypes.shape({
+    AuthUser: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      emailVerified: PropTypes.bool.isRequired,
+    }),
+    token: PropTypes.string,
+  }).isRequired,
   Component: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   pageProps: PropTypes.object,
 }
 
 App.defaultProps = {
-  authUserFromSession: null,
-  authUserToken: null,
   pageProps: {},
 }
 

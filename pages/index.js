@@ -6,14 +6,14 @@ import withData from '../lib/withData'
 import Link from '../components/Link'
 
 const Index = props => {
-  const { authUser, app, user } = props
+  const { AuthUser, app, user } = props
   const { moneyRaised } = app
   const { tabs, vcCurrent } = user
 
   return (
     <div>
       <p>Hi there!</p>
-      {!authUser ? (
+      {!AuthUser ? (
         <p>
           You are not signed in.{' '}
           <Link to="/auth">
@@ -21,7 +21,7 @@ const Index = props => {
           </Link>
         </p>
       ) : (
-        <p>You're signed in. Email: {authUser.email}</p>
+        <p>You're signed in. Email: {AuthUser.email}</p>
       )}
       <div>
         <Link to="/example">
@@ -40,9 +40,10 @@ const Index = props => {
 Index.displayName = 'Index'
 
 Index.propTypes = {
-  authUser: PropTypes.shape({
-    id: PropTypes.string,
-    email: PropTypes.string,
+  AuthUser: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    emailVerified: PropTypes.bool.isRequired,
   }),
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
@@ -54,7 +55,7 @@ Index.propTypes = {
 }
 
 Index.defaultProps = {
-  authUser: null,
+  AuthUser: null,
 }
 
 export default withData(Index, authUser => {
