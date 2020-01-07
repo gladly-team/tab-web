@@ -47,7 +47,7 @@ Example.defaultProps = {
   authUser: null,
 }
 
-export default withData(Example, {
+export default withData(Example, () => ({
   query: graphql`
     query exampleQuery {
       app {
@@ -55,4 +55,4 @@ export default withData(Example, {
       }
     }
   `,
-})
+}))
