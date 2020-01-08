@@ -1,21 +1,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { get } from 'lodash/object'
 import { graphql } from 'react-relay'
 import withData from '../lib/withData'
-import withUser from '../lib/withUser'
 import Link from '../components/Link'
 
 const Example = props => {
-  const { authUser, app } = props
+  const { AuthUserInfo, app } = props
+  const AuthUser = get(AuthUserInfo, 'AuthUser', null)
   const { moneyRaised } = app
 
   return (
     <div>
-      <p>This page does not use withUser.</p>
+      <p>
+        This page does not call withAuthUserInfo, so it will not know if you're
+        signed in.
+      </p>
       <Link to="/">
         <a>Home</a>
       </Link>
-      {!authUser ? (
+      {!AuthUser ? (
         <p>
           You are not signed in.{' '}
           <Link to="/auth">
@@ -23,7 +27,7 @@ const Example = props => {
           </Link>
         </p>
       ) : (
-        <p>You're signed in. Email: {authUser.email}</p>
+        <p>You're signed in. Email: {AuthUser.email}</p>
       )}
       <div>
         <div>Money raised: {moneyRaised}</div>
@@ -38,9 +42,19 @@ Example.propTypes = {
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
   }).isRequired,
+  AuthUserInfo: PropTypes.shape({
+    AuthUser: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      emailVerified: PropTypes.bool.isRequired,
+    }),
+    token: PropTypes.string,
+  }),
 }
 
-Example.defaultProps = {}
+Example.defaultProps = {
+  AuthUserInfo: null,
+}
 
 export default withData(Example, () => ({
   query: graphql`

@@ -1,16 +1,25 @@
 /* eslint import/prefer-default-export: 0 */
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import initFirebase from './initFirebase'
 import { setSession } from './firebaseSessionHandler'
+import { createAuthUserInfo } from './user'
 
 initFirebase()
 
 // https://benmcmahen.com/using-firebase-with-react-hooks/
 
-export const useAuth = () => {
+// Defaults to empty AuthUserInfo object.
+export const AuthUserInfoContext = React.createContext(createAuthUserInfo())
+
+export const useAuthUserInfo = () => {
+  return React.useContext(AuthUserInfoContext)
+}
+
+// Returns a Firebase JS SDK user object.
+export const useFirebaseAuth = () => {
   const [state, setState] = useState(() => {
     const user = firebase.auth().currentUser
     return {

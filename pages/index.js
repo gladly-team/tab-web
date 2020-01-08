@@ -2,19 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
+import withAuthUserInfo from '../lib/withAuthUserInfo'
 import withData from '../lib/withData'
-import withUser from '../lib/withUser'
 import Link from '../components/Link'
 
 const Index = props => {
-  const { authUser, app, user } = props
+  const { AuthUserInfo, app, user } = props
+  const AuthUser = get(AuthUserInfo, 'AuthUser', null)
   const { moneyRaised } = app
   const { tabs, vcCurrent } = user
 
   return (
     <div>
       <p>Hi there!</p>
-      {!authUser ? (
+      {!AuthUser ? (
         <p>
           You are not signed in.{' '}
           <Link to="/auth">
@@ -22,7 +23,7 @@ const Index = props => {
           </Link>
         </p>
       ) : (
-        <p>You're signed in. Email: {authUser.email}</p>
+        <p>You're signed in. Email: {AuthUser.email}</p>
       )}
       <div>
         <Link to="/example">
@@ -41,9 +42,13 @@ const Index = props => {
 Index.displayName = 'Index'
 
 Index.propTypes = {
-  authUser: PropTypes.shape({
-    id: PropTypes.string,
-    email: PropTypes.string,
+  AuthUserInfo: PropTypes.shape({
+    AuthUser: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      email: PropTypes.string.isRequired,
+      emailVerified: PropTypes.bool.isRequired,
+    }),
+    token: PropTypes.string,
   }),
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
@@ -55,27 +60,25 @@ Index.propTypes = {
 }
 
 Index.defaultProps = {
-  authUser: null,
+  AuthUserInfo: null,
 }
 
-export default withUser(
-  withData(Index, authUser => {
-    const userId = get(authUser, 'id')
-    return {
-      query: graphql`
-        query pagesIndexQuery($userId: String!) {
-          app {
-            moneyRaised
-          }
-          user(userId: $userId) {
-            tabs
-            vcCurrent
-          }
+export default withData(withAuthUserInfo(Index), authUser => {
+  const userId = get(authUser, 'id')
+  return {
+    query: graphql`
+      query pagesIndexQuery($userId: String!) {
+        app {
+          moneyRaised
         }
-      `,
-      variables: {
-        userId,
-      },
-    }
-  })
-)
+        user(userId: $userId) {
+          tabs
+          vcCurrent
+        }
+      }
+    `,
+    variables: {
+      userId,
+    },
+  }
+})
