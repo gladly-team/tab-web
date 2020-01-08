@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import { graphql } from 'react-relay'
-import withData from '../lib/withData'
+import withData from '../utils/pageWrappers/withData'
 import Link from '../components/Link'
 
 const Example = props => {
