@@ -3,7 +3,6 @@
   "version": 2,
   "scope": "gladly-team",
   "cleanUrls": true,
-  "trailingSlash": true,
   "rewrites": [
     { "source": "/v4/(.*)", "destination": "/$1" }
   ],
