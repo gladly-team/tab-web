@@ -9,9 +9,15 @@
 // https://github.com/zeit/next.js/pull/9872/files
 // A Next.js RFC to support custom routes:
 // https://github.com/zeit/next.js/issues/9081
-const BASE_PATH = process.env.BASE_PATH || ''
+const URLS_BASE_PATH = process.env.URLS_BASE_PATH || ''
 
-const withBasePath = path => `${BASE_PATH}${path}`
+// The trailing slash doesn't work in development:
+// https://github.com/zeit/next.js/issues/5214
+// But we want to use it in production.
+const URLS_USE_TRAILING_SLASH = process.env.URLS_USE_TRAILING_SLASH === 'true'
+
+const withBasePath = path =>
+  `${URLS_BASE_PATH}${path}${URLS_USE_TRAILING_SLASH ? '/' : ''}`
 
 export const apiLogin = withBasePath('/api/login')
 export const apiLogout = withBasePath('/api/logout')
