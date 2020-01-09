@@ -4,7 +4,6 @@
   "scope": "gladly-team",
   "cleanUrls": true,
   "trailingSlash": true,
-  // https://zeit.co/docs/configuration#project/rewrites
   "rewrites": [
     { "source": "/(.*)", "destination": "/v4/$1" }
   ],
