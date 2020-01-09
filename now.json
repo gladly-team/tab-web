@@ -4,6 +4,9 @@
   "scope": "gladly-team",
   "cleanUrls": true,
   "trailingSlash": true,
+  "rewrites": [
+    { "source": "/v4/(.*)", "destination": "/$1" }
+  ],
   "env": {
     "FIREBASE_CLIENT_EMAIL": "next-js-firebase-admin-sdk@dev-tab-for-a-cause.iam.gserviceaccount.com",
     "FIREBASE_DATABASE_URL": "https://dev-tab-for-a-cause.firebaseio.com",
