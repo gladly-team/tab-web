@@ -4,6 +4,10 @@
   "scope": "gladly-team",
   "cleanUrls": true,
   "trailingSlash": true,
+  // https://zeit.co/docs/configuration#project/rewrites
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/v4/$1" }
+  ],
   "env": {
     "FIREBASE_CLIENT_EMAIL": "next-js-firebase-admin-sdk@dev-tab-for-a-cause.iam.gserviceaccount.com",
     "FIREBASE_DATABASE_URL": "https://dev-tab-for-a-cause.firebaseio.com",
