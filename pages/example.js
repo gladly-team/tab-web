@@ -4,6 +4,7 @@ import { get } from 'lodash/object'
 import { graphql } from 'react-relay'
 import withData from '../utils/pageWrappers/withData'
 import Link from '../components/Link'
+import { authURL, dashboardURL } from '../utils/urls'
 
 const Example = props => {
   const { AuthUserInfo, app } = props
@@ -16,13 +17,13 @@ const Example = props => {
         This page does not call withAuthUserInfo, so it will not know if you're
         signed in.
       </p>
-      <Link to="/">
+      <Link to={dashboardURL}>
         <a>Home</a>
       </Link>
       {!AuthUser ? (
         <p>
           You are not signed in.{' '}
-          <Link to="/auth">
+          <Link to={authURL}>
             <a>Sign in</a>
           </Link>
         </p>

@@ -1,6 +1,7 @@
 require('./env.js')
 
 module.exports = {
+  exportTrailingSlash: true,
   // Public, build-time env vars.
   // https://nextjs.org/docs#build-time-configuration
   env: {
@@ -10,5 +11,7 @@ module.exports = {
     FIREBASE_PUBLIC_API_KEY: process.env.FIREBASE_PUBLIC_API_KEY,
     GRAPHQL_SCHEMA_LOCATION: process.env.GRAPHQL_SCHEMA_LOCATION,
     RELAY_ENDPOINT: process.env.RELAY_ENDPOINT,
+    URLS_BASE_PATH: process.env.URLS_BASE_PATH, // @area/workaround/next-js-base-path
+    URLS_USE_TRAILING_SLASH: process.env.URLS_USE_TRAILING_SLASH,
   },
 }
