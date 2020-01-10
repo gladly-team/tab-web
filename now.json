@@ -7,7 +7,7 @@
     { "source": "/v4/(.*)", "destination": "/$1" }
   ],
   "env": {
-    "FIREBASE_CLIENT_EMAIL": "next-js-firebase-admin-sdk@dev-tab-for-a-cause.iam.gserviceaccount.com",
+    "FIREBASE_CLIENT_EMAIL": "firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com",
     "FIREBASE_DATABASE_URL": "https://dev-tab-for-a-cause.firebaseio.com",
     "FIREBASE_PRIVATE_KEY": "@firebase-private-key",
     "FIREBASE_PROJECT_ID": "dev-tab-for-a-cause",
