@@ -16,8 +16,12 @@ const URLS_BASE_PATH = process.env.URLS_BASE_PATH || ''
 // But we want to use it in production.
 const URLS_USE_TRAILING_SLASH = process.env.URLS_USE_TRAILING_SLASH === 'true'
 
-const withBasePath = path =>
-  `${URLS_BASE_PATH}${path}${URLS_USE_TRAILING_SLASH ? '/' : ''}`
+const withBasePath = path => {
+  const hasTrailingSlash = path[path.length - 1] === '/'
+  return `${URLS_BASE_PATH}${path}${
+    !(hasTrailingSlash && URLS_USE_TRAILING_SLASH) ? '/' : ''
+  }`
+}
 
 export const apiLogin = withBasePath('/api/login')
 export const apiLogout = withBasePath('/api/logout')
