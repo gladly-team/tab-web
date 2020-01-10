@@ -21,7 +21,7 @@
       "FIREBASE_DATABASE_URL": "https://dev-tab-for-a-cause.firebaseio.com",
       "FIREBASE_PROJECT_ID": "dev-tab-for-a-cause",
       "GRAPHQL_SCHEMA_LOCATION": "./schema/schema.graphql",
-      "RELAY_ENDPOINT": "https://dev-tab2017.gladly.io/graphql",
+      "RELAY_ENDPOINT": "https://dev-tab2017.gladly.io/graphql/",
       "URLS_BASE_PATH": "/v4",
       "URLS_USE_TRAILING_SLASH": "true"
     }
