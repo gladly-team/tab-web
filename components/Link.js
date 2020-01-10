@@ -12,8 +12,12 @@ const Link = props => {
   // urls.js. We can reenable prefetching after Next.js supports
   // a "basePath" option.
   // https://github.com/zeit/next.js/issues/4998#issuecomment-464345554
+  // FIXME: debugging. May have to remove the base URL from the href param.
+  // We set the "as" parameter to also work around the missing
+  // "basePath" functionality:
+  // https://github.com/zeit/next.js/issues/4998#issuecomment-520888814
   return (
-    <NextJsLink href={to} {...otherProps} prefetch={false}>
+    <NextJsLink href={to} as={`.${to}`} {...otherProps} prefetch={false}>
       {children}
     </NextJsLink>
   )
