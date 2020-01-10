@@ -19,7 +19,7 @@ const URLS_USE_TRAILING_SLASH = process.env.URLS_USE_TRAILING_SLASH === 'true'
 const withBasePath = path => {
   const hasTrailingSlash = path[path.length - 1] === '/'
   return `${URLS_BASE_PATH}${path}${
-    !(hasTrailingSlash && URLS_USE_TRAILING_SLASH) ? '/' : ''
+    !hasTrailingSlash && URLS_USE_TRAILING_SLASH ? '/' : ''
   }`
 }
 
