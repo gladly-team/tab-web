@@ -26,6 +26,6 @@ const withBasePath = path => {
 export const apiLogin = withBasePath('/api/login')
 export const apiLogout = withBasePath('/api/logout')
 
-export const authURL = withBasePath('/auth')
-export const dashboardURL = withBasePath('/')
-export const exampleURL = withBasePath('/example')
+export const authURL = '/auth'
+export const dashboardURL = '/'
+export const exampleURL = '/example'
