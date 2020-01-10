@@ -3,6 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import NextJsLink from 'next/link'
+import { withBasePath } from '../utils/urls'
 
 const Link = props => {
   const { children, to, ...otherProps } = props
@@ -17,7 +18,12 @@ const Link = props => {
   // "basePath" functionality:
   // https://github.com/zeit/next.js/issues/4998#issuecomment-520888814
   return (
-    <NextJsLink href={to} as={`.${to}`} {...otherProps} prefetch={false}>
+    <NextJsLink
+      href={to}
+      as={withBasePath(to)}
+      {...otherProps}
+      prefetch={false}
+    >
       {children}
     </NextJsLink>
   )
