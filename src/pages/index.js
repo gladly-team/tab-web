@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
+import authRequired from 'src/utils/pageWrappers/authRequired'
 import withAuthUserInfo from 'src/utils/pageWrappers/withAuthUserInfo'
 import withData from 'src/utils/pageWrappers/withData'
 import Link from 'src/components/Link'
@@ -64,7 +65,7 @@ Index.defaultProps = {
   AuthUserInfo: null,
 }
 
-export default withData(withAuthUserInfo(Index), authUser => {
+export default withData(authRequired(withAuthUserInfo(Index)), authUser => {
   const userId = get(authUser, 'id')
   return {
     query: graphql`
