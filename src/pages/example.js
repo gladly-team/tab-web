@@ -1,35 +1,27 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { get } from 'lodash/object'
 import { graphql } from 'react-relay'
 import withData from 'src/utils/pageWrappers/withData'
 import Link from 'src/components/Link'
-import { authURL, dashboardURL } from 'src/utils/urls'
+import { dashboardURL } from 'src/utils/urls'
 
 const Example = props => {
-  const { AuthUserInfo, app } = props
-  const AuthUser = get(AuthUserInfo, 'AuthUser', null)
+  // The AuthUserInfo prop, if we used it, would always be null regardless
+  // of the user authentication state because we do not call the
+  // withAuthUserInfo higher-order component on this page.
+  const { app } = props
   const { moneyRaised } = app
 
   return (
     <div>
       <p>
-        This page does not call withAuthUserInfo, so it will not know if you're
-        signed in.
+        This page does not require authentication or include the authed user
+        info, so it will not know if you're signed in and will not redirect to
+        auth.
       </p>
       <Link to={dashboardURL}>
         <a>Home</a>
       </Link>
-      {!AuthUser ? (
-        <p>
-          You are not signed in.{' '}
-          <Link to={authURL}>
-            <a>Sign in</a>
-          </Link>
-        </p>
-      ) : (
-        <p>You're signed in. Email: {AuthUser.email}</p>
-      )}
       <div>
         <div>Money raised: {moneyRaised}</div>
       </div>
@@ -43,19 +35,9 @@ Example.propTypes = {
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
   }).isRequired,
-  AuthUserInfo: PropTypes.shape({
-    AuthUser: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      email: PropTypes.string.isRequired,
-      emailVerified: PropTypes.bool.isRequired,
-    }),
-    token: PropTypes.string,
-  }),
 }
 
-Example.defaultProps = {
-  AuthUserInfo: null,
-}
+Example.defaultProps = {}
 
 export default withData(Example, () => ({
   query: graphql`
