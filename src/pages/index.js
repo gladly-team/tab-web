@@ -65,22 +65,26 @@ Index.defaultProps = {
   AuthUserInfo: null,
 }
 
-export default withAuthUserInfo(authRequired(withData(Index)), authUser => {
-  const userId = get(authUser, 'id')
-  return {
-    query: graphql`
-      query pagesIndexQuery($userId: String!) {
-        app {
-          moneyRaised
-        }
-        user(userId: $userId) {
-          tabs
-          vcCurrent
-        }
+export default withAuthUserInfo(
+  authRequired(
+    withData(Index, authUser => {
+      const userId = get(authUser, 'id')
+      return {
+        query: graphql`
+          query pagesIndexQuery($userId: String!) {
+            app {
+              moneyRaised
+            }
+            user(userId: $userId) {
+              tabs
+              vcCurrent
+            }
+          }
+        `,
+        variables: {
+          userId,
+        },
       }
-    `,
-    variables: {
-      userId,
-    },
-  }
-})
+    })
+  )
+)
