@@ -36,7 +36,7 @@ export default (ComposedComponent, getRelayQuery) => {
   WithDataComp.getInitialProps = async ctx => {
     // Get the AuthUserInfo object. This is set in _app.js.
     const AuthUserInfo = get(ctx, 'tabCustomData.AuthUserInfo', null)
-    const AuthUserFromSession = get(AuthUserInfo, 'AuthUser', null)
+    const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     const AuthUserToken = get(AuthUserInfo, 'token', null)
 
     // Evaluate the composed component's getInitialProps().
@@ -47,7 +47,7 @@ export default (ComposedComponent, getRelayQuery) => {
 
     // Get the Relay query and variables config. We pass the authUser
     // so the child component can use the user ID in the query, if needed.
-    const { query, variables = {} } = getRelayQuery(AuthUserFromSession)
+    const { query, variables = {} } = getRelayQuery(AuthUser)
 
     let queryProps = {}
     let queryRecords = {}
