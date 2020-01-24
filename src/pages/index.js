@@ -65,7 +65,7 @@ Index.defaultProps = {
   AuthUserInfo: null,
 }
 
-export default withData(authRequired(withAuthUserInfo(Index)), authUser => {
+export default withAuthUserInfo(authRequired(withData(Index)), authUser => {
   const userId = get(authUser, 'id')
   return {
     query: graphql`
