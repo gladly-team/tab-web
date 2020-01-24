@@ -71,8 +71,10 @@ export const getAuthUserInfoFromDOM = () => {
       window.document.getElementById(authUserInfoDOMScriptId).textContent
     )
   } catch (e) {
-    // TODO: log error
     console.error(e) // eslint-disable-line no-console
+
+    // TODO: log error instead of throwing
+    throw e
   }
   return AuthUserInfo
 }
@@ -98,7 +100,9 @@ export const setAuthUserInfoInDOM = AuthUserInfo => {
       authUserInfoDOMScriptId
     ).textContent = JSON.stringify(AuthUserInfo)
   } catch (e) {
-    // TODO: log error
     console.error(e) // eslint-disable-line no-console
+
+    // TODO: log error instead of throwing
+    throw e
   }
 }
