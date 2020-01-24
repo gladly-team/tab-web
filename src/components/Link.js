@@ -4,7 +4,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import NextJsLink from 'next/link'
 import { withBasePath } from 'src/utils/urls'
-// import { withBasePath } from '../utils/urls'
 
 const Link = props => {
   const { children, to, ...otherProps } = props
