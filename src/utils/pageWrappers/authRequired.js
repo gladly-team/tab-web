@@ -6,6 +6,12 @@ import { get } from 'lodash/object'
 import { redirect } from 'src/utils/navigation'
 import { authURL } from 'src/utils/urls'
 
+// FIXME: immediately after sign-in, there is no user. We should wait
+//   until the user is defined from the client-side JS before redirecting
+//   to auth. Right now, when you sign in
+
+// TODO: add ?next=[location] URL param to redirects.
+
 // Redirects to the authentication page if the user is not logged in.
 // This should be wrapped outside any other higher-order components
 // that may expect the user to exist.
