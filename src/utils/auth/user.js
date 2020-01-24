@@ -46,6 +46,20 @@ export const createAuthUserInfo = ({
   }
 }
 
+/**
+ * Check if an object is a valid AuthUserInfo object. Throws if it is not.
+ * Otherwise, returns true.
+ * @param {Object} obj - The object to evaluate.
+ * @return {Boolean} Returns true if the object is a valid AuthUserInfo
+ *   object
+ */
+const validateAuthUserInfo = obj => {
+  if (!(obj && has(obj, 'AuthUser') && has(obj, 'token'))) {
+    throw new Error('The AuthUserInfo object is invalid.')
+  }
+  return true
+}
+
 // The ID of the script in which we store the AuthUserInfo JSON. See:
 // https://github.com/zeit/next.js/issues/2252#issuecomment-353992669
 export const authUserInfoDOMScriptId = '__TAB_WEB_AUTH_USER_INFO'
@@ -94,7 +108,9 @@ export const setAuthUserInfoInDOM = AuthUserInfo => {
   if (isServerSide()) {
     throw new Error('The `setAuthUserInfoInDOM` cannot be called server-side.')
   }
-  // TODO: may want to validate the AuthUserInfo
+  // Validate the AuthUserInfo to prevent storing anything unexpected.
+  validateAuthUserInfo(AuthUserInfo)
+
   try {
     window.document.getElementById(
       authUserInfoDOMScriptId
