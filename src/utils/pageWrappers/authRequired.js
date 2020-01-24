@@ -8,7 +8,7 @@ import { authURL } from 'src/utils/urls'
 
 // FIXME: immediately after sign-in, there is no user. We should wait
 //   until the user is defined from the client-side JS before redirecting
-//   to auth. Right now, when you sign in
+//   to auth. Right now, when you sign in, it redirects back to auth.
 
 // TODO: add ?next=[location] URL param to redirects.
 
