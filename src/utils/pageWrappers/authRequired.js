@@ -17,7 +17,6 @@ export default ComposedComponent => {
   AuthRequiredComp.getInitialProps = async ctx => {
     // Get the AuthUserInfo object. This is set in _app.js.
     const AuthUserInfo = get(ctx, 'tabCustomData.AuthUserInfo', null)
-
     let composedInitialProps = {}
 
     // If there is no authed user, redirect to the authentication page.
