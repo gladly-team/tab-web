@@ -1,10 +1,13 @@
 /* eslint react/jsx-props-no-spreading: 0 */
-/* globals window */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { get, set } from 'lodash/object'
 import { AuthUserInfoContext, useFirebaseAuth } from 'src/utils/auth/hooks'
-import { createAuthUser, createAuthUserInfo } from 'src/utils/auth/user'
+import {
+  createAuthUser,
+  createAuthUserInfo,
+  getAuthUserInfoFromDOM,
+} from 'src/utils/auth/user'
 import { addSession } from 'src/utils/middleware/cookieSession'
 import { isServerSide } from 'src/utils/ssr'
 
@@ -44,14 +47,7 @@ App.getInitialProps = async ({ Component, ctx }) => {
     // If client-side, get AuthUserInfo from stored data. We store it
     // in _document.js. See:
     // https://github.com/zeit/next.js/issues/2252#issuecomment-353992669
-    try {
-      AuthUserInfo = JSON.parse(
-        window.document.getElementById('__TAB_WEB_AUTH_USER_INFO').textContent
-      )
-    } catch (e) {
-      // TODO: log error
-      console.error(e) // eslint-disable-line no-console
-    }
+    AuthUserInfo = getAuthUserInfoFromDOM()
   }
 
   // Explicitly add the user to a custom prop in the getInitialProps
