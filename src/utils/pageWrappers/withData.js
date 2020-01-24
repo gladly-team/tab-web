@@ -4,8 +4,8 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import { fetchQuery, ReactRelayContext } from 'react-relay'
-import initEnvironment from './createRelayEnvironment'
-import { useAuthUserInfo } from '../utils/auth/hooks'
+import initEnvironment from 'src/utils/createRelayEnvironment'
+import { useAuthUserInfo } from 'src/utils/auth/hooks'
 
 // Adapted from:
 // https://github.com/zeit/next.js/blob/canary/examples/with-relay-modern/lib/withData.js

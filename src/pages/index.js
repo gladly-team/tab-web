@@ -2,10 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
-import withAuthUserInfo from '../lib/withAuthUserInfo'
-import withData from '../lib/withData'
-import Link from '../components/Link'
-import { authURL, exampleURL } from '../utils/urls'
+import withAuthUserInfo from 'src/utils/pageWrappers/withAuthUserInfo'
+import withData from 'src/utils/pageWrappers/withData'
+import Link from 'src/components/Link'
+import { authURL, exampleURL } from 'src/utils/urls'
 
 const Index = props => {
   const { AuthUserInfo, app, user } = props

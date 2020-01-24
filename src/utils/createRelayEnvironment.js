@@ -3,7 +3,7 @@
 
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 import fetch from 'isomorphic-unfetch'
-import { isServerSide } from '../utils/ssr'
+import { isServerSide } from 'src/utils/ssr'
 
 const relayEndpoint = process.env.RELAY_ENDPOINT
 let relayEnvironment = null

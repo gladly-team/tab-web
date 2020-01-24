@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import { graphql } from 'react-relay'
-import withData from '../lib/withData'
-import Link from '../components/Link'
-import { authURL, dashboardURL } from '../utils/urls'
+import withData from 'src/utils/pageWrappers/withData'
+import Link from 'src/components/Link'
+import { authURL, dashboardURL } from 'src/utils/urls'
 
 const Example = props => {
   const { AuthUserInfo, app } = props

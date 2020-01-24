@@ -1,4 +1,6 @@
-require('./env.js')
+const path = require('path')
+
+require('./src/env')
 
 module.exports = {
   exportTrailingSlash: true,
@@ -13,5 +15,14 @@ module.exports = {
     RELAY_ENDPOINT: process.env.RELAY_ENDPOINT,
     URLS_BASE_PATH: process.env.URLS_BASE_PATH, // @area/workaround/next-js-base-path
     URLS_USE_TRAILING_SLASH: process.env.URLS_USE_TRAILING_SLASH,
+  },
+  webpack(config) {
+    // Use absolute imports from 'src/'. See:
+    // https://github.com/zeit/next.js/blob/canary/examples/with-absolute-imports/next.config.js#L8
+    // We use eslint-import-resolver-alias in eslintrc.json to handle linting.
+    // https://github.com/benmosher/eslint-plugin-import/issues/1286
+    // eslint-disable-next-line no-param-reassign
+    config.resolve.alias.src = path.join(__dirname, 'src')
+    return config
   },
 }
