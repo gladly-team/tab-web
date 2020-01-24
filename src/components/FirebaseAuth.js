@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import { isClientSide } from '../utils/ssr'
-import initFirebase from '../utils/auth/initFirebase'
+import { isClientSide } from 'src/utils/ssr'
+import initFirebase from 'src/utils/auth/initFirebase'
 
 // Init the Firebase app.
 initFirebase()

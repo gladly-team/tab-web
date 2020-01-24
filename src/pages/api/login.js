@@ -1,5 +1,5 @@
-import commonMiddleware from '../../utils/middleware/commonMiddleware'
-import { verifyIdToken } from '../../utils/auth/firebaseAdmin'
+import commonMiddleware from 'src/utils/middleware/commonMiddleware'
+import { verifyIdToken } from 'src/utils/auth/firebaseAdmin'
 
 const handler = (req, res) => {
   if (!req.body) {

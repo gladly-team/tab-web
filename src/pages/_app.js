@@ -3,10 +3,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { get, set } from 'lodash/object'
-import { AuthUserInfoContext, useFirebaseAuth } from '../utils/auth/hooks'
-import { createAuthUser, createAuthUserInfo } from '../utils/auth/user'
-import { addSession } from '../utils/middleware/cookieSession'
-import { isServerSide } from '../utils/ssr'
+import { AuthUserInfoContext, useFirebaseAuth } from 'src/utils/auth/hooks'
+import { createAuthUser, createAuthUserInfo } from 'src/utils/auth/user'
+import { addSession } from 'src/utils/middleware/cookieSession'
+import { isServerSide } from 'src/utils/ssr'
 
 const App = props => {
   const { AuthUserInfo, Component, pageProps } = props
