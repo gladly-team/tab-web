@@ -1,4 +1,4 @@
-require('src/env')
+require('./src/env')
 
 module.exports = {
   projects: {
@@ -6,7 +6,7 @@ module.exports = {
       schema: process.env.GRAPHQL_SCHEMA_LOCATION,
       extensions: {
         codegen: {
-          './schema/schema.graphql': ['schema-ast'],
+          './src/schema/schema.graphql': ['schema-ast'],
         },
       },
     },
