@@ -9,7 +9,7 @@
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\"",
-    "relay": "relay-compiler --src ./ --artifactDirectory ./relay/__generated__ --exclude '**/.next/**' '**/node_modules/**' '**/test/**'  '**/__generated__/**' --exclude '**/schema/**' --schema ./schema/schema.graphql",
+    "relay": "relay-compiler --src ./src/ --artifactDirectory ./src/relay/__generated__ --exclude '**/__test__/**'  '**/__generated__/**' --schema ./src/schema/schema.graphql",
     "graphql": "NODE_ENV=production graphql",
     "graphql:validate": "NODE_ENV=production graphql validate",
     "schema": "NODE_ENV=production graphql codegen"

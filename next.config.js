@@ -1,4 +1,6 @@
-require('./env.js')
+const path = require('path')
+
+require('./src/env')
 
 module.exports = {
   exportTrailingSlash: true,
@@ -20,7 +22,7 @@ module.exports = {
     // Use absolute imports from 'src/'. See:
     // https://github.com/zeit/next.js/blob/canary/examples/with-absolute-imports/next.config.js#L8
     // eslint-disable-next-line no-param-reassign
-    config.resolve.alias.src = __dirname
+    config.resolve.alias.src = path.join(__dirname, 'src')
     return config
   },
 }

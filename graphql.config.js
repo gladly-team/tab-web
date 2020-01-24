@@ -1,4 +1,4 @@
-require('./env.js')
+require('src/env')
 
 module.exports = {
   projects: {
