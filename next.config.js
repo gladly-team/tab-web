@@ -14,4 +14,13 @@ module.exports = {
     URLS_BASE_PATH: process.env.URLS_BASE_PATH, // @area/workaround/next-js-base-path
     URLS_USE_TRAILING_SLASH: process.env.URLS_USE_TRAILING_SLASH,
   },
+  // FIXME
+  // https://github.com/benmosher/eslint-plugin-import/issues/1286
+  webpack(config) {
+    // Use absolute imports from 'src/'. See:
+    // https://github.com/zeit/next.js/blob/canary/examples/with-absolute-imports/next.config.js#L8
+    // eslint-disable-next-line no-param-reassign
+    config.resolve.alias.src = __dirname
+    return config
+  },
 }
