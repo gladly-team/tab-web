@@ -2,9 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
-import authRequired from 'src/utils/pageWrappers/authRequired'
-import withAuthUserInfo from 'src/utils/pageWrappers/withAuthUserInfo'
-import withData from 'src/utils/pageWrappers/withData'
+import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import Link from 'src/components/Link'
 import { authURL, exampleURL } from 'src/utils/urls'
 
@@ -65,26 +63,22 @@ Index.defaultProps = {
   AuthUserInfo: null,
 }
 
-export default withAuthUserInfo(
-  authRequired(
-    withData(({ AuthUser }) => {
-      const userId = get(AuthUser, 'id')
-      return {
-        query: graphql`
-          query pagesIndexQuery($userId: String!) {
-            app {
-              moneyRaised
-            }
-            user(userId: $userId) {
-              tabs
-              vcCurrent
-            }
-          }
-        `,
-        variables: {
-          userId,
-        },
+export default withAuthAndData(({ AuthUser }) => {
+  const userId = get(AuthUser, 'id')
+  return {
+    query: graphql`
+      query pagesIndexQuery($userId: String!) {
+        app {
+          moneyRaised
+        }
+        user(userId: $userId) {
+          tabs
+          vcCurrent
+        }
       }
-    })(Index)
-  )
-)
+    `,
+    variables: {
+      userId,
+    },
+  }
+})(Index)
