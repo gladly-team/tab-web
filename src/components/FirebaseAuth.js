@@ -90,4 +90,6 @@ const FirebaseAuth = () => {
   )
 }
 
+FirebaseAuth.displayName = 'FirebaseAuth'
+
 export default FirebaseAuth
