@@ -1,5 +1,6 @@
 /* eslint import/prefer-default-export: 0 */
 import { isServerSide } from 'src/utils/ssr'
+import { withBasePath } from 'src/utils/urls'
 
 // Handle redirects on both the client side and server side.
 // Adapted from:
@@ -17,7 +18,8 @@ export const redirect = ({ location, ctx = null, status = 302 }) => {
       )
     }
     ctx.res.writeHead(status, {
-      Location: location,
+      // Server-side redirects require the subpath under which we're running this app.
+      Location: withBasePath(location),
       'Content-Type': 'text/html; charset=utf-8',
     })
     ctx.res.end()
