@@ -84,19 +84,23 @@ const FirebaseAuth = () => {
     credentialHelper: 'none',
   }
 
-  return (
-    <div>
-      {renderAuth && !isWaitingOnSignIn ? (
+  let signInMenu
+  if (renderAuth) {
+    if (isWaitingOnSignIn) {
+      signInMenu = (
+        <div style={{ textAlign: 'center', margin: 40 }}>Signing in...</div>
+      )
+    } else {
+      signInMenu = (
         <StyledFirebaseAuth
           uiConfig={firebaseAuthConfig}
           firebaseAuth={firebase.auth()}
         />
-      ) : null}
-      {renderAuth && isWaitingOnSignIn ? (
-        <div style={{ textAlign: 'center', margin: 40 }}>Signing in...</div>
-      ) : null}
-    </div>
-  )
+      )
+    }
+  }
+
+  return <div>{signInMenu}</div>
 }
 
 FirebaseAuth.displayName = 'FirebaseAuth'
