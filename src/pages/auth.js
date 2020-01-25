@@ -1,7 +1,9 @@
 import React from 'react'
+import { get } from 'lodash/object'
 import FirebaseAuth from 'src/components/FirebaseAuth'
-
-// TODO: if there is an authed user, redirect to the app.
+import withAuthUserInfo from 'src/utils/pageWrappers/withAuthUserInfo'
+import { redirect } from 'src/utils/navigation'
+import { dashboardURL } from 'src/utils/urls'
 
 const Auth = () => {
   return (
@@ -14,6 +16,22 @@ const Auth = () => {
   )
 }
 
-Auth.propTypes = {}
+Auth.getInitialProps = async ctx => {
+  const AuthUserInfo = get(ctx, 'tabCustomData.AuthUserInfo', null)
 
-export default Auth
+  // If there is an authed user, redirect to the app.
+  if (get(AuthUserInfo, 'AuthUser')) {
+    redirect({
+      location: dashboardURL,
+      ctx,
+    })
+  }
+
+  return {}
+}
+
+Auth.displayName = 'Auth'
+Auth.propTypes = {}
+Auth.defaultProps = {}
+
+export default withAuthUserInfo(Auth)
