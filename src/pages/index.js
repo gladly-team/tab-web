@@ -89,7 +89,6 @@ Index.defaultProps = {
   AuthUserInfo: null,
 }
 
-// FIXME: 500 error when unauthed user navigates from /example to /.
 export default withAuthAndData(({ AuthUser }) => {
   const userId = get(AuthUser, 'id')
   return {
