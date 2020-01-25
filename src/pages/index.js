@@ -5,7 +5,7 @@ import { get } from 'lodash/object'
 import { useRouter } from 'next/router'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import Link from 'src/components/Link'
-import { authURL, exampleURL } from 'src/utils/urls'
+import { authURL, exampleURL, withBasePath } from 'src/utils/urls'
 import logout from 'src/utils/auth/logout'
 
 const Index = props => {
@@ -18,7 +18,7 @@ const Index = props => {
   const onLogout = async () => {
     try {
       await logout()
-      router.push(authURL)
+      router.push(withBasePath(authURL))
     } catch (e) {
       // TODO: log error
       console.error(e) // eslint-disable-line no-console
