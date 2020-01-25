@@ -1,6 +1,8 @@
 import React from 'react'
 import FirebaseAuth from 'src/components/FirebaseAuth'
 
+// TODO: if there is an authed user, redirect to the app.
+
 const Auth = () => {
   return (
     <div>

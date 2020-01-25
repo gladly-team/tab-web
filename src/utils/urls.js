@@ -16,11 +16,13 @@ const URLS_BASE_PATH = process.env.URLS_BASE_PATH || ''
 // But we want to use it in production.
 const URLS_USE_TRAILING_SLASH = process.env.URLS_USE_TRAILING_SLASH === 'true'
 
-export const withBasePath = path => {
+const addTrailingSlashIfNeeded = path => {
   const hasTrailingSlash = path[path.length - 1] === '/'
-  return `${URLS_BASE_PATH}${path}${
-    !hasTrailingSlash && URLS_USE_TRAILING_SLASH ? '/' : ''
-  }`
+  return `${path}${!hasTrailingSlash && URLS_USE_TRAILING_SLASH ? '/' : ''}`
+}
+
+export const withBasePath = path => {
+  return addTrailingSlashIfNeeded(`${URLS_BASE_PATH}${path}`)
 }
 
 export const apiLogin = withBasePath('/api/login')
@@ -31,6 +33,6 @@ export const apiLogout = withBasePath('/api/logout')
 // rewrite the route with the base path.
 // https://github.com/zeit/next.js/issues/4998#issuecomment-520888814
 // @area/workaround/next-js-base-path
-export const authURL = '/auth'
+export const authURL = addTrailingSlashIfNeeded('/auth')
 export const dashboardURL = '/'
-export const exampleURL = '/example'
+export const exampleURL = addTrailingSlashIfNeeded('/example')

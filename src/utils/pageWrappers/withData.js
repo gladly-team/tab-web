@@ -10,7 +10,7 @@ import { useAuthUserInfo } from 'src/utils/auth/hooks'
 // Adapted from:
 // https://github.com/zeit/next.js/blob/canary/examples/with-relay-modern/lib/withData.js
 
-export default (ComposedComponent, getRelayQuery) => {
+export default getRelayQuery => ComposedComponent => {
   const WithDataComp = props => {
     const { queryRecords, ...otherProps } = props
     const [environment] = useState(
@@ -47,7 +47,7 @@ export default (ComposedComponent, getRelayQuery) => {
 
     // Get the Relay query and variables config. We pass the authUser
     // so the child component can use the user ID in the query, if needed.
-    const { query, variables = {} } = getRelayQuery(AuthUser)
+    const { query, variables = {} } = getRelayQuery({ AuthUser })
 
     let queryProps = {}
     let queryRecords = {}
