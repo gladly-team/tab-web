@@ -122,3 +122,28 @@ export const setAuthUserInfoInDOM = AuthUserInfo => {
     throw e
   }
 }
+
+/**
+ * Remove the AuthUserInfo value in the stored DOM JSON.
+ * @return {undefined}
+ */
+export const destroyAuthUserInfoInDOM = () => {
+  // This function should not be called server-side.
+  if (isServerSide()) {
+    throw new Error(
+      'The `destroyAuthUserInfoInDOM` cannot be called server-side.'
+    )
+  }
+
+  try {
+    // Reset the AuthUserInfo to the default for an unauthenticated user.
+    window.document.getElementById(
+      authUserInfoDOMScriptId
+    ).textContent = JSON.stringify(createAuthUserInfo())
+  } catch (e) {
+    console.error(e) // eslint-disable-line no-console
+
+    // TODO: log error instead of throwing
+    throw e
+  }
+}
