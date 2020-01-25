@@ -32,6 +32,8 @@ export const apiLogout = withBasePath('/api/logout')
 // we add it in the Link component's "at" prop and let Now
 // rewrite the route with the base path.
 // https://github.com/zeit/next.js/issues/4998#issuecomment-520888814
+// Note: this means we must add the base path manually for any navigation
+// we do outside of the Link component.
 // @area/workaround/next-js-base-path
 export const authURL = addTrailingSlashIfNeeded('/auth')
 export const dashboardURL = '/'
