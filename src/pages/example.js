@@ -39,7 +39,7 @@ Example.propTypes = {
 
 Example.defaultProps = {}
 
-export default withData(Example, () => ({
+export default withData(() => ({
   query: graphql`
     query exampleQuery {
       app {
@@ -47,4 +47,4 @@ export default withData(Example, () => ({
       }
     }
   `,
-}))
+}))(Example)

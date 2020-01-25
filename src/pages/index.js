@@ -67,8 +67,8 @@ Index.defaultProps = {
 
 export default withAuthUserInfo(
   authRequired(
-    withData(Index, authUser => {
-      const userId = get(authUser, 'id')
+    withData(({ AuthUser }) => {
+      const userId = get(AuthUser, 'id')
       return {
         query: graphql`
           query pagesIndexQuery($userId: String!) {
@@ -85,6 +85,6 @@ export default withAuthUserInfo(
           userId,
         },
       }
-    })
+    })(Index)
   )
 )
