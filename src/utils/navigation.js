@@ -6,6 +6,7 @@ import { withBasePath } from 'src/utils/urls'
 // Adapted from:
 // https://github.com/zeit/next.js/issues/649#issuecomment-426552156
 export const redirect = ({ location, ctx = null, status = 302 }) => {
+  const locationWithBasePath = withBasePath(location)
   if (!location) {
     throw new Error(
       'The `redirect` function must include a "location" argument.'
@@ -19,12 +20,12 @@ export const redirect = ({ location, ctx = null, status = 302 }) => {
     }
     ctx.res.writeHead(status, {
       // Server-side redirects require the subpath under which we're running this app.
-      Location: withBasePath(location),
+      Location: locationWithBasePath,
       'Content-Type': 'text/html; charset=utf-8',
     })
     ctx.res.end()
   } else {
     const Router = require('next/router').default // eslint-disable-line global-require
-    Router.replace(location)
+    Router.replace(locationWithBasePath)
   }
 }
