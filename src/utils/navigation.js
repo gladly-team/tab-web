@@ -1,4 +1,5 @@
 /* eslint import/prefer-default-export: 0 */
+/* globals window */
 import Router from 'next/router'
 import { isServerSide } from 'src/utils/ssr'
 import { withBasePath } from 'src/utils/urls'
@@ -43,4 +44,17 @@ export const goTo = location => {
   // https://github.com/zeit/next.js/issues/4998#issuecomment-520888814
   // @area/workaround/next-js-base-path
   Router.push(location, locationWithBasePath)
+}
+
+// Call window.location.
+export const setWindowLocation = location => {
+  if (isServerSide()) {
+    throw new Error(
+      'The `setWindowLocation` function cannot be called server-side.'
+    )
+  } else {
+    // @area/workaround/next-js-base-path
+    const locationWithBasePath = withBasePath(location)
+    window.location = locationWithBasePath
+  }
 }
