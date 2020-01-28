@@ -12,7 +12,7 @@
   "rewrites": [
     { "source": "/v4/(.*)", "destination": "/$1" },
     {
-      "source": "^/service-worker.js$",
+      "source": "/service-worker.js",
       "destination": "/_next/static/service-worker.js"
     }
   ],
