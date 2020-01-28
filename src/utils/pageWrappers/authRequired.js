@@ -3,16 +3,25 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
-import { redirect } from 'src/utils/navigation'
+import { redirect, setWindowLocation } from 'src/utils/navigation'
 import { authURL } from 'src/utils/urls'
-
-// TODO: add ?next=[location] URL param to redirects.
+import { isClientSide } from 'src/utils/ssr'
 
 // Redirects to the authentication page if the user is not logged in.
 // This should wrap any other higher-order components that expect the
 // user to exist.
 export default ComposedComponent => {
   const AuthRequiredComp = props => {
+    const { AuthUserInfo } = props
+
+    // If there is not an authed user, redirect to the auth page.
+    if (isClientSide() && !get(AuthUserInfo, 'AuthUser')) {
+      // TODO: add ?next=[location] URL param to redirects.
+      // Important: we must fully refresh the page to ensure the AuthUserInfo
+      // is reset when calling `getInitialProps` on the next page.
+      setWindowLocation(authURL)
+      return null
+    }
     return <ComposedComponent {...props} />
   }
 
