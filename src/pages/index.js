@@ -2,10 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
-import { useRouter } from 'next/router'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import Link from 'src/components/Link'
-import { authURL, exampleURL, withBasePath } from 'src/utils/urls'
+import { goTo } from 'src/utils/navigation'
+import { authURL, exampleURL } from 'src/utils/urls'
 import logout from 'src/utils/auth/logout'
 
 const Index = props => {
@@ -13,12 +13,10 @@ const Index = props => {
   const AuthUser = get(AuthUserInfo, 'AuthUser', null)
   const { moneyRaised } = app
   const { tabs, vcCurrent } = user
-  const router = useRouter()
-
   const onLogout = async () => {
     try {
       await logout()
-      router.push(withBasePath(authURL))
+      goTo(authURL)
     } catch (e) {
       // TODO: log error
       console.error(e) // eslint-disable-line no-console

@@ -1,4 +1,5 @@
 /* eslint import/prefer-default-export: 0 */
+import Router from 'next/router'
 import { isServerSide } from 'src/utils/ssr'
 import { withBasePath } from 'src/utils/urls'
 
@@ -25,7 +26,21 @@ export const redirect = ({ location, ctx = null, status = 302 }) => {
     })
     ctx.res.end()
   } else {
-    const Router = require('next/router').default // eslint-disable-line global-require
-    Router.replace(locationWithBasePath)
+    // We set the "as" parameter as a  workaround for the missing "basePath"
+    // functionality:
+    // https://github.com/zeit/next.js/issues/4998#issuecomment-520888814
+    // @area/workaround/next-js-base-path
+    Router.replace(location, locationWithBasePath)
   }
+}
+
+// Like Router.push but handling the basePath workaround.
+export const goTo = location => {
+  const locationWithBasePath = withBasePath(location)
+
+  // We set the "as" parameter as a  workaround for the missing "basePath"
+  // functionality:
+  // https://github.com/zeit/next.js/issues/4998#issuecomment-520888814
+  // @area/workaround/next-js-base-path
+  Router.push(location, locationWithBasePath)
 }

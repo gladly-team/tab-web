@@ -14,7 +14,7 @@ const Link = props => {
   // a "basePath" option.
   // https://github.com/zeit/next.js/issues/4998#issuecomment-464345554
   // We set the "as" parameter to fix client-side routing. This is a
-  // workaround for the  the missing "basePath" functionality:
+  // workaround for the missing "basePath" functionality:
   // https://github.com/zeit/next.js/issues/4998#issuecomment-520888814
   // @area/workaround/next-js-base-path
   return (
