@@ -6,7 +6,7 @@
 import fetch from 'isomorphic-unfetch'
 import { apiLogin, apiLogout } from 'src/utils/urls'
 
-export const setSession = user => {
+export const setSession = async user => {
   // Log in.
   if (user) {
     return user.getIdToken().then(token => {
