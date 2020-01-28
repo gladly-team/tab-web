@@ -29,7 +29,7 @@
           "value" : "/"
         }
       ]
-    },
+    }
   ],
   "env": {
     "FIREBASE_CLIENT_EMAIL": "firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com",
