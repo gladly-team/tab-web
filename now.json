@@ -13,12 +13,23 @@
     { "source": "/v4/(.*)", "destination": "/$1" },
     {
       "source": "^/service-worker.js$",
-      "destination": "/_next/static/service-worker.js",
-      "headers": {
-        "cache-control": "no-cache",
-        "Service-Worker-Allowed": "/"
-      }
+      "destination": "/_next/static/service-worker.js"
     }
+  ],
+  "headers": [
+    {
+      "source": "/service-worker.js",
+      "headers" : [
+        {
+          "key" : "Cache-Control",
+          "value" : "no-cache"
+        },
+        {
+          "key" : "Service-Worker-Allowed",
+          "value" : "/"
+        }
+      ]
+    },
   ],
   "env": {
     "FIREBASE_CLIENT_EMAIL": "firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com",
