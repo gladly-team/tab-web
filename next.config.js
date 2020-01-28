@@ -1,8 +1,9 @@
 const path = require('path')
+const withOffline = require('next-offline')
 
 require('./src/env')
 
-module.exports = {
+const nextConfig = {
   exportTrailingSlash: true,
   // Public, build-time env vars.
   // https://nextjs.org/docs#build-time-configuration
@@ -25,4 +26,39 @@ module.exports = {
     config.resolve.alias.src = path.join(__dirname, 'src')
     return config
   },
+  // Modify our service worker manifest.
+  transformManifest: manifest => ['/'].concat(manifest), // add the homepage to the cache
+  // Whether to enable the SW in development. Note this may not work
+  // if we don't have a custom _error.js file:
+  // https://github.com/hanford/next-offline/issues/190#issuecomment-535278921
+  generateInDevMode: false,
+  workboxOpts: {
+    swDest: 'static/service-worker.js',
+    cleanupOutdatedCaches: true,
+    clientsClaim: true,
+    skipWaiting: true,
+    // TODO:
+    // Configure different strategies:
+    // https://github.com/hanford/next-offline#cache-strategies
+    runtimeCaching: [
+      {
+        urlPattern: /^https?.*/,
+        handler: 'StaleWhileRevalidate',
+        options: {
+          cacheName: 'https-calls',
+          expiration: {
+            maxEntries: 150,
+            maxAgeSeconds: 30 * 24 * 60 * 60, // 1 month
+            // Automatically cleanup if quota is exceeded.
+            purgeOnQuotaError: true,
+          },
+          cacheableResponse: {
+            statuses: [0, 200],
+          },
+        },
+      },
+    ],
+  },
 }
+
+module.exports = withOffline(nextConfig)

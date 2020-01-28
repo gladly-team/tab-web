@@ -3,8 +3,24 @@
   "version": 2,
   "scope": "gladly-team",
   "cleanUrls": true,
+  "builds": [
+    {
+      "src": "next.config.js",
+      "use": "@now/next"
+    }
+  ],
   "rewrites": [
     { "source": "/v4/(.*)", "destination": "/$1" }
+  ],
+  "routes": [
+    {
+      "src": "^/service-worker.js$",
+      "dest": "/_next/static/service-worker.js",
+      "headers": {
+        "cache-control": "public, max-age=43200, immutable",
+        "Service-Worker-Allowed": "/"
+      }
+    }
   ],
   "env": {
     "FIREBASE_CLIENT_EMAIL": "firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com",
