@@ -24,6 +24,8 @@ const App = props => {
   const AuthUserFromClient = createAuthUser(firebaseUser)
   const { AuthUser: AuthUserFromSession, token } = AuthUserInfo
 
+  // We rely on this AuthUser value to, among other things, determine whether
+  // to redirect to/from the authentication page.
   let AuthUser = null
   if (AuthUserFromClient) {
     AuthUser = AuthUserFromClient

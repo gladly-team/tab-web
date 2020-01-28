@@ -55,6 +55,8 @@ const FirebaseAuth = props => {
         }
 
         // Do not automatically redirect to the signInSuccessUrl.
+        // We handle redirection by listening to the existence of
+        // the AuthUser object in auth.js.
         return false
       },
     },
@@ -86,9 +88,11 @@ const FirebaseAuth = props => {
 FirebaseAuth.displayName = 'FirebaseAuth'
 
 FirebaseAuth.propTypes = {
-  onSuccessfulAuth: PropTypes.func.isRequired,
+  onSuccessfulAuth: PropTypes.func,
 }
 
-FirebaseAuth.defaultProps = {}
+FirebaseAuth.defaultProps = {
+  onSuccessfulAuth: () => {},
+}
 
 export default FirebaseAuth

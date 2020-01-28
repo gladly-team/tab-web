@@ -9,7 +9,13 @@ import { dashboardURL } from 'src/utils/urls'
 const Auth = props => {
   const { AuthUserInfo } = props
 
-  const navigateToPostAuthPage = () => {
+  // If there is an authed user, redirect to the app. AuthUser will be
+  // become defined on a successful login. The user might also already
+  // be authed when visiting this page if the session is invalid or
+  // doesn't exist (so the server redirected here) but the user has a valid
+  // token on the client. We treat the token as the source of truth for
+  // authentication.
+  if (get(AuthUserInfo, 'AuthUser')) {
     // TODO: use ?next=[location] URL param to redirects.
 
     // Important: we must fully refresh the page to ensure the AuthUserInfo
@@ -22,19 +28,11 @@ const Auth = props => {
     setWindowLocation(dashboardURL)
   }
 
-  // If there is an authed user, redirect to the app. This may happen
-  // if the session is invalid or doesn't exist but the user has a valid
-  // token on the client. We treat the token as the source of truth for
-  // authentication.
-  if (get(AuthUserInfo, 'AuthUser')) {
-    navigateToPostAuthPage()
-  }
-
   return (
     <div>
       <p>Sign in</p>
       <div>
-        <FirebaseAuth onSuccessfulAuth={navigateToPostAuthPage} />
+        <FirebaseAuth />
       </div>
     </div>
   )
