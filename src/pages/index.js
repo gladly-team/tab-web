@@ -4,7 +4,6 @@ import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import Link from 'src/components/Link'
-import { goTo } from 'src/utils/navigation'
 import { authURL, exampleURL } from 'src/utils/urls'
 import logout from 'src/utils/auth/logout'
 
@@ -16,7 +15,6 @@ const Index = props => {
   const onLogout = async () => {
     try {
       await logout()
-      goTo(authURL)
     } catch (e) {
       // TODO: log error
       console.error(e) // eslint-disable-line no-console

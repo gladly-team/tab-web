@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase/app'
 import 'firebase/auth'
-import { createAuthUserInfo, setAuthUserInfoInDOM } from 'src/utils/auth/user'
 import { isClientSide } from 'src/utils/ssr'
 import initFirebase from 'src/utils/auth/initFirebase'
-import { redirect } from 'src/utils/navigation'
 import { dashboardURL } from 'src/utils/urls'
 
 // Init the Firebase app.
 initFirebase()
 
-const FirebaseAuth = () => {
+const FirebaseAuth = props => {
+  const { onSuccessfulAuth } = props
+
   // Do not SSR FirebaseUI, because it is not supported.
   // https://github.com/firebase/firebaseui-web/issues/213
   const [renderAuth, setRenderAuth] = useState(false)
@@ -23,31 +24,6 @@ const FirebaseAuth = () => {
 
   // When waiting for sign in to complete, show a loader.
   const [isWaitingOnSignIn, setIsWaitingOnSignIn] = useState(false)
-
-  // Called on successful sign-in.
-  const signInSuccessCallback = async authResult => {
-    setIsWaitingOnSignIn(true)
-
-    // Add the AuthUserInfo to the DOM as JSON. This is used in _document.js
-    // to provide the AuthUserInfo to pages' `getInitialProps`. Without setting
-    // it in DOM, pages that require authentication would automatically redirect
-    // back to the authentication page. For additional context, see _app.js,
-    // _document.js, and these issues:
-    // https://github.com/zeit/next.js/issues/3043#issuecomment-334521241
-    // https://github.com/zeit/next.js/issues/2252#issuecomment-353992669
-    const { user: firebaseUser } = authResult
-    const token = await firebaseUser.getIdToken()
-    const AuthUserInfo = createAuthUserInfo({
-      firebaseUser,
-      token,
-    })
-    setAuthUserInfoInDOM(AuthUserInfo)
-
-    // TODO: use ?next=[location] URL param to redirects.
-    redirect({
-      location: dashboardURL,
-    })
-  }
 
   const firebaseAuthConfig = {
     // Either 'popup' or 'redirect'
@@ -71,10 +47,16 @@ const FirebaseAuth = () => {
     signInSuccessUrl: dashboardURL,
     callbacks: {
       // Does not support async functions.
-      signInSuccessWithAuthResult: (authResult, redirectUrl) => {
-        signInSuccessCallback(authResult, redirectUrl)
+      signInSuccessWithAuthResult: () => {
+        setIsWaitingOnSignIn(true)
+
+        if (onSuccessfulAuth) {
+          onSuccessfulAuth()
+        }
 
         // Do not automatically redirect to the signInSuccessUrl.
+        // We handle redirection by listening to the existence of
+        // the AuthUser object in auth.js.
         return false
       },
     },
@@ -104,5 +86,13 @@ const FirebaseAuth = () => {
 }
 
 FirebaseAuth.displayName = 'FirebaseAuth'
+
+FirebaseAuth.propTypes = {
+  onSuccessfulAuth: PropTypes.func,
+}
+
+FirebaseAuth.defaultProps = {
+  onSuccessfulAuth: () => {},
+}
 
 export default FirebaseAuth

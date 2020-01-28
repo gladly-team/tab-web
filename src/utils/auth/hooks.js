@@ -28,11 +28,19 @@ export const useFirebaseAuth = () => {
     }
   })
 
-  function onChange(user) {
-    setState({ initializing: false, user })
+  async function onChange(user) {
+    // Call server to update session. We need this to complete
+    // before setting the user state to ensure the session exists
+    // and thus server-side rendering will behave like client-side
+    // rendering.
+    try {
+      await setSession(user)
+    } catch (e) {
+      // TODO: log error
+      console.error(e) // eslint-disable-line no-console
+    }
 
-    // Call server to update session.
-    setSession(user)
+    setState({ initializing: false, user })
   }
 
   useEffect(() => {
