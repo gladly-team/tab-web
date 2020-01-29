@@ -3,6 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
+import { PWAManifestURL } from 'src/utils/urls'
 
 class CustomDocument extends Document {
   render() {
@@ -15,7 +16,7 @@ class CustomDocument extends Document {
     return (
       <Html>
         <Head>
-          <link rel="manifest" href="/manifest.json" />
+          <link rel="manifest" href={PWAManifestURL} />
           <script
             id="__TAB_WEB_AUTH_USER_INFO"
             type="application/json"

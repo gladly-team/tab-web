@@ -38,3 +38,6 @@ export const apiLogout = withBasePath('/api/logout')
 export const authURL = addTrailingSlashIfNeeded('/auth')
 export const dashboardURL = '/'
 export const exampleURL = addTrailingSlashIfNeeded('/example')
+
+// For progressive web app.
+export const PWAManifestURL = withBasePath('/manifest.json')
