@@ -15,6 +15,7 @@ class CustomDocument extends Document {
     return (
       <Html>
         <Head>
+          <link rel="manifest" href="/manifest.json" />
           <script
             id="__TAB_WEB_AUTH_USER_INFO"
             type="application/json"
