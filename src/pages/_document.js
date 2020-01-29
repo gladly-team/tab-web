@@ -17,6 +17,7 @@ class CustomDocument extends Document {
       <Html>
         <Head>
           <link rel="manifest" href={PWAManifestURL} />
+          <meta name="theme-color" content="#9d4ba3">
           <script
             id="__TAB_WEB_AUTH_USER_INFO"
             type="application/json"
