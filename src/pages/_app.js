@@ -12,7 +12,7 @@ import {
 import { addSession } from 'src/utils/middleware/cookieSession'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
 
-const ENABLE_SERVICE_WORKER = false
+const ENABLE_SERVICE_WORKER = true
 
 const App = props => {
   const { AuthUserInfo, Component, pageProps } = props
