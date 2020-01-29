@@ -20,7 +20,7 @@
         },
         {
           "key" : "Service-Worker-Allowed",
-          "value" : "/"
+          "value" : "/v4/"
         }
       ]
     }
