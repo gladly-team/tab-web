@@ -41,7 +41,7 @@
       "FIREBASE_PROJECT_ID": "dev-tab-for-a-cause",
       "GRAPHQL_SCHEMA_LOCATION": "./src/schema/schema.graphql",
       "RELAY_ENDPOINT": "https://dev-tab2017.gladly.io/graphql/",
-      "SERVICE_WORKER_ENABLED": "false",
+      "SERVICE_WORKER_ENABLED": "true",
       "URLS_BASE_PATH": "/v4",
       "URLS_USE_TRAILING_SLASH": "true"
     }
