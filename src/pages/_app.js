@@ -12,16 +12,15 @@ import {
 import { addSession } from 'src/utils/middleware/cookieSession'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
 
-const ENABLE_SERVICE_WORKER = true
-
 const App = props => {
   const { AuthUserInfo, Component, pageProps } = props
 
   // Optionally, enable or disable the service worker:
   // https://github.com/hanford/next-offline#runtime-registration
   useEffect(() => {
+    const isServiceWorkerEnabled = process.env.SERVICE_WORKER_ENABLED === 'true'
     if (isClientSide()) {
-      if (ENABLE_SERVICE_WORKER) {
+      if (isServiceWorkerEnabled) {
         register()
         console.log('Registered the service worker.') // eslint-disable-line no-console
       } else {
@@ -30,7 +29,7 @@ const App = props => {
       }
     }
     return () => {
-      if (isClientSide() && ENABLE_SERVICE_WORKER) {
+      if (isClientSide() && isServiceWorkerEnabled) {
         unregister()
         console.log('Unregistered the service worker.') // eslint-disable-line no-console
       }
