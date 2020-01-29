@@ -32,9 +32,12 @@ const nextConfig = {
   // if we don't have a custom _error.js file:
   // https://github.com/hanford/next-offline/issues/190#issuecomment-535278921
   generateInDevMode: false,
-  // The base path from which to serve the service worker. This affects the scope.
+  // The base path from which to serve the service worker. This affects the
+  // default scope.
   // https://developers.google.com/web/ilt/pwa/introduction-to-service-worker#registration_and_scope
   registerSwPrefix: '/v4',
+  // Limit the service worker to this app's base path.
+  scope: '/v4/',
   workboxOpts: {
     swDest: 'static/service-worker.js',
     cleanupOutdatedCaches: true,
