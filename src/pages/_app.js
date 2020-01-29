@@ -21,7 +21,7 @@ const App = props => {
     const isServiceWorkerEnabled = process.env.SERVICE_WORKER_ENABLED === 'true'
     if (isClientSide()) {
       if (isServiceWorkerEnabled) {
-        register()
+        register('/v4/service-worker.js')
         console.log('Registered the service worker.') // eslint-disable-line no-console
       } else {
         unregister()
