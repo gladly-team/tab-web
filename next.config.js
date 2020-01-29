@@ -52,10 +52,11 @@ const nextConfig = {
     // https://github.com/hanford/next-offline#cache-strategies
     runtimeCaching: [
       {
-        // All resources except requests to /api/ or /graphql,
-        // including our hardcoded base path.
-        // https://regex101.com/r/axaPj1/2
-        urlPattern: /^http[s]?:\/\/(?:[^\/\s]+\/)v4\/(?:(?!api\/$|graphql\/?$)).*$/,
+        // All resources except requests to /api/* or /graphql*, including
+        // variants with our base path. Note that our base path, "/v4", is
+        // hardcoded here.
+        // https://regex101.com/r/5cs6L7/1/tests
+        urlPattern: /^http[s]?:\/\/(?:[^/\s]+\/)(?:(?!api\/|graphql(?:\/)?$|v4\/api\/|v4\/graphql(?:\/)?$)).*$/,
         handler: 'StaleWhileRevalidate',
         options: {
           cacheName: 'tab-resources',
