@@ -17,7 +17,7 @@ const ENABLE_SERVICE_WORKER = false
 const App = props => {
   const { AuthUserInfo, Component, pageProps } = props
 
-  // Optionally, enable or disalbe the service worker:
+  // Optionally, enable or disable the service worker:
   // https://github.com/hanford/next-offline#runtime-registration
   useEffect(() => {
     if (isClientSide()) {
