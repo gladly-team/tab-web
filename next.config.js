@@ -52,14 +52,17 @@ const nextConfig = {
     // https://github.com/hanford/next-offline#cache-strategies
     runtimeCaching: [
       {
-        urlPattern: /^https?.*/,
+        // All resources except requests to /api/ or /graphql,
+        // including our hardcoded base path.
+        // https://regex101.com/r/axaPj1/2
+        urlPattern: /^http[s]?:\/\/(?:[^\/\s]+\/)v4\/(?:(?!api\/$|graphql\/?$)).*$/,
         handler: 'StaleWhileRevalidate',
         options: {
-          cacheName: 'https-calls',
+          cacheName: 'tab-resources',
           expiration: {
-            maxEntries: 150,
+            maxEntries: 500,
             maxAgeSeconds: 30 * 24 * 60 * 60, // 1 month
-            // Automatically cleanup if quota is exceeded.
+            // Automatically clean up if quota is exceeded.
             purgeOnQuotaError: true,
           },
           cacheableResponse: {
