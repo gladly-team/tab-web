@@ -4,7 +4,26 @@
   "scope": "gladly-team",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/v4/(.*)", "destination": "/$1" }
+    { "source": "/v4/(.*)", "destination": "/$1" },
+    {
+      "source": "/service-worker.js",
+      "destination": "/_next/static/service-worker.js"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/v4/service-worker.js",
+      "headers" : [
+        {
+          "key" : "Cache-Control",
+          "value" : "no-cache"
+        },
+        {
+          "key" : "Service-Worker-Allowed",
+          "value" : "/v4/"
+        }
+      ]
+    }
   ],
   "env": {
     "FIREBASE_CLIENT_EMAIL": "firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com",
@@ -22,6 +41,7 @@
       "FIREBASE_PROJECT_ID": "dev-tab-for-a-cause",
       "GRAPHQL_SCHEMA_LOCATION": "./src/schema/schema.graphql",
       "RELAY_ENDPOINT": "https://dev-tab2017.gladly.io/graphql/",
+      "SERVICE_WORKER_ENABLED": "true",
       "URLS_BASE_PATH": "/v4",
       "URLS_USE_TRAILING_SLASH": "true"
     }

@@ -1,7 +1,8 @@
 /* eslint react/jsx-props-no-spreading: 0 */
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { get, set } from 'lodash/object'
+import { register, unregister } from 'next-offline/runtime'
 import { AuthUserInfoContext, useFirebaseAuth } from 'src/utils/auth/hooks'
 import {
   createAuthUser,
@@ -9,10 +10,31 @@ import {
   getAuthUserInfoFromDOM,
 } from 'src/utils/auth/user'
 import { addSession } from 'src/utils/middleware/cookieSession'
-import { isServerSide } from 'src/utils/ssr'
+import { isClientSide, isServerSide } from 'src/utils/ssr'
 
 const App = props => {
   const { AuthUserInfo, Component, pageProps } = props
+
+  // Optionally, enable or disable the service worker:
+  // https://github.com/hanford/next-offline#runtime-registration
+  useEffect(() => {
+    const isServiceWorkerEnabled = process.env.SERVICE_WORKER_ENABLED === 'true'
+    if (isClientSide()) {
+      if (isServiceWorkerEnabled) {
+        register()
+        console.log('Registered the service worker.') // eslint-disable-line no-console
+      } else {
+        unregister()
+        console.log('Not registering a service worker. It is not enabled.') // eslint-disable-line no-console
+      }
+    }
+    return () => {
+      if (isClientSide() && isServiceWorkerEnabled) {
+        unregister()
+        console.log('Unregistered the service worker.') // eslint-disable-line no-console
+      }
+    }
+  }, [])
 
   // We'll use the authed user from client-side auth (Firebase JS SDK)
   // when available. On the server side, we'll use the authed user from
