@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { get, set } from 'lodash/object'
-import { unregister } from 'next-offline/runtime'
+import { register, unregister } from 'next-offline/runtime'
 import { AuthUserInfoContext, useFirebaseAuth } from 'src/utils/auth/hooks'
 import {
   createAuthUser,
@@ -12,15 +12,27 @@ import {
 import { addSession } from 'src/utils/middleware/cookieSession'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
 
+const ENABLE_SERVICE_WORKER = false
+
 const App = props => {
   const { AuthUserInfo, Component, pageProps } = props
 
-  // Optionally, disable the service worker created by next-offline:
+  // Optionally, enable or disalbe the service worker:
   // https://github.com/hanford/next-offline#runtime-registration
   useEffect(() => {
     if (isClientSide()) {
-      unregister()
-      console.log('Unregistered service worker.') // eslint-disable-line no-console
+      if (ENABLE_SERVICE_WORKER) {
+        register()
+        console.log('Registered the service worker.') // eslint-disable-line no-console
+      }
+    } else {
+      console.log('Not registering a service worker. It is not enabled.') // eslint-disable-line no-console
+    }
+    return () => {
+      if (ENABLE_SERVICE_WORKER) {
+        unregister()
+        console.log('Unregistered the service worker.') // eslint-disable-line no-console
+      }
     }
   }, [])
 

@@ -28,6 +28,9 @@ const nextConfig = {
   },
   // Modify our service worker manifest.
   transformManifest: manifest => ['/'].concat(manifest), // add the homepage to the cache
+  // Let us manually register the service worker.
+  // https://github.com/hanford/next-offline#runtime-registration
+  dontAutoRegisterSw: true,
   // Whether to enable the service worker in development. Note this may not work
   // if we don't have a custom _error.js file:
   // https://github.com/hanford/next-offline/issues/190#issuecomment-535278921
