@@ -47,9 +47,8 @@ const nextConfig = {
     cleanupOutdatedCaches: true,
     clientsClaim: true,
     skipWaiting: true,
-    // TODO:
-    // Configure different strategies:
-    // https://github.com/hanford/next-offline#cache-strategies
+    // Cache strategies for different resources:
+    // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#using_strategies
     runtimeCaching: [
       {
         // All resources except requests to /api/* or /graphql*, including
@@ -70,6 +69,15 @@ const nextConfig = {
             statuses: [0, 200],
           },
         },
+      },
+      {
+        // Requests to /api/* or /graphql*, including variants with our base
+        // path. Note that our base path, "/v4", is hardcoded here. With a
+        // "network only" strategy, this should be the same as not defining
+        // any caching at all, so we're just being explicit here.
+        // https://regex101.com/r/2ttcQE/2
+        urlPattern: /^http[s]?:\/\/(?:[^/\s]+\/)(?:(api\/|graphql(?:\/)?$|v4\/api\/|v4\/graphql(?:\/)?$))/,
+        handler: 'NetworkOnly',
       },
     ],
   },
