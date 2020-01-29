@@ -1,8 +1,7 @@
 /* eslint react/jsx-props-no-spreading: 0 */
-import React, { useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { get, set } from 'lodash/object'
-import { unregister } from 'next-offline/runtime'
 import { AuthUserInfoContext, useFirebaseAuth } from 'src/utils/auth/hooks'
 import {
   createAuthUser,
@@ -14,14 +13,6 @@ import { isServerSide } from 'src/utils/ssr'
 
 const App = props => {
   const { AuthUserInfo, Component, pageProps } = props
-
-  // Optionally, disable the service worker created by next-offline:
-  // https://github.com/hanford/next-offline#runtime-registration
-  useEffect(() => {
-    unregister().then(() => {
-      console.log('Unregistered service worker.') // eslint-disable-line no-console
-    })
-  }, [])
 
   // We'll use the authed user from client-side auth (Firebase JS SDK)
   // when available. On the server side, we'll use the authed user from
