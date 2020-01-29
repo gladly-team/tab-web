@@ -24,12 +24,12 @@ const App = props => {
       if (ENABLE_SERVICE_WORKER) {
         register()
         console.log('Registered the service worker.') // eslint-disable-line no-console
+      } else {
+        console.log('Not registering a service worker. It is not enabled.') // eslint-disable-line no-console
       }
-    } else {
-      console.log('Not registering a service worker. It is not enabled.') // eslint-disable-line no-console
     }
     return () => {
-      if (ENABLE_SERVICE_WORKER) {
+      if (isClientSide() && ENABLE_SERVICE_WORKER) {
         unregister()
         console.log('Unregistered the service worker.') // eslint-disable-line no-console
       }
