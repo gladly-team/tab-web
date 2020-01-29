@@ -21,13 +21,12 @@ const addTrailingSlashIfNeeded = path => {
   return `${path}${!hasTrailingSlash && URLS_USE_TRAILING_SLASH ? '/' : ''}`
 }
 
-export const withBasePath = path => {
-  return addTrailingSlashIfNeeded(`${URLS_BASE_PATH}${path}`)
-}
+export const withBasePath = path => `${URLS_BASE_PATH}${path}`
 
-export const apiLogin = withBasePath('/api/login')
-export const apiLogout = withBasePath('/api/logout')
+// For /api/* paths.
+const createAPIURL = url => addTrailingSlashIfNeeded(withBasePath(url))
 
+// For paths that we use with the Link component and router.
 // We don't add the base path to page URLs here. Instead,
 // we add it in the Link component's "at" prop and let Now
 // rewrite the route with the base path.
@@ -35,6 +34,14 @@ export const apiLogout = withBasePath('/api/logout')
 // Note: this means we must add the base path manually for any navigation
 // we do outside of the Link component.
 // @area/workaround/next-js-base-path
-export const authURL = addTrailingSlashIfNeeded('/auth')
-export const dashboardURL = '/'
-export const exampleURL = addTrailingSlashIfNeeded('/example')
+const createPageURL = url => addTrailingSlashIfNeeded(url)
+
+export const apiLogin = createAPIURL('/api/login')
+export const apiLogout = createAPIURL('/api/logout')
+
+export const authURL = createPageURL('/auth')
+export const dashboardURL = createPageURL('/')
+export const exampleURL = createPageURL('/example')
+
+// For progressive web app.
+export const PWAManifestURL = withBasePath('/manifest.json')

@@ -3,6 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
+import { PWAManifestURL } from 'src/utils/urls'
 
 class CustomDocument extends Document {
   render() {
@@ -15,6 +16,12 @@ class CustomDocument extends Document {
     return (
       <Html>
         <Head>
+          <link rel="manifest" href={PWAManifestURL} />
+          <meta name="theme-color" content="#9d4ba3" />
+          <link
+            rel="apple-touch-icon"
+            href="/static/img/logo/logo192-apple.png"
+          />
           <script
             id="__TAB_WEB_AUTH_USER_INFO"
             type="application/json"
