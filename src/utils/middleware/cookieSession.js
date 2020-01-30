@@ -32,6 +32,7 @@ export const addSession = (req, res) => {
     overwrite: true,
     // Important that production serves sameSite=None and secure=true because we
     // may load this page as an iframe on the new tab page (cross-domain).
+    // The 'none' option is supported in cookie-session ^1.4.0.
     sameSite: useSecureSameSiteNone ? 'none' : 'strict',
     secure: useSecureSameSiteNone,
   })
