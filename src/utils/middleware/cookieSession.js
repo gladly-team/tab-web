@@ -35,6 +35,8 @@ export const addSession = (req, res) => {
     sameSite: useSecureSameSiteNone ? 'none' : 'strict',
     secure: useSecureSameSiteNone,
   })
+
+  console.log(req) // eslint-disable-line no-console
   includeSession(req, res, () => {})
 }
 
