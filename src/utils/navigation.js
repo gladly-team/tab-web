@@ -1,4 +1,3 @@
-/* eslint import/prefer-default-export: 0 */
 /* globals window */
 import Router from 'next/router'
 import { isServerSide } from 'src/utils/ssr'
