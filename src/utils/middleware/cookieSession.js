@@ -23,20 +23,25 @@ export const addSession = (req, res) => {
 
   // Example:
   // https://github.com/billymoon/micro-cookie-session
-  const includeSession = cookieSession({
-    // https://github.com/expressjs/cookie-session#cookie-options
-    name: 'tabWebSession',
-    httpOnly: true,
-    keys: sessionSecrets,
-    maxAge: 604800000, // week
-    overwrite: true,
-    // Important that production serves sameSite=None and secure=true because we
-    // may load this page as an iframe on the new tab page (cross-domain).
-    // The 'none' option is supported in cookie-session ^1.4.0.
-    sameSite: useSecureSameSiteNone ? 'none' : 'strict',
-    secure: useSecureSameSiteNone,
-  })
-  includeSession(req, res, () => {})
+  try {
+    const includeSession = cookieSession({
+      // https://github.com/expressjs/cookie-session#cookie-options
+      name: 'tabWebSession',
+      httpOnly: true,
+      keys: sessionSecrets,
+      maxAge: 604800000, // week
+      overwrite: true,
+      // Important that production serves sameSite=None and secure=true because we
+      // may load this page as an iframe on the new tab page (cross-domain).
+      // The 'none' option is supported in cookie-session ^1.4.0.
+      sameSite: useSecureSameSiteNone ? 'none' : 'strict',
+      secure: useSecureSameSiteNone,
+    })
+    includeSession(req, res, () => {})
+  } catch (e) {
+    console.error(e) // eslint-disable-line no-console
+    throw e
+  }
 }
 
 export default handler => (req, res) => {
