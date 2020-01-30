@@ -37,6 +37,8 @@ export const addSession = (req, res) => {
       sameSite: useSecureSameSiteNone ? 'none' : 'strict',
       secure: useSecureSameSiteNone,
     })
+    console.log('req.protocol', req.protocol) // eslint-disable-line no-console
+    console.log('req.connection.encrypted', req.connection.encrypted) // eslint-disable-line no-console
     includeSession(req, res, () => {})
   } catch (e) {
     console.error(e) // eslint-disable-line no-console
