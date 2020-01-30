@@ -24,6 +24,9 @@ export const addSession = (req, res) => {
   // Example:
   // https://github.com/billymoon/micro-cookie-session
   try {
+    // FIXME: the problem with using cookie-session in the ZEIT Now context
+    // is that apparently the checks for a secure connection are failing:
+    // https://www.npmjs.com/package/cookies#secure-cookies
     const includeSession = cookieSession({
       // https://github.com/expressjs/cookie-session#cookie-options
       name: 'tabWebSession',
@@ -37,8 +40,6 @@ export const addSession = (req, res) => {
       sameSite: useSecureSameSiteNone ? 'none' : 'strict',
       secure: useSecureSameSiteNone,
     })
-    console.log('req.protocol', req.protocol) // eslint-disable-line no-console
-    console.log('req.connection.encrypted', req.connection.encrypted) // eslint-disable-line no-console
     includeSession(req, res, () => {})
   } catch (e) {
     console.error(e) // eslint-disable-line no-console
