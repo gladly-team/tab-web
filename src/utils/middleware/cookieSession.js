@@ -29,7 +29,7 @@ export const addSession = (req, res) => {
     overwrite: true,
     // Important that sameSite=None because we may load this page as
     // an iframe on the new tab page (cross-domain).
-    sameSite: 'None',
+    sameSite: 'none',
     secure: true,
   })
   includeSession(req, res, () => {})
