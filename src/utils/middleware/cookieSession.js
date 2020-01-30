@@ -36,6 +36,11 @@ export const addSession = (req, res) => {
       // The 'none' option is supported in cookie-session ^1.4.0.
       sameSite: useSecureSameSiteNone ? 'none' : 'strict',
       secure: useSecureSameSiteNone,
+      cookie: {
+        overwrite: true,
+        sameSite: useSecureSameSiteNone ? 'none' : 'strict',
+        secure: useSecureSameSiteNone,
+      },
     })
     includeSession(req, res, () => {})
   } catch (e) {
