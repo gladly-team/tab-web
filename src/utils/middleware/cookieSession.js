@@ -21,13 +21,16 @@ export const addSession = (req, res) => {
   // Example:
   // https://github.com/billymoon/micro-cookie-session
   const includeSession = cookieSession({
-    name: 'tabWebSession',
-    keys: sessionSecrets,
-    // TODO: set other options, such as "secure", "sameSite", etc.
     // https://github.com/expressjs/cookie-session#cookie-options
-    maxAge: 604800000, // week
+    name: 'tabWebSession',
     httpOnly: true,
+    keys: sessionSecrets,
+    maxAge: 604800000, // week
     overwrite: true,
+    // Important that sameSite=None because we may load this page as
+    // an iframe on the new tab page (cross-domain).
+    sameSite: 'None',
+    secure: true,
   })
   includeSession(req, res, () => {})
 }
