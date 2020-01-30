@@ -18,6 +18,9 @@ export const addSession = (req, res) => {
     process.env.SESSION_SECRET_PREVIOUS,
   ]
 
+  const useSecureSameSiteNone =
+    process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE === 'true'
+
   // Example:
   // https://github.com/billymoon/micro-cookie-session
   const includeSession = cookieSession({
@@ -27,10 +30,10 @@ export const addSession = (req, res) => {
     keys: sessionSecrets,
     maxAge: 604800000, // week
     overwrite: true,
-    // Important that sameSite=None because we may load this page as
-    // an iframe on the new tab page (cross-domain).
-    sameSite: 'none',
-    secure: true,
+    // Important that production serves sameSite=None and secure=true because we
+    // may load this page as an iframe on the new tab page (cross-domain).
+    sameSite: useSecureSameSiteNone ? 'none' : 'strict',
+    secure: useSecureSameSiteNone,
   })
   includeSession(req, res, () => {})
 }
