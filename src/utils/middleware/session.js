@@ -8,13 +8,18 @@ function Session(req) {
   this.req = req
   this.cookieName = 'tabWebSession'
 
-  this.serialize = val => encodeBase64(val)
-  this.deserialize = val => decodeBase64(val)
+  const serialize = val => encodeBase64(val)
+  const deserialize = val => decodeBase64(val)
+
+  // Compare a new serialized value to the existing value.
+  const isDifferent = newSerializedVal => {
+    return newSerializedVal !== serialize(this.get())
+  }
 
   this.get = () => {
     let decodedVal
     try {
-      decodedVal = this.deserialize(this.req.cookie.get(this.cookieName))
+      decodedVal = deserialize(this.req.cookie.get(this.cookieName))
       return decodedVal
     } catch (e) {
       return undefined
@@ -29,14 +34,18 @@ function Session(req) {
       if (isNil(val)) {
         encodedVal = undefined
       } else {
-        encodedVal = this.serialize(val)
+        encodedVal = serialize(val)
       }
     } catch (e) {
       // TODO: log error
       console.error(e) // eslint-disable-line no-console
       return
     }
-    this.req.cookie.set(this.cookieName, encodedVal)
+
+    // Only set the cookie if it has changed.
+    if (isDifferent(encodedVal)) {
+      this.req.cookie.set(this.cookieName, encodedVal)
+    }
   }
 }
 
@@ -54,6 +63,7 @@ const addSession = req => {
       set: session.set,
     })
   } catch (e) {
+    // TODO: log error
     console.error(e) // eslint-disable-line no-console
     throw e
   }

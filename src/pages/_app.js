@@ -72,7 +72,6 @@ App.getInitialProps = async ({ Component, ctx }) => {
   if (isServerSide()) {
     // If server-side, get AuthUserInfo from the session in the request.
     withSession(req, res)
-    console.log('Session:', req.session) // eslint-disable-line no-console
     AuthUserInfo = createAuthUserInfo({
       firebaseUser: get(req, 'session.decodedToken', null),
       token: get(req, 'session.token', null),

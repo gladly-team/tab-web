@@ -16,10 +16,12 @@ const handler = (req, res) => {
       }
       return decodedToken
     })
-    .then(decodedToken => {
-      return res.status(200).json({ status: true, decodedToken })
+    .then(() => {
+      return res.status(200).json({ status: true })
     })
     .catch(error => {
+      // TODO: log error
+      console.error(error) // eslint-disable-line no-console
       return res.status(500).json({ error })
     })
 }
