@@ -9,7 +9,7 @@ import {
   createAuthUserInfo,
   getAuthUserInfoFromDOM,
 } from 'src/utils/auth/user'
-import { addSession } from 'src/utils/middleware/cookieSession'
+// import { addSession } from 'src/utils/middleware/cookieSession'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
 
 const App = props => {
@@ -71,7 +71,7 @@ App.getInitialProps = async ({ Component, ctx }) => {
   let AuthUserInfo
   if (isServerSide()) {
     // If server-side, get AuthUserInfo from the session in the request.
-    addSession(req, res)
+    // addSession(req, res)
     AuthUserInfo = createAuthUserInfo({
       firebaseUser: get(req, 'session.decodedToken', null),
       token: get(req, 'session.token', null),

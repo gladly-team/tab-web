@@ -1,6 +1,7 @@
-import cookieSession from 'cookie-session'
+import Cookies from 'cookies'
 
-export const addSession = (req, res) => {
+// Adds a req.cookies function, which has get/set methods.
+export const addCookies = (req, res) => {
   // Ensure that session secrets are set.
   if (
     !(process.env.SESSION_SECRET_CURRENT && process.env.SESSION_SECRET_PREVIOUS)
@@ -21,15 +22,9 @@ export const addSession = (req, res) => {
   const useSecureSameSiteNone =
     process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE === 'true'
 
-  // Example:
-  // https://github.com/billymoon/micro-cookie-session
+  // https://github.com/pillarjs/cookies
   try {
-    // FIXME: the problem with using cookie-session in the ZEIT Now context
-    // is that apparently the checks for a secure connection are failing:
-    // https://www.npmjs.com/package/cookies#secure-cookies
-    const includeSession = cookieSession({
-      // https://github.com/expressjs/cookie-session#cookie-options
-      name: 'tabWebSession',
+    const cookies = Cookies(req, res, {
       httpOnly: true,
       keys: sessionSecrets,
       maxAge: 604800000, // week
@@ -40,7 +35,7 @@ export const addSession = (req, res) => {
       sameSite: useSecureSameSiteNone ? 'none' : 'strict',
       secure: useSecureSameSiteNone,
     })
-    includeSession(req, res, () => {})
+    req.cookies = cookies
   } catch (e) {
     console.error(e) // eslint-disable-line no-console
     throw e
@@ -49,9 +44,11 @@ export const addSession = (req, res) => {
 
 export default handler => (req, res) => {
   try {
-    addSession(req, res)
+    addCookies(req, res)
   } catch (e) {
-    return res.status(500).json({ error: 'Could not get user session.' })
+    return res
+      .status(500)
+      .json({ error: 'Could not add the cookies middleware.' })
   }
   return handler(req, res)
 }
