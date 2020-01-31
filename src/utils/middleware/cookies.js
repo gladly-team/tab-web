@@ -1,7 +1,7 @@
 import Cookies from 'cookies'
 
-// Adds a req.cookies function, which has get/set methods.
-export const addCookies = (req, res) => {
+// Adds a req.cookie object, which has get/set methods.
+export const withCookies = (req, res) => {
   // Ensure that session secrets are set.
   if (
     !(process.env.SESSION_SECRET_CURRENT && process.env.SESSION_SECRET_PREVIOUS)
@@ -37,6 +37,11 @@ export const addCookies = (req, res) => {
       secure: useSecureSameSiteNone,
     })
     req.cookie = {
+      get: cookieName => {
+        return cookies.get(cookieName, {
+          signed: true,
+        })
+      },
       set: (cookieName, cookieVal) => {
         cookies.set(cookieName, cookieVal, {
           httpOnly: true,
@@ -58,7 +63,7 @@ export const addCookies = (req, res) => {
 
 export default handler => (req, res) => {
   try {
-    addCookies(req, res)
+    withCookies(req, res)
   } catch (e) {
     return res
       .status(500)
