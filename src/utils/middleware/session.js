@@ -17,24 +17,24 @@ function Session(req) {
   }
 
   this.get = () => {
-    let decodedVal
+    let deserializedVal
     try {
-      decodedVal = deserialize(this.req.cookie.get(this.cookieName))
-      return decodedVal
+      deserializedVal = deserialize(this.req.cookie.get(this.cookieName))
+      return deserializedVal
     } catch (e) {
       return undefined
     }
   }
 
   this.set = val => {
-    let encodedVal
+    let serializedVal
     try {
       // If the value is not defined, set the value to undefined
       // so that the cookie will be deleted.
       if (isNil(val)) {
-        encodedVal = undefined
+        serializedVal = undefined
       } else {
-        encodedVal = serialize(val)
+        serializedVal = serialize(val)
       }
     } catch (e) {
       // TODO: log error
@@ -43,8 +43,8 @@ function Session(req) {
     }
 
     // Only set the cookie if it has changed.
-    if (isDifferent(encodedVal)) {
-      this.req.cookie.set(this.cookieName, encodedVal)
+    if (isDifferent(serializedVal)) {
+      this.req.cookie.set(this.cookieName, serializedVal)
     }
   }
 }
