@@ -11,6 +11,7 @@ const handler = (req, res) => {
   return verifyIdToken(token)
     .then(decodedToken => {
       req.session = {
+        ...(req.session || {}),
         decodedToken,
         token,
       }
