@@ -10,8 +10,10 @@ const handler = (req, res) => {
 
   return verifyIdToken(token)
     .then(decodedToken => {
-      req.session.decodedToken = decodedToken
-      req.session.token = token
+      req.session = {
+        decodedToken,
+        token,
+      }
       return decodedToken
     })
     .then(decodedToken => {
