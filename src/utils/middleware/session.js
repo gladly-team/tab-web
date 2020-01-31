@@ -1,6 +1,7 @@
+import { encodeBase64, decodeBase64 } from 'src/utils/encoding'
 import { withCookies } from 'src/utils/middleware/cookies'
 
-const addSession = (req, res) => {
+const addSession = req => {
   if (!req.cookie) {
     throw new Error('The session middleware requires the cookies middleware.')
   }
@@ -12,9 +13,25 @@ const addSession = (req, res) => {
     Object.defineProperty(req, 'session', {
       configurable: true,
       enumerable: true,
-      get: () => req.cookie.get(sessionCookieName),
+      get: () => {
+        let decodedVal
+        try {
+          decodedVal = decodeBase64(req.cookie.get(sessionCookieName))
+          return decodedVal
+        } catch (e) {
+          return undefined
+        }
+      },
       set: val => {
-        req.cookie.set(sessionCookieName, val)
+        let encodedVal
+        try {
+          encodedVal = encodeBase64(val)
+        } catch (e) {
+          // TODO: log error
+          console.error(e) // eslint-disable-line no-console
+          return
+        }
+        req.cookie.set(sessionCookieName, encodedVal)
       },
     })
   } catch (e) {
