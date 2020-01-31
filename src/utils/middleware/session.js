@@ -13,7 +13,11 @@ function Session(req) {
 
   // Compare a new serialized value to the existing value.
   const isDifferent = newSerializedVal => {
-    return newSerializedVal !== serialize(this.get())
+    const existingSession = this.get()
+    const existingSessionSerialized = isNil(existingSession)
+      ? undefined
+      : serialize(existingSession)
+    return newSerializedVal !== existingSessionSerialized
   }
 
   this.get = () => {
