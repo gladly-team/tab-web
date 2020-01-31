@@ -14,7 +14,7 @@ export const setSession = async user => {
         method: 'POST',
         // eslint-disable-next-line no-undef
         headers: new Headers({ 'Content-Type': 'application/json' }),
-        credentials: 'same-origin',
+        credentials: 'include',
         body: JSON.stringify({ token }),
       })
     })
@@ -23,6 +23,6 @@ export const setSession = async user => {
   // Log out.
   return fetch(apiLogout, {
     method: 'POST',
-    credentials: 'same-origin',
+    credentials: 'include',
   })
 }

@@ -10,14 +10,19 @@ const handler = (req, res) => {
 
   return verifyIdToken(token)
     .then(decodedToken => {
-      req.session.decodedToken = decodedToken
-      req.session.token = token
+      req.session = {
+        ...(req.session || {}),
+        decodedToken,
+        token,
+      }
       return decodedToken
     })
-    .then(decodedToken => {
-      return res.status(200).json({ status: true, decodedToken })
+    .then(() => {
+      return res.status(200).json({ status: true })
     })
     .catch(error => {
+      // TODO: log error
+      console.error(error) // eslint-disable-line no-console
       return res.status(500).json({ error })
     })
 }
