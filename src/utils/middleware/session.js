@@ -1,3 +1,4 @@
+import { isNil } from 'lodash/lang'
 import { encodeBase64, decodeBase64 } from 'src/utils/encoding'
 import { withCookies } from 'src/utils/middleware/cookies'
 
@@ -25,7 +26,13 @@ const addSession = req => {
       set: val => {
         let encodedVal
         try {
-          encodedVal = encodeBase64(val)
+          // If the value is not defined, set the value to undefined
+          // so that the cookie will be deleted.
+          if (isNil(val)) {
+            encodedVal = undefined
+          } else {
+            encodedVal = encodeBase64(val)
+          }
         } catch (e) {
           // TODO: log error
           console.error(e) // eslint-disable-line no-console
