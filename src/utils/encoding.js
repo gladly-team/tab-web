@@ -1,5 +1,5 @@
 /**
- * Decode the base64 cookie value to an object.
+ * Decode a base64 value to an object.
  *
  * @param {String} string
  * @return {Object}
