@@ -25,17 +25,31 @@ export const addCookies = (req, res) => {
   // https://github.com/pillarjs/cookies
   try {
     const cookies = Cookies(req, res, {
-      httpOnly: true,
+      // "A Keygrip object or an array of keys can optionally be passed as options.keys
+      // to enable cryptographic signing based on SHA1 HMAC, using rotated credentials."
+      // https://github.com/pillarjs/cookies#cookies--new-cookies-request-response--options--
       keys: sessionSecrets,
-      maxAge: 604800000, // week
-      overwrite: true,
       // Important that production serves sameSite=None and secure=true because we
       // may load this page as an iframe on the new tab page (cross-domain).
-      // The 'none' option is supported in cookie-session ^1.4.0.
-      sameSite: useSecureSameSiteNone ? 'none' : 'strict',
+      // "A Boolean can optionally be passed as options.secure to explicitly specify
+      // if the connection is secure, rather than this module examining request."
+      // https://github.com/pillarjs/cookies#cookies--new-cookies-request-response--options--
       secure: useSecureSameSiteNone,
     })
-    req.cookies = cookies
+    req.cookie = {
+      set: (cookieName, cookieVal) => {
+        cookies.set(cookieName, cookieVal, {
+          httpOnly: true,
+          maxAge: 604800000, // week
+          overwrite: true,
+          // Important that production serves sameSite=None and secure=true because we
+          // may load this page as an iframe on the new tab page (cross-domain).
+          // The 'none' option is supported in cookie-session ^1.4.0.
+          sameSite: useSecureSameSiteNone ? 'none' : 'strict',
+          secure: useSecureSameSiteNone,
+        })
+      },
+    }
   } catch (e) {
     console.error(e) // eslint-disable-line no-console
     throw e
