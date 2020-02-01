@@ -14,10 +14,10 @@ import { isClientSide } from 'src/utils/ssr'
 export default getRelayQuery => ComposedComponent => {
   const WithDataComp = props => {
     const {
-      composedComponentInitialProps,
       queryRecords,
       queryProps,
       refetchDataOnMount,
+      ...otherProps
     } = props
     const [environment] = useState(
       initEnvironment({
@@ -66,10 +66,10 @@ export default getRelayQuery => ComposedComponent => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    // The child component's props are the combination of any intial props it
+    // The child component's props are the combination of any initial props it
     // requested plus data fetched via Relay.
     const componentData = {
-      ...composedComponentInitialProps,
+      ...otherProps,
       ...relayData,
     }
 
@@ -87,11 +87,9 @@ export default getRelayQuery => ComposedComponent => {
     const AuthUserToken = get(AuthUserInfo, 'token', null)
 
     // Evaluate the composed component's getInitialProps().
-    let composedComponentInitialProps = {}
+    let composedInitialProps = {}
     if (ComposedComponent.getInitialProps) {
-      composedComponentInitialProps = await ComposedComponent.getInitialProps(
-        ctx
-      )
+      composedInitialProps = await ComposedComponent.getInitialProps(ctx)
     }
 
     // Get the Relay query and variables config. We pass the authUser
@@ -122,7 +120,7 @@ export default getRelayQuery => ComposedComponent => {
       process.env.SERVICE_WORKER_ENABLED === 'true' && !isClientSide()
 
     return {
-      composedComponentInitialProps,
+      ...composedInitialProps,
       queryProps,
       queryRecords,
       refetchDataOnMount,
@@ -133,17 +131,13 @@ export default getRelayQuery => ComposedComponent => {
 
   WithDataComp.propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
-    composedComponentInitialProps: PropTypes.object,
-    // eslint-disable-next-line react/forbid-prop-types
     queryRecords: PropTypes.object.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     queryProps: PropTypes.object.isRequired,
     refetchDataOnMount: PropTypes.bool.isRequired,
   }
 
-  WithDataComp.defaultProps = {
-    composedComponentInitialProps: {},
-  }
+  WithDataComp.defaultProps = {}
 
   return WithDataComp
 }
