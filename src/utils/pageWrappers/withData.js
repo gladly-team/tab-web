@@ -13,7 +13,12 @@ import { isClientSide } from 'src/utils/ssr'
 
 export default getRelayQuery => ComposedComponent => {
   const WithDataComp = props => {
-    const { composedComponentInitialProps, queryRecords, queryProps } = props
+    const {
+      composedComponentInitialProps,
+      queryRecords,
+      queryProps,
+      refetchDataOnMount,
+    } = props
     const [environment] = useState(
       initEnvironment({
         records: queryRecords,
@@ -29,13 +34,11 @@ export default getRelayQuery => ComposedComponent => {
     // so the child component can use the user ID in the query, if needed.
     const { query, variables = {} } = getRelayQuery({ AuthUser })
 
+    // If needed, refetch data on client-side mount.
     // If our service worker is active, we're likely loading stale data
     // from cached page HTML. In this case, refetch data on mount.
     useEffect(() => {
-      // If we aren't running the service worker, there's no reason to refetch.
-      const isServiceWorkerEnabled =
-        process.env.SERVICE_WORKER_ENABLED === 'true'
-      if (!isServiceWorkerEnabled) {
+      if (!refetchDataOnMount) {
         return
       }
       let isCancelled = false
@@ -111,10 +114,18 @@ export default getRelayQuery => ComposedComponent => {
         .toJSON()
     }
 
+    // Determine if we should refetch data on client-side mount.
+    // If we aren't running the service worker, there's no reason to refetch.
+    // In addition, if getInitialProps is called on the client side,
+    // like during client-side navigation, we don't need to refetch.
+    const refetchDataOnMount =
+      process.env.SERVICE_WORKER_ENABLED === 'true' && !isClientSide()
+
     return {
       composedComponentInitialProps,
       queryProps,
       queryRecords,
+      refetchDataOnMount,
     }
   }
 
@@ -127,6 +138,7 @@ export default getRelayQuery => ComposedComponent => {
     queryRecords: PropTypes.object.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     queryProps: PropTypes.object.isRequired,
+    refetchDataOnMount: PropTypes.bool.isRequired,
   }
 
   WithDataComp.defaultProps = {
