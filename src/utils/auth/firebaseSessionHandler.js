@@ -17,7 +17,7 @@ export const setSession = async user => {
       headers: new Headers({
         Authorization: userToken,
       }),
-      credentials: 'omit',
+      credentials: 'include',
     })
   }
 
@@ -28,6 +28,6 @@ export const setSession = async user => {
     headers: new Headers({
       Authorization: userToken,
     }),
-    credentials: 'omit',
+    credentials: 'include',
   })
 }
