@@ -1,7 +1,8 @@
-import commonMiddleware from 'src/utils/middleware/commonMiddleware'
+import commonAPIMiddleware from 'src/utils/middleware/APIMiddleware/commonAPIMiddleware'
 import { verifyIdToken } from 'src/utils/auth/firebaseAdmin'
 
 const handler = (req, res) => {
+  console.log(req.tab)
   if (!req.body) {
     return res.status(400)
   }
@@ -27,4 +28,4 @@ const handler = (req, res) => {
     })
 }
 
-export default commonMiddleware(handler)
+export default commonAPIMiddleware(handler)

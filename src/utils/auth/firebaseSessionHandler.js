@@ -7,22 +7,29 @@ import fetch from 'isomorphic-unfetch'
 import { apiLogin, apiLogout } from 'src/utils/urls'
 
 export const setSession = async user => {
-  // Log in.
+  const userToken = await user.getIdToken()
+
+  // If the user is authed, call login to set a cookie.
   if (user) {
-    return user.getIdToken().then(token => {
-      return fetch(apiLogin, {
-        method: 'POST',
-        // eslint-disable-next-line no-undef
-        headers: new Headers({ 'Content-Type': 'application/json' }),
-        credentials: 'include',
-        body: JSON.stringify({ token }),
-      })
+    return fetch(apiLogin, {
+      method: 'POST',
+      // eslint-disable-next-line no-undef
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        Authorization: userToken,
+      }),
+      credentials: 'omit',
+      body: JSON.stringify({ userToken }),
     })
   }
 
-  // Log out.
+  // If the user is not authed, call logout to unset the cookie.
   return fetch(apiLogout, {
     method: 'POST',
-    credentials: 'include',
+    // eslint-disable-next-line no-undef
+    headers: new Headers({
+      Authorization: userToken,
+    }),
+    credentials: 'omit',
   })
 }
