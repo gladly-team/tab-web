@@ -46,6 +46,7 @@ function Session(req) {
       return
     }
 
+    // TODO: remove this optimization
     // Only set the cookie if it has changed.
     if (isDifferent(serializedVal)) {
       this.req.cookie.set(this.cookieName, serializedVal)

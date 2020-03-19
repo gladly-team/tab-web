@@ -4,6 +4,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import { AuthUserInfoContext } from 'src/utils/auth/hooks'
+import {
+  NEXT_CTX_CUSTOM_DATA_KEY,
+  NEXT_CTX_AUTH_USER_INFO_KEY,
+} from 'src/utils/constants'
 
 // Provides an AuthUserInfo prop to the composed component.
 export default ComposedComponent => {
@@ -23,7 +27,11 @@ export default ComposedComponent => {
 
   WithAuthUserInfoComp.getInitialProps = async ctx => {
     // Get the AuthUserInfo object. This is set in _app.js.
-    const AuthUserInfo = get(ctx, 'tabCustomData.AuthUserInfo', null)
+    const AuthUserInfo = get(
+      ctx,
+      [NEXT_CTX_CUSTOM_DATA_KEY, NEXT_CTX_AUTH_USER_INFO_KEY],
+      null
+    )
 
     // Evaluate the composed component's getInitialProps().
     let composedInitialProps = {}

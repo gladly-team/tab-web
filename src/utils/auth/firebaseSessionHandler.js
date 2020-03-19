@@ -15,11 +15,9 @@ export const setSession = async user => {
       method: 'POST',
       // eslint-disable-next-line no-undef
       headers: new Headers({
-        'Content-Type': 'application/json',
         Authorization: userToken,
       }),
       credentials: 'omit',
-      body: JSON.stringify({ userToken }),
     })
   }
 
