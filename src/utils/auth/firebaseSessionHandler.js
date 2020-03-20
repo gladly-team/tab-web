@@ -6,15 +6,12 @@
 import fetch from 'isomorphic-unfetch'
 import { apiLogin, apiLogout } from 'src/utils/urls'
 
-export const setSession = async ({ shouldLogin, user }) => {
-  if (!user) {
-    throw new Error('The setSession function requires a valid "user" value.')
-  }
+export const setSession = async user => {
   const userToken = await user.getIdToken()
 
-  // If the user is still authed, call login to set a cookie.
-  if (shouldLogin) {
-    await fetch(apiLogin, {
+  // If the user is authed, call login to set a cookie.
+  if (user) {
+    return fetch(apiLogin, {
       method: 'POST',
       // eslint-disable-next-line no-undef
       headers: new Headers({
@@ -22,11 +19,10 @@ export const setSession = async ({ shouldLogin, user }) => {
       }),
       credentials: 'include',
     })
-    return
   }
 
-  // If the user is logging out, call logout to unset the cookie.
-  await fetch(apiLogout, {
+  // If the user is not authed, call logout to unset the cookie.
+  return fetch(apiLogout, {
     method: 'POST',
     // eslint-disable-next-line no-undef
     headers: new Headers({
