@@ -1,4 +1,4 @@
-import commonMiddleware from 'src/utils/middleware/commonMiddleware'
+import commonAPIMiddleware from 'src/utils/middleware/APIMiddleware/commonAPIMiddleware'
 
 const handler = (req, res) => {
   // Destroy the session.
@@ -9,4 +9,4 @@ const handler = (req, res) => {
   res.status(200).json({ status: true })
 }
 
-export default commonMiddleware(handler)
+export default commonAPIMiddleware(handler)
