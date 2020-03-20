@@ -27,10 +27,11 @@ export const useFirebaseAuth = () => {
   })
 
   async function onChange(user) {
-    // Call server to update session. We need this to complete
-    // before setting the user state to ensure the session exists
-    // and thus server-side rendering will behave like client-side
-    // rendering.
+    // When the user logs in or out to Firebase, call the server
+    // to update their session. We must wait for the session to be
+    // set before changing the user state because we want server-side
+    // rendering to match client-side user state.
+
     try {
       await setSession(user)
     } catch (e) {
