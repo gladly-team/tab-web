@@ -7,15 +7,15 @@ import fetch from 'isomorphic-unfetch'
 import { apiLogin, apiLogout } from 'src/utils/urls'
 
 export const setSession = async user => {
-  const userToken = await user.getIdToken()
-
   // If the user is authed, call login to set a cookie.
   if (user) {
+    const userToken = await user.getIdToken()
     return fetch(apiLogin, {
       method: 'POST',
       // eslint-disable-next-line no-undef
       headers: new Headers({
         Authorization: userToken,
+        'X-Gladly-Requested-By': 'tab-web-nextjs',
       }),
       credentials: 'include',
     })
@@ -26,7 +26,9 @@ export const setSession = async user => {
     method: 'POST',
     // eslint-disable-next-line no-undef
     headers: new Headers({
-      Authorization: userToken,
+      // This custom header provides modest CSRF protection.
+      // TODO: explain approach/rationale
+      'X-Gladly-Requested-By': 'tab-web-nextjs',
     }),
     credentials: 'include',
   })
