@@ -1,6 +1,6 @@
 import cookies from 'src/utils/middleware/cookies'
 import session from 'src/utils/middleware/session'
-import customHeaderRequired from 'src/utils/middleware/APIMiddleware/customHeaderRequired'
+import customHeaderRequired from 'src/utils/middleware/customHeaderRequired'
 
 const handler = (req, res) => {
   // Destroy the session.

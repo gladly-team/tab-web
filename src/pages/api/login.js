@@ -1,5 +1,5 @@
 import { get } from 'lodash/object'
-import commonAPIMiddleware from 'src/utils/middleware/APIMiddleware/commonAPIMiddleware'
+import commonAPIMiddleware from 'src/utils/middleware/commonAPIMiddleware'
 import {
   CUSTOM_REQ_DATA_KEY,
   AUTH_USER_INFO_KEY,
