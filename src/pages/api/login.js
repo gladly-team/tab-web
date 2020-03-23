@@ -6,7 +6,7 @@ import {
 } from 'src/utils/middleware/constants'
 
 const handler = (req, res) => {
-  const AuthUserInfo = get(req, [CUSTOM_REQ_DATA_KEY, AUTH_USER_INFO_KEY])
+  const AuthUserInfo = get(req, [CUSTOM_REQ_DATA_KEY, AUTH_USER_INFO_KEY], null)
   req.session = {
     ...(req.session || {}),
     AuthUserInfo,
