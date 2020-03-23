@@ -11,15 +11,6 @@ function Session(req) {
   const serialize = val => encodeBase64(val)
   const deserialize = val => decodeBase64(val)
 
-  // Compare a new serialized value to the existing value.
-  const isDifferent = newSerializedVal => {
-    const existingSession = this.get()
-    const existingSessionSerialized = isNil(existingSession)
-      ? undefined
-      : serialize(existingSession)
-    return newSerializedVal !== existingSessionSerialized
-  }
-
   this.get = () => {
     let deserializedVal
     try {
@@ -46,11 +37,7 @@ function Session(req) {
       return
     }
 
-    // TODO: remove this optimization
-    // Only set the cookie if it has changed.
-    if (isDifferent(serializedVal)) {
-      this.req.cookie.set(this.cookieName, serializedVal)
-    }
+    this.req.cookie.set(this.cookieName, serializedVal)
   }
 }
 
