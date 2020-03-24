@@ -4,6 +4,10 @@ import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { PWAManifestURL } from 'src/utils/urls'
+import {
+  NEXT_CTX_CUSTOM_DATA_KEY,
+  NEXT_CTX_AUTH_USER_INFO_KEY,
+} from 'src/utils/constants'
 
 class CustomDocument extends Document {
   render() {
@@ -41,7 +45,11 @@ class CustomDocument extends Document {
 
 CustomDocument.getInitialProps = async ctx => {
   // Get the AuthUserInfo object. This is set in _app.js.
-  const AuthUserInfo = get(ctx, 'tabCustomData.AuthUserInfo', null)
+  const AuthUserInfo = get(
+    ctx,
+    [NEXT_CTX_CUSTOM_DATA_KEY, NEXT_CTX_AUTH_USER_INFO_KEY],
+    null
+  )
 
   const initialProps = await Document.getInitialProps(ctx)
   return { ...initialProps, AuthUserInfo }

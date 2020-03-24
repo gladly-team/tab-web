@@ -11,6 +11,12 @@ import {
 } from 'src/utils/auth/user'
 import { withSession } from 'src/utils/middleware/session'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
+import {
+  NEXT_CTX_CUSTOM_DATA_KEY,
+  NEXT_CTX_AUTH_USER_INFO_KEY,
+  REQ_SESSION_KEY,
+  REQ_SESSION_AUTH_USER_INFO_KEY,
+} from 'src/utils/constants'
 
 const App = props => {
   const { AuthUserInfo, Component, pageProps } = props
@@ -72,10 +78,14 @@ App.getInitialProps = async ({ Component, ctx }) => {
   if (isServerSide()) {
     // If server-side, get AuthUserInfo from the session in the request.
     withSession(req, res)
-    AuthUserInfo = createAuthUserInfo({
-      firebaseUser: get(req, 'session.decodedToken', null),
-      token: get(req, 'session.token', null),
-    })
+
+    // If AuthUserInfo isn't in the session, default to an empty
+    // AuthUserInfo object.
+    AuthUserInfo = get(
+      req,
+      [REQ_SESSION_KEY, REQ_SESSION_AUTH_USER_INFO_KEY],
+      createAuthUserInfo()
+    )
   } else {
     // If client-side, get AuthUserInfo from stored data. We store it
     // in _document.js. See:
@@ -85,7 +95,11 @@ App.getInitialProps = async ({ Component, ctx }) => {
 
   // Explicitly add the user to a custom prop in the getInitialProps
   // context for ease of use in child components.
-  set(ctx, 'tabCustomData.AuthUserInfo', AuthUserInfo)
+  set(
+    ctx,
+    [NEXT_CTX_CUSTOM_DATA_KEY, NEXT_CTX_AUTH_USER_INFO_KEY],
+    AuthUserInfo
+  )
 
   let pageProps = {}
   if (Component.getInitialProps) {

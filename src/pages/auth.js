@@ -7,6 +7,10 @@ import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { isClientSide } from 'src/utils/ssr'
 import { redirect, setWindowLocation } from 'src/utils/navigation'
 import { dashboardURL } from 'src/utils/urls'
+import {
+  NEXT_CTX_CUSTOM_DATA_KEY,
+  NEXT_CTX_AUTH_USER_INFO_KEY,
+} from 'src/utils/constants'
 
 const Auth = props => {
   const { AuthUserInfo } = props
@@ -50,7 +54,11 @@ const Auth = props => {
 }
 
 Auth.getInitialProps = async ctx => {
-  const AuthUserInfo = get(ctx, 'tabCustomData.AuthUserInfo', null)
+  const AuthUserInfo = get(
+    ctx,
+    [NEXT_CTX_CUSTOM_DATA_KEY, NEXT_CTX_AUTH_USER_INFO_KEY],
+    null
+  )
 
   // If there is an authed user, redirect to the app.
   if (get(AuthUserInfo, 'AuthUser')) {

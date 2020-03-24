@@ -7,6 +7,10 @@ import { fetchQuery, ReactRelayContext } from 'react-relay'
 import initEnvironment from 'src/utils/createRelayEnvironment'
 import { useAuthUserInfo } from 'src/utils/auth/hooks'
 import { isClientSide } from 'src/utils/ssr'
+import {
+  NEXT_CTX_CUSTOM_DATA_KEY,
+  NEXT_CTX_AUTH_USER_INFO_KEY,
+} from 'src/utils/constants'
 
 // Adapted from:
 // https://github.com/zeit/next.js/blob/canary/examples/with-relay-modern/lib/withData.js
@@ -82,7 +86,11 @@ export default getRelayQuery => ComposedComponent => {
 
   WithDataComp.getInitialProps = async ctx => {
     // Get the AuthUserInfo object. This is set in _app.js.
-    const AuthUserInfo = get(ctx, 'tabCustomData.AuthUserInfo', null)
+    const AuthUserInfo = get(
+      ctx,
+      [NEXT_CTX_CUSTOM_DATA_KEY, NEXT_CTX_AUTH_USER_INFO_KEY],
+      null
+    )
     const AuthUser = get(AuthUserInfo, 'AuthUser', null)
     const AuthUserToken = get(AuthUserInfo, 'token', null)
 

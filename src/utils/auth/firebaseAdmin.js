@@ -1,5 +1,12 @@
 /* eslint import/prefer-default-export: 0 */
 import * as admin from 'firebase-admin'
+import { isServerSide } from 'src/utils/ssr'
+
+if (!isServerSide()) {
+  throw new Error(
+    'The `verifyIdToken` function must be invoked on the server side.'
+  )
+}
 
 export const verifyIdToken = token => {
   const firebasePrivateKey = process.env.FIREBASE_PRIVATE_KEY

@@ -1,4 +1,6 @@
-import commonMiddleware from 'src/utils/middleware/commonMiddleware'
+import cookies from 'src/utils/middleware/cookies'
+import session from 'src/utils/middleware/session'
+import customHeaderRequired from 'src/utils/middleware/customHeaderRequired'
 
 const handler = (req, res) => {
   // Destroy the session.
@@ -9,4 +11,6 @@ const handler = (req, res) => {
   res.status(200).json({ status: true })
 }
 
-export default commonMiddleware(handler)
+// Endpoint does not require the user to be authenticated.
+// TODO: explain approach/rationale
+export default cookies(session(customHeaderRequired(handler)))

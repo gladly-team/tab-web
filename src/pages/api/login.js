@@ -1,30 +1,17 @@
-import commonMiddleware from 'src/utils/middleware/commonMiddleware'
-import { verifyIdToken } from 'src/utils/auth/firebaseAdmin'
+import { get } from 'lodash/object'
+import commonAPIMiddleware from 'src/utils/middleware/commonAPIMiddleware'
+import {
+  CUSTOM_REQ_DATA_KEY,
+  AUTH_USER_INFO_KEY,
+} from 'src/utils/middleware/constants'
 
 const handler = (req, res) => {
-  if (!req.body) {
-    return res.status(400)
+  const AuthUserInfo = get(req, [CUSTOM_REQ_DATA_KEY, AUTH_USER_INFO_KEY], null)
+  req.session = {
+    ...(req.session || {}),
+    AuthUserInfo,
   }
-
-  const { token } = req.body
-
-  return verifyIdToken(token)
-    .then(decodedToken => {
-      req.session = {
-        ...(req.session || {}),
-        decodedToken,
-        token,
-      }
-      return decodedToken
-    })
-    .then(() => {
-      return res.status(200).json({ status: true })
-    })
-    .catch(error => {
-      // TODO: log error
-      console.error(error) // eslint-disable-line no-console
-      return res.status(500).json({ error })
-    })
+  return res.status(200).json({ success: true })
 }
 
-export default commonMiddleware(handler)
+export default commonAPIMiddleware(handler)
