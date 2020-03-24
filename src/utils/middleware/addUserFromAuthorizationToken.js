@@ -17,7 +17,6 @@ export default handler => async (req, res) => {
     try {
       firebaseUser = await verifyIdToken(authorizationHeaderVal)
     } catch (e) {
-      // TODO: log error
       return res.status(403).json({ error: 'Invalid authorization header.' })
     }
     const authUserInfo = createAuthUserInfo({
