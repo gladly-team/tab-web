@@ -11,6 +11,6 @@ const handler = (req, res) => {
   res.status(200).json({ status: true })
 }
 
-// Endpoint does not require the user to be authenticated.
-// TODO: explain approach/rationale
+// Endpoint does not require the user to be authenticated. See:
+// https://github.com/gladly-team/tab-web#authentication-approach
 export default cookies(session(customHeaderRequired(handler)))

@@ -26,8 +26,8 @@ export const setSession = async user => {
     method: 'POST',
     // eslint-disable-next-line no-undef
     headers: new Headers({
-      // This custom header provides modest CSRF protection.
-      // TODO: explain approach/rationale
+      // This custom header provides modest CSRF protection. See:
+      // https://github.com/gladly-team/tab-web#authentication-approach
       'X-Gladly-Requested-By': 'tab-web-nextjs',
     }),
     credentials: 'include',
