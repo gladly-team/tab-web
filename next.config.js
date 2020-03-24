@@ -8,6 +8,8 @@ const nextConfig = {
   // Public, build-time env vars.
   // https://nextjs.org/docs#build-time-configuration
   env: {
+    ADS_ENABLED: process.env.ADS_ENABLED,
+    ADS_USE_MOCK_ADS: process.env.ADS_USE_MOCK_ADS,
     FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
     FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,
     FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
