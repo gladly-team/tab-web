@@ -149,65 +149,79 @@ const Index = props => {
           <a href="/newtab/">current new tab page</a>.
         </p>
       </div>
+      {/* TODO: use classes for styling */}
       <div
+        data-test-id="ads-container"
         style={{
-          display: 'flex',
-          flexDirection: 'column',
+          position: 'absolute',
           overflow: 'visible',
+          display: 'flex',
+          alignItems: 'flex-end',
+          flexDirection: 'row-reverse',
+          bottom: 10,
+          right: 10,
         }}
       >
-        {adUnits.rectangleAdSecondary && shouldRenderAds ? (
-          <AdComponent
-            adId={adUnits.rectangleAdSecondary.adId}
-            onAdDisplayed={displayedAdInfo => {
-              onAdDisplayed(displayedAdInfo, adContext)
-            }}
-            onError={onAdError}
-            style={{
-              display: 'flex',
-              minWidth: 300,
-              overflow: 'visible',
-            }}
-          />
-        ) : null}
-        {adUnits.rectangleAdPrimary && shouldRenderAds ? (
-          <AdComponent
-            adId={adUnits.rectangleAdPrimary.adId}
-            onAdDisplayed={displayedAdInfo => {
-              onAdDisplayed(displayedAdInfo, adContext)
-            }}
-            onError={onAdError}
-            style={{
-              display: 'flex',
-              minWidth: 300,
-              overflow: 'visible',
-              marginTop: 10,
-            }}
-          />
-        ) : null}
-      </div>
-      {adUnits.leaderboard && shouldRenderAds ? (
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             overflow: 'visible',
-            marginRight: 10,
           }}
         >
-          <AdComponent
-            adId={adUnits.leaderboard.adId}
-            onAdDisplayed={displayedAdInfo => {
-              onAdDisplayed(displayedAdInfo, adContext)
-            }}
-            onError={onAdError}
-            style={{
-              overflow: 'visible',
-              minWidth: 728,
-            }}
-          />
+          {adUnits.rectangleAdSecondary && shouldRenderAds ? (
+            <AdComponent
+              adId={adUnits.rectangleAdSecondary.adId}
+              onAdDisplayed={displayedAdInfo => {
+                onAdDisplayed(displayedAdInfo, adContext)
+              }}
+              onError={onAdError}
+              style={{
+                display: 'flex',
+                minWidth: 300,
+                overflow: 'visible',
+              }}
+            />
+          ) : null}
+          {adUnits.rectangleAdPrimary && shouldRenderAds ? (
+            <AdComponent
+              adId={adUnits.rectangleAdPrimary.adId}
+              onAdDisplayed={displayedAdInfo => {
+                onAdDisplayed(displayedAdInfo, adContext)
+              }}
+              onError={onAdError}
+              style={{
+                display: 'flex',
+                minWidth: 300,
+                overflow: 'visible',
+                marginTop: 10,
+              }}
+            />
+          ) : null}
         </div>
-      ) : null}
+        {adUnits.leaderboard && shouldRenderAds ? (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              overflow: 'visible',
+              marginRight: 10,
+            }}
+          >
+            <AdComponent
+              adId={adUnits.leaderboard.adId}
+              onAdDisplayed={displayedAdInfo => {
+                onAdDisplayed(displayedAdInfo, adContext)
+              }}
+              onError={onAdError}
+              style={{
+                overflow: 'visible',
+                minWidth: 728,
+              }}
+            />
+          </div>
+        ) : null}
+      </div>
     </div>
   )
 }
