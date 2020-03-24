@@ -33,3 +33,7 @@ __generated__/
 
 # For server.js session storage.
 sessions
+
+# https://github.com/whitecolor/yalc#keep-it-out-of-git
+.yalc
+yalc.lock
