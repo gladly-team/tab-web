@@ -57,3 +57,7 @@ export const setWindowLocation = location => {
     window.location = locationWithBasePath
   }
 }
+
+export const getHostname = () => window.location.hostname
+
+export const getCurrentURL = () => window.location.href
