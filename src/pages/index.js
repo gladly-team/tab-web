@@ -62,8 +62,8 @@ const Index = props => {
     }
   }
 
-  // Determine which ad units only once on mount, because
-  // the ads have already been fetched and won't be re-fetched.
+  // Determine which ad units we'll show only once, on mount,
+  // because the ads have already been fetched and won't change.
   const [adUnits, setAdUnits] = useState([])
   useEffect(() => {
     setAdUnits(getAdUnits())
