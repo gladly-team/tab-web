@@ -23,6 +23,8 @@ if (isClientSide()) {
     try {
       fetchAds({
         adUnits: Object.values(getAdUnits()),
+        auctionTimeout: 1200,
+        bidderTimeout: 900,
         consent: {
           isEU: isInEuropeanUnion,
         },
