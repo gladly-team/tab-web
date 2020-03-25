@@ -29,7 +29,7 @@
     "react-firebaseui": "^4.0.0",
     "react-relay": "^7.1.0",
     "relay-runtime": "^7.1.0",
-    "tab-ads": "^0.6.1"
+    "tab-ads": "^0.7.0"
   },
   "devDependencies": {
     "@graphql-codegen/schema-ast": "^1.9.1",
