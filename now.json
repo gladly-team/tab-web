@@ -36,6 +36,8 @@
   },
   "build": {
     "env": {
+      "ADS_ENABLED": "true",
+      "ADS_USE_MOCK_ADS": "false",
       "FIREBASE_PUBLIC_API_KEY": "AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4",
       "FIREBASE_AUTH_DOMAIN": "dev-tab-for-a-cause.firebaseapp.com",
       "FIREBASE_DATABASE_URL": "https://dev-tab-for-a-cause.firebaseio.com",
