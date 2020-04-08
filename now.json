@@ -9,7 +9,7 @@
       "source": "/service-worker.js",
       "destination": "/_next/static/service-worker.js"
     },
-    { "source": "/v4/(.*)", "destination": "/$1" }, // for development
+    { "source": "/v4/(.*)", "destination": "/$1" }
   ],
   "headers": [
     {
