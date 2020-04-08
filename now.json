@@ -4,15 +4,16 @@
   "scope": "gladly-team",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/v4/(.*)", "destination": "/$1" },
+    { "source": "/newtab/(.*)", "destination": "/$1" },
     {
       "source": "/service-worker.js",
       "destination": "/_next/static/service-worker.js"
-    }
+    },
+    { "source": "/v4/(.*)", "destination": "/$1" }
   ],
   "headers": [
     {
-      "source": "/v4/service-worker.js",
+      "source": "/newtab/service-worker.js",
       "headers" : [
         {
           "key" : "Cache-Control",
@@ -20,7 +21,7 @@
         },
         {
           "key" : "Service-Worker-Allowed",
-          "value" : "/v4/"
+          "value" : "/newtab/"
         }
       ]
     }
@@ -45,7 +46,7 @@
       "GRAPHQL_SCHEMA_LOCATION": "./src/schema/schema.graphql",
       "RELAY_ENDPOINT": "https://dev-tab2017.gladly.io/graphql/",
       "SERVICE_WORKER_ENABLED": "true",
-      "URLS_BASE_PATH": "/v4",
+      "URLS_BASE_PATH": "/newtab",
       "URLS_USE_TRAILING_SLASH": "true"
     }
   }
