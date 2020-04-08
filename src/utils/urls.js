@@ -38,6 +38,7 @@ const createPageURL = url => addTrailingSlashIfNeeded(url)
 
 export const apiLogin = createAPIURL('/api/login')
 export const apiLogout = createAPIURL('/api/logout')
+export const apiBetaOptIn = createAPIURL('/api/beta-opt-in')
 
 export const authURL = createPageURL('/auth')
 export const dashboardURL = createPageURL('/')
