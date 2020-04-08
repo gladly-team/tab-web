@@ -7,7 +7,6 @@ const optInCookieName = 'tabV4OptIn'
 // Sets or unsets a cookie that determines whether CloudFront
 // routes to this beta app or the exsting app.
 const handler = (req, res) => {
-  console.log(req.body)
   const isOptedIn = req.body.optIn === true
   const cookieVal = isOptedIn ? 'enabled' : undefined
   req.cookie.set(optInCookieName, cookieVal)
