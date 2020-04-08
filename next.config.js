@@ -41,9 +41,9 @@ const nextConfig = {
   // The base path from which to serve the service worker. This affects the
   // default scope.
   // https://developers.google.com/web/ilt/pwa/introduction-to-service-worker#registration_and_scope
-  registerSwPrefix: '/v4',
+  registerSwPrefix: '/newtab',
   // Limit the service worker to this app's base path.
-  scope: '/v4/',
+  scope: '/newtab/',
   workboxOpts: {
     swDest: 'static/service-worker.js',
     cleanupOutdatedCaches: true,
@@ -54,10 +54,10 @@ const nextConfig = {
     runtimeCaching: [
       {
         // All resources except requests to /api/* or /graphql*, including
-        // variants with our base path. Note that our base path, "/v4", is
+        // variants with our base path. Note that our base path, "/newtab", is
         // hardcoded here.
         // https://regex101.com/r/5cs6L7/1/tests
-        urlPattern: /^http[s]?:\/\/(?:[^/\s]+\/)(?:(?!api\/|graphql(?:\/)?$|v4\/api\/|v4\/graphql(?:\/)?$)).*$/,
+        urlPattern: /^http[s]?:\/\/(?:[^/\s]+\/)(?:(?!api\/|graphql(?:\/)?$|newtab\/api\/|newtab\/graphql(?:\/)?$)).*$/,
         handler: 'StaleWhileRevalidate',
         options: {
           cacheName: 'tab-resources',
@@ -74,11 +74,11 @@ const nextConfig = {
       },
       {
         // Requests to /api/* or /graphql*, including variants with our base
-        // path. Note that our base path, "/v4", is hardcoded here. With a
+        // path. Note that our base path, "/newtab", is hardcoded here. With a
         // "network only" strategy, this should be the same as not defining
         // any caching at all, so we're just being explicit here.
         // https://regex101.com/r/2ttcQE/2
-        urlPattern: /^http[s]?:\/\/(?:[^/\s]+\/)(?:(api\/|graphql(?:\/)?$|v4\/api\/|v4\/graphql(?:\/)?$))/,
+        urlPattern: /^http[s]?:\/\/(?:[^/\s]+\/)(?:(api\/|graphql(?:\/)?$|newtab\/api\/|newtab\/graphql(?:\/)?$))/,
         handler: 'NetworkOnly',
       },
     ],
