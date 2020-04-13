@@ -21,11 +21,14 @@ const BetaOptIn = () => {
       body: JSON.stringify({ optIn: isOptedIn }),
     })
 
-    if (response.ok && !isOptedIn) {
-      // If reverting back to the legacy app, remove cached content
-      // and unregister the service worker.
+    if (response.ok) {
+      // On beta status change, remove cached data.
       await clearAllServiceWorkerCaches()
-      unregister()
+
+      // If opting out, unregister the service worker.
+      if (!isOptedIn) {
+        unregister()
+      }
     }
   }
 
