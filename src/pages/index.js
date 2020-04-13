@@ -117,7 +117,7 @@ const Index = props => {
 
   return (
     <div>
-      <p>Hi there! [dev deploy]</p>
+      <p>Hi there! :)</p>
       {!AuthUser ? (
         <div>
           <p>
