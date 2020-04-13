@@ -3,6 +3,9 @@
   "version": 2,
   "scope": "gladly-team",
   "alias": ["dev-tab-web"],
+  "github": {
+    "autoAlias": false
+  },
   "cleanUrls": true,
   "rewrites": [
     { "source": "/newtab/(.*)", "destination": "/$1" },
