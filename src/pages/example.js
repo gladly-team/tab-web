@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { unregister } from 'next-offline/runtime'
 import fetch from 'isomorphic-unfetch'
 import { graphql } from 'react-relay'
 import withData from 'src/utils/pageWrappers/withData'
 import Link from 'src/components/Link'
 import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
+import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 
 const Example = props => {
   // The AuthUserInfo prop, if we used it, would always be null regardless
@@ -13,8 +15,8 @@ const Example = props => {
   const { app } = props
   const { moneyRaised } = app
 
-  const setOptIn = isOptedIn => {
-    fetch(apiBetaOptIn, {
+  const setOptIn = async isOptedIn => {
+    const response = await fetch(apiBetaOptIn, {
       method: 'POST',
       // eslint-disable-next-line no-undef
       headers: new Headers({
@@ -26,6 +28,13 @@ const Example = props => {
       credentials: 'include',
       body: JSON.stringify({ optIn: isOptedIn }),
     })
+
+    if (response.ok && !isOptedIn) {
+      // If reverting back to the legacy app, remove cached content
+      // and unregister the service worker.
+      await clearAllServiceWorkerCaches()
+      unregister('/newtab/service-worker.js')
+    }
   }
 
   return (
