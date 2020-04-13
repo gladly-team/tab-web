@@ -33,7 +33,7 @@ const Example = props => {
       // If reverting back to the legacy app, remove cached content
       // and unregister the service worker.
       await clearAllServiceWorkerCaches()
-      unregister('/newtab/service-worker.js')
+      unregister()
     }
   }
 
