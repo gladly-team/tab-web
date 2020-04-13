@@ -2,6 +2,7 @@
   "name": "tab-web",
   "version": 2,
   "scope": "gladly-team",
+  "alias": ["dev-tab-web"],
   "cleanUrls": true,
   "rewrites": [
     { "source": "/newtab/(.*)", "destination": "/$1" },
