@@ -5,7 +5,7 @@ import { get } from 'lodash/object'
 import { AdComponent, fetchAds } from 'tab-ads'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import Link from 'src/components/Link'
-import { authURL, exampleURL } from 'src/utils/urls'
+import { authURL, betaOptInURL, exampleURL } from 'src/utils/urls'
 import logout from 'src/utils/auth/logout'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
@@ -147,8 +147,7 @@ const Index = props => {
       </div>
       <div style={{ marginTop: 20 }}>
         <p>
-          This page shares data with the{' '}
-          <a href="/newtab/">current new tab page</a>.
+          <a href={betaOptInURL}>Change beta opt in</a>
         </p>
       </div>
       {/* TODO: use classes for styling */}

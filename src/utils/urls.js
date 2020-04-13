@@ -51,6 +51,7 @@ export const apiBetaOptIn = createAPIURL('/api/beta-opt-in')
 export const authURL = createPageURL('/auth')
 export const dashboardURL = createPageURL('/')
 export const exampleURL = createPageURL('/example')
+export const betaOptInURL = createPageURL('/beta-opt-in')
 
 // For progressive web app.
 export const PWAManifestURL = withBasePath('/manifest.json')
