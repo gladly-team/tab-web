@@ -11,6 +11,13 @@
 // https://github.com/zeit/next.js/issues/9081
 const URLS_BASE_PATH = process.env.URLS_BASE_PATH || ''
 
+// In CloudFront, the /v4 base path routes to this Next.js
+// app. The /newtab base paths routes to the this app -OR-
+// the legacy static app, depending on cookie settings. Thus,
+// to call one of this app's API endpoints to set the cookie
+// that opts into this app, we need to use the /v4 endpoint.
+const URLS_API_BASE_PATH = process.env.URLS_API_BASE_PATH || ''
+
 // The trailing slash doesn't work in development:
 // https://github.com/zeit/next.js/issues/5214
 // But we want to use it in production.
@@ -24,7 +31,8 @@ const addTrailingSlashIfNeeded = path => {
 export const withBasePath = path => `${URLS_BASE_PATH}${path}`
 
 // For /api/* paths.
-const createAPIURL = url => addTrailingSlashIfNeeded(withBasePath(url))
+const createAPIURL = url =>
+  addTrailingSlashIfNeeded(`${URLS_API_BASE_PATH}${url}`)
 
 // For paths that we use with the Link component and router.
 // We don't add the base path to page URLs here. Instead,

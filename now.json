@@ -46,6 +46,7 @@
       "GRAPHQL_SCHEMA_LOCATION": "./src/schema/schema.graphql",
       "RELAY_ENDPOINT": "https://dev-tab2017.gladly.io/graphql/",
       "SERVICE_WORKER_ENABLED": "true",
+      "URLS_API_BASE_PATH": "/v4",
       "URLS_BASE_PATH": "/newtab",
       "URLS_USE_TRAILING_SLASH": "true"
     }
