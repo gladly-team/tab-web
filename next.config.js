@@ -1,5 +1,6 @@
 const path = require('path')
 const withOffline = require('next-offline')
+const withImages = require('next-images')
 
 require('./src/env')
 
@@ -86,4 +87,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withOffline(nextConfig)
+module.exports = withOffline(withImages(nextConfig))

@@ -34,7 +34,7 @@ class CustomDocument extends Document {
             }}
           />
         </Head>
-        <body>
+        <body style={{ margin: 0, padding: 0 }}>
           {/*
             Ads code. See:
             https://github.com/gladly-team/tab-ads#html-tags

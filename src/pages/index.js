@@ -12,6 +12,7 @@ import {
   isInEuropeanUnion,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
+import Logo from 'src/components/Logo'
 
 if (isClientSide()) {
   // Load ads immediately on the client side when we parse
@@ -102,8 +103,15 @@ const Index = props => {
   }
 
   return (
-    <div>
-      <p>Hey!</p>
+    <div
+      style={{
+        height: '100vh',
+        width: '100vw',
+        background: '#eee5ff',
+        overflow: 'hidden',
+      }}
+    >
+      <Logo includeText style={{ padding: 8 }} />
       {/* TODO: use classes for styling */}
       <div
         data-test-id="ads-container"
