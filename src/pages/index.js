@@ -111,7 +111,7 @@ const Index = props => {
         overflow: 'hidden',
       }}
     >
-      <Logo includeText style={{ padding: 8 }} />
+      <Logo includeText style={{ padding: 12 }} />
       {/* TODO: use classes for styling */}
       <div
         data-test-id="ads-container"
