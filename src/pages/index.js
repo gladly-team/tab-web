@@ -4,9 +4,6 @@ import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
 import { AdComponent, fetchAds } from 'tab-ads'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
-import Link from 'src/components/Link'
-import { authURL, betaOptInURL, exampleURL } from 'src/utils/urls'
-import logout from 'src/utils/auth/logout'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,
@@ -15,6 +12,7 @@ import {
   isInEuropeanUnion,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
+import Logo from 'src/components/Logo'
 
 if (isClientSide()) {
   // Load ads immediately on the client side when we parse
@@ -49,18 +47,7 @@ if (isClientSide()) {
 }
 
 const Index = props => {
-  const { AuthUserInfo, app, user } = props
-  const AuthUser = get(AuthUserInfo, 'AuthUser', null)
-  const { moneyRaised } = app
-  const { tabs, vcCurrent } = user
-  const onLogout = async () => {
-    try {
-      await logout()
-    } catch (e) {
-      // TODO: log error
-      console.error(e) // eslint-disable-line no-console
-    }
-  }
+  const { user } = props
 
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
@@ -116,40 +103,15 @@ const Index = props => {
   }
 
   return (
-    <div>
-      <p>Hi there!</p>
-      {!AuthUser ? (
-        <div>
-          <p>
-            You are not signed in.{' '}
-            <Link to={authURL}>
-              <a>Sign in</a>
-            </Link>
-          </p>
-        </div>
-      ) : (
-        <div>
-          <p>You're signed in. Email: {AuthUser.email}</p>
-          <button type="button" onClick={onLogout}>
-            Log out
-          </button>
-        </div>
-      )}
-      <div style={{ marginTop: 20 }}>
-        <Link to={exampleURL}>
-          <a>Another example page</a>
-        </Link>
-      </div>
-      <div style={{ marginTop: 20 }}>
-        <div>Money raised: {moneyRaised}</div>
-        <div>Tabs: {tabs}</div>
-        <div>Hearts: {vcCurrent}</div>
-      </div>
-      <div style={{ marginTop: 20 }}>
-        <p>
-          <a href={betaOptInURL}>Change beta opt in</a>
-        </p>
-      </div>
+    <div
+      style={{
+        height: '100vh',
+        width: '100vw',
+        background: '#eee5ff',
+        overflow: 'hidden',
+      }}
+    >
+      <Logo includeText style={{ padding: 12 }} />
       {/* TODO: use classes for styling */}
       <div
         data-test-id="ads-container"
@@ -230,26 +192,13 @@ const Index = props => {
 Index.displayName = 'Index'
 
 Index.propTypes = {
-  AuthUserInfo: PropTypes.shape({
-    AuthUser: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      email: PropTypes.string.isRequired,
-      emailVerified: PropTypes.bool.isRequired,
-    }),
-    token: PropTypes.string,
-  }),
-  app: PropTypes.shape({
-    moneyRaised: PropTypes.number.isRequired,
-  }).isRequired,
   user: PropTypes.shape({
     tabs: PropTypes.number.isRequired,
     vcCurrent: PropTypes.number.isRequired,
   }).isRequired,
 }
 
-Index.defaultProps = {
-  AuthUserInfo: null,
-}
+Index.defaultProps = {}
 
 export default withAuthAndData(({ AuthUser }) => {
   const userId = get(AuthUser, 'id')
