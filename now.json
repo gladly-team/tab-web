@@ -26,30 +26,5 @@
         }
       ]
     }
-  ],
-  "env": {
-    "FIREBASE_CLIENT_EMAIL": "firebase-adminsdk-kuncd@dev-tab-for-a-cause.iam.gserviceaccount.com",
-    "FIREBASE_DATABASE_URL": "https://dev-tab-for-a-cause.firebaseio.com",
-    "FIREBASE_PRIVATE_KEY": "@firebase-private-key",
-    "FIREBASE_PROJECT_ID": "dev-tab-for-a-cause",
-    "SESSION_COOKIE_SECURE_SAME_SITE_NONE": "true",
-    "SESSION_SECRET_CURRENT": "@session-secret-current",
-    "SESSION_SECRET_PREVIOUS": "@session-secret-previous"
-  },
-  "build": {
-    "env": {
-      "ADS_ENABLED": "true",
-      "ADS_USE_MOCK_ADS": "false",
-      "FIREBASE_PUBLIC_API_KEY": "AIzaSyDrGghKLnfOwwaSnPM0unRDXz_4YdorKU4",
-      "FIREBASE_AUTH_DOMAIN": "dev-tab-for-a-cause.firebaseapp.com",
-      "FIREBASE_DATABASE_URL": "https://dev-tab-for-a-cause.firebaseio.com",
-      "FIREBASE_PROJECT_ID": "dev-tab-for-a-cause",
-      "GRAPHQL_SCHEMA_LOCATION": "./src/schema/schema.graphql",
-      "RELAY_ENDPOINT": "https://dev-tab2017.gladly.io/graphql/",
-      "SERVICE_WORKER_ENABLED": "true",
-      "URLS_API_BASE_PATH": "/v4",
-      "URLS_BASE_PATH": "/newtab",
-      "URLS_USE_TRAILING_SLASH": "true"
-    }
-  }
+  ]
 }
