@@ -35,10 +35,13 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.9.0",
+    "@babel/preset-react": "^7.9.4",
     "@graphql-codegen/schema-ast": "^1.9.1",
     "@test-graphql-cli/codegen": "4.0.0-alpha-df0d2bc.481",
     "@test-graphql-cli/validate": "4.0.0-alpha-df0d2bc.481",
     "babel-jest": "^25.3.0",
+    "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-relay": "^7.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
