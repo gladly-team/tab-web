@@ -1,5 +1,10 @@
 /* eslint-env jest */
-/* eslint-disable no-console */
+/* eslint no-console: 0, import/no-extraneous-dependencies: 0 */
+
+import Enzyme from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+
+Enzyme.configure({ adapter: new Adapter() })
 
 // Force warnings to fail Jest tests.
 // https://github.com/facebook/jest/issues/6121#issuecomment-444269677
