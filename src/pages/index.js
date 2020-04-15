@@ -112,7 +112,7 @@ const Index = props => {
       }}
     >
       <Logo includeText style={{ padding: 12 }} />
-      <p>This is dev.</p>
+      <p>This is dev!</p>
       {/* TODO: use classes for styling */}
       <div
         data-test-id="ads-container"
