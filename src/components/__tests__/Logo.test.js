@@ -3,6 +3,12 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 
+// TODO:
+// - add jest eslint plugin
+// - configure specific eslint rules for test files:
+//   https://stackoverflow.com/a/49211283
+// - try to enable automocking
+
 const getMockProps = () => ({
   color: 'purple',
   includeText: false,
