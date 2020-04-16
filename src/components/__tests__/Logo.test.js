@@ -17,8 +17,10 @@ describe('Logo component', () => {
 
   it('has a default height of 40px', () => {
     const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.style = {}
+    const mockProps = {
+      ...getMockProps(),
+      style: undefined,
+    }
     const wrapper = shallow(<Logo {...mockProps} />)
     expect(wrapper.at(0).prop('style')).toMatchObject({
       height: 40,
@@ -27,10 +29,12 @@ describe('Logo component', () => {
 
   it('assigns style to the img element', () => {
     const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.style = {
-      border: 'teal 2px dotted',
-      background: '#ff0000',
+    const mockProps = {
+      ...getMockProps(),
+      style: {
+        border: 'teal 2px dotted',
+        background: '#ff0000',
+      },
     }
     const wrapper = shallow(<Logo {...mockProps} />)
     expect(wrapper.at(0).prop('style')).toMatchObject({
@@ -50,58 +54,61 @@ describe('Logo component', () => {
 
   it('defaults to the purple "tab" logo', () => {
     const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    delete mockProps.brand
-    delete mockProps.color
+    const mockProps = {
+      ...getMockProps(),
+      color: undefined,
+      includeText: false,
+    }
     const wrapper = shallow(<Logo {...mockProps} />)
     expect(wrapper.find('img').prop('src')).toEqual('logo.svg')
   })
 
-  it('throws an error when passed an invalid brand', () => {
-    const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.brand = 'coolApp'
-    expect(() => {
-      shallow(<Logo {...mockProps} />)
-    }).toThrow('No logo exists for brand "coolApp".')
-  })
-
   it('uses the correct file for color=default', () => {
     const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.color = 'default'
+    const mockProps = {
+      ...getMockProps(),
+      color: 'default',
+    }
     const wrapper = shallow(<Logo {...mockProps} />)
     expect(wrapper.find('img').prop('src')).toEqual('logo.svg')
   })
 
   it('uses the correct file for color=purple', () => {
     const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.color = 'purple'
+    const mockProps = {
+      ...getMockProps(),
+      color: 'purple',
+    }
     const wrapper = shallow(<Logo {...mockProps} />)
     expect(wrapper.find('img').prop('src')).toEqual('logo.svg')
   })
 
   it('uses the correct file for color=white', () => {
     const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.color = 'white'
+    const mockProps = {
+      ...getMockProps(),
+      color: 'white',
+    }
     const wrapper = shallow(<Logo {...mockProps} />)
     expect(wrapper.find('img').prop('src')).toEqual('logo-white.svg')
   })
 
   it('uses the correct file for color=grey', () => {
     const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.color = 'white'
+    const mockProps = {
+      ...getMockProps(),
+      color: 'grey',
+    }
     const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('logo-white.svg')
+    expect(wrapper.find('img').prop('src')).toEqual('logo-grey.svg')
   })
 
   it('uses the correct file for includeText=true', () => {
     const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.includeText = true
+    const mockProps = {
+      ...getMockProps(),
+      includeText: true,
+    }
     const wrapper = shallow(<Logo {...mockProps} />)
     expect(wrapper.find('img').prop('src')).toEqual('logo-with-text.svg')
   })
@@ -116,9 +123,14 @@ describe('Logo component', () => {
   })
 
   it('throws an error when passed an invalid color', () => {
+    // Suppress expected console error.
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+
     const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.color = 'orange'
+    const mockProps = {
+      ...getMockProps(),
+      color: 'orange',
+    }
     expect(() => {
       shallow(<Logo {...mockProps} />)
     }).toThrow('No "tab" logo exists with color "orange"')
