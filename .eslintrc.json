@@ -1,6 +1,6 @@
 {
-  "extends": ["airbnb", "prettier"],
-  "plugins": ["prettier", "react-hooks"],
+  "extends": ["airbnb", "prettier", "plugin:jest/recommended"],
+  "plugins": ["prettier", "react-hooks", "jest"],
   "rules": {
     "prettier/prettier": "error",
     "jsx-a11y/anchor-is-valid": 0, // https://github.com/zeit/next.js/issues/5533

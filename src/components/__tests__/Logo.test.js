@@ -4,7 +4,6 @@ import React from 'react'
 import { shallow } from 'enzyme'
 
 // TODO:
-// - add jest eslint plugin
 // - configure specific eslint rules for test files:
 //   https://stackoverflow.com/a/49211283
 // - try to enable automocking
@@ -18,7 +17,9 @@ describe('Logo component', () => {
   it('renders without error', () => {
     const Logo = require('src/components/Logo').default
     const mockProps = getMockProps()
-    shallow(<Logo {...mockProps} />)
+    expect(() => {
+      shallow(<Logo {...mockProps} />)
+    }).not.toThrow()
   })
 
   it('has a default height of 40px', () => {
