@@ -4,7 +4,6 @@ import React from 'react'
 import { shallow } from 'enzyme'
 
 const getMockProps = () => ({
-  brand: 'tab',
   color: 'purple',
   includeText: false,
 })
@@ -66,9 +65,7 @@ describe('Logo component', () => {
       shallow(<Logo {...mockProps} />)
     }).toThrow('No logo exists for brand "coolApp".')
   })
-})
 
-describe('Logo component: "tab" brand', () => {
   it('uses the correct file for color=default', () => {
     const Logo = require('src/components/Logo').default
     const mockProps = getMockProps()
@@ -125,72 +122,5 @@ describe('Logo component: "tab" brand', () => {
     expect(() => {
       shallow(<Logo {...mockProps} />)
     }).toThrow('No "tab" logo exists with color "orange"')
-  })
-})
-
-describe('Logo component: "search" brand', () => {
-  it('uses the correct file for color=default', () => {
-    const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.brand = 'search'
-    mockProps.color = 'default'
-    const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('search-logo.svg')
-  })
-
-  it('uses the correct file for color=teal', () => {
-    const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.brand = 'search'
-    mockProps.color = 'teal'
-    const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('search-logo.svg')
-  })
-
-  it('uses the correct file for color=white', () => {
-    const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.brand = 'search'
-    mockProps.color = 'white'
-    const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('logo-white.svg')
-  })
-
-  it('uses the correct file for color=grey', () => {
-    const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.brand = 'search'
-    mockProps.color = 'white'
-    const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('logo-white.svg')
-  })
-
-  it('uses the correct file for includeText=true', () => {
-    const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.brand = 'search'
-    mockProps.includeText = true
-    const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('search-logo-with-text.svg')
-  })
-
-  it('uses the same file for includeText=true even when another (unsupported) color is provided', () => {
-    const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.brand = 'search'
-    mockProps.includeText = true
-    mockProps.color = 'white'
-    const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('search-logo-with-text.svg')
-  })
-
-  it('throws an error when passed an invalid color', () => {
-    const Logo = require('src/components/Logo').default
-    const mockProps = getMockProps()
-    mockProps.brand = 'search'
-    mockProps.color = 'orange'
-    expect(() => {
-      shallow(<Logo {...mockProps} />)
-    }).toThrow('No "search" logo exists with color "orange"')
   })
 })
