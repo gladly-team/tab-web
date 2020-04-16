@@ -1,5 +1,3 @@
-/* eslint react/jsx-props-no-spreading: 0, global-require: 0 */
-
 import React from 'react'
 import { shallow } from 'enzyme'
 

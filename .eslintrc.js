@@ -1,6 +1,6 @@
 module.exports = {
-  "extends": ["airbnb", "prettier", "plugin:jest/recommended"],
-  "plugins": ["prettier", "react-hooks", "jest"],
+  "extends": ["airbnb", "prettier"],
+  "plugins": ["prettier", "react-hooks"],
   "rules": {
     "prettier/prettier": "error",
     "jsx-a11y/anchor-is-valid": 0, // https://github.com/zeit/next.js/issues/5533
@@ -8,15 +8,28 @@ module.exports = {
     "react/jsx-filename-extension": 0,
     "react/jsx-one-expression-per-line": 0,
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "error"
   },
+  overrides: [
+    // Set Jest rules only for test files.
+    // https://stackoverflow.com/a/49211283
+    {
+      files: [ '**/*.test.js' ],
+      "extends": ["plugin:jest/recommended"],
+      env: { jest: true },
+      plugins: [ 'jest' ],
+      rules: {
+        "global-require": 0,
+        "react/jsx-props-no-spreading": 0,
+      }
+    }
+  ],
   "parserOptions": {
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
   "env": {
-    "es6": true,
-    "jest": true
+    "es6": true
   },
   "settings": {
     "import/resolver": {
