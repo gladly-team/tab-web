@@ -1,4 +1,4 @@
-{
+module.exports = {
   "extends": ["airbnb", "prettier", "plugin:jest/recommended"],
   "plugins": ["prettier", "react-hooks", "jest"],
   "rules": {
