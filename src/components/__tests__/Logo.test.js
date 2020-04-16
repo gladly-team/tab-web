@@ -2,8 +2,6 @@ import React from 'react'
 import { shallow } from 'enzyme'
 
 // TODO:
-// - configure specific eslint rules for test files:
-//   https://stackoverflow.com/a/49211283
 // - fix setupTests to throw when console.warn is called
 
 const getMockProps = () => ({
