@@ -46,7 +46,7 @@ const SearchInput = () => {
         //     this.search()
         //   }
         // }}
-        placeholder="Search to raise money for charity..."
+        placeholder="Search Google"
         disableUnderline
         fullWidth
         classes={{

@@ -16,7 +16,7 @@ import { isClientSide } from 'src/utils/ssr'
 import Logo from 'src/components/Logo'
 import SearchInput from 'src/components/SearchInput'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   centerContainer: {
     height: '100%',
     width: '100%',
@@ -29,12 +29,13 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    minWidth: 400,
+    minWidth: 500,
     maxWidth: 800,
   },
   logo: {
-    height: 70,
-    padding: 12,
+    height: 50,
+    padding: theme.spacing(2),
+    boxSizing: 'content-box',
   },
 }))
 

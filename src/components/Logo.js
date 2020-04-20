@@ -11,6 +11,7 @@ import tabLogoWithText from 'src/assets/logos/logo-with-text.svg'
 const useStyles = makeStyles(() => ({
   logoDefaults: {
     height: 40,
+    boxSizing: 'content-box',
   },
 }))
 
