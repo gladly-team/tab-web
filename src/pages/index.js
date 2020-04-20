@@ -139,6 +139,7 @@ const Index = props => {
           flexDirection: 'row-reverse',
           bottom: 10,
           right: 10,
+          pointerEvents: 'none', // don't block the main page
         }}
       >
         <div
@@ -146,6 +147,7 @@ const Index = props => {
             display: 'flex',
             flexDirection: 'column',
             overflow: 'visible',
+            pointerEvents: 'all', // needs to be clickable
           }}
         >
           {adUnits.rectangleAdSecondary && shouldRenderAds ? (
@@ -185,6 +187,7 @@ const Index = props => {
               flexDirection: 'column',
               overflow: 'visible',
               marginRight: 10,
+              pointerEvents: 'all', // needs to be clickable
             }}
           >
             <AdComponent
