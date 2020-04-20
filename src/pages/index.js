@@ -17,11 +17,20 @@ import Logo from 'src/components/Logo'
 import SearchInput from 'src/components/SearchInput'
 
 const useStyles = makeStyles(() => ({
-  searchBarContainer: {
+  centerContainer: {
     height: '100%',
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 200, // for visually-appealing vertical centering
+  },
+  searchBarContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    minWidth: 400,
+    maxWidth: 800,
   },
 }))
 
@@ -124,9 +133,11 @@ const Index = props => {
         overflow: 'hidden',
       }}
     >
-      <Logo includeText style={{ padding: 12 }} />
-      <div className={classes.searchBarContainer}>
-        <SearchInput />
+      <div className={classes.centerContainer}>
+        <div className={classes.searchBarContainer}>
+          <Logo includeText style={{ height: 70, padding: 12 }} />
+          <SearchInput />
+        </div>
       </div>
       {/* TODO: use classes for styling */}
       <div
