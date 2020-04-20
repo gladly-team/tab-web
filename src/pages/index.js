@@ -32,6 +32,10 @@ const useStyles = makeStyles(() => ({
     minWidth: 400,
     maxWidth: 800,
   },
+  logo: {
+    height: 70,
+    padding: 12,
+  },
 }))
 
 if (isClientSide()) {
@@ -135,7 +139,7 @@ const Index = props => {
     >
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
-          <Logo includeText style={{ height: 70, padding: 12 }} />
+          <Logo includeText className={classes.logo} />
           <SearchInput />
         </div>
       </div>

@@ -2,6 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 
 const getMockProps = () => ({
+  className: undefined,
   color: 'purple',
   includeText: false,
 })
@@ -15,16 +16,14 @@ describe('Logo component', () => {
     }).not.toThrow()
   })
 
-  it('has a default height of 40px', () => {
+  it('passes down the className prop', () => {
     const Logo = require('src/components/Logo').default
     const mockProps = {
       ...getMockProps(),
-      style: undefined,
+      className: 'my-class-name',
     }
     const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.at(0).prop('style')).toMatchObject({
-      height: 40,
-    })
+    expect(wrapper.at(0).prop('className')).toContain('my-class-name')
   })
 
   it('assigns style to the img element', () => {
