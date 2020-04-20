@@ -1,13 +1,23 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react'
 import PropTypes from 'prop-types'
+import { makeStyles } from '@material-ui/core/styles'
+import clsx from 'clsx'
 import tabLogoDefault from 'src/assets/logos/logo.svg'
 import tabLogoWhite from 'src/assets/logos/logo-white.svg'
 import tabLogoGrey from 'src/assets/logos/logo-grey.svg'
 import tabLogoWithText from 'src/assets/logos/logo-with-text.svg'
 
+const useStyles = makeStyles(() => ({
+  logoDefaults: {
+    height: 40,
+    boxSizing: 'content-box',
+  },
+}))
+
 const Logo = props => {
-  const { color, includeText, style, ...otherProps } = props
+  const { className, color, includeText, style, ...otherProps } = props
+  const classes = useStyles()
   let logo
   if (includeText) {
     logo = tabLogoWithText
@@ -34,21 +44,30 @@ const Logo = props => {
       }
     }
   }
-  // The alt text flashes on Firefox.
-  // eslint-disable-next-line jsx-a11y/alt-text
-  return <img style={{ height: 40, ...style }} src={logo} {...otherProps} />
+  // The alt text flashes on Firefox
+  return (
+    // eslint-disable-next-line jsx-a11y/alt-text
+    <img
+      style={style}
+      className={clsx(classes.logo, className)}
+      src={logo}
+      {...otherProps}
+    />
+  )
 }
 
 Logo.propTypes = {
+  className: PropTypes.string,
+  color: PropTypes.oneOf(['default', 'purple', 'white', 'grey']),
   includeText: PropTypes.bool,
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  color: PropTypes.oneOf(['default', 'purple', 'white', 'grey']),
 }
 
 Logo.defaultProps = {
+  className: '',
+  color: 'default',
   includeText: false,
   style: {},
-  color: 'default',
 }
 
 export default Logo

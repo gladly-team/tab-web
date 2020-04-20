@@ -3,11 +3,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
+import { ServerStyleSheets } from '@material-ui/core/styles'
 import { PWAManifestURL } from 'src/utils/urls'
 import {
   NEXT_CTX_CUSTOM_DATA_KEY,
   NEXT_CTX_AUTH_USER_INFO_KEY,
 } from 'src/utils/constants'
+import theme from 'src/utils/theme'
 
 class CustomDocument extends Document {
   render() {
@@ -21,7 +23,7 @@ class CustomDocument extends Document {
       <Html>
         <Head>
           <link rel="manifest" href={PWAManifestURL} />
-          <meta name="theme-color" content="#9d4ba3" />
+          <meta name="theme-color" content={theme.palette.primary.main} />
           <link
             rel="apple-touch-icon"
             href="/static/img/logo/logo192-apple.png"
@@ -90,6 +92,17 @@ class CustomDocument extends Document {
 }
 
 CustomDocument.getInitialProps = async ctx => {
+  // Material UI:
+  // Render app and page and get the context of the page with collected side effects.
+  // https://github.com/mui-org/material-ui/tree/master/examples/nextjs
+  const sheets = new ServerStyleSheets()
+  const originalRenderPage = ctx.renderPage
+  ctx.renderPage = () =>
+    originalRenderPage({
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      enhanceApp: App => props => sheets.collect(<App {...props} />),
+    })
+
   // Get the AuthUserInfo object. This is set in _app.js.
   const AuthUserInfo = get(
     ctx,
@@ -98,7 +111,14 @@ CustomDocument.getInitialProps = async ctx => {
   )
 
   const initialProps = await Document.getInitialProps(ctx)
-  return { ...initialProps, AuthUserInfo }
+  return {
+    ...initialProps,
+    AuthUserInfo, // Styles fragment is rendered after the app and page rendering finish.
+    styles: [
+      ...React.Children.toArray(initialProps.styles),
+      sheets.getStyleElement(),
+    ],
+  }
 }
 
 CustomDocument.propTypes = {

@@ -16,6 +16,9 @@
     "schema": "NODE_ENV=production graphql codegen"
   },
   "dependencies": {
+    "@material-ui/core": "^4.9.11",
+    "@material-ui/icons": "^4.9.1",
+    "clsx": "^1.1.0",
     "cookies": "^0.8.0",
     "dotenv": "^8.2.0",
     "firebase": "^7.6.1",
