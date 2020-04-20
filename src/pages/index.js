@@ -17,6 +17,12 @@ import Logo from 'src/components/Logo'
 import SearchInput from 'src/components/SearchInput'
 
 const useStyles = makeStyles(theme => ({
+  pageContainer: {
+    height: '100vh',
+    width: '100vw',
+    background: '#eee5ff',
+    overflow: 'hidden',
+  },
   centerContainer: {
     height: '100%',
     width: '100%',
@@ -36,6 +42,29 @@ const useStyles = makeStyles(theme => ({
     height: 50,
     padding: theme.spacing(2),
     boxSizing: 'content-box',
+  },
+  adsContainer: {
+    position: 'absolute',
+    overflow: 'visible',
+    display: 'flex',
+    alignItems: 'flex-end',
+    flexDirection: 'row-reverse',
+    bottom: 10,
+    right: 10,
+    pointerEvents: 'none', // don't block the main page
+  },
+  adsContainerRectangles: {
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'visible',
+    pointerEvents: 'all', // needs to be clickable
+  },
+  adContainerLeaderboard: {
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'visible',
+    marginRight: 10,
+    pointerEvents: 'all', // needs to be clickable
   },
 }))
 
@@ -130,42 +159,15 @@ const Index = props => {
   }
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        width: '100vw',
-        background: '#eee5ff',
-        overflow: 'hidden',
-      }}
-    >
+    <div className={classes.pageContainer}>
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
           <Logo includeText className={classes.logo} />
           <SearchInput />
         </div>
       </div>
-      {/* TODO: use classes for styling */}
-      <div
-        data-test-id="ads-container"
-        style={{
-          position: 'absolute',
-          overflow: 'visible',
-          display: 'flex',
-          alignItems: 'flex-end',
-          flexDirection: 'row-reverse',
-          bottom: 10,
-          right: 10,
-          pointerEvents: 'none', // don't block the main page
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'visible',
-            pointerEvents: 'all', // needs to be clickable
-          }}
-        >
+      <div className={classes.adsContainer}>
+        <div className={classes.adsContainerRectangles}>
           {adUnits.rectangleAdSecondary && shouldRenderAds ? (
             <AdComponent
               adId={adUnits.rectangleAdSecondary.adId}
@@ -197,15 +199,7 @@ const Index = props => {
           ) : null}
         </div>
         {adUnits.leaderboard && shouldRenderAds ? (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'visible',
-              marginRight: 10,
-              pointerEvents: 'all', // needs to be clickable
-            }}
-          >
+          <div className={classes.adContainerLeaderboard}>
             <AdComponent
               adId={adUnits.leaderboard.adId}
               onAdDisplayed={displayedAdInfo => {
