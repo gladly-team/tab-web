@@ -81,6 +81,7 @@ const App = props => {
   return (
     <>
       <Head>
+        <title>Tab for a Cause</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
