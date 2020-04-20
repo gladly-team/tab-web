@@ -34,6 +34,7 @@ export const redirect = ({ location, ctx = null, status = 302 }) => {
   }
 }
 
+// Note that this currently won't work with external URLs.
 // Like Router.push but handling the basePath workaround.
 export const goTo = location => {
   const locationWithBasePath = withBasePath(location)
@@ -46,6 +47,8 @@ export const goTo = location => {
 }
 
 // Call window.location.
+// Note that this may cause problems if we navigate to
+// external URLs while in the new tab page iframe.
 export const setWindowLocation = location => {
   if (isServerSide()) {
     throw new Error(
@@ -56,6 +59,10 @@ export const setWindowLocation = location => {
     const locationWithBasePath = withBasePath(location)
     window.location = locationWithBasePath
   }
+}
+
+export const windowOpenTop = location => {
+  window.open(location, '_top')
 }
 
 export const getHostname = () => window.location.hostname

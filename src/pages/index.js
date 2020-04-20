@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
+import { makeStyles } from '@material-ui/core/styles'
 import { AdComponent, fetchAds } from 'tab-ads'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
@@ -13,6 +14,59 @@ import {
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import Logo from 'src/components/Logo'
+import SearchInput from 'src/components/SearchInput'
+
+const useStyles = makeStyles(theme => ({
+  pageContainer: {
+    height: '100vh',
+    width: '100vw',
+    background: theme.palette.background.paper,
+    overflow: 'hidden',
+  },
+  centerContainer: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 220, // for visually-appealing vertical centering
+  },
+  searchBarContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    minWidth: 500,
+    maxWidth: 800,
+  },
+  logo: {
+    height: 50,
+    padding: theme.spacing(2),
+    boxSizing: 'content-box',
+  },
+  adsContainer: {
+    position: 'absolute',
+    overflow: 'visible',
+    display: 'flex',
+    alignItems: 'flex-end',
+    flexDirection: 'row-reverse',
+    bottom: 10,
+    right: 10,
+    pointerEvents: 'none', // don't block the main page
+  },
+  adsContainerRectangles: {
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'visible',
+    pointerEvents: 'all', // needs to be clickable
+  },
+  adContainerLeaderboard: {
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'visible',
+    marginRight: 10,
+    pointerEvents: 'all', // needs to be clickable
+  },
+}))
 
 if (isClientSide()) {
   // Load ads immediately on the client side when we parse
@@ -48,6 +102,8 @@ if (isClientSide()) {
 
 const Index = props => {
   const { user } = props
+
+  const classes = useStyles()
 
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
@@ -103,36 +159,15 @@ const Index = props => {
   }
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        width: '100vw',
-        background: '#eee5ff',
-        overflow: 'hidden',
-      }}
-    >
-      <Logo includeText style={{ padding: 12 }} />
-      <p>This is dev!</p>
-      {/* TODO: use classes for styling */}
-      <div
-        data-test-id="ads-container"
-        style={{
-          position: 'absolute',
-          overflow: 'visible',
-          display: 'flex',
-          alignItems: 'flex-end',
-          flexDirection: 'row-reverse',
-          bottom: 10,
-          right: 10,
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'visible',
-          }}
-        >
+    <div className={classes.pageContainer}>
+      <div className={classes.centerContainer}>
+        <div className={classes.searchBarContainer}>
+          <Logo includeText className={classes.logo} />
+          <SearchInput />
+        </div>
+      </div>
+      <div className={classes.adsContainer}>
+        <div className={classes.adsContainerRectangles}>
           {adUnits.rectangleAdSecondary && shouldRenderAds ? (
             <AdComponent
               adId={adUnits.rectangleAdSecondary.adId}
@@ -164,14 +199,7 @@ const Index = props => {
           ) : null}
         </div>
         {adUnits.leaderboard && shouldRenderAds ? (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'visible',
-              marginRight: 10,
-            }}
-          >
+          <div className={classes.adContainerLeaderboard}>
             <AdComponent
               adId={adUnits.leaderboard.adId}
               onAdDisplayed={displayedAdInfo => {

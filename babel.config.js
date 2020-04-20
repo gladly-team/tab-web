@@ -7,5 +7,14 @@ module.exports = {
         artifactDirectory: './src/relay/__generated__',
       },
     ],
+    [
+      'module-resolver',
+      {
+        root: ['./'],
+        alias: {
+          src: './src',
+        },
+      },
+    ],
   ],
 }

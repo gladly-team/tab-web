@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development next dev",
-    "build": "NODE_ENV=production yarn run relay && next build",
+    "build": "NODE_ENV=production yarn run test && yarn run relay && next build",
     "start": "NODE_ENV=production next start",
+    "test": "jest --env=jsdom",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\"",
@@ -15,6 +16,9 @@
     "schema": "NODE_ENV=production graphql codegen"
   },
   "dependencies": {
+    "@material-ui/core": "^4.9.11",
+    "@material-ui/icons": "^4.9.1",
+    "clsx": "^1.1.0",
     "cookies": "^0.8.0",
     "dotenv": "^8.2.0",
     "firebase": "^7.6.1",
@@ -33,21 +37,29 @@
     "tab-ads": "^0.7.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.9.0",
     "@graphql-codegen/schema-ast": "^1.9.1",
     "@test-graphql-cli/codegen": "4.0.0-alpha-df0d2bc.481",
     "@test-graphql-cli/validate": "4.0.0-alpha-df0d2bc.481",
+    "babel-jest": "^25.3.0",
+    "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-relay": "^7.1.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^6.7.2",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.7.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jest": "^23.8.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "graphql": "^14.5.8",
     "graphql-cli": "4.0.0-alpha-df0d2bc.481",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^25.3.0",
     "prettier": "^1.19.1",
     "relay-compiler": "^7.1.0"
   }
