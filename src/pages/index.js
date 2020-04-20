@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
+import { makeStyles } from '@material-ui/core/styles'
 import { AdComponent, fetchAds } from 'tab-ads'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
@@ -13,6 +14,16 @@ import {
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import Logo from 'src/components/Logo'
+import SearchInput from 'src/components/SearchInput'
+
+const useStyles = makeStyles(() => ({
+  searchBarContainer: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+}))
 
 if (isClientSide()) {
   // Load ads immediately on the client side when we parse
@@ -48,6 +59,8 @@ if (isClientSide()) {
 
 const Index = props => {
   const { user } = props
+
+  const classes = useStyles()
 
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
@@ -112,6 +125,9 @@ const Index = props => {
       }}
     >
       <Logo includeText style={{ padding: 12 }} />
+      <div className={classes.searchBarContainer}>
+        <SearchInput />
+      </div>
       {/* TODO: use classes for styling */}
       <div
         data-test-id="ads-container"
