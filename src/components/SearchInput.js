@@ -5,6 +5,7 @@ import Input from '@material-ui/core/Input'
 import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchIcon from '@material-ui/icons/Search'
+import { windowOpenTop } from 'src/utils/navigation'
 
 const searchBoxBorderColor = '#ced4da'
 const searchBoxBorderColorFocused = '#bdbdbd'
@@ -34,18 +35,27 @@ const useStyles = makeStyles(theme => ({
 
 const SearchInput = () => {
   const classes = useStyles()
+  const searchInputRef = React.createRef()
+
+  const onSearch = () => {
+    const query = searchInputRef.current.value
+    const searchURL = `https://www.google.com/search?q=${encodeURIComponent(
+      query
+    )}`
+    windowOpenTop(searchURL)
+  }
+
   return (
     <div>
       <Input
         autoFocus
-        data-test-id="search-input"
         type="text"
-        // inputRef={node => (this.searchInput = node)}
-        // onKeyPress={e => {
-        //   if (e.key === 'Enter') {
-        //     this.search()
-        //   }
-        // }}
+        inputRef={searchInputRef}
+        onKeyPress={e => {
+          if (e.key === 'Enter') {
+            onSearch()
+          }
+        }}
         placeholder="Search Google"
         disableUnderline
         fullWidth
@@ -54,16 +64,13 @@ const SearchInput = () => {
           input: classes.inputStyle,
           focused: classes.inputRootFocused,
         }}
-        endAdornment={(
+        endAdornment={
           <InputAdornment position="end">
-            <IconButton
-              aria-label="Search button"
-              // onClick={this.search.bind(this)}
-            >
+            <IconButton aria-label="Search button" onClick={onSearch}>
               <SearchIcon style={{ color: searchBoxBorderColorFocused }} />
             </IconButton>
           </InputAdornment>
-        )}
+        }
       />
     </div>
   )
