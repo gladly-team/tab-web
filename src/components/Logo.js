@@ -34,14 +34,9 @@ const Logo = props => {
       }
     }
   }
-  return (
-    <img
-      style={{ height: 40, ...style }}
-      src={logo}
-      {...otherProps}
-      alt="The Tab for a Cause logo"
-    />
-  )
+  // The alt text flashes on Firefox.
+  // eslint-disable-next-line jsx-a11y/alt-text
+  return <img style={{ height: 40, ...style }} src={logo} {...otherProps} />
 }
 
 Logo.propTypes = {
