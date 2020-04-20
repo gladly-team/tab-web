@@ -1,8 +1,12 @@
+/* globals document */
 /* eslint react/jsx-props-no-spreading: 0 */
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import Head from 'next/head'
 import { get, set } from 'lodash/object'
 import { register, unregister } from 'next-offline/runtime'
+import { ThemeProvider } from '@material-ui/core/styles'
+import CssBaseline from '@material-ui/core/CssBaseline'
 import { AuthUserInfoContext, useFirebaseAuth } from 'src/utils/auth/hooks'
 import {
   createAuthUser,
@@ -17,6 +21,7 @@ import {
   REQ_SESSION_KEY,
   REQ_SESSION_AUTH_USER_INFO_KEY,
 } from 'src/utils/constants'
+import theme from 'src/utils/theme'
 
 const App = props => {
   const { AuthUserInfo, Component, pageProps } = props
@@ -42,6 +47,16 @@ const App = props => {
     }
   }, [])
 
+  useEffect(() => {
+    // Material UI:
+    // Remove the server-side injected CSS.
+    // https://github.com/mui-org/material-ui/tree/master/examples/nextjs
+    const jssStyles = document.querySelector('#jss-server-side')
+    if (jssStyles) {
+      jssStyles.parentElement.removeChild(jssStyles)
+    }
+  }, [])
+
   // We'll use the authed user from client-side auth (Firebase JS SDK)
   // when available. On the server side, we'll use the authed user from
   // the session. This allows us to server-render while also using Firebase's
@@ -64,9 +79,21 @@ const App = props => {
     AuthUser = AuthUserFromSession
   }
   return (
-    <AuthUserInfoContext.Provider value={{ AuthUser, token }}>
-      <Component {...pageProps} />
-    </AuthUserInfoContext.Provider>
+    <>
+      <Head>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
+      </Head>
+      {/* Material UI: https://github.com/mui-org/material-ui/blob/master/examples/nextjs/pages/_app.js */}
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AuthUserInfoContext.Provider value={{ AuthUser, token }}>
+          <Component {...pageProps} />
+        </AuthUserInfoContext.Provider>
+      </ThemeProvider>
+    </>
   )
 }
 
