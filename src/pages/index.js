@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   pageContainer: {
     height: '100vh',
     width: '100vw',
-    background: '#eee5ff',
+    background: theme.palette.background.paper,
     overflow: 'hidden',
   },
   centerContainer: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 200, // for visually-appealing vertical centering
+    paddingBottom: 220, // for visually-appealing vertical centering
   },
   searchBarContainer: {
     display: 'flex',
