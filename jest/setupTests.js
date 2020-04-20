@@ -10,11 +10,12 @@ Enzyme.configure({ adapter: new Adapter() })
 // https://github.com/facebook/jest/issues/6127
 // We can consider enabling it later.
 
-// FIXME
 // Force warnings to fail Jest tests.
 // https://github.com/facebook/jest/issues/6121#issuecomment-444269677
-// const { error } = console
-// console.error = message => {
-//   error.apply(console, arguments) // eslint-disable-line no-undef
-//   throw message instanceof Error ? message : new Error(message)
-// }
+const { error } = console
+
+// eslint-disable-next-line func-names
+console.error = function(message, ...args) {
+  error.apply(console, args) // keep default behaviour
+  throw message instanceof Error ? message : new Error(message)
+}

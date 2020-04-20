@@ -1,9 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 
-// TODO:
-// - fix setupTests to throw when console.warn is called
-
 const getMockProps = () => ({
   color: 'purple',
   includeText: false,
