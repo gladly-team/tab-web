@@ -10,7 +10,6 @@ describe('Logo component', () => {
   it('renders without error', () => {
     const Logo = require('src/components/Logo').default
     const mockProps = getMockProps()
-    console.error('oops')
     expect(() => {
       shallow(<Logo {...mockProps} />)
     }).not.toThrow()
