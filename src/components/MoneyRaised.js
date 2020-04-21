@@ -11,8 +11,6 @@ const MoneyRaised = props => {
   return <span>{moneyRaisedFormatted}</span>
 }
 
-console.log('HERE', PropTypes.shape)
-
 MoneyRaised.propTypes = {
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
