@@ -17,7 +17,7 @@ jobs:
       with:
         node-version: 12.x
     - run: npm install
-    - run: npm test:coverage
+    - run: npm run test:coverage
       env:
         CI: true
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
