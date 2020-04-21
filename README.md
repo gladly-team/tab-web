@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/gladly-team/tab-web/branch/master/graph/badge.svg)](https://codecov.io/gh/gladly-team/tab-web)
+
 # [Tab for a Cause](https://tab.gladly.io/)
 *V4: adding server-side rendering*
 
