@@ -14,6 +14,7 @@ import {
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import Logo from 'src/components/Logo'
+import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import SearchInput from 'src/components/SearchInput'
 
 const useStyles = makeStyles(theme => ({
@@ -101,7 +102,7 @@ if (isClientSide()) {
 }
 
 const Index = props => {
-  const { user } = props
+  const { app, user } = props
 
   const classes = useStyles()
 
@@ -160,6 +161,9 @@ const Index = props => {
 
   return (
     <div className={classes.pageContainer}>
+      <div>
+        <MoneyRaisedContainer app={app} />
+      </div>
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
           <Logo includeText className={classes.logo} />
@@ -235,7 +239,7 @@ export default withAuthAndData(({ AuthUser }) => {
     query: graphql`
       query pagesIndexQuery($userId: String!) {
         app {
-          moneyRaised
+          ...MoneyRaisedContainer_app
         }
         user(userId: $userId) {
           tabs
