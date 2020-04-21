@@ -5,8 +5,6 @@ module.exports = {
     '!**/node_modules/**',
     '!**/__generated__/**',
   ],
-  // FIXME: Codecov can't run directly in ZEIT Now. We
-  //   may want to set up a CI service.
   coverageDirectory: './coverage/',
   collectCoverage: true,
   moduleNameMapper: {
