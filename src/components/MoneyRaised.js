@@ -10,6 +10,14 @@ const MoneyRaised = props => {
 
   const [currentMoneyRaised, setMoneyRaised] = useState(moneyRaised)
 
+  // If the moneyRaised prop changes, use the new value.
+  // https://reactjs.org/docs/hooks-faq.html#how-do-i-implement-getderivedstatefromprops
+  const [prevMoneyRaised, setPrevMoneyRaised] = useState(moneyRaised)
+  if (moneyRaised !== prevMoneyRaised) {
+    setMoneyRaised(moneyRaised)
+    setPrevMoneyRaised(moneyRaised)
+  }
+
   // Add a penny every X number of seconds.
   const msInDay = 864e5
   const msPerPenny = msInDay / (dollarsPerDayRate * 100)
