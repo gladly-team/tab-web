@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
 import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import { AdComponent, fetchAds } from 'tab-ads'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
@@ -14,6 +15,7 @@ import {
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import Logo from 'src/components/Logo'
+import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import SearchInput from 'src/components/SearchInput'
 
 const useStyles = makeStyles(theme => ({
@@ -22,6 +24,17 @@ const useStyles = makeStyles(theme => ({
     width: '100vw',
     background: theme.palette.background.paper,
     overflow: 'hidden',
+  },
+  topRightContainer: {
+    position: 'absolute',
+    zIndex: 10,
+    top: 0,
+    right: 0,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  moneyRaisedContainer: {
+    padding: theme.spacing(2),
   },
   centerContainer: {
     height: '100%',
@@ -101,7 +114,7 @@ if (isClientSide()) {
 }
 
 const Index = props => {
-  const { user } = props
+  const { app, user } = props
 
   const classes = useStyles()
 
@@ -160,6 +173,13 @@ const Index = props => {
 
   return (
     <div className={classes.pageContainer}>
+      <div className={classes.topRightContainer}>
+        <div className={classes.moneyRaisedContainer}>
+          <Typography variant="h5">
+            <MoneyRaisedContainer app={app} />
+          </Typography>
+        </div>
+      </div>
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
           <Logo includeText className={classes.logo} />
@@ -221,6 +241,10 @@ const Index = props => {
 Index.displayName = 'Index'
 
 Index.propTypes = {
+  app: PropTypes.shape({
+    moneyRaised: PropTypes.number.isRequired,
+    dollarsPerDayRate: PropTypes.number.isRequired,
+  }).isRequired,
   user: PropTypes.shape({
     tabs: PropTypes.number.isRequired,
     vcCurrent: PropTypes.number.isRequired,
@@ -235,7 +259,7 @@ export default withAuthAndData(({ AuthUser }) => {
     query: graphql`
       query pagesIndexQuery($userId: String!) {
         app {
-          moneyRaised
+          ...MoneyRaisedContainer_app
         }
         user(userId: $userId) {
           tabs

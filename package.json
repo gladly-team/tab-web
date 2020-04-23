@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development next dev",
-    "build": "NODE_ENV=production yarn run test && yarn run relay && next build",
+    "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start",
     "test": "jest --env=jsdom",
     "test:coverage": "yarn run test && codecov",
@@ -42,6 +42,7 @@
     "@graphql-codegen/schema-ast": "^1.9.1",
     "@test-graphql-cli/codegen": "4.0.0-alpha-df0d2bc.481",
     "@test-graphql-cli/validate": "4.0.0-alpha-df0d2bc.481",
+    "@testing-library/react-hooks": "^3.2.1",
     "babel-jest": "^25.3.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-relay": "^7.1.0",
