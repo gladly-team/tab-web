@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development next dev",
-    "build": "NODE_ENV=production yarn run test && yarn run relay && next build",
+    "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start",
     "test": "jest --env=jsdom",
     "test:coverage": "yarn run test && codecov",
