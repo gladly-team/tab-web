@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
 import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import { AdComponent, fetchAds } from 'tab-ads'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
@@ -23,6 +24,17 @@ const useStyles = makeStyles(theme => ({
     width: '100vw',
     background: theme.palette.background.paper,
     overflow: 'hidden',
+  },
+  topRightContainer: {
+    position: 'absolute',
+    zIndex: 10,
+    top: 0,
+    right: 0,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  moneyRaisedContainer: {
+    padding: theme.spacing(2),
   },
   centerContainer: {
     height: '100%',
@@ -161,8 +173,12 @@ const Index = props => {
 
   return (
     <div className={classes.pageContainer}>
-      <div>
-        <MoneyRaisedContainer app={app} />
+      <div className={classes.topRightContainer}>
+        <div className={classes.moneyRaisedContainer}>
+          <Typography variant="h5">
+            <MoneyRaisedContainer app={app} />
+          </Typography>
+        </div>
       </div>
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
@@ -225,6 +241,10 @@ const Index = props => {
 Index.displayName = 'Index'
 
 Index.propTypes = {
+  app: PropTypes.shape({
+    moneyRaised: PropTypes.number.isRequired,
+    dollarsPerDayRate: PropTypes.number.isRequired,
+  }).isRequired,
   user: PropTypes.shape({
     tabs: PropTypes.number.isRequired,
     vcCurrent: PropTypes.number.isRequired,
