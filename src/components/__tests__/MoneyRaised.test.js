@@ -1,0 +1,60 @@
+import React from 'react'
+import { act } from 'react-dom/test-utils'
+import { mount } from 'enzyme'
+
+const getMockProps = () => ({
+  app: {
+    moneyRaised: 846892.02,
+    dollarsPerDayRate: 602.12,
+  },
+})
+
+beforeEach(() => {
+  jest.useFakeTimers()
+})
+
+// Note: Enzyme will not call `useEffect` when shallow
+// rendering, as of 23 April, 2020:
+// https://github.com/enzymejs/enzyme/issues/2086
+describe('MoneyRaised component', () => {
+  it('renders without error', () => {
+    const MoneyRaised = require('src/components/MoneyRaised').default
+    const mockProps = getMockProps()
+    expect(() => {
+      mount(<MoneyRaised {...mockProps} />)
+    }).not.toThrow()
+  })
+
+  it('increases the money raised amount at the expected rate', () => {
+    const MoneyRaised = require('src/components/MoneyRaised').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        moneyRaised: 650200.12,
+        dollarsPerDayRate: 1440, // a dollar per minute
+      },
+    }
+    const wrapper = mount(<MoneyRaised {...mockProps} />)
+    expect(wrapper.find('span').text()).toEqual('$650,200.12')
+    act(() => jest.advanceTimersByTime(30e3)) // 30 seconds
+    expect(wrapper.find('span').text()).toEqual('$650,200.62')
+    act(() => jest.advanceTimersByTime(4e3)) // 4 seconds
+    expect(wrapper.find('span').text()).toEqual('$650,200.68')
+  })
+
+  it('displays a two decimal places with trailing zeros', () => {
+    const MoneyRaised = require('src/components/MoneyRaised').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        moneyRaised: 650200,
+      },
+    }
+    const wrapper = mount(<MoneyRaised {...mockProps} />)
+    expect(wrapper.find('span').text()).toEqual('$650,200.00')
+  })
+})

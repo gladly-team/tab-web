@@ -10,6 +10,9 @@ const theme = createMuiTheme({
       main: '#4a90e2',
       contrastText: '#fff',
     },
+    text: {
+      primary: 'rgba(0, 0, 0, 0.76)',
+    },
   },
   typography: {
     fontSize: 14,
