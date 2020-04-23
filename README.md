@@ -17,3 +17,14 @@ With this approach:
 On the `/api/logout` endpoint, we do not require the user to be authenticated, because if the user's Firebase credentials are invalidated or removed, the user would not be able to unset their session cookies and would continue to receive authed content until the session cookie expires. For basic CSRF protection, the logout endpoint verifies that the custom header `X-Gladly-Requested-By` is set.
 
 In the future, we can consider adding session-based CSRF tokens for defense in depth.
+
+### Deployment
+**Vercel runs unit tests and deploys**
+* Our Vercel project, [tab-web](https://vercel.com/gladly-team/tab-web), builds on commit push
+* Environment variables are set in the Vercel console, and we keep values in `.env.info` for reference
+* The "dev" Git branch is mapped to our "dev" environment
+
+**Github Action logs code coverage**
+* A Node Github action runs test coverage and logs to [Codecov](https://codecov.io/gh/gladly-team/tab-web)
+
+As needed, we may want to move the workflow entirely into a CI system.
