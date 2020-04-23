@@ -57,4 +57,59 @@ describe('MoneyRaised component', () => {
     const wrapper = mount(<MoneyRaised {...mockProps} />)
     expect(wrapper.find('span').text()).toEqual('$650,200.00')
   })
+
+  it('updates when the app.moneyRaised prop value changes', () => {
+    const MoneyRaised = require('src/components/MoneyRaised').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        moneyRaised: 871033.04,
+        dollarsPerDayRate: 602.12,
+      },
+    }
+    const wrapper = mount(<MoneyRaised {...mockProps} />)
+    expect(wrapper.find('span').text()).toEqual('$871,033.04')
+
+    // Update the moneyRaised prop value.
+    wrapper.setProps({
+      ...mockProps,
+      app: {
+        ...mockProps.app,
+        moneyRaised: 900123.01,
+      },
+    })
+    expect(wrapper.find('span').text()).toEqual('$900,123.01')
+  })
+
+  it('increases the money raised amount at the new rate when the dollarsPerDayRate changes', () => {
+    const MoneyRaised = require('src/components/MoneyRaised').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      app: {
+        ...defaultMockProps.app,
+        moneyRaised: 650200.12,
+        dollarsPerDayRate: 1440, // a dollar per minute
+      },
+    }
+    const wrapper = mount(<MoneyRaised {...mockProps} />)
+    expect(wrapper.find('span').text()).toEqual('$650,200.12')
+    act(() => jest.advanceTimersByTime(30e3)) // 30 seconds
+    expect(wrapper.find('span').text()).toEqual('$650,200.62')
+
+    // Update the dollarsPerDayRate.
+    wrapper.setProps({
+      ...mockProps,
+      app: {
+        ...mockProps.app,
+        dollarsPerDayRate: 2880, // a dollar every 30 seconds
+      },
+    })
+
+    expect(wrapper.find('span').text()).toEqual('$650,200.62')
+    act(() => jest.advanceTimersByTime(30e3)) // 30 seconds
+    expect(wrapper.find('span').text()).toEqual('$650,201.62')
+  })
 })
