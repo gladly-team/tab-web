@@ -44,6 +44,11 @@ export const createAuthUserInfo = ({
   isClientInitialized = false,
   token = null,
 } = {}) => {
+  if (AuthUser && firebaseUser) {
+    throw new Error(
+      'Pass either AuthUser or firebaseUser, not both, when constructing AuthUserInfo'
+    )
+  }
   return {
     AuthUser: AuthUser || createAuthUser(firebaseUser),
     isClientInitialized,
