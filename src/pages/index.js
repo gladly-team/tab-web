@@ -97,7 +97,7 @@ if (isClientSide()) {
           domain: getHostname(),
           pageUrl: getCurrentURL(),
         },
-        logLevel: 'debug',
+        logLevel: 'error',
         onError: e => {
           // TODO: log error
           console.error(e) // eslint-disable-line no-console
