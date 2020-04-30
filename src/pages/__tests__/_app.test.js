@@ -3,9 +3,9 @@ import { shallow } from 'enzyme'
 import { useFirebaseAuth } from 'src/utils/auth/hooks'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
 import {
-  createAuthUser,
+  // createAuthUser,
   createAuthUserInfo,
-  getAuthUserInfoFromDOM,
+  // getAuthUserInfoFromDOM,
 } from 'src/utils/auth/user'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
 
@@ -21,14 +21,15 @@ const MockComponent = () => {
 MockComponent.getInitialProps = jest.fn()
 
 const getMockProps = () => ({
-  AuthUserInfo: {
+  AuthUserInfo: createAuthUserInfo({
     AuthUser: {
       id: 'abc-123',
       email: 'fake@example.com',
       emailVerified: true,
     },
     token: 'some-token-here',
-  },
+    isClientInitialized: false,
+  }),
   Component: MockComponent,
   pageProps: { some: 'data' },
 })
