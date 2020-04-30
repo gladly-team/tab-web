@@ -78,6 +78,10 @@ const App = props => {
     // AuthUserFromSession when the user logs out on the client.
     AuthUser = AuthUserFromSession
   }
+
+  // TODO: use the "initializing" data to set "isClientInitialized" in
+  //   the provided AuthUserInfo.
+  // const AuthUserInfoCurrent = createAuthUserInfo()
   return (
     <>
       <Head>

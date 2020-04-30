@@ -12,6 +12,8 @@ import {
   NEXT_CTX_AUTH_USER_INFO_KEY,
 } from 'src/utils/constants'
 
+// TODO: show a "loading" message before determining
+// the client-side auth state.
 const Auth = props => {
   const { AuthUserInfo } = props
 
