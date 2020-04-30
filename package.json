@@ -7,7 +7,7 @@
     "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start",
     "test": "jest --env=jsdom",
-    "test:coverage": "yarn run test && codecov",
+    "test:coverage": "yarn run test --coverage && codecov",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\"",

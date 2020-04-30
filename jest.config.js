@@ -6,7 +6,6 @@ module.exports = {
     '!**/__generated__/**',
   ],
   coverageDirectory: './coverage/',
-  collectCoverage: true,
   moduleNameMapper: {
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
   },
