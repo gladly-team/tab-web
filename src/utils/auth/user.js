@@ -28,6 +28,8 @@ export const createAuthUser = firebaseUser => {
 
 /**
  * Create an object with an AuthUser object and AuthUserToken value.
+ * @param {Object} AuthUser - An existing AuthUser object. Pass either this
+ *   or the firebaseUser object.
  * @param {Object} firebaseUser - A decoded Firebase user token or JS SDK
  *   Firebase user object.
  * @param {String} firebaseToken - A Firebase auth token string.
@@ -37,11 +39,14 @@ export const createAuthUser = firebaseUser => {
  * @return {String} AuthUser.token - The user's encoded Firebase token.
  */
 export const createAuthUserInfo = ({
+  AuthUser = null,
   firebaseUser = null,
+  isClientInitialized = false,
   token = null,
 } = {}) => {
   return {
-    AuthUser: createAuthUser(firebaseUser),
+    AuthUser: AuthUser || createAuthUser(firebaseUser),
+    isClientInitialized,
     token,
   }
 }
@@ -54,7 +59,14 @@ export const createAuthUserInfo = ({
  *   object
  */
 const validateAuthUserInfo = obj => {
-  if (!(obj && has(obj, 'AuthUser') && has(obj, 'token'))) {
+  if (
+    !(
+      obj &&
+      has(obj, 'AuthUser') &&
+      has(obj, 'token') &&
+      has(obj, 'isClientInitialized')
+    )
+  ) {
     throw new Error('The AuthUserInfo object is invalid.')
   }
   return true
