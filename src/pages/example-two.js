@@ -69,7 +69,8 @@ ExampleTwo.propTypes = {
       email: PropTypes.string.isRequired,
       emailVerified: PropTypes.bool.isRequired,
     }),
-    token: PropTypes.string,
+    token: PropTypes.string.isRequired,
+    isClientInitialized: PropTypes.bool.isRequired,
   }),
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,

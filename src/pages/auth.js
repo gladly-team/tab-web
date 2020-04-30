@@ -83,7 +83,8 @@ Auth.propTypes = {
       email: PropTypes.string.isRequired,
       emailVerified: PropTypes.bool.isRequired,
     }),
-    token: PropTypes.string,
+    token: PropTypes.string, // user likely isn't authed on this page
+    isClientInitialized: PropTypes.bool.isRequired,
   }),
 }
 

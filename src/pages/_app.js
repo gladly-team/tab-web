@@ -79,9 +79,11 @@ const App = props => {
     AuthUser = AuthUserFromSession
   }
 
-  // TODO: use the "initializing" data to set "isClientInitialized" in
-  //   the provided AuthUserInfo.
-  // const AuthUserInfoCurrent = createAuthUserInfo()
+  const AuthUserInfoCurrent = createAuthUserInfo({
+    AuthUser,
+    token,
+    isClientInitialized: !initializing,
+  })
   return (
     <>
       <Head>
@@ -94,7 +96,7 @@ const App = props => {
       {/* Material UI: https://github.com/mui-org/material-ui/blob/master/examples/nextjs/pages/_app.js */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AuthUserInfoContext.Provider value={{ AuthUser, token }}>
+        <AuthUserInfoContext.Provider value={AuthUserInfoCurrent}>
           <Component {...pageProps} />
         </AuthUserInfoContext.Provider>
       </ThemeProvider>
@@ -150,7 +152,8 @@ App.propTypes = {
       email: PropTypes.string.isRequired,
       emailVerified: PropTypes.bool.isRequired,
     }),
-    token: PropTypes.string,
+    token: PropTypes.string, // user might not be authed on all pages
+    isClientInitialized: PropTypes.bool.isRequired,
   }).isRequired,
   Component: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
