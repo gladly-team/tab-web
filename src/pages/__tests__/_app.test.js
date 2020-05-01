@@ -39,7 +39,7 @@ beforeEach(() => {
   })
 
   useFirebaseAuth.mockReturnValue({
-    initializing: true,
+    initializing: false,
     user: {
       uid: 'abc-123',
       email: 'fake@example.com',
@@ -108,10 +108,11 @@ describe('_app.js', () => {
     expect(unregister).toHaveBeenCalled()
   })
 
-  it('provides AuthUserInfo context to consumers', () => {
+  it('provides AuthUserInfo context to consumers, using the server AuthUser if the client-side is still initializing', () => {
     expect.assertions(1)
     const App = require('src/pages/_app.js').default
 
+    // Create a child component with a consumer of the AuthUserInfo context.
     const MockComponentSpy = jest.fn(() => {
       return <div>hey</div>
     })
@@ -122,20 +123,133 @@ describe('_app.js', () => {
         </AuthUserInfoContext.Consumer>
       )
     }
+
+    useFirebaseAuth.mockReturnValue({
+      initializing: true, // still initializing
+      user: undefined,
+    })
+
     const defaultMockProps = getMockProps()
     const mockProps = {
       ...defaultMockProps,
+      AuthUserInfo: createAuthUserInfo({
+        AuthUser: {
+          id: 'abc-123',
+          email: 'serverSidePerson@example.com',
+          emailVerified: true,
+        },
+        token: 'some-token-here',
+        isClientInitialized: false, // this will always be false on the server side
+      }),
       Component: MockComponentWithConsumer,
     }
     mount(<App {...mockProps} />)
     const childComponentProps = MockComponentSpy.mock.calls[0][0]
     expect(childComponentProps.AuthUserInfo).toEqual({
       AuthUser: {
-        email: 'fake@example.com',
-        emailVerified: true,
         id: 'abc-123',
+        email: 'serverSidePerson@example.com',
+        emailVerified: true,
       },
-      isClientInitialized: false,
+      isClientInitialized: false, // note this is false
+      token: 'some-token-here',
+    })
+  })
+
+  it('provides AuthUserInfo context to consumers, using the client AuthUser if the client-side is finished initializing', () => {
+    expect.assertions(1)
+    const App = require('src/pages/_app.js').default
+
+    // Create a child component with a consumer of the AuthUserInfo context.
+    const MockComponentSpy = jest.fn(() => {
+      return <div>hey</div>
+    })
+    const MockComponentWithConsumer = () => {
+      return (
+        <AuthUserInfoContext.Consumer>
+          {AuthUserInfo => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+        </AuthUserInfoContext.Consumer>
+      )
+    }
+
+    useFirebaseAuth.mockReturnValue({
+      initializing: false, // finished initializing
+      user: {
+        uid: 'xyz-987',
+        email: 'clientSidePerson@example.com',
+        emailVerified: true,
+      },
+    })
+
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      AuthUserInfo: createAuthUserInfo({
+        AuthUser: {
+          id: 'abc-123',
+          email: 'serverSidePerson@example.com',
+          emailVerified: true,
+        },
+        token: 'some-token-here',
+        isClientInitialized: false, // this will always be false on the server side
+      }),
+      Component: MockComponentWithConsumer,
+    }
+    mount(<App {...mockProps} />)
+    const childComponentProps = MockComponentSpy.mock.calls[0][0]
+    expect(childComponentProps.AuthUserInfo).toEqual({
+      AuthUser: {
+        id: 'xyz-987',
+        email: 'clientSidePerson@example.com',
+        emailVerified: true,
+      },
+      isClientInitialized: true, // note that this is true
+      token: 'some-token-here',
+    })
+  })
+
+  // In this case, the user still has auth cookies but does not have
+  // credentials in teh Firebase JS SDK.
+  it('provides AuthUserInfo context to consumers, using the client AuthUser (when undefined) if the client-side is finished initializing', () => {
+    expect.assertions(1)
+    const App = require('src/pages/_app.js').default
+
+    // Create a child component with a consumer of the AuthUserInfo context.
+    const MockComponentSpy = jest.fn(() => {
+      return <div>hey</div>
+    })
+    const MockComponentWithConsumer = () => {
+      return (
+        <AuthUserInfoContext.Consumer>
+          {AuthUserInfo => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+        </AuthUserInfoContext.Consumer>
+      )
+    }
+
+    useFirebaseAuth.mockReturnValue({
+      initializing: false, // finished initializing
+      user: undefined, // not logged in
+    })
+
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      AuthUserInfo: createAuthUserInfo({
+        AuthUser: {
+          id: 'abc-123',
+          email: 'serverSidePerson@example.com',
+          emailVerified: true,
+        },
+        token: 'some-token-here',
+        isClientInitialized: false, // this will always be false on the server side
+      }),
+      Component: MockComponentWithConsumer,
+    }
+    mount(<App {...mockProps} />)
+    const childComponentProps = MockComponentSpy.mock.calls[0][0]
+    expect(childComponentProps.AuthUserInfo).toEqual({
+      AuthUser: null, // not logged in
+      isClientInitialized: true, // note that this is true
       token: 'some-token-here',
     })
   })
