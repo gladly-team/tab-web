@@ -1,5 +1,7 @@
 import { getAvailableAdUnits } from 'tab-ads'
 
+const DEFAULT_NUMBER_OF_ADS = 2
+
 // TODO: implement
 /**
  * Determine if the user has viewed the maximum number of ads
@@ -44,7 +46,7 @@ export const getAdUnits = () => {
   } else if (shouldShowOneAd()) {
     numberOfAdsToShow = 1
   } else {
-    numberOfAdsToShow = 3
+    numberOfAdsToShow = DEFAULT_NUMBER_OF_ADS
   }
   const {
     leaderboard,
