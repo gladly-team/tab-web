@@ -2,11 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { useFirebaseAuth } from 'src/utils/auth/hooks'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
-import {
-  // createAuthUser,
-  createAuthUserInfo,
-  // getAuthUserInfoFromDOM,
-} from 'src/utils/auth/user'
+import { createAuthUserInfo, getAuthUserInfoFromDOM } from 'src/utils/auth/user'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
 import { withSession } from 'src/utils/middleware/session'
 
@@ -169,6 +165,35 @@ describe('_app.js: getInitialProps', () => {
       AuthUser: {
         id: 'user-id-from-session',
         email: 'MrSessionGuy@example.com',
+        emailVerified: true,
+      },
+      token: 'some-token-here',
+      isClientInitialized: false,
+    })
+  })
+
+  it('returns AuthUserInfo from data stored in the DOM [client-side]', async () => {
+    expect.assertions(1)
+    isClientSide.mockReturnValue(true)
+    isServerSide.mockReturnValue(false)
+    getAuthUserInfoFromDOM.mockReturnValue({
+      AuthUser: {
+        id: 'user-id-from-DOM',
+        email: 'MsDOMDataLady@example.com',
+        emailVerified: true,
+      },
+      token: 'some-token-here',
+      isClientInitialized: false,
+    })
+    const App = require('src/pages/_app.js').default
+    const initialProps = await App.getInitialProps({
+      Component: MockComponent,
+      ctx: getMockNextJSContext({ serverSide: false }),
+    })
+    expect(initialProps.AuthUserInfo).toEqual({
+      AuthUser: {
+        id: 'user-id-from-DOM',
+        email: 'MsDOMDataLady@example.com',
         emailVerified: true,
       },
       token: 'some-token-here',
