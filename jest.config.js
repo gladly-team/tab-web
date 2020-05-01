@@ -4,6 +4,8 @@ module.exports = {
     '!**/*.d.ts',
     '!**/node_modules/**',
     '!**/__generated__/**',
+    '!**/__mocks__/**',
+    '!**/__tests__/**',
   ],
   coverageDirectory: './coverage/',
   moduleNameMapper: {
