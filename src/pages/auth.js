@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import FirebaseAuth from 'src/components/FirebaseAuth'
+import FullPageLoader from 'src/components/FullPageLoader'
 import withAuthUserInfo from 'src/utils/pageWrappers/withAuthUserInfo'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { isClientSide } from 'src/utils/ssr'
@@ -15,6 +16,11 @@ import {
 const Auth = props => {
   const { AuthUserInfo } = props
 
+  const shouldRedirect =
+    isClientSide() &&
+    get(AuthUserInfo, 'AuthUser') &&
+    AuthUserInfo.isClientInitialized
+
   useEffect(() => {
     // If there is an authed user, redirect to the app. AuthUser will be
     // become defined on a successful login. The user might also already
@@ -22,7 +28,7 @@ const Auth = props => {
     // doesn't exist (so the server redirected here) but the user has a valid
     // token on the client. We treat the token as the source of truth for
     // authentication.
-    if (isClientSide() && get(AuthUserInfo, 'AuthUser')) {
+    if (shouldRedirect) {
       const redirectToApp = async () => {
         // Clear the cache so it can be updated with content specific
         // to the authed user.
@@ -41,7 +47,15 @@ const Auth = props => {
       }
       redirectToApp()
     }
-  }, [AuthUserInfo])
+  }, [shouldRedirect])
+
+  // If Firebase hasn't initialized yet, or we are in the process of
+  // redirecting, show a loading message. Here, the user might be authed
+  // but not have auth cookies set, so we don't want to flash the sign-in
+  // dialog.
+  if (!AuthUserInfo.isClientInitialized || shouldRedirect) {
+    return <FullPageLoader />
+  }
 
   return (
     <div>
@@ -81,7 +95,8 @@ Auth.propTypes = {
       email: PropTypes.string.isRequired,
       emailVerified: PropTypes.bool.isRequired,
     }),
-    token: PropTypes.string,
+    token: PropTypes.string, // user likely isn't authed on this page
+    isClientInitialized: PropTypes.bool.isRequired,
   }),
 }
 

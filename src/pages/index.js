@@ -97,7 +97,7 @@ if (isClientSide()) {
           domain: getHostname(),
           pageUrl: getCurrentURL(),
         },
-        logLevel: 'debug',
+        logLevel: 'error',
         onError: e => {
           // TODO: log error
           console.error(e) // eslint-disable-line no-console
@@ -241,10 +241,7 @@ const Index = props => {
 Index.displayName = 'Index'
 
 Index.propTypes = {
-  app: PropTypes.shape({
-    moneyRaised: PropTypes.number.isRequired,
-    dollarsPerDayRate: PropTypes.number.isRequired,
-  }).isRequired,
+  app: PropTypes.shape({}).isRequired,
   user: PropTypes.shape({
     tabs: PropTypes.number.isRequired,
     vcCurrent: PropTypes.number.isRequired,

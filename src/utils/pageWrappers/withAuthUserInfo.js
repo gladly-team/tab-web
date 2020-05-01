@@ -54,7 +54,8 @@ export default ComposedComponent => {
         email: PropTypes.string.isRequired,
         emailVerified: PropTypes.bool.isRequired,
       }),
-      token: PropTypes.string,
+      token: PropTypes.string, // user might not be authed on all pages
+      isClientInitialized: PropTypes.bool.isRequired,
     }).isRequired,
   }
 

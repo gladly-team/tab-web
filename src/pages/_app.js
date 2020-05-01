@@ -39,12 +39,6 @@ const App = props => {
         console.log('Not registering a service worker. It is not enabled.') // eslint-disable-line no-console
       }
     }
-    return () => {
-      if (isClientSide() && isServiceWorkerEnabled) {
-        unregister()
-        console.log('Unregistered the service worker.') // eslint-disable-line no-console
-      }
-    }
   }, [])
 
   useEffect(() => {
@@ -78,6 +72,12 @@ const App = props => {
     // AuthUserFromSession when the user logs out on the client.
     AuthUser = AuthUserFromSession
   }
+
+  const AuthUserInfoCurrent = createAuthUserInfo({
+    AuthUser,
+    token,
+    isClientInitialized: !initializing,
+  })
   return (
     <>
       <Head>
@@ -90,7 +90,7 @@ const App = props => {
       {/* Material UI: https://github.com/mui-org/material-ui/blob/master/examples/nextjs/pages/_app.js */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <AuthUserInfoContext.Provider value={{ AuthUser, token }}>
+        <AuthUserInfoContext.Provider value={AuthUserInfoCurrent}>
           <Component {...pageProps} />
         </AuthUserInfoContext.Provider>
       </ThemeProvider>
@@ -146,7 +146,8 @@ App.propTypes = {
       email: PropTypes.string.isRequired,
       emailVerified: PropTypes.bool.isRequired,
     }),
-    token: PropTypes.string,
+    token: PropTypes.string, // user might not be authed on all pages
+    isClientInitialized: PropTypes.bool.isRequired,
   }).isRequired,
   Component: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
