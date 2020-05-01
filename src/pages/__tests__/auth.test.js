@@ -3,7 +3,7 @@ import { mount } from 'enzyme'
 import { createAuthUserInfo } from 'src/utils/auth/user'
 // import FirebaseAuth from 'src/components/FirebaseAuth'
 // import withAuthUserInfo from 'src/utils/pageWrappers/withAuthUserInfo'
-// import { clearAllServiceWorkerCaches } from 'src/utils/caching'
+import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { isClientSide } from 'src/utils/ssr'
 import { redirect, setWindowLocation } from 'src/utils/navigation'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
@@ -57,12 +57,13 @@ describe('auth.js', () => {
       AuthUserInfo: createAuthUserInfo(), // empty AuthUserInfo
     }
     const wrapper = mount(<AuthPage {...mockProps} />)
+    await flushAllPromises()
     expect(setWindowLocation).not.toHaveBeenCalled()
     wrapper.setProps({
       ...mockProps,
       AuthUserInfo: createAuthUserInfo({
         AuthUser: {
-          id: 'abc-123!!!',
+          id: 'abc-123',
           email: 'fake@example.com',
           emailVerified: true,
         },
@@ -72,6 +73,33 @@ describe('auth.js', () => {
     })
     await flushAllPromises()
     expect(setWindowLocation).toHaveBeenCalledWith(dashboardURL)
+  })
+
+  it('clears service worker caches when logging in (when the AuthUser becomes defined)', async () => {
+    expect.assertions(2)
+    const AuthPage = require('src/pages/auth.js').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      AuthUserInfo: createAuthUserInfo(), // empty AuthUserInfo
+    }
+    const wrapper = mount(<AuthPage {...mockProps} />)
+    await flushAllPromises()
+    expect(clearAllServiceWorkerCaches).not.toHaveBeenCalled()
+    wrapper.setProps({
+      ...mockProps,
+      AuthUserInfo: createAuthUserInfo({
+        AuthUser: {
+          id: 'abc-123',
+          email: 'fake@example.com',
+          emailVerified: true,
+        },
+        token: 'some-token-here',
+        isClientInitialized: true,
+      }),
+    })
+    await flushAllPromises()
+    expect(clearAllServiceWorkerCaches).toHaveBeenCalled()
   })
 })
 
