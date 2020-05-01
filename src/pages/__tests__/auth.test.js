@@ -27,12 +27,8 @@ afterEach(() => {
 
 const getMockProps = () => ({
   AuthUserInfo: createAuthUserInfo({
-    AuthUser: {
-      id: 'abc-123',
-      email: 'fake@example.com',
-      emailVerified: true,
-    },
-    token: 'some-token-here',
+    AuthUser: null,
+    token: null,
     isClientInitialized: true,
   }),
 })
@@ -101,12 +97,49 @@ describe('auth.js', () => {
     expect(clearAllServiceWorkerCaches).toHaveBeenCalled()
   })
 
-  it('renders the FirebaseAuth component', async () => {
+  it('renders the FirebaseAuth component if the user is not authed and Firebase has initialized', async () => {
     expect.assertions(1)
     const AuthPage = require('src/pages/auth.js').default
-    const mockProps = getMockProps()
+    const mockProps = {
+      ...getMockProps(),
+      AuthUserInfo: createAuthUserInfo({
+        AuthUser: null,
+        token: null,
+        isClientInitialized: true,
+      }),
+    }
     const wrapper = mount(<AuthPage {...mockProps} />)
     expect(wrapper.find(FirebaseAuth).exists()).toBe(true)
+  })
+
+  it('does not render the FirebaseAuth component if Firebase has not yet initialized', async () => {
+    expect.assertions(1)
+    const AuthPage = require('src/pages/auth.js').default
+    const mockProps = {
+      ...getMockProps(),
+      AuthUserInfo: createAuthUserInfo({
+        AuthUser: null,
+        token: null,
+        isClientInitialized: false, // still loading
+      }),
+    }
+    const wrapper = mount(<AuthPage {...mockProps} />)
+    expect(wrapper.find(FirebaseAuth).exists()).toBe(false)
+  })
+
+  it('renders a loading message when Firebase has not yet initialized', async () => {
+    expect.assertions(1)
+    const AuthPage = require('src/pages/auth.js').default
+    const mockProps = {
+      ...getMockProps(),
+      AuthUserInfo: createAuthUserInfo({
+        AuthUser: null,
+        token: null,
+        isClientInitialized: false, // still loading
+      }),
+    }
+    const wrapper = mount(<AuthPage {...mockProps} />)
+    expect(wrapper.at(0).text()).toEqual('Loading')
   })
 })
 

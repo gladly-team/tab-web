@@ -12,10 +12,13 @@ import {
   NEXT_CTX_AUTH_USER_INFO_KEY,
 } from 'src/utils/constants'
 
-// TODO: show a "loading" message before determining
-// the client-side auth state.
 const Auth = props => {
   const { AuthUserInfo } = props
+
+  const shouldRedirect =
+    isClientSide() &&
+    get(AuthUserInfo, 'AuthUser') &&
+    AuthUserInfo.isClientInitialized
 
   useEffect(() => {
     // If there is an authed user, redirect to the app. AuthUser will be
@@ -24,7 +27,7 @@ const Auth = props => {
     // doesn't exist (so the server redirected here) but the user has a valid
     // token on the client. We treat the token as the source of truth for
     // authentication.
-    if (isClientSide() && get(AuthUserInfo, 'AuthUser')) {
+    if (shouldRedirect) {
       const redirectToApp = async () => {
         // Clear the cache so it can be updated with content specific
         // to the authed user.
@@ -43,7 +46,15 @@ const Auth = props => {
       }
       redirectToApp()
     }
-  }, [AuthUserInfo])
+  }, [shouldRedirect])
+
+  // If Firebase hasn't initialized yet, or we are in the process of
+  // redirecting, show a loading message. Here, the user might be authed
+  // but not have auth cookies set, so we don't want to flash the sign-in
+  // dialog.
+  if (!AuthUserInfo.isClientInitialized || shouldRedirect) {
+    return <div>Loading</div>
+  }
 
   return (
     <div>
