@@ -5,8 +5,9 @@ import { createAuthUserInfo } from 'src/utils/auth/user'
 // import withAuthUserInfo from 'src/utils/pageWrappers/withAuthUserInfo'
 // import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { isClientSide } from 'src/utils/ssr'
-import { redirect } from 'src/utils/navigation'
+import { redirect, setWindowLocation } from 'src/utils/navigation'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
+import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import { dashboardURL } from 'src/utils/urls'
 
 jest.mock('src/components/FirebaseAuth', () => () => (
@@ -46,9 +47,39 @@ describe('auth.js', () => {
       mount(<AuthPage {...mockProps} />)
     }).not.toThrow()
   })
+
+  it('redirects to the app if the AuthUser becomes defined', async () => {
+    expect.assertions(2)
+    const AuthPage = require('src/pages/auth.js').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      AuthUserInfo: createAuthUserInfo(), // empty AuthUserInfo
+    }
+    const wrapper = mount(<AuthPage {...mockProps} />)
+    expect(setWindowLocation).not.toHaveBeenCalled()
+    wrapper.setProps({
+      ...mockProps,
+      AuthUserInfo: createAuthUserInfo({
+        AuthUser: {
+          id: 'abc-123!!!',
+          email: 'fake@example.com',
+          emailVerified: true,
+        },
+        token: 'some-token-here',
+        isClientInitialized: true,
+      }),
+    })
+    await flushAllPromises()
+    expect(setWindowLocation).toHaveBeenCalledWith(dashboardURL)
+  })
 })
 
 describe('auth.js: getInitialProps', () => {
+  beforeEach(() => {
+    isClientSide.mockReturnValue(false)
+  })
+
   it('redirects to the dashboard if the user is authed', async () => {
     expect.assertions(1)
     const AuthPage = require('src/pages/auth.js').default
