@@ -60,6 +60,10 @@ beforeEach(() => {
   })
 })
 
+afterEach(() => {
+  jest.clearAllMocks()
+})
+
 describe('_app.js', () => {
   it('renders without error', () => {
     const App = require('src/pages/_app.js').default
@@ -100,6 +104,47 @@ describe('_app.js: getInitialProps [server-side]', () => {
     expect(initialProps.pageProps).toEqual({
       hi: 'there',
       datum: 3.1416,
+    })
+  })
+
+  it("includes the session's AuthUserInfo in the ctx passed to the the child component's getInitialProps", async () => {
+    expect.assertions(1)
+    withSession.mockImplementation(req => {
+      req.cookies = ''
+      Object.defineProperty(req, 'session', {
+        configurable: true,
+        enumerable: true,
+        // Session exists
+        get: jest.fn(() => {
+          return {
+            AuthUserInfo: createAuthUserInfo({
+              AuthUser: {
+                id: 'user-id-from-session',
+                email: 'MrSessionGuy@example.com',
+                emailVerified: true,
+              },
+              token: 'some-token-here',
+              isClientInitialized: false,
+            }),
+          }
+        }),
+        set: jest.fn(),
+      })
+    })
+    const App = require('src/pages/_app.js').default
+    await App.getInitialProps({
+      Component: MockComponent,
+      ctx: getMockNextJSContext({ serverSide: true }),
+    })
+    const childComponentCtx = MockComponent.getInitialProps.mock.calls[0][0]
+    expect(childComponentCtx.tabCustomData.AuthUserInfo).toEqual({
+      AuthUser: {
+        id: 'user-id-from-session',
+        email: 'MrSessionGuy@example.com',
+        emailVerified: true,
+      },
+      token: 'some-token-here',
+      isClientInitialized: false,
     })
   })
 
@@ -184,6 +229,34 @@ describe('_app.js: getInitialProps [client-side]', () => {
     expect(initialProps.pageProps).toEqual({
       hi: 'there',
       datum: 3.1416,
+    })
+  })
+
+  it("includes the DOM data's AuthUserInfo in the ctx passed to the the child component's getInitialProps", async () => {
+    expect.assertions(1)
+    getAuthUserInfoFromDOM.mockReturnValue({
+      AuthUser: {
+        id: 'user-id-from-DOM',
+        email: 'MsDOMDataLady@example.com',
+        emailVerified: true,
+      },
+      token: 'some-token-here',
+      isClientInitialized: false,
+    })
+    const App = require('src/pages/_app.js').default
+    await App.getInitialProps({
+      Component: MockComponent,
+      ctx: getMockNextJSContext({ serverSide: false }),
+    })
+    const childComponentCtx = MockComponent.getInitialProps.mock.calls[0][0]
+    expect(childComponentCtx.tabCustomData.AuthUserInfo).toEqual({
+      AuthUser: {
+        id: 'user-id-from-DOM',
+        email: 'MsDOMDataLady@example.com',
+        emailVerified: true,
+      },
+      token: 'some-token-here',
+      isClientInitialized: false,
     })
   })
 
