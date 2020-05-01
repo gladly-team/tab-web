@@ -1,7 +1,7 @@
 import React from 'react'
-import { mount, shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import { register, unregister } from 'next-offline/runtime'
-import { useFirebaseAuth } from 'src/utils/auth/hooks'
+import { AuthUserInfoContext, useFirebaseAuth } from 'src/utils/auth/hooks'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
 import { createAuthUserInfo, getAuthUserInfoFromDOM } from 'src/utils/auth/user'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
@@ -68,6 +68,10 @@ afterEach(() => {
 })
 
 describe('_app.js', () => {
+  beforeEach(() => {
+    // Suppress expected console log.
+    jest.spyOn(console, 'log').mockImplementationOnce(() => {})
+  })
   it('renders without error', () => {
     expect.assertions(1)
     const App = require('src/pages/_app.js').default
@@ -80,8 +84,6 @@ describe('_app.js', () => {
   it('registers the service worker if process.env.SERVICE_WORKER_ENABLED === "true"', () => {
     expect.assertions(1)
     process.env.SERVICE_WORKER_ENABLED = 'true'
-    // Suppress expected console log.
-    jest.spyOn(console, 'log').mockImplementationOnce(() => {})
     const App = require('src/pages/_app.js').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
@@ -91,8 +93,6 @@ describe('_app.js', () => {
   it('unregisters the service worker if process.env.SERVICE_WORKER_ENABLED === "false"', () => {
     expect.assertions(1)
     process.env.SERVICE_WORKER_ENABLED = 'false'
-    // Suppress expected console log.
-    jest.spyOn(console, 'log').mockImplementationOnce(() => {})
     const App = require('src/pages/_app.js').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
@@ -102,12 +102,42 @@ describe('_app.js', () => {
   it('unregisters the service worker if process.env.SERVICE_WORKER_ENABLED is undefined', () => {
     expect.assertions(1)
     process.env.SERVICE_WORKER_ENABLED = undefined
-    // Suppress expected console log.
-    jest.spyOn(console, 'log').mockImplementationOnce(() => {})
     const App = require('src/pages/_app.js').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
     expect(unregister).toHaveBeenCalled()
+  })
+
+  it('provides AuthUserInfo context to consumers', () => {
+    expect.assertions(1)
+    const App = require('src/pages/_app.js').default
+
+    const MockComponentSpy = jest.fn(() => {
+      return <div>hey</div>
+    })
+    const MockComponentWithConsumer = () => {
+      return (
+        <AuthUserInfoContext.Consumer>
+          {AuthUserInfo => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+        </AuthUserInfoContext.Consumer>
+      )
+    }
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      Component: MockComponentWithConsumer,
+    }
+    mount(<App {...mockProps} />)
+    const childComponentProps = MockComponentSpy.mock.calls[0][0]
+    expect(childComponentProps.AuthUserInfo).toEqual({
+      AuthUser: {
+        email: 'fake@example.com',
+        emailVerified: true,
+        id: 'abc-123',
+      },
+      isClientInitialized: false,
+      token: 'some-token-here',
+    })
   })
 })
 
