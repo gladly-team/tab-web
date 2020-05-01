@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import FirebaseAuth from 'src/components/FirebaseAuth'
+import FullPageLoader from 'src/components/FullPageLoader'
 import withAuthUserInfo from 'src/utils/pageWrappers/withAuthUserInfo'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { isClientSide } from 'src/utils/ssr'
@@ -53,7 +54,7 @@ const Auth = props => {
   // but not have auth cookies set, so we don't want to flash the sign-in
   // dialog.
   if (!AuthUserInfo.isClientInitialized || shouldRedirect) {
-    return <div>Loading</div>
+    return <FullPageLoader />
   }
 
   return (

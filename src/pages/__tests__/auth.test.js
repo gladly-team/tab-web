@@ -2,6 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { createAuthUserInfo } from 'src/utils/auth/user'
 import FirebaseAuth from 'src/components/FirebaseAuth'
+import FullPageLoader from 'src/components/FullPageLoader'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { isClientSide } from 'src/utils/ssr'
 import { redirect, setWindowLocation } from 'src/utils/navigation'
@@ -11,6 +12,9 @@ import { dashboardURL } from 'src/utils/urls'
 
 jest.mock('src/components/FirebaseAuth', () => () => (
   <div data-test-id="firebase-auth-mock" />
+))
+jest.mock('src/components/FullPageLoader', () => () => (
+  <div data-test-id="full-page-loader-mock" />
 ))
 jest.mock('src/utils/pageWrappers/withAuthUserInfo')
 jest.mock('src/utils/caching')
@@ -139,7 +143,7 @@ describe('auth.js', () => {
       }),
     }
     const wrapper = mount(<AuthPage {...mockProps} />)
-    expect(wrapper.at(0).text()).toEqual('Loading')
+    expect(wrapper.find(FullPageLoader).exists()).toBe(true)
   })
 })
 
