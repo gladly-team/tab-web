@@ -39,12 +39,6 @@ const App = props => {
         console.log('Not registering a service worker. It is not enabled.') // eslint-disable-line no-console
       }
     }
-    return () => {
-      if (isClientSide() && isServiceWorkerEnabled) {
-        unregister()
-        console.log('Unregistered the service worker.') // eslint-disable-line no-console
-      }
-    }
   }, [])
 
   useEffect(() => {

@@ -1,5 +1,6 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
+import { register, unregister } from 'next-offline/runtime'
 import { useFirebaseAuth } from 'src/utils/auth/hooks'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
 import { createAuthUserInfo, getAuthUserInfoFromDOM } from 'src/utils/auth/user'
@@ -58,6 +59,8 @@ beforeEach(() => {
       set: jest.fn(),
     })
   })
+
+  process.env.SERVICE_WORKER_ENABLED = 'true'
 })
 
 afterEach(() => {
@@ -66,11 +69,45 @@ afterEach(() => {
 
 describe('_app.js', () => {
   it('renders without error', () => {
+    expect.assertions(1)
     const App = require('src/pages/_app.js').default
     const mockProps = getMockProps()
     expect(() => {
-      shallow(<App {...mockProps} />)
+      mount(<App {...mockProps} />)
     }).not.toThrow()
+  })
+
+  it('registers the service worker if process.env.SERVICE_WORKER_ENABLED === "true"', () => {
+    expect.assertions(1)
+    process.env.SERVICE_WORKER_ENABLED = 'true'
+    // Suppress expected console log.
+    jest.spyOn(console, 'log').mockImplementationOnce(() => {})
+    const App = require('src/pages/_app.js').default
+    const mockProps = getMockProps()
+    mount(<App {...mockProps} />)
+    expect(register).toHaveBeenCalledWith('/newtab/service-worker.js')
+  })
+
+  it('unregisters the service worker if process.env.SERVICE_WORKER_ENABLED === "false"', () => {
+    expect.assertions(1)
+    process.env.SERVICE_WORKER_ENABLED = 'false'
+    // Suppress expected console log.
+    jest.spyOn(console, 'log').mockImplementationOnce(() => {})
+    const App = require('src/pages/_app.js').default
+    const mockProps = getMockProps()
+    mount(<App {...mockProps} />)
+    expect(unregister).toHaveBeenCalled()
+  })
+
+  it('unregisters the service worker if process.env.SERVICE_WORKER_ENABLED is undefined', () => {
+    expect.assertions(1)
+    process.env.SERVICE_WORKER_ENABLED = undefined
+    // Suppress expected console log.
+    jest.spyOn(console, 'log').mockImplementationOnce(() => {})
+    const App = require('src/pages/_app.js').default
+    const mockProps = getMockProps()
+    mount(<App {...mockProps} />)
+    expect(unregister).toHaveBeenCalled()
   })
 })
 
@@ -91,6 +128,7 @@ describe('_app.js: getInitialProps [server-side]', () => {
   })
 
   it("returns the child component's props as the pageProps", async () => {
+    expect.assertions(1)
     isServerSide.mockReturnValue(true)
     MockComponent.getInitialProps.mockReturnValue({
       hi: 'there',
