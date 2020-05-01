@@ -1,8 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { createAuthUserInfo } from 'src/utils/auth/user'
-// import FirebaseAuth from 'src/components/FirebaseAuth'
-// import withAuthUserInfo from 'src/utils/pageWrappers/withAuthUserInfo'
+import FirebaseAuth from 'src/components/FirebaseAuth'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { isClientSide } from 'src/utils/ssr'
 import { redirect, setWindowLocation } from 'src/utils/navigation'
@@ -100,6 +99,14 @@ describe('auth.js', () => {
     })
     await flushAllPromises()
     expect(clearAllServiceWorkerCaches).toHaveBeenCalled()
+  })
+
+  it('renders the FirebaseAuth component', async () => {
+    expect.assertions(1)
+    const AuthPage = require('src/pages/auth.js').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<AuthPage {...mockProps} />)
+    expect(wrapper.find(FirebaseAuth).exists()).toBe(true)
   })
 })
 
