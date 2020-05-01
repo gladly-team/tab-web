@@ -70,10 +70,23 @@ describe('_app.js', () => {
   })
 })
 
-describe('_app.js: getInitialProps', () => {
-  it("returns the child component's props as the pageProps [server-side]", async () => {
-    expect.assertions(1)
+describe('_app.js: getInitialProps [server-side]', () => {
+  beforeEach(() => {
+    // Set up expected server-side mocks.
     isClientSide.mockReturnValue(false)
+    isServerSide.mockReturnValue(true)
+    getAuthUserInfoFromDOM.mockImplementation(() => {
+      throw new Error(
+        'The `getAuthUserInfoFromDOM` cannot be called server-side.'
+      )
+    })
+  })
+
+  afterAll(() => {
+    getAuthUserInfoFromDOM.mockReset()
+  })
+
+  it("returns the child component's props as the pageProps", async () => {
     isServerSide.mockReturnValue(true)
     MockComponent.getInitialProps.mockReturnValue({
       hi: 'there',
@@ -90,29 +103,8 @@ describe('_app.js: getInitialProps', () => {
     })
   })
 
-  it("returns the child component's props as the pageProps [client-side]", async () => {
+  it("returns an empty AuthUserInfo object if there isn't a session", async () => {
     expect.assertions(1)
-    isClientSide.mockReturnValue(true)
-    isServerSide.mockReturnValue(false)
-    MockComponent.getInitialProps.mockReturnValue({
-      hi: 'there',
-      datum: 3.1416,
-    })
-    const App = require('src/pages/_app.js').default
-    const initialProps = await App.getInitialProps({
-      Component: MockComponent,
-      ctx: getMockNextJSContext({ serverSide: false }),
-    })
-    expect(initialProps.pageProps).toEqual({
-      hi: 'there',
-      datum: 3.1416,
-    })
-  })
-
-  it("returns an empty AuthUserInfo object if there isn't a session [server-side]", async () => {
-    expect.assertions(1)
-    isClientSide.mockReturnValue(false)
-    isServerSide.mockReturnValue(true)
     withSession.mockImplementation(req => {
       req.cookies = ''
       Object.defineProperty(req, 'session', {
@@ -130,10 +122,8 @@ describe('_app.js: getInitialProps', () => {
     expect(initialProps.AuthUserInfo).toEqual(createAuthUserInfo())
   })
 
-  it('returns a populated AuthUserInfo object if there is a session [server-side]', async () => {
+  it('returns a populated AuthUserInfo object if there is a session', async () => {
     expect.assertions(1)
-    isClientSide.mockReturnValue(false)
-    isServerSide.mockReturnValue(true)
     withSession.mockImplementation(req => {
       req.cookies = ''
       Object.defineProperty(req, 'session', {
@@ -171,11 +161,34 @@ describe('_app.js: getInitialProps', () => {
       isClientInitialized: false,
     })
   })
+})
 
-  it('returns AuthUserInfo from data stored in the DOM [client-side]', async () => {
-    expect.assertions(1)
+describe('_app.js: getInitialProps [client-side]', () => {
+  beforeEach(() => {
+    // Set up expected client-side mocks.
     isClientSide.mockReturnValue(true)
     isServerSide.mockReturnValue(false)
+  })
+
+  it("returns the child component's props as the pageProps", async () => {
+    expect.assertions(1)
+    MockComponent.getInitialProps.mockReturnValue({
+      hi: 'there',
+      datum: 3.1416,
+    })
+    const App = require('src/pages/_app.js').default
+    const initialProps = await App.getInitialProps({
+      Component: MockComponent,
+      ctx: getMockNextJSContext({ serverSide: false }),
+    })
+    expect(initialProps.pageProps).toEqual({
+      hi: 'there',
+      datum: 3.1416,
+    })
+  })
+
+  it('returns AuthUserInfo from data stored in the DOM', async () => {
+    expect.assertions(1)
     getAuthUserInfoFromDOM.mockReturnValue({
       AuthUser: {
         id: 'user-id-from-DOM',
