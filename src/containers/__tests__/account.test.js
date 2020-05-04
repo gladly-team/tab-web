@@ -2,6 +2,8 @@ import React from 'react'
 import { shallow } from 'enzyme'
 // import { createAuthUserInfo } from 'src/utils/auth/user'
 
+jest.mock('src/utils/pageWrappers/withAuthAndData')
+
 const getMockProps = () => ({
   // AuthUserInfo: createAuthUserInfo({
   //   AuthUser: null,
@@ -21,7 +23,7 @@ describe('account.js', () => {
   })
 })
 
-describe('auth.js: getInitialProps', () => {
+describe('account.js: getInitialProps', () => {
   it('does not define getInitialProps', () => {
     expect.assertions(1)
     const AccountPage = require('src/containers/account.js').default
