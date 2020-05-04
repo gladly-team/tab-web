@@ -1,10 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import clsx from 'clsx'
 import NextJsLink from 'next/link'
+import { makeStyles } from '@material-ui/core/styles'
 import { withBasePath } from 'src/utils/urls'
 
+const useStyles = makeStyles(() => ({
+  anchor: {
+    color: 'inherit',
+    textDecoration: 'none',
+  },
+}))
+
 const Link = props => {
-  const { children, to } = props
+  const { children, className, to } = props
+  const classes = useStyles()
 
   // We're disabling prefetch because it's broken by using
   // an app subpath: see now.json "rewrites" and comments in
@@ -17,7 +27,7 @@ const Link = props => {
   // @area/workaround/next-js-base-path
   return (
     <NextJsLink href={to} as={withBasePath(to)} prefetch={false}>
-      <a>{children}</a>
+      <a className={clsx(classes.anchor, className)}>{children}</a>
     </NextJsLink>
   )
 }
@@ -27,9 +37,12 @@ Link.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
+  className: PropTypes.string,
   to: PropTypes.string.isRequired,
 }
 
-Link.defaultProps = {}
+Link.defaultProps = {
+  className: '',
+}
 
 export default Link

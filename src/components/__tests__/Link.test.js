@@ -10,6 +10,7 @@ jest.mock('src/utils/urls')
 
 const getMockProps = () => ({
   children: 'hi',
+  className: 'some-class',
   to: '/some/url',
 })
 
@@ -68,5 +69,16 @@ describe('Link component', () => {
     }
     const wrapper = shallow(<Link {...mockProps} />)
     expect(wrapper.at(0).prop('as')).toEqual('/my-fake-basepath/my/thing')
+  })
+
+  it('assigns the className prop to the anchor', () => {
+    const Link = require('src/components/Link').default
+    const mockProps = {
+      ...getMockProps(),
+      className: 'some-class-here',
+    }
+    const wrapper = shallow(<Link {...mockProps} />)
+    const anchor = wrapper.childAt(0)
+    expect(anchor.prop('className')).toContain('some-class-here')
   })
 })
