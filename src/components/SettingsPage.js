@@ -81,7 +81,7 @@ SettingsMenuItem.propTypes = {
 SettingsMenuItem.defaultProps = {}
 
 const SettingsPage = props => {
-  const { mainContent, onClose } = props
+  const { children, onClose } = props
   const classes = useStyles()
 
   return (
@@ -104,13 +104,13 @@ const SettingsPage = props => {
           <SettingsMenuItem to={settingsAccountURL}>Account</SettingsMenuItem>
         </List>
       </div>
-      <div className={classes.mainContentContainer}>{mainContent}</div>
+      <div className={classes.mainContentContainer}>{children}</div>
     </div>
   )
 }
 
 SettingsPage.propTypes = {
-  mainContent: PropTypes.node.isRequired,
+  children: PropTypes.node.isRequired,
   onClose: PropTypes.func.isRequired,
 }
 
