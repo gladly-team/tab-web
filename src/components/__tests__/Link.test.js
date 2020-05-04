@@ -1,0 +1,72 @@
+import React from 'react'
+import { shallow } from 'enzyme'
+import NextJsLink from 'next/link'
+import { withBasePath } from 'src/utils/urls'
+
+jest.mock('next/link', () => props => (
+  <div data-test-id="mock-next-js-link">{props.children}</div>
+))
+jest.mock('src/utils/urls')
+
+const getMockProps = () => ({
+  children: 'hi',
+  to: '/some/url',
+})
+
+beforeEach(() => {
+  withBasePath.mockImplementation(url => `/my-fake-basepath${url}`)
+})
+
+describe('Link component', () => {
+  it('renders without error', () => {
+    const Link = require('src/components/Link').default
+    const mockProps = getMockProps()
+    expect(() => {
+      shallow(<Link {...mockProps} />)
+    }).not.toThrow()
+  })
+
+  it('returns a Next.js Link component', () => {
+    const Link = require('src/components/Link').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<Link {...mockProps} />)
+    expect(wrapper.type()).toEqual(NextJsLink)
+  })
+
+  it('has an anchor as a child of the Next.js Link component', () => {
+    const Link = require('src/components/Link').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<Link {...mockProps} />)
+    expect(wrapper.childAt(0).type()).toEqual('a')
+  })
+
+  it('passes the "to" prop value to the Next.js Link "href" prop', () => {
+    const Link = require('src/components/Link').default
+    const mockProps = {
+      ...getMockProps(),
+      to: '/my/thing',
+    }
+    const wrapper = shallow(<Link {...mockProps} />)
+    expect(wrapper.at(0).prop('href')).toEqual('/my/thing')
+  })
+
+  it('sets Next.js Link "as" prop to use the basePath', () => {
+    const Link = require('src/components/Link').default
+    const mockProps = {
+      ...getMockProps(),
+      to: '/my/thing',
+    }
+    const wrapper = shallow(<Link {...mockProps} />)
+    expect(wrapper.at(0).prop('href')).toEqual('/my/thing')
+  })
+
+  it('disables prefetch for the Next.js Link due to our basePath workaround', () => {
+    const Link = require('src/components/Link').default
+    const mockProps = {
+      ...getMockProps(),
+      to: '/my/thing',
+    }
+    const wrapper = shallow(<Link {...mockProps} />)
+    expect(wrapper.at(0).prop('as')).toEqual('/my-fake-basepath/my/thing')
+  })
+})
