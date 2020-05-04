@@ -4,7 +4,9 @@
 *V4: adding server-side rendering*
 
 ## Documentation
-### Authentication Approach
+### File Structure
+Our pages are in the `containers` directory, which allows us to colocate their tests. Currently, Next.js doesn't support non-page files in the `pages` directory (see [issue](https://github.com/zeit/next.js/issues/3728#issuecomment-363964953)). Files in the `pages` directory should simply export matching files in `containers`.
+### Authentication
 We use Firebase authentication, stored in IndexedDB, as the source of truth for user authentication. When the Firebase auth state changes, we call an endpoint to set client-side cookies that Next.js uses for server-side rendering. We do not store any session state on the server side.
 
 Our app needs cookies set to `SameSite=None` because it may load in an iframe in the context of a browser extension new tab page.
