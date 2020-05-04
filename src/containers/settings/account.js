@@ -3,13 +3,7 @@ import React from 'react'
 import SettingsPage from 'src/components/SettingsPage'
 
 const Account = () => {
-  return (
-    <SettingsPage
-      mainContent={<div>hi</div>}
-      sidebarContent={<div>sidebar here</div>}
-      onClose={() => {}}
-    />
-  )
+  return <SettingsPage mainContent={<div>hi</div>} onClose={() => {}} />
 }
 
 Account.displayName = 'Account'
