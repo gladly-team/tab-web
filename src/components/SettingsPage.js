@@ -16,7 +16,7 @@ import Logo from 'src/components/Logo'
 import { dashboardURL, settingsAccountURL } from 'src/utils/urls'
 
 const sidebarWidth = 240
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   container: {
     minWidth: '100vw',
     minHeight: '100vh',
@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
     height: 28,
   },
   list: {
-    marginLeft: 14,
+    marginLeft: theme.spacing(1),
   },
   listSubheader: {
     fontSize: '0.75rem',
