@@ -48,11 +48,11 @@ export const apiLogin = createAPIURL('/api/login')
 export const apiLogout = createAPIURL('/api/logout')
 export const apiBetaOptIn = createAPIURL('/api/beta-opt-in')
 
+export const accountURL = createPageURL('/account')
 export const authURL = createPageURL('/auth')
 export const betaOptInURL = createPageURL('/beta-opt-in')
 export const dashboardURL = createPageURL('/')
 export const exampleURL = createPageURL('/example')
-export const settingsAccountURL = createPageURL('/account')
 
 // For progressive web app.
 export const PWAManifestURL = withBasePath('/manifest.json')
