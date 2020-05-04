@@ -8,6 +8,12 @@ import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 
+// TODO:
+// - settings button on dashboard (gear?)
+// - some tests for the dashboard
+// - test account page content
+// - test SettingsPage component
+
 const useStyles = makeStyles(theme => ({
   contentContainer: {
     width: '100%',
