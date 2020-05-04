@@ -1,0 +1,271 @@
+import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import { graphql } from 'react-relay'
+import { get } from 'lodash/object'
+import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import { AdComponent, fetchAds } from 'tab-ads'
+import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
+import { getHostname, getCurrentURL } from 'src/utils/navigation'
+import {
+  getAdUnits,
+  areAdsEnabled,
+  showMockAds,
+  isInEuropeanUnion,
+} from 'src/utils/adHelpers'
+import { isClientSide } from 'src/utils/ssr'
+import Logo from 'src/components/Logo'
+import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
+import SearchInput from 'src/components/SearchInput'
+
+const useStyles = makeStyles(theme => ({
+  pageContainer: {
+    height: '100vh',
+    width: '100vw',
+    background: theme.palette.background.paper,
+    overflow: 'hidden',
+  },
+  topRightContainer: {
+    position: 'absolute',
+    zIndex: 10,
+    top: 0,
+    right: 0,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  moneyRaisedContainer: {
+    padding: theme.spacing(2),
+  },
+  centerContainer: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 220, // for visually-appealing vertical centering
+  },
+  searchBarContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    minWidth: 500,
+    maxWidth: 800,
+  },
+  logo: {
+    height: 50,
+    padding: theme.spacing(2),
+    boxSizing: 'content-box',
+  },
+  adsContainer: {
+    position: 'absolute',
+    overflow: 'visible',
+    display: 'flex',
+    alignItems: 'flex-end',
+    flexDirection: 'row-reverse',
+    bottom: 10,
+    right: 10,
+    pointerEvents: 'none', // don't block the main page
+  },
+  adsContainerRectangles: {
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'visible',
+    pointerEvents: 'all', // needs to be clickable
+  },
+  adContainerLeaderboard: {
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'visible',
+    marginRight: 10,
+    pointerEvents: 'all', // needs to be clickable
+  },
+}))
+
+if (isClientSide()) {
+  // Load ads immediately on the client side when we parse
+  // this file rather than waiting for component mount.
+  const loadAds = () => {
+    try {
+      fetchAds({
+        adUnits: Object.values(getAdUnits()),
+        auctionTimeout: 1200,
+        bidderTimeout: 900,
+        consent: {
+          isEU: isInEuropeanUnion,
+        },
+        publisher: {
+          domain: getHostname(),
+          pageUrl: getCurrentURL(),
+        },
+        logLevel: 'error',
+        onError: e => {
+          // TODO: log error
+          console.error(e) // eslint-disable-line no-console
+        },
+        disableAds: !areAdsEnabled(),
+        useMockAds: showMockAds(),
+      })
+    } catch (e) {
+      // TODO: log error
+      console.error(e) // eslint-disable-line no-console
+    }
+  }
+  loadAds()
+}
+
+const Index = props => {
+  const { app, user } = props
+
+  const classes = useStyles()
+
+  // Determine which ad units we'll show only once, on mount,
+  // because the ads have already been fetched and won't change.
+  const [adUnits, setAdUnits] = useState([])
+  useEffect(() => {
+    setAdUnits(getAdUnits())
+  }, [])
+
+  // Only render ads if we are on the client side.
+  const [shouldRenderAds, setShouldRenderAds] = useState(false)
+  useEffect(() => {
+    if (isClientSide()) {
+      setShouldRenderAds(true)
+    }
+  }, [])
+
+  // FIXME: use UUID in state
+  const tabId = 'abc-123'
+
+  // Data to provide the onAdDisplayed callback
+  const adContext = {
+    user,
+    tabId,
+  }
+
+  /*
+   * A handler for AdComponents' onAdDisplayed callbacks, which receives
+   * info about the displayed ad.
+   * @param {Object|null} displayedAdInfo - A DisplayedAdInfo from tab-ads. See:
+   *   https://github.com/gladly-team/tab-ads/blob/master/src/utils/DisplayedAdInfo.js
+   * @param {Object} context - Additional info to help with revenue logging
+   * @param {Object} context.user - The user object
+   * @param {String} context.user.id - The user ID
+   * @param {String} context.tabId - A UUID for this page load
+   * @return {undefined}
+   */
+  const onAdDisplayed = (displayedAdInfo, context) => {
+    // No ad was shown.
+    if (!displayedAdInfo) {
+      return
+    }
+    console.log('Ad displayed:', displayedAdInfo, context) // eslint-disable-line no-console
+  }
+
+  /*
+   * Log any errors the occur in the Ad components.
+   * @param {Object} e - The error
+   * @return {undefined}
+   */
+  const onAdError = e => {
+    // TODO: log error
+    console.error(e) // eslint-disable-line no-console
+  }
+
+  return (
+    <div className={classes.pageContainer}>
+      <div className={classes.topRightContainer}>
+        <div className={classes.moneyRaisedContainer}>
+          <Typography variant="h5">
+            <MoneyRaisedContainer app={app} />
+          </Typography>
+        </div>
+      </div>
+      <div className={classes.centerContainer}>
+        <div className={classes.searchBarContainer}>
+          <Logo includeText className={classes.logo} />
+          <SearchInput />
+        </div>
+      </div>
+      <div className={classes.adsContainer}>
+        <div className={classes.adsContainerRectangles}>
+          {adUnits.rectangleAdSecondary && shouldRenderAds ? (
+            <AdComponent
+              adId={adUnits.rectangleAdSecondary.adId}
+              onAdDisplayed={displayedAdInfo => {
+                onAdDisplayed(displayedAdInfo, adContext)
+              }}
+              onError={onAdError}
+              style={{
+                display: 'flex',
+                minWidth: 300,
+                overflow: 'visible',
+              }}
+            />
+          ) : null}
+          {adUnits.rectangleAdPrimary && shouldRenderAds ? (
+            <AdComponent
+              adId={adUnits.rectangleAdPrimary.adId}
+              onAdDisplayed={displayedAdInfo => {
+                onAdDisplayed(displayedAdInfo, adContext)
+              }}
+              onError={onAdError}
+              style={{
+                display: 'flex',
+                minWidth: 300,
+                overflow: 'visible',
+                marginTop: 10,
+              }}
+            />
+          ) : null}
+        </div>
+        {adUnits.leaderboard && shouldRenderAds ? (
+          <div className={classes.adContainerLeaderboard}>
+            <AdComponent
+              adId={adUnits.leaderboard.adId}
+              onAdDisplayed={displayedAdInfo => {
+                onAdDisplayed(displayedAdInfo, adContext)
+              }}
+              onError={onAdError}
+              style={{
+                overflow: 'visible',
+                minWidth: 728,
+              }}
+            />
+          </div>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
+Index.displayName = 'Index'
+
+Index.propTypes = {
+  app: PropTypes.shape({}).isRequired,
+  user: PropTypes.shape({
+    tabs: PropTypes.number.isRequired,
+    vcCurrent: PropTypes.number.isRequired,
+  }).isRequired,
+}
+
+Index.defaultProps = {}
+
+export default withAuthAndData(({ AuthUser }) => {
+  const userId = get(AuthUser, 'id')
+  return {
+    query: graphql`
+      query containersIndexQuery($userId: String!) {
+        app {
+          ...MoneyRaisedContainer_app
+        }
+        user(userId: $userId) {
+          tabs
+          vcCurrent
+        }
+      }
+    `,
+    variables: {
+      userId,
+    },
+  }
+})(Index)
