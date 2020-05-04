@@ -99,7 +99,7 @@ const SettingsPage = props => {
       <div className={classes.sidebarContentContainer}>
         <List className={classes.list}>
           <ListSubheader disableSticky className={classes.listSubheader}>
-            Settings
+            Your Profile
           </ListSubheader>
           <SettingsMenuItem to={settingsAccountURL}>Account</SettingsMenuItem>
         </List>
