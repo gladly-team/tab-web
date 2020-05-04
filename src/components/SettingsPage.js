@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import AppBar from '@material-ui/core/AppBar'
@@ -44,6 +45,9 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  menuItem: {
+    background: props => (props.isActive ? grey['300'] : 'inherit'),
+  },
   sidebarContentContainer: {
     width: sidebarWidth,
     position: 'fixed',
@@ -52,8 +56,11 @@ const useStyles = makeStyles(() => ({
 
 const SettingsMenuItem = props => {
   const { children, to } = props
+  const router = useRouter()
+  const isActive = router.pathname === to
+  const classes = useStyles({ isActive })
   return (
-    <Link to={to}>
+    <Link to={to} className={classes.menuItem}>
       <ListItem button>
         <ListItemText
           primary={children}

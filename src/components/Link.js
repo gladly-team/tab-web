@@ -7,6 +7,7 @@ import { withBasePath } from 'src/utils/urls'
 
 const useStyles = makeStyles(() => ({
   anchor: {
+    display: 'block',
     color: 'inherit',
     textDecoration: 'none',
   },
