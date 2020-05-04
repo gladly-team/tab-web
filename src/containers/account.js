@@ -13,27 +13,42 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     margin: theme.spacing(2),
   },
+  title: {
+    padding: theme.spacing(3),
+  },
+  accountItem: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: 20,
+  },
+  accountItemName: {
+    flex: 1,
+    fontWeight: 'bold',
+  },
+  accountItemValue: {
+    flex: 2,
+  },
+  accountItemActionButton: {
+    flex: 2,
+  },
 }))
 
 const AccountItem = props => {
   const { actionButton, name, value } = props
+  const classes = useStyles()
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        padding: 20,
-      }}
-    >
-      <Typography variant="body2" style={{ flex: 1, fontWeight: 'bold' }}>
+    <div className={classes.accountItem}>
+      <Typography variant="body2" className={classes.accountItemName}>
         {name}
       </Typography>
       {value ? (
-        <Typography variant="body2" style={{ flex: 2 }}>
+        <Typography variant="body2" className={classes.accountItemValue}>
           {value}
         </Typography>
       ) : null}
-      {actionButton ? <div style={{ flex: 2 }}>{actionButton}</div> : null}
+      {actionButton ? (
+        <div className={classes.accountItemActionButton}>{actionButton}</div>
+      ) : null}
     </div>
   )
 }
@@ -55,7 +70,7 @@ const Account = props => {
   return (
     <SettingsPage>
       <Paper elevation={1} className={classes.contentContainer}>
-        <Typography variant="h5" style={{ padding: 20 }}>
+        <Typography variant="h5" className={classes.title}>
           Account
         </Typography>
         <Divider />
