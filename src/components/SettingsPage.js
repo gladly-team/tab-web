@@ -30,12 +30,14 @@ const useStyles = makeStyles(() => ({
     marginLeft: 14,
   },
   listSubheader: {
+    fontSize: '0.75rem',
     textTransform: 'uppercase',
   },
   logo: {
     width: 40,
     height: 40,
   },
+  logoContainer: { flex: 1 },
   mainContentContainer: {
     marginLeft: sidebarWidth,
     boxSizing: 'border-box',
@@ -79,7 +81,7 @@ const SettingsPage = props => {
     <div className={classes.container}>
       <AppBar color="primary" position="sticky">
         <Toolbar>
-          <div style={{ flex: 1 }}>
+          <div className={classes.logoContainer}>
             <Logo color="white" className={classes.logo} />
           </div>
           <IconButton onClick={onClose}>
