@@ -13,7 +13,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
-import { settingsAccountURL } from 'src/utils/urls'
+import { dashboardURL, settingsAccountURL } from 'src/utils/urls'
 
 const sidebarWidth = 240
 const useStyles = makeStyles(() => ({
@@ -81,7 +81,7 @@ SettingsMenuItem.propTypes = {
 SettingsMenuItem.defaultProps = {}
 
 const SettingsPage = props => {
-  const { children, onClose } = props
+  const { children } = props
   const classes = useStyles()
 
   return (
@@ -91,9 +91,11 @@ const SettingsPage = props => {
           <div className={classes.logoContainer}>
             <Logo color="white" className={classes.logo} />
           </div>
-          <IconButton onClick={onClose}>
-            <CloseIcon className={classes.closeIcon} />
-          </IconButton>
+          <Link to={dashboardURL} className={classes.menuItem}>
+            <IconButton>
+              <CloseIcon className={classes.closeIcon} />
+            </IconButton>
+          </Link>
         </Toolbar>
       </AppBar>
       <div className={classes.sidebarContentContainer}>
@@ -111,7 +113,6 @@ const SettingsPage = props => {
 
 SettingsPage.propTypes = {
   children: PropTypes.node.isRequired,
-  onClose: PropTypes.func.isRequired,
 }
 
 SettingsPage.defaultProps = {}

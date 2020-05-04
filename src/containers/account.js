@@ -4,7 +4,7 @@ import SettingsPage from 'src/components/SettingsPage'
 
 const Account = () => {
   return (
-    <SettingsPage onClose={() => {}}>
+    <SettingsPage>
       <div>hi</div>
     </SettingsPage>
   )
