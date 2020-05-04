@@ -106,7 +106,7 @@ export default withAuthAndData(({ AuthUser }) => {
   const userId = AuthUser.id
   return {
     query: graphql`
-      query containersIndexQuery($userId: String!) {
+      query accountQuery($userId: String!) {
         user(userId: $userId) {
           email
           username
