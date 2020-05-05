@@ -106,7 +106,12 @@ const SettingsPage = props => {
           <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
         </List>
       </div>
-      <div className={classes.mainContentContainer}>{children}</div>
+      <div
+        data-test-id="settings-content"
+        className={classes.mainContentContainer}
+      >
+        {children}
+      </div>
     </div>
   )
 }

@@ -87,4 +87,23 @@ describe('SettingsPage component', () => {
     expect(item.type()).toEqual(Link)
     expect(item.prop('to')).toEqual(accountURL)
   })
+
+  it('renders children in the main content container', () => {
+    expect.assertions(1)
+    const SettingsPage = require('src/components/SettingsPage.js').default
+    const mockProps = {
+      ...getMockProps(),
+      children: (
+        <div>
+          <span>Hi</span> there!
+        </div>
+      ),
+    }
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    expect(
+      wrapper
+        .find('[data-test-id="settings-content"]')
+        .contains(mockProps.children)
+    ).toBe(true)
+  })
 })
