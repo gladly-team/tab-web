@@ -8,9 +8,6 @@ import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 
-// TODO:
-// - test account page content
-
 const useStyles = makeStyles(theme => ({
   contentContainer: {
     width: '100%',
