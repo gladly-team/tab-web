@@ -2,19 +2,30 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { makeStyles } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
+import logout from 'src/utils/auth/logout'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
     width: '100%',
     margin: theme.spacing(2),
   },
+  titleContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   title: {
     padding: theme.spacing(3),
+  },
+  logoutButton: {
+    margin: theme.spacing(2),
   },
   accountItem: {
     display: 'flex',
@@ -67,12 +78,25 @@ const Account = (props) => {
   const { user } = props
   const { email, username } = user
   const classes = useStyles()
+  const onLogoutClick = async () => {
+    await logout()
+  }
   return (
     <SettingsPage>
       <Paper elevation={1} className={classes.contentContainer}>
-        <Typography variant="h5" className={classes.title}>
-          Account
-        </Typography>
+        <div className={classes.titleContainer}>
+          <Typography variant="h5" className={classes.title}>
+            Account
+          </Typography>
+          <Button
+            color="default"
+            variant="contained"
+            onClick={onLogoutClick}
+            className={classes.logoutButton}
+          >
+            Log Out
+          </Button>
+        </div>
         <Divider />
         <AccountItem name="Username" value={username || 'Not signed in'} />
         <Divider />
