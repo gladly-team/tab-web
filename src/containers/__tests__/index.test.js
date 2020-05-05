@@ -1,5 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import Link from 'src/components/Link'
+import IconButton from '@material-ui/core/IconButton'
+import SettingsIcon from '@material-ui/icons/Settings'
+import { accountURL } from 'src/utils/urls'
 // import { AdComponent, fetchAds } from 'tab-ads'
 // import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 // import { getHostname, getCurrentURL } from 'src/utils/navigation'
@@ -15,6 +19,8 @@ import { shallow } from 'enzyme'
 // import SearchInput from 'src/components/SearchInput'
 
 jest.mock('tab-ads')
+jest.mock('@material-ui/icons/Settings')
+jest.mock('src/components/Link')
 jest.mock('src/utils/pageWrappers/withAuthAndData')
 jest.mock('src/utils/navigation')
 jest.mock('src/utils/adHelpers')
@@ -39,5 +45,33 @@ describe('index.js', () => {
     expect(() => {
       shallow(<IndexPage {...mockProps} />)
     }).not.toThrow()
+  })
+
+  it('includes a settings icon link to the account page', () => {
+    expect.assertions(1)
+    const IndexPage = require('src/containers/index').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    const settingsLink = wrapper
+      .find(Link)
+      .filterWhere(el => el.prop('to') === accountURL)
+    expect(settingsLink.exists()).toBe(true)
+  })
+
+  it('uses an settings icon button to link to the account page', () => {
+    expect.assertions(2)
+    const IndexPage = require('src/containers/index').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    const settingsLink = wrapper
+      .find(Link)
+      .filterWhere(el => el.prop('to') === accountURL)
+    expect(settingsLink.childAt(0).type()).toEqual(IconButton)
+    expect(
+      settingsLink
+        .childAt(0)
+        .childAt(0)
+        .type()
+    ).toEqual(SettingsIcon)
   })
 })
