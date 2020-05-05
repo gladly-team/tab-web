@@ -74,7 +74,7 @@ describe('_app.js', () => {
   })
   it('renders without error', () => {
     expect.assertions(1)
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
     const mockProps = getMockProps()
     expect(() => {
       mount(<App {...mockProps} />)
@@ -84,7 +84,7 @@ describe('_app.js', () => {
   it('registers the service worker if process.env.SERVICE_WORKER_ENABLED === "true"', () => {
     expect.assertions(1)
     process.env.SERVICE_WORKER_ENABLED = 'true'
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
     expect(register).toHaveBeenCalledWith('/newtab/service-worker.js')
@@ -93,7 +93,7 @@ describe('_app.js', () => {
   it('unregisters the service worker if process.env.SERVICE_WORKER_ENABLED === "false"', () => {
     expect.assertions(1)
     process.env.SERVICE_WORKER_ENABLED = 'false'
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
     expect(unregister).toHaveBeenCalled()
@@ -102,7 +102,7 @@ describe('_app.js', () => {
   it('unregisters the service worker if process.env.SERVICE_WORKER_ENABLED is undefined', () => {
     expect.assertions(1)
     process.env.SERVICE_WORKER_ENABLED = undefined
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
     expect(unregister).toHaveBeenCalled()
@@ -110,7 +110,7 @@ describe('_app.js', () => {
 
   it('provides AuthUserInfo context to consumers, using the server AuthUser if the client-side is still initializing', () => {
     expect.assertions(1)
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
 
     // Create a child component with a consumer of the AuthUserInfo context.
     const MockComponentSpy = jest.fn(() => {
@@ -158,7 +158,7 @@ describe('_app.js', () => {
 
   it('provides AuthUserInfo context to consumers, using the client AuthUser if the client-side is finished initializing', () => {
     expect.assertions(1)
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
 
     // Create a child component with a consumer of the AuthUserInfo context.
     const MockComponentSpy = jest.fn(() => {
@@ -212,7 +212,7 @@ describe('_app.js', () => {
   // credentials in teh Firebase JS SDK.
   it('provides AuthUserInfo context to consumers, using the client AuthUser (when undefined) if the client-side is finished initializing', () => {
     expect.assertions(1)
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
 
     // Create a child component with a consumer of the AuthUserInfo context.
     const MockComponentSpy = jest.fn(() => {
@@ -278,7 +278,7 @@ describe('_app.js: getInitialProps [server-side]', () => {
       hi: 'there',
       datum: 3.1416,
     })
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
     const initialProps = await App.getInitialProps({
       Component: MockComponent,
       ctx: getMockNextJSContext({ serverSide: true }),
@@ -313,7 +313,7 @@ describe('_app.js: getInitialProps [server-side]', () => {
         set: jest.fn(),
       })
     })
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
     await App.getInitialProps({
       Component: MockComponent,
       ctx: getMockNextJSContext({ serverSide: true }),
@@ -341,7 +341,7 @@ describe('_app.js: getInitialProps [server-side]', () => {
         set: jest.fn(),
       })
     })
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
     const initialProps = await App.getInitialProps({
       Component: MockComponent,
       ctx: getMockNextJSContext({ serverSide: true }),
@@ -373,7 +373,7 @@ describe('_app.js: getInitialProps [server-side]', () => {
         set: jest.fn(),
       })
     })
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
     const initialProps = await App.getInitialProps({
       Component: MockComponent,
       ctx: getMockNextJSContext({ serverSide: true }),
@@ -403,7 +403,7 @@ describe('_app.js: getInitialProps [client-side]', () => {
       hi: 'there',
       datum: 3.1416,
     })
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
     const initialProps = await App.getInitialProps({
       Component: MockComponent,
       ctx: getMockNextJSContext({ serverSide: false }),
@@ -425,7 +425,7 @@ describe('_app.js: getInitialProps [client-side]', () => {
       token: 'some-token-here',
       isClientInitialized: false,
     })
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
     await App.getInitialProps({
       Component: MockComponent,
       ctx: getMockNextJSContext({ serverSide: false }),
@@ -453,7 +453,7 @@ describe('_app.js: getInitialProps [client-side]', () => {
       token: 'some-token-here',
       isClientInitialized: false,
     })
-    const App = require('src/pages/_app.js').default
+    const App = require('src/containers/_app.js').default
     const initialProps = await App.getInitialProps({
       Component: MockComponent,
       ctx: getMockNextJSContext({ serverSide: false }),

@@ -40,7 +40,7 @@ const getMockProps = () => ({
 describe('auth.js', () => {
   it('renders without error', () => {
     expect.assertions(1)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/containers/auth.js').default
     const mockProps = getMockProps()
     expect(() => {
       mount(<AuthPage {...mockProps} />)
@@ -49,7 +49,7 @@ describe('auth.js', () => {
 
   it('redirects to the app if the AuthUser becomes defined', async () => {
     expect.assertions(2)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/containers/auth.js').default
     const defaultMockProps = getMockProps()
     const mockProps = {
       ...defaultMockProps,
@@ -76,7 +76,7 @@ describe('auth.js', () => {
 
   it('clears service worker caches when logging in (when the AuthUser becomes defined)', async () => {
     expect.assertions(2)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/containers/auth.js').default
     const defaultMockProps = getMockProps()
     const mockProps = {
       ...defaultMockProps,
@@ -103,7 +103,7 @@ describe('auth.js', () => {
 
   it('renders the FirebaseAuth component if the user is not authed and Firebase has initialized', async () => {
     expect.assertions(1)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/containers/auth.js').default
     const mockProps = {
       ...getMockProps(),
       AuthUserInfo: createAuthUserInfo({
@@ -118,7 +118,7 @@ describe('auth.js', () => {
 
   it('does not render the FirebaseAuth component if Firebase has not yet initialized', async () => {
     expect.assertions(1)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/containers/auth.js').default
     const mockProps = {
       ...getMockProps(),
       AuthUserInfo: createAuthUserInfo({
@@ -133,7 +133,7 @@ describe('auth.js', () => {
 
   it('renders a loading message when Firebase has not yet initialized', async () => {
     expect.assertions(1)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/containers/auth.js').default
     const mockProps = {
       ...getMockProps(),
       AuthUserInfo: createAuthUserInfo({
@@ -154,7 +154,7 @@ describe('auth.js: getInitialProps', () => {
 
   it('redirects to the dashboard if the user is authed', async () => {
     expect.assertions(1)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/containers/auth.js').default
     const ctx = {
       ...getMockNextJSContext(),
       tabCustomData: {
@@ -178,7 +178,7 @@ describe('auth.js: getInitialProps', () => {
 
   it('returns empty initial props if the user is not authed and does not redirect', async () => {
     expect.assertions(2)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/containers/auth.js').default
     const ctx = {
       ...getMockNextJSContext(),
       tabCustomData: {

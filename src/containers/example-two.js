@@ -27,10 +27,7 @@ const ExampleTwo = props => {
       {!AuthUser ? (
         <div>
           <p>
-            You are not signed in.{' '}
-            <Link to={authURL}>
-              <a>Sign in</a>
-            </Link>
+            You are not signed in. <Link to={authURL}>Sign in</Link>
           </p>
         </div>
       ) : (
@@ -42,9 +39,7 @@ const ExampleTwo = props => {
         </div>
       )}
       <div style={{ marginTop: 20 }}>
-        <Link to={exampleURL}>
-          <a>Another example page</a>
-        </Link>
+        <Link to={exampleURL}>Another example page</Link>
       </div>
       <div style={{ marginTop: 20 }}>
         <div>Money raised: {moneyRaised}</div>
