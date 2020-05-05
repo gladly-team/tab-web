@@ -1,8 +1,13 @@
 /* eslint-env jest */
 /* eslint no-console: 0, import/no-extraneous-dependencies: 0 */
 
+import React from 'react'
 import Enzyme from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
+
+// Fixes "Warning: useLayoutEffect does nothing on the server":
+// https://stackoverflow.com/a/58173551
+React.useLayoutEffect = React.useEffect
 
 Enzyme.configure({ adapter: new Adapter() })
 
