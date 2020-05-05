@@ -1,5 +1,5 @@
 // Only allow POST requests.
-export default handler => async (req, res) => {
+export default (handler) => async (req, res) => {
   if (req.method !== 'POST') {
     return res
       .status(405)

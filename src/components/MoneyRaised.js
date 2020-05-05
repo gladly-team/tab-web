@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import useInterval from 'src/utils/hooks/useInterval'
 import { currencyFormatUSD } from 'src/utils/formatting'
 
-const MoneyRaised = props => {
+const MoneyRaised = (props) => {
   const {
     app: { dollarsPerDayRate, moneyRaised },
   } = props

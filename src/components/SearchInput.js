@@ -10,7 +10,7 @@ import { windowOpenTop } from 'src/utils/navigation'
 const searchBoxBorderColor = '#ced4da'
 const searchBoxBorderColorFocused = '#bdbdbd'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   inputRootStyle: {
     padding: 0,
     borderRadius: 28,
@@ -51,7 +51,7 @@ const SearchInput = () => {
         autoFocus
         type="text"
         inputRef={searchInputRef}
-        onKeyPress={e => {
+        onKeyPress={(e) => {
           if (e.key === 'Enter') {
             onSearch()
           }

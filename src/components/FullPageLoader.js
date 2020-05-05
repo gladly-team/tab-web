@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import Logo from 'src/components/Logo'
 import Typography from '@material-ui/core/Typography'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     height: '100vh',
     display: 'flex',

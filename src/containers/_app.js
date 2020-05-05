@@ -23,7 +23,7 @@ import {
 } from 'src/utils/constants'
 import theme from 'src/utils/theme'
 
-const App = props => {
+const App = (props) => {
   const { AuthUserInfo, Component, pageProps } = props
 
   // Optionally, enable or disable the service worker:

@@ -7,7 +7,7 @@ import Link from 'src/components/Link'
 import { authURL, betaOptInURL, exampleURL } from 'src/utils/urls'
 import logout from 'src/utils/auth/logout'
 
-const ExampleTwo = props => {
+const ExampleTwo = (props) => {
   const { AuthUserInfo, app, user } = props
   const AuthUser = get(AuthUserInfo, 'AuthUser', null)
   const { moneyRaised } = app

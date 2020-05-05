@@ -30,7 +30,7 @@ function fetchQuery(operation, variables, { token = null }) {
       query: operation.text, // GraphQL text from input
       variables,
     }),
-  }).then(response => response.json())
+  }).then((response) => response.json())
 }
 
 export default function initEnvironment({ records = {} } = {}) {

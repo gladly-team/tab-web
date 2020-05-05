@@ -13,7 +13,7 @@ import { isServerSide } from 'src/utils/ssr'
  * @return {String} AuthUser.email - The user's email
  * @return {Boolean} AuthUser.emailVerified - Whether the user has verified their email
  */
-export const createAuthUser = firebaseUser => {
+export const createAuthUser = (firebaseUser) => {
   if (!firebaseUser || !firebaseUser.uid) {
     return null
   }
@@ -63,7 +63,7 @@ export const createAuthUserInfo = ({
  * @return {Boolean} Returns true if the object is a valid AuthUserInfo
  *   object
  */
-const validateAuthUserInfo = obj => {
+const validateAuthUserInfo = (obj) => {
   if (
     !(
       obj &&
@@ -120,7 +120,7 @@ export const getAuthUserInfoFromDOM = () => {
  * @param {String} AuthUser.token - The user's encoded Firebase token.
  * @return {undefined}
  */
-export const setAuthUserInfoInDOM = AuthUserInfo => {
+export const setAuthUserInfoInDOM = (AuthUserInfo) => {
   // This function should not be called server-side.
   if (isServerSide()) {
     throw new Error('The `setAuthUserInfoInDOM` cannot be called server-side.')

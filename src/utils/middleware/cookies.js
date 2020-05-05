@@ -37,7 +37,7 @@ export const withCookies = (req, res) => {
       secure: useSecureSameSiteNone,
     })
     req.cookie = {
-      get: cookieName => {
+      get: (cookieName) => {
         return cookies.get(cookieName, {
           signed: true,
         })
@@ -61,7 +61,7 @@ export const withCookies = (req, res) => {
   }
 }
 
-export default handler => (req, res) => {
+export default (handler) => (req, res) => {
   try {
     withCookies(req, res)
   } catch (e) {

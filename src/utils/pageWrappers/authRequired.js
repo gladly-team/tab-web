@@ -14,8 +14,8 @@ import {
 // Redirects to the authentication page if the user is not logged in.
 // This should wrap any other higher-order components that expect the
 // user to exist.
-export default ComposedComponent => {
-  const AuthRequiredComp = props => {
+export default (ComposedComponent) => {
+  const AuthRequiredComp = (props) => {
     const { AuthUserInfo } = props
 
     // If there is not an authed user, redirect to the auth page.
@@ -29,7 +29,7 @@ export default ComposedComponent => {
     return <ComposedComponent {...props} />
   }
 
-  AuthRequiredComp.getInitialProps = async ctx => {
+  AuthRequiredComp.getInitialProps = async (ctx) => {
     // Get the AuthUserInfo object. This is set in _app.js.
     const AuthUserInfo = get(
       ctx,

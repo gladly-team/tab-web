@@ -5,7 +5,7 @@ import withData from 'src/utils/pageWrappers/withData'
 import Link from 'src/components/Link'
 import { dashboardURL } from 'src/utils/urls'
 
-const Example = props => {
+const Example = (props) => {
   // The AuthUserInfo prop, if we used it, would always be null regardless
   // of the user authentication state because we do not call the
   // withAuthUserInfo higher-order component on this page.

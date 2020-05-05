@@ -91,7 +91,7 @@ class CustomDocument extends Document {
   }
 }
 
-CustomDocument.getInitialProps = async ctx => {
+CustomDocument.getInitialProps = async (ctx) => {
   // Material UI:
   // Render app and page and get the context of the page with collected side effects.
   // https://github.com/mui-org/material-ui/tree/master/examples/nextjs
@@ -100,7 +100,7 @@ CustomDocument.getInitialProps = async ctx => {
   ctx.renderPage = () =>
     originalRenderPage({
       // eslint-disable-next-line react/jsx-props-no-spreading
-      enhanceApp: App => props => sheets.collect(<App {...props} />),
+      enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
     })
 
   // Get the AuthUserInfo object. This is set in _app.js.

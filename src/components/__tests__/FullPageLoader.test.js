@@ -25,11 +25,6 @@ describe('FullPageLoader component', () => {
     const FullPageLoader = require('src/components/FullPageLoader').default
     const mockProps = getMockProps()
     const wrapper = shallow(<FullPageLoader {...mockProps} />)
-    expect(
-      wrapper
-        .find(Typography)
-        .render()
-        .text()
-    ).toEqual('Loading...')
+    expect(wrapper.find(Typography).render().text()).toEqual('Loading...')
   })
 })

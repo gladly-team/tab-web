@@ -7,7 +7,7 @@ import { isNil } from 'lodash/lang'
  * @param {Number|String} amount - A number or numerical string
  * @return {String} The amount with commas where appropriate
  */
-export const commaFormatted = amount => {
+export const commaFormatted = (amount) => {
   if (isNil(amount)) {
     return '0'
   }
@@ -21,7 +21,7 @@ export const commaFormatted = amount => {
  * @return {String} The number formatted as a en-US USD currency
  *   value, such as $1,234.57.
  */
-export const currencyFormatUSD = num => {
+export const currencyFormatUSD = (num) => {
   if (Number.isNaN(parseFloat(num))) {
     throw new Error(
       `Could not parse this value for currency formatting: ${num}`
