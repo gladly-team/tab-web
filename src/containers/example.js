@@ -14,9 +14,7 @@ const Example = props => {
 
   return (
     <div>
-      <Link to={dashboardURL}>
-        <a>Home</a>
-      </Link>
+      <Link to={dashboardURL}>Home</Link>
       <p>
         This page does not require authentication or include the authed user
         info, so it will not know if you're signed in and will not redirect to

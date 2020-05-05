@@ -34,9 +34,7 @@ const BetaOptIn = () => {
 
   return (
     <div>
-      <Link to={dashboardURL}>
-        <a>Home</a>
-      </Link>
+      <Link to={dashboardURL}>Home</Link>
       <div style={{ margin: 60 }}>
         <p>Opt in or out to this beta app:</p>
         <button onClick={() => setOptIn(true)} type="button">

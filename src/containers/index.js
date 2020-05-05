@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import clsx from 'clsx'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
+import SettingsIcon from '@material-ui/icons/Settings'
 import { AdComponent, fetchAds } from 'tab-ads'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
@@ -14,9 +17,11 @@ import {
   isInEuropeanUnion,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
+import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import SearchInput from 'src/components/SearchInput'
+import { accountURL } from 'src/utils/urls'
 
 const useStyles = makeStyles(theme => ({
   pageContainer: {
@@ -31,10 +36,22 @@ const useStyles = makeStyles(theme => ({
     top: 0,
     right: 0,
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: theme.spacing(1),
+  },
+  userMenuItem: {
+    color: 'rgba(0, 0, 0, 0.70)',
   },
   moneyRaisedContainer: {
-    padding: theme.spacing(2),
+    margin: theme.spacing(0.5),
+  },
+  settingsIconContainer: {
+    margin: theme.spacing(0.5),
+  },
+  settingsIcon: {
+    height: 20,
+    width: 20,
   },
   centerContainer: {
     height: '100%',
@@ -175,9 +192,18 @@ const Index = props => {
     <div className={classes.pageContainer}>
       <div className={classes.topRightContainer}>
         <div className={classes.moneyRaisedContainer}>
-          <Typography variant="h5">
+          <Typography variant="h5" className={clsx(classes.userMenuItem)}>
             <MoneyRaisedContainer app={app} />
           </Typography>
+        </div>
+        <div className={classes.settingsIconContainer}>
+          <Link to={accountURL}>
+            <IconButton>
+              <SettingsIcon
+                className={clsx(classes.userMenuItem, classes.settingsIcon)}
+              />
+            </IconButton>
+          </Link>
         </div>
       </div>
       <div className={classes.centerContainer}>
