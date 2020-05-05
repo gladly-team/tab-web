@@ -3,3 +3,6 @@ coverage
 build
 .next
 .serverless
+
+# This can break builds in Now.sh.
+next.config.js
