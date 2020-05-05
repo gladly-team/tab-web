@@ -20,7 +20,7 @@ Enzyme.configure({ adapter: new Adapter() })
 const { error } = console
 
 // eslint-disable-next-line func-names
-console.error = function(message, ...args) {
+console.error = function (message, ...args) {
   error.apply(console, args) // keep default behaviour
   throw message instanceof Error ? message : new Error(message)
 }

@@ -13,7 +13,7 @@ import {
   NEXT_CTX_AUTH_USER_INFO_KEY,
 } from 'src/utils/constants'
 
-const Auth = props => {
+const Auth = (props) => {
   const { AuthUserInfo } = props
 
   const shouldRedirect =
@@ -67,7 +67,7 @@ const Auth = props => {
   )
 }
 
-Auth.getInitialProps = async ctx => {
+Auth.getInitialProps = async (ctx) => {
   const AuthUserInfo = get(
     ctx,
     [NEXT_CTX_CUSTOM_DATA_KEY, NEXT_CTX_AUTH_USER_INFO_KEY],

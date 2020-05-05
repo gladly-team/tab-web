@@ -8,7 +8,7 @@ import onlyPostRequests from 'src/utils/middleware/onlyPostRequests'
 // Load environment variables.
 require('src/env')
 
-export default handler =>
+export default (handler) =>
   onlyPostRequests(
     customHeaderRequired(
       cookies(session(addUserFromAuthorizationToken(authProtected(handler))))

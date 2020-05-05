@@ -4,7 +4,7 @@
  * @return {Promise<undefined>}
  */
 const flushAllPromises = async () => {
-  await new Promise(resolve => setImmediate(resolve))
+  await new Promise((resolve) => setImmediate(resolve))
 }
 
 export default flushAllPromises

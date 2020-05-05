@@ -10,12 +10,12 @@ import {
 } from 'src/utils/constants'
 
 // Provides an AuthUserInfo prop to the composed component.
-export default ComposedComponent => {
-  const WithAuthUserInfoComp = props => {
+export default (ComposedComponent) => {
+  const WithAuthUserInfoComp = (props) => {
     const { AuthUserInfo: AuthUserInfoFromSession, ...otherProps } = props
     return (
       <AuthUserInfoContext.Consumer>
-        {AuthUserInfo => (
+        {(AuthUserInfo) => (
           <ComposedComponent
             {...otherProps}
             AuthUserInfo={AuthUserInfo || AuthUserInfoFromSession}
@@ -25,7 +25,7 @@ export default ComposedComponent => {
     )
   }
 
-  WithAuthUserInfoComp.getInitialProps = async ctx => {
+  WithAuthUserInfoComp.getInitialProps = async (ctx) => {
     // Get the AuthUserInfo object. This is set in _app.js.
     const AuthUserInfo = get(
       ctx,

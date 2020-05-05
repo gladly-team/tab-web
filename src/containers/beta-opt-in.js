@@ -7,7 +7,7 @@ import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 
 const BetaOptIn = () => {
-  const setOptIn = async isOptedIn => {
+  const setOptIn = async (isOptedIn) => {
     const response = await fetch(apiBetaOptIn, {
       method: 'POST',
       // eslint-disable-next-line no-undef

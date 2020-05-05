@@ -6,7 +6,7 @@
 import fetch from 'isomorphic-unfetch'
 import { apiLogin, apiLogout } from 'src/utils/urls'
 
-export const setSession = async user => {
+export const setSession = async (user) => {
   // If the user is authed, call login to set a cookie.
   if (user) {
     const userToken = await user.getIdToken()

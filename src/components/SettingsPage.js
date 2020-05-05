@@ -16,7 +16,7 @@ import Logo from 'src/components/Logo'
 import { accountURL, dashboardURL } from 'src/utils/urls'
 
 const sidebarWidth = 240
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     minWidth: '100vw',
     minHeight: '100vh',
@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
   },
   menuItem: {
-    background: props => (props.isActive ? grey['300'] : 'inherit'),
+    background: (props) => (props.isActive ? grey['300'] : 'inherit'),
   },
   sidebarContentContainer: {
     width: sidebarWidth,
@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const SettingsMenuItem = props => {
+const SettingsMenuItem = (props) => {
   const { children, to } = props
   const router = useRouter()
   const isActive = router.pathname === to
@@ -80,7 +80,7 @@ SettingsMenuItem.propTypes = {
 
 SettingsMenuItem.defaultProps = {}
 
-const SettingsPage = props => {
+const SettingsPage = (props) => {
   const { children } = props
   const classes = useStyles()
 

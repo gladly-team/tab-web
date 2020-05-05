@@ -9,7 +9,7 @@ export const clearAllServiceWorkerCaches = async () => {
   }
   const cacheNames = await window.caches.keys()
   return Promise.all(
-    cacheNames.map(key => {
+    cacheNames.map((key) => {
       return window.caches.delete(key)
     })
   )
