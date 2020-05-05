@@ -22,7 +22,7 @@ const dotEnvFiles = [
   dotEnvPath,
 ].filter(Boolean)
 
-dotEnvFiles.forEach(dotenvFile => {
+dotEnvFiles.forEach((dotenvFile) => {
   if (fs.existsSync(dotenvFile)) {
     // eslint-disable-next-line global-require
     require('dotenv').config({

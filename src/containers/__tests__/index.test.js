@@ -54,7 +54,7 @@ describe('index.js', () => {
     const wrapper = shallow(<IndexPage {...mockProps} />)
     const settingsLink = wrapper
       .find(Link)
-      .filterWhere(el => el.prop('to') === accountURL)
+      .filterWhere((el) => el.prop('to') === accountURL)
     expect(settingsLink.exists()).toBe(true)
   })
 
@@ -65,13 +65,8 @@ describe('index.js', () => {
     const wrapper = shallow(<IndexPage {...mockProps} />)
     const settingsLink = wrapper
       .find(Link)
-      .filterWhere(el => el.prop('to') === accountURL)
+      .filterWhere((el) => el.prop('to') === accountURL)
     expect(settingsLink.childAt(0).type()).toEqual(IconButton)
-    expect(
-      settingsLink
-        .childAt(0)
-        .childAt(0)
-        .type()
-    ).toEqual(SettingsIcon)
+    expect(settingsLink.childAt(0).childAt(0).type()).toEqual(SettingsIcon)
   })
 })

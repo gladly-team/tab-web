@@ -15,7 +15,7 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const Logo = props => {
+const Logo = (props) => {
   const { className, color, includeText, style, ...otherProps } = props
   const classes = useStyles()
   let logo

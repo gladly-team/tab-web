@@ -31,10 +31,7 @@ describe('SettingsPage component', () => {
     const SettingsPage = require('src/components/SettingsPage.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<SettingsPage {...mockProps} />)
-    const toolbar = wrapper
-      .find(AppBar)
-      .find(Toolbar)
-      .first()
+    const toolbar = wrapper.find(AppBar).find(Toolbar).first()
     const logo = toolbar.find(Logo)
     expect(logo.exists()).toBe(true)
     expect(logo.prop('includeText')).not.toBe(true)
@@ -46,21 +43,13 @@ describe('SettingsPage component', () => {
     const SettingsPage = require('src/components/SettingsPage.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<SettingsPage {...mockProps} />)
-    const toolbar = wrapper
-      .find(AppBar)
-      .find(Toolbar)
-      .first()
+    const toolbar = wrapper.find(AppBar).find(Toolbar).first()
     const link = toolbar
       .find(Link)
-      .filterWhere(elem => elem.prop('to') === dashboardURL)
+      .filterWhere((elem) => elem.prop('to') === dashboardURL)
     expect(link.exists()).toBe(true)
     expect(link.childAt(0).type()).toEqual(IconButton)
-    expect(
-      link
-        .childAt(0)
-        .childAt(0)
-        .type()
-    ).toEqual(CloseIcon)
+    expect(link.childAt(0).childAt(0).type()).toEqual(CloseIcon)
   })
 
   it('includes the "Your Profile" subheader in the sidebar list', () => {

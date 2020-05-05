@@ -32,7 +32,7 @@ const nextConfig = {
     return config
   },
   // Modify our service worker manifest.
-  transformManifest: manifest => ['/'].concat(manifest), // add the homepage to the cache
+  transformManifest: (manifest) => ['/'].concat(manifest), // add the homepage to the cache
   // Let us manually register the service worker.
   // https://github.com/hanford/next-offline#runtime-registration
   dontAutoRegisterSw: true,

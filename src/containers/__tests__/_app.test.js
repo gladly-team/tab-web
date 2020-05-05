@@ -50,7 +50,7 @@ beforeEach(() => {
   isClientSide.mockReturnValue(true)
   isServerSide.mockReturnValue(false)
 
-  withSession.mockImplementation(req => {
+  withSession.mockImplementation((req) => {
     req.cookies = ''
     Object.defineProperty(req, 'session', {
       configurable: true,
@@ -119,7 +119,7 @@ describe('_app.js', () => {
     const MockComponentWithConsumer = () => {
       return (
         <AuthUserInfoContext.Consumer>
-          {AuthUserInfo => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+          {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
         </AuthUserInfoContext.Consumer>
       )
     }
@@ -167,7 +167,7 @@ describe('_app.js', () => {
     const MockComponentWithConsumer = () => {
       return (
         <AuthUserInfoContext.Consumer>
-          {AuthUserInfo => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+          {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
         </AuthUserInfoContext.Consumer>
       )
     }
@@ -221,7 +221,7 @@ describe('_app.js', () => {
     const MockComponentWithConsumer = () => {
       return (
         <AuthUserInfoContext.Consumer>
-          {AuthUserInfo => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+          {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
         </AuthUserInfoContext.Consumer>
       )
     }
@@ -291,7 +291,7 @@ describe('_app.js: getInitialProps [server-side]', () => {
 
   it("includes the session's AuthUserInfo in the ctx passed to the the child component's getInitialProps", async () => {
     expect.assertions(1)
-    withSession.mockImplementation(req => {
+    withSession.mockImplementation((req) => {
       req.cookies = ''
       Object.defineProperty(req, 'session', {
         configurable: true,
@@ -332,7 +332,7 @@ describe('_app.js: getInitialProps [server-side]', () => {
 
   it("returns an empty AuthUserInfo object if there isn't a session", async () => {
     expect.assertions(1)
-    withSession.mockImplementation(req => {
+    withSession.mockImplementation((req) => {
       req.cookies = ''
       Object.defineProperty(req, 'session', {
         configurable: true,
@@ -351,7 +351,7 @@ describe('_app.js: getInitialProps [server-side]', () => {
 
   it('returns a populated AuthUserInfo object if there is a session', async () => {
     expect.assertions(1)
-    withSession.mockImplementation(req => {
+    withSession.mockImplementation((req) => {
       req.cookies = ''
       Object.defineProperty(req, 'session', {
         configurable: true,

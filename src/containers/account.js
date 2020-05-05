@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   contentContainer: {
     width: '100%',
     margin: theme.spacing(2),
@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const AccountItem = props => {
+const AccountItem = (props) => {
   const { actionButton, name, value } = props
   const classes = useStyles()
   return (
@@ -63,7 +63,7 @@ AccountItem.defaultProps = {
   actionButton: null,
 }
 
-const Account = props => {
+const Account = (props) => {
   const { user } = props
   const { email, username } = user
   const classes = useStyles()

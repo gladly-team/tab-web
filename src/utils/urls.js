@@ -23,15 +23,15 @@ const URLS_API_BASE_PATH = process.env.URLS_API_BASE_PATH || ''
 // But we want to use it in production.
 const URLS_USE_TRAILING_SLASH = process.env.URLS_USE_TRAILING_SLASH === 'true'
 
-const addTrailingSlashIfNeeded = path => {
+const addTrailingSlashIfNeeded = (path) => {
   const hasTrailingSlash = path[path.length - 1] === '/'
   return `${path}${!hasTrailingSlash && URLS_USE_TRAILING_SLASH ? '/' : ''}`
 }
 
-export const withBasePath = path => `${URLS_BASE_PATH}${path}`
+export const withBasePath = (path) => `${URLS_BASE_PATH}${path}`
 
 // For /api/* paths.
-const createAPIURL = url =>
+const createAPIURL = (url) =>
   addTrailingSlashIfNeeded(`${URLS_API_BASE_PATH}${url}`)
 
 // For paths that we use with the Link component and router.
@@ -42,7 +42,7 @@ const createAPIURL = url =>
 // Note: this means we must add the base path manually for any navigation
 // we do outside of the Link component.
 // @area/workaround/next-js-base-path
-const createPageURL = url => addTrailingSlashIfNeeded(url)
+const createPageURL = (url) => addTrailingSlashIfNeeded(url)
 
 export const apiLogin = createAPIURL('/api/login')
 export const apiLogout = createAPIURL('/api/logout')

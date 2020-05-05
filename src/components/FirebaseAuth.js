@@ -10,7 +10,7 @@ import { dashboardURL } from 'src/utils/urls'
 // Init the Firebase app.
 initFirebase()
 
-const FirebaseAuth = props => {
+const FirebaseAuth = (props) => {
   const { onSuccessfulAuth } = props
 
   // Do not SSR FirebaseUI, because it is not supported.

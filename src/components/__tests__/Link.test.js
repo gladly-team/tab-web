@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import NextJsLink from 'next/link'
 import { withBasePath } from 'src/utils/urls'
 
-jest.mock('next/link', () => props => (
+jest.mock('next/link', () => (props) => (
   <div data-test-id="mock-next-js-link">{props.children}</div>
 ))
 jest.mock('src/utils/urls')
@@ -15,7 +15,7 @@ const getMockProps = () => ({
 })
 
 beforeEach(() => {
-  withBasePath.mockImplementation(url => `/my-fake-basepath${url}`)
+  withBasePath.mockImplementation((url) => `/my-fake-basepath${url}`)
 })
 
 describe('Link component', () => {

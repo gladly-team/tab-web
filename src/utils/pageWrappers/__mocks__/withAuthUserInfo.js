@@ -1,1 +1,1 @@
-export default wrappedComponent => wrappedComponent
+export default (wrappedComponent) => wrappedComponent

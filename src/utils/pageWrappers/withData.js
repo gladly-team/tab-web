@@ -15,8 +15,8 @@ import {
 // Adapted from:
 // https://github.com/zeit/next.js/blob/canary/examples/with-relay-modern/lib/withData.js
 
-export default getRelayQuery => ComposedComponent => {
-  const WithDataComp = props => {
+export default (getRelayQuery) => (ComposedComponent) => {
+  const WithDataComp = (props) => {
     const {
       queryRecords,
       queryProps,
@@ -84,7 +84,7 @@ export default getRelayQuery => ComposedComponent => {
     )
   }
 
-  WithDataComp.getInitialProps = async ctx => {
+  WithDataComp.getInitialProps = async (ctx) => {
     // Get the AuthUserInfo object. This is set in _app.js.
     const AuthUserInfo = get(
       ctx,
@@ -114,10 +114,7 @@ export default getRelayQuery => ComposedComponent => {
       queryProps = await fetchQuery(environment, query, variables, {
         token: AuthUserToken,
       })
-      queryRecords = environment
-        .getStore()
-        .getSource()
-        .toJSON()
+      queryRecords = environment.getStore().getSource().toJSON()
     }
 
     // Determine if we should refetch data on client-side mount.

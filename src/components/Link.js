@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const Link = props => {
+const Link = (props) => {
   const { children, className, to } = props
   const classes = useStyles()
 

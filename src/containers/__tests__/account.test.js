@@ -38,11 +38,7 @@ describe('account.js', () => {
     const AccountPage = require('src/containers/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper
-      .at(0)
-      .dive()
-      .find(Paper)
-      .first()
+    const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(0)
     expect(accountItem.type()).toEqual(Typography)
     expect(accountItem.text()).toEqual('Account')
@@ -53,11 +49,7 @@ describe('account.js', () => {
     const AccountPage = require('src/containers/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper
-      .at(0)
-      .dive()
-      .find(Paper)
-      .first()
+    const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(1)
     expect(accountItem.type()).toEqual(Divider)
   })
@@ -67,24 +59,10 @@ describe('account.js', () => {
     const AccountPage = require('src/containers/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper
-      .at(0)
-      .dive()
-      .find(Paper)
-      .first()
+    const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(2).dive()
-    expect(
-      accountItem
-        .find(Typography)
-        .first()
-        .text()
-    ).toEqual('Username')
-    expect(
-      accountItem
-        .find(Typography)
-        .at(1)
-        .text()
-    ).toEqual('IAmFake')
+    expect(accountItem.find(Typography).first().text()).toEqual('Username')
+    expect(accountItem.find(Typography).at(1).text()).toEqual('IAmFake')
   })
 
   it('displays a Divider after the username info', () => {
@@ -92,11 +70,7 @@ describe('account.js', () => {
     const AccountPage = require('src/containers/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper
-      .at(0)
-      .dive()
-      .find(Paper)
-      .first()
+    const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(3)
     expect(accountItem.type()).toEqual(Divider)
   })
@@ -106,24 +80,12 @@ describe('account.js', () => {
     const AccountPage = require('src/containers/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper
-      .at(0)
-      .dive()
-      .find(Paper)
-      .first()
+    const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(4).dive()
-    expect(
-      accountItem
-        .find(Typography)
-        .first()
-        .text()
-    ).toEqual('Email')
-    expect(
-      accountItem
-        .find(Typography)
-        .at(1)
-        .text()
-    ).toEqual('fakeEmail@example.com')
+    expect(accountItem.find(Typography).first().text()).toEqual('Email')
+    expect(accountItem.find(Typography).at(1).text()).toEqual(
+      'fakeEmail@example.com'
+    )
   })
 })
 

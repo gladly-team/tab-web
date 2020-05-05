@@ -7,7 +7,7 @@ import {
 } from 'src/utils/middleware/constants'
 
 // Adds a tab.user object to the request.
-export default handler => async (req, res) => {
+export default (handler) => async (req, res) => {
   try {
     const authorizationHeaderVal = get(req, 'headers.authorization')
     if (!authorizationHeaderVal) {

@@ -23,7 +23,7 @@ import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import SearchInput from 'src/components/SearchInput'
 import { accountURL } from 'src/utils/urls'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   pageContainer: {
     height: '100vh',
     width: '100vw',
@@ -115,7 +115,7 @@ if (isClientSide()) {
           pageUrl: getCurrentURL(),
         },
         logLevel: 'error',
-        onError: e => {
+        onError: (e) => {
           // TODO: log error
           console.error(e) // eslint-disable-line no-console
         },
@@ -130,7 +130,7 @@ if (isClientSide()) {
   loadAds()
 }
 
-const Index = props => {
+const Index = (props) => {
   const { app, user } = props
 
   const classes = useStyles()
@@ -183,7 +183,7 @@ const Index = props => {
    * @param {Object} e - The error
    * @return {undefined}
    */
-  const onAdError = e => {
+  const onAdError = (e) => {
     // TODO: log error
     console.error(e) // eslint-disable-line no-console
   }
@@ -217,7 +217,7 @@ const Index = props => {
           {adUnits.rectangleAdSecondary && shouldRenderAds ? (
             <AdComponent
               adId={adUnits.rectangleAdSecondary.adId}
-              onAdDisplayed={displayedAdInfo => {
+              onAdDisplayed={(displayedAdInfo) => {
                 onAdDisplayed(displayedAdInfo, adContext)
               }}
               onError={onAdError}
@@ -231,7 +231,7 @@ const Index = props => {
           {adUnits.rectangleAdPrimary && shouldRenderAds ? (
             <AdComponent
               adId={adUnits.rectangleAdPrimary.adId}
-              onAdDisplayed={displayedAdInfo => {
+              onAdDisplayed={(displayedAdInfo) => {
                 onAdDisplayed(displayedAdInfo, adContext)
               }}
               onError={onAdError}
@@ -248,7 +248,7 @@ const Index = props => {
           <div className={classes.adContainerLeaderboard}>
             <AdComponent
               adId={adUnits.leaderboard.adId}
-              onAdDisplayed={displayedAdInfo => {
+              onAdDisplayed={(displayedAdInfo) => {
                 onAdDisplayed(displayedAdInfo, adContext)
               }}
               onError={onAdError}

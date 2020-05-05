@@ -8,8 +8,8 @@ function Session(req) {
   this.req = req
   this.cookieName = 'tabWebSession'
 
-  const serialize = val => encodeBase64(val)
-  const deserialize = val => decodeBase64(val)
+  const serialize = (val) => encodeBase64(val)
+  const deserialize = (val) => decodeBase64(val)
 
   this.get = () => {
     let deserializedVal
@@ -21,7 +21,7 @@ function Session(req) {
     }
   }
 
-  this.set = val => {
+  this.set = (val) => {
     let serializedVal
     try {
       // If the value is not defined, set the value to undefined
@@ -41,7 +41,7 @@ function Session(req) {
   }
 }
 
-const addSession = req => {
+const addSession = (req) => {
   if (!req.cookie) {
     throw new Error('The session middleware requires the cookies middleware.')
   }
@@ -66,7 +66,7 @@ export const withSession = (req, res) => {
   addSession(req, res)
 }
 
-export default handler => (req, res) => {
+export default (handler) => (req, res) => {
   try {
     withSession(req, res)
   } catch (e) {
