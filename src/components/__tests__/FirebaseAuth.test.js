@@ -1,8 +1,10 @@
 import React from 'react'
+import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
 import initFirebase from 'src/utils/auth/initFirebase'
 import { isClientSide } from 'src/utils/ssr'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
+import FullPageLoader from 'src/components/FullPageLoader'
 import { dashboardURL } from 'src/utils/urls'
 
 jest.mock('react-firebaseui/StyledFirebaseAuth')
@@ -141,5 +143,48 @@ describe('FirebaseAuth component', () => {
     expect(firebaseUIConfig.privacyPolicyUrl).toEqual(
       'https://tab.gladly.io/privacy/'
     )
+  })
+
+  it('returns a loader component when the signInSuccessWithAuthResult callback is called', () => {
+    expect.assertions(2)
+    const FirebaseAuth = require('src/components/FirebaseAuth').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<FirebaseAuth {...mockProps} />)
+    expect(wrapper.find(FullPageLoader).exists()).toBe(false)
+    act(() => {
+      const firebaseUIConfig = wrapper.find(StyledFirebaseAuth).prop('uiConfig')
+      firebaseUIConfig.callbacks.signInSuccessWithAuthResult()
+    })
+    wrapper.update()
+    expect(wrapper.find(FullPageLoader).exists()).toBe(true)
+  })
+
+  it('calls the "onSuccessfulAuth" prop when the signInSuccessWithAuthResult callback is called', () => {
+    expect.assertions(2)
+    const FirebaseAuth = require('src/components/FirebaseAuth').default
+    const mockProps = {
+      ...getMockProps(),
+      onSuccessfulAuth: jest.fn(),
+    }
+    const wrapper = mount(<FirebaseAuth {...mockProps} />)
+    expect(mockProps.onSuccessfulAuth).not.toHaveBeenCalled()
+    act(() => {
+      const firebaseUIConfig = wrapper.find(StyledFirebaseAuth).prop('uiConfig')
+      firebaseUIConfig.callbacks.signInSuccessWithAuthResult()
+    })
+    expect(mockProps.onSuccessfulAuth).toHaveBeenCalledTimes(1)
+  })
+
+  it('returns false from the signInSuccessWithAuthResult callback, which ensures we handle the auth redirect ourselves', () => {
+    expect.assertions(1)
+    const FirebaseAuth = require('src/components/FirebaseAuth').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<FirebaseAuth {...mockProps} />)
+    act(() => {
+      const firebaseUIConfig = wrapper.find(StyledFirebaseAuth).prop('uiConfig')
+      expect(firebaseUIConfig.callbacks.signInSuccessWithAuthResult()).toBe(
+        false
+      )
+    })
   })
 })
