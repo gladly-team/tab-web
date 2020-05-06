@@ -14,6 +14,7 @@ import logout from 'src/utils/auth/logout'
 import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { setWindowLocation } from 'src/utils/navigation'
+import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -82,7 +83,7 @@ AccountItem.defaultProps = {
 
 const Account = (props) => {
   const { user } = props
-  const { email, username } = user
+  const { id: userId, email, username } = user
   const classes = useStyles()
 
   // Logging out.
@@ -115,6 +116,13 @@ const Account = (props) => {
       // If opting out, unregister the service worker.
       if (!isOptedIn) {
         unregister()
+      }
+
+      // TODO: add tests
+      // Set the "v4 beta enabled" flag to false on the user's
+      // profile.s
+      if (userId) {
+        await SetV4BetaMutation({ enabled: false, userId })
       }
 
       // Go to the dashboard.
@@ -170,12 +178,14 @@ Account.displayName = 'Account'
 Account.propTypes = {
   user: PropTypes.shape({
     email: PropTypes.string,
+    id: PropTypes.string,
     username: PropTypes.string,
   }),
 }
 Account.defaultProps = {
   user: {
     email: null,
+    id: null,
     username: null,
   },
 }
@@ -187,6 +197,7 @@ export default withAuthAndData(({ AuthUser }) => {
       query accountQuery($userId: String!) {
         user(userId: $userId) {
           email
+          id
           username
         }
       }

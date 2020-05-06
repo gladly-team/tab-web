@@ -8,6 +8,8 @@ import { isServerSide } from 'src/utils/ssr'
 const relayEndpoint = process.env.RELAY_ENDPOINT
 let relayEnvironment = null
 
+// FIXME: include user token for mutations
+
 // Define a function that fetches the results of an operation (query/mutation/etc)
 // and returns its results as a Promise:
 function fetchQuery(operation, variables, { token = null }) {
