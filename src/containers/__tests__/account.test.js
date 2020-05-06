@@ -1,5 +1,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import fetch from 'isomorphic-unfetch'
+import { unregister } from 'next-offline/runtime'
 import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
@@ -7,16 +9,28 @@ import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
 import logout from 'src/utils/auth/logout'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
+import getMockFetchResponse from 'src/utils/testHelpers/getMockFetchResponse'
+import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
+import { clearAllServiceWorkerCaches } from 'src/utils/caching'
+import { setWindowLocation } from 'src/utils/navigation'
 
+jest.mock('isomorphic-unfetch')
+jest.mock('next-offline/runtime')
 jest.mock('src/components/SettingsPage')
 jest.mock('src/utils/pageWrappers/withAuthAndData')
 jest.mock('src/utils/auth/logout')
+jest.mock('src/utils/caching')
+jest.mock('src/utils/navigation')
 
 const getMockProps = () => ({
   user: {
     email: 'fakeEmail@example.com',
     username: 'IAmFake',
   },
+})
+
+beforeEach(() => {
+  fetch.mockResolvedValue(getMockFetchResponse())
 })
 
 afterEach(() => {
@@ -147,6 +161,71 @@ describe('account.js', () => {
     expect(accountItem.find(Typography).at(1).text()).toEqual(
       'fakeEmail@example.com'
     )
+  })
+
+  it('displays a Divider after the email address', () => {
+    expect.assertions(1)
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const content = wrapper.at(0).dive().find(Paper).first()
+    const accountItem = content.childAt(5)
+    expect(accountItem.type()).toEqual(Divider)
+  })
+
+  it('displays the "switch back to classic" field', () => {
+    expect.assertions(2)
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const content = wrapper.at(0).dive().find(Paper).first()
+    const accountItem = content.childAt(6).dive()
+    expect(accountItem.find(Typography).first().text()).toEqual('Beta Enabled')
+    expect(accountItem.find(Button).first().text()).toEqual('Switch to Classic')
+  })
+
+  it('clicking the "switch back to classic" button calls the API endpoint as expected', async () => {
+    expect.assertions(1)
+    fetch.mockResolvedValue(getMockFetchResponse())
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const content = wrapper.at(0).dive().find(Paper).first()
+    const accountItem = content.childAt(6).dive()
+    const optOutButton = accountItem.find(Button).first()
+    optOutButton.simulate('click')
+    expect(fetch).toHaveBeenCalledWith(apiBetaOptIn, {
+      body: '{"optIn":false}',
+      credentials: 'include',
+      // eslint-disable-next-line no-undef
+      headers: new Headers({
+        'X-Gladly-Requested-By': 'tab-web-nextjs',
+        'Content-Type': 'application/json',
+      }),
+      method: 'POST',
+    })
+  })
+
+  it('clicking the "switch back to classic" clears the ', async () => {
+    expect.assertions(1)
+    fetch.mockResolvedValue(getMockFetchResponse())
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const content = wrapper.at(0).dive().find(Paper).first()
+    const accountItem = content.childAt(6).dive()
+    const optOutButton = accountItem.find(Button).first()
+    optOutButton.simulate('click')
+    expect(fetch).toHaveBeenCalledWith(apiBetaOptIn, {
+      body: '{"optIn":false}',
+      credentials: 'include',
+      // eslint-disable-next-line no-undef
+      headers: new Headers({
+        'X-Gladly-Requested-By': 'tab-web-nextjs',
+        'Content-Type': 'application/json',
+      }),
+      method: 'POST',
+    })
   })
 })
 

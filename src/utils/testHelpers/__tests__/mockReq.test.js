@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import getMockReq from 'src/utils/testHelpers/mockReq'
 
 describe('mockReq', () => {
