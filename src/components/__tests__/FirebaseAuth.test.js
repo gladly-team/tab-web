@@ -1,25 +1,11 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-// import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-// import FullPageLoader from 'src/components/FullPageLoader'
-// import { dashboardURL } from 'src/utils/urls'
+import { mount } from 'enzyme'
+import initFirebase from 'src/utils/auth/initFirebase'
+import { isClientSide } from 'src/utils/ssr'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 
-jest.mock('react-firebaseui/StyledFirebaseAuth', () => () => (
-  <div data-test-id="styled-firebase-auth-mock" />
-))
-jest.mock('firebase/app', () => ({
-  auth: {
-    EmailAuthProvider: {
-      PROVIDER_ID: 'password',
-    },
-    FacebookAuthProvider: {
-      PROVIDER_ID: 'facebook.com',
-    },
-    GoogleAuthProvider: {
-      PROVIDER_ID: 'google.com',
-    },
-  },
-}))
+jest.mock('react-firebaseui/StyledFirebaseAuth')
+jest.mock('firebase/app')
 jest.mock('firebase/auth')
 jest.mock('src/components/FullPageLoader', () => () => (
   <div data-test-id="full-page-loader-mock" />
@@ -32,13 +18,11 @@ const getMockProps = () => ({
 })
 
 beforeEach(() => {
-  const { isClientSide } = require('src/utils/ssr')
   isClientSide.mockReturnValue(true)
 })
 
 afterEach(() => {
   jest.clearAllMocks()
-  jest.resetModules() // calls initFirebase on module load
 })
 
 describe('FirebaseAuth component', () => {
@@ -47,15 +31,26 @@ describe('FirebaseAuth component', () => {
     const FirebaseAuth = require('src/components/FirebaseAuth').default
     const mockProps = getMockProps()
     expect(() => {
-      shallow(<FirebaseAuth {...mockProps} />)
+      mount(<FirebaseAuth {...mockProps} />)
     }).not.toThrow()
   })
 
-  it('calls initFirebase on module load', () => {
+  it('calls initFirebase on mount', () => {
     expect.assertions(2)
-    const initFirebase = require('src/utils/auth/initFirebase').default
+    const FirebaseAuth = require('src/components/FirebaseAuth').default
     expect(initFirebase).not.toHaveBeenCalled()
-    require('src/components/FirebaseAuth').default // eslint-disable-line
+    const mockProps = getMockProps()
+    mount(<FirebaseAuth {...mockProps} />)
     expect(initFirebase).toHaveBeenCalled()
+  })
+
+  it('passes an object to StyledFirebaseAuth\'s "uiConfig" prop', () => {
+    expect.assertions(1)
+    const FirebaseAuth = require('src/components/FirebaseAuth').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<FirebaseAuth {...mockProps} />)
+    expect(wrapper.find(StyledFirebaseAuth).prop('uiConfig')).toEqual(
+      expect.any(Object)
+    )
   })
 })
