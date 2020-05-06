@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import { makeStyles } from '@material-ui/core/styles'
+import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import FirebaseAuth from 'src/components/FirebaseAuth'
 import FullPageLoader from 'src/components/FullPageLoader'
@@ -18,6 +19,7 @@ import Logo from 'src/components/Logo'
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    background: grey['50'],
     height: '100vh',
     display: 'flex',
     flexDirection: 'column',
