@@ -36,13 +36,41 @@ describe('FirebaseAuth component', () => {
     }).not.toThrow()
   })
 
-  it('calls initFirebase on mount', () => {
+  it('calls initFirebase on mount on the client side', () => {
     expect.assertions(2)
     const FirebaseAuth = require('src/components/FirebaseAuth').default
     expect(initFirebase).not.toHaveBeenCalled()
     const mockProps = getMockProps()
     mount(<FirebaseAuth {...mockProps} />)
     expect(initFirebase).toHaveBeenCalled()
+  })
+
+  it('does not call initFirebase on mount on the server side', () => {
+    expect.assertions(1)
+    isClientSide.mockReturnValue(false)
+    const FirebaseAuth = require('src/components/FirebaseAuth').default
+    const mockProps = getMockProps()
+    mount(<FirebaseAuth {...mockProps} />)
+    expect(initFirebase).not.toHaveBeenCalled()
+  })
+
+  it('returns an empty div when rendering on the server side', () => {
+    expect.assertions(2)
+    isClientSide.mockReturnValue(false)
+    const FirebaseAuth = require('src/components/FirebaseAuth').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<FirebaseAuth {...mockProps} />)
+    expect(wrapper.at(0).contains(<div />)).toBe(true)
+    expect(wrapper.find(StyledFirebaseAuth).exists()).toBe(false)
+  })
+
+  it('returns StyledFirebaseAuth when rendering on the client side', () => {
+    expect.assertions(1)
+    isClientSide.mockReturnValue(true)
+    const FirebaseAuth = require('src/components/FirebaseAuth').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<FirebaseAuth {...mockProps} />)
+    expect(wrapper.find(StyledFirebaseAuth).exists()).toBe(true)
   })
 
   it('passes an object to StyledFirebaseAuth\'s "uiConfig" prop', () => {
