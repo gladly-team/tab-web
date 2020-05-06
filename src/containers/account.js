@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { makeStyles } from '@material-ui/core/styles'
@@ -78,7 +78,10 @@ const Account = (props) => {
   const { user } = props
   const { email, username } = user
   const classes = useStyles()
+
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
   const onLogoutClick = async () => {
+    setIsLoggingOut(true)
     await logout()
   }
   return (
@@ -92,9 +95,10 @@ const Account = (props) => {
             color="default"
             variant="contained"
             onClick={onLogoutClick}
+            disabled={isLoggingOut}
             className={classes.logoutButton}
           >
-            Log Out
+            {isLoggingOut ? 'Logging Out...' : 'Log Out'}
           </Button>
         </div>
         <Divider />

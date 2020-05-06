@@ -81,6 +81,30 @@ describe('account.js', () => {
     expect(logout).toHaveBeenCalled()
   })
 
+  it('disables the logout button after clicking', async () => {
+    expect.assertions(2)
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const logoutButton = wrapper.find(Button).first()
+    expect(logoutButton.prop('disabled')).toBe(false)
+    logoutButton.simulate('click')
+    await flushAllPromises()
+    expect(wrapper.find(Button).first().prop('disabled')).toBe(true)
+  })
+
+  it('changes the logout text after clicking', async () => {
+    expect.assertions(2)
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const logoutButton = wrapper.find(Button).first()
+    expect(logoutButton.text()).toEqual('Log Out')
+    logoutButton.simulate('click')
+    await flushAllPromises()
+    expect(wrapper.find(Button).first().text()).toEqual('Logging Out...')
+  })
+
   it('displays a Divider after the title', () => {
     expect.assertions(1)
     const AccountPage = require('src/containers/account.js').default
