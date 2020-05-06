@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import fetch from 'isomorphic-unfetch'
+import { unregister } from 'next-offline/runtime'
 import { graphql } from 'react-relay'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -9,6 +11,9 @@ import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import logout from 'src/utils/auth/logout'
+import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
+import { clearAllServiceWorkerCaches } from 'src/utils/caching'
+import { setWindowLocation } from 'src/utils/navigation'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -66,12 +71,13 @@ const AccountItem = (props) => {
 
 AccountItem.propTypes = {
   name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   actionButton: PropTypes.element,
 }
 
 AccountItem.defaultProps = {
   actionButton: null,
+  value: null,
 }
 
 const Account = (props) => {
@@ -79,10 +85,41 @@ const Account = (props) => {
   const { email, username } = user
   const classes = useStyles()
 
+  // Logging out.
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const onLogoutClick = async () => {
     setIsLoggingOut(true)
     await logout()
+  }
+
+  // Switching to classic tab page.
+  const [isRevertingToClassicTab, setIsRevertingToClassicTab] = useState(false)
+  const setBetaOptIn = async (isOptedIn) => {
+    const response = await fetch(apiBetaOptIn, {
+      method: 'POST',
+      // eslint-disable-next-line no-undef
+      headers: new Headers({
+        // This custom header provides modest CSRF protection. See:
+        // https://github.com/gladly-team/tab-web#authentication-approach
+        'X-Gladly-Requested-By': 'tab-web-nextjs',
+        'Content-Type': 'application/json',
+      }),
+      credentials: 'include',
+      body: JSON.stringify({ optIn: isOptedIn }),
+    })
+
+    if (response.ok) {
+      // On beta status change, remove cached data.
+      await clearAllServiceWorkerCaches()
+
+      // If opting out, unregister the service worker.
+      if (!isOptedIn) {
+        unregister()
+      }
+
+      // Go to the dashboard.
+      setWindowLocation(dashboardURL)
+    }
   }
   return (
     <SettingsPage>
@@ -105,6 +142,25 @@ const Account = (props) => {
         <AccountItem name="Username" value={username || 'Not signed in'} />
         <Divider />
         <AccountItem name="Email" value={email || 'Not signed in'} />
+        <Divider />
+        <AccountItem
+          name="Beta Enabled"
+          actionButton={
+            <Button
+              color="default"
+              variant="contained"
+              disabled={isRevertingToClassicTab}
+              onClick={() => {
+                setIsRevertingToClassicTab(true)
+                setBetaOptIn(false)
+              }}
+            >
+              {isRevertingToClassicTab
+                ? 'Switching Back...'
+                : 'Switch to Classic'}
+            </Button>
+          }
+        />
       </Paper>
     </SettingsPage>
   )
