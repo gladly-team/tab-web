@@ -1,18 +1,26 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
+import logout from 'src/utils/auth/logout'
+import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 
 jest.mock('src/components/SettingsPage')
 jest.mock('src/utils/pageWrappers/withAuthAndData')
+jest.mock('src/utils/auth/logout')
 
 const getMockProps = () => ({
   user: {
     email: 'fakeEmail@example.com',
     username: 'IAmFake',
   },
+})
+
+afterEach(() => {
+  jest.clearAllMocks()
 })
 
 describe('account.js', () => {
@@ -34,14 +42,67 @@ describe('account.js', () => {
   })
 
   it('has an "Account" title', () => {
-    expect.assertions(2)
+    expect.assertions(1)
     const AccountPage = require('src/containers/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
-    const accountItem = content.childAt(0)
-    expect(accountItem.type()).toEqual(Typography)
-    expect(accountItem.text()).toEqual('Account')
+    const title = content.childAt(0).find(Typography).first()
+    expect(title.text()).toEqual('Account')
+  })
+
+  it('has a logout button', () => {
+    expect.assertions(1)
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const logoutButton = wrapper.find(Button).first()
+    expect(logoutButton.exists()).toBe(true)
+  })
+
+  it('displays the expected text on the logout button', () => {
+    expect.assertions(1)
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const logoutButton = wrapper.find(Button).first()
+    expect(logoutButton.text()).toEqual('Log Out')
+  })
+
+  it('calls `logout` when clicking the logout button', async () => {
+    expect.assertions(2)
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const logoutButton = wrapper.find(Button).first()
+    expect(logout).not.toHaveBeenCalled()
+    logoutButton.simulate('click')
+    await flushAllPromises()
+    expect(logout).toHaveBeenCalled()
+  })
+
+  it('disables the logout button after clicking', async () => {
+    expect.assertions(2)
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const logoutButton = wrapper.find(Button).first()
+    expect(logoutButton.prop('disabled')).toBe(false)
+    logoutButton.simulate('click')
+    await flushAllPromises()
+    expect(wrapper.find(Button).first().prop('disabled')).toBe(true)
+  })
+
+  it('changes the logout text after clicking', async () => {
+    expect.assertions(2)
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const logoutButton = wrapper.find(Button).first()
+    expect(logoutButton.text()).toEqual('Log Out')
+    logoutButton.simulate('click')
+    await flushAllPromises()
+    expect(wrapper.find(Button).first().text()).toEqual('Logging Out...')
   })
 
   it('displays a Divider after the title', () => {
