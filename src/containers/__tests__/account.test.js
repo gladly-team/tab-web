@@ -31,6 +31,7 @@ const getMockProps = () => ({
 
 beforeEach(() => {
   fetch.mockResolvedValue(getMockFetchResponse())
+  clearAllServiceWorkerCaches.mockResolvedValue()
 })
 
 afterEach(() => {
@@ -194,6 +195,7 @@ describe('account.js', () => {
     const accountItem = content.childAt(6).dive()
     const optOutButton = accountItem.find(Button).first()
     optOutButton.simulate('click')
+    await flushAllPromises()
     expect(fetch).toHaveBeenCalledWith(apiBetaOptIn, {
       body: '{"optIn":false}',
       credentials: 'include',
@@ -206,9 +208,8 @@ describe('account.js', () => {
     })
   })
 
-  it('clicking the "switch back to classic" clears the ', async () => {
+  it('clicking the "switch back to classic" clears the service worker caches', async () => {
     expect.assertions(1)
-    fetch.mockResolvedValue(getMockFetchResponse())
     const AccountPage = require('src/containers/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
@@ -216,16 +217,34 @@ describe('account.js', () => {
     const accountItem = content.childAt(6).dive()
     const optOutButton = accountItem.find(Button).first()
     optOutButton.simulate('click')
-    expect(fetch).toHaveBeenCalledWith(apiBetaOptIn, {
-      body: '{"optIn":false}',
-      credentials: 'include',
-      // eslint-disable-next-line no-undef
-      headers: new Headers({
-        'X-Gladly-Requested-By': 'tab-web-nextjs',
-        'Content-Type': 'application/json',
-      }),
-      method: 'POST',
-    })
+    await flushAllPromises()
+    expect(clearAllServiceWorkerCaches).toHaveBeenCalled()
+  })
+
+  it('clicking the "switch back to classic" unregisters the service worker', async () => {
+    expect.assertions(1)
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const content = wrapper.at(0).dive().find(Paper).first()
+    const accountItem = content.childAt(6).dive()
+    const optOutButton = accountItem.find(Button).first()
+    optOutButton.simulate('click')
+    await flushAllPromises()
+    expect(unregister).toHaveBeenCalled()
+  })
+
+  it('clicking the "switch back to classic" navigates to the dashboard', async () => {
+    expect.assertions(1)
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const content = wrapper.at(0).dive().find(Paper).first()
+    const accountItem = content.childAt(6).dive()
+    const optOutButton = accountItem.find(Button).first()
+    optOutButton.simulate('click')
+    await flushAllPromises()
+    expect(setWindowLocation).toHaveBeenCalledWith(dashboardURL)
   })
 })
 
