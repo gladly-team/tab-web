@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import FullPageLoader from 'src/components/FullPageLoader'
 import { isClientSide } from 'src/utils/ssr'
 import initFirebase from 'src/utils/auth/initFirebase'
 import { dashboardURL } from 'src/utils/urls'
@@ -73,9 +74,7 @@ const FirebaseAuth = (props) => {
   let signInMenu
   if (renderAuth) {
     if (isWaitingOnSignIn) {
-      signInMenu = (
-        <div style={{ textAlign: 'center', margin: 40 }}>Signing in...</div>
-      )
+      signInMenu = <FullPageLoader />
     } else {
       signInMenu = (
         <StyledFirebaseAuth
