@@ -41,7 +41,7 @@ describe('createRelayEnvironment', () => {
     })
   })
 
-  it('calls Network.create', () => {
+  it('calls Network.create with a function', () => {
     expect.assertions(1)
     const initEnvironment = require('src/utils/createRelayEnvironment').default
     initEnvironment()
@@ -94,6 +94,27 @@ describe('createRelayEnvironment', () => {
         'Content-Type': 'application/json',
       },
       method: 'POST',
+    })
+  })
+
+  it('returns the response JSON when calling the `fetch` function provided to Network.create', async () => {
+    expect.assertions(1)
+    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    const fetch = require('isomorphic-unfetch').default
+    fetch.mockResolvedValue({
+      ...getMockFetchResponse(),
+      json: () => Promise.resolve({ my: 'data' }),
+    })
+    initEnvironment()
+    const { Network } = require('relay-runtime')
+    const fetchFunc = Network.create.mock.calls[0][0]
+    const response = await fetchFunc(
+      'someFakeQuery',
+      { myVar: 'here' },
+      { token: 'some-fake-token' }
+    )
+    expect(response).toEqual({
+      my: 'data',
     })
   })
 })
