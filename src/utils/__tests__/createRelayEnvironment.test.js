@@ -5,6 +5,9 @@ jest.mock('isomorphic-unfetch')
 jest.mock('src/utils/ssr')
 
 beforeEach(() => {
+  const { isServerSide } = require('src/utils/ssr')
+  isServerSide.mockReturnValue(true)
+
   const { Environment, Network, Store } = require('relay-runtime')
   Network.create.mockImplementation(() => ({
     isMockRelayNetwork: true,
@@ -12,11 +15,17 @@ beforeEach(() => {
   Store.mockImplementation(() => ({
     isMockRelayStore: true,
   }))
-  Environment.mockImplementation(({ network, store }) => ({
-    isMockRelayEnvironment: true,
-    _network: network,
-    _store: store,
-  }))
+
+  function MockEnvironment({ network, store }) {
+    // The ID is to test environment re-creation / reusing
+    this.mockId = Math.random().toString(36).substr(2, 9)
+    this.isMockRelayEnvironment = true
+    this._network = network // eslint-disable-line no-underscore-dangle
+    this._store = store // eslint-disable-line no-underscore-dangle
+  }
+  Environment.mockImplementation((args) => {
+    return new MockEnvironment(args)
+  })
 
   process.env.RELAY_ENDPOINT = '/mock-relay-endpoint/here/'
 
@@ -34,11 +43,32 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const initEnvironment = require('src/utils/createRelayEnvironment').default
     const response = initEnvironment()
-    expect(response).toEqual({
+    expect(response).toMatchObject({
       isMockRelayEnvironment: true,
+      mockId: expect.any(String),
       _network: { isMockRelayNetwork: true },
       _store: { isMockRelayStore: true },
     })
+  })
+
+  it('returns a new Relay environment when called a second time on the server', () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(true)
+    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    const firstEnv = initEnvironment()
+    const secondEnv = initEnvironment()
+    expect(firstEnv).not.toEqual(secondEnv)
+  })
+
+  it('returns the same Relay environment when called a second time on the client-side', () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    const firstEnv = initEnvironment()
+    const secondEnv = initEnvironment()
+    expect(firstEnv).toEqual(secondEnv)
   })
 
   it('calls Network.create with a function', () => {
