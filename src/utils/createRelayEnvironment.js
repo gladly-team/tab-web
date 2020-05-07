@@ -12,7 +12,7 @@ let relayEnvironment = null
 
 // Define a function that fetches the results of an operation (query/mutation/etc)
 // and returns its results as a Promise:
-function fetchQuery(operation, variables, { token = null }) {
+function fetchQuery(operation, variables, { token = null } = {}) {
   return fetch(relayEndpoint, {
     method: 'POST',
     headers: {
