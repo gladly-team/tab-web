@@ -23,6 +23,11 @@ export default (getRelayQuery) => (ComposedComponent) => {
       refetchDataOnMount,
       ...otherProps
     } = props
+
+    // TODO: create a new environment when the AuthUser changes.
+    //   Maybe move environment init (and re-creation) into the
+    //   top-level, such as _app.js?
+
     const [environment] = useState(
       initEnvironment({
         records: queryRecords,
