@@ -49,19 +49,15 @@ describe('createRelayEnvironment', () => {
     expect(Network.create).toHaveBeenCalledWith(expect.any(Function))
   })
 
-  it('provides the expected `fetch` function to Network.create when called with a user token', async () => {
+  it('provides the expected `fetch` function to Network.create when when the Relay environment was created with a user token', async () => {
     expect.assertions(1)
     const initEnvironment = require('src/utils/createRelayEnvironment').default
     const fetch = require('isomorphic-unfetch').default
     fetch.mockResolvedValue(getMockFetchResponse())
-    initEnvironment()
+    initEnvironment({ token: 'some-fake-token' })
     const { Network } = require('relay-runtime')
     const fetchFunc = Network.create.mock.calls[0][0]
-    await fetchFunc(
-      'someFakeQuery',
-      { myVar: 'here' },
-      { token: 'some-fake-token' }
-    )
+    await fetchFunc('someFakeQuery', { myVar: 'here' })
     expect(fetch).toHaveBeenCalledWith('/mock-relay-endpoint/here/', {
       body: '{"variables":{"myVar":"here"}}',
       headers: {
@@ -73,19 +69,15 @@ describe('createRelayEnvironment', () => {
     })
   })
 
-  it('provides the expected `fetch` function to Network.create when called without a user token', async () => {
+  it('provides the expected `fetch` function to Network.create when the Relay environment was created without a user token', async () => {
     expect.assertions(1)
     const initEnvironment = require('src/utils/createRelayEnvironment').default
     const fetch = require('isomorphic-unfetch').default
     fetch.mockResolvedValue(getMockFetchResponse())
-    initEnvironment()
+    initEnvironment() //  no token provided
     const { Network } = require('relay-runtime')
     const fetchFunc = Network.create.mock.calls[0][0]
-    await fetchFunc(
-      'someFakeQuery',
-      { lookAt: 'this', thing: 123 }
-      // { token: 'some-fake-token' } // not provided
-    )
+    await fetchFunc('someFakeQuery', { lookAt: 'this', thing: 123 })
     expect(fetch).toHaveBeenCalledWith('/mock-relay-endpoint/here/', {
       body: '{"variables":{"lookAt":"this","thing":123}}',
       headers: {
@@ -108,11 +100,7 @@ describe('createRelayEnvironment', () => {
     initEnvironment()
     const { Network } = require('relay-runtime')
     const fetchFunc = Network.create.mock.calls[0][0]
-    const response = await fetchFunc(
-      'someFakeQuery',
-      { myVar: 'here' },
-      { token: 'some-fake-token' }
-    )
+    const response = await fetchFunc('someFakeQuery', { myVar: 'here' })
     expect(response).toEqual({
       my: 'data',
     })
