@@ -24,20 +24,19 @@ export default (getRelayQuery) => (ComposedComponent) => {
       ...otherProps
     } = props
 
-    // TODO: create a new environment when the AuthUser changes.
-    //   Maybe move environment init (and re-creation) into the
-    //   top-level, such as _app.js?
-
-    const [environment] = useState(
-      initEnvironment({
-        records: queryRecords,
-      })
-    )
-
     const [relayData, updateRelayData] = useState(queryProps)
 
     // Get the AuthUser from context.
     const { AuthUser, token } = useAuthUserInfo()
+
+    // FIXME: recreate the environment on login/logout
+    // Create the Relay environment.
+    const [environment] = useState(
+      initEnvironment({
+        records: queryRecords,
+        token,
+      })
+    )
 
     // Get the Relay query and variables config. We pass the authUser
     // so the child component can use the user ID in the query, if needed.
@@ -53,9 +52,7 @@ export default (getRelayQuery) => (ComposedComponent) => {
       let isCancelled = false
       const refetchData = async () => {
         if (isClientSide()) {
-          const newRelayData = await fetchQuery(environment, query, variables, {
-            token,
-          })
+          const newRelayData = await fetchQuery(environment, query, variables)
           if (!isCancelled) {
             updateRelayData(newRelayData)
           }
@@ -71,6 +68,7 @@ export default (getRelayQuery) => (ComposedComponent) => {
         isCancelled = true
       }
 
+      // FIXME: do this the right way.
       // We want to refetch only once on mount.
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -105,20 +103,22 @@ export default (getRelayQuery) => (ComposedComponent) => {
       composedInitialProps = await ComposedComponent.getInitialProps(ctx)
     }
 
+    // Create the Relay environment.
+    const environment = initEnvironment({
+      token: AuthUserToken,
+    })
+
     // Get the Relay query and variables config. We pass the authUser
     // so the child component can use the user ID in the query, if needed.
     const { query, variables = {} } = getRelayQuery({ AuthUser })
 
+    // If there is a query, fetch the results.
     let queryProps = {}
     let queryRecords = {}
-    const environment = initEnvironment()
-
     if (query) {
       // TODO: Consider RelayQueryResponseCache
       // https://github.com/facebook/relay/issues/1687#issuecomment-302931855
-      queryProps = await fetchQuery(environment, query, variables, {
-        token: AuthUserToken,
-      })
+      queryProps = await fetchQuery(environment, query, variables)
       queryRecords = environment.getStore().getSource().toJSON()
     }
 

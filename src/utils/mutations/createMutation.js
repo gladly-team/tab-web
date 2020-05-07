@@ -23,7 +23,15 @@ const commitMutation = (environment, options) => {
 // https://relay.dev/docs/en/mutations#commitmutation
 const createMutation = (mutationConfig) => {
   const { mutation, variables } = mutationConfig
+
+  // TODO: throw if the env doesn't already exist?
+
+  // This will reuse the environment created earlier in the
+  // "withData" HOC, which will include the user's token.
+  // This means any view that calls a mutation must be wrapped
+  // in "withData".
   const environment = initEnvironment()
+
   return commitMutation(environment, {
     mutation,
     variables,
