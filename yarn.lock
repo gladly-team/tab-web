@@ -12084,11 +12084,6 @@ regjsparser@^0.6.4:
   dependencies:
     jsesc "~0.5.0"
 
-relay-commit-mutation-promise@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/relay-commit-mutation-promise/-/relay-commit-mutation-promise-1.1.3.tgz#ed5a2372589d6c19d342fb230300288e706f193b"
-  integrity sha512-fnF8M89VXVcwetNHKFM78PJUTwIe1eykQ7GDUAHEVRg84enqAUbRZaxka439cXM2kcfp4k7fbeDSscInX9XmbA==
-
 relay-compiler@^9.1.0:
   version "9.1.0"
   resolved "https://registry.yarnpkg.com/relay-compiler/-/relay-compiler-9.1.0.tgz#e2975de85192e2470daad78e30052bf9614d22ed"
