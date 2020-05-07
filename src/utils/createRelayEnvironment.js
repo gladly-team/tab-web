@@ -57,25 +57,24 @@ const createFetchQuery = ({ token }) => {
  * @return {Object} A Relay environment
  */
 export default function initEnvironment({ records = {}, token = null } = {}) {
-  // TODO: only instantiate these if we need to
-  const network = Network.create(createFetchQuery({ token }))
-  const store = new Store(new RecordSource(records))
-
-  // Make sure to create a new Relay environment for every server-side request so that data
-  // isn't shared between connections (which would be bad)
-  if (isServerSide()) {
+  const createNewEnvironment = () => {
+    const network = Network.create(createFetchQuery({ token }))
+    const store = new Store(new RecordSource(records))
     return new Environment({
       network,
       store,
     })
   }
 
-  // reuse Relay environment on client-side
+  // On the server, always recreate the environment so that data
+  // isn't shared between connections.
+  if (isServerSide()) {
+    return createNewEnvironment()
+  }
+
+  // On the client side, reuse the environment if it exists.
   if (!relayEnvironment) {
-    relayEnvironment = new Environment({
-      network,
-      store,
-    })
+    relayEnvironment = createNewEnvironment()
   }
 
   return relayEnvironment

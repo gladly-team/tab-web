@@ -79,6 +79,50 @@ describe('createRelayEnvironment', () => {
     expect(Network.create).toHaveBeenCalledWith(expect.any(Function))
   })
 
+  it('calls Network.create a second time when we call createRelayEnvironment twice on the server', () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(true)
+    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    initEnvironment()
+    initEnvironment()
+    const { Network } = require('relay-runtime')
+    expect(Network.create).toHaveBeenCalledTimes(2)
+  })
+
+  it('calls Network.create only once on the client-side, even when we call createRelayEnvironment twice', () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    initEnvironment()
+    initEnvironment()
+    const { Network } = require('relay-runtime')
+    expect(Network.create).toHaveBeenCalledTimes(1)
+  })
+
+  it('instantiates Store a second time when we call createRelayEnvironment twice on the server', () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(true)
+    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    initEnvironment()
+    initEnvironment()
+    const { Store } = require('relay-runtime')
+    expect(Store).toHaveBeenCalledTimes(2)
+  })
+
+  it('instantiates Store only once on the client-side, even when we call createRelayEnvironment twice', () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    initEnvironment()
+    initEnvironment()
+    const { Store } = require('relay-runtime')
+    expect(Store).toHaveBeenCalledTimes(1)
+  })
+
   it('provides the expected `fetch` function to Network.create when when the Relay environment was created with a user token', async () => {
     expect.assertions(1)
     const initEnvironment = require('src/utils/createRelayEnvironment').default
