@@ -128,7 +128,7 @@ CustomDocument.propTypes = {
       email: PropTypes.string.isRequired,
       emailVerified: PropTypes.bool.isRequired,
     }),
-    token: PropTypes.string.isRequired,
+    token: PropTypes.string,
     isClientInitialized: PropTypes.bool.isRequired,
   }).isRequired,
 }
