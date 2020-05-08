@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { mount } from 'enzyme'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
-import { ReactRelayContext } from 'react-relay'
+import getMockFetchResponse from 'src/utils/testHelpers/getMockFetchResponse'
+import { fetchQuery, ReactRelayContext } from 'react-relay'
 import initEnvironment from 'src/utils/createRelayEnvironment'
 import { AuthUserInfoContext } from 'src/utils/auth/hooks'
 import { isClientSide } from 'src/utils/ssr'
@@ -70,6 +71,7 @@ const getMockPropsForHOC = () => ({
 
 beforeEach(() => {
   isClientSide.mockReturnValue(false)
+  fetchQuery.mockResolvedValue(getMockFetchResponse())
 })
 
 afterEach(() => {
