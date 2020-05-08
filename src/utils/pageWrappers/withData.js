@@ -39,7 +39,8 @@ export default (getRelayQuery) => (ComposedComponent) => {
       })
     )
 
-    // TODO: test
+    // FIXME: move this logic into the Relay environment creation
+
     // If the user's auth status changes after mount, recreate
     // the Relay environment so it doesn't use an outdated
     // Authorization header.
