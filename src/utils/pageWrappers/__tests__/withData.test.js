@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
+import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
-import getMockFetchResponse from 'src/utils/testHelpers/getMockFetchResponse'
 import { fetchQuery, ReactRelayContext } from 'react-relay'
 import initEnvironment from 'src/utils/createRelayEnvironment'
 import { AuthUserInfoContext } from 'src/utils/auth/hooks'
@@ -71,7 +72,7 @@ const getMockPropsForHOC = () => ({
 
 beforeEach(() => {
   isClientSide.mockReturnValue(false)
-  fetchQuery.mockResolvedValue(getMockFetchResponse())
+  fetchQuery.mockResolvedValue({}) // data returned from Relay fetch
 })
 
 afterEach(() => {
@@ -311,10 +312,103 @@ describe('withData: render', () => {
     })
   })
 
+  it('refetches data on mount if the "refetchDataOnMount" prop is true and we are on the client side', async () => {
+    expect.assertions(2)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    isClientSide.mockReturnValue(true)
+    const mockProps = {
+      ...getMockPropsForHOC(),
+      refetchDataOnMount: true, // should refetch
+    }
+    const MockAuthProvider = getMockAuthProviderComponent()
+    await act(async () => {
+      mount(<HOC {...mockProps} />, {
+        wrappingComponent: MockAuthProvider,
+      })
+      await flushAllPromises()
+    })
+    const { query, variables } = mockRelayQueryGetter()
+    expect(fetchQuery).toHaveBeenCalledTimes(1)
+    expect(fetchQuery).toHaveBeenCalledWith(
+      expect.any(Object),
+      query,
+      variables
+    )
+  })
+
+  it('does not refetch data on mount if the "refetchDataOnMount" prop is true but we are on the server side', async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    isClientSide.mockReturnValue(false) // note this is server-side
+    const mockProps = {
+      ...getMockPropsForHOC(),
+      refetchDataOnMount: true, // will refetch, but client-side only
+    }
+    const MockAuthProvider = getMockAuthProviderComponent()
+    await act(async () => {
+      mount(<HOC {...mockProps} />, {
+        wrappingComponent: MockAuthProvider,
+      })
+      await flushAllPromises()
+    })
+    expect(fetchQuery).not.toHaveBeenCalled()
+  })
+
+  it('does not refetch data on mount if the "refetchDataOnMount" prop is false, on the client side', async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    isClientSide.mockReturnValue(true) // is client side
+    const mockProps = {
+      ...getMockPropsForHOC(),
+      refetchDataOnMount: false, // should not refetch
+    }
+    const MockAuthProvider = getMockAuthProviderComponent()
+    await act(async () => {
+      mount(<HOC {...mockProps} />, {
+        wrappingComponent: MockAuthProvider,
+      })
+      await flushAllPromises()
+    })
+    expect(fetchQuery).not.toHaveBeenCalled()
+  })
+
+  it('passes updated (refetched) data to the child component, on the client side', async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    isClientSide.mockReturnValue(true)
+    const mockProps = {
+      ...getMockPropsForHOC(),
+      refetchDataOnMount: true, // should refetch
+      queryProps: {
+        isThisSomeNewData: false,
+        cool: 'not so much',
+      },
+    }
+    fetchQuery.mockResolvedValue({
+      isThisSomeNewData: true,
+      cool: 'sure',
+    })
+    const MockAuthProvider = getMockAuthProviderComponent()
+
+    let wrapper
+    await act(async () => {
+      wrapper = mount(<HOC {...mockProps} />, {
+        wrappingComponent: MockAuthProvider,
+      })
+      await flushAllPromises()
+    })
+    wrapper.update()
+    expect(wrapper.find(MockComponent).props()).toMatchObject({
+      isThisSomeNewData: true,
+      cool: 'sure',
+    })
+  })
+
   // TODO: tests
-  // - refetches data on mount if the "refetchDataOnMount" prop is true
-  // - does not refetch data on mount if the "refetchDataOnMount" prop is true
-  // - passes updated (refetched) data to the child component
   // - does not throw if the component unmounts before the refetched data returns
 })
 
