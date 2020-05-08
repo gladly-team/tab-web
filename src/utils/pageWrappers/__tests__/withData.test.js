@@ -408,8 +408,35 @@ describe('withData: render', () => {
     })
   })
 
-  // TODO: tests
-  // - does not throw if the component unmounts before the refetched data returns
+  it('does not throw if the component unmounts before the refetched data returns', async () => {
+    expect.assertions(0)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    isClientSide.mockReturnValue(true)
+    const mockProps = {
+      ...getMockPropsForHOC(),
+      refetchDataOnMount: true, // should refetch
+    }
+    let mockFetchQueryResolver
+    const mockFetchQueryResponse = new Promise((resolve) => {
+      mockFetchQueryResolver = (data) => resolve(data)
+    })
+    fetchQuery.mockImplementation(() => mockFetchQueryResponse)
+    const MockAuthProvider = getMockAuthProviderComponent()
+
+    let wrapper
+    await act(async () => {
+      wrapper = mount(<HOC {...mockProps} />, {
+        wrappingComponent: MockAuthProvider,
+      })
+      await flushAllPromises()
+      wrapper.unmount()
+
+      // React will call console.warn if we try to update state on an
+      // unmounted component, and we throw if console.warn is called.
+      mockFetchQueryResolver({})
+    })
+  })
 })
 
 describe('withData: getInitialProps', () => {
