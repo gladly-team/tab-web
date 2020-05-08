@@ -39,7 +39,7 @@ MockComponent.displayName = 'MockComponent'
 // to children. Use this to wrap mounted components during testing.
 const getMockAuthProviderComponent = ({
   initialValue = getMockSignedInAuthUserInfo(),
-}) => {
+} = {}) => {
   const MockAuthProvider = ({ children, value }) => (
     <AuthUserInfoContext.Provider value={value || initialValue}>
       {children}
@@ -234,9 +234,51 @@ describe('withData: render', () => {
     })
   })
 
+  it('passes the Relay data (query props) to the child component', () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const mockProps = {
+      ...getMockPropsForHOC(),
+      queryProps: {
+        some: ['data', 'here'],
+        abc: 123,
+      },
+    }
+    const MockAuthProvider = getMockAuthProviderComponent()
+    const wrapper = mount(<HOC {...mockProps} />, {
+      wrappingComponent: MockAuthProvider,
+    })
+    expect(wrapper.find(MockComponent).props()).toMatchObject({
+      some: ['data', 'here'],
+      abc: 123,
+    })
+  })
+
+  it('passes additional props to the child component', () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const mockProps = {
+      ...getMockPropsForHOC(),
+      extraneous: 'prop',
+      thisIs: {
+        extra: 'data',
+      },
+    }
+    const MockAuthProvider = getMockAuthProviderComponent()
+    const wrapper = mount(<HOC {...mockProps} />, {
+      wrappingComponent: MockAuthProvider,
+    })
+    expect(wrapper.find(MockComponent).props()).toMatchObject({
+      extraneous: 'prop',
+      thisIs: {
+        extra: 'data',
+      },
+    })
+  })
+
   // TODO: tests
-  // - passes the Relay data (query records) to the child component
-  // - passes additional props to the child component
   // - calls getRelayQuery with the AuthUser value
   // - refetches data on mount if the "refetchDataOnMount" prop is true
   // - does not refetch data on mount if the "refetchDataOnMount" prop is true
