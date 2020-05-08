@@ -71,6 +71,16 @@ describe('createRelayEnvironment', () => {
     expect(firstEnv).toEqual(secondEnv)
   })
 
+  it('returns a new Relay environment when called with "destroyExisting" on the client-side', () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    const firstEnv = initEnvironment()
+    const secondEnv = initEnvironment({ destroyExisting: true })
+    expect(firstEnv).not.toEqual(secondEnv)
+  })
+
   it('calls Network.create with a function', () => {
     expect.assertions(1)
     const initEnvironment = require('src/utils/createRelayEnvironment').default
