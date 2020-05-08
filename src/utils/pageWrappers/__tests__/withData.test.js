@@ -39,7 +39,7 @@ const mockRelayQueryGetter = jest.fn(() => ({
 // A mock component that serves as the wrapped child of the
 // withData HOC we're testing.
 const MockComponent = () => <div>hi</div>
-MockComponent.getInitialProps = jest.fn()
+MockComponent.getInitialProps = jest.fn(() => Promise.resolve())
 MockComponent.displayName = 'MockComponent'
 
 // Return a React component that provides the AuthUserInfoContext
@@ -73,6 +73,7 @@ const getMockPropsForHOC = () => ({
 beforeEach(() => {
   isClientSide.mockReturnValue(false)
   fetchQuery.mockResolvedValue({}) // data returned from Relay fetch
+  process.env.SERVICE_WORKER_ENABLED = 'false'
 })
 
 afterEach(() => {
@@ -494,11 +495,85 @@ describe('withData: getInitialProps', () => {
     })
   })
 
+  it('calls getRelayQuery with the AuthUser value', async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const ctx = {
+      ...getMockNextJSContext(),
+      tabCustomData: {
+        AuthUserInfo: createAuthUserInfo({
+          AuthUser: {
+            id: 'abc-123',
+            email: 'joe.smith@example.com',
+            emailVerified: true,
+          },
+          token: 'some-token-here-abcxyz',
+          isClientInitialized: true,
+        }),
+      },
+    }
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    await HOC.getInitialProps(ctx)
+    expect(mockRelayQueryGetter).toHaveBeenCalledWith({
+      AuthUser: {
+        id: 'abc-123',
+        email: 'joe.smith@example.com',
+        emailVerified: true,
+      },
+    })
+  })
+
+  it("calls Relay's fetchQuery as expected if a query is provided", async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const ctx = getMockNextJSContext()
+    mockRelayQueryGetter.mockReturnValue({
+      query: 'some-query',
+      variables: {
+        special: 'variable',
+      },
+    })
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    await HOC.getInitialProps(ctx)
+    expect(fetchQuery).toHaveBeenCalledWith(expect.any(Object), 'some-query', {
+      special: 'variable',
+    })
+  })
+
+  it("does not call Relay's fetchQuery if no query is provided", async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const ctx = getMockNextJSContext()
+    mockRelayQueryGetter.mockReturnValue({
+      query: undefined,
+      variables: undefined,
+    })
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    await HOC.getInitialProps(ctx)
+    expect(fetchQuery).not.toHaveBeenCalled()
+  })
+
+  it("includes the wrapped component's initial props in the returned props", async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const ctx = getMockNextJSContext()
+    mockRelayQueryGetter.mockReturnValue({
+      query: undefined,
+      variables: undefined,
+    })
+    MockComponent.getInitialProps = async () => ({
+      foo: 'bar',
+      extra: 'props',
+    })
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const response = await HOC.getInitialProps(ctx)
+    expect(response).toMatchObject({
+      foo: 'bar',
+      extra: 'props',
+    })
+  })
+
   // TODO: tests
-  // - calls getRelayQuery with the AuthUser value
-  // - calls Relay's fetchQuery as expected if a query is provided
-  // - does not call Relay's fetchQuery if no query is provided
-  // - includes the wrapped component's props in returned props
   // - returns the fetchQuery response as the "queryProps" prop
   // - returns the environment's store records as the "queryRecords" prop
   // - sets the "refetchDataOnMount" to true if process.env.SERVICE_WORKER_ENABLED === 'true' and we are server-side
