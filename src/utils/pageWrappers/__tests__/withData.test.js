@@ -440,6 +440,10 @@ describe('withData: render', () => {
 })
 
 describe('withData: getInitialProps', () => {
+  beforeEach(() => {
+    isClientSide.mockReturnValue(false)
+  })
+
   it("calls the wrapped component's getInitialProps with the Next.js context", async () => {
     expect.assertions(2)
     const withData = require('src/utils/pageWrappers/withData').default
@@ -450,9 +454,47 @@ describe('withData: getInitialProps', () => {
     expect(MockComponent.getInitialProps).toHaveBeenCalledWith(ctx)
   })
 
+  it('calls initEnvironment with a null token if the AuthUserInfo object is empty', async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const ctx = {
+      ...getMockNextJSContext(),
+      tabCustomData: {
+        AuthUserInfo: createAuthUserInfo(), // not signed in
+      },
+    }
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    await HOC.getInitialProps(ctx)
+    expect(initEnvironment).toHaveBeenCalledWith({
+      token: null,
+    })
+  })
+
+  it('calls initEnvironment with the token if the AuthUserInfo object is not empty', async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const ctx = {
+      ...getMockNextJSContext(),
+      tabCustomData: {
+        AuthUserInfo: createAuthUserInfo({
+          AuthUser: {
+            id: 'abc-123',
+            email: 'fake@example.com',
+            emailVerified: true,
+          },
+          token: 'some-token-here-abcxyz',
+          isClientInitialized: true,
+        }),
+      },
+    }
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    await HOC.getInitialProps(ctx)
+    expect(initEnvironment).toHaveBeenCalledWith({
+      token: 'some-token-here-abcxyz',
+    })
+  })
+
   // TODO: tests
-  // - calls initEnvironment with null token if empty AuthUserInfo
-  // - calls initEnvironment with the token if there is AuthUserInfo
   // - calls getRelayQuery with the AuthUser value
   // - calls Relay's fetchQuery as expected if a query is provided
   // - does not call Relay's fetchQuery if no query is provided
