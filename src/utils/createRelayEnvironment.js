@@ -56,7 +56,11 @@ const createFetchQuery = ({ token }) => {
  *   Authorization header
  * @return {Object} A Relay environment
  */
-export default function initEnvironment({ records = {}, token = null } = {}) {
+export default function initEnvironment({
+  records = {},
+  token = null,
+  destroyExisting = false,
+} = {}) {
   const createNewEnvironment = () => {
     const network = Network.create(createFetchQuery({ token }))
     const store = new Store(new RecordSource(records))
@@ -73,9 +77,11 @@ export default function initEnvironment({ records = {}, token = null } = {}) {
   }
 
   // On the client side, reuse the environment if it exists.
-  if (!relayEnvironment) {
-    relayEnvironment = createNewEnvironment()
+  if (relayEnvironment && !destroyExisting) {
+    return relayEnvironment
   }
 
+  // Otherwise, create a new one.
+  relayEnvironment = createNewEnvironment()
   return relayEnvironment
 }
