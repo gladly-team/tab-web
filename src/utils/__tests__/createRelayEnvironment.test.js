@@ -61,7 +61,7 @@ describe('createRelayEnvironment', () => {
     expect(firstEnv).not.toEqual(secondEnv)
   })
 
-  it('returns the same Relay environment when called a second time on the client-side', () => {
+  it('returns the same Relay environment when called a second time on the client-side with the same (empty) token', () => {
     expect.assertions(1)
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(false)
@@ -71,13 +71,23 @@ describe('createRelayEnvironment', () => {
     expect(firstEnv).toEqual(secondEnv)
   })
 
-  it('returns a new Relay environment when called with "destroyExisting" on the client-side', () => {
+  it('returns the same Relay environment when called a second time on the client-side with the same non-empty token', () => {
     expect.assertions(1)
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(false)
     const initEnvironment = require('src/utils/createRelayEnvironment').default
-    const firstEnv = initEnvironment()
-    const secondEnv = initEnvironment({ destroyExisting: true })
+    const firstEnv = initEnvironment({ token: 'abc-123' })
+    const secondEnv = initEnvironment({ token: 'abc-123' })
+    expect(firstEnv).toEqual(secondEnv)
+  })
+
+  it('returns a new Relay environment when called with a new token on the client-side', () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    const firstEnv = initEnvironment({ token: 'abc-123' })
+    const secondEnv = initEnvironment({ token: '987-zyx' })
     expect(firstEnv).not.toEqual(secondEnv)
   })
 

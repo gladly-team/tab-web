@@ -6,8 +6,6 @@ import { get } from 'lodash/object'
 import { fetchQuery, ReactRelayContext } from 'react-relay'
 import initEnvironment from 'src/utils/createRelayEnvironment'
 import { useAuthUserInfo } from 'src/utils/auth/hooks'
-import usePrevious from 'src/utils/hooks/usePrevious'
-import useUpdateEffect from 'src/utils/hooks/useUpdateEffect'
 import { isClientSide } from 'src/utils/ssr'
 import {
   NEXT_CTX_CUSTOM_DATA_KEY,
@@ -16,8 +14,6 @@ import {
 
 // Adapted from:
 // https://github.com/zeit/next.js/blob/canary/examples/with-relay-modern/lib/withData.js
-
-// TODO: add tests
 
 export default (getRelayQuery) => (ComposedComponent) => {
   const WithDataComp = (props) => {
@@ -32,32 +28,10 @@ export default (getRelayQuery) => (ComposedComponent) => {
     const { AuthUser, token } = useAuthUserInfo()
 
     // Create the Relay environment.
-    const [environment, setEnvironment] = useState(
-      initEnvironment({
-        records: queryRecords,
-        token,
-      })
-    )
-
-    // FIXME: move this logic into the Relay environment creation
-
-    // If the user's auth status changes after mount, recreate
-    // the Relay environment so it doesn't use an outdated
-    // Authorization header.
-    const previousToken = usePrevious(token)
-    useUpdateEffect(() => {
-      // Don't update if the token hasn't changed.
-      if (token === previousToken) {
-        return
-      }
-      setEnvironment(
-        initEnvironment({
-          destroyExisting: true, // overwrite the current environment
-          records: queryRecords,
-          token,
-        })
-      )
-    }, [queryRecords, token, previousToken])
+    const environment = initEnvironment({
+      records: queryRecords,
+      token,
+    })
 
     // Get the Relay query and variables from the wrapped component.
     // We pass the AuthUser so the child component can use the user

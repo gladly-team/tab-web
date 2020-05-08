@@ -7,6 +7,7 @@ import { isServerSide } from 'src/utils/ssr'
 
 const relayEndpoint = process.env.RELAY_ENDPOINT
 let relayEnvironment = null
+let prevUserToken = null
 
 /**
  * Create the `fetch` function that serves as the network interface
@@ -56,11 +57,7 @@ const createFetchQuery = ({ token }) => {
  *   Authorization header
  * @return {Object} A Relay environment
  */
-export default function initEnvironment({
-  records = {},
-  token = null,
-  destroyExisting = false,
-} = {}) {
+export default function initEnvironment({ records = {}, token = null } = {}) {
   const createNewEnvironment = () => {
     const network = Network.create(createFetchQuery({ token }))
     const store = new Store(new RecordSource(records))
@@ -77,11 +74,14 @@ export default function initEnvironment({
   }
 
   // On the client side, reuse the environment if it exists.
-  if (relayEnvironment && !destroyExisting) {
+  // If the user's token changes, recreate the Relay environment
+  // so it doesn't use an outdated Authorization header.
+  if (relayEnvironment && token === prevUserToken) {
     return relayEnvironment
   }
 
-  // Otherwise, create a new one.
+  // Otherwise, create a new environment.
+  prevUserToken = token
   relayEnvironment = createNewEnvironment()
   return relayEnvironment
 }

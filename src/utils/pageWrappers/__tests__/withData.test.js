@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { mount } from 'enzyme'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
-// import { fetchQuery, ReactRelayContext } from 'react-relay'
+import { ReactRelayContext } from 'react-relay'
 import initEnvironment from 'src/utils/createRelayEnvironment'
 import { AuthUserInfoContext } from 'src/utils/auth/hooks'
 import { isClientSide } from 'src/utils/ssr'
@@ -173,6 +173,64 @@ describe('withData: render', () => {
     expect(initEnvironment).toHaveBeenCalledWith({
       records: mockProps.queryRecords,
       token: null,
+    })
+  })
+
+  it('passes the expected environment to the Relay context provider (correct user token)', () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const mockProps = getMockPropsForHOC()
+    const MockAuthProvider = getMockAuthProviderComponent({
+      initialValue: {
+        ...getMockSignedInAuthUserInfo(),
+        token: 'this-is-the-token',
+      },
+    })
+    const wrapper = mount(<HOC {...mockProps} />, {
+      wrappingComponent: MockAuthProvider,
+    })
+    const RelayContextProvider = wrapper.find(ReactRelayContext.Provider)
+    expect(RelayContextProvider.prop('value').environment).toMatchObject({
+      isMockRelayEnvironment: true,
+      mockUserToken: 'this-is-the-token',
+    })
+  })
+
+  it('passes a new environment to the Relay context provider after the user token changes', () => {
+    expect.assertions(2)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const mockProps = getMockPropsForHOC()
+    const MockAuthProvider = getMockAuthProviderComponent({
+      initialValue: {
+        ...getMockSignedInAuthUserInfo(),
+        token: 'this-is-the-token',
+      },
+    })
+    const wrapper = mount(<HOC {...mockProps} />, {
+      wrappingComponent: MockAuthProvider,
+    })
+    expect(
+      wrapper.find(ReactRelayContext.Provider).prop('value').environment
+    ).toMatchObject({
+      isMockRelayEnvironment: true,
+      mockUserToken: 'this-is-the-token',
+    })
+
+    // Update the AuthUserInfo context value.
+    const newAuthUserInfo = {
+      ...getMockSignedInAuthUserInfo(),
+      token: 'another-token-appeared!',
+    }
+    const provider = wrapper.getWrappingComponent()
+    provider.setProps({ value: newAuthUserInfo })
+
+    expect(
+      wrapper.find(ReactRelayContext.Provider).prop('value').environment
+    ).toMatchObject({
+      isMockRelayEnvironment: true,
+      mockUserToken: 'another-token-appeared!',
     })
   })
 
