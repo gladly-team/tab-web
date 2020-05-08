@@ -2,9 +2,10 @@ import React from 'react'
 import { mount } from 'enzyme'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
 // import { fetchQuery, ReactRelayContext } from 'react-relay'
-// import initEnvironment from 'src/utils/createRelayEnvironment'
-// import { useAuthUserInfo } from 'src/utils/auth/hooks'
+import initEnvironment from 'src/utils/createRelayEnvironment'
+import { useAuthUserInfo } from 'src/utils/auth/hooks'
 import { isClientSide } from 'src/utils/ssr'
+import { createAuthUserInfo } from 'src/utils/auth/user'
 
 jest.mock('react-relay')
 jest.mock('src/utils/createRelayEnvironment')
@@ -18,6 +19,18 @@ beforeEach(() => {
 afterEach(() => {
   jest.clearAllMocks()
 })
+
+const getMockSignedInAuthUserInfo = () => {
+  return createAuthUserInfo({
+    firebaseUser: {
+      uid: 'my-fake-id',
+      email: 'fakeEmail@example.com',
+      emailVerified: true,
+    },
+    token: 'some-mock-token',
+    isClientInitialized: true,
+  })
+}
 
 const mockRelayQueryGetter = jest.fn((wrappedComponent) => wrappedComponent)
 
@@ -42,9 +55,33 @@ describe('withData: render', () => {
     expect(wrapper.find(MockComponent).exists()).toBe(true)
   })
 
+  it('calls initEnvironment with the query records and token on mount', () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const mockProps = {
+      ...getMockPropsForHOC(),
+      queryRecords: { some: 'records', abc: 123 },
+    }
+    useAuthUserInfo.mockReturnValue(getMockSignedInAuthUserInfo())
+    mount(<HOC {...mockProps} />)
+    expect(initEnvironment).toHaveBeenCalledWith({
+      records: mockProps.queryRecords,
+      token: 'some-mock-token',
+    })
+  })
+
+  it('calls initEnvironment only once on mount', () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const mockProps = getMockPropsForHOC()
+    useAuthUserInfo.mockReturnValue(getMockSignedInAuthUserInfo())
+    mount(<HOC {...mockProps} />)
+    expect(initEnvironment).toHaveBeenCalledTimes(1)
+  })
+
   // TODO: tests
-  // - calls initEnvironment with the query records and token on mount
-  // - calls initEnvironment only once on mount
   // - calls initEnvironment, replacing it, if the token value changes
   // - passes the Relay data (query records) to the child component
   // - passes additional props to the child component
