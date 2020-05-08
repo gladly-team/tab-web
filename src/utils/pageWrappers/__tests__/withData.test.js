@@ -27,7 +27,12 @@ const getMockSignedInAuthUserInfo = () => {
 }
 
 // The function provided to the withData HOC>
-const mockRelayQueryGetter = jest.fn((wrappedComponent) => wrappedComponent)
+const mockRelayQueryGetter = jest.fn(() => ({
+  query: 'some-query',
+  variables: {
+    special: 'variable',
+  },
+}))
 
 // A mock component that serves as the wrapped child of the
 // withData HOC we're testing.
@@ -278,8 +283,33 @@ describe('withData: render', () => {
     })
   })
 
+  it('calls getRelayQuery with the AuthUser value', () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const mockProps = getMockPropsForHOC()
+    const mockAuthUserInfo = {
+      ...getMockSignedInAuthUserInfo(),
+      AuthUser: {
+        ...getMockSignedInAuthUserInfo().AuthUser,
+        uid: 'some-user-id',
+        email: 'foo@example.com',
+        emailVerified: true,
+      },
+      token: 'this-is-the-token',
+    }
+    const MockAuthProvider = getMockAuthProviderComponent({
+      initialValue: mockAuthUserInfo,
+    })
+    mount(<HOC {...mockProps} />, {
+      wrappingComponent: MockAuthProvider,
+    })
+    expect(mockRelayQueryGetter).toHaveBeenCalledWith({
+      AuthUser: mockAuthUserInfo.AuthUser,
+    })
+  })
+
   // TODO: tests
-  // - calls getRelayQuery with the AuthUser value
   // - refetches data on mount if the "refetchDataOnMount" prop is true
   // - does not refetch data on mount if the "refetchDataOnMount" prop is true
   // - passes updated (refetched) data to the child component
