@@ -1,8 +1,11 @@
 /* eslint-env jest */
 
 export default jest.fn(({ token }) => ({
-  // This is not the shape of the Relay environment object.
-  // It's just for testing.
-  isMockRelayEnvironment: true,
-  mockUserToken: token,
+  isMockRelayEnvironment: true, // just for testing
+  mockUserToken: token, // just for testing
+  getStore: jest.fn(() => ({
+    getSource: jest.fn(() => ({
+      toJSON: jest.fn(),
+    })),
+  })),
 }))
