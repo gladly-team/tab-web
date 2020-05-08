@@ -41,6 +41,18 @@ describe('withData: render', () => {
     const wrapper = mount(<HOC {...mockProps} />)
     expect(wrapper.find(MockComponent).exists()).toBe(true)
   })
+
+  // TODO: tests
+  // - calls initEnvironment with the query records and token on mount
+  // - calls initEnvironment only once on mount
+  // - calls initEnvironment, replacing it, if the token value changes
+  // - passes the Relay data (query records) to the child component
+  // - passes additional props to the child component
+  // - calls getRelayQuery with the AuthUser value
+  // - refetches data on mount if the "refetchDataOnMount" prop is true
+  // - does not refetch data on mount if the "refetchDataOnMount" prop is true
+  // - passes updated (refetched) data to the child component
+  // - does not throw if the component unmounts before the refetched data returns
 })
 
 describe('withData: getInitialProps', () => {
@@ -53,4 +65,17 @@ describe('withData: getInitialProps', () => {
     expect(MockComponent.getInitialProps).toHaveBeenCalledTimes(1)
     expect(MockComponent.getInitialProps).toHaveBeenCalledWith(ctx)
   })
+
+  // TODO: tests
+  // - calls initEnvironment with null token if empty AuthUserInfo
+  // - calls initEnvironment with the token if there is AuthUserInfo
+  // - calls getRelayQuery with the AuthUser value
+  // - calls Relay's fetchQuery as expected if a query is provided
+  // - does not call Relay's fetchQuery if no query is provided
+  // - includes the wrapped component's props in returned props
+  // - returns the fetchQuery response as the "queryProps" prop
+  // - returns the environment's store records as the "queryRecords" prop
+  // - sets the "refetchDataOnMount" to true if process.env.SERVICE_WORKER_ENABLED === 'true' and we are server-side
+  // - sets the "refetchDataOnMount" to false if process.env.SERVICE_WORKER_ENABLED === 'false' and we are server-side
+  // - sets the "refetchDataOnMount" to true if process.env.SERVICE_WORKER_ENABLED === 'true' but we are client-side
 })
