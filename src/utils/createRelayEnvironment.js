@@ -55,9 +55,16 @@ const createFetchQuery = ({ token }) => {
  *   our API on the server-side before SSR or client rendering
  * @param {String} config.token - The user's token to use in the fetch
  *   Authorization header
+ * @param {Boolean} config.throwIfNotPreviouslyCreated - If true,
+ *   we will not create a new environment. Instead, if an environment
+ *   does not already exist, throw an error.
  * @return {Object} A Relay environment
  */
-export default function initEnvironment({ records = {}, token = null } = {}) {
+export default function initEnvironment({
+  records = {},
+  token = null,
+  throwIfNotPreviouslyCreated = false,
+} = {}) {
   const createNewEnvironment = () => {
     const network = Network.create(createFetchQuery({ token }))
     const store = new Store(new RecordSource(records))
@@ -78,6 +85,14 @@ export default function initEnvironment({ records = {}, token = null } = {}) {
   // so it doesn't use an outdated Authorization header.
   if (relayEnvironment && token === prevUserToken) {
     return relayEnvironment
+  }
+
+  // Some callers, such as createMutation.js, expect the environment to
+  // already exist and thus aren't providing the user token or records.
+  if (throwIfNotPreviouslyCreated) {
+    throw new Error(
+      'The Relay environment was expected to have been already created but was not.'
+    )
   }
 
   // Otherwise, create a new environment.

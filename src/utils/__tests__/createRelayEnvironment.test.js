@@ -143,6 +143,29 @@ describe('createRelayEnvironment', () => {
     expect(Store).toHaveBeenCalledTimes(1)
   })
 
+  it('throws if the "throwIfNotPreviouslyCreated" option is true and the environment has not already been created', () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    expect(() => {
+      initEnvironment({ throwIfNotPreviouslyCreated: true })
+    }).toThrow(
+      'The Relay environment was expected to have been already created but was not.'
+    )
+  })
+
+  it('does not throw if the "throwIfNotPreviouslyCreated" option is true but the environment has already been created', () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    initEnvironment()
+    expect(() => {
+      initEnvironment({ throwIfNotPreviouslyCreated: true })
+    }).not.toThrow()
+  })
+
   it('provides the expected `fetch` function to Network.create when when the Relay environment was created with a user token', async () => {
     expect.assertions(1)
     const initEnvironment = require('src/utils/createRelayEnvironment').default
