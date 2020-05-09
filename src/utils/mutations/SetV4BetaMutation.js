@@ -13,11 +13,14 @@ const mutation = graphql`
 
 // TODO: add tests
 
-export default (input) => {
+export default ({ enabled, userId }) => {
   return createMutation({
     mutation,
     variables: {
-      input,
+      input: {
+        enabled,
+        userId,
+      },
     },
   })
 }
