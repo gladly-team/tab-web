@@ -1,5 +1,5 @@
 import { graphql } from 'react-relay'
-import createMutation from 'src/utils/mutations/createMutation'
+import callMutation from 'src/utils/mutations/callMutation'
 
 const mutation = graphql`
   mutation SetV4BetaMutation($input: SetV4BetaInput!) {
@@ -14,7 +14,7 @@ const mutation = graphql`
 // TODO: add tests
 
 export default ({ enabled, userId }) => {
-  return createMutation({
+  return callMutation({
     mutation,
     variables: {
       input: {

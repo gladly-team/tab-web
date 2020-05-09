@@ -19,11 +19,11 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('createMutation', () => {
+describe('callMutation', () => {
   it('calls createRelayEnvironment with the "throwIfNotPreviouslyCreated" option', async () => {
     expect.assertions(1)
-    const createMutation = require('src/utils/mutations/createMutation').default
-    await createMutation({
+    const callMutation = require('src/utils/mutations/callMutation').default
+    await callMutation({
       mutation: { some: 'stuff' },
       variables: { myVars: 'here' },
     })

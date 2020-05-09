@@ -87,8 +87,8 @@ export default function createRelayEnvironment({
     return relayEnvironment
   }
 
-  // Some callers, such as createMutation.js, expect the environment to
-  // already exist and thus aren't providing the user token or records.
+  // Some callers, such as mutations, expect the environment to already
+  // exist and thus aren't providing the user token or records.
   if (throwIfNotPreviouslyCreated) {
     throw new Error(
       'The Relay environment was expected to have been already created but was not.'

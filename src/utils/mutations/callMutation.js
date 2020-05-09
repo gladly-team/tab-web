@@ -21,7 +21,7 @@ const commitMutation = (environment, options) => {
 }
 
 // https://relay.dev/docs/en/mutations#commitmutation
-const createMutation = (mutationConfig) => {
+const callMutation = (mutationConfig) => {
   const { mutation, variables } = mutationConfig
 
   // We will reuse the Relay environment created earlier in the "withData"
@@ -42,4 +42,4 @@ const createMutation = (mutationConfig) => {
   })
 }
 
-export default createMutation
+export default callMutation
