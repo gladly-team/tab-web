@@ -636,8 +636,36 @@ describe('withData: getInitialProps', () => {
     })
   })
 
-  // TODO: tests
-  // - sets the "refetchDataOnMount" to true if process.env.SERVICE_WORKER_ENABLED === 'true' and we are server-side
-  // - sets the "refetchDataOnMount" to false if process.env.SERVICE_WORKER_ENABLED === 'false' and we are server-side
-  // - sets the "refetchDataOnMount" to true if process.env.SERVICE_WORKER_ENABLED === 'true' but we are client-side
+  it('sets the "refetchDataOnMount" prop to true if process.env.SERVICE_WORKER_ENABLED === \'true\' and we are server-side', async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    process.env.SERVICE_WORKER_ENABLED = 'true'
+    isClientSide.mockReturnValue(false)
+    const ctx = getMockNextJSContext()
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const response = await HOC.getInitialProps(ctx)
+    expect(response.refetchDataOnMount).toBe(true)
+  })
+
+  it('sets the "refetchDataOnMount" prop to false if process.env.SERVICE_WORKER_ENABLED === \'false\' and we are server-side', async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    process.env.SERVICE_WORKER_ENABLED = 'false'
+    isClientSide.mockReturnValue(false)
+    const ctx = getMockNextJSContext()
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const response = await HOC.getInitialProps(ctx)
+    expect(response.refetchDataOnMount).toBe(false)
+  })
+
+  it('sets the "refetchDataOnMount" prop to false if process.env.SERVICE_WORKER_ENABLED === \'true\' but we are client-side', async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    process.env.SERVICE_WORKER_ENABLED = 'true'
+    isClientSide.mockReturnValue(true) // don't refetch data on client-side navigation
+    const ctx = getMockNextJSContext()
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const response = await HOC.getInitialProps(ctx)
+    expect(response.refetchDataOnMount).toBe(false)
+  })
 })
