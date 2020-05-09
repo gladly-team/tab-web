@@ -612,8 +612,31 @@ describe('withData: getInitialProps', () => {
     })
   })
 
+  it('returns the environment\'s store records as the "queryRecords" prop', async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const ctx = getMockNextJSContext()
+    initEnvironment.mockReturnValueOnce({
+      getStore: () => ({
+        getSource: () => ({
+          toJSON: () => ({
+            store: 'records',
+            stuff: [1000, 2000, 3000],
+          }),
+        }),
+      }),
+    })
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const response = await HOC.getInitialProps(ctx)
+    expect(response).toMatchObject({
+      queryRecords: {
+        store: 'records',
+        stuff: [1000, 2000, 3000],
+      },
+    })
+  })
+
   // TODO: tests
-  // - returns the environment's store records as the "queryRecords" prop
   // - sets the "refetchDataOnMount" to true if process.env.SERVICE_WORKER_ENABLED === 'true' and we are server-side
   // - sets the "refetchDataOnMount" to false if process.env.SERVICE_WORKER_ENABLED === 'false' and we are server-side
   // - sets the "refetchDataOnMount" to true if process.env.SERVICE_WORKER_ENABLED === 'true' but we are client-side
