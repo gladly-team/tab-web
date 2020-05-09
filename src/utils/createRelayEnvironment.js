@@ -44,8 +44,6 @@ const createFetchQuery = ({ token }) => {
   return fetchQuery
 }
 
-// FIXME: recreate the environment on login/logout
-
 /**
  * Create the Relay environment. On the server, this will always
  * return a new environment. On the client, this will typically
