@@ -41,8 +41,9 @@ afterEach(() => {
 describe('createRelayEnvironment', () => {
   it('returns a Relay environment', () => {
     expect.assertions(1)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
-    const response = initEnvironment()
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
+    const response = createRelayEnvironment()
     expect(response).toMatchObject({
       isMockRelayEnvironment: true,
       mockId: expect.any(String),
@@ -55,9 +56,10 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(true)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
-    const firstEnv = initEnvironment()
-    const secondEnv = initEnvironment()
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
+    const firstEnv = createRelayEnvironment()
+    const secondEnv = createRelayEnvironment()
     expect(firstEnv).not.toEqual(secondEnv)
   })
 
@@ -65,9 +67,10 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(false)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
-    const firstEnv = initEnvironment()
-    const secondEnv = initEnvironment()
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
+    const firstEnv = createRelayEnvironment()
+    const secondEnv = createRelayEnvironment()
     expect(firstEnv).toEqual(secondEnv)
   })
 
@@ -75,9 +78,10 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(false)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
-    const firstEnv = initEnvironment({ token: 'abc-123' })
-    const secondEnv = initEnvironment({ token: 'abc-123' })
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
+    const firstEnv = createRelayEnvironment({ token: 'abc-123' })
+    const secondEnv = createRelayEnvironment({ token: 'abc-123' })
     expect(firstEnv).toEqual(secondEnv)
   })
 
@@ -85,16 +89,18 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(false)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
-    const firstEnv = initEnvironment({ token: 'abc-123' })
-    const secondEnv = initEnvironment({ token: '987-zyx' })
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
+    const firstEnv = createRelayEnvironment({ token: 'abc-123' })
+    const secondEnv = createRelayEnvironment({ token: '987-zyx' })
     expect(firstEnv).not.toEqual(secondEnv)
   })
 
   it('calls Network.create with a function', () => {
     expect.assertions(1)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
-    initEnvironment()
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
+    createRelayEnvironment()
     const { Network } = require('relay-runtime')
     expect(Network.create).toHaveBeenCalledWith(expect.any(Function))
   })
@@ -103,9 +109,10 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(true)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
-    initEnvironment()
-    initEnvironment()
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
+    createRelayEnvironment()
+    createRelayEnvironment()
     const { Network } = require('relay-runtime')
     expect(Network.create).toHaveBeenCalledTimes(2)
   })
@@ -114,9 +121,10 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(false)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
-    initEnvironment()
-    initEnvironment()
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
+    createRelayEnvironment()
+    createRelayEnvironment()
     const { Network } = require('relay-runtime')
     expect(Network.create).toHaveBeenCalledTimes(1)
   })
@@ -125,9 +133,10 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(true)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
-    initEnvironment()
-    initEnvironment()
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
+    createRelayEnvironment()
+    createRelayEnvironment()
     const { Store } = require('relay-runtime')
     expect(Store).toHaveBeenCalledTimes(2)
   })
@@ -136,9 +145,10 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(false)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
-    initEnvironment()
-    initEnvironment()
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
+    createRelayEnvironment()
+    createRelayEnvironment()
     const { Store } = require('relay-runtime')
     expect(Store).toHaveBeenCalledTimes(1)
   })
@@ -147,9 +157,10 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(false)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
     expect(() => {
-      initEnvironment({ throwIfNotPreviouslyCreated: true })
+      createRelayEnvironment({ throwIfNotPreviouslyCreated: true })
     }).toThrow(
       'The Relay environment was expected to have been already created but was not.'
     )
@@ -159,19 +170,21 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(false)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
-    initEnvironment()
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
+    createRelayEnvironment()
     expect(() => {
-      initEnvironment({ throwIfNotPreviouslyCreated: true })
+      createRelayEnvironment({ throwIfNotPreviouslyCreated: true })
     }).not.toThrow()
   })
 
   it('provides the expected `fetch` function to Network.create when when the Relay environment was created with a user token', async () => {
     expect.assertions(1)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
     const fetch = require('isomorphic-unfetch').default
     fetch.mockResolvedValue(getMockFetchResponse())
-    initEnvironment({ token: 'some-fake-token' })
+    createRelayEnvironment({ token: 'some-fake-token' })
     const { Network } = require('relay-runtime')
     const fetchFunc = Network.create.mock.calls[0][0]
     await fetchFunc('someFakeQuery', { myVar: 'here' })
@@ -188,10 +201,11 @@ describe('createRelayEnvironment', () => {
 
   it('provides the expected `fetch` function to Network.create when the Relay environment was created without a user token', async () => {
     expect.assertions(1)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
     const fetch = require('isomorphic-unfetch').default
     fetch.mockResolvedValue(getMockFetchResponse())
-    initEnvironment() //  no token provided
+    createRelayEnvironment() //  no token provided
     const { Network } = require('relay-runtime')
     const fetchFunc = Network.create.mock.calls[0][0]
     await fetchFunc('someFakeQuery', { lookAt: 'this', thing: 123 })
@@ -208,13 +222,14 @@ describe('createRelayEnvironment', () => {
 
   it('returns the response JSON when calling the `fetch` function provided to Network.create', async () => {
     expect.assertions(1)
-    const initEnvironment = require('src/utils/createRelayEnvironment').default
+    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
+      .default
     const fetch = require('isomorphic-unfetch').default
     fetch.mockResolvedValue({
       ...getMockFetchResponse(),
       json: () => Promise.resolve({ my: 'data' }),
     })
-    initEnvironment()
+    createRelayEnvironment()
     const { Network } = require('relay-runtime')
     const fetchFunc = Network.create.mock.calls[0][0]
     const response = await fetchFunc('someFakeQuery', { myVar: 'here' })

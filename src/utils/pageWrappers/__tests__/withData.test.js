@@ -5,7 +5,7 @@ import { mount } from 'enzyme'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
 import { fetchQuery, ReactRelayContext } from 'react-relay'
-import initEnvironment from 'src/utils/createRelayEnvironment'
+import createRelayEnvironment from 'src/utils/createRelayEnvironment'
 import { AuthUserInfoContext } from 'src/utils/auth/hooks'
 import { isClientSide } from 'src/utils/ssr'
 import { createAuthUserInfo } from 'src/utils/auth/user'
@@ -96,7 +96,7 @@ describe('withData: render', () => {
     expect(wrapper.find(MockComponent).exists()).toBe(true)
   })
 
-  it('calls initEnvironment with the query records and token on mount', () => {
+  it('calls createRelayEnvironment with the query records and token on mount', () => {
     expect.assertions(1)
     const withData = require('src/utils/pageWrappers/withData').default
     const HOC = withData(mockRelayQueryGetter)(MockComponent)
@@ -110,13 +110,13 @@ describe('withData: render', () => {
     mount(<HOC {...mockProps} />, {
       wrappingComponent: MockAuthProvider,
     })
-    expect(initEnvironment).toHaveBeenCalledWith({
+    expect(createRelayEnvironment).toHaveBeenCalledWith({
       records: mockProps.queryRecords,
       token: 'some-mock-token',
     })
   })
 
-  it('still calls initEnvironment when the user is not authenticated', () => {
+  it('still calls createRelayEnvironment when the user is not authenticated', () => {
     expect.assertions(1)
     const withData = require('src/utils/pageWrappers/withData').default
     const HOC = withData(mockRelayQueryGetter)(MockComponent)
@@ -130,13 +130,13 @@ describe('withData: render', () => {
     mount(<HOC {...mockProps} />, {
       wrappingComponent: MockAuthProvider,
     })
-    expect(initEnvironment).toHaveBeenCalledWith({
+    expect(createRelayEnvironment).toHaveBeenCalledWith({
       records: mockProps.queryRecords,
       token: null, // not signed in
     })
   })
 
-  it('calls initEnvironment only once on mount', () => {
+  it('calls createRelayEnvironment only once on mount', () => {
     expect.assertions(1)
     const withData = require('src/utils/pageWrappers/withData').default
     const HOC = withData(mockRelayQueryGetter)(MockComponent)
@@ -150,10 +150,10 @@ describe('withData: render', () => {
     mount(<HOC {...mockProps} />, {
       wrappingComponent: MockAuthProvider,
     })
-    expect(initEnvironment).toHaveBeenCalledTimes(1)
+    expect(createRelayEnvironment).toHaveBeenCalledTimes(1)
   })
 
-  it('calls initEnvironment a second time if the AuthUser value changes', () => {
+  it('calls createRelayEnvironment a second time if the AuthUser value changes', () => {
     expect.assertions(2)
     const withData = require('src/utils/pageWrappers/withData').default
     const HOC = withData(mockRelayQueryGetter)(MockComponent)
@@ -168,19 +168,19 @@ describe('withData: render', () => {
       wrappingComponent: MockAuthProvider,
     })
 
-    expect(initEnvironment).toHaveBeenCalledWith({
+    expect(createRelayEnvironment).toHaveBeenCalledWith({
       records: mockProps.queryRecords,
       token: 'some-mock-token',
     })
 
-    initEnvironment.mockClear() // clear the mock
+    createRelayEnvironment.mockClear() // clear the mock
 
     // Update the AuthUserInfo context value.
     const newAuthUserInfo = createAuthUserInfo() // not signed in
     const provider = wrapper.getWrappingComponent()
     provider.setProps({ value: newAuthUserInfo })
 
-    expect(initEnvironment).toHaveBeenCalledWith({
+    expect(createRelayEnvironment).toHaveBeenCalledWith({
       records: mockProps.queryRecords,
       token: null,
     })
@@ -456,7 +456,7 @@ describe('withData: getInitialProps', () => {
     expect(MockComponent.getInitialProps).toHaveBeenCalledWith(ctx)
   })
 
-  it('calls initEnvironment with a null token if the AuthUserInfo object is empty', async () => {
+  it('calls createRelayEnvironment with a null token if the AuthUserInfo object is empty', async () => {
     expect.assertions(1)
     const withData = require('src/utils/pageWrappers/withData').default
     const ctx = {
@@ -467,12 +467,12 @@ describe('withData: getInitialProps', () => {
     }
     const HOC = withData(mockRelayQueryGetter)(MockComponent)
     await HOC.getInitialProps(ctx)
-    expect(initEnvironment).toHaveBeenCalledWith({
+    expect(createRelayEnvironment).toHaveBeenCalledWith({
       token: null,
     })
   })
 
-  it('calls initEnvironment with the token if the AuthUserInfo object is not empty', async () => {
+  it('calls createRelayEnvironment with the token if the AuthUserInfo object is not empty', async () => {
     expect.assertions(1)
     const withData = require('src/utils/pageWrappers/withData').default
     const ctx = {
@@ -491,7 +491,7 @@ describe('withData: getInitialProps', () => {
     }
     const HOC = withData(mockRelayQueryGetter)(MockComponent)
     await HOC.getInitialProps(ctx)
-    expect(initEnvironment).toHaveBeenCalledWith({
+    expect(createRelayEnvironment).toHaveBeenCalledWith({
       token: 'some-token-here-abcxyz',
     })
   })
@@ -616,7 +616,7 @@ describe('withData: getInitialProps', () => {
     expect.assertions(1)
     const withData = require('src/utils/pageWrappers/withData').default
     const ctx = getMockNextJSContext()
-    initEnvironment.mockReturnValueOnce({
+    createRelayEnvironment.mockReturnValueOnce({
       getStore: () => ({
         getSource: () => ({
           toJSON: () => ({

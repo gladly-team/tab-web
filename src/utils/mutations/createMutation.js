@@ -1,5 +1,5 @@
 import { commitMutation as commitMutationDefault } from 'react-relay'
-import initEnvironment from 'src/utils/createRelayEnvironment'
+import createRelayEnvironment from 'src/utils/createRelayEnvironment'
 
 // TODO: throw if server-side
 // TODO: add tests
@@ -32,7 +32,7 @@ const createMutation = (mutationConfig) => {
   // We can change this in the future, if needed; to do so, we need to pass
   // the AuthUserInfo to mutations here and provide the user token when
   // creating the Relay environment.
-  const environment = initEnvironment({
+  const environment = createRelayEnvironment({
     throwIfNotPreviouslyCreated: true,
   })
 

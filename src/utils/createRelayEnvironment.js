@@ -60,7 +60,7 @@ const createFetchQuery = ({ token }) => {
  *   does not already exist, throw an error.
  * @return {Object} A Relay environment
  */
-export default function initEnvironment({
+export default function createRelayEnvironment({
   records = {},
   token = null,
   throwIfNotPreviouslyCreated = false,
