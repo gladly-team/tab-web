@@ -28,14 +28,6 @@ const getMockSignedInAuthUserInfo = () => {
   })
 }
 
-// The function provided to the withData HOC>
-const mockRelayQueryGetter = jest.fn(() => ({
-  query: 'some-query',
-  variables: {
-    special: 'variable',
-  },
-}))
-
 // A mock component that serves as the wrapped child of the
 // withData HOC we're testing.
 const MockComponent = () => <div>hi</div>
@@ -70,10 +62,19 @@ const getMockPropsForHOC = () => ({
   refetchDataOnMount: false,
 })
 
+// The function provided to the withData HOC.
+const mockRelayQueryGetter = jest.fn()
+
 beforeEach(() => {
   isClientSide.mockReturnValue(false)
   fetchQuery.mockResolvedValue({}) // data returned from Relay fetch
   process.env.SERVICE_WORKER_ENABLED = 'false'
+  mockRelayQueryGetter.mockReturnValue({
+    query: 'some-query',
+    variables: {
+      special: 'variable',
+    },
+  })
 })
 
 afterEach(() => {
@@ -573,8 +574,45 @@ describe('withData: getInitialProps', () => {
     })
   })
 
+  it('returns the fetchQuery response as the "queryProps" prop', async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const ctx = getMockNextJSContext()
+    fetchQuery.mockResolvedValue({
+      abc: [1, 2, 3],
+      hi: 'there',
+    })
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const response = await HOC.getInitialProps(ctx)
+    expect(response).toMatchObject({
+      queryProps: {
+        abc: [1, 2, 3],
+        hi: 'there',
+      },
+    })
+  })
+
+  it('returns an empty object for the "queryProps" prop if no query is provided', async () => {
+    expect.assertions(1)
+    const withData = require('src/utils/pageWrappers/withData').default
+    const ctx = getMockNextJSContext()
+    mockRelayQueryGetter.mockReturnValue({
+      query: undefined,
+      variables: undefined,
+    })
+    // This shouldn't get called.
+    fetchQuery.mockResolvedValue({
+      abc: [1, 2, 3],
+      hi: 'there',
+    })
+    const HOC = withData(mockRelayQueryGetter)(MockComponent)
+    const response = await HOC.getInitialProps(ctx)
+    expect(response).toMatchObject({
+      queryProps: {},
+    })
+  })
+
   // TODO: tests
-  // - returns the fetchQuery response as the "queryProps" prop
   // - returns the environment's store records as the "queryRecords" prop
   // - sets the "refetchDataOnMount" to true if process.env.SERVICE_WORKER_ENABLED === 'true' and we are server-side
   // - sets the "refetchDataOnMount" to false if process.env.SERVICE_WORKER_ENABLED === 'false' and we are server-side

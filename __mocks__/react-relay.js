@@ -16,5 +16,6 @@ mock.ReactRelayContext = {
     </div>
   )),
 }
+mock.fetchQuery = jest.fn(() => Promise.resolve({}))
 
 module.exports = mock
