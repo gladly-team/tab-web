@@ -7,7 +7,6 @@ import { isServerSide } from 'src/utils/ssr'
 
 const relayEndpoint = process.env.RELAY_ENDPOINT
 let relayEnvironment = null
-let prevUserToken = null
 
 /**
  * Create the `fetch` function that serves as the network interface
@@ -78,10 +77,14 @@ export default function createRelayEnvironment({
     return createNewEnvironment()
   }
 
+  // Note: if the user's auth state changes, we will want to
+  // recreate the Relay environment. For now, we rely on the fact
+  // that login/logout refetches the app from the server.
+
   // On the client side, reuse the environment if it exists.
   // If the user's token changes, recreate the Relay environment
   // so it doesn't use an outdated Authorization header.
-  if (relayEnvironment && token === prevUserToken) {
+  if (relayEnvironment) {
     return relayEnvironment
   }
 
@@ -94,7 +97,6 @@ export default function createRelayEnvironment({
   }
 
   // Otherwise, create a new environment.
-  prevUserToken = token
   relayEnvironment = createNewEnvironment()
   return relayEnvironment
 }

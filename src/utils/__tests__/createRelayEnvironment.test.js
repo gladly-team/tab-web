@@ -85,17 +85,6 @@ describe('createRelayEnvironment', () => {
     expect(firstEnv).toEqual(secondEnv)
   })
 
-  it('returns a new Relay environment when called with a new token on the client-side', () => {
-    expect.assertions(1)
-    const { isServerSide } = require('src/utils/ssr')
-    isServerSide.mockReturnValue(false)
-    const createRelayEnvironment = require('src/utils/createRelayEnvironment')
-      .default
-    const firstEnv = createRelayEnvironment({ token: 'abc-123' })
-    const secondEnv = createRelayEnvironment({ token: '987-zyx' })
-    expect(firstEnv).not.toEqual(secondEnv)
-  })
-
   it('calls Network.create with a function', () => {
     expect.assertions(1)
     const createRelayEnvironment = require('src/utils/createRelayEnvironment')
