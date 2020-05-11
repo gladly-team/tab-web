@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import { fetchQuery, ReactRelayContext } from 'react-relay'
-import initEnvironment from 'src/utils/createRelayEnvironment'
+import createRelayEnvironment from 'src/utils/createRelayEnvironment'
 import { useAuthUserInfo } from 'src/utils/auth/hooks'
 import { isClientSide } from 'src/utils/ssr'
 import {
@@ -28,7 +28,7 @@ export default (getRelayQuery) => (ComposedComponent) => {
     const { AuthUser, token } = useAuthUserInfo()
 
     // Create the Relay environment.
-    const environment = initEnvironment({
+    const environment = createRelayEnvironment({
       records: queryRecords,
       token,
     })
@@ -102,7 +102,7 @@ export default (getRelayQuery) => (ComposedComponent) => {
     }
 
     // Create the Relay environment.
-    const environment = initEnvironment({
+    const environment = createRelayEnvironment({
       token: AuthUserToken,
     })
 
