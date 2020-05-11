@@ -118,7 +118,6 @@ const Account = (props) => {
         unregister()
       }
 
-      // TODO: add tests
       // Set the "v4 beta enabled" flag to false on the user's
       // profile.s
       if (userId) {
