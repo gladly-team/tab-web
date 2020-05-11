@@ -1,10 +1,18 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import grey from '@material-ui/core/colors/grey'
 import Logo from 'src/components/Logo'
 import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    background: grey['50'],
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    overflow: 'hidden',
     height: '100vh',
     display: 'flex',
     margin: 0,

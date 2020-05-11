@@ -3,12 +3,10 @@ import PropTypes from 'prop-types'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import firebase from 'firebase/app'
 import 'firebase/auth'
+import FullPageLoader from 'src/components/FullPageLoader'
 import { isClientSide } from 'src/utils/ssr'
 import initFirebase from 'src/utils/auth/initFirebase'
 import { dashboardURL } from 'src/utils/urls'
-
-// Init the Firebase app.
-initFirebase()
 
 const FirebaseAuth = (props) => {
   const { onSuccessfulAuth } = props
@@ -18,6 +16,10 @@ const FirebaseAuth = (props) => {
   const [renderAuth, setRenderAuth] = useState(false)
   useEffect(() => {
     if (isClientSide()) {
+      // Init the Firebase app.
+      initFirebase()
+
+      // Set that we can render the Firebase auth UI.
       setRenderAuth(true)
     }
   }, [])
@@ -64,14 +66,16 @@ const FirebaseAuth = (props) => {
     // https://github.com/firebase/firebaseui-web#credential-helper
     // https://github.com/firebase/firebaseui-web/blob/bd710448caa34c4a47a2fd578d76be8506d392d8/javascript/widgets/config.js#L83
     credentialHelper: 'none',
+    // Terms of service URL
+    tosUrl: 'https://tab.gladly.io/terms/',
+    // Privacy policy URL
+    privacyPolicyUrl: 'https://tab.gladly.io/privacy/',
   }
 
   let signInMenu
   if (renderAuth) {
     if (isWaitingOnSignIn) {
-      signInMenu = (
-        <div style={{ textAlign: 'center', margin: 40 }}>Signing in...</div>
-      )
+      signInMenu = <FullPageLoader />
     } else {
       signInMenu = (
         <StyledFirebaseAuth

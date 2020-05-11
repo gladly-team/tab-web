@@ -73,6 +73,9 @@ const App = (props) => {
     AuthUser = AuthUserFromSession
   }
 
+  // FIXME: after an authed user logs out, the token will still be
+  // set here. The client-side auth hook should provide its own token
+  // value.
   const AuthUserInfoCurrent = createAuthUserInfo({
     AuthUser,
     token,

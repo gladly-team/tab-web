@@ -1,5 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
+import Typography from '@material-ui/core/Typography'
 import { createAuthUserInfo } from 'src/utils/auth/user'
 import FirebaseAuth from 'src/components/FirebaseAuth'
 import FullPageLoader from 'src/components/FullPageLoader'
@@ -9,6 +10,7 @@ import { redirect, setWindowLocation } from 'src/utils/navigation'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import { dashboardURL } from 'src/utils/urls'
+import Logo from 'src/components/Logo'
 
 jest.mock('src/components/FirebaseAuth', () => () => (
   <div data-test-id="firebase-auth-mock" />
@@ -20,6 +22,7 @@ jest.mock('src/utils/pageWrappers/withAuthUserInfo')
 jest.mock('src/utils/caching')
 jest.mock('src/utils/ssr')
 jest.mock('src/utils/navigation')
+jest.mock('src/components/Logo')
 
 beforeEach(() => {
   isClientSide.mockReturnValue(true)
@@ -144,6 +147,32 @@ describe('auth.js', () => {
     }
     const wrapper = mount(<AuthPage {...mockProps} />)
     expect(wrapper.find(FullPageLoader).exists()).toBe(true)
+  })
+
+  it('includes the logo', async () => {
+    expect.assertions(1)
+    const AuthPage = require('src/containers/auth.js').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<AuthPage {...mockProps} />)
+    expect(wrapper.find(Logo).exists()).toBe(true)
+  })
+
+  it('includes the expected quote', async () => {
+    expect.assertions(1)
+    const AuthPage = require('src/containers/auth.js').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<AuthPage {...mockProps} />)
+    expect(wrapper.find(Typography).first().text()).toEqual(
+      '"One of the simplest ways to raise money"'
+    )
+  })
+
+  it('includes the expected quote attribution', async () => {
+    expect.assertions(1)
+    const AuthPage = require('src/containers/auth.js').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<AuthPage {...mockProps} />)
+    expect(wrapper.find(Typography).at(1).text()).toEqual('- USA Today')
   })
 })
 
