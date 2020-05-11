@@ -1,8 +1,10 @@
 import { commitMutation as commitMutationDefault } from 'react-relay'
 import createRelayEnvironment from 'src/utils/createRelayEnvironment'
+import { isServerSide } from 'src/utils/ssr'
 
 jest.mock('react-relay')
 jest.mock('src/utils/createRelayEnvironment')
+jest.mock('src/utils/ssr')
 
 beforeEach(() => {
   commitMutationDefault.mockImplementation((environment, options) => {
@@ -13,6 +15,7 @@ beforeEach(() => {
       },
     })
   })
+  isServerSide.mockReturnValue(false)
 })
 
 afterEach(() => {
@@ -93,5 +96,17 @@ describe('callMutation', () => {
         variables: { myVars: 'here' },
       })
     ).rejects.toEqual(mockErr)
+  })
+
+  it('throws if called on the server side', async () => {
+    expect.assertions(1)
+    isServerSide.mockReturnValue(true)
+    const callMutation = require('src/utils/mutations/callMutation').default
+    await expect(
+      callMutation({
+        mutation: { some: 'stuff' },
+        variables: { myVars: 'here' },
+      })
+    ).rejects.toEqual(new Error('Mutations must only be called on the client.'))
   })
 })
