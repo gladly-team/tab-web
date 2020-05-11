@@ -4,6 +4,7 @@ import useInterval from 'src/utils/hooks/useInterval'
 beforeEach(() => {
   jest.useFakeTimers()
 })
+
 describe('useInterval', () => {
   it('should invoke the callback the expected number of times based on the interval', () => {
     const mockFn = jest.fn()

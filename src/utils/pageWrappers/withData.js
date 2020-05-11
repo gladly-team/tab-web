@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import { fetchQuery, ReactRelayContext } from 'react-relay'
-import initEnvironment from 'src/utils/createRelayEnvironment'
+import createRelayEnvironment from 'src/utils/createRelayEnvironment'
 import { useAuthUserInfo } from 'src/utils/auth/hooks'
 import { isClientSide } from 'src/utils/ssr'
 import {
@@ -23,20 +23,22 @@ export default (getRelayQuery) => (ComposedComponent) => {
       refetchDataOnMount,
       ...otherProps
     } = props
-    const [environment] = useState(
-      initEnvironment({
-        records: queryRecords,
-      })
-    )
-
-    const [relayData, updateRelayData] = useState(queryProps)
 
     // Get the AuthUser from context.
     const { AuthUser, token } = useAuthUserInfo()
 
-    // Get the Relay query and variables config. We pass the authUser
-    // so the child component can use the user ID in the query, if needed.
+    // Create the Relay environment.
+    const environment = createRelayEnvironment({
+      records: queryRecords,
+      token,
+    })
+
+    // Get the Relay query and variables from the wrapped component.
+    // We pass the AuthUser so the child component can use the user
+    // ID in the query, if needed.
     const { query, variables = {} } = getRelayQuery({ AuthUser })
+
+    const [relayData, updateRelayData] = useState(queryProps)
 
     // If needed, refetch data on client-side mount.
     // If our service worker is active, we're likely loading stale data
@@ -48,9 +50,7 @@ export default (getRelayQuery) => (ComposedComponent) => {
       let isCancelled = false
       const refetchData = async () => {
         if (isClientSide()) {
-          const newRelayData = await fetchQuery(environment, query, variables, {
-            token,
-          })
+          const newRelayData = await fetchQuery(environment, query, variables)
           if (!isCancelled) {
             updateRelayData(newRelayData)
           }
@@ -66,6 +66,7 @@ export default (getRelayQuery) => (ComposedComponent) => {
         isCancelled = true
       }
 
+      // FIXME: do this the right way.
       // We want to refetch only once on mount.
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -100,20 +101,22 @@ export default (getRelayQuery) => (ComposedComponent) => {
       composedInitialProps = await ComposedComponent.getInitialProps(ctx)
     }
 
+    // Create the Relay environment.
+    const environment = createRelayEnvironment({
+      token: AuthUserToken,
+    })
+
     // Get the Relay query and variables config. We pass the authUser
     // so the child component can use the user ID in the query, if needed.
     const { query, variables = {} } = getRelayQuery({ AuthUser })
 
+    // If there is a query, fetch the results.
     let queryProps = {}
     let queryRecords = {}
-    const environment = initEnvironment()
-
     if (query) {
       // TODO: Consider RelayQueryResponseCache
       // https://github.com/facebook/relay/issues/1687#issuecomment-302931855
-      queryProps = await fetchQuery(environment, query, variables, {
-        token: AuthUserToken,
-      })
+      queryProps = await fetchQuery(environment, query, variables)
       queryRecords = environment.getStore().getSource().toJSON()
     }
 

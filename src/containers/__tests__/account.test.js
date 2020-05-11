@@ -13,6 +13,7 @@ import getMockFetchResponse from 'src/utils/testHelpers/getMockFetchResponse'
 import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { setWindowLocation } from 'src/utils/navigation'
+import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 
 jest.mock('isomorphic-unfetch')
 jest.mock('next-offline/runtime')
@@ -21,9 +22,11 @@ jest.mock('src/utils/pageWrappers/withAuthAndData')
 jest.mock('src/utils/auth/logout')
 jest.mock('src/utils/caching')
 jest.mock('src/utils/navigation')
+jest.mock('src/utils/mutations/SetV4BetaMutation')
 
 const getMockProps = () => ({
   user: {
+    id: 'some-user-id',
     email: 'fakeEmail@example.com',
     username: 'IAmFake',
   },
@@ -32,6 +35,7 @@ const getMockProps = () => ({
 beforeEach(() => {
   fetch.mockResolvedValue(getMockFetchResponse())
   clearAllServiceWorkerCaches.mockResolvedValue()
+  SetV4BetaMutation.mockResolvedValue()
 })
 
 afterEach(() => {
@@ -232,6 +236,28 @@ describe('account.js', () => {
     optOutButton.simulate('click')
     await flushAllPromises()
     expect(unregister).toHaveBeenCalled()
+  })
+
+  it('clicking the "switch back to classic" calls SetV4BetaMutation', async () => {
+    expect.assertions(1)
+    const AccountPage = require('src/containers/account.js').default
+    const mockProps = {
+      ...getMockProps(),
+      user: {
+        ...getMockProps(),
+        id: 'my-wonderful-user-id',
+      },
+    }
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const content = wrapper.at(0).dive().find(Paper).first()
+    const accountItem = content.childAt(6).dive()
+    const optOutButton = accountItem.find(Button).first()
+    optOutButton.simulate('click')
+    await flushAllPromises()
+    expect(SetV4BetaMutation).toHaveBeenCalledWith({
+      enabled: false,
+      userId: 'my-wonderful-user-id',
+    })
   })
 
   it('clicking the "switch back to classic" navigates to the dashboard', async () => {

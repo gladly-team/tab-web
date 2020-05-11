@@ -16,6 +16,10 @@ export const useAuthUserInfo = () => {
   return React.useContext(AuthUserInfoContext)
 }
 
+// FIXME: using this hook more than once will call the `onChange`
+// callback multiple times unnecessarily.
+// TODO: refactor this into a hook that returns AuthUserInfo.
+
 // Returns a Firebase JS SDK user object.
 export const useFirebaseAuth = () => {
   const [state, setState] = useState(() => {
