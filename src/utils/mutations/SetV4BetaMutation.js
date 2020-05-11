@@ -11,8 +11,6 @@ const mutation = graphql`
   }
 `
 
-// TODO: add tests
-
 export default ({ enabled, userId }) => {
   return callMutation({
     mutation,
