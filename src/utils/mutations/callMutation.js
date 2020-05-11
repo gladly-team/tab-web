@@ -1,9 +1,6 @@
 import { commitMutation as commitMutationDefault } from 'react-relay'
 import createRelayEnvironment from 'src/utils/createRelayEnvironment'
 
-// TODO: throw if server-side
-// TODO: add tests
-
 // Return a Promise when committing mutations.
 // https://github.com/facebook/relay/issues/1822#issuecomment-305906204
 const commitMutation = (environment, options) => {
@@ -21,8 +18,8 @@ const commitMutation = (environment, options) => {
 }
 
 // https://relay.dev/docs/en/mutations#commitmutation
-const callMutation = (mutationConfig) => {
-  const { mutation, variables } = mutationConfig
+const callMutation = ({ mutation, variables }) => {
+  // TODO: throw if server-side
 
   // We will reuse the Relay environment created earlier in the "withData"
   // HOC, which will include the user's token. This is a convenience so that
