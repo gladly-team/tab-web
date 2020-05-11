@@ -76,8 +76,8 @@ const SearchInput = () => {
   )
 }
 
+SearchInput.displayName = 'SearchInput'
 SearchInput.propTypes = {}
-
 SearchInput.defaultProps = {}
 
 export default SearchInput

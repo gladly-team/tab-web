@@ -142,6 +142,7 @@ App.getInitialProps = async ({ Component, ctx }) => {
   }
 }
 
+App.displayName = 'App'
 App.propTypes = {
   AuthUserInfo: PropTypes.shape({
     AuthUser: PropTypes.shape({

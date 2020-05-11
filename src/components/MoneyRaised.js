@@ -28,6 +28,7 @@ const MoneyRaised = (props) => {
   return <span>{currencyFormatUSD(currentMoneyRaised)}</span>
 }
 
+MoneyRaised.displayName = 'MoneyRaised'
 MoneyRaised.propTypes = {
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
