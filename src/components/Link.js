@@ -33,6 +33,8 @@ const Link = (props) => {
   )
 }
 
+Link.displayName = 'Link'
+
 Link.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),

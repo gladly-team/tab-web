@@ -39,6 +39,7 @@ const FullPageLoader = () => {
   )
 }
 
+FullPageLoader.displayName = 'FullPageLoader'
 FullPageLoader.propTypes = {}
 FullPageLoader.defaultProps = {}
 

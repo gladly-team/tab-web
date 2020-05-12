@@ -52,7 +52,6 @@ export const accountURL = createPageURL('/account')
 export const authURL = createPageURL('/auth')
 export const betaOptInURL = createPageURL('/beta-opt-in')
 export const dashboardURL = createPageURL('/')
-export const exampleURL = createPageURL('/example')
 
 // For progressive web app.
 export const PWAManifestURL = withBasePath('/manifest.json')

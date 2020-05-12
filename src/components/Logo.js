@@ -56,6 +56,8 @@ const Logo = (props) => {
   )
 }
 
+Logo.displayName = 'Logo'
+
 Logo.propTypes = {
   className: PropTypes.string,
   color: PropTypes.oneOf(['default', 'purple', 'white', 'grey']),
