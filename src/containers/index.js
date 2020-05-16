@@ -73,8 +73,15 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     boxSizing: 'content-box',
   },
+  achievementsContainer: {
+    // TODO: position this as flex within an absolute container
+    //   that also contains the user menu
+    // position: 'absolute',
+    // top: 80,
+  },
   adsContainer: {
     position: 'absolute',
+    zIndex: 100000,
     overflow: 'visible',
     display: 'flex',
     alignItems: 'flex-end',
