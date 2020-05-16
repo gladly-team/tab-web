@@ -27,42 +27,78 @@ const useStyles = makeStyles({
 })
 
 const ImpactGoal = (props) => {
-  const { className } = props
+  const { className, demo } = props
   const classes = useStyles()
   const bull = <span className={classes.bullet}>•</span>
 
-  return (
-    <Card className={clsx(classes.root, className)}>
-      <CardContent>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
-          Word of the Day
-        </Typography>
-        <Typography variant="h5" component="h2">
-          be{bull}nev{bull}o{bull}lent
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
-        </Typography>
-        <Typography variant="body2" component="p">
-          well meaning and kindly.
-          <br />
-          "a benevolent smile"
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small">Learn More</Button>
-      </CardActions>
-    </Card>
-  )
+  let content
+  switch (demo) {
+    case 'something':
+      content = (
+        <>
+          <CardContent>
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              gutterBottom
+            >
+              Something
+            </Typography>
+            <Typography variant="h5" component="h2">
+              Open 100 Tabs
+            </Typography>
+            <Typography className={classes.pos} color="textSecondary">
+              adjective
+            </Typography>
+            <Typography variant="body2" component="p">
+              well meaning and kindly.
+              <br />
+              "a benevolent smile"
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small">Learn More</Button>
+          </CardActions>
+        </>
+      )
+      break
+    default:
+      content = (
+        <>
+          <CardContent>
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              gutterBottom
+            >
+              Word of the Day
+            </Typography>
+            <Typography variant="h5" component="h2">
+              be{bull}nev{bull}o{bull}lent
+            </Typography>
+            <Typography className={classes.pos} color="textSecondary">
+              adjective
+            </Typography>
+            <Typography variant="body2" component="p">
+              well meaning and kindly.
+              <br />
+              "a benevolent smile"
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small">Learn More</Button>
+          </CardActions>
+        </>
+      )
+  }
+
+  return <Card className={clsx(classes.root, className)}>{content}</Card>
 }
 
 ImpactGoal.displayName = 'ImpactGoal'
 ImpactGoal.propTypes = {
   className: PropTypes.string,
+  demo: PropTypes.string.isRequired,
 }
 ImpactGoal.defaultProps = {
   className: '',

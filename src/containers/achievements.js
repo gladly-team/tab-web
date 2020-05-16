@@ -70,13 +70,13 @@ const Achievements = () => {
       <div className={classes.contentContainer}>
         <div className={classes.timelineContainer}>
           <div className={classes.timelineBar} />
-          <ImpactGoal className={classes.impactGoal} />
-          <ImpactGoal className={classes.impactGoal} />
-          <ImpactGoal className={classes.impactGoal} />
-          <ImpactGoal className={classes.impactGoal} />
-          <ImpactGoal className={classes.impactGoal} />
-          <ImpactGoal className={classes.impactGoal} />
-          <ImpactGoal className={classes.impactGoal} />
+          <ImpactGoal className={classes.impactGoal} demo="default" />
+          <ImpactGoal className={classes.impactGoal} demo="something" />
+          <ImpactGoal className={classes.impactGoal} demo="default" />
+          <ImpactGoal className={classes.impactGoal} demo="default" />
+          <ImpactGoal className={classes.impactGoal} demo="default" />
+          <ImpactGoal className={classes.impactGoal} demo="default" />
+          <ImpactGoal className={classes.impactGoal} demo="default" />
           <div className={classes.timelineEnd} />
         </div>
         <div className={classes.timelineEndTextContainer}>
