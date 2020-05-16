@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import green from '@material-ui/core/colors/green'
+import grey from '@material-ui/core/colors/grey'
 import red from '@material-ui/core/colors/red'
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -12,6 +13,8 @@ import Typography from '@material-ui/core/Typography'
 import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
 import Group from '@material-ui/icons/Group'
+import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked'
+import Schedule from '@material-ui/icons/Schedule'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,6 +32,17 @@ const useStyles = makeStyles((theme) => ({
   pos: {
     marginBottom: 12,
   },
+  timeContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: theme.spacing(1),
+  },
+  timeIcon: {
+    marginRight: theme.spacing(1),
+    color: theme.palette.text.secondary,
+    width: 14,
+    height: 14,
+  },
   subtitleContainer: {
     display: 'flex',
     alignItems: 'center',
@@ -44,6 +58,17 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     marginRight: theme.spacing(1),
   },
+  progressContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: theme.spacing(1),
+    marginRight: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(2),
+  },
+  progressCheckmark: {
+    margin: theme.spacing(1),
+  },
 }))
 
 const ImpactGoal = (props) => {
@@ -53,6 +78,62 @@ const ImpactGoal = (props) => {
 
   let content
   switch (demo) {
+    case 'tab7days':
+      content = (
+        <>
+          <CardContent>
+            <div className={classes.timeContainer}>
+              <Schedule className={classes.timeIcon} />
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                variant="body2"
+              >
+                4d remaining
+              </Typography>
+            </div>
+            <div className={classes.impactContainer}>
+              <Typography variant="h5">Plants 1 tree</Typography>
+            </div>
+            <div className={classes.subtitleContainer}>
+              <Typography variant="subtitle1" color="textSecondary">
+                Tab 7 days in a row
+              </Typography>
+            </div>
+            <div className={classes.progressContainer}>
+              <CheckCircle
+                htmlColor={green['500']}
+                className={classes.progressCheckmark}
+              />
+              <CheckCircle
+                htmlColor={green['500']}
+                className={classes.progressCheckmark}
+              />
+              <CheckCircle
+                htmlColor={green['500']}
+                className={classes.progressCheckmark}
+              />
+              <RadioButtonUnchecked
+                className={classes.progressCheckmark}
+                htmlColor={grey['600']}
+              />
+              <RadioButtonUnchecked
+                className={classes.progressCheckmark}
+                htmlColor={grey['600']}
+              />
+              <RadioButtonUnchecked
+                className={classes.progressCheckmark}
+                htmlColor={grey['600']}
+              />
+              <RadioButtonUnchecked
+                className={classes.progressCheckmark}
+                htmlColor={grey['600']}
+              />
+            </div>
+          </CardContent>
+        </>
+      )
+      break
     case '100tabs':
       content = (
         <>
@@ -60,7 +141,7 @@ const ImpactGoal = (props) => {
             <Typography
               className={classes.title}
               color="textSecondary"
-              variant="overline"
+              variant="body2"
               gutterBottom
             >
               April 24
@@ -79,7 +160,7 @@ const ImpactGoal = (props) => {
             </div>
           </CardContent>
           <CardActions>
-            <Button color="primary">Share</Button>
+            <Button color="default">Share</Button>
           </CardActions>
         </>
       )
@@ -91,7 +172,7 @@ const ImpactGoal = (props) => {
             <Typography
               className={classes.title}
               color="textSecondary"
-              variant="overline"
+              variant="body2"
               gutterBottom
             >
               April 14
@@ -119,7 +200,7 @@ const ImpactGoal = (props) => {
             <Typography
               className={classes.title}
               color="textSecondary"
-              variant="overline"
+              variant="body2"
               gutterBottom
             >
               April 10
@@ -139,7 +220,7 @@ const ImpactGoal = (props) => {
             </div>
           </CardContent>
           <CardActions>
-            <Button color="primary">Share</Button>
+            <Button color="default">Share</Button>
           </CardActions>
         </>
       )
