@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import green from '@material-ui/core/colors/green'
-import grey from '@material-ui/core/colors/grey'
 import red from '@material-ui/core/colors/red'
+// import yellow from '@material-ui/core/colors/yellow'
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
@@ -14,6 +14,7 @@ import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
 import Group from '@material-ui/icons/Group'
 import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked'
+import RemoveCircle from '@material-ui/icons/RemoveCircle'
 import Schedule from '@material-ui/icons/Schedule'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
@@ -55,9 +56,23 @@ const useStyles = makeStyles((theme) => ({
   statusIcon: {
     marginRight: theme.spacing(1),
   },
+  successColor: {
+    color: green['500'],
+  },
+  failureColor: {
+    color: red['500'],
+  },
+  subtitleIcon: {
+    marginRight: theme.spacing(1),
+    width: '0.9em',
+    height: '0.9em',
+  },
   groupIcon: {
     color: theme.palette.text.secondary,
-    marginRight: theme.spacing(1),
+  },
+  skipIcon: {
+    color: theme.palette.text.secondary,
+    // color: yellow['500'],
   },
   progressContainer: {
     display: 'flex',
@@ -69,9 +84,13 @@ const useStyles = makeStyles((theme) => ({
   },
   progressCheckmark: {
     margin: theme.spacing(1),
+    color: green['500'],
   },
   progressBar: {
     flex: 1,
+    margin: theme.spacing(2),
+  },
+  descriptionContainer: {
     margin: theme.spacing(2),
   },
 }))
@@ -106,34 +125,13 @@ const ImpactGoal = (props) => {
               </Typography>
             </div>
             <div className={classes.progressContainer}>
-              <CheckCircle
-                htmlColor={green['500']}
-                className={classes.progressCheckmark}
-              />
-              <CheckCircle
-                htmlColor={green['500']}
-                className={classes.progressCheckmark}
-              />
-              <CheckCircle
-                htmlColor={green['500']}
-                className={classes.progressCheckmark}
-              />
-              <RadioButtonUnchecked
-                className={classes.progressCheckmark}
-                htmlColor={grey['600']}
-              />
-              <RadioButtonUnchecked
-                className={classes.progressCheckmark}
-                htmlColor={grey['600']}
-              />
-              <RadioButtonUnchecked
-                className={classes.progressCheckmark}
-                htmlColor={grey['600']}
-              />
-              <RadioButtonUnchecked
-                className={classes.progressCheckmark}
-                htmlColor={grey['600']}
-              />
+              <CheckCircle className={classes.progressCheckmark} />
+              <CheckCircle className={classes.progressCheckmark} />
+              <CheckCircle className={classes.progressCheckmark} />
+              <RadioButtonUnchecked className={classes.progressCheckmark} />
+              <RadioButtonUnchecked className={classes.progressCheckmark} />
+              <RadioButtonUnchecked className={classes.progressCheckmark} />
+              <RadioButtonUnchecked className={classes.progressCheckmark} />
             </div>
           </CardContent>
         </>
@@ -157,9 +155,19 @@ const ImpactGoal = (props) => {
               <Typography variant="h5">Build a library in Cambodia</Typography>
             </div>
             <div className={classes.subtitleContainer}>
-              <Group className={classes.groupIcon} />
+              <Group
+                className={clsx(classes.subtitleIcon, classes.groupIcon)}
+              />
               <Typography variant="subtitle1" color="textSecondary">
-                We're working on this together
+                Community goal
+              </Typography>
+            </div>
+            <div className={classes.descriptionContainer}>
+              <Typography variant="body2" color="textSecondary" paragraph>
+                Tiramisu caramels jelly beans ice cream sesame snaps marshmallow
+                lollipop pastry danish. Gummi bears oat cake donut cookie
+                chocolate jelly jujubes. Muffin marzipan marshmallow danish oat
+                cake. Chupa chups candy pastry.
               </Typography>
             </div>
             <div className={classes.progressContainer}>
@@ -169,6 +177,48 @@ const ImpactGoal = (props) => {
                 color="primary"
                 className={classes.progressBar}
               />
+            </div>
+          </CardContent>
+        </>
+      )
+      break
+    case 'beehives':
+      content = (
+        <>
+          <CardContent>
+            <div className={classes.timeContainer}>
+              <Schedule className={classes.timeIcon} />
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                variant="body2"
+              >
+                May 2
+              </Typography>
+            </div>
+            <div className={classes.impactContainer}>
+              <CheckCircle
+                className={clsx(classes.statusIcon, classes.successColor)}
+              />
+              <Typography variant="h5">
+                Funded 100 beehives in Nicaragua
+              </Typography>
+            </div>
+            <div className={classes.subtitleContainer}>
+              <Group
+                className={clsx(classes.subtitleIcon, classes.groupIcon)}
+              />
+              <Typography variant="subtitle1" color="textSecondary">
+                Our community achieved this
+              </Typography>
+            </div>
+            <div className={classes.subtitleContainer}>
+              <RemoveCircle
+                className={clsx(classes.subtitleIcon, classes.skipIcon)}
+              />
+              <Typography variant="subtitle1" color="textSecondary">
+                You skipped this goal
+              </Typography>
             </div>
           </CardContent>
         </>
@@ -188,14 +238,13 @@ const ImpactGoal = (props) => {
             </Typography>
             <div className={classes.impactContainer}>
               <CheckCircle
-                htmlColor={green['500']}
-                className={clsx(classes.statusIcon)}
+                className={clsx(classes.statusIcon, classes.successColor)}
               />
               <Typography variant="h5">1 tree planted</Typography>
             </div>
             <div className={classes.subtitleContainer}>
               <Typography variant="subtitle1" color="textSecondary">
-                Opened 100 tabs
+                Open 100 tabs
               </Typography>
             </div>
           </CardContent>
@@ -215,12 +264,11 @@ const ImpactGoal = (props) => {
               variant="body2"
               gutterBottom
             >
-              April 14
+              May 8
             </Typography>
             <div className={classes.impactContainer}>
               <Cancel
-                htmlColor={red['500']}
-                className={clsx(classes.statusIcon)}
+                className={clsx(classes.statusIcon, classes.failureColor)}
               />
               <Typography variant="h5">No trees planted</Typography>
             </div>
@@ -247,15 +295,29 @@ const ImpactGoal = (props) => {
             </Typography>
             <div className={classes.impactContainer}>
               <CheckCircle
-                htmlColor={green['500']}
-                className={clsx(classes.statusIcon)}
+                className={clsx(classes.statusIcon, classes.successColor)}
               />
               <Typography variant="h5">Give 25,000 meals to kids</Typography>
             </div>
             <div className={classes.subtitleContainer}>
-              <Group className={classes.groupIcon} />
+              <Group
+                className={clsx(classes.subtitleIcon, classes.groupIcon)}
+              />
               <Typography variant="subtitle1" color="textSecondary">
                 We achieved this together
+              </Typography>
+            </div>
+            <div className={classes.descriptionContainer}>
+              <Typography variant="body2" color="textSecondary" paragraph>
+                Nearly 22 million low-income kids in the United States rely on
+                the free and reduced-price meals they receive at school. With
+                schools closed in districts nationwide, children may be left
+                without that critical lifeline to healthy meals.
+              </Typography>
+              <Typography variant="body2" color="textSecondary" paragraph>
+                To help combat this, we supported No Kid Hungry in their efforts
+                to make sure all children have access to nutritious meals
+                throughout the crisis.
               </Typography>
             </div>
           </CardContent>
