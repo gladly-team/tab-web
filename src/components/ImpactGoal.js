@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   statusIcon: {
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(2),
   },
   successColor: {
     color: green['500'],
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
     color: red['500'],
   },
   subtitleIcon: {
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(2),
     width: '0.9em',
     height: '0.9em',
   },
@@ -117,7 +117,7 @@ const ImpactGoal = (props) => {
               </Typography>
             </div>
             <div className={classes.impactContainer}>
-              <Typography variant="h5">Plants 1 tree</Typography>
+              <Typography variant="h5">Plant 1 tree</Typography>
             </div>
             <div className={classes.subtitleContainer}>
               <Typography variant="subtitle1" color="textSecondary">
@@ -240,7 +240,7 @@ const ImpactGoal = (props) => {
               <CheckCircle
                 className={clsx(classes.statusIcon, classes.successColor)}
               />
-              <Typography variant="h5">1 tree planted</Typography>
+              <Typography variant="h5">Planted 1 tree</Typography>
             </div>
             <div className={classes.subtitleContainer}>
               <Typography variant="subtitle1" color="textSecondary">
@@ -270,7 +270,7 @@ const ImpactGoal = (props) => {
               <Cancel
                 className={clsx(classes.statusIcon, classes.failureColor)}
               />
-              <Typography variant="h5">No trees planted</Typography>
+              <Typography variant="h5">Plant 1 tree</Typography>
             </div>
             <div className={classes.subtitleContainer}>
               <Typography variant="subtitle1" color="textSecondary">
@@ -297,7 +297,7 @@ const ImpactGoal = (props) => {
               <CheckCircle
                 className={clsx(classes.statusIcon, classes.successColor)}
               />
-              <Typography variant="h5">Give 25,000 meals to kids</Typography>
+              <Typography variant="h5">Gave 25,000 meals to kids</Typography>
             </div>
             <div className={classes.subtitleContainer}>
               <Group
