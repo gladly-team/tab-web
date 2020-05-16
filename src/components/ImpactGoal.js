@@ -15,6 +15,7 @@ import CheckCircle from '@material-ui/icons/CheckCircle'
 import Group from '@material-ui/icons/Group'
 import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked'
 import Schedule from '@material-ui/icons/Schedule'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,6 +69,10 @@ const useStyles = makeStyles((theme) => ({
   },
   progressCheckmark: {
     margin: theme.spacing(1),
+  },
+  progressBar: {
+    flex: 1,
+    margin: theme.spacing(2),
   },
 }))
 
@@ -128,6 +133,41 @@ const ImpactGoal = (props) => {
               <RadioButtonUnchecked
                 className={classes.progressCheckmark}
                 htmlColor={grey['600']}
+              />
+            </div>
+          </CardContent>
+        </>
+      )
+      break
+    case 'library':
+      content = (
+        <>
+          <CardContent>
+            <div className={classes.timeContainer}>
+              <Schedule className={classes.timeIcon} />
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                variant="body2"
+              >
+                12d remaining
+              </Typography>
+            </div>
+            <div className={classes.impactContainer}>
+              <Typography variant="h5">Build a library in Cambodia</Typography>
+            </div>
+            <div className={classes.subtitleContainer}>
+              <Group className={classes.groupIcon} />
+              <Typography variant="subtitle1" color="textSecondary">
+                We're working on this together
+              </Typography>
+            </div>
+            <div className={classes.progressContainer}>
+              <LinearProgress
+                variant="determinate"
+                value={72}
+                color="primary"
+                className={classes.progressBar}
               />
             </div>
           </CardContent>
