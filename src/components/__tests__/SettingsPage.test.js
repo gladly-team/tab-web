@@ -7,7 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
-import { accountURL, dashboardURL } from 'src/utils/urls'
+import { accountURL, achievementsURL, dashboardURL } from 'src/utils/urls'
 
 jest.mock('src/components/Link')
 jest.mock('src/components/Logo')
@@ -63,7 +63,7 @@ describe('SettingsPage component', () => {
     expect(sidebarList.childAt(0).text()).toEqual('Your Profile')
   })
 
-  it('includes the account link in the sidebar list', () => {
+  it('includes the achievements link in the sidebar list', () => {
     expect.assertions(3)
     const SettingsPage = require('src/components/SettingsPage.js').default
     const mockProps = getMockProps()
@@ -72,6 +72,20 @@ describe('SettingsPage component', () => {
 
     // First link.
     const item = sidebarList.childAt(1).dive()
+    expect(item.render().text()).toEqual('Achievements')
+    expect(item.type()).toEqual(Link)
+    expect(item.prop('to')).toEqual(achievementsURL)
+  })
+
+  it('includes the account link in the sidebar list', () => {
+    expect.assertions(3)
+    const SettingsPage = require('src/components/SettingsPage.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const sidebarList = wrapper.find(List).first()
+
+    // Second link.
+    const item = sidebarList.childAt(2).dive()
     expect(item.render().text()).toEqual('Account')
     expect(item.type()).toEqual(Link)
     expect(item.prop('to')).toEqual(accountURL)
