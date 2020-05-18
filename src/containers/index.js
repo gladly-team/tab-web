@@ -76,17 +76,24 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     alignItems: 'center',
     cursor: 'pointer',
     transition: 'all 0.1s ease-in-out',
     '&:hover': {
       transform: 'scale(1.01)',
     },
+    paddingBottom: 270, // handle the space taken by the ad
   },
   impactGoal: {
     width: 360,
     margin: theme.spacing(1),
+    position: 'relative',
+    zIndex: 100, // greater than the timeline bar
+  },
+  impactGoalCompact: {
+    margin: theme.spacing(1),
+    flex: 0,
     position: 'relative',
     zIndex: 100, // greater than the timeline bar
   },
@@ -95,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 10, // less than the achievements
     height: '100%',
     top: 40,
-    width: 24,
+    width: 18,
     background: grey['300'],
   },
   centerContainer: {
@@ -266,6 +273,12 @@ const Index = (props) => {
         </div>
         <Link to={achievementsURL} className={classes.achievementsContainer}>
           <ImpactGoal className={classes.impactGoal} demo="tab7days" />
+          <ImpactGoal className={classes.impactGoalCompact} demo="failIcon" />
+          <ImpactGoal
+            className={classes.impactGoalCompact}
+            demo="successIcon"
+          />
+          <div /> {/* take up a spacing unit */}
           <div className={classes.timelineBar} />
         </Link>
       </div>

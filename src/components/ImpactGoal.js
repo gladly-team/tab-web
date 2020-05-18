@@ -9,6 +9,7 @@ import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
@@ -53,6 +54,16 @@ const useStyles = makeStyles((theme) => ({
   },
   impactContainer: {
     display: 'flex',
+    alignItems: 'center',
+  },
+  impactCompactView: {
+    borderRadius: '50%',
+    width: 50,
+    minWidth: 50,
+    height: 50,
+    minHeight: 50,
+    display: 'flex',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   statusIcon: {
@@ -372,6 +383,24 @@ const ImpactGoal = (props) => {
         </>
       )
       break
+    case 'failIcon':
+      return (
+        <Paper className={clsx(className, classes.impactCompactView)}>
+          <Cancel
+            className={clsx(classes.statusIcon, classes.failureColor)}
+            style={{ width: '90%', height: '90%', margin: 0 }}
+          />
+        </Paper>
+      )
+    case 'successIcon':
+      return (
+        <Paper className={clsx(className, classes.impactCompactView)}>
+          <CheckCircle
+            className={clsx(classes.statusIcon, classes.successColor)}
+            style={{ width: '90%', height: '90%', margin: 0 }}
+          />
+        </Paper>
+      )
     default:
       content = (
         <>
