@@ -41,8 +41,14 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
   },
+  topContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignContent: 'flex-start',
+  },
   userMenuContainer: {
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-start',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -61,6 +67,13 @@ const useStyles = makeStyles((theme) => ({
   settingsIcon: {
     height: 20,
     width: 20,
+  },
+  achievementsContainer: {
+    alignSelf: 'flex-end',
+  },
+  impactGoal: {
+    width: 380,
+    margin: theme.spacing(1),
   },
   centerContainer: {
     height: '100%',
@@ -88,12 +101,6 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     zIndex: 1e4, // same as search bar
     pointerEvents: 'none',
-  },
-  achievementsContainer: {
-    alignSelf: 'flex-end',
-  },
-  impactGoal: {
-    margin: theme.spacing(1),
   },
   adsContainer: {
     position: 'absolute',
@@ -214,24 +221,26 @@ const Index = (props) => {
   return (
     <div className={classes.pageContainer}>
       <div className={classes.fullContainer}>
-        <div className={classes.userMenuContainer}>
-          <div className={classes.moneyRaisedContainer}>
-            <Typography variant="h5" className={clsx(classes.userMenuItem)}>
-              <MoneyRaisedContainer app={app} />
-            </Typography>
+        <div className={classes.topContainer}>
+          <div className={classes.userMenuContainer}>
+            <div className={classes.moneyRaisedContainer}>
+              <Typography variant="h5" className={clsx(classes.userMenuItem)}>
+                <MoneyRaisedContainer app={app} />
+              </Typography>
+            </div>
+            <div className={classes.settingsIconContainer}>
+              <Link to={accountURL}>
+                <IconButton>
+                  <SettingsIcon
+                    className={clsx(classes.userMenuItem, classes.settingsIcon)}
+                  />
+                </IconButton>
+              </Link>
+            </div>
           </div>
-          <div className={classes.settingsIconContainer}>
-            <Link to={accountURL}>
-              <IconButton>
-                <SettingsIcon
-                  className={clsx(classes.userMenuItem, classes.settingsIcon)}
-                />
-              </IconButton>
-            </Link>
+          <div className={classes.achievementsContainer}>
+            <ImpactGoal className={classes.impactGoal} demo="tab7days" />
           </div>
-        </div>
-        <div className={classes.achievementsContainer}>
-          <ImpactGoal className={classes.impactGoal} demo="tab7days" />
         </div>
       </div>
       <div className={classes.centerContainer}>
