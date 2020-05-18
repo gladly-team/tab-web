@@ -78,6 +78,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
+    cursor: 'pointer',
+    transition: 'all 0.1s ease-in-out',
+    '&:hover': {
+      transform: 'scale(1.02)',
+    },
   },
   impactGoal: {
     width: 360,
