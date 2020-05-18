@@ -108,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'visible',
     display: 'flex',
     alignItems: 'flex-end',
-    flexDirection: 'row-reverse',
+    flexDirection: 'row-reverse', // swap to move ads to opposite side
     bottom: 0,
     right: 0,
     left: 0,
