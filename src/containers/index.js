@@ -238,9 +238,9 @@ const Index = (props) => {
               </Link>
             </div>
           </div>
-          <div className={classes.achievementsContainer}>
-            <ImpactGoal className={classes.impactGoal} demo="tab7days" />
-          </div>
+        </div>
+        <div className={classes.achievementsContainer}>
+          <ImpactGoal className={classes.impactGoal} demo="tab7days" />
         </div>
       </div>
       <div className={classes.centerContainer}>
