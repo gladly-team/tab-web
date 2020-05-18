@@ -82,6 +82,8 @@ const useStyles = makeStyles((theme) => ({
     transition: 'all 0.1s ease-in-out',
     '&:hover': {
       transform: 'scale(1.01)',
+      // TODO
+      // Increase elevation on hover.
     },
     paddingBottom: 270, // handle the space taken by the ad
   },
