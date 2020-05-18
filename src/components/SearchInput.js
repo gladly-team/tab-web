@@ -1,5 +1,5 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Input from '@material-ui/core/Input'
 import IconButton from '@material-ui/core/IconButton'
@@ -33,7 +33,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SearchInput = () => {
+const SearchInput = (props) => {
+  const { className } = props
   const classes = useStyles()
   const searchInputRef = React.createRef()
 
@@ -46,7 +47,7 @@ const SearchInput = () => {
   }
 
   return (
-    <div>
+    <div className={className}>
       <Input
         autoFocus
         type="text"
@@ -77,7 +78,11 @@ const SearchInput = () => {
 }
 
 SearchInput.displayName = 'SearchInput'
-SearchInput.propTypes = {}
-SearchInput.defaultProps = {}
+SearchInput.propTypes = {
+  className: PropTypes.string,
+}
+SearchInput.defaultProps = {
+  className: '',
+}
 
 export default SearchInput

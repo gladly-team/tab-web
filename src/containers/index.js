@@ -30,11 +30,18 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.background.paper,
     overflow: 'hidden',
   },
-  topRightContainer: {
+  fullContainer: {
     position: 'absolute',
-    zIndex: 10,
+    zIndex: 1e3,
     top: 0,
     right: 0,
+    left: 0,
+    bottom: 0,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  userMenuContainer: {
+    alignSelf: 'flex-end',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -68,20 +75,24 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 500,
     maxWidth: 800,
   },
+  searchBar: {
+    position: 'relative',
+    zIndex: 1e4, // must be higher than all content besides ads
+  },
   logo: {
     height: 50,
     padding: theme.spacing(2),
     boxSizing: 'content-box',
+    position: 'relative',
+    zIndex: 1e4, // same as search bar
+    pointerEvents: 'none',
   },
   achievementsContainer: {
-    // TODO: position this as flex within an absolute container
-    //   that also contains the user menu
-    // position: 'absolute',
-    // top: 80,
+    // TODO
   },
   adsContainer: {
     position: 'absolute',
-    zIndex: 100000,
+    zIndex: 1e5, // must be on top of all content
     overflow: 'visible',
     display: 'flex',
     alignItems: 'flex-end',
@@ -197,26 +208,28 @@ const Index = (props) => {
 
   return (
     <div className={classes.pageContainer}>
-      <div className={classes.topRightContainer}>
-        <div className={classes.moneyRaisedContainer}>
-          <Typography variant="h5" className={clsx(classes.userMenuItem)}>
-            <MoneyRaisedContainer app={app} />
-          </Typography>
-        </div>
-        <div className={classes.settingsIconContainer}>
-          <Link to={accountURL}>
-            <IconButton>
-              <SettingsIcon
-                className={clsx(classes.userMenuItem, classes.settingsIcon)}
-              />
-            </IconButton>
-          </Link>
+      <div className={classes.fullContainer}>
+        <div className={classes.userMenuContainer}>
+          <div className={classes.moneyRaisedContainer}>
+            <Typography variant="h5" className={clsx(classes.userMenuItem)}>
+              <MoneyRaisedContainer app={app} />
+            </Typography>
+          </div>
+          <div className={classes.settingsIconContainer}>
+            <Link to={accountURL}>
+              <IconButton>
+                <SettingsIcon
+                  className={clsx(classes.userMenuItem, classes.settingsIcon)}
+                />
+              </IconButton>
+            </Link>
+          </div>
         </div>
       </div>
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
           <Logo includeText className={classes.logo} />
-          <SearchInput />
+          <SearchInput className={classes.searchBar} />
         </div>
       </div>
       <div className={classes.adsContainer}>
