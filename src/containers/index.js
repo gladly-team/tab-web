@@ -109,8 +109,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'flex-end',
     flexDirection: 'row-reverse',
-    bottom: 10,
-    right: 10,
+    bottom: 0,
+    right: 0,
+    left: 0,
     pointerEvents: 'none', // don't block the main page
   },
   adsContainerRectangles: {
@@ -118,12 +119,13 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     overflow: 'visible',
     pointerEvents: 'all', // needs to be clickable
+    margin: 10,
   },
   adContainerLeaderboard: {
     display: 'flex',
     flexDirection: 'column',
     overflow: 'visible',
-    marginRight: 10,
+    marginBottom: 10,
     pointerEvents: 'all', // needs to be clickable
   },
 }))
