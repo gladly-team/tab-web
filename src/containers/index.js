@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
 import { makeStyles } from '@material-ui/core/styles'
+import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
@@ -17,11 +18,12 @@ import {
   isInEuropeanUnion,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
+import ImpactGoal from 'src/components/ImpactGoal'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import SearchInput from 'src/components/SearchInput'
-import { accountURL } from 'src/utils/urls'
+import { accountURL, achievementsURL } from 'src/utils/urls'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -30,15 +32,30 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.background.paper,
     overflow: 'hidden',
   },
-  topRightContainer: {
+  fullContainer: {
     position: 'absolute',
-    zIndex: 10,
+    zIndex: 1e3,
     top: 0,
     right: 0,
+    left: 0,
+    bottom: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
+  topContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignContent: 'flex-start',
+  },
+  userMenuContainer: {
+    alignSelf: 'flex-start',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     padding: theme.spacing(1),
+    paddingBottom: theme.spacing(0),
   },
   userMenuItem: {
     color: 'rgba(0, 0, 0, 0.70)',
@@ -52,6 +69,41 @@ const useStyles = makeStyles((theme) => ({
   settingsIcon: {
     height: 20,
     width: 20,
+  },
+  achievementsContainer: {
+    alignSelf: 'flex-end',
+    flex: 1,
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    cursor: 'pointer',
+    transition: 'all 0.1s ease-in-out',
+    '&:hover': {
+      transform: 'scale(1.01)',
+    },
+    paddingBottom: 270, // handle the space taken by the ad
+  },
+  impactGoal: {
+    width: 360,
+    margin: theme.spacing(1),
+    position: 'relative',
+    zIndex: 100, // greater than the timeline bar
+  },
+  impactGoalCompact: {
+    margin: theme.spacing(1),
+    flex: 0,
+    position: 'relative',
+    zIndex: 100, // greater than the timeline bar
+  },
+  timelineBar: {
+    position: 'absolute',
+    zIndex: 10, // less than the achievements
+    height: '100%',
+    top: 40,
+    width: 18,
+    background: grey['300'],
   },
   centerContainer: {
     height: '100%',
@@ -68,19 +120,28 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 500,
     maxWidth: 800,
   },
+  searchBar: {
+    position: 'relative',
+    zIndex: 1e4, // must be higher than all content besides ads
+  },
   logo: {
     height: 50,
     padding: theme.spacing(2),
     boxSizing: 'content-box',
+    position: 'relative',
+    zIndex: 1e4, // same as search bar
+    pointerEvents: 'none',
   },
   adsContainer: {
     position: 'absolute',
+    zIndex: 1e5, // must be on top of all content
     overflow: 'visible',
     display: 'flex',
     alignItems: 'flex-end',
-    flexDirection: 'row-reverse',
-    bottom: 10,
-    right: 10,
+    flexDirection: 'row-reverse', // swap to move ads to opposite side
+    bottom: 0,
+    right: 0,
+    left: 0,
     pointerEvents: 'none', // don't block the main page
   },
   adsContainerRectangles: {
@@ -88,12 +149,13 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     overflow: 'visible',
     pointerEvents: 'all', // needs to be clickable
+    margin: 10,
   },
   adContainerLeaderboard: {
     display: 'flex',
     flexDirection: 'column',
     overflow: 'visible',
-    marginRight: 10,
+    marginBottom: 10,
     pointerEvents: 'all', // needs to be clickable
   },
 }))
@@ -190,26 +252,40 @@ const Index = (props) => {
 
   return (
     <div className={classes.pageContainer}>
-      <div className={classes.topRightContainer}>
-        <div className={classes.moneyRaisedContainer}>
-          <Typography variant="h5" className={clsx(classes.userMenuItem)}>
-            <MoneyRaisedContainer app={app} />
-          </Typography>
+      <div className={classes.fullContainer}>
+        <div className={classes.topContainer}>
+          <div className={classes.userMenuContainer}>
+            <div className={classes.moneyRaisedContainer}>
+              <Typography variant="h5" className={clsx(classes.userMenuItem)}>
+                <MoneyRaisedContainer app={app} />
+              </Typography>
+            </div>
+            <div className={classes.settingsIconContainer}>
+              <Link to={accountURL}>
+                <IconButton>
+                  <SettingsIcon
+                    className={clsx(classes.userMenuItem, classes.settingsIcon)}
+                  />
+                </IconButton>
+              </Link>
+            </div>
+          </div>
         </div>
-        <div className={classes.settingsIconContainer}>
-          <Link to={accountURL}>
-            <IconButton>
-              <SettingsIcon
-                className={clsx(classes.userMenuItem, classes.settingsIcon)}
-              />
-            </IconButton>
-          </Link>
-        </div>
+        <Link to={achievementsURL} className={classes.achievementsContainer}>
+          <ImpactGoal className={classes.impactGoal} demo="tab7days" />
+          <ImpactGoal className={classes.impactGoalCompact} demo="failIcon" />
+          <ImpactGoal
+            className={classes.impactGoalCompact}
+            demo="successIcon"
+          />
+          <div /> {/* take up a spacing unit */}
+          <div className={classes.timelineBar} />
+        </Link>
       </div>
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
           <Logo includeText className={classes.logo} />
-          <SearchInput />
+          <SearchInput className={classes.searchBar} />
         </div>
       </div>
       <div className={classes.adsContainer}>

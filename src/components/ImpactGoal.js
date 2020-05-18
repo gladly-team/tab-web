@@ -9,9 +9,12 @@ import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
+import ArrowRight from '@material-ui/icons/ArrowRight'
+// import DoubleArrow from '@material-ui/icons/DoubleArrow'
 import Group from '@material-ui/icons/Group'
 import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked'
 import RemoveCircle from '@material-ui/icons/RemoveCircle'
@@ -53,6 +56,16 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
+  impactCompactView: {
+    borderRadius: '50%',
+    width: 50,
+    minWidth: 50,
+    height: 50,
+    minHeight: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   statusIcon: {
     marginRight: theme.spacing(2),
   },
@@ -64,8 +77,12 @@ const useStyles = makeStyles((theme) => ({
   },
   subtitleIcon: {
     marginRight: theme.spacing(2),
-    width: '0.9em',
-    height: '0.9em',
+    width: '0.86em',
+    height: '0.86em',
+    // TODO: make subtitle text align with title
+  },
+  requirementsIcon: {
+    color: theme.palette.text.secondary,
   },
   groupIcon: {
     color: theme.palette.text.secondary,
@@ -77,9 +94,9 @@ const useStyles = makeStyles((theme) => ({
   progressContainer: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(0),
     marginRight: theme.spacing(2),
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(0),
     marginLeft: theme.spacing(2),
   },
   progressCheckmark: {
@@ -94,6 +111,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
 }))
+
+const HowToAchieveIcon = ArrowRight
+// const HowToAchieveIcon = DoubleArrow
 
 const ImpactGoal = (props) => {
   const { className, demo } = props
@@ -120,8 +140,11 @@ const ImpactGoal = (props) => {
               <Typography variant="h5">Plant 1 tree</Typography>
             </div>
             <div className={classes.subtitleContainer}>
+              <HowToAchieveIcon
+                className={clsx(classes.subtitleIcon, classes.requirementsIcon)}
+              />
               <Typography variant="subtitle1" color="textSecondary">
-                Tab 7 days in a row
+                Open tabs 7 days in a row
               </Typography>
             </div>
             <div className={classes.progressContainer}>
@@ -155,6 +178,14 @@ const ImpactGoal = (props) => {
               <Typography variant="h5">Build a library in Cambodia</Typography>
             </div>
             <div className={classes.subtitleContainer}>
+              <HowToAchieveIcon
+                className={clsx(classes.subtitleIcon, classes.requirementsIcon)}
+              />
+              <Typography variant="subtitle1" color="textSecondary">
+                Recruit 1,000 new people
+              </Typography>
+            </div>
+            <div className={classes.subtitleContainer}>
               <Group
                 className={clsx(classes.subtitleIcon, classes.groupIcon)}
               />
@@ -179,6 +210,9 @@ const ImpactGoal = (props) => {
               />
             </div>
           </CardContent>
+          <CardActions>
+            <Button color="default">Invite Friends</Button>
+          </CardActions>
         </>
       )
       break
@@ -205,11 +239,19 @@ const ImpactGoal = (props) => {
               </Typography>
             </div>
             <div className={classes.subtitleContainer}>
+              <HowToAchieveIcon
+                className={clsx(classes.subtitleIcon, classes.requirementsIcon)}
+              />
+              <Typography variant="subtitle1" color="textSecondary">
+                Open tabs
+              </Typography>
+            </div>
+            <div className={classes.subtitleContainer}>
               <Group
                 className={clsx(classes.subtitleIcon, classes.groupIcon)}
               />
               <Typography variant="subtitle1" color="textSecondary">
-                Our community achieved this
+                Community goal
               </Typography>
             </div>
             <div className={classes.subtitleContainer}>
@@ -243,6 +285,9 @@ const ImpactGoal = (props) => {
               <Typography variant="h5">Planted 1 tree</Typography>
             </div>
             <div className={classes.subtitleContainer}>
+              <HowToAchieveIcon
+                className={clsx(classes.subtitleIcon, classes.requirementsIcon)}
+              />
               <Typography variant="subtitle1" color="textSecondary">
                 Open 100 tabs
               </Typography>
@@ -273,6 +318,9 @@ const ImpactGoal = (props) => {
               <Typography variant="h5">Plant 1 tree</Typography>
             </div>
             <div className={classes.subtitleContainer}>
+              <HowToAchieveIcon
+                className={clsx(classes.subtitleIcon, classes.requirementsIcon)}
+              />
               <Typography variant="subtitle1" color="textSecondary">
                 Recruit 1 friend
               </Typography>
@@ -300,11 +348,19 @@ const ImpactGoal = (props) => {
               <Typography variant="h5">Gave 25,000 meals to kids</Typography>
             </div>
             <div className={classes.subtitleContainer}>
+              <HowToAchieveIcon
+                className={clsx(classes.subtitleIcon, classes.requirementsIcon)}
+              />
+              <Typography variant="subtitle1" color="textSecondary">
+                Open tabs
+              </Typography>
+            </div>
+            <div className={classes.subtitleContainer}>
               <Group
                 className={clsx(classes.subtitleIcon, classes.groupIcon)}
               />
               <Typography variant="subtitle1" color="textSecondary">
-                We achieved this together
+                Community goal
               </Typography>
             </div>
             <div className={classes.descriptionContainer}>
@@ -327,6 +383,24 @@ const ImpactGoal = (props) => {
         </>
       )
       break
+    case 'failIcon':
+      return (
+        <Paper className={clsx(className, classes.impactCompactView)}>
+          <Cancel
+            className={clsx(classes.statusIcon, classes.failureColor)}
+            style={{ width: '90%', height: '90%', margin: 0 }}
+          />
+        </Paper>
+      )
+    case 'successIcon':
+      return (
+        <Paper className={clsx(className, classes.impactCompactView)}>
+          <CheckCircle
+            className={clsx(classes.statusIcon, classes.successColor)}
+            style={{ width: '90%', height: '90%', margin: 0 }}
+          />
+        </Paper>
+      )
     default:
       content = (
         <>
