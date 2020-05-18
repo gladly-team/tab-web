@@ -17,6 +17,7 @@ import {
   isInEuropeanUnion,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
+import ImpactGoal from 'src/components/ImpactGoal'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
     padding: theme.spacing(1),
+    paddingBottom: theme.spacing(0),
   },
   userMenuItem: {
     color: 'rgba(0, 0, 0, 0.70)',
@@ -88,7 +90,10 @@ const useStyles = makeStyles((theme) => ({
     pointerEvents: 'none',
   },
   achievementsContainer: {
-    // TODO
+    alignSelf: 'flex-end',
+  },
+  impactGoal: {
+    margin: theme.spacing(1),
   },
   adsContainer: {
     position: 'absolute',
@@ -224,6 +229,9 @@ const Index = (props) => {
               </IconButton>
             </Link>
           </div>
+        </div>
+        <div className={classes.achievementsContainer}>
+          <ImpactGoal className={classes.impactGoal} demo="tab7days" />
         </div>
       </div>
       <div className={classes.centerContainer}>
