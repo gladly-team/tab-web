@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
 import { makeStyles } from '@material-ui/core/styles'
+import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
@@ -40,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     display: 'flex',
     flexDirection: 'column',
+    overflow: 'hidden',
   },
   topContainer: {
     display: 'flex',
@@ -70,10 +72,26 @@ const useStyles = makeStyles((theme) => ({
   },
   achievementsContainer: {
     alignSelf: 'flex-end',
+    flex: 1,
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
   impactGoal: {
-    width: 380,
+    width: 360,
     margin: theme.spacing(1),
+    position: 'relative',
+    zIndex: 100, // greater than the timeline bar
+  },
+  timelineBar: {
+    position: 'absolute',
+    zIndex: 10, // less than the achievements
+    height: '100%',
+    top: 40,
+    width: 24,
+    background: grey['300'],
   },
   centerContainer: {
     height: '100%',
@@ -243,6 +261,7 @@ const Index = (props) => {
         </div>
         <div className={classes.achievementsContainer}>
           <ImpactGoal className={classes.impactGoal} demo="tab7days" />
+          <div className={classes.timelineBar} />
         </div>
       </div>
       <div className={classes.centerContainer}>
