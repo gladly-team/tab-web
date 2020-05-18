@@ -23,7 +23,7 @@ import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import SearchInput from 'src/components/SearchInput'
-import { accountURL } from 'src/utils/urls'
+import { accountURL, achievementsURL } from 'src/utils/urls'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -81,7 +81,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
     transition: 'all 0.1s ease-in-out',
     '&:hover': {
-      transform: 'scale(1.02)',
+      transform: 'scale(1.01)',
     },
   },
   impactGoal: {
@@ -264,10 +264,10 @@ const Index = (props) => {
             </div>
           </div>
         </div>
-        <div className={classes.achievementsContainer}>
+        <Link to={achievementsURL} className={classes.achievementsContainer}>
           <ImpactGoal className={classes.impactGoal} demo="tab7days" />
           <div className={classes.timelineBar} />
-        </div>
+        </Link>
       </div>
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
