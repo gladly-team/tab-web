@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import Achievement from 'src/components/Achievement'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -9,7 +10,11 @@ const useStyles = makeStyles((theme) => ({
 
 const DemoAchievementComponent = () => {
   const classes = useStyles()
-  return <div className={classes.container}>TODO</div>
+  return (
+    <div className={classes.container}>
+      <Achievement impactText="Plant 20 trees" />
+    </div>
+  )
 }
 
 DemoAchievementComponent.displayName = 'DemoAchievementComponent'
