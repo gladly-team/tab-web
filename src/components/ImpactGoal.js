@@ -436,6 +436,9 @@ const ImpactGoal = (props) => {
 
 ImpactGoal.displayName = 'ImpactGoal'
 
+// TODO: make this component handle all use cases and create a
+// demo page that shows each goal in progress, succeeded, and failed.
+
 // Draft of data:
 // eslint-disable-next-line
 const propSpecs = {
