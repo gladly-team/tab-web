@@ -10,7 +10,7 @@ import CardContent from '@material-ui/core/CardContent'
 // import Button from '@material-ui/core/Button'
 // import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-// import Cancel from '@material-ui/icons/Cancel'
+import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 // import Group from '@material-ui/icons/Group'
@@ -21,7 +21,7 @@ import Schedule from '@material-ui/icons/Schedule'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    minWidth: 275,
+    minWidth: 400,
     maxWidth: 600,
   },
   title: {
@@ -103,10 +103,34 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const HowToAchieveIcon = ArrowRight
+const SUCCESS = 'success'
+const FAILURE = 'failure'
+const IN_PROGRESS = 'inProgress'
 
 const Achievement = (props) => {
-  const { className, impactText, taskText } = props
+  const { className, impactText, status, taskText } = props
   const classes = useStyles()
+
+  let StatusIcon = null
+  switch (status) {
+    case SUCCESS:
+      StatusIcon = (
+        <CheckCircle
+          className={clsx(classes.statusIcon, classes.successColor)}
+        />
+      )
+      break
+    case FAILURE:
+      StatusIcon = (
+        <Cancel className={clsx(classes.statusIcon, classes.failureColor)} />
+      )
+      break
+    case IN_PROGRESS:
+      StatusIcon = null
+      break
+    default:
+      StatusIcon = null
+  }
 
   return (
     <Card className={clsx(classes.root, className)}>
@@ -121,7 +145,11 @@ const Achievement = (props) => {
             4d remaining
           </Typography>
         </div>
-        <div className={classes.impactContainer}>
+        <div
+          className={classes.impactContainer}
+          data-test-id="impact-text-container"
+        >
+          {StatusIcon}
           <Typography variant="h5">{impactText}</Typography>
         </div>
         <div className={classes.subtitleContainer}>
@@ -192,7 +220,10 @@ Achievement.propTypes = {
   impactText: PropTypes.string.isRequired, // e.g., "Plant 1 Tree"
   taskText: PropTypes.string.isRequired, // e.g., "Open 10 tabs"
   // descriptionMarkdown: PropTypes.string, // longer content
-  // status: PropTypes.string.isRequired, // one of: "inProgress", "success", "failure"
+  // Whether the achievement has been completed or not.
+  status: PropTypes.oneOf(['inProgress', 'success', 'failure']).isRequired,
+  // Whether this is the user's current (most recent) achievement.
+  // isCurrentAchievement: PropTypes.bool.isRequired,
   // // ISO timestamp or null. Null if not yet completed.
   // // If successful, the successful completion time.
   // // If failed, the time the goal ended.
