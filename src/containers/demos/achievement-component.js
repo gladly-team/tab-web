@@ -12,7 +12,7 @@ const DemoAchievementComponent = () => {
   const classes = useStyles()
   return (
     <div className={classes.container}>
-      <Achievement impactText="Plant 20 trees" />
+      <Achievement impactText="Plant 20 trees" taskText="Open 50 tabs" />
     </div>
   )
 }

@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
 const HowToAchieveIcon = ArrowRight
 
 const Achievement = (props) => {
-  const { className, impactText } = props
+  const { className, impactText, taskText } = props
   const classes = useStyles()
 
   return (
@@ -129,7 +129,7 @@ const Achievement = (props) => {
             className={clsx(classes.subtitleIcon, classes.requirementsIcon)}
           />
           <Typography variant="subtitle1" color="textSecondary">
-            Open tabs 7 days in a row
+            {taskText}
           </Typography>
         </div>
         <div className={classes.progressContainer}>
@@ -190,7 +190,7 @@ const propSpecs = {
 Achievement.propTypes = {
   className: PropTypes.string,
   impactText: PropTypes.string.isRequired, // e.g., "Plant 1 Tree"
-  // taskText: PropTypes.string.isRequired, // e.g., "Open 10 tabs"
+  taskText: PropTypes.string.isRequired, // e.g., "Open 10 tabs"
   // descriptionMarkdown: PropTypes.string, // longer content
   // status: PropTypes.string.isRequired, // one of: "inProgress", "success", "failure"
   // // ISO timestamp or null. Null if not yet completed.
