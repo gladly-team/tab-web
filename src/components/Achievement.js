@@ -115,7 +115,7 @@ const useStyles = makeStyles((theme) => ({
 const HowToAchieveIcon = ArrowRight
 // const HowToAchieveIcon = DoubleArrow
 
-const ImpactGoal = (props) => {
+const Achievement = (props) => {
   const { className, demo } = props
   const classes = useStyles()
   const bull = <span className={classes.bullet}>•</span>
@@ -434,7 +434,7 @@ const ImpactGoal = (props) => {
   return <Card className={clsx(classes.root, className)}>{content}</Card>
 }
 
-ImpactGoal.displayName = 'ImpactGoal'
+Achievement.displayName = 'Achievement'
 
 // TODO: make this component handle all use cases and create a
 // demo page that shows each goal in progress, succeeded, and failed.
@@ -475,12 +475,12 @@ const propSpecs = {
   compactBadge: PropTypes.bool,
 }
 
-ImpactGoal.propTypes = {
+Achievement.propTypes = {
   className: PropTypes.string,
   demo: PropTypes.string.isRequired,
 }
-ImpactGoal.defaultProps = {
+Achievement.defaultProps = {
   className: '',
 }
 
-export default ImpactGoal
+export default Achievement
