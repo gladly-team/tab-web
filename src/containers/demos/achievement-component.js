@@ -62,32 +62,33 @@ const DemoAchievementComponent = () => {
           completionTime={moment().subtract(5, 'months').toISOString()}
         />
       </div>
-      <Typography variant="h5">
-        Individual achievement (different completion times)
-      </Typography>
+      <Typography variant="h5">Community achievements</Typography>
       <div className={classes.exampleSet}>
         <Achievement
           className={classes.achievement}
-          impactText="Plant 20 trees"
+          impactText="Plant 10,000 trees"
           status="inProgress"
-          taskText="Open 50 tabs"
+          taskText="Open 5M tabs"
           deadlineTime={moment().add(40, 'days').toISOString()}
+          isCommunityGoal
         />
         <Achievement
           className={classes.achievement}
-          impactText="Plant 20 trees"
+          impactText="Plant 10,000 trees"
           status="success"
-          taskText="Open 50 tabs"
+          taskText="Open 5M tabs"
           deadlineTime={moment().subtract(2, 'years').toISOString()}
           completionTime={moment().subtract(3, 'years').toISOString()}
+          isCommunityGoal
         />
         <Achievement
           className={classes.achievement}
-          impactText="Plant 20 trees"
+          impactText="Plant 10,000 trees"
           status="failure"
-          taskText="Open 50 tabs"
+          taskText="Open 5M tabs"
           deadlineTime={moment().subtract(8, 'years').toISOString()}
           completionTime={moment().subtract(8, 'years').toISOString()}
+          isCommunityGoal
         />
       </div>
     </div>

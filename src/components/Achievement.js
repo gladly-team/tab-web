@@ -15,7 +15,7 @@ import Typography from '@material-ui/core/Typography'
 import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
 import ArrowRight from '@material-ui/icons/ArrowRight'
-// import Group from '@material-ui/icons/Group'
+import Group from '@material-ui/icons/Group'
 import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked'
 // import RemoveCircle from '@material-ui/icons/RemoveCircle'
 import Schedule from '@material-ui/icons/Schedule'
@@ -140,6 +140,7 @@ const Achievement = (props) => {
     completionTime,
     deadlineTime,
     impactText,
+    isCommunityGoal,
     status,
     taskText,
   } = props
@@ -226,6 +227,14 @@ const Achievement = (props) => {
             {taskText}
           </Typography>
         </div>
+        {isCommunityGoal ? (
+          <div className={classes.subtitleContainer}>
+            <Group className={clsx(classes.subtitleIcon, classes.groupIcon)} />
+            <Typography variant="subtitle1" color="textSecondary">
+              Community goal
+            </Typography>
+          </div>
+        ) : null}
         <div className={classes.progressContainer}>
           <CheckCircle className={classes.progressCheckmark} />
           <CheckCircle className={classes.progressCheckmark} />
@@ -290,15 +299,15 @@ Achievement.propTypes = {
   status: PropTypes.oneOf(['inProgress', 'success', 'failure']).isRequired,
   // Whether this is the user's current (most recent) achievement.
   // isCurrentAchievement: PropTypes.bool.isRequired,
-  // // ISO timestamp or null. Null if not yet completed.
-  // // If successful, the successful completion time.
-  // // If failed, the time the goal ended.
+  // ISO timestamp or null. Null if not yet completed.
+  // If successful, the successful completion time.
+  // If failed, the time the goal ended.
   completionTime: PropTypes.string,
   // ISO timestamp or null. Null if there is no deadline.
   deadlineTime: PropTypes.string,
-  // // Whether this is a goal for the entire Tab community. Default
-  // // to false.
-  // isCommunityGoal: PropTypes.bool,
+  // Whether this is a goal for the entire Tab community. Default
+  // to false.
+  isCommunityGoal: PropTypes.bool,
   // progress: PropTypes.shape({
   //   targetNumber: PropTypes.number.isRequired,
   //   currentNumber: PropTypes.number.isRequired,
@@ -322,6 +331,7 @@ Achievement.defaultProps = {
   className: '',
   completionTime: null,
   deadlineTime: null,
+  isCommunityGoal: false,
 }
 
 export default Achievement

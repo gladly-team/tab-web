@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
+import Group from '@material-ui/icons/Group'
 import Schedule from '@material-ui/icons/Schedule'
 
 const mockNow = '2020-04-02T18:00:00.000Z'
@@ -31,6 +32,7 @@ const getMockProps = () => ({
   taskText: 'Open 10 tabs',
   completionTime: moment(mockNow).subtract(2, 'minutes').toISOString(),
   deadlineTime: moment(mockNow).add(8, 'hours').toISOString(),
+  isCommunityGoal: undefined, // defaults to false
 })
 
 const getTimeDisplayString = (wrapper) => {
@@ -473,5 +475,49 @@ describe('Achievement component', () => {
       wrapper.find('[data-test-id="time-container"]').find(Typography).exists()
     ).toBe(false)
     expect(mockConsoleWarn).not.toHaveBeenCalled()
+  })
+
+  it('displays the community goal icon and text if "isCommunityGoal" is true', () => {
+    expect.assertions(2)
+
+    // Suppress expected console warning.
+    const mockConsoleWarn = jest.fn()
+    jest.spyOn(console, 'warn').mockImplementation(mockConsoleWarn)
+
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      isCommunityGoal: true,
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere((elem) => elem.render().text() === 'Community goal')
+        .exists()
+    ).toBe(true)
+    expect(wrapper.find(Group).exists()).toBe(true)
+  })
+
+  it('does not display the community goal icon or text if "isCommunityGoal" is false', () => {
+    expect.assertions(2)
+
+    // Suppress expected console warning.
+    const mockConsoleWarn = jest.fn()
+    jest.spyOn(console, 'warn').mockImplementation(mockConsoleWarn)
+
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      isCommunityGoal: false,
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere((elem) => elem.render().text() === 'Community goal')
+        .exists()
+    ).toBe(false)
+    expect(wrapper.find(Group).exists()).toBe(false)
   })
 })
