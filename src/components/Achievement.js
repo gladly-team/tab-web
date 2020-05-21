@@ -254,42 +254,6 @@ Achievement.displayName = 'Achievement'
 // TODO: make this component handle all use cases and create a
 // demo page that shows each goal in progress, succeeded, and failed.
 
-// Draft of data:
-// eslint-disable-next-line
-const propSpecs = {
-  impactText: PropTypes.string.isRequired, // e.g., "Plant 1 Tree"
-  taskText: PropTypes.string.isRequired, // e.g., "Open 10 tabs"
-  descriptionMarkdown: PropTypes.string, // longer content
-  status: PropTypes.string.isRequired, // one of: "inProgress", "success", "failure"
-  // ISO timestamp or null. Null if not yet completed.
-  // If successful, the successful completion time.
-  // If failed, the time the goal ended.
-  completionTime: PropTypes.string,
-  // ISO timestamp or null. Null if there is no deadline.
-  deadlineTime: PropTypes.string,
-  // Whether this is a goal for the entire Tab community. Default
-  // to false.
-  progress: PropTypes.shape({
-    targetNumber: PropTypes.number.isRequired,
-    currentNumber: PropTypes.number.isRequired,
-    // How to display the progress.
-    // One of: "progressBar", "checkMarks",
-    type: PropTypes.string.isRequired,
-    // Start without these things, which can get complicated:
-    // itemNameSingular: PropTypes.string.isRequired, // e.g. "tab", "friend", "day"
-    // itemNamePlural: PropTypes.string.isRequired, // e.g., "tabs", "friends", "days"
-  }),
-  isCommunityGoal: PropTypes.bool,
-  showShareButton: PropTypes.bool,
-  showInviteFriendsButton: PropTypes.bool,
-  // Content to show when sharing. Refer to the current Tab campaign
-  // logic. We may want to fetch this only after a user clicks
-  // to share.
-  socialSharing: PropTypes.shape({}),
-  // An option to show only the success/fail icon, plus info on hover.
-  compactBadge: PropTypes.bool,
-}
-
 Achievement.propTypes = {
   className: PropTypes.string,
   impactText: PropTypes.string.isRequired, // e.g., "Plant 1 Tree"
