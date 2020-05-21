@@ -7,7 +7,9 @@ import ArrowRight from '@material-ui/icons/ArrowRight'
 import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
 import Group from '@material-ui/icons/Group'
+import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked'
 import Schedule from '@material-ui/icons/Schedule'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
 const mockNow = '2020-04-02T18:00:00.000Z'
 
@@ -33,6 +35,11 @@ const getMockProps = () => ({
   completionTime: moment(mockNow).subtract(2, 'minutes').toISOString(),
   deadlineTime: moment(mockNow).add(8, 'hours').toISOString(),
   isCommunityGoal: undefined, // defaults to false
+  progress: {
+    currentNumber: 11,
+    targetNumber: 50,
+    visualizationType: 'progressBar',
+  },
 })
 
 const getTimeDisplayString = (wrapper) => {
@@ -519,5 +526,124 @@ describe('Achievement component', () => {
         .exists()
     ).toBe(false)
     expect(wrapper.find(Group).exists()).toBe(false)
+  })
+
+  it('does not display any progress when "progress" is undefined', () => {
+    expect.assertions(1)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'inProgress',
+      progress: undefined,
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(wrapper.find('[data-test-id="progress-container"]').exists()).toBe(
+      false
+    )
+  })
+
+  it('displays a progress bar with the expected value when "progress.visualizationType" is "progressBar"', () => {
+    expect.assertions(2)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'inProgress',
+      progress: {
+        currentNumber: 11,
+        targetNumber: 50,
+        visualizationType: 'progressBar',
+      },
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    const progressBarElem = wrapper
+      .find('[data-test-id="progress-container"]')
+      .find(LinearProgress)
+    expect(progressBarElem.exists()).toBe(true)
+    expect(progressBarElem.prop('value')).toEqual((11 / 50) * 100)
+  })
+
+  it('displays checkmarks with none checked when "progress.visualizationType" is "checkmarks" and the "currentNumber" is zero', () => {
+    expect.assertions(2)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'inProgress',
+      progress: {
+        currentNumber: 0,
+        targetNumber: 5,
+        visualizationType: 'checkmarks',
+      },
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+
+    // None checked.
+    expect(
+      wrapper.find('[data-test-id="progress-container"]').find(CheckCircle)
+        .length
+    ).toEqual(0)
+
+    // All unchecked.
+    expect(
+      wrapper
+        .find('[data-test-id="progress-container"]')
+        .find(RadioButtonUnchecked).length
+    ).toEqual(5)
+  })
+
+  it('displays checkmarks with some checked when "progress.visualizationType" is "checkmarks" and the "currentNumber" is non-zero', () => {
+    expect.assertions(2)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'inProgress',
+      progress: {
+        currentNumber: 3,
+        targetNumber: 7,
+        visualizationType: 'checkmarks',
+      },
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+
+    // Some checked.
+    expect(
+      wrapper.find('[data-test-id="progress-container"]').find(CheckCircle)
+        .length
+    ).toEqual(3)
+
+    // Some unchecked.
+    expect(
+      wrapper
+        .find('[data-test-id="progress-container"]')
+        .find(RadioButtonUnchecked).length
+    ).toEqual(4)
+  })
+
+  it('warns if the number of progress checkmarks exceeds 20 and only renders 20 checkmarks', () => {
+    expect.assertions(2)
+
+    // Suppress expected console warning.
+    const mockConsoleWarn = jest.fn()
+    jest.spyOn(console, 'warn').mockImplementation(mockConsoleWarn)
+
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'inProgress',
+      progress: {
+        currentNumber: 0,
+        targetNumber: 50,
+        visualizationType: 'checkmarks',
+      },
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper
+        .find('[data-test-id="progress-container"]')
+        .find(RadioButtonUnchecked).length
+    ).toEqual(20) // limits the number that render
+
+    expect(mockConsoleWarn).toHaveBeenCalledWith(
+      'Large number of checkmarks attempted to render in Achievement. Limiting to 20 checkmarks.'
+    )
   })
 })

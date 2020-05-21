@@ -4,6 +4,7 @@ import clsx from 'clsx'
 import { isNil } from 'lodash/lang'
 import moment from 'moment'
 import green from '@material-ui/core/colors/green'
+import grey from '@material-ui/core/colors/grey'
 import red from '@material-ui/core/colors/red'
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -19,7 +20,7 @@ import Group from '@material-ui/icons/Group'
 import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked'
 // import RemoveCircle from '@material-ui/icons/RemoveCircle'
 import Schedule from '@material-ui/icons/Schedule'
-// import LinearProgress from '@material-ui/core/LinearProgress'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,6 +98,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     color: green['500'],
   },
+  progressCheckmarkUnchecked: {
+    color: grey['500'],
+  },
   progressBar: {
     flex: 1,
     margin: theme.spacing(2),
@@ -110,6 +114,9 @@ const HowToAchieveIcon = ArrowRight
 const SUCCESS = 'success'
 const FAILURE = 'failure'
 const IN_PROGRESS = 'inProgress'
+
+const CHECKMARKS = 'checkmarks'
+const PROGRESS_BAR = 'progressBar'
 
 /**
  * Return the formatted date to display, as a "time since X" format
@@ -141,6 +148,7 @@ const Achievement = (props) => {
     deadlineTime,
     impactText,
     isCommunityGoal,
+    progress,
     status,
     taskText,
   } = props
@@ -195,6 +203,77 @@ const Achievement = (props) => {
     timeToDisplay = null
   }
 
+  // Visualize the progress if the "progress" data is provided.
+  let progressContent = null
+  if (progress) {
+    const { currentNumber, targetNumber, visualizationType } = progress
+    switch (visualizationType) {
+      case CHECKMARKS: {
+        // Don't allow rendering a massive number of checkmarks.
+        const MAX_CHECKMARKS_ALLOWED = 20
+        const numCheckmarksToRender =
+          targetNumber > MAX_CHECKMARKS_ALLOWED
+            ? MAX_CHECKMARKS_ALLOWED
+            : targetNumber
+        if (targetNumber > MAX_CHECKMARKS_ALLOWED) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            `Large number of checkmarks attempted to render in Achievement. Limiting to ${MAX_CHECKMARKS_ALLOWED} checkmarks.`
+          )
+        }
+
+        const checkmarks = []
+        for (let i = 0; i < numCheckmarksToRender; i += 1) {
+          if (i < currentNumber) {
+            checkmarks.push(
+              <CheckCircle
+                key={`checkmark-${i}`}
+                className={classes.progressCheckmark}
+              />
+            )
+          } else {
+            checkmarks.push(
+              <RadioButtonUnchecked
+                key={`checkmark-${i}`}
+                className={clsx(
+                  classes.progressCheckmark,
+                  classes.progressCheckmarkUnchecked
+                )}
+              />
+            )
+          }
+        }
+        progressContent = (
+          <div
+            className={classes.progressContainer}
+            data-test-id="progress-container"
+          >
+            {checkmarks}
+          </div>
+        )
+        break
+      }
+      case PROGRESS_BAR: {
+        progressContent = (
+          <div
+            className={classes.progressContainer}
+            data-test-id="progress-container"
+          >
+            <LinearProgress
+              variant="determinate"
+              value={(currentNumber / targetNumber) * 100}
+              color="primary"
+              className={classes.progressBar}
+            />
+          </div>
+        )
+        break
+      }
+      default:
+        progressContent = null
+    }
+  }
+
   return (
     <Card className={clsx(classes.root, className)}>
       <CardContent>
@@ -235,15 +314,7 @@ const Achievement = (props) => {
             </Typography>
           </div>
         ) : null}
-        <div className={classes.progressContainer}>
-          <CheckCircle className={classes.progressCheckmark} />
-          <CheckCircle className={classes.progressCheckmark} />
-          <CheckCircle className={classes.progressCheckmark} />
-          <RadioButtonUnchecked className={classes.progressCheckmark} />
-          <RadioButtonUnchecked className={classes.progressCheckmark} />
-          <RadioButtonUnchecked className={classes.progressCheckmark} />
-          <RadioButtonUnchecked className={classes.progressCheckmark} />
-        </div>
+        {progressContent}
       </CardContent>
     </Card>
   )
@@ -260,7 +331,7 @@ Achievement.propTypes = {
   taskText: PropTypes.string.isRequired, // e.g., "Open 10 tabs"
   // descriptionMarkdown: PropTypes.string, // longer content
   // Whether the achievement has been completed or not.
-  status: PropTypes.oneOf(['inProgress', 'success', 'failure']).isRequired,
+  status: PropTypes.oneOf([IN_PROGRESS, SUCCESS, FAILURE]).isRequired,
   // Whether this is the user's current (most recent) achievement.
   // isCurrentAchievement: PropTypes.bool.isRequired,
   // ISO timestamp or null. Null if not yet completed.
@@ -272,16 +343,16 @@ Achievement.propTypes = {
   // Whether this is a goal for the entire Tab community. Default
   // to false.
   isCommunityGoal: PropTypes.bool,
-  // progress: PropTypes.shape({
-  //   targetNumber: PropTypes.number.isRequired,
-  //   currentNumber: PropTypes.number.isRequired,
-  //   // How to display the progress.
-  //   // One of: "progressBar", "checkMarks",
-  //   type: PropTypes.string.isRequired,
-  //   // Start without these things, which can get complicated:
-  //   // itemNameSingular: PropTypes.string.isRequired, // e.g. "tab", "friend", "day"
-  //   // itemNamePlural: PropTypes.string.isRequired, // e.g., "tabs", "friends", "days"
-  // }),
+  progress: PropTypes.shape({
+    currentNumber: PropTypes.number.isRequired,
+    targetNumber: PropTypes.number.isRequired,
+    // How to visually display the progress.
+    visualizationType: PropTypes.oneOf([PROGRESS_BAR, CHECKMARKS]).isRequired,
+    // Start without these things, which can get complicated:
+    // itemNameSingular: PropTypes.string.isRequired, // e.g. "tab", "friend", "day"
+    // itemNamePlural: PropTypes.string.isRequired, // e.g., "tabs", "friends", "days"
+    // Perhaps add: leftLabelText, rightLabelText?
+  }),
   // showShareButton: PropTypes.bool,
   // showInviteFriendsButton: PropTypes.bool,
   // // Content to show when sharing. Refer to the current Tab campaign
@@ -296,6 +367,7 @@ Achievement.defaultProps = {
   completionTime: null,
   deadlineTime: null,
   isCommunityGoal: false,
+  progress: null,
 }
 
 export default Achievement

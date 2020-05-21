@@ -36,32 +36,92 @@ const DemoAchievementComponent = () => {
           (historical), failure (recent), and failure (historical).
         </Typography>
       </div>
-      <Typography variant="h5">Individual achievement</Typography>
+      <Typography variant="h5">
+        Individual achievement (progress bar)
+      </Typography>
       <div className={classes.exampleSet}>
         <Achievement
           className={classes.achievement}
-          impactText="Plant 20 trees"
+          impactText="Plant 1 tree"
           status="inProgress"
           taskText="Open 50 tabs"
-          deadlineTime={moment().add(92, 'seconds').toISOString()}
+          deadlineTime={moment().add(47, 'minutes').toISOString()}
+          progress={{
+            currentNumber: 11,
+            targetNumber: 50,
+            visualizationType: 'progressBar',
+          }}
         />
         <Achievement
           className={classes.achievement}
           impactText="Plant 20 trees"
           status="success"
           taskText="Open 50 tabs"
-          deadlineTime={moment().subtract(4, 'days').toISOString()}
-          completionTime={moment().subtract(5, 'days').toISOString()}
+          deadlineTime={moment().subtract(8, 'minutes').toISOString()}
+          completionTime={moment().subtract(11, 'minutes').toISOString()}
+          progress={{
+            currentNumber: 50,
+            targetNumber: 50,
+            visualizationType: 'progressBar',
+          }}
         />
         <Achievement
           className={classes.achievement}
           impactText="Plant 20 trees"
           status="failure"
           taskText="Open 50 tabs"
-          deadlineTime={moment().subtract(5, 'months').toISOString()}
-          completionTime={moment().subtract(5, 'months').toISOString()}
+          deadlineTime={moment().subtract(3, 'seconds').toISOString()}
+          completionTime={moment().subtract(3, 'seconds').toISOString()}
+          progress={{
+            currentNumber: 21,
+            targetNumber: 50,
+            visualizationType: 'progressBar',
+          }}
         />
       </div>
+
+      <Typography variant="h5">Individual achievement (checkmarks)</Typography>
+      <div className={classes.exampleSet}>
+        <Achievement
+          className={classes.achievement}
+          impactText="Plant 5 trees"
+          status="inProgress"
+          taskText="Recruit 5 friends"
+          deadlineTime={moment().add(92, 'seconds').toISOString()}
+          progress={{
+            currentNumber: 2,
+            targetNumber: 5,
+            visualizationType: 'checkmarks',
+          }}
+        />
+        <Achievement
+          className={classes.achievement}
+          impactText="Plant 5 trees"
+          status="success"
+          taskText="Recruit 5 friends"
+          deadlineTime={moment().subtract(2, 'days').toISOString()}
+          completionTime={moment().subtract(3, 'days').toISOString()}
+          progress={{
+            currentNumber: 5,
+            targetNumber: 5,
+            visualizationType: 'checkmarks',
+          }}
+        />
+        <Achievement
+          className={classes.achievement}
+          impactText="Plant 5 trees"
+          status="failure"
+          taskText="Recruit 5 friends"
+          deadlineTime={moment().subtract(7, 'months').toISOString()}
+          completionTime={moment().subtract(7, 'months').toISOString()}
+          progress={{
+            currentNumber: 4,
+            targetNumber: 5,
+            visualizationType: 'checkmarks',
+          }}
+        />
+      </div>
+
       <Typography variant="h5">Community achievements</Typography>
       <div className={classes.exampleSet}>
         <Achievement
@@ -70,6 +130,11 @@ const DemoAchievementComponent = () => {
           status="inProgress"
           taskText="Open 5M tabs"
           deadlineTime={moment().add(40, 'days').toISOString()}
+          progress={{
+            currentNumber: 2128173,
+            targetNumber: 5e6,
+            visualizationType: 'progressBar',
+          }}
           isCommunityGoal
         />
         <Achievement
@@ -79,6 +144,11 @@ const DemoAchievementComponent = () => {
           taskText="Open 5M tabs"
           deadlineTime={moment().subtract(2, 'years').toISOString()}
           completionTime={moment().subtract(3, 'years').toISOString()}
+          progress={{
+            currentNumber: 5e6,
+            targetNumber: 5e6,
+            visualizationType: 'progressBar',
+          }}
           isCommunityGoal
         />
         <Achievement
@@ -88,6 +158,11 @@ const DemoAchievementComponent = () => {
           taskText="Open 5M tabs"
           deadlineTime={moment().subtract(8, 'years').toISOString()}
           completionTime={moment().subtract(8, 'years').toISOString()}
+          progress={{
+            currentNumber: 4382111,
+            targetNumber: 5e6,
+            visualizationType: 'progressBar',
+          }}
           isCommunityGoal
         />
       </div>
