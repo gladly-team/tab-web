@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
+import { isNil } from 'lodash/lang'
+import moment from 'moment'
 import green from '@material-ui/core/colors/green'
 import red from '@material-ui/core/colors/red'
 import { makeStyles } from '@material-ui/core/styles'
@@ -107,8 +109,38 @@ const SUCCESS = 'success'
 const FAILURE = 'failure'
 const IN_PROGRESS = 'inProgress'
 
+/**
+ * Return the formatted date to display, as a "time since X" format
+ * or "time from now" format.
+ * @param {String} time - An ISO timestamp
+ * @return {String} Time text, such as "2 days ago" or "a few
+ *   seconds remaining".
+ */
+const getTimeDisplay = (time) => {
+  const now = moment()
+  const timeMoment = moment(time)
+  let displayedTime = ''
+  if (timeMoment.isBefore(now)) {
+    // "time ago":
+    // https://momentjs.com/docs/#/displaying/fromnow/
+    displayedTime = timeMoment.fromNow(false)
+  } else {
+    // "in X time"
+    // https://momentjs.com/docs/#/displaying/from/
+    displayedTime = `${timeMoment.from(now, true)} remaining`
+  }
+  return displayedTime
+}
+
 const Achievement = (props) => {
-  const { className, impactText, status, taskText } = props
+  const {
+    className,
+    completionTime,
+    deadlineTime,
+    impactText,
+    status,
+    taskText,
+  } = props
   const classes = useStyles()
 
   let StatusIcon = null
@@ -132,19 +164,51 @@ const Achievement = (props) => {
       StatusIcon = null
   }
 
+  // If the achievement is in progress, display the formatted deadlineTime,
+  // if it exists. If the achievement has ended, display the formatted
+  // completionTime.
+  let timeToDisplay = null
+  if (status === IN_PROGRESS && !isNil(deadlineTime)) {
+    // Warn if it's not a valid time.
+    if (!moment(deadlineTime).isValid()) {
+      // eslint-disable-next-line no-console
+      console.warn('Invalid "deadlineTime" timestamp provided to Achievement.')
+    } else {
+      timeToDisplay = getTimeDisplay(deadlineTime)
+    }
+  } else if (status === SUCCESS || status === FAILURE) {
+    // Warn if a valid completionTime is not provided.
+    if (isNil(completionTime) || !moment(completionTime).isValid()) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        'Invalid "completionTime" timestamp provided to Achievement.'
+      )
+    } else {
+      timeToDisplay = getTimeDisplay(completionTime)
+    }
+  } else {
+    // We expect no displayed time if the achievement is in progress and
+    // there isn't a deadline time.
+    timeToDisplay = null
+  }
+
   return (
     <Card className={clsx(classes.root, className)}>
       <CardContent>
-        <div className={classes.timeContainer}>
-          <Schedule className={classes.timeIcon} />
-          <Typography
-            className={classes.title}
-            color="textSecondary"
-            variant="body2"
-          >
-            4d remaining
-          </Typography>
-        </div>
+        {timeToDisplay ? (
+          <div className={classes.timeContainer} data-test-id="time-container">
+            {status === IN_PROGRESS ? (
+              <Schedule className={classes.timeIcon} />
+            ) : null}
+            <Typography
+              className={classes.title}
+              color="textSecondary"
+              variant="body2"
+            >
+              {timeToDisplay}
+            </Typography>
+          </div>
+        ) : null}
         <div
           className={classes.impactContainer}
           data-test-id="impact-text-container"
@@ -227,11 +291,12 @@ Achievement.propTypes = {
   // // ISO timestamp or null. Null if not yet completed.
   // // If successful, the successful completion time.
   // // If failed, the time the goal ended.
-  // completionTime: PropTypes.string,
-  // // ISO timestamp or null. Null if there is no deadline.
-  // deadlineTime: PropTypes.string,
+  completionTime: PropTypes.string,
+  // ISO timestamp or null. Null if there is no deadline.
+  deadlineTime: PropTypes.string,
   // // Whether this is a goal for the entire Tab community. Default
   // // to false.
+  // isCommunityGoal: PropTypes.bool,
   // progress: PropTypes.shape({
   //   targetNumber: PropTypes.number.isRequired,
   //   currentNumber: PropTypes.number.isRequired,
@@ -242,7 +307,6 @@ Achievement.propTypes = {
   //   // itemNameSingular: PropTypes.string.isRequired, // e.g. "tab", "friend", "day"
   //   // itemNamePlural: PropTypes.string.isRequired, // e.g., "tabs", "friends", "days"
   // }),
-  // isCommunityGoal: PropTypes.bool,
   // showShareButton: PropTypes.bool,
   // showInviteFriendsButton: PropTypes.bool,
   // // Content to show when sharing. Refer to the current Tab campaign
@@ -254,6 +318,8 @@ Achievement.propTypes = {
 }
 Achievement.defaultProps = {
   className: '',
+  completionTime: null,
+  deadlineTime: null,
 }
 
 export default Achievement

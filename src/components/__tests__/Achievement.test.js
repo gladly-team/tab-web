@@ -1,15 +1,46 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import moment from 'moment'
+import MockDate from 'mockdate'
 import Typography from '@material-ui/core/Typography'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
+import Schedule from '@material-ui/icons/Schedule'
+
+const mockNow = '2020-04-02T18:00:00.000Z'
+
+beforeEach(() => {
+  MockDate.set(moment(mockNow))
+})
+
+afterEach(() => {
+  MockDate.reset()
+
+  // Some tests suppress console warnings. Unmock console.warn.
+  // eslint-disable-next-line no-console
+  if (console.warn.mockRestore) {
+    // eslint-disable-next-line no-console
+    console.warn.mockRestore()
+  }
+})
 
 const getMockProps = () => ({
   impactText: 'Plant 1 tree',
   status: 'inProgress',
   taskText: 'Open 10 tabs',
+  completionTime: moment(mockNow).subtract(2, 'minutes').toISOString(),
+  deadlineTime: moment(mockNow).add(8, 'hours').toISOString(),
 })
+
+const getTimeDisplayString = (wrapper) => {
+  return wrapper
+    .find('[data-test-id="time-container"]')
+    .find(Typography)
+    .first()
+    .render()
+    .text()
+}
 
 describe('Achievement component', () => {
   it('renders without error', () => {
@@ -117,5 +148,330 @@ describe('Achievement component', () => {
         .find(Cancel)
         .exists()
     ).toBe(false)
+  })
+
+  it('displays the expected time string when the achievement is in progress and the deadline is in the near future', () => {
+    expect.assertions(6)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'inProgress',
+      completionTime: undefined,
+      deadlineTime: moment(mockNow).add(1, 'second').toISOString(),
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+
+    expect(getTimeDisplayString(wrapper)).toEqual('a few seconds remaining')
+
+    wrapper.setProps({
+      deadlineTime: moment(mockNow).add(24, 'seconds').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('a few seconds remaining')
+
+    wrapper.setProps({
+      deadlineTime: moment(mockNow).add(46, 'seconds').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('a minute remaining')
+
+    wrapper.setProps({
+      deadlineTime: moment(mockNow).add(192, 'seconds').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('3 minutes remaining')
+
+    wrapper.setProps({
+      deadlineTime: moment(mockNow).add(54, 'minutes').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('an hour remaining')
+
+    wrapper.setProps({
+      deadlineTime: moment(mockNow).add(14, 'hours').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('14 hours remaining')
+  })
+
+  it('displays the expected time string when the achievement was successfully completed in the recent past and the deadline is in the future', () => {
+    expect.assertions(6)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'success',
+      completionTime: moment(mockNow).subtract(1, 'second').toISOString(),
+      deadlineTime: moment(mockNow).add(14, 'hours').toISOString(),
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+
+    expect(getTimeDisplayString(wrapper)).toEqual('a few seconds ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(24, 'seconds').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('a few seconds ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(46, 'seconds').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('a minute ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(192, 'seconds').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('3 minutes ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(54, 'minutes').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('an hour ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(14, 'hours').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('14 hours ago')
+  })
+
+  it('displays the expected time string when the achievement was failed and the deadline/completion time is in recent past', () => {
+    expect.assertions(6)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'failure',
+      completionTime: moment(mockNow).subtract(1, 'second').toISOString(),
+      deadlineTime: moment(mockNow).subtract(1, 'second').toISOString(),
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+
+    expect(getTimeDisplayString(wrapper)).toEqual('a few seconds ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(24, 'seconds').toISOString(),
+      deadlineTime: moment(mockNow).subtract(24, 'seconds').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('a few seconds ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(46, 'seconds').toISOString(),
+      deadlineTime: moment(mockNow).subtract(46, 'seconds').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('a minute ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(192, 'seconds').toISOString(),
+      deadlineTime: moment(mockNow).subtract(192, 'seconds').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('3 minutes ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(54, 'minutes').toISOString(),
+      deadlineTime: moment(mockNow).subtract(54, 'minutes').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('an hour ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(14, 'hours').toISOString(),
+      deadlineTime: moment(mockNow).subtract(14, 'hours').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('14 hours ago')
+  })
+
+  it('displays the expected time string when the achievement was completed in the distant past', () => {
+    expect.assertions(5)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'success',
+      completionTime: moment(mockNow).subtract(3, 'days').toISOString(),
+      deadlineTime: moment(mockNow).add(14, 'hours').toISOString(),
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+
+    expect(getTimeDisplayString(wrapper)).toEqual('3 days ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(16, 'days').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('16 days ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(70, 'days').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('2 months ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(400, 'days').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('a year ago')
+
+    wrapper.setProps({
+      completionTime: moment(mockNow).subtract(3, 'years').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('3 years ago')
+  })
+
+  it('displays the expected time string when the achievement deadline is in the distant future', () => {
+    expect.assertions(5)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'inProgress',
+      completionTime: undefined,
+      deadlineTime: moment(mockNow).add(3, 'days').toISOString(),
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+
+    expect(getTimeDisplayString(wrapper)).toEqual('3 days remaining')
+
+    wrapper.setProps({
+      deadlineTime: moment(mockNow).add(16, 'days').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('16 days remaining')
+
+    wrapper.setProps({
+      deadlineTime: moment(mockNow).add(70, 'days').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('2 months remaining')
+
+    wrapper.setProps({
+      deadlineTime: moment(mockNow).add(400, 'days').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('a year remaining')
+
+    wrapper.setProps({
+      deadlineTime: moment(mockNow).add(3, 'years').toISOString(),
+    })
+    expect(getTimeDisplayString(wrapper)).toEqual('3 years remaining')
+  })
+
+  it('displays the clock icon next to the display time when the achievement is in progress', () => {
+    expect.assertions(1)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'inProgress',
+      completionTime: undefined,
+      deadlineTime: moment(mockNow).add(4, 'hours').toISOString(),
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="time-container"]').find(Schedule).exists()
+    ).toBe(true)
+  })
+
+  it('does not display the clock icon when the achievement was completed (success)', () => {
+    expect.assertions(1)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'success',
+      completionTime: moment(mockNow).subtract(4, 'hours').toISOString(),
+      deadlineTime: moment(mockNow).subtract(4, 'hours').toISOString(),
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="time-container"]').find(Schedule).exists()
+    ).toBe(false)
+  })
+
+  it('does not display the clock icon when the achievement was completed (failure)', () => {
+    expect.assertions(1)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'failure',
+      completionTime: moment(mockNow).subtract(4, 'hours').toISOString(),
+      deadlineTime: moment(mockNow).subtract(4, 'hours').toISOString(),
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="time-container"]').find(Schedule).exists()
+    ).toBe(false)
+  })
+
+  it('calls console.warn and does not display a time if the achievement status is "inProgress" and the deadline time is invalid', () => {
+    expect.assertions(2)
+
+    // Suppress expected console warning.
+    const mockConsoleWarn = jest.fn()
+    jest.spyOn(console, 'warn').mockImplementation(mockConsoleWarn)
+
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'inProgress',
+      completionTime: undefined,
+      deadlineTime: 'xyz123', // invalid
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="time-container"]').find(Typography).exists()
+    ).toBe(false)
+    expect(mockConsoleWarn).toHaveBeenCalledWith(
+      'Invalid "deadlineTime" timestamp provided to Achievement.'
+    )
+  })
+
+  it('calls console.warn and does not display a time if the achievement status is "success" and no completion time is provided', () => {
+    expect.assertions(2)
+
+    // Suppress expected console warning.
+    const mockConsoleWarn = jest.fn()
+    jest.spyOn(console, 'warn').mockImplementation(mockConsoleWarn)
+
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'success',
+      completionTime: undefined,
+      deadlineTime: moment(mockNow).subtract(4, 'hours').toISOString(),
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="time-container"]').find(Typography).exists()
+    ).toBe(false)
+    expect(mockConsoleWarn).toHaveBeenCalledWith(
+      'Invalid "completionTime" timestamp provided to Achievement.'
+    )
+  })
+
+  it('calls console.warn and does not display a time if the achievement status is "failure" and no completion time is provided', () => {
+    expect.assertions(2)
+
+    // Suppress expected console warning.
+    const mockConsoleWarn = jest.fn()
+    jest.spyOn(console, 'warn').mockImplementation(mockConsoleWarn)
+
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'failure',
+      completionTime: undefined,
+      deadlineTime: moment(mockNow).subtract(4, 'hours').toISOString(),
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="time-container"]').find(Typography).exists()
+    ).toBe(false)
+    expect(mockConsoleWarn).toHaveBeenCalledWith(
+      'Invalid "completionTime" timestamp provided to Achievement.'
+    )
+  })
+
+  it('does not display a time and does not call console.warn if the achievement status is "inProgress" and the deadline time is not set', () => {
+    expect.assertions(2)
+
+    // Suppress expected console warning.
+    const mockConsoleWarn = jest.fn()
+    jest.spyOn(console, 'warn').mockImplementation(mockConsoleWarn)
+
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'inProgress',
+      completionTime: undefined,
+      deadlineTime: undefined,
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="time-container"]').find(Typography).exists()
+    ).toBe(false)
+    expect(mockConsoleWarn).not.toHaveBeenCalled()
   })
 })
