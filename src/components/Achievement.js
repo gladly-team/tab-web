@@ -59,6 +59,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   statusIcon: {
+    width: '1em',
+    height: '1em',
     marginRight: theme.spacing(2),
   },
   successColor: {
@@ -68,10 +70,10 @@ const useStyles = makeStyles((theme) => ({
     color: red['500'],
   },
   subtitleIcon: {
-    marginRight: theme.spacing(2),
+    // Make the subtitle text align with the title text.
+    marginRight: `calc(${theme.spacing(2)}px + 0.14em)`,
     width: '0.86em',
     height: '0.86em',
-    // TODO: make subtitle text align with title
   },
   requirementsIcon: {
     color: theme.palette.text.secondary,
