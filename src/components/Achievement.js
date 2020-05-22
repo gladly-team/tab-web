@@ -403,9 +403,6 @@ Achievement.propTypes = {
     targetNumber: PropTypes.number.isRequired,
     // How to visually display the progress.
     visualizationType: PropTypes.oneOf([PROGRESS_BAR, CHECKMARKS]).isRequired,
-    // Start without these things, which can get complicated:
-    // itemNameSingular: PropTypes.string.isRequired, // e.g. "tab", "friend", "day"
-    // itemNamePlural: PropTypes.string.isRequired, // e.g., "tabs", "friends", "days"
     // Perhaps add: leftLabelText, rightLabelText?
   }),
   shareButton: PropTypes.shape({
