@@ -6,7 +6,9 @@ import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
 // import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
+import return404If from 'src/utils/pageWrappers/return404If'
 import ImpactGoal from 'src/components/ImpactGoal'
+import { showMockAchievements } from 'src/utils/featureFlags'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -103,4 +105,4 @@ Achievements.displayName = 'Achievements'
 Achievements.propTypes = {}
 Achievements.defaultProps = {}
 
-export default Achievements
+export default return404If(!showMockAchievements())(Achievements)
