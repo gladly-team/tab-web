@@ -100,7 +100,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
   },
   progressCheckmark: {
-    margin: theme.spacing(1),
+    marginTop: theme.spacing(0.25),
+    marginBottom: theme.spacing(0.25),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     color: green['500'],
   },
   progressCheckmarkUnchecked: {
