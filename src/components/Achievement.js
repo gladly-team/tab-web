@@ -376,9 +376,6 @@ const Achievement = (props) => {
 
 Achievement.displayName = 'Achievement'
 
-// TODO: make this component handle all use cases and create a
-// demo page that shows each goal in progress, succeeded, and failed.
-
 Achievement.propTypes = {
   className: PropTypes.string,
   impactText: PropTypes.string.isRequired, // e.g., "Plant 1 Tree"
@@ -388,8 +385,6 @@ Achievement.propTypes = {
   descriptionTwo: PropTypes.string,
   // Whether the achievement has been completed or not.
   status: PropTypes.oneOf([IN_PROGRESS, SUCCESS, FAILURE]).isRequired,
-  // Whether this is the user's current (most recent) achievement.
-  // isCurrentAchievement: PropTypes.bool.isRequired,
   // ISO timestamp or null. Null if not yet completed.
   // If successful, the successful completion time.
   // If failed, the time the goal ended.
@@ -421,12 +416,14 @@ Achievement.propTypes = {
     show: PropTypes.bool.isRequired,
     text: PropTypes.string,
   }),
-  // // Content to show when sharing. Refer to the current Tab campaign
-  // // logic. We may want to fetch this only after a user clicks
-  // // to share.
+  // Content to show when sharing. Refer to the current Tab campaign
+  // logic. We may want to fetch this only after a user clicks
+  // to share.
+  // TODO:
   // socialSharing: PropTypes.shape({}),
-  // // An option to show only the success/fail icon, plus info on hover.
-  // compactBadge: PropTypes.bool,
+  // An option to show only the success/fail icon, plus info on hover.
+  // TODO:
+  // badgeOnly: PropTypes.bool,
 }
 Achievement.defaultProps = {
   className: '',
