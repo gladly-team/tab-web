@@ -51,6 +51,8 @@ const getMockProps = () => ({
     show: false,
     // text: 'Next Goal' // it provides default text
   },
+  description: 'Some info here.',
+  descriptionTwo: undefined,
 })
 
 const getTimeDisplayString = (wrapper) => {
@@ -537,6 +539,38 @@ describe('Achievement component', () => {
         .exists()
     ).toBe(false)
     expect(wrapper.find(Group).exists()).toBe(false)
+  })
+
+  it('displays the description when provided', () => {
+    expect.assertions(2)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      description: 'This is my description',
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    const descriptionElem = wrapper
+      .find(Typography)
+      .filterWhere((elem) => elem.render().text() === 'This is my description')
+    expect(descriptionElem.exists()).toBe(true)
+    expect(descriptionElem.prop('variant')).toEqual('body2')
+  })
+
+  it('displays the descriptionTwo when provided', () => {
+    expect.assertions(2)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      descriptionTwo: 'Another description goes here.',
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    const descriptionElem = wrapper
+      .find(Typography)
+      .filterWhere(
+        (elem) => elem.render().text() === 'Another description goes here.'
+      )
+    expect(descriptionElem.exists()).toBe(true)
+    expect(descriptionElem.prop('variant')).toEqual('body2')
   })
 
   it('does not display any progress when "progress" is undefined', () => {

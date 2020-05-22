@@ -69,6 +69,7 @@ const DemoAchievementComponent = () => {
             targetNumber: 50,
             visualizationType: 'progressBar',
           }}
+          descriptionTwo="Great job! You planted 20 trees!"
         />
         <Achievement
           className={classes.achievement}
@@ -142,6 +143,11 @@ const DemoAchievementComponent = () => {
             targetNumber: 5e6,
             visualizationType: 'progressBar',
           }}
+          description="Tiramisu caramels jelly beans ice cream sesame snaps marshmallow
+            lollipop pastry danish. Gummi bears oat cake donut cookie chocolate
+            jelly jujubes. Muffin marzipan marshmallow danish oat cake. Chupa
+            chups candy pastry."
+          descriptionTwo="Gummi bears oat cake donut cookie chocolate jelly jujubes."
           isCommunityGoal
           shareButton={{ show: true }}
         />

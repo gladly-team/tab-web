@@ -112,9 +112,9 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     margin: theme.spacing(2),
   },
-  // descriptionContainer: {
-  //   margin: theme.spacing(2),
-  // },
+  descriptionContainer: {
+    padding: theme.spacing(1),
+  },
 }))
 
 const HowToAchieveIcon = ArrowRight
@@ -153,6 +153,8 @@ const Achievement = (props) => {
     className,
     completionTime,
     deadlineTime,
+    description,
+    descriptionTwo,
     impactText,
     inviteFriendsButton,
     isCommunityGoal,
@@ -332,12 +334,26 @@ const Achievement = (props) => {
             </div>
           ) : null}
         </div>
+        {description ? (
+          <div className={classes.descriptionContainer}>
+            <Typography variant="body2" color="textSecondary">
+              {description}
+            </Typography>
+          </div>
+        ) : null}
         {progressContent ? (
           <div
             className={classes.progressContainer}
             data-test-id="progress-container"
           >
             {progressContent}
+          </div>
+        ) : null}
+        {descriptionTwo ? (
+          <div className={classes.descriptionContainer}>
+            <Typography variant="body2" color="textSecondary">
+              {descriptionTwo}
+            </Typography>
           </div>
         ) : null}
       </CardContent>
@@ -367,7 +383,9 @@ Achievement.propTypes = {
   className: PropTypes.string,
   impactText: PropTypes.string.isRequired, // e.g., "Plant 1 Tree"
   taskText: PropTypes.string.isRequired, // e.g., "Open 10 tabs"
-  // descriptionMarkdown: PropTypes.string, // longer content
+  // May want to accept descriptionMarkdown in the future.
+  description: PropTypes.string,
+  descriptionTwo: PropTypes.string,
   // Whether the achievement has been completed or not.
   status: PropTypes.oneOf([IN_PROGRESS, SUCCESS, FAILURE]).isRequired,
   // Whether this is the user's current (most recent) achievement.
@@ -414,6 +432,8 @@ Achievement.defaultProps = {
   className: '',
   completionTime: null,
   deadlineTime: null,
+  description: null,
+  descriptionTwo: null,
   inviteFriendsButton: {
     show: false,
     text: 'Invite Friends',
