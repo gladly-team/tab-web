@@ -18,7 +18,6 @@ import CheckCircle from '@material-ui/icons/CheckCircle'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import Group from '@material-ui/icons/Group'
 import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked'
-// import RemoveCircle from '@material-ui/icons/RemoveCircle'
 import Schedule from '@material-ui/icons/Schedule'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
@@ -83,9 +82,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   groupIcon: {
-    color: theme.palette.text.secondary,
-  },
-  skipIcon: {
     color: theme.palette.text.secondary,
   },
   progressContainer: {
