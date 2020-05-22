@@ -32,9 +32,13 @@ const DemoAchievementComponent = () => {
     <div className={classes.container}>
       <div className={classes.header}>
         <Typography variant="h3">Demos of Achievement Types</Typography>
-        <Typography variant="body1">
+        <Typography variant="body1" gutterBottom>
           Each type in various states: in progress, success (recent), success
           (historical), failure (recent), and failure (historical).
+        </Typography>
+        <Typography variant="body1" gutterBottom>
+          We can choose to show the following buttons: "Invite Friends" and
+          "Share"
         </Typography>
       </div>
       <Typography variant="h5">
@@ -94,6 +98,7 @@ const DemoAchievementComponent = () => {
             targetNumber: 5,
             visualizationType: 'checkmarks',
           }}
+          showInviteFriendsButton
         />
         <Achievement
           className={classes.achievement}
@@ -123,7 +128,7 @@ const DemoAchievementComponent = () => {
         />
       </div>
 
-      <Typography variant="h5">Community achievements</Typography>
+      <Typography variant="h5">Community achievement</Typography>
       <div className={classes.exampleSet}>
         <Achievement
           className={classes.achievement}
@@ -151,6 +156,7 @@ const DemoAchievementComponent = () => {
             visualizationType: 'progressBar',
           }}
           isCommunityGoal
+          showShareButton
         />
         <Achievement
           className={classes.achievement}

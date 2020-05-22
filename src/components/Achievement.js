@@ -8,9 +8,9 @@ import grey from '@material-ui/core/colors/grey'
 import red from '@material-ui/core/colors/red'
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
-// import CardActions from '@material-ui/core/CardActions'
+import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
-// import Button from '@material-ui/core/Button'
+import Button from '@material-ui/core/Button'
 // import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Cancel from '@material-ui/icons/Cancel'
@@ -156,6 +156,8 @@ const Achievement = (props) => {
     impactText,
     isCommunityGoal,
     progress,
+    showInviteFriendsButton,
+    showShareButton,
     status,
     taskText,
   } = props
@@ -273,6 +275,8 @@ const Achievement = (props) => {
     }
   }
 
+  const hasButton = showInviteFriendsButton || showShareButton
+
   return (
     <Card className={clsx(classes.root, className)}>
       <CardContent className={classes.cardContent}>
@@ -326,6 +330,14 @@ const Achievement = (props) => {
           </div>
         ) : null}
       </CardContent>
+      {hasButton ? (
+        <CardActions>
+          {showInviteFriendsButton ? (
+            <Button color="default">Invite Friends</Button>
+          ) : null}
+          {showShareButton ? <Button color="default">Share</Button> : null}
+        </CardActions>
+      ) : null}
     </Card>
   )
 }
@@ -363,8 +375,8 @@ Achievement.propTypes = {
     // itemNamePlural: PropTypes.string.isRequired, // e.g., "tabs", "friends", "days"
     // Perhaps add: leftLabelText, rightLabelText?
   }),
-  // showShareButton: PropTypes.bool,
-  // showInviteFriendsButton: PropTypes.bool,
+  showShareButton: PropTypes.bool,
+  showInviteFriendsButton: PropTypes.bool,
   // // Content to show when sharing. Refer to the current Tab campaign
   // // logic. We may want to fetch this only after a user clicks
   // // to share.
@@ -378,6 +390,8 @@ Achievement.defaultProps = {
   deadlineTime: null,
   isCommunityGoal: false,
   progress: null,
+  showShareButton: false,
+  showInviteFriendsButton: false,
 }
 
 export default Achievement

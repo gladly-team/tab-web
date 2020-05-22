@@ -3,6 +3,8 @@ import { shallow } from 'enzyme'
 import moment from 'moment'
 import MockDate from 'mockdate'
 import Typography from '@material-ui/core/Typography'
+import CardActions from '@material-ui/core/CardActions'
+import Button from '@material-ui/core/Button'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
@@ -40,6 +42,8 @@ const getMockProps = () => ({
     targetNumber: 50,
     visualizationType: 'progressBar',
   },
+  showShareButton: undefined, // defaults to false
+  showInviteFriendsButton: undefined, // defaults to false
 })
 
 const getTimeDisplayString = (wrapper) => {
@@ -645,5 +649,88 @@ describe('Achievement component', () => {
     expect(mockConsoleWarn).toHaveBeenCalledWith(
       'Large number of checkmarks attempted to render in Achievement. Limiting to 20 checkmarks.'
     )
+  })
+
+  it('does not render CardActions or any buttons if "showInviteFriendsButton" and "showShareButton" are both undefined', () => {
+    expect.assertions(2)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      showInviteFriendsButton: undefined,
+      showShareButton: undefined,
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(wrapper.find(CardActions).exists()).toBe(false)
+    expect(wrapper.find(Button).exists()).toBe(false)
+  })
+
+  it('does not render CardActions or any buttons if "showInviteFriendsButton" and "showShareButton" are both false', () => {
+    expect.assertions(2)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      showInviteFriendsButton: false,
+      showShareButton: false,
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(wrapper.find(CardActions).exists()).toBe(false)
+    expect(wrapper.find(Button).exists()).toBe(false)
+  })
+
+  it('renders the "Invite Friends" button if "showInviteFriendsButton" is true', () => {
+    expect.assertions(1)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      showInviteFriendsButton: true,
+      showShareButton: false,
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper
+        .find(Button)
+        .filterWhere((e) => e.render().text() === 'Invite Friends')
+        .exists()
+    ).toBe(true)
+  })
+
+  it('renders the "Share" button if "showShareButton" is true', () => {
+    expect.assertions(1)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      showInviteFriendsButton: false,
+      showShareButton: true,
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper
+        .find(Button)
+        .filterWhere((e) => e.render().text() === 'Share')
+        .exists()
+    ).toBe(true)
+  })
+
+  it('renders both the "Invite Friends" and "Share" buttons if both should be shown', () => {
+    expect.assertions(2)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      showInviteFriendsButton: true,
+      showShareButton: true,
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper
+        .find(Button)
+        .filterWhere((e) => e.render().text() === 'Invite Friends')
+        .exists()
+    ).toBe(true)
+    expect(
+      wrapper
+        .find(Button)
+        .filterWhere((e) => e.render().text() === 'Share')
+        .exists()
+    ).toBe(true)
   })
 })
