@@ -154,10 +154,10 @@ const Achievement = (props) => {
     completionTime,
     deadlineTime,
     impactText,
+    inviteFriendsButton,
     isCommunityGoal,
     progress,
-    showInviteFriendsButton,
-    showShareButton,
+    shareButton,
     status,
     taskText,
   } = props
@@ -275,6 +275,11 @@ const Achievement = (props) => {
     }
   }
 
+  const {
+    show: showInviteFriendsButton,
+    text: inviteFriendsButtonText = 'Invite Friends',
+  } = inviteFriendsButton
+  const { show: showShareButton, text: shareButtonText = 'Share' } = shareButton
   const hasButton = showInviteFriendsButton || showShareButton
 
   return (
@@ -333,9 +338,11 @@ const Achievement = (props) => {
       {hasButton ? (
         <CardActions>
           {showInviteFriendsButton ? (
-            <Button color="default">Invite Friends</Button>
+            <Button color="default">{inviteFriendsButtonText}</Button>
           ) : null}
-          {showShareButton ? <Button color="default">Share</Button> : null}
+          {showShareButton ? (
+            <Button color="default">{shareButtonText}</Button>
+          ) : null}
         </CardActions>
       ) : null}
     </Card>
@@ -375,8 +382,14 @@ Achievement.propTypes = {
     // itemNamePlural: PropTypes.string.isRequired, // e.g., "tabs", "friends", "days"
     // Perhaps add: leftLabelText, rightLabelText?
   }),
-  showShareButton: PropTypes.bool,
-  showInviteFriendsButton: PropTypes.bool,
+  shareButton: PropTypes.shape({
+    show: PropTypes.bool.isRequired,
+    text: PropTypes.string,
+  }),
+  inviteFriendsButton: PropTypes.shape({
+    show: PropTypes.bool.isRequired,
+    text: PropTypes.string,
+  }),
   // // Content to show when sharing. Refer to the current Tab campaign
   // // logic. We may want to fetch this only after a user clicks
   // // to share.
@@ -388,10 +401,16 @@ Achievement.defaultProps = {
   className: '',
   completionTime: null,
   deadlineTime: null,
+  inviteFriendsButton: {
+    show: false,
+    text: 'Invite Friends',
+  },
   isCommunityGoal: false,
   progress: null,
-  showShareButton: false,
-  showInviteFriendsButton: false,
+  shareButton: {
+    show: false,
+    text: 'Share',
+  },
 }
 
 export default Achievement

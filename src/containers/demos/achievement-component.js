@@ -98,7 +98,7 @@ const DemoAchievementComponent = () => {
             targetNumber: 5,
             visualizationType: 'checkmarks',
           }}
-          showInviteFriendsButton
+          inviteFriendsButton={{ show: true }}
         />
         <Achievement
           className={classes.achievement}
@@ -125,6 +125,7 @@ const DemoAchievementComponent = () => {
             targetNumber: 12,
             visualizationType: 'checkmarks',
           }}
+          inviteFriendsButton={{ show: true, text: 'Keep Inviting' }}
         />
       </div>
 
@@ -142,6 +143,7 @@ const DemoAchievementComponent = () => {
             visualizationType: 'progressBar',
           }}
           isCommunityGoal
+          shareButton={{ show: true }}
         />
         <Achievement
           className={classes.achievement}
@@ -156,7 +158,7 @@ const DemoAchievementComponent = () => {
             visualizationType: 'progressBar',
           }}
           isCommunityGoal
-          showShareButton
+          shareButton={{ show: true, text: 'Share This' }}
         />
         <Achievement
           className={classes.achievement}
