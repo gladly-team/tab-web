@@ -24,6 +24,7 @@ import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import SearchInput from 'src/components/SearchInput'
 import { accountURL, achievementsURL } from 'src/utils/urls'
+import { showMockAchievements } from 'src/utils/featureFlags'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -199,6 +200,8 @@ const Index = (props) => {
 
   const classes = useStyles()
 
+  const showAchievements = showMockAchievements()
+
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
   const [adUnits, setAdUnits] = useState([])
@@ -273,16 +276,18 @@ const Index = (props) => {
             </div>
           </div>
         </div>
-        <Link to={achievementsURL} className={classes.achievementsContainer}>
-          <ImpactGoal className={classes.impactGoal} demo="tab7days" />
-          <ImpactGoal className={classes.impactGoalCompact} demo="failIcon" />
-          <ImpactGoal
-            className={classes.impactGoalCompact}
-            demo="successIcon"
-          />
-          <div /> {/* take up a spacing unit */}
-          <div className={classes.timelineBar} />
-        </Link>
+        {showAchievements ? (
+          <Link to={achievementsURL} className={classes.achievementsContainer}>
+            <ImpactGoal className={classes.impactGoal} demo="tab7days" />
+            <ImpactGoal className={classes.impactGoalCompact} demo="failIcon" />
+            <ImpactGoal
+              className={classes.impactGoalCompact}
+              demo="successIcon"
+            />
+            <div /> {/* take up a spacing unit */}
+            <div className={classes.timelineBar} />
+          </Link>
+        ) : null}
       </div>
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
