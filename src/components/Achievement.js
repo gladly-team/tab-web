@@ -334,6 +334,10 @@ const Achievement = (props) => {
             </div>
           ) : null}
         </div>
+        {/* 
+          We may want to make this collapsible:
+          https://material-ui.com/components/cards/#complex-interaction
+        */}
         {description ? (
           <div className={classes.descriptionContainer}>
             <Typography variant="body2" color="textSecondary">
