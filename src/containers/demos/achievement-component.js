@@ -214,6 +214,7 @@ const DemoAchievementComponent = () => {
           impactText="Reach 1,000 trees Planted"
           status="success"
           taskText="Open 132 tabs"
+          completionTime={moment().subtract(11, 'minutes').toISOString()}
           descriptionTwo="Great work: you've planted 1,000 trees by opening tabs! Share this milestone:"
           shareButton={{ show: true }}
         />
