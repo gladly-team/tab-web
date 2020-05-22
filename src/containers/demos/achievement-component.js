@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     flexWrap: 'wrap',
     margin: theme.spacing(2),
+    marginBottom: theme.spacing(4),
   },
   achievement: {
     margin: theme.spacing(2),
@@ -34,15 +35,33 @@ const DemoAchievementComponent = () => {
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <Typography variant="h3">Demos of Achievement Types</Typography>
-        <Typography variant="body1" gutterBottom>
-          Each type in various states: in progress, success (recent), success
-          (historical), failure (recent), and failure (historical).
+        <Typography variant="h3" gutterBottom>
+          Demos of Achievement Types
         </Typography>
         <Typography variant="body1" gutterBottom>
-          We can choose to show the following buttons: "Invite Friends" and
-          "Share"
+          Here are achievements in various states: in progress, success
+          (recent), failure (recent), success (historical), and failure
+          (historical).
         </Typography>
+        <Typography variant="body1">We can optionally show:</Typography>
+        <ul>
+          <li>
+            <Typography variant="body1">
+              a visualization of progress (progress bar or checkmarks)
+            </Typography>
+          </li>
+          <li>
+            <Typography variant="body1">
+              text above and/or below the progress visualization
+            </Typography>
+          </li>
+          <li>
+            <Typography variant="body1">
+              buttons for "Invite Friends", "Share", and "Next Goal", with
+              customizable text
+            </Typography>
+          </li>
+        </ul>
       </div>
 
       <Typography variant="h5">
@@ -63,7 +82,7 @@ const DemoAchievementComponent = () => {
         />
         <Achievement
           className={classes.achievement}
-          impactText="Plant 20 trees"
+          impactText="Plant 1 tree"
           status="success"
           taskText="Open 50 tabs"
           deadlineTime={moment().subtract(8, 'minutes').toISOString()}
@@ -73,11 +92,13 @@ const DemoAchievementComponent = () => {
             targetNumber: 50,
             visualizationType: 'progressBar',
           }}
-          descriptionTwo="Great job! You planted 20 trees!"
+          descriptionTwo="Great job! You planted a tree! This text is customizable or can be hidden."
+          nextGoalButton={{ show: true }}
+          shareButton={{ show: true }}
         />
         <Achievement
           className={classes.achievement}
-          impactText="Plant 20 trees"
+          impactText="Plant 1 tree"
           status="failure"
           taskText="Open 50 tabs"
           deadlineTime={moment().subtract(3, 'seconds').toISOString()}
@@ -87,6 +108,26 @@ const DemoAchievementComponent = () => {
             targetNumber: 50,
             visualizationType: 'progressBar',
           }}
+          descriptionTwo="Unfortunately, you didn't meet this goal, but your tabs are still doing good. Keep it up!"
+          nextGoalButton={{ show: true }}
+        />
+        <Achievement
+          className={classes.achievement}
+          impactText="Plant 1 tree"
+          status="success"
+          taskText="Open 50 tabs"
+          deadlineTime={moment().subtract(5, 'weeks').toISOString()}
+          completionTime={moment().subtract(5, 'weeks').toISOString()}
+          shareButton={{ show: true }}
+        />
+        <Achievement
+          className={classes.achievement}
+          impactText="Plant 1 tree"
+          status="failure"
+          taskText="Open 50 tabs"
+          deadlineTime={moment().subtract(5, 'weeks').toISOString()}
+          completionTime={moment().subtract(5, 'weeks').toISOString()}
+          nextGoalButton={{ show: false }}
         />
       </div>
 
@@ -117,6 +158,32 @@ const DemoAchievementComponent = () => {
             targetNumber: 10,
             visualizationType: 'checkmarks',
           }}
+          nextGoalButton={{ show: true }}
+          shareButton={{ show: true }}
+        />
+        <Achievement
+          className={classes.achievement}
+          impactText="Plant 12 trees"
+          status="failure"
+          taskText="Recruit 12 friends"
+          deadlineTime={moment().subtract(9, 'minutes').toISOString()}
+          completionTime={moment().subtract(9, 'minutes').toISOString()}
+          progress={{
+            currentNumber: 4,
+            targetNumber: 12,
+            visualizationType: 'checkmarks',
+          }}
+          nextGoalButton={{ show: true }}
+          inviteFriendsButton={{ show: true, text: 'Keep Inviting' }}
+        />
+        <Achievement
+          className={classes.achievement}
+          impactText="Plant 10 trees"
+          status="success"
+          taskText="Recruit 10 friends"
+          deadlineTime={moment().subtract(2, 'months').toISOString()}
+          completionTime={moment().subtract(3, 'months').toISOString()}
+          shareButton={{ show: true }}
         />
         <Achievement
           className={classes.achievement}
@@ -125,12 +192,30 @@ const DemoAchievementComponent = () => {
           taskText="Recruit 12 friends"
           deadlineTime={moment().subtract(7, 'months').toISOString()}
           completionTime={moment().subtract(7, 'months').toISOString()}
+        />
+      </div>
+
+      <Typography variant="h5">Achievement with no deadline</Typography>
+      <div className={classes.exampleSet}>
+        <Achievement
+          className={classes.achievement}
+          impactText="Reach 1,000 trees Planted"
+          status="inProgress"
+          taskText="Open 132 tabs"
           progress={{
-            currentNumber: 4,
-            targetNumber: 12,
-            visualizationType: 'checkmarks',
+            currentNumber: 18,
+            targetNumber: 132,
+            visualizationType: 'progressBar',
           }}
-          inviteFriendsButton={{ show: true, text: 'Keep Inviting' }}
+          description="Wow, you've nearly planted 1,000 trees by opening tabs!"
+        />
+        <Achievement
+          className={classes.achievement}
+          impactText="Reach 1,000 trees Planted"
+          status="success"
+          taskText="Open 132 tabs"
+          descriptionTwo="Great work: you've planted 1,000 trees by opening tabs! Share this milestone:"
+          shareButton={{ show: true }}
         />
       </div>
 
@@ -147,13 +232,13 @@ const DemoAchievementComponent = () => {
             targetNumber: 5e6,
             visualizationType: 'progressBar',
           }}
-          description="Tiramisu caramels jelly beans ice cream sesame snaps marshmallow
+          description="We could make long descriptions here collapsed by default on the new tab page (expand to read details). Tiramisu caramels jelly beans ice cream sesame snaps marshmallow
             lollipop pastry danish. Gummi bears oat cake donut cookie chocolate
             jelly jujubes. Muffin marzipan marshmallow danish oat cake. Chupa
             chups candy pastry."
           descriptionTwo="Gummi bears oat cake donut cookie chocolate jelly jujubes."
           isCommunityGoal
-          shareButton={{ show: true }}
+          inviteFriendsButton={{ show: true, text: 'Tell Friends to Join' }}
         />
         <Achievement
           className={classes.achievement}
@@ -162,11 +247,7 @@ const DemoAchievementComponent = () => {
           taskText="Open 5M tabs"
           deadlineTime={moment().subtract(2, 'years').toISOString()}
           completionTime={moment().subtract(3, 'years').toISOString()}
-          progress={{
-            currentNumber: 5e6,
-            targetNumber: 5e6,
-            visualizationType: 'progressBar',
-          }}
+          description="Congrats! When we succeed, we can choose to hide the progress bar and just show text."
           isCommunityGoal
           nextGoalButton={{ show: true }}
           shareButton={{ show: true, text: 'Share This' }}
@@ -183,7 +264,10 @@ const DemoAchievementComponent = () => {
             targetNumber: 5e6,
             visualizationType: 'progressBar',
           }}
+          descriptionTwo="We didn't quite hit this goal, but we were still able to plant 8,432 trees. Great job!"
           isCommunityGoal
+          nextGoalButton={{ show: true }}
+          shareButton={{ show: true }}
         />
       </div>
 
