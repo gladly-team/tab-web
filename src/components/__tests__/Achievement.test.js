@@ -5,7 +5,7 @@ import MockDate from 'mockdate'
 import Typography from '@material-ui/core/Typography'
 import CardActions from '@material-ui/core/CardActions'
 import Button from '@material-ui/core/Button'
-import ArrowRight from '@material-ui/icons/ArrowRight'
+import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt'
 import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
 import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled'
@@ -105,7 +105,7 @@ describe('Achievement component', () => {
     const Achievement = require('src/components/Achievement').default
     const mockProps = { ...getMockProps(), taskText: 'Open 121 tabs' }
     const wrapper = shallow(<Achievement {...mockProps} />)
-    const impactTextIcon = wrapper.find(ArrowRight).first()
+    const impactTextIcon = wrapper.find(ArrowRightAltIcon).first()
     expect(impactTextIcon.exists()).toBe(true)
 
     // TODO: we should test that the icon is a sibling of the text,

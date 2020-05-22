@@ -16,7 +16,12 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
-import ArrowRight from '@material-ui/icons/ArrowRight'
+import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt'
+// import ArrowRight from '@material-ui/icons/ArrowRight'
+// import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+// import SubdirectoryArrowRight from '@material-ui/icons/SubdirectoryArrowRight'
+// import DoubleArrow from '@material-ui/icons/DoubleArrow'
+// import WorkOutline from '@material-ui/icons/WorkOutline'
 import Group from '@material-ui/icons/Group'
 import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled'
 import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked'
@@ -119,7 +124,8 @@ const useStyles = makeStyles((theme) => ({
   badgeOnlyStatusIcon: { width: '90%', height: '90%', margin: 0 },
 }))
 
-const HowToAchieveIcon = ArrowRight
+const HowToAchieveIcon = ArrowRightAltIcon
+
 const SUCCESS = 'success'
 const FAILURE = 'failure'
 const IN_PROGRESS = 'inProgress'
