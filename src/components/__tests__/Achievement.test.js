@@ -8,10 +8,12 @@ import Button from '@material-ui/core/Button'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
+import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled'
 import Group from '@material-ui/icons/Group'
 import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked'
 import Schedule from '@material-ui/icons/Schedule'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import Paper from '@material-ui/core/Paper'
 
 const mockNow = '2020-04-02T18:00:00.000Z'
 
@@ -848,5 +850,59 @@ describe('Achievement component', () => {
         .filterWhere((e) => e.render().text() === 'Next Goal')
         .exists()
     ).toBe(true)
+  })
+
+  it('returns an "in progress" icon when in progress and "badgeOnly" is true', () => {
+    expect.assertions(5)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'inProgress',
+      badgeOnly: true,
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(wrapper.at(0).type()).toEqual(Paper)
+    expect(wrapper.at(0).prop('data-test-id')).toEqual('badge')
+    expect(wrapper.at(0).find(PlayCircleFilled).exists()).toBe(true)
+
+    // Does not contain other status icons.
+    expect(wrapper.at(0).find(CheckCircle).exists()).toBe(false)
+    expect(wrapper.at(0).find(Cancel).exists()).toBe(false)
+  })
+
+  it('returns a success icon when successful and "badgeOnly" is true', () => {
+    expect.assertions(5)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'success',
+      badgeOnly: true,
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(wrapper.at(0).type()).toEqual(Paper)
+    expect(wrapper.at(0).prop('data-test-id')).toEqual('badge')
+    expect(wrapper.at(0).find(CheckCircle).exists()).toBe(true)
+
+    // Does not contain other status icons.
+    expect(wrapper.at(0).find(Cancel).exists()).toBe(false)
+    expect(wrapper.at(0).find(PlayCircleFilled).exists()).toBe(false)
+  })
+
+  it('returns a failed icon when failed and "badgeOnly" is true', () => {
+    expect.assertions(5)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      status: 'failure',
+      badgeOnly: true,
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(wrapper.at(0).type()).toEqual(Paper)
+    expect(wrapper.at(0).prop('data-test-id')).toEqual('badge')
+    expect(wrapper.at(0).find(Cancel).exists()).toBe(true)
+
+    // Does not contain other status icons.
+    expect(wrapper.at(0).find(CheckCircle).exists()).toBe(false)
+    expect(wrapper.at(0).find(PlayCircleFilled).exists()).toBe(false)
   })
 })

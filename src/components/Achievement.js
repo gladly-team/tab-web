@@ -6,17 +6,19 @@ import moment from 'moment'
 import green from '@material-ui/core/colors/green'
 import grey from '@material-ui/core/colors/grey'
 import red from '@material-ui/core/colors/red'
+import yellow from '@material-ui/core/colors/yellow'
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
-// import Paper from '@material-ui/core/Paper'
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Cancel from '@material-ui/icons/Cancel'
 import CheckCircle from '@material-ui/icons/CheckCircle'
 import ArrowRight from '@material-ui/icons/ArrowRight'
 import Group from '@material-ui/icons/Group'
+import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled'
 import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked'
 import Schedule from '@material-ui/icons/Schedule'
 import LinearProgress from '@material-ui/core/LinearProgress'
@@ -51,20 +53,13 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
-  // impactCompactView: {
-  //   borderRadius: '50%',
-  //   width: 50,
-  //   minWidth: 50,
-  //   height: 50,
-  //   minHeight: 50,
-  //   display: 'flex',
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  // },
   statusIcon: {
     width: '1em',
     height: '1em',
     marginRight: theme.spacing(2),
+  },
+  inProgressColor: {
+    color: yellow['600'],
   },
   successColor: {
     color: green['500'],
@@ -111,6 +106,17 @@ const useStyles = makeStyles((theme) => ({
   descriptionContainer: {
     padding: theme.spacing(1),
   },
+  badgeOnlyContainer: {
+    borderRadius: '50%',
+    width: 50,
+    minWidth: 50,
+    height: 50,
+    minHeight: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  badgeOnlyStatusIcon: { width: '90%', height: '90%', margin: 0 },
 }))
 
 const HowToAchieveIcon = ArrowRight
@@ -166,8 +172,52 @@ const Achievement = (props) => {
 
   // If it's a badge, return a substantially different component.
   if (badgeOnly) {
-    // TODO
-    return <div className={badgeClassName}>badge!</div>
+    let BadgeStatusIcon = null
+    switch (status) {
+      case SUCCESS:
+        BadgeStatusIcon = (
+          <CheckCircle
+            className={clsx(
+              classes.badgeOnlyStatusIcon,
+              classes.statusIcon,
+              classes.successColor
+            )}
+          />
+        )
+        break
+      case FAILURE:
+        BadgeStatusIcon = (
+          <Cancel
+            className={clsx(
+              classes.badgeOnlyStatusIcon,
+              classes.statusIcon,
+              classes.failureColor
+            )}
+          />
+        )
+        break
+      case IN_PROGRESS:
+        BadgeStatusIcon = (
+          <PlayCircleFilled
+            className={clsx(
+              classes.badgeOnlyStatusIcon,
+              classes.statusIcon,
+              classes.inProgressColor
+            )}
+          />
+        )
+        break
+      default:
+        BadgeStatusIcon = null
+    }
+    return (
+      <Paper
+        className={clsx(badgeClassName, classes.badgeOnlyContainer)}
+        data-test-id="badge"
+      >
+        {BadgeStatusIcon}
+      </Paper>
+    )
   }
 
   let StatusIcon = null
