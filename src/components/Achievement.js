@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 400,
     maxWidth: 600,
   },
-  title: {
-    fontSize: 14,
+  cardContent: {
+    paddingBottom: theme.spacing(1),
   },
   timeContainer: {
     display: 'flex',
@@ -44,24 +44,24 @@ const useStyles = makeStyles((theme) => ({
   topTextContainer: {
     marginBottom: theme.spacing(1),
   },
-  subtitleContainer: {
-    display: 'flex',
-    alignItems: 'center',
-  },
   impactContainer: {
     display: 'flex',
     alignItems: 'center',
   },
-  impactCompactView: {
-    borderRadius: '50%',
-    width: 50,
-    minWidth: 50,
-    height: 50,
-    minHeight: 50,
+  subtitleContainer: {
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
   },
+  // impactCompactView: {
+  //   borderRadius: '50%',
+  //   width: 50,
+  //   minWidth: 50,
+  //   height: 50,
+  //   minHeight: 50,
+  //   display: 'flex',
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
   statusIcon: {
     width: '1em',
     height: '1em',
@@ -87,7 +87,6 @@ const useStyles = makeStyles((theme) => ({
   },
   skipIcon: {
     color: theme.palette.text.secondary,
-    // color: yellow['500'],
   },
   progressContainer: {
     display: 'flex',
@@ -100,8 +99,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
   },
   progressCheckmark: {
-    marginTop: theme.spacing(0.25),
-    marginBottom: theme.spacing(0.25),
+    marginTop: theme.spacing(0.5),
+    marginBottom: theme.spacing(0.5),
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     color: green['500'],
@@ -113,9 +112,9 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     margin: theme.spacing(2),
   },
-  descriptionContainer: {
-    margin: theme.spacing(2),
-  },
+  // descriptionContainer: {
+  //   margin: theme.spacing(2),
+  // },
 }))
 
 const HowToAchieveIcon = ArrowRight
@@ -276,7 +275,7 @@ const Achievement = (props) => {
 
   return (
     <Card className={clsx(classes.root, className)}>
-      <CardContent>
+      <CardContent className={classes.cardContent}>
         {timeToDisplay ? (
           <div className={classes.timeContainer} data-test-id="time-container">
             {status === IN_PROGRESS ? (
