@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
     width: 14,
     height: 14,
   },
+  topTextContainer: {
+    marginBottom: theme.spacing(1),
+  },
   subtitleContainer: {
     display: 'flex',
     alignItems: 'center',
@@ -285,29 +288,33 @@ const Achievement = (props) => {
             </Typography>
           </div>
         ) : null}
-        <div
-          className={classes.impactContainer}
-          data-test-id="impact-text-container"
-        >
-          {StatusIcon}
-          <Typography variant="h5">{impactText}</Typography>
-        </div>
-        <div className={classes.subtitleContainer}>
-          <HowToAchieveIcon
-            className={clsx(classes.subtitleIcon, classes.requirementsIcon)}
-          />
-          <Typography variant="subtitle1" color="textSecondary">
-            {taskText}
-          </Typography>
-        </div>
-        {isCommunityGoal ? (
+        <div className={classes.topTextContainer}>
+          <div
+            className={classes.impactContainer}
+            data-test-id="impact-text-container"
+          >
+            {StatusIcon}
+            <Typography variant="h5">{impactText}</Typography>
+          </div>
           <div className={classes.subtitleContainer}>
-            <Group className={clsx(classes.subtitleIcon, classes.groupIcon)} />
+            <HowToAchieveIcon
+              className={clsx(classes.subtitleIcon, classes.requirementsIcon)}
+            />
             <Typography variant="subtitle1" color="textSecondary">
-              Community goal
+              {taskText}
             </Typography>
           </div>
-        ) : null}
+          {isCommunityGoal ? (
+            <div className={classes.subtitleContainer}>
+              <Group
+                className={clsx(classes.subtitleIcon, classes.groupIcon)}
+              />
+              <Typography variant="subtitle1" color="textSecondary">
+                Community goal
+              </Typography>
+            </div>
+          ) : null}
+        </div>
         {progressContent ? (
           <div
             className={classes.progressContainer}
