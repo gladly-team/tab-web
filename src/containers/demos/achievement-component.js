@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     width: 400,
   },
+  achievementBadge: {
+    margin: theme.spacing(4),
+  },
 }))
 
 const DemoAchievementComponent = () => {
@@ -41,6 +44,7 @@ const DemoAchievementComponent = () => {
           "Share"
         </Typography>
       </div>
+
       <Typography variant="h5">
         Individual achievement (progress bar)
       </Typography>
@@ -180,6 +184,55 @@ const DemoAchievementComponent = () => {
             visualizationType: 'progressBar',
           }}
           isCommunityGoal
+        />
+      </div>
+
+      <Typography variant="h5">Badges only</Typography>
+      <div className={classes.exampleSet}>
+        <Achievement
+          badgeOnly
+          badgeClassName={classes.achievementBadge}
+          className={classes.achievement}
+          impactText="Plant 1 tree"
+          status="inProgress"
+          taskText="Open 50 tabs"
+          deadlineTime={moment().add(47, 'minutes').toISOString()}
+          progress={{
+            currentNumber: 11,
+            targetNumber: 50,
+            visualizationType: 'progressBar',
+          }}
+        />
+        <Achievement
+          badgeOnly
+          badgeClassName={classes.achievementBadge}
+          className={classes.achievement}
+          impactText="Plant 20 trees"
+          status="success"
+          taskText="Open 50 tabs"
+          deadlineTime={moment().subtract(8, 'minutes').toISOString()}
+          completionTime={moment().subtract(11, 'minutes').toISOString()}
+          progress={{
+            currentNumber: 50,
+            targetNumber: 50,
+            visualizationType: 'progressBar',
+          }}
+          descriptionTwo="Great job! You planted 20 trees!"
+        />
+        <Achievement
+          badgeOnly
+          badgeClassName={classes.achievementBadge}
+          className={classes.achievement}
+          impactText="Plant 20 trees"
+          status="failure"
+          taskText="Open 50 tabs"
+          deadlineTime={moment().subtract(3, 'seconds').toISOString()}
+          completionTime={moment().subtract(3, 'seconds').toISOString()}
+          progress={{
+            currentNumber: 21,
+            targetNumber: 50,
+            visualizationType: 'progressBar',
+          }}
         />
       </div>
     </div>

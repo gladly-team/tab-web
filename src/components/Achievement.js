@@ -146,6 +146,8 @@ const getTimeDisplay = (time) => {
 
 const Achievement = (props) => {
   const {
+    badgeClassName,
+    badgeOnly,
     className,
     completionTime,
     deadlineTime,
@@ -161,6 +163,12 @@ const Achievement = (props) => {
     taskText,
   } = props
   const classes = useStyles()
+
+  // If it's a badge, return a substantially different component.
+  if (badgeOnly) {
+    // TODO
+    return <div className={badgeClassName}>badge!</div>
+  }
 
   let StatusIcon = null
   switch (status) {
@@ -377,6 +385,9 @@ const Achievement = (props) => {
 Achievement.displayName = 'Achievement'
 
 Achievement.propTypes = {
+  badgeClassName: PropTypes.string, // applied when the "badgeOnly" prop is true
+  // An option to show only the success/fail icon.
+  badgeOnly: PropTypes.bool,
   className: PropTypes.string,
   impactText: PropTypes.string.isRequired, // e.g., "Plant 1 Tree"
   taskText: PropTypes.string.isRequired, // e.g., "Open 10 tabs"
@@ -418,11 +429,11 @@ Achievement.propTypes = {
   // to share.
   // TODO:
   // socialSharing: PropTypes.shape({}),
-  // An option to show only the success/fail icon, plus info on hover.
-  // TODO:
-  // badgeOnly: PropTypes.bool,
 }
+
 Achievement.defaultProps = {
+  badgeClassName: '',
+  badgeOnly: false,
   className: '',
   completionTime: null,
   deadlineTime: null,
