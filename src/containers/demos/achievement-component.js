@@ -158,6 +158,7 @@ const DemoAchievementComponent = () => {
             visualizationType: 'progressBar',
           }}
           isCommunityGoal
+          nextGoalButton={{ show: true }}
           shareButton={{ show: true, text: 'Share This' }}
         />
         <Achievement

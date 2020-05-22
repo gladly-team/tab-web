@@ -47,6 +47,10 @@ const getMockProps = () => ({
     show: true,
     text: 'Tell a Friend',
   },
+  nextGoalButton: {
+    show: false,
+    // text: 'Next Goal' // it provides default text
+  },
 })
 
 const getTimeDisplayString = (wrapper) => {
@@ -667,20 +671,21 @@ describe('Achievement component', () => {
     expect(wrapper.find(Button).exists()).toBe(false)
   })
 
-  it('does not render CardActions or any buttons if "inviteFriendsButton" and "shareButton" are both set to not show', () => {
+  it('does not render CardActions or any buttons if "inviteFriendsButton", "shareButton", and "nextGoalButton" are all set to not show', () => {
     expect.assertions(2)
     const Achievement = require('src/components/Achievement').default
     const mockProps = {
       ...getMockProps(),
       inviteFriendsButton: { show: false },
       shareButton: { show: false },
+      nextGoalButton: { show: false },
     }
     const wrapper = shallow(<Achievement {...mockProps} />)
     expect(wrapper.find(CardActions).exists()).toBe(false)
     expect(wrapper.find(Button).exists()).toBe(false)
   })
 
-  it('renders the "Invite Friends" button if "inviteFriendsButton" is true', () => {
+  it('renders the "Invite Friends" button if "inviteFriendsButton.show" is true', () => {
     expect.assertions(1)
     const Achievement = require('src/components/Achievement').default
     const mockProps = {
@@ -714,7 +719,7 @@ describe('Achievement component', () => {
     ).toBe(true)
   })
 
-  it('renders the "Share" button if "shareButton" is true', () => {
+  it('renders the "Share" button if "shareButton.show" is true', () => {
     expect.assertions(1)
     const Achievement = require('src/components/Achievement').default
     const mockProps = {
@@ -748,13 +753,46 @@ describe('Achievement component', () => {
     ).toBe(true)
   })
 
-  it('renders both the "Invite Friends" and "Share" buttons if both should be shown', () => {
-    expect.assertions(2)
+  it('renders the "Next Goal" button if "nextGoalButton.show" is true', () => {
+    expect.assertions(1)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      nextGoalButton: { show: true },
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper
+        .find(Button)
+        .filterWhere((e) => e.render().text() === 'Next Goal')
+        .exists()
+    ).toBe(true)
+  })
+
+  it('renders custom text for the "Next Goal" button', () => {
+    expect.assertions(1)
+    const Achievement = require('src/components/Achievement').default
+    const mockProps = {
+      ...getMockProps(),
+      nextGoalButton: { show: true, text: 'Skip' },
+    }
+    const wrapper = shallow(<Achievement {...mockProps} />)
+    expect(
+      wrapper
+        .find(Button)
+        .filterWhere((e) => e.render().text() === 'Skip')
+        .exists()
+    ).toBe(true)
+  })
+
+  it('renders "Invite Friends", "Share", and "Next Goal" buttons if all should be shown', () => {
+    expect.assertions(3)
     const Achievement = require('src/components/Achievement').default
     const mockProps = {
       ...getMockProps(),
       inviteFriendsButton: { show: true },
       shareButton: { show: true },
+      nextGoalButton: { show: true },
     }
     const wrapper = shallow(<Achievement {...mockProps} />)
     expect(
@@ -767,6 +805,13 @@ describe('Achievement component', () => {
       wrapper
         .find(Button)
         .filterWhere((e) => e.render().text() === 'Share')
+        .exists()
+    ).toBe(true)
+
+    expect(
+      wrapper
+        .find(Button)
+        .filterWhere((e) => e.render().text() === 'Next Goal')
         .exists()
     ).toBe(true)
   })

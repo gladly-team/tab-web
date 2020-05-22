@@ -156,6 +156,7 @@ const Achievement = (props) => {
     impactText,
     inviteFriendsButton,
     isCommunityGoal,
+    nextGoalButton,
     progress,
     shareButton,
     status,
@@ -280,7 +281,12 @@ const Achievement = (props) => {
     text: inviteFriendsButtonText = 'Invite Friends',
   } = inviteFriendsButton
   const { show: showShareButton, text: shareButtonText = 'Share' } = shareButton
-  const hasButton = showInviteFriendsButton || showShareButton
+  const {
+    show: showNextGoalButton,
+    text: nextGoalButtonText = 'Next Goal',
+  } = nextGoalButton
+  const hasButton =
+    showInviteFriendsButton || showShareButton || showNextGoalButton
 
   return (
     <Card className={clsx(classes.root, className)}>
@@ -337,6 +343,9 @@ const Achievement = (props) => {
       </CardContent>
       {hasButton ? (
         <CardActions>
+          {showNextGoalButton ? (
+            <Button color="default">{nextGoalButtonText}</Button>
+          ) : null}
           {showInviteFriendsButton ? (
             <Button color="default">{inviteFriendsButtonText}</Button>
           ) : null}
@@ -390,6 +399,10 @@ Achievement.propTypes = {
     show: PropTypes.bool.isRequired,
     text: PropTypes.string,
   }),
+  nextGoalButton: PropTypes.shape({
+    show: PropTypes.bool.isRequired,
+    text: PropTypes.string,
+  }),
   // // Content to show when sharing. Refer to the current Tab campaign
   // // logic. We may want to fetch this only after a user clicks
   // // to share.
@@ -406,6 +419,10 @@ Achievement.defaultProps = {
     text: 'Invite Friends',
   },
   isCommunityGoal: false,
+  nextGoalButton: {
+    show: false,
+    text: 'Next Goal',
+  },
   progress: null,
   shareButton: {
     show: false,
