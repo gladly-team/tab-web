@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
   },
   exampleSet: {
     display: 'flex',
+    alignItems: 'flex-start',
     flexDirection: 'row',
     flexWrap: 'wrap',
     margin: theme.spacing(2),
@@ -96,27 +97,27 @@ const DemoAchievementComponent = () => {
         />
         <Achievement
           className={classes.achievement}
-          impactText="Plant 5 trees"
+          impactText="Plant 10 trees"
           status="success"
-          taskText="Recruit 5 friends"
+          taskText="Recruit 10 friends"
           deadlineTime={moment().subtract(2, 'days').toISOString()}
           completionTime={moment().subtract(3, 'days').toISOString()}
           progress={{
-            currentNumber: 5,
-            targetNumber: 5,
+            currentNumber: 10,
+            targetNumber: 10,
             visualizationType: 'checkmarks',
           }}
         />
         <Achievement
           className={classes.achievement}
-          impactText="Plant 5 trees"
+          impactText="Plant 12 trees"
           status="failure"
-          taskText="Recruit 5 friends"
+          taskText="Recruit 12 friends"
           deadlineTime={moment().subtract(7, 'months').toISOString()}
           completionTime={moment().subtract(7, 'months').toISOString()}
           progress={{
             currentNumber: 4,
-            targetNumber: 5,
+            targetNumber: 12,
             visualizationType: 'checkmarks',
           }}
         />

@@ -89,10 +89,12 @@ const useStyles = makeStyles((theme) => ({
   progressContainer: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: theme.spacing(0),
-    marginRight: theme.spacing(2),
-    marginBottom: theme.spacing(0),
-    marginLeft: theme.spacing(2),
+    padding: theme.spacing(1),
+    justifyContent: 'center',
+  },
+  progressCheckmarksContainer: {
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
   },
   progressCheckmark: {
     margin: theme.spacing(1),
@@ -244,10 +246,7 @@ const Achievement = (props) => {
           }
         }
         progressContent = (
-          <div
-            className={classes.progressContainer}
-            data-test-id="progress-container"
-          >
+          <div className={classes.progressCheckmarksContainer}>
             {checkmarks}
           </div>
         )
@@ -255,17 +254,12 @@ const Achievement = (props) => {
       }
       case PROGRESS_BAR: {
         progressContent = (
-          <div
-            className={classes.progressContainer}
-            data-test-id="progress-container"
-          >
-            <LinearProgress
-              variant="determinate"
-              value={(currentNumber / targetNumber) * 100}
-              color="primary"
-              className={classes.progressBar}
-            />
-          </div>
+          <LinearProgress
+            variant="determinate"
+            value={(currentNumber / targetNumber) * 100}
+            color="primary"
+            className={classes.progressBar}
+          />
         )
         break
       }
@@ -314,7 +308,14 @@ const Achievement = (props) => {
             </Typography>
           </div>
         ) : null}
-        {progressContent}
+        {progressContent ? (
+          <div
+            className={classes.progressContainer}
+            data-test-id="progress-container"
+          >
+            {progressContent}
+          </div>
+        ) : null}
       </CardContent>
     </Card>
   )
