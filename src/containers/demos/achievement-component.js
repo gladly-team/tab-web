@@ -332,6 +332,9 @@ AchievementComponentDemoPage.displayName = 'AchievementComponentDemoPage'
 AchievementComponentDemoPage.propTypes = {}
 AchievementComponentDemoPage.defaultProps = {}
 
+// eslint-disable-next-line
+console.log('Should show 404:', !showDevelopmentOnlyDemoPages())
+
 export default return404If(!showDevelopmentOnlyDemoPages())(
   AchievementComponentDemoPage
 )
