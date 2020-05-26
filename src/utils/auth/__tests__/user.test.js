@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import { createAuthUserInfo } from 'src/utils/auth/user'
 
 // The Firebase user from the JS SDK.

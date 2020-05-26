@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 const firebaseApp = jest.genMockFromModule('firebase')
 
 const authMock = {

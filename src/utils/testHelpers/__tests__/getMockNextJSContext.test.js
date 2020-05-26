@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
 
 describe('getMockNextJSContext', () => {

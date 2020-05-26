@@ -1,4 +1,3 @@
-/* eslint-env jest */
 import React from 'react'
 
 const Mock404Page = jest.fn(() => <div>404</div>)

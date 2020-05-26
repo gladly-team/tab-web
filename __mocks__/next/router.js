@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 const mock = jest.genMockFromModule('next/router')
 
 // https://nextjs.org/docs/api-reference/next/router#userouter

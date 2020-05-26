@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 export default jest.fn(({ token }) => ({
   isMockRelayEnvironment: true, // just for testing
   mockUserToken: token, // just for testing

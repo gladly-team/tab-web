@@ -17,7 +17,7 @@ module.exports = {
     // Set Jest rules only for test files.
     // https://stackoverflow.com/a/49211283
     {
-      files: ['**/*.test.js', '**/__mocks__/*.js'],
+      files: ['**/*.test.js', '**/__mocks__/**/*.js'],
       'extends': ['plugin:jest/recommended'],
       env: {
         jest: true
