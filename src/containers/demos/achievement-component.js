@@ -3,6 +3,8 @@ import moment from 'moment'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Achievement from 'src/components/Achievement'
+import return404If from 'src/utils/pageWrappers/return404If'
+import { showDevelopmentOnlyDemoPages } from 'src/utils/featureFlags'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -29,7 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const DemoAchievementComponent = () => {
+// TODO: add base "demos" page to link out to each demo
+
+const AchievementComponentDemoPage = () => {
   const classes = useStyles()
 
   return (
@@ -324,8 +328,10 @@ const DemoAchievementComponent = () => {
   )
 }
 
-DemoAchievementComponent.displayName = 'DemoAchievementComponent'
-DemoAchievementComponent.propTypes = {}
-DemoAchievementComponent.defaultProps = {}
+AchievementComponentDemoPage.displayName = 'AchievementComponentDemoPage'
+AchievementComponentDemoPage.propTypes = {}
+AchievementComponentDemoPage.defaultProps = {}
 
-export default DemoAchievementComponent
+export default return404If(!showDevelopmentOnlyDemoPages())(
+  AchievementComponentDemoPage
+)
