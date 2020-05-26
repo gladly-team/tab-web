@@ -4,6 +4,7 @@ import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { accountURL } from 'src/utils/urls'
+import { showMockAchievements } from 'src/utils/featureFlags'
 // import { AdComponent, fetchAds } from 'tab-ads'
 // import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 // import { getHostname, getCurrentURL } from 'src/utils/navigation'
@@ -28,6 +29,7 @@ jest.mock('src/utils/ssr')
 jest.mock('src/components/Logo')
 jest.mock('src/components/MoneyRaisedContainer')
 jest.mock('src/components/SearchInput')
+jest.mock('src/utils/featureFlags')
 
 const getMockProps = () => ({
   app: {},
@@ -35,6 +37,10 @@ const getMockProps = () => ({
     tabs: 221,
     vcCurrent: 78,
   },
+})
+
+beforeEach(() => {
+  showMockAchievements.mockReturnValue(false)
 })
 
 describe('index.js', () => {
@@ -68,5 +74,23 @@ describe('index.js', () => {
       .filterWhere((el) => el.prop('to') === accountURL)
     expect(settingsLink.childAt(0).type()).toEqual(IconButton)
     expect(settingsLink.childAt(0).childAt(0).type()).toEqual(SettingsIcon)
+  })
+
+  it('does not show the achievements content if showMockAchievements returns false', () => {
+    expect.assertions(1)
+    showMockAchievements.mockReturnValue(false)
+    const IndexPage = require('src/containers/index').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find('[data-test-id="achievements"]').exists()).toBe(false)
+  })
+
+  it('shows the achievements content if showMockAchievements returns true', () => {
+    expect.assertions(1)
+    showMockAchievements.mockReturnValue(true)
+    const IndexPage = require('src/containers/index').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find('[data-test-id="achievements"]').exists()).toBe(true)
   })
 })

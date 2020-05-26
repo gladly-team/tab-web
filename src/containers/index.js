@@ -277,7 +277,11 @@ const Index = (props) => {
           </div>
         </div>
         {showAchievements ? (
-          <Link to={achievementsURL} className={classes.achievementsContainer}>
+          <Link
+            to={achievementsURL}
+            className={classes.achievementsContainer}
+            data-test-id="achievements"
+          >
             <ImpactGoal className={classes.impactGoal} demo="tab7days" />
             <ImpactGoal className={classes.impactGoalCompact} demo="failIcon" />
             <ImpactGoal
