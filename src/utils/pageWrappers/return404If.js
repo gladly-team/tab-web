@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ErrorPage from 'next/error'
 
-// If `should404` is true, return a 404 for the wrapped page.`
+// If `should404` is true, return a 404 for the wrapped page.
 export default (should404) => (ComposedComponent) => {
   const Return404If = ({ is404, composedInitialProps }) => {
     // https://nextjs.org/docs/advanced-features/custom-error-page#reusing-the-built-in-error-page
