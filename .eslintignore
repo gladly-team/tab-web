@@ -5,4 +5,4 @@ build
 .serverless
 
 # This can break builds in Now.sh.
-next.config.js
+next.config.*js
