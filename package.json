@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development next dev",
+    "dev": "USE_LOCAL_ENV_FILE=true NODE_ENV=development next dev",
     "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start",
     "test": "yarn run lint && yarn run relay && jest",

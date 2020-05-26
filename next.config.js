@@ -2,7 +2,15 @@ const path = require('path')
 const withOffline = require('next-offline')
 const withImages = require('next-images')
 
-require('./src/env')
+// Only use the .env file for local development.
+if (process.env.USE_LOCAL_ENV_FILE === 'true') {
+  // eslint-disable-next-line no-console
+  console.log('Loading the local .env file.')
+  require('./src/env')
+} else {
+  // eslint-disable-next-line no-console
+  console.log('Ignoring the local .env file. Set env var "USE_LOCAL_ENV_FILE" to "true" if you want to use it.')
+}
 
 const nextConfig = {
   exportTrailingSlash: true,
