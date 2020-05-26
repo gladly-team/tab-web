@@ -25,7 +25,7 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    minWidth: 400,
+    minWidth: 340,
     maxWidth: 600,
   },
   cardContent: {

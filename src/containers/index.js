@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
+import moment from 'moment'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
 import { makeStyles } from '@material-ui/core/styles'
@@ -18,7 +19,7 @@ import {
   isInEuropeanUnion,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
-import ImpactGoal from 'src/components/ImpactGoal'
+import Achievement from 'src/components/Achievement'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
@@ -88,13 +89,13 @@ const useStyles = makeStyles((theme) => ({
     },
     paddingBottom: 270, // handle the space taken by the ad
   },
-  impactGoal: {
+  achievement: {
     width: 360,
     margin: theme.spacing(1),
     position: 'relative',
     zIndex: 100, // greater than the timeline bar
   },
-  impactGoalCompact: {
+  achievementBadge: {
     margin: theme.spacing(1),
     flex: 0,
     position: 'relative',
@@ -282,11 +283,35 @@ const Index = (props) => {
             className={classes.achievementsContainer}
             data-test-id="achievements"
           >
-            <ImpactGoal className={classes.impactGoal} demo="tab7days" />
-            <ImpactGoal className={classes.impactGoalCompact} demo="failIcon" />
-            <ImpactGoal
-              className={classes.impactGoalCompact}
-              demo="successIcon"
+            <Achievement
+              className={classes.achievement}
+              impactText="Plant 1 tree"
+              status="inProgress"
+              taskText="Open tabs 5 days in a row"
+              deadlineTime={moment().add(3, 'days').toISOString()}
+              progress={{
+                currentNumber: 2,
+                targetNumber: 5,
+                visualizationType: 'checkmarks',
+              }}
+            />
+            <Achievement
+              badgeClassName={classes.achievementBadge}
+              badgeOnly
+              impactText="Plant 1 tree"
+              status="failure"
+              taskText="Recruit 1 friend"
+              completedTime={moment().subtract(2, 'days').toISOString()}
+              deadlineTime={moment().subtract(2, 'days').toISOString()}
+            />
+            <Achievement
+              badgeClassName={classes.achievementBadge}
+              badgeOnly
+              impactText="Plant 1 tree"
+              status="success"
+              taskText="Open 100 tabs"
+              completedTime={moment().subtract(5, 'days').toISOString()}
+              deadlineTime={moment().subtract(5, 'days').toISOString()}
             />
             <div /> {/* take up a spacing unit */}
             <div className={classes.timelineBar} />

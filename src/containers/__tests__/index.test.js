@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { accountURL } from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
+import Achievement from 'src/components/Achievement'
 // import { AdComponent, fetchAds } from 'tab-ads'
 // import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 // import { getHostname, getCurrentURL } from 'src/utils/navigation'
@@ -30,6 +31,9 @@ jest.mock('src/components/Logo')
 jest.mock('src/components/MoneyRaisedContainer')
 jest.mock('src/components/SearchInput')
 jest.mock('src/utils/featureFlags')
+jest.mock('src/components/Achievement', () => () => (
+  <div data-test-id="mock-achievement" />
+))
 
 const getMockProps = () => ({
   app: {},
@@ -92,5 +96,16 @@ describe('index.js', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<IndexPage {...mockProps} />)
     expect(wrapper.find('[data-test-id="achievements"]').exists()).toBe(true)
+  })
+
+  it('the achievements container contains Achievement components', () => {
+    expect.assertions(1)
+    showMockAchievements.mockReturnValue(true)
+    const IndexPage = require('src/containers/index').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(
+      wrapper.find('[data-test-id="achievements"]').find(Achievement).length
+    ).toBeGreaterThan(1)
   })
 })
