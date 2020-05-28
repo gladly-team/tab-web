@@ -7,13 +7,19 @@ import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
-import { accountURL, dashboardURL } from 'src/utils/urls'
+import { accountURL, achievementsURL, dashboardURL } from 'src/utils/urls'
+import { showMockAchievements } from 'src/utils/featureFlags'
 
 jest.mock('src/components/Link')
 jest.mock('src/components/Logo')
+jest.mock('src/utils/featureFlags')
 
 const getMockProps = () => ({
   children: <div>I am a child</div>,
+})
+
+beforeEach(() => {
+  showMockAchievements.mockReturnValue(false)
 })
 
 describe('SettingsPage component', () => {
@@ -63,16 +69,52 @@ describe('SettingsPage component', () => {
     expect(sidebarList.childAt(0).text()).toEqual('Your Profile')
   })
 
-  it('includes the account link in the sidebar list', () => {
+  it('includes the achievements link in the sidebar list if the feature is enabled', () => {
     expect.assertions(3)
+
+    showMockAchievements.mockReturnValue(true) // enabled
+
     const SettingsPage = require('src/components/SettingsPage.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<SettingsPage {...mockProps} />)
     const sidebarList = wrapper.find(List).first()
 
-    // First link.
-    const item = sidebarList.childAt(1).dive()
-    expect(item.render().text()).toEqual('Account')
+    const item = sidebarList
+      .findWhere((elem) => elem.render().text() === 'Achievements')
+      .dive()
+    expect(item.exists()).toBe(true)
+    expect(item.type()).toEqual(Link)
+    expect(item.prop('to')).toEqual(achievementsURL)
+  })
+
+  it('does not includes the achievements link in the sidebar list if the feature is not enabled', () => {
+    expect.assertions(1)
+
+    showMockAchievements.mockReturnValue(false) // not enabled
+
+    const SettingsPage = require('src/components/SettingsPage.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const sidebarList = wrapper.find(List).first()
+
+    const item = sidebarList.findWhere(
+      (elem) => elem.render().text() === 'Achievements'
+    )
+    expect(item.exists()).toBe(false)
+  })
+
+  it('includes the account link in the sidebar list', () => {
+    expect.assertions(3)
+
+    const SettingsPage = require('src/components/SettingsPage.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const sidebarList = wrapper.find(List).first()
+
+    const item = sidebarList
+      .findWhere((elem) => elem.render().text() === 'Account')
+      .dive()
+    expect(item.exists()).toBe(true)
     expect(item.type()).toEqual(Link)
     expect(item.prop('to')).toEqual(accountURL)
   })

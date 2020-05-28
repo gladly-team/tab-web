@@ -2,7 +2,15 @@ const path = require('path')
 const withOffline = require('next-offline')
 const withImages = require('next-images')
 
-require('./src/env')
+// Only use the .env file for local development.
+if (process.env.USE_LOCAL_ENV_FILE === 'true') {
+  // eslint-disable-next-line no-console
+  console.log('Loading the local .env file.')
+  require('./src/env')
+} else {
+  // eslint-disable-next-line no-console
+  console.log('Ignoring the local .env file. Set env var "USE_LOCAL_ENV_FILE" to "true" if you want to use it.')
+}
 
 const nextConfig = {
   exportTrailingSlash: true,
@@ -11,6 +19,8 @@ const nextConfig = {
   env: {
     ADS_ENABLED: process.env.ADS_ENABLED,
     ADS_USE_MOCK_ADS: process.env.ADS_USE_MOCK_ADS,
+    FEATURE_FLAG_DEVELOPMENT_DEMO_PAGES: process.env.FEATURE_FLAG_DEVELOPMENT_DEMO_PAGES,
+    FEATURE_FLAG_MOCK_ACHIEVEMENTS: process.env.FEATURE_FLAG_MOCK_ACHIEVEMENTS,
     FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
     FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,
     FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,

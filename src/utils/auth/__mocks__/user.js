@@ -1,5 +1,3 @@
-/* eslint-env jest */
-
 // Seem like module-resolver doesn't currently handle
 // jest.requireActual:
 // https://github.com/facebook/jest/issues/8958

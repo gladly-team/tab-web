@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development next dev",
+    "dev": "USE_LOCAL_ENV_FILE=true NODE_ENV=development next dev",
     "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start",
     "test": "yarn run lint && yarn run relay && jest",
@@ -26,6 +26,7 @@
     "firebase-admin": "^8.11.0",
     "isomorphic-unfetch": "^3.0.0",
     "lodash": "^4.17.15",
+    "moment": "^2.26.0",
     "next": "^9.3.6",
     "next-images": "^1.4.0",
     "next-offline": "^5.0.2",
@@ -63,6 +64,7 @@
     "graphql-cli": "4.0.0-alpha-df0d2bc.481",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.0.1",
+    "mockdate": "^2.0.5",
     "prettier": "^2.0.5",
     "relay-compiler": "^9.1.0"
   }

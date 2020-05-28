@@ -13,7 +13,8 @@ import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
-import { accountURL, dashboardURL } from 'src/utils/urls'
+import { accountURL, achievementsURL, dashboardURL } from 'src/utils/urls'
+import { showMockAchievements } from 'src/utils/featureFlags'
 
 const sidebarWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   menuItem: {
+    display: 'block',
     background: (props) => (props.isActive ? grey['300'] : 'inherit'),
   },
   sidebarContentContainer: {
@@ -103,6 +105,11 @@ const SettingsPage = (props) => {
           <ListSubheader disableSticky className={classes.listSubheader}>
             Your Profile
           </ListSubheader>
+          {showMockAchievements() ? (
+            <SettingsMenuItem to={achievementsURL}>
+              Achievements
+            </SettingsMenuItem>
+          ) : null}
           <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
         </List>
       </div>
