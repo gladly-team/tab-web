@@ -1,13 +1,19 @@
-// import Cookies from 'cookies'
+import Cookies from 'cookies'
 import getMockReq from 'src/utils/testHelpers/mockReq'
 import getMockRes from 'src/utils/testHelpers/mockRes'
 import cookies, { withCookies } from 'src/utils/middleware/cookies'
 
-jest.mock('cookies')
+const mockCookie = jest.fn(() => ({
+  get: jest.fn(),
+  set: jest.fn(),
+}))
+
+jest.mock('cookies', () => jest.fn(() => mockCookie))
 
 beforeEach(() => {
   process.env.SESSION_SECRET_CURRENT = 'abc'
   process.env.SESSION_SECRET_PREVIOUS = 'def'
+  process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'true'
 })
 
 afterEach(() => {
@@ -22,6 +28,39 @@ describe('cookies middleware: withCookies', () => {
     expect(mockReq.cookie).toBeUndefined()
     withCookies(mockReq, mockRes)
     expect(mockReq.cookie).toEqual(expect.any(Object))
+  })
+
+  it('passes the request and response objects to Cookies', () => {
+    expect.assertions(1)
+    process.env.SESSION_SECRET_CURRENT = 'thing'
+    process.env.SESSION_SECRET_PREVIOUS = 'anotherThing'
+    const mockReq = getMockReq()
+    const mockRes = getMockRes()
+    withCookies(mockReq, mockRes)
+    expect(Cookies).toHaveBeenCalledWith(mockReq, mockRes, expect.any(Object))
+  })
+
+  it('passes the expected secrets to Cookies', () => {
+    expect.assertions(1)
+    process.env.SESSION_SECRET_CURRENT = 'thing'
+    process.env.SESSION_SECRET_PREVIOUS = 'anotherThing'
+    const mockReq = getMockReq()
+    const mockRes = getMockRes()
+    withCookies(mockReq, mockRes)
+    const optionsForCookies = Cookies.mock.calls[0][2]
+    expect(optionsForCookies).toMatchObject({
+      keys: ['thing', 'anotherThing'],
+    })
+  })
+
+  it('sets the "secure" option to true in Cookies when secure cookies are configured', () => {
+    expect.assertions(1)
+    process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'true'
+    withCookies(getMockReq(), getMockRes())
+    const optionsForCookies = Cookies.mock.calls[0][2]
+    expect(optionsForCookies).toMatchObject({
+      secure: true,
+    })
   })
 })
 
