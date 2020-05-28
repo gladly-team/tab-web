@@ -31,8 +31,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-// TODO: add base "demos" page to link out to each demo
-
 const AchievementComponentDemoPage = () => {
   const classes = useStyles()
 

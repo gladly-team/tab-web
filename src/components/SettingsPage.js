@@ -47,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   menuItem: {
+    display: 'block',
     background: (props) => (props.isActive ? grey['300'] : 'inherit'),
   },
   sidebarContentContainer: {
