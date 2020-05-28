@@ -139,4 +139,33 @@ describe('return404If: getInitialProps', () => {
       composedInitialProps: {},
     })
   })
+
+  it('sets the status code to 404 if "should404" is true', async () => {
+    expect.assertions(1)
+    const return404If = require('src/utils/pageWrappers/return404If').default
+    const ctx = getMockNextJSContext()
+    MockComponent.getInitialProps.mockResolvedValue({ some: 'things' }) // shouldn't be called
+    const HOC = return404If(true)(MockComponent)
+    await HOC.getInitialProps(ctx)
+    expect(ctx.res.statusCode).toEqual(404)
+  })
+
+  it('returns a 200 status code if "should404" is false', async () => {
+    expect.assertions(1)
+    const return404If = require('src/utils/pageWrappers/return404If').default
+    const ctx = getMockNextJSContext()
+    MockComponent.getInitialProps.mockResolvedValue({ some: 'things' }) // shouldn't be called
+    const HOC = return404If(false)(MockComponent)
+    await HOC.getInitialProps(ctx)
+    expect(ctx.res.statusCode).toEqual(200)
+  })
+
+  it('does not throw with a client-side context object', async () => {
+    expect.assertions(0)
+    const return404If = require('src/utils/pageWrappers/return404If').default
+    const ctx = getMockNextJSContext({ serverSide: false })
+    MockComponent.getInitialProps.mockResolvedValue({ some: 'things' }) // shouldn't be called
+    const HOC = return404If(false)(MockComponent)
+    await HOC.getInitialProps(ctx)
+  })
 })

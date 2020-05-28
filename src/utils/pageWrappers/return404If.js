@@ -20,6 +20,11 @@ export default (should404) => (ComposedComponent) => {
       composedInitialProps = await ComposedComponent.getInitialProps(ctx)
     }
 
+    // Set the response status code.
+    if (should404 && ctx.res) {
+      ctx.res.statusCode = 404
+    }
+
     return {
       is404: should404,
       composedInitialProps,
