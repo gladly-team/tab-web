@@ -3,10 +3,10 @@ import getMockReq from 'src/utils/testHelpers/mockReq'
 import getMockRes from 'src/utils/testHelpers/mockRes'
 import cookies, { withCookies } from 'src/utils/middleware/cookies'
 
-const mockCookie = jest.fn(() => ({
+const mockCookie = {
   get: jest.fn(),
   set: jest.fn(),
-}))
+}
 
 jest.mock('cookies', () => jest.fn(() => mockCookie))
 
@@ -100,6 +100,67 @@ describe('cookies middleware: withCookies', () => {
     const optionsForCookies = Cookies.mock.calls[0][2]
     expect(optionsForCookies).toMatchObject({
       secure: false,
+    })
+  })
+
+  it("calls the Cookies library's cookies.get when calling cookie.get", () => {
+    expect.assertions(1)
+    const mockReq = getMockReq()
+    withCookies(mockReq, getMockRes())
+    mockReq.cookie.get('chocolateChip')
+    expect(mockCookie.get).toHaveBeenCalledWith('chocolateChip', {
+      signed: true,
+    })
+  })
+
+  it("calls the Cookies library's cookies.set when calling cookie.set", () => {
+    expect.assertions(1)
+    const mockReq = getMockReq()
+    withCookies(mockReq, getMockRes())
+    mockReq.cookie.set('chocolateChip', 'delicious')
+    expect(mockCookie.set).toHaveBeenCalledWith(
+      'chocolateChip',
+      'delicious',
+      expect.any(Object)
+    )
+  })
+
+  it('uses some expected default cookie settings when calling cookie.set', () => {
+    expect.assertions(1)
+    const mockReq = getMockReq()
+    withCookies(mockReq, getMockRes())
+    mockReq.cookie.set('chocolateChip', 'delicious')
+    const cookieSetOpts = mockCookie.set.mock.calls[0][2]
+    expect(cookieSetOpts).toMatchObject({
+      httpOnly: true,
+      maxAge: 604800000,
+      overwrite: true,
+    })
+  })
+
+  it('sets a secure cookie with SameSite=None when enabled', () => {
+    expect.assertions(1)
+    process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'true'
+    const mockReq = getMockReq()
+    withCookies(mockReq, getMockRes())
+    mockReq.cookie.set('chocolateChip', 'delicious')
+    const cookieSetOpts = mockCookie.set.mock.calls[0][2]
+    expect(cookieSetOpts).toMatchObject({
+      secure: true,
+      sameSite: 'none',
+    })
+  })
+
+  it('sets an insecure cookie with SameSite=Strict when secure cookies are not enabled', () => {
+    expect.assertions(1)
+    process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'false'
+    const mockReq = getMockReq()
+    withCookies(mockReq, getMockRes())
+    mockReq.cookie.set('chocolateChip', 'delicious')
+    const cookieSetOpts = mockCookie.set.mock.calls[0][2]
+    expect(cookieSetOpts).toMatchObject({
+      secure: false,
+      sameSite: 'strict',
     })
   })
 })
