@@ -22,7 +22,7 @@ const mockSessionCookieAuthed = () => {
             isClientInitialized: false,
           }),
         }),
-      set: () => {},
+      set: jest.fn(() => {}),
     }
   })
 }
@@ -31,7 +31,7 @@ const mockSessionCookieUnset = () => {
   withCookies.mockImplementation((req) => {
     req.cookie = {
       get: () => undefined,
-      set: () => {},
+      set: jest.fn(() => {}),
     }
   })
 }
@@ -65,6 +65,58 @@ describe('session middleware: withSession', () => {
     expect(mockReq.session).toBeUndefined()
     withSession(mockReq, mockRes)
     expect(mockReq.session).toBeUndefined()
+  })
+
+  it("sets the session cookie when the session isn't yet set and a new value is provided", () => {
+    expect.assertions(1)
+    mockSessionCookieUnset() // mock a user without an auth cookie
+    const mockReq = getMockReq()
+    const mockRes = getMockRes()
+    withSession(mockReq, mockRes)
+    mockReq.session = { my: 'session', abc: 123 }
+    expect(mockReq.cookie.set).toHaveBeenCalledWith(
+      'tabWebSession',
+      encodeBase64({
+        my: 'session',
+        abc: 123,
+      })
+    )
+  })
+
+  it("sets the session cookie to undefined when the session isn't yet set and an undefined value is provided", () => {
+    expect.assertions(1)
+    mockSessionCookieUnset() // mock a user without an auth cookie
+    const mockReq = getMockReq()
+    const mockRes = getMockRes()
+    withSession(mockReq, mockRes)
+    mockReq.session = undefined
+    expect(mockReq.cookie.set).toHaveBeenCalledWith('tabWebSession', undefined)
+  })
+
+  it('sets the session cookie when the session exists and a new value is provided', () => {
+    expect.assertions(1)
+    mockSessionCookieAuthed() // mock an auth cookie
+    const mockReq = getMockReq()
+    const mockRes = getMockRes()
+    withSession(mockReq, mockRes)
+    mockReq.session = { my: 'session', abc: 123 }
+    expect(mockReq.cookie.set).toHaveBeenCalledWith(
+      'tabWebSession',
+      encodeBase64({
+        my: 'session',
+        abc: 123,
+      })
+    )
+  })
+
+  it('sets the session cookie to undefined when the session exists and an undefined value is provided', () => {
+    expect.assertions(1)
+    mockSessionCookieAuthed() // mock an auth cookie
+    const mockReq = getMockReq()
+    const mockRes = getMockRes()
+    withSession(mockReq, mockRes)
+    mockReq.session = undefined
+    expect(mockReq.cookie.set).toHaveBeenCalledWith('tabWebSession', undefined)
   })
 })
 
