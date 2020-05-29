@@ -53,6 +53,26 @@ describe('cookies middleware: withCookies', () => {
     })
   })
 
+  it('throws if the session key SESSION_SECRET_CURRENT is not defined', () => {
+    expect.assertions(1)
+    delete process.env.SESSION_SECRET_CURRENT
+    expect(() => {
+      withCookies(getMockReq(), getMockRes())
+    }).toThrow(
+      'Session secrets must be set as env vars `SESSION_SECRET_CURRENT` and `SESSION_SECRET_PREVIOUS`.'
+    )
+  })
+
+  it('throws if the session key SESSION_SECRET_PREVIOUS is not defined', () => {
+    expect.assertions(1)
+    delete process.env.SESSION_SECRET_PREVIOUS
+    expect(() => {
+      withCookies(getMockReq(), getMockRes())
+    }).toThrow(
+      'Session secrets must be set as env vars `SESSION_SECRET_CURRENT` and `SESSION_SECRET_PREVIOUS`.'
+    )
+  })
+
   it('sets the "secure" option to true in Cookies when secure cookies are configured', () => {
     expect.assertions(1)
     process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'true'
