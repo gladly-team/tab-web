@@ -1,11 +1,6 @@
 /* eslint-env jest */
 
-/**
- * Create a mock HTTP response object for testing. It is an
- * incomplete set of values.
- * @return {Object}
- */
-const mockRes = () => ({
+const mockRes = {
   output: {},
   outputEncodings: {},
   outputCallbacks: {},
@@ -25,6 +20,15 @@ const mockRes = () => ({
   end: jest.fn(),
   on: jest.fn(),
   writeHead: jest.fn(),
-})
+}
+mockRes.json = jest.fn(() => mockRes)
+mockRes.status = jest.fn(() => mockRes)
 
-export default mockRes
+/**
+ * Create a mock HTTP response object for testing. It is an
+ * incomplete set of values.
+ * @return {Object}
+ */
+const getMockRes = () => mockRes
+
+export default getMockRes

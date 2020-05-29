@@ -67,6 +67,8 @@ export default (handler) => (req, res) => {
   try {
     withCookies(req, res)
   } catch (e) {
+    // TODO: log error
+    console.error(e) // eslint-disable-line no-console
     return res
       .status(500)
       .json({ error: 'Could not add the cookies middleware.' })
