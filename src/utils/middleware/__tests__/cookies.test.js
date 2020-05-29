@@ -75,7 +75,7 @@ describe('cookies middleware: withCookies', () => {
 
   it('sets the "secure" option to false in Cookies when secure cookies are not configured', () => {
     expect.assertions(1)
-    process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = undefined
+    delete process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE
     withCookies(getMockReq(), getMockRes())
     const optionsForCookies = Cookies.mock.calls[0][2]
     expect(optionsForCookies).toMatchObject({

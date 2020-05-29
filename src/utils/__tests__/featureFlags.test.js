@@ -1,11 +1,11 @@
 beforeEach(() => {
-  process.env.FEATURE_FLAG_DEVELOPMENT_DEMO_PAGES = undefined
-  process.env.FEATURE_FLAG_MOCK_ACHIEVEMENTS = undefined
+  delete process.env.FEATURE_FLAG_DEVELOPMENT_DEMO_PAGES
+  delete process.env.FEATURE_FLAG_MOCK_ACHIEVEMENTS
 })
 
 describe('feature flag: showDevelopmentOnlyDemoPages', () => {
   it('returns false when the env var is undefined', () => {
-    process.env.FEATURE_FLAG_DEVELOPMENT_DEMO_PAGES = undefined
+    delete process.env.FEATURE_FLAG_DEVELOPMENT_DEMO_PAGES
     const { showDevelopmentOnlyDemoPages } = require('src/utils/featureFlags')
     expect(showDevelopmentOnlyDemoPages()).toBe(false)
   })
@@ -25,7 +25,7 @@ describe('feature flag: showDevelopmentOnlyDemoPages', () => {
 
 describe('feature flag: showMockAchievements', () => {
   it('returns false when the env var is undefined', () => {
-    process.env.FEATURE_FLAG_MOCK_ACHIEVEMENTS = undefined
+    delete process.env.FEATURE_FLAG_MOCK_ACHIEVEMENTS
     const { showMockAchievements } = require('src/utils/featureFlags')
     expect(showMockAchievements()).toBe(false)
   })
