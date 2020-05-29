@@ -101,7 +101,7 @@ describe('_app.js', () => {
 
   it('unregisters the service worker if process.env.SERVICE_WORKER_ENABLED is undefined', () => {
     expect.assertions(1)
-    process.env.SERVICE_WORKER_ENABLED = undefined
+    delete process.env.SERVICE_WORKER_ENABLED
     const App = require('src/containers/_app.js').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)

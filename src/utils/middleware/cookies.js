@@ -36,6 +36,7 @@ export const withCookies = (req, res) => {
       // https://github.com/pillarjs/cookies#cookies--new-cookies-request-response--options--
       secure: useSecureSameSiteNone,
     })
+
     req.cookie = {
       get: (cookieName) => {
         return cookies.get(cookieName, {
