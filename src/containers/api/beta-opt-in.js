@@ -15,7 +15,9 @@ const handler = (req, res) => {
   }
   const isOptedIn = !!optIn
   const cookieVal = isOptedIn ? 'enabled' : undefined
-  req.cookie.set(optInCookieName, cookieVal)
+  req.cookie.set(optInCookieName, cookieVal, {
+    maxAge: 157680000000, // 5 years
+  })
   return res.status(200).json({ status: true })
 }
 

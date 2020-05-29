@@ -45,7 +45,24 @@ describe('API: beta-opt-in', () => {
     }
     const mockRes = getMockRes()
     await betaOptInAPI(mockReq, mockRes)
-    expect(mockReq.cookie.set).toHaveBeenCalledWith('tabV4OptIn', 'enabled')
+    expect(mockReq.cookie.set).toHaveBeenCalledWith(
+      'tabV4OptIn',
+      'enabled',
+      expect.any(Object)
+    )
+  })
+
+  it('sets the max age of the Tab v4 opt in cookie to 5 years (setting cookie when body.optIn is true)', async () => {
+    expect.assertions(1)
+    const mockReq = {
+      ...getMockReq(),
+      body: { optIn: true },
+    }
+    const mockRes = getMockRes()
+    await betaOptInAPI(mockReq, mockRes)
+    expect(mockReq.cookie.set.mock.calls[0][2]).toMatchObject({
+      maxAge: 1000 * 60 * 60 * 24 * 365 * 5,
+    })
   })
 
   it('unsets the Tab v4 opt in cookie if body.optIn is false', async () => {
@@ -56,6 +73,10 @@ describe('API: beta-opt-in', () => {
     }
     const mockRes = getMockRes()
     await betaOptInAPI(mockReq, mockRes)
-    expect(mockReq.cookie.set).toHaveBeenCalledWith('tabV4OptIn', undefined)
+    expect(mockReq.cookie.set).toHaveBeenCalledWith(
+      'tabV4OptIn',
+      undefined,
+      expect.any(Object)
+    )
   })
 })
