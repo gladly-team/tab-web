@@ -138,6 +138,23 @@ describe('cookies middleware: withCookies', () => {
     })
   })
 
+  it('allows overriding some default cookie settings when calling cookie.set', () => {
+    expect.assertions(1)
+    const mockReq = getMockReq()
+    withCookies(mockReq, getMockRes())
+    mockReq.cookie.set('chocolateChip', 'delicious', {
+      httpOnly: false,
+      maxAge: 140,
+      overwrite: false,
+    })
+    const cookieSetOpts = mockCookie.set.mock.calls[0][2]
+    expect(cookieSetOpts).toMatchObject({
+      httpOnly: false,
+      maxAge: 140,
+      overwrite: false,
+    })
+  })
+
   it('sets a secure cookie with SameSite=None when enabled', () => {
     expect.assertions(1)
     process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'true'
@@ -161,6 +178,22 @@ describe('cookies middleware: withCookies', () => {
     expect(cookieSetOpts).toMatchObject({
       secure: false,
       sameSite: 'strict',
+    })
+  })
+
+  it('does not allow overriding some secure/SameSite cookie settings when calling cookie.set', () => {
+    expect.assertions(1)
+    process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'true'
+    const mockReq = getMockReq()
+    withCookies(mockReq, getMockRes())
+    mockReq.cookie.set('chocolateChip', 'delicious', {
+      secure: false,
+      sameSite: 'strict',
+    })
+    const cookieSetOpts = mockCookie.set.mock.calls[0][2]
+    expect(cookieSetOpts).toMatchObject({
+      secure: true,
+      sameSite: 'none',
     })
   })
 })

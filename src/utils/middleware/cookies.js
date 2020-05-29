@@ -43,11 +43,12 @@ export const withCookies = (req, res) => {
           signed: true,
         })
       },
-      set: (cookieName, cookieVal) => {
+      set: (cookieName, cookieVal, options = {}) => {
         cookies.set(cookieName, cookieVal, {
           httpOnly: true,
           maxAge: 604800000, // week
           overwrite: true,
+          ...options,
           // Important that production serves sameSite=None and secure=true because we
           // may load this page as an iframe on the new tab page (cross-domain).
           // The 'none' option is supported in cookie-session ^1.4.0.
