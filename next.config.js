@@ -79,7 +79,6 @@ const nextConfig = {
     // This is an alternative to manually uploading the source maps
     // Note: This is disabled in development mode.
     if (
-
       process.env.SENTRY_DSN &&
       process.env.SENTRY_ORG &&
       process.env.SENTRY_PROJECT &&
