@@ -190,9 +190,9 @@ const Achievements = () => {
 //   throw new Error('Example getServerSideProps error.')
 // }
 
-// Achievements.getInitialProps = async () => {
-//   throw new Error('Example getInitialProps error.')
-// }
+Achievements.getInitialProps = async () => {
+  throw new Error('Example getInitialProps error on achievements.')
+}
 
 Achievements.displayName = 'Achievements'
 Achievements.propTypes = {}
