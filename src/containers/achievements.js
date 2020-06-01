@@ -66,19 +66,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-// TODO: remove example errors
-
 const Achievements = () => {
   const classes = useStyles()
-  // throw new Error('Example render error.')
   return (
     <SettingsPage>
-      <div
-        className={classes.contentContainer}
-        // onClick={() => {
-        //   throw new Error('Example click error.')
-        // }}
-      >
+      <div className={classes.contentContainer}>
         <div className={classes.timelineContainer}>
           <div className={classes.timelineBar} />
           <Achievement
@@ -184,15 +176,6 @@ const Achievements = () => {
     </SettingsPage>
   )
 }
-
-// For later Next versions.
-// Achievements.getServerSideProps = async () => {
-//   throw new Error('Example getServerSideProps error.')
-// }
-
-// Achievements.getInitialProps = async () => {
-//   throw new Error('Example getInitialProps error.')
-// }
 
 Achievements.displayName = 'Achievements'
 Achievements.propTypes = {}
