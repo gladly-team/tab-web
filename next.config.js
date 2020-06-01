@@ -154,4 +154,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withOffline(withImages(nextConfig))
+module.exports = withSourceMaps(withOffline(withImages(nextConfig)))
