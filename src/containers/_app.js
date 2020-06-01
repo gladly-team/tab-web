@@ -27,9 +27,7 @@ import theme from 'src/utils/theme'
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_app.js
 if (process.env.SENTRY_DSN) {
   Sentry.init({
-    // TODO: env var to enable Sentry:
-    // enabled: process.env.NODE_ENV === 'production',
-    enabled: true,
+    enabled: process.env.NODE_ENV === 'production',
     dsn: process.env.SENTRY_DSN,
   })
 } else {
