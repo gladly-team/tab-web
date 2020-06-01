@@ -30,6 +30,7 @@ const getMockProps = () => ({
   }),
   Component: MockComponent,
   pageProps: { some: 'data' },
+  err: undefined,
 })
 
 beforeEach(() => {
@@ -72,6 +73,7 @@ describe('_app.js', () => {
     // Suppress expected console log.
     jest.spyOn(console, 'log').mockImplementationOnce(() => {})
   })
+
   it('renders without error', () => {
     expect.assertions(1)
     const App = require('src/containers/_app.js').default
@@ -252,6 +254,24 @@ describe('_app.js', () => {
       isClientInitialized: true, // note that this is true
       token: 'some-token-here',
     })
+  })
+
+  // This is a workaround for error logging with Sentry:
+  // https://github.com/vercel/next.js/issues/8592
+  // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_app.js
+  it('provides the error prop to the child component', () => {
+    expect.assertions(1)
+    const App = require('src/containers/_app.js').default
+
+    const mockErr = new Error('Some fake error')
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      Component: MockComponent,
+      err: mockErr,
+    }
+    const wrapper = mount(<App {...mockProps} />)
+    expect(wrapper.find(MockComponent).prop('err')).toEqual(mockErr)
   })
 })
 
