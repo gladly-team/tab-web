@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
 import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
-// import logout from 'src/utils/auth/logout'
+import logout from 'src/utils/auth/logout'
 import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { setWindowLocation } from 'src/utils/navigation'
@@ -87,15 +87,10 @@ const Account = (props) => {
   const classes = useStyles()
 
   // Logging out.
-  // const [isLoggingOut, setIsLoggingOut] = useState(false)
-  // const onLogoutClick = async () => {
-  //   throw new Error('Example logout error.')
-  //   // setIsLoggingOut(true)
-  //   // await logout()
-  // }
-  const [isLoggingOut] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
   const onLogoutClick = async () => {
-    throw new Error('Example logout error.')
+    setIsLoggingOut(true)
+    await logout()
   }
 
   // Switching to classic tab page.

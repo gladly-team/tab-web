@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
@@ -199,8 +198,6 @@ if (isClientSide()) {
 
 const Index = (props) => {
   const { app, user } = props
-
-  throw new Error('Example Index render error.')
 
   const classes = useStyles()
 
