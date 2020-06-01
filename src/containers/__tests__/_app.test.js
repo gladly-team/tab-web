@@ -12,6 +12,7 @@ jest.mock('src/utils/auth/hooks')
 jest.mock('src/utils/auth/user')
 jest.mock('src/utils/middleware/session')
 jest.mock('src/utils/ssr')
+jest.mock('@sentry/node')
 
 const MockComponent = () => {
   return <div>hi</div>
@@ -62,6 +63,7 @@ beforeEach(() => {
   })
 
   process.env.SERVICE_WORKER_ENABLED = 'true'
+  process.env.SENTRY_DSN = 'some-sentry-dsn'
 })
 
 afterEach(() => {
