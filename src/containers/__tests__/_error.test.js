@@ -150,4 +150,16 @@ describe('_error.js: getInitialProps', () => {
       new Error('_error.js getInitialProps missing data at path: /some-path/')
     )
   })
+
+  it('does not throw if "res" is not defined (getInitialProps called on the client)', async () => {
+    expect.assertions(1)
+    const ErrorPage = require('src/containers/_error.js').default
+    await expect(
+      ErrorPage.getInitialProps({
+        res: undefined,
+        err: mockErr,
+        asPath: '/some-path/',
+      })
+    ).resolves.not.toThrow()
+  })
 })
