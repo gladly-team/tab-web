@@ -1,6 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { register, unregister } from 'next-offline/runtime'
+import * as Sentry from '@sentry/node'
 import { AuthUserInfoContext, useFirebaseAuth } from 'src/utils/auth/hooks'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
 import { createAuthUserInfo, getAuthUserInfoFromDOM } from 'src/utils/auth/user'
@@ -275,6 +276,87 @@ describe('_app.js', () => {
     const wrapper = mount(<App {...mockProps} />)
     expect(wrapper.find(MockComponent).prop('err')).toEqual(mockErr)
   })
+
+  it('calls Sentry.setUser when the AuthUser has an ID', () => {
+    expect.assertions(1)
+    const App = require('src/containers/_app.js').default
+
+    // Create a child component with a consumer of the AuthUserInfo context.
+    const MockComponentSpy = jest.fn(() => {
+      return <div>hey</div>
+    })
+    const MockComponentWithConsumer = () => {
+      return (
+        <AuthUserInfoContext.Consumer>
+          {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+        </AuthUserInfoContext.Consumer>
+      )
+    }
+
+    useFirebaseAuth.mockReturnValue({
+      initializing: false,
+      user: {
+        uid: 'abc-123',
+        email: 'somebody@example.com',
+        emailVerified: true,
+      },
+    })
+
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      AuthUserInfo: createAuthUserInfo({
+        AuthUser: {
+          id: 'abc-123',
+          email: 'somebody@example.com',
+          emailVerified: true,
+        },
+        token: 'some-token-here',
+        isClientInitialized: false,
+      }),
+      Component: MockComponentWithConsumer,
+    }
+    mount(<App {...mockProps} />)
+    expect(Sentry.setUser).toHaveBeenCalledWith({
+      id: 'abc-123',
+      email: 'somebody@example.com',
+    })
+  })
+
+  it('does not call Sentry.setUser when the AuthUser is null', () => {
+    expect.assertions(1)
+    const App = require('src/containers/_app.js').default
+
+    // Create a child component with a consumer of the AuthUserInfo context.
+    const MockComponentSpy = jest.fn(() => {
+      return <div>hey</div>
+    })
+    const MockComponentWithConsumer = () => {
+      return (
+        <AuthUserInfoContext.Consumer>
+          {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+        </AuthUserInfoContext.Consumer>
+      )
+    }
+
+    useFirebaseAuth.mockReturnValue({
+      initializing: false,
+      user: null,
+    })
+
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      AuthUserInfo: createAuthUserInfo({
+        AuthUser: null,
+        token: undefined,
+        isClientInitialized: false,
+      }),
+      Component: MockComponentWithConsumer,
+    }
+    mount(<App {...mockProps} />)
+    expect(Sentry.setUser).not.toHaveBeenCalled()
+  })
 })
 
 describe('_app.js: getInitialProps [server-side]', () => {
@@ -409,6 +491,61 @@ describe('_app.js: getInitialProps [server-side]', () => {
       token: 'some-token-here',
       isClientInitialized: false,
     })
+  })
+
+  it('calls Sentry.setUser if the AuthUser exists', async () => {
+    expect.assertions(1)
+    withSession.mockImplementation((req) => {
+      req.cookies = ''
+      Object.defineProperty(req, 'session', {
+        configurable: true,
+        enumerable: true,
+        // Session exists
+        get: jest.fn(() => {
+          return {
+            AuthUserInfo: createAuthUserInfo({
+              AuthUser: {
+                id: 'user-id-from-session',
+                email: 'MrSessionGuy@example.com',
+                emailVerified: true,
+              },
+              token: 'some-token-here',
+              isClientInitialized: false,
+            }),
+          }
+        }),
+        set: jest.fn(),
+      })
+    })
+    const App = require('src/containers/_app.js').default
+    await App.getInitialProps({
+      Component: MockComponent,
+      ctx: getMockNextJSContext({ serverSide: true }),
+    })
+    expect(Sentry.setUser).toHaveBeenCalledWith({
+      id: 'user-id-from-session',
+      email: 'MrSessionGuy@example.com',
+    })
+  })
+
+  it('does not call Sentry.setUser if the AuthUser o sniull', async () => {
+    expect.assertions(1)
+    withSession.mockImplementation((req) => {
+      req.cookies = ''
+      Object.defineProperty(req, 'session', {
+        configurable: true,
+        enumerable: true,
+        // Session exists
+        get: jest.fn(() => undefined),
+        set: jest.fn(),
+      })
+    })
+    const App = require('src/containers/_app.js').default
+    await App.getInitialProps({
+      Component: MockComponent,
+      ctx: getMockNextJSContext({ serverSide: true }),
+    })
+    expect(Sentry.setUser).not.toHaveBeenCalled()
   })
 })
 

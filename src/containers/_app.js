@@ -94,6 +94,14 @@ const App = (props) => {
     isClientInitialized: !initializing,
   })
 
+  // Set user context for Sentry error logging.
+  const { id: userId, email } = AuthUser || {}
+  useEffect(() => {
+    if (userId) {
+      Sentry.setUser({ id: userId, email })
+    }
+  }, [userId, email])
+
   // Including the "err" prop as a workaround for:
   // https://github.com/vercel/next.js/issues/8592
   // See:
@@ -139,6 +147,13 @@ App.getInitialProps = async ({ Component, ctx }) => {
     // in _document.js. See:
     // https://github.com/zeit/next.js/issues/2252#issuecomment-353992669
     AuthUserInfo = getAuthUserInfoFromDOM()
+  }
+
+  // Set user context for Sentry error logging.
+  const { AuthUser } = AuthUserInfo || {}
+  const { id: userId, email } = AuthUser || {}
+  if (userId) {
+    Sentry.setUser({ id: userId, email })
   }
 
   // Explicitly add the user to a custom prop in the getInitialProps
