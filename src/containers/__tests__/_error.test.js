@@ -99,9 +99,55 @@ describe('_error.js: getInitialProps', () => {
     })
   })
 
-  // TODO: test:
-  // throws if NextErrorComponent.getInitialProps throws
-  // logs an error to Sentry
-  // does not log an error for 404 status code
-  // logs an error to Sentry when there is no err object
+  it('throws if NextErrorComponent.getInitialProps throws', async () => {
+    expect.assertions(1)
+    const unrelatedErr = new Error('Some unrelated error!')
+    NextErrorComponent.getInitialProps.mockRejectedValue(unrelatedErr)
+    const ErrorPage = require('src/containers/_error.js').default
+    await expect(
+      ErrorPage.getInitialProps({
+        res: getMockRes(),
+        err: mockErr,
+        asPath: '/some-path/',
+      })
+    ).rejects.toEqual(unrelatedErr)
+  })
+
+  it('logs an error to Sentry', async () => {
+    expect.assertions(1)
+    const ErrorPage = require('src/containers/_error.js').default
+    await ErrorPage.getInitialProps({
+      res: getMockRes(),
+      err: mockErr,
+      asPath: '/some-path/',
+    })
+    expect(Sentry.captureException).toHaveBeenCalledWith(mockErr)
+  })
+
+  it('does not log an error for a 404 status code', async () => {
+    expect.assertions(1)
+    const ErrorPage = require('src/containers/_error.js').default
+    await ErrorPage.getInitialProps({
+      res: {
+        ...getMockRes(),
+        statusCode: 404,
+      },
+      err: mockErr,
+      asPath: '/some-path/',
+    })
+    expect(Sentry.captureException).not.toHaveBeenCalled()
+  })
+
+  it('logs an error to Sentry when there is no "err" object', async () => {
+    expect.assertions(1)
+    const ErrorPage = require('src/containers/_error.js').default
+    await ErrorPage.getInitialProps({
+      res: getMockRes(),
+      err: undefined,
+      asPath: '/some-path/',
+    })
+    expect(Sentry.captureException).toHaveBeenCalledWith(
+      new Error('_error.js getInitialProps missing data at path: /some-path/')
+    )
+  })
 })
