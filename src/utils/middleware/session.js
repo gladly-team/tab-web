@@ -1,6 +1,7 @@
 import { isNil } from 'lodash/lang'
 import { encodeBase64, decodeBase64 } from 'src/utils/encoding'
 import { withCookies } from 'src/utils/middleware/cookies'
+import logger from 'src/utils/logger'
 
 // Session adapted from:
 // https://github.com/expressjs/cookie-session/blob/master/index.js
@@ -32,8 +33,7 @@ function Session(req) {
         serializedVal = serialize(val)
       }
     } catch (e) {
-      // TODO: log error
-      console.error(e) // eslint-disable-line no-console
+      logger.error(e)
       return
     }
 
@@ -55,8 +55,7 @@ const addSession = (req) => {
       set: session.set,
     })
   } catch (e) {
-    // TODO: log error
-    console.error(e) // eslint-disable-line no-console
+    logger.error(e)
     throw e
   }
 }
@@ -70,8 +69,7 @@ export default (handler) => (req, res) => {
   try {
     withSession(req, res)
   } catch (e) {
-    // TODO: log error
-    console.error(e) // eslint-disable-line no-console
+    logger.error(e)
     return res.status(500).json({ error: 'Could not get user session.' })
   }
   return handler(req, res)

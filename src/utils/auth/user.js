@@ -2,6 +2,7 @@
 /* globals window */
 import { get, has } from 'lodash/object'
 import { isServerSide } from 'src/utils/ssr'
+import logger from 'src/utils/logger'
 
 /**
  * Take the user object from Firebase (from either the Firebase admin SDK or
@@ -102,10 +103,7 @@ export const getAuthUserInfoFromDOM = () => {
       window.document.getElementById(authUserInfoDOMScriptId).textContent
     )
   } catch (e) {
-    console.error(e) // eslint-disable-line no-console
-
-    // TODO: log error instead of throwing
-    throw e
+    logger.error(e)
   }
   return AuthUserInfo
 }
@@ -133,10 +131,7 @@ export const setAuthUserInfoInDOM = (AuthUserInfo) => {
       authUserInfoDOMScriptId
     ).textContent = JSON.stringify(AuthUserInfo)
   } catch (e) {
-    console.error(e) // eslint-disable-line no-console
-
-    // TODO: log error instead of throwing
-    throw e
+    logger.error(e)
   }
 }
 
@@ -158,9 +153,6 @@ export const destroyAuthUserInfoInDOM = () => {
       authUserInfoDOMScriptId
     ).textContent = JSON.stringify(createAuthUserInfo())
   } catch (e) {
-    console.error(e) // eslint-disable-line no-console
-
-    // TODO: log error instead of throwing
-    throw e
+    logger.error(e)
   }
 }

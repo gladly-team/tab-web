@@ -1,4 +1,5 @@
 import Cookies from 'cookies'
+import logger from 'src/utils/logger'
 
 // Adds a req.cookie object, which has get/set methods.
 export const withCookies = (req, res) => {
@@ -58,7 +59,7 @@ export const withCookies = (req, res) => {
       },
     }
   } catch (e) {
-    console.error(e) // eslint-disable-line no-console
+    logger.error(e)
     throw e
   }
 }
@@ -67,8 +68,7 @@ export default (handler) => (req, res) => {
   try {
     withCookies(req, res)
   } catch (e) {
-    // TODO: log error
-    console.error(e) // eslint-disable-line no-console
+    logger.error(e)
     return res
       .status(500)
       .json({ error: 'Could not add the cookies middleware.' })

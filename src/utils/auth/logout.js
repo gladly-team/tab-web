@@ -2,6 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { destroyAuthUserInfoInDOM } from 'src/utils/auth/user'
+import logger from 'src/utils/logger'
 
 export default async () => {
   try {
@@ -14,9 +15,7 @@ export default async () => {
     await clearAllServiceWorkerCaches()
     return true
   } catch (e) {
-    console.error(e) // eslint-disable-line no-console
-
-    // TODO: log error instead of throwing
-    throw e
+    logger.error(e)
+    return false
   }
 }
