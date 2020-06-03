@@ -5,6 +5,7 @@ import {
   CUSTOM_REQ_DATA_KEY,
   AUTH_USER_INFO_KEY,
 } from 'src/utils/middleware/constants'
+import logger from 'src/utils/logger'
 
 // Adds a tab.user object to the request.
 export default (handler) => async (req, res) => {
@@ -25,7 +26,7 @@ export default (handler) => async (req, res) => {
     })
     set(req, [CUSTOM_REQ_DATA_KEY, AUTH_USER_INFO_KEY], authUserInfo)
   } catch (e) {
-    // TODO: log error
+    logger.error(e)
     return res
       .status(500)
       .json({ error: 'Could not get the user from the Authorization header.' })

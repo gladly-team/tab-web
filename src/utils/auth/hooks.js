@@ -4,6 +4,7 @@ import 'firebase/auth'
 import initFirebase from 'src/utils/auth/initFirebase'
 import { setSession } from 'src/utils/auth/firebaseSessionHandler'
 import { createAuthUserInfo } from 'src/utils/auth/user'
+import logger from 'src/utils/logger'
 
 initFirebase()
 
@@ -39,8 +40,7 @@ export const useFirebaseAuth = () => {
     try {
       await setSession(user)
     } catch (e) {
-      // TODO: log error
-      console.error(e) // eslint-disable-line no-console
+      logger.error(e)
     }
 
     setState({ initializing: false, user })

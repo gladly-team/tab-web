@@ -26,6 +26,7 @@ import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import SearchInput from 'src/components/SearchInput'
 import { accountURL, achievementsURL } from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
+import logger from 'src/utils/logger'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -182,15 +183,13 @@ if (isClientSide()) {
         },
         logLevel: 'error',
         onError: (e) => {
-          // TODO: log error
-          console.error(e) // eslint-disable-line no-console
+          logger.error(e)
         },
         disableAds: !areAdsEnabled(),
         useMockAds: showMockAds(),
       })
     } catch (e) {
-      // TODO: log error
-      console.error(e) // eslint-disable-line no-console
+      logger.error(e)
     }
   }
   loadAds()
@@ -252,8 +251,7 @@ const Index = (props) => {
    * @return {undefined}
    */
   const onAdError = (e) => {
-    // TODO: log error
-    console.error(e) // eslint-disable-line no-console
+    logger.error(e)
   }
 
   return (
