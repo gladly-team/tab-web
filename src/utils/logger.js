@@ -51,7 +51,6 @@ logger.error = (...args) => {
       logMessageToSentry('error', ...args)
     }
   } else {
-    console.log('HERE!', ...args)
     console.error(...args)
   }
 }
