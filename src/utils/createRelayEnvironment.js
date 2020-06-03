@@ -38,7 +38,11 @@ const createFetchQuery = ({ token }) => {
         query: operation.text, // GraphQL text from input
         variables,
       }),
-    }).then((response) => response.json())
+    })
+      .then((response) => response.json())
+      .catch((e) => {
+        throw e
+      })
   }
   return fetchQuery
 }
