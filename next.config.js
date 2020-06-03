@@ -2,6 +2,17 @@ const path = require('path')
 const withOffline = require('next-offline')
 const withImages = require('next-images')
 
+// Sentry error logging. See:
+// https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/next.config.js
+// Use the hidden-source-map option when you don't want the source maps to be
+// publicly available on the servers, only to the error reporting
+const withSourceMaps = require('@zeit/next-source-maps')({
+  devtool: 'hidden-source-map'
+})
+
+// Use the SentryWebpack plugin to upload the source maps during build.
+const SentryWebpackPlugin = require('@sentry/webpack-plugin')
+
 // Only use the .env file for local development.
 if (process.env.USE_LOCAL_ENV_FILE === 'true') {
   // eslint-disable-next-line no-console
@@ -27,18 +38,63 @@ const nextConfig = {
     FIREBASE_PUBLIC_API_KEY: process.env.FIREBASE_PUBLIC_API_KEY,
     GRAPHQL_SCHEMA_LOCATION: process.env.GRAPHQL_SCHEMA_LOCATION,
     RELAY_ENDPOINT: process.env.RELAY_ENDPOINT,
+    SENTRY_DSN: process.env.SENTRY_DSN,
     SERVICE_WORKER_ENABLED: process.env.SERVICE_WORKER_ENABLED,
     URLS_API_BASE_PATH: process.env.URLS_API_BASE_PATH,
     URLS_BASE_PATH: process.env.URLS_BASE_PATH, // @area/workaround/next-js-base-path
     URLS_USE_TRAILING_SLASH: process.env.URLS_USE_TRAILING_SLASH,
   },
-  webpack(config) {
+  webpack: (config, options) => {
     // Use absolute imports from 'src/'. See:
     // https://github.com/zeit/next.js/blob/canary/examples/with-absolute-imports/next.config.js#L8
     // We use eslint-import-resolver-alias in eslintrc.json to handle linting.
     // https://github.com/benmosher/eslint-plugin-import/issues/1286
     // eslint-disable-next-line no-param-reassign
     config.resolve.alias.src = path.join(__dirname, 'src')
+
+    // Sentry error logging. See:
+    // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/next.config.js
+    // 
+    // In `pages/_app.js`, Sentry is imported from @sentry/node. While
+    // @sentry/browser will run in a Node.js environment, @sentry/node will use
+    // Node.js-only APIs to catch even more unhandled exceptions.
+    //
+    // This works well when Next.js is SSRing your page on a server with
+    // Node.js, but it is not what we want when your client-side bundle is being
+    // executed by a browser.
+    //
+    // Luckily, Next.js will call this webpack function twice, once for the
+    // server and once for the client. Read more:
+    // https://nextjs.org/docs#customizing-webpack-config
+    //
+    // So ask Webpack to replace @sentry/node imports with @sentry/browser when
+    // building the browser's bundle
+    if (!options.isServer) {
+      config.resolve.alias['@sentry/node'] = '@sentry/browser'
+    }
+
+    // When all the Sentry configuration env variables are available/configured
+    // The Sentry webpack plugin gets pushed to the webpack plugins to build
+    // and upload the source maps to sentry.
+    // This is an alternative to manually uploading the source maps
+    // Note: This is disabled in development mode.
+    if (
+      process.env.SENTRY_DSN &&
+      process.env.SENTRY_ORG &&
+      process.env.SENTRY_PROJECT &&
+      process.env.SENTRY_AUTH_TOKEN &&
+      process.env.SENTRY_UPLOAD_SOURCE_MAPS_ON_BUILD === 'true'
+    ) {
+      config.plugins.push(
+        new SentryWebpackPlugin({
+          include: '.next',
+          ignore: ['node_modules'],
+          urlPrefix: '~/_next',
+          release: options.buildId,
+        })
+      )
+    }
+
     return config
   },
   // Modify our service worker manifest.
@@ -97,4 +153,4 @@ const nextConfig = {
   },
 }
 
-module.exports = withOffline(withImages(nextConfig))
+module.exports = withSourceMaps(withOffline(withImages(nextConfig)))

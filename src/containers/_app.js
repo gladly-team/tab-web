@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { get, set } from 'lodash/object'
+import * as Sentry from '@sentry/node'
 import { register, unregister } from 'next-offline/runtime'
 import { ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -23,8 +24,19 @@ import {
 } from 'src/utils/constants'
 import theme from 'src/utils/theme'
 
+// https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_app.js
+if (process.env.SENTRY_DSN) {
+  Sentry.init({
+    enabled: process.env.NODE_ENV === 'production',
+    dsn: process.env.SENTRY_DSN,
+  })
+} else {
+  // eslint-disable-next-line no-console
+  console.warn(`SENTRY_DSN env var not defined. Not initializing Sentry.`)
+}
+
 const App = (props) => {
-  const { AuthUserInfo, Component, pageProps } = props
+  const { AuthUserInfo, Component, pageProps, err } = props
 
   // Optionally, enable or disable the service worker:
   // https://github.com/hanford/next-offline#runtime-registration
@@ -81,6 +93,11 @@ const App = (props) => {
     token,
     isClientInitialized: !initializing,
   })
+
+  // Including the "err" prop as a workaround for:
+  // https://github.com/vercel/next.js/issues/8592
+  // See:
+  // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_app.js
   return (
     <>
       <Head>
@@ -94,7 +111,7 @@ const App = (props) => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <AuthUserInfoContext.Provider value={AuthUserInfoCurrent}>
-          <Component {...pageProps} />
+          <Component {...pageProps} err={err} />
         </AuthUserInfoContext.Provider>
       </ThemeProvider>
     </>
@@ -155,10 +172,13 @@ App.propTypes = {
   }).isRequired,
   Component: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
+  err: PropTypes.object,
+  // eslint-disable-next-line react/forbid-prop-types
   pageProps: PropTypes.object,
 }
 
 App.defaultProps = {
+  err: undefined,
   pageProps: {},
 }
 
