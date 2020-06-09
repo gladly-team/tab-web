@@ -4,6 +4,7 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 import fetch from 'isomorphic-unfetch'
 import { isServerSide } from 'src/utils/ssr'
+import logger from 'src/utils/logger'
 
 const relayEndpoint = process.env.RELAY_ENDPOINT
 let relayEnvironment = null
@@ -18,8 +19,8 @@ let relayEnvironment = null
  *   resolves into fetched data.
  */
 const createFetchQuery = ({ token }) => {
-  function fetchQuery(operation, variables) {
-    return fetch(relayEndpoint, {
+  const fetchQuery = async (operation, variables) => {
+    const response = await fetch(relayEndpoint, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -39,10 +40,24 @@ const createFetchQuery = ({ token }) => {
         variables,
       }),
     })
-      .then((response) => response.json())
-      .catch((e) => {
-        throw e
+    const responseJSON = await response.json()
+
+    // If the response is not a 200, throw.
+    if (!response.ok) {
+      throw new Error(`Bad GraphQL response. ${JSON.stringify(responseJSON)}`)
+    }
+
+    // If there are any errors returned from GraphQL, log them and throw.
+    if (responseJSON.errors && responseJSON.errors) {
+      responseJSON.errors.forEach((err) => {
+        logger.error(err)
       })
+      throw new Error(
+        `Bad GraphQL response. Errors: ${JSON.stringify(responseJSON.errors)}`
+      )
+    }
+
+    return responseJSON
   }
   return fetchQuery
 }
