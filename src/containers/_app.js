@@ -35,6 +35,8 @@ if (process.env.SENTRY_DSN) {
   console.warn(`SENTRY_DSN env var not defined. Not initializing Sentry.`)
 }
 
+// TODO: use new approach here
+// https://nextjs.org/docs/advanced-features/custom-app
 const App = (props) => {
   const { AuthUserInfo, Component, pageProps, err } = props
 
