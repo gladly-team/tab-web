@@ -24,7 +24,33 @@ if (process.env.USE_LOCAL_ENV_FILE === 'true') {
 }
 
 const nextConfig = {
+  basePath: process.env.URLS_BASE_PATH,
   exportTrailingSlash: true,
+  async redirects() {
+    return [
+      // For convenience in local development.
+      {
+        source: `/`,
+        destination: `${process.env.URLS_BASE_PATH}`,
+        basePath: false,
+        permanent: false,
+      },
+    ]
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/service-worker.js',
+        destination: '/_next/static/service-worker.js'
+      },
+      // To support a /v4/ API base path.
+      {
+        source: `${process.env.URLS_API_BASE_PATH}/:path*`,
+        destination: `${process.env.URLS_BASE_PATH}/:path*`,
+        basePath: false,
+       }
+    ]
+  },
   // Public, build-time env vars.
   // https://nextjs.org/docs#build-time-configuration
   env: {
@@ -41,7 +67,7 @@ const nextConfig = {
     SENTRY_DSN: process.env.SENTRY_DSN,
     SERVICE_WORKER_ENABLED: process.env.SERVICE_WORKER_ENABLED,
     URLS_API_BASE_PATH: process.env.URLS_API_BASE_PATH,
-    URLS_BASE_PATH: process.env.URLS_BASE_PATH, // @area/workaround/next-js-base-path
+    URLS_BASE_PATH: process.env.URLS_BASE_PATH,
     URLS_USE_TRAILING_SLASH: process.env.URLS_USE_TRAILING_SLASH,
   },
   webpack: (config, options) => {

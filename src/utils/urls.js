@@ -34,14 +34,6 @@ export const withBasePath = (path) => `${URLS_BASE_PATH}${path}`
 const createAPIURL = (url) =>
   addTrailingSlashIfNeeded(`${URLS_API_BASE_PATH}${url}`)
 
-// For paths that we use with the Link component and router.
-// We don't add the base path to page URLs here. Instead,
-// we add it in the Link component's "at" prop and let Now
-// rewrite the route with the base path.
-// https://github.com/zeit/next.js/issues/4998#issuecomment-520888814
-// Note: this means we must add the base path manually for any navigation
-// we do outside of the Link component.
-// @area/workaround/next-js-base-path
 const createPageURL = (url) => addTrailingSlashIfNeeded(url)
 
 export const apiLogin = createAPIURL('/api/login')

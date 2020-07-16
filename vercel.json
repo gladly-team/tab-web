@@ -4,14 +4,6 @@
   "scope": "gladly-team",
   "alias": ["dev-tab-web"],
   "cleanUrls": true,
-  "rewrites": [
-    { "source": "/newtab/(.*)", "destination": "/$1" },
-    {
-      "source": "/service-worker.js",
-      "destination": "/_next/static/service-worker.js"
-    },
-    { "source": "/v4/(.*)", "destination": "/$1" }
-  ],
   "headers": [
     {
       "source": "/newtab/service-worker.js",

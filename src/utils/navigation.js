@@ -7,7 +7,6 @@ import { withBasePath } from 'src/utils/urls'
 // Adapted from:
 // https://github.com/zeit/next.js/issues/649#issuecomment-426552156
 export const redirect = ({ location, ctx = null, status = 302 }) => {
-  const locationWithBasePath = withBasePath(location)
   if (!location) {
     throw new Error(
       'The `redirect` function must include a "location" argument.'
@@ -21,29 +20,19 @@ export const redirect = ({ location, ctx = null, status = 302 }) => {
     }
     ctx.res.writeHead(status, {
       // Server-side redirects require the subpath under which we're running this app.
-      Location: locationWithBasePath,
+      Location: location,
       'Content-Type': 'text/html; charset=utf-8',
     })
     ctx.res.end()
   } else {
-    // We set the "as" parameter as a  workaround for the missing "basePath"
-    // functionality:
-    // https://github.com/zeit/next.js/issues/4998#issuecomment-520888814
-    // @area/workaround/next-js-base-path
-    Router.replace(location, locationWithBasePath)
+    Router.replace(location)
   }
 }
 
 // Note that this currently won't work with external URLs.
 // Like Router.push but handling the basePath workaround.
 export const goTo = (location) => {
-  const locationWithBasePath = withBasePath(location)
-
-  // We set the "as" parameter as a  workaround for the missing "basePath"
-  // functionality:
-  // https://github.com/zeit/next.js/issues/4998#issuecomment-520888814
-  // @area/workaround/next-js-base-path
-  Router.push(location, locationWithBasePath)
+  Router.push(location)
 }
 
 // Call window.location.
@@ -55,7 +44,8 @@ export const setWindowLocation = (location) => {
       'The `setWindowLocation` function cannot be called server-side.'
     )
   } else {
-    // @area/workaround/next-js-base-path
+    // The Next.js router handles the base path automatically, but
+    // we need to add it manually here.
     const locationWithBasePath = withBasePath(location)
     window.location = locationWithBasePath
   }

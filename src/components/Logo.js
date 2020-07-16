@@ -7,6 +7,7 @@ import tabLogoDefault from 'src/assets/logos/logo.svg'
 import tabLogoWhite from 'src/assets/logos/logo-white.svg'
 import tabLogoGrey from 'src/assets/logos/logo-grey.svg'
 import tabLogoWithText from 'src/assets/logos/logo-with-text.svg'
+import { withBasePath } from 'src/utils/urls'
 
 const useStyles = makeStyles(() => ({
   logoDefaults: {
@@ -44,13 +45,15 @@ const Logo = (props) => {
       }
     }
   }
-  // The alt text flashes on Firefox
+  // The alt text flashes on Firefox.
+  // Note we need to manually add the basePath to assets:
+  // https://github.com/vercel/next.js/issues/4998#issuecomment-657233398
   return (
     // eslint-disable-next-line jsx-a11y/alt-text
     <img
       style={style}
       className={clsx(classes.logo, className)}
-      src={logo}
+      src={withBasePath(logo)}
       {...otherProps}
     />
   )
