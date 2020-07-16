@@ -149,7 +149,7 @@ const nextConfig = {
   // https://developers.google.com/web/ilt/pwa/introduction-to-service-worker#registration_and_scope
   registerSwPrefix: '/newtab',
   // Limit the service worker to this app's base path.
-  scope: '/newtab/',
+  scope: '/newtab',
   workboxOpts: {
     swDest: 'static/service-worker.js',
     cleanupOutdatedCaches: true,
