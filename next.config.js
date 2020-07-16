@@ -26,6 +26,19 @@ if (process.env.USE_LOCAL_ENV_FILE === 'true') {
 const nextConfig = {
   basePath: process.env.URLS_BASE_PATH,
   exportTrailingSlash: true,
+  async redirects() {
+    return [
+      // This is for convenience in local development and when
+      // viewing preview deployments. It shouldn't need to be used
+      // in production.
+      {
+        source: `/`,
+        destination: `${process.env.URLS_BASE_PATH}`,
+        basePath: false,
+        permanent: false,
+      },
+    ]
+  },
   // We set the trailing slash preference in vercel.json.
   // Next.js has an experimental option in progress:
   // https://github.com/vercel/next.js/issues/5214
