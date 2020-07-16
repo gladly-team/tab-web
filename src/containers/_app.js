@@ -2,6 +2,7 @@
 /* eslint react/jsx-props-no-spreading: 0 */
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import App from 'next/app'
 import Head from 'next/head'
 import { get, set } from 'lodash/object'
 import * as Sentry from '@sentry/node'
@@ -35,9 +36,7 @@ if (process.env.SENTRY_DSN) {
   console.warn(`SENTRY_DSN env var not defined. Not initializing Sentry.`)
 }
 
-// TODO: use new approach here
-// https://nextjs.org/docs/advanced-features/custom-app
-const App = (props) => {
+const MyApp = (props) => {
   const { AuthUserInfo, Component, pageProps, err } = props
 
   // Optionally, enable or disable the service worker:
@@ -128,7 +127,7 @@ const App = (props) => {
   )
 }
 
-App.getInitialProps = async ({ Component, ctx }) => {
+MyApp.getInitialProps = async ({ ctx, ...otherAppContext }) => {
   const { req, res } = ctx
 
   // Get the AuthUserInfo object.
@@ -166,18 +165,15 @@ App.getInitialProps = async ({ Component, ctx }) => {
     AuthUserInfo
   )
 
-  let pageProps = {}
-  if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps(ctx)
-  }
+  const appProps = await App.getInitialProps({ ctx, ...otherAppContext })
   return {
-    pageProps,
+    ...appProps,
     AuthUserInfo,
   }
 }
 
-App.displayName = 'App'
-App.propTypes = {
+MyApp.displayName = 'App'
+MyApp.propTypes = {
   AuthUserInfo: PropTypes.shape({
     AuthUser: PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -194,9 +190,9 @@ App.propTypes = {
   pageProps: PropTypes.object,
 }
 
-App.defaultProps = {
+MyApp.defaultProps = {
   err: undefined,
   pageProps: {},
 }
 
-export default App
+export default MyApp
