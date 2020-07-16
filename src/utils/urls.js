@@ -1,14 +1,5 @@
-// This app is on a subpath of a domain that contains other
-// apps. In now.json, we rewrite requests from the subpath
-// to the root, and in Cloudfront, we pass all requests prefixed
-// with this BASE_PATH value or "_next" to the Now server.
-// In the future, we can potentially set a "basePath" option
-// in Next.js.
-// Info on experimental Next.js "basePath":
-// https://github.com/zeit/next.js/issues/4998
-// https://github.com/zeit/next.js/pull/9872/files
-// A Next.js RFC to support custom routes:
-// https://github.com/zeit/next.js/issues/9081
+// Base path set in Next config. This must match our app's
+// CloudFront routing.
 const URLS_BASE_PATH = process.env.URLS_BASE_PATH || ''
 
 // In CloudFront, the /v4 base path routes to this Next.js
@@ -18,9 +9,9 @@ const URLS_BASE_PATH = process.env.URLS_BASE_PATH || ''
 // that opts into this app, we need to use the /v4 endpoint.
 const URLS_API_BASE_PATH = process.env.URLS_API_BASE_PATH || ''
 
-// The trailing slash doesn't work in development:
+// A trailing slash in Next is experimental:
 // https://github.com/zeit/next.js/issues/5214
-// But we want to use it in production.
+// We can use it in production with Vercel routing.
 // const URLS_USE_TRAILING_SLASH = process.env.URLS_USE_TRAILING_SLASH === 'true'
 const URLS_USE_TRAILING_SLASH = false
 
