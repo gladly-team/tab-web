@@ -31,17 +31,6 @@ const nextConfig = {
     // https://github.com/vercel/next.js/pull/13333
     ...(process.env.URLS_USE_TRAILING_SLASH === 'true' && { trailingSlash: true })
   },
-  async redirects() {
-    return [
-      // For convenience in local development.
-      {
-        source: `/`,
-        destination: `${process.env.URLS_BASE_PATH}`,
-        basePath: false,
-        permanent: false,
-      },
-    ]
-  },
   async rewrites() {
     return [
       {
