@@ -26,11 +26,11 @@ if (process.env.USE_LOCAL_ENV_FILE === 'true') {
 const nextConfig = {
   basePath: process.env.URLS_BASE_PATH,
   exportTrailingSlash: true,
-  // experimental: {
-  //   // https://github.com/vercel/next.js/issues/5214
-  //   // https://github.com/vercel/next.js/pull/13333
-  //   ...(process.env.URLS_USE_TRAILING_SLASH === 'true' && { trailingSlash: true })
-  // },
+  experimental: {
+    // https://github.com/vercel/next.js/issues/5214
+    // https://github.com/vercel/next.js/pull/13333
+    ...(process.env.URLS_USE_TRAILING_SLASH === 'true' && { trailingSlash: true })
+  },
   async redirects() {
     return [
       // For convenience in local development.
@@ -53,7 +53,13 @@ const nextConfig = {
         source: `${process.env.URLS_API_BASE_PATH}/:path*`,
         destination: `${process.env.URLS_BASE_PATH}/:path*`,
         basePath: false,
-       }
+       },
+       // ... and with a trailing slash.
+       {
+        source: `${process.env.URLS_API_BASE_PATH}/:path*/`,
+        destination: `${process.env.URLS_BASE_PATH}/:path*/`,
+        basePath: false,
+       },
     ]
   },
   // Public, build-time env vars.
