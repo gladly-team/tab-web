@@ -21,7 +21,8 @@ const URLS_API_BASE_PATH = process.env.URLS_API_BASE_PATH || ''
 // The trailing slash doesn't work in development:
 // https://github.com/zeit/next.js/issues/5214
 // But we want to use it in production.
-const URLS_USE_TRAILING_SLASH = process.env.URLS_USE_TRAILING_SLASH === 'true'
+// const URLS_USE_TRAILING_SLASH = process.env.URLS_USE_TRAILING_SLASH === 'true'
+const URLS_USE_TRAILING_SLASH = false
 
 const addTrailingSlashIfNeeded = (path) => {
   const hasTrailingSlash = path[path.length - 1] === '/'
