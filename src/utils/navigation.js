@@ -20,7 +20,7 @@ export const redirect = ({ location, ctx = null, status = 302 }) => {
     }
     ctx.res.writeHead(status, {
       // Server-side redirects require the subpath under which we're running this app.
-      Location: location,
+      Location: withBasePath(location),
       'Content-Type': 'text/html; charset=utf-8',
     })
     ctx.res.end()
