@@ -12,8 +12,7 @@ const URLS_API_BASE_PATH = process.env.URLS_API_BASE_PATH || ''
 // A trailing slash in Next is experimental:
 // https://github.com/zeit/next.js/issues/5214
 // We can use it in production with Vercel routing.
-// const URLS_USE_TRAILING_SLASH = process.env.URLS_USE_TRAILING_SLASH === 'true'
-const URLS_USE_TRAILING_SLASH = false
+const URLS_USE_TRAILING_SLASH = process.env.URLS_USE_TRAILING_SLASH === 'true'
 
 const addTrailingSlashIfNeeded = (path) => {
   const hasTrailingSlash = path[path.length - 1] === '/'
