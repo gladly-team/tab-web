@@ -33,7 +33,7 @@ const nextConfig = {
       // in production.
       {
         source: `/`,
-        destination: `${process.env.URLS_BASE_PATH}`,
+        destination: `${process.env.URLS_BASE_PATH}/`,
         basePath: false,
         permanent: false,
       },
