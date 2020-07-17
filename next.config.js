@@ -147,14 +147,14 @@ const nextConfig = {
   // The base path from which to serve the service worker. This affects the
   // default scope.
   // https://developers.google.com/web/ilt/pwa/introduction-to-service-worker#registration_and_scope
-  registerSwPrefix: '/newtab',
-  // Limit the service worker to this app's base path.
-  scope: '/newtab',
+  registerSwPrefix: '/',
+  scope: '/',
   workboxOpts: {
     swDest: 'static/service-worker.js',
     cleanupOutdatedCaches: true,
     clientsClaim: true,
     skipWaiting: true,
+    // TODO: may need to improve caching rules.
     // Cache strategies for different resources:
     // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#using_strategies
     runtimeCaching: [
