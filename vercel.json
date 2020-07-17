@@ -6,7 +6,7 @@
   "cleanUrls": true,
   "trailingSlash": true,
   "rewrites": [
-    { "source": "/(.*)/", "destination": "/$1" },
+    { "source": "/(.*)/", "destination": "/$1" }
   ],
   "headers": [
     {
