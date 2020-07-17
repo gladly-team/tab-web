@@ -37,3 +37,5 @@ sessions
 # https://github.com/whitecolor/yalc#keep-it-out-of-git
 .yalc
 yalc.lock
+
+.vercel
