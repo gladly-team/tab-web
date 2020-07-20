@@ -3,7 +3,7 @@
   "version": 2,
   "scope": "gladly-team",
   "alias": ["dev-tab-web"],
-  "cleanUrls": false,
+  "cleanUrls": true,
   "trailingSlash": true,
   "headers": [
     {
