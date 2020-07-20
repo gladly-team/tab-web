@@ -29,11 +29,11 @@ if (process.env.USE_LOCAL_ENV_FILE === 'true') {
 
 const nextConfig = {
   // basePath: basePath,
-  exportTrailingSlash: true,
+  exportTrailingSlash: false,
   // We also set the trailing slash preference in vercel.json.
   // Trailing slash stable in v9.4.5-canary.41:
   // https://github.com/vercel/next.js/releases/tag/v9.4.5-canary.41
-  // trailingSlash: true,
+  trailingSlash: true,
   async redirects() {
     return [
       // This is for convenience in local development and when
