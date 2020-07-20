@@ -1,8 +1,6 @@
 // Base path set in Next config. This must match our app's
 // CloudFront routing.
-// TODO: reenable env var
-// const basePath = process.env.URLS_BASE_PATH || ''
-const basePath = ''
+const basePath = process.env.URLS_BASE_PATH || ''
 
 // In CloudFront, the /v4 base path routes to this Next.js
 // app. The /newtab base paths routes to the this app -OR-

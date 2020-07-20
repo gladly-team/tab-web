@@ -7,7 +7,11 @@
   "trailingSlash": true,
   "rewrites": [
     { "source": "/(.*)/", "destination": "/$1" },
-    { "source": "/v4/(.*)", "destination": "/$1" }
+    { "source": "/v4/(.*)", "destination": "/newtab/$1" },
+    {
+      "source": "/service-worker.js",
+      "destination": "/_next/static/service-worker.js"
+    }
   ],
   "headers": [
     {

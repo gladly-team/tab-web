@@ -10,9 +10,7 @@ const withSourceMaps = require('@zeit/next-source-maps')({
   devtool: 'hidden-source-map'
 })
 
-// TODO: reenable env var
-// const basePath = process.env.URLS_BASE_PATH
-const basePath = ''
+const basePath = process.env.URLS_BASE_PATH
 
 // Use the SentryWebpack plugin to upload the source maps during build.
 const SentryWebpackPlugin = require('@sentry/webpack-plugin')
@@ -28,7 +26,10 @@ if (process.env.USE_LOCAL_ENV_FILE === 'true') {
 }
 
 const nextConfig = {
-  // basePath: basePath,
+  experimental: {
+    // Should be stable in v9.4.5.
+    basePath: basePath,
+  },
   exportTrailingSlash: true,
   // We set the trailing slash preference in vercel.json.
   // Trailing slash stable in v9.4.5-canary.41:
@@ -47,26 +48,26 @@ const nextConfig = {
   //     }),
   //   ].filter(Boolean)
   // },
-  async rewrites() {
-    return [
-      {
-        source: '/service-worker.js',
-        destination: '/_next/static/service-worker.js'
-      },
-      // To support a /v4/ API base path.
-      {
-        source: `${process.env.URLS_API_BASE_PATH}/:path*`,
-        destination: `${basePath}/:path*`,
-        basePath: false,
-       },
-       // ... and with a trailing slash.
-       {
-        source: `${process.env.URLS_API_BASE_PATH}/:path*/`,
-        destination: `${basePath}/:path*/`,
-        basePath: false,
-       },
-    ]
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/service-worker.js',
+  //       destination: '/_next/static/service-worker.js'
+  //     },
+  //     // To support a /v4/ API base path.
+  //     {
+  //       source: `${process.env.URLS_API_BASE_PATH}/:path*`,
+  //       destination: `${basePath}/:path*`,
+  //       basePath: false,
+  //      },
+  //      // ... and with a trailing slash.
+  //      {
+  //       source: `${process.env.URLS_API_BASE_PATH}/:path*/`,
+  //       destination: `${basePath}/:path*/`,
+  //       basePath: false,
+  //      },
+  //   ]
+  // },
   // Public, build-time env vars.
   // https://nextjs.org/docs#build-time-configuration
   env: {
