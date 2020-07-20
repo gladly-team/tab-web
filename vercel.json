@@ -5,6 +5,9 @@
   "alias": ["dev-tab-web"],
   "cleanUrls": true,
   "trailingSlash": true,
+  "rewrites": [
+    { "source": "/(.*)/", "destination": "/$1" }
+  ],
   "headers": [
     {
       "source": "/newtab/service-worker.js",
