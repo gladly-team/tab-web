@@ -34,19 +34,19 @@ const nextConfig = {
   // Trailing slash stable in v9.4.5-canary.41:
   // https://github.com/vercel/next.js/releases/tag/v9.4.5-canary.41
   trailingSlash: true,
-  async redirects() {
-    return [
-      // This is for convenience in local development and when
-      // viewing preview deployments. It shouldn't need to be used
-      // in production.
-      (basePath && {
-        source: `/`,
-        destination: `${basePath}/`,
-        basePath: false,
-        permanent: false,
-      }),
-    ].filter(Boolean)
-  },
+  // async redirects() {
+  //   return [
+  //     // This is for convenience in local development and when
+  //     // viewing preview deployments. It shouldn't need to be used
+  //     // in production.
+  //     (basePath && {
+  //       source: `/`,
+  //       destination: `${basePath}/`,
+  //       basePath: false,
+  //       permanent: false,
+  //     }),
+  //   ].filter(Boolean)
+  // },
   async rewrites() {
     return [
       {
