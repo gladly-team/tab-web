@@ -26,6 +26,13 @@ if (process.env.USE_LOCAL_ENV_FILE === 'true') {
 const nextConfig = {
   basePath: process.env.URLS_BASE_PATH,
   exportTrailingSlash: true,
+  // We also set the trailing slash preference in vercel.json.
+  // Trailing slash stable in v9.4.5-canary.41:
+  // https://github.com/vercel/next.js/releases/tag/v9.4.5-canary.41
+  // trailingSlash: true,
+  experimental: {
+    trailingSlash: true,
+  },
   async redirects() {
     return [
       // This is for convenience in local development and when
@@ -38,13 +45,6 @@ const nextConfig = {
         permanent: false,
       },
     ]
-  },
-  experimental: {
-    // We also set the trailing slash preference in vercel.json.
-    // Next.js experimental option in progress:
-    // https://github.com/vercel/next.js/issues/5214
-    // https://github.com/vercel/next.js/pull/13333
-    trailingSlash: true,
   },
   async rewrites() {
     return [
