@@ -10,6 +10,8 @@ const withSourceMaps = require('@zeit/next-source-maps')({
   devtool: 'hidden-source-map'
 })
 
+console.log("process.env.URLS_BASE_PATH", process.env.URLS_BASE_PATH)
+
 // Use the SentryWebpack plugin to upload the source maps during build.
 const SentryWebpackPlugin = require('@sentry/webpack-plugin')
 
