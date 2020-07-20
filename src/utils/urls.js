@@ -1,6 +1,8 @@
 // Base path set in Next config. This must match our app's
 // CloudFront routing.
-const URLS_BASE_PATH = process.env.URLS_BASE_PATH || ''
+// TODO: reenable env var
+// const basePath = process.env.URLS_BASE_PATH || ''
+const basePath = ''
 
 // In CloudFront, the /v4 base path routes to this Next.js
 // app. The /newtab base paths routes to the this app -OR-
@@ -20,7 +22,7 @@ const addTrailingSlashIfNeeded = (path) => {
   return `${path}${!hasTrailingSlash && URLS_USE_TRAILING_SLASH ? '/' : ''}`
 }
 
-export const withBasePath = (path) => `${URLS_BASE_PATH}${path}`
+export const withBasePath = (path) => `${basePath}${path}`
 
 // For /api/* paths.
 const createAPIURL = (url) =>

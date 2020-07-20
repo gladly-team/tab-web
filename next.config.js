@@ -10,6 +10,10 @@ const withSourceMaps = require('@zeit/next-source-maps')({
   devtool: 'hidden-source-map'
 })
 
+// TODO: reenable env var
+// const basePath = process.env.URLS_BASE_PATH
+const basePath = ''
+
 // Use the SentryWebpack plugin to upload the source maps during build.
 const SentryWebpackPlugin = require('@sentry/webpack-plugin')
 
@@ -24,7 +28,7 @@ if (process.env.USE_LOCAL_ENV_FILE === 'true') {
 }
 
 const nextConfig = {
-  basePath: process.env.URLS_BASE_PATH,
+  basePath: basePath,
   exportTrailingSlash: true,
   // We also set the trailing slash preference in vercel.json.
   // Trailing slash stable in v9.4.5-canary.41:
@@ -38,13 +42,13 @@ const nextConfig = {
       // This is for convenience in local development and when
       // viewing preview deployments. It shouldn't need to be used
       // in production.
-      {
+      (basePath && {
         source: `/`,
-        destination: `${process.env.URLS_BASE_PATH}/`,
+        destination: `${basePath}/`,
         basePath: false,
         permanent: false,
-      },
-    ]
+      }),
+    ].filter(Boolean)
   },
   async rewrites() {
     return [
@@ -55,13 +59,13 @@ const nextConfig = {
       // To support a /v4/ API base path.
       {
         source: `${process.env.URLS_API_BASE_PATH}/:path*`,
-        destination: `${process.env.URLS_BASE_PATH}/:path*`,
+        destination: `${basePath}/:path*`,
         basePath: false,
        },
        // ... and with a trailing slash.
        {
         source: `${process.env.URLS_API_BASE_PATH}/:path*/`,
-        destination: `${process.env.URLS_BASE_PATH}/:path*/`,
+        destination: `${basePath}/:path*/`,
         basePath: false,
        },
     ]
@@ -82,7 +86,7 @@ const nextConfig = {
     SENTRY_DSN: process.env.SENTRY_DSN,
     SERVICE_WORKER_ENABLED: process.env.SERVICE_WORKER_ENABLED,
     URLS_API_BASE_PATH: process.env.URLS_API_BASE_PATH,
-    URLS_BASE_PATH: process.env.URLS_BASE_PATH,
+    URLS_BASE_PATH: basePath,
     URLS_USE_TRAILING_SLASH: process.env.URLS_USE_TRAILING_SLASH,
   },
   webpack: (config, options) => {
