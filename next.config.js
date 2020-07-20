@@ -39,10 +39,13 @@ const nextConfig = {
       },
     ]
   },
-  // We set the trailing slash preference in vercel.json.
-  // Next.js has an experimental option in progress:
-  // https://github.com/vercel/next.js/issues/5214
-  // https://github.com/vercel/next.js/pull/13333
+  experimental: {
+    // We also set the trailing slash preference in vercel.json.
+    // Next.js experimental option in progress:
+    // https://github.com/vercel/next.js/issues/5214
+    // https://github.com/vercel/next.js/pull/13333
+    trailingSlash: true,
+  },
   async rewrites() {
     return [
       {
