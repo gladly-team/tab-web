@@ -28,7 +28,7 @@ if (process.env.USE_LOCAL_ENV_FILE === 'true') {
 }
 
 const nextConfig = {
-  basePath: basePath,
+  // basePath: basePath,
   exportTrailingSlash: true,
   // We also set the trailing slash preference in vercel.json.
   // Trailing slash stable in v9.4.5-canary.41:
