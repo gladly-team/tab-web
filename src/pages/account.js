@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import fetch from 'isomorphic-unfetch'
 import { unregister } from 'next-offline/runtime'
 import { graphql } from 'react-relay'
 import { makeStyles } from '@material-ui/core/styles'

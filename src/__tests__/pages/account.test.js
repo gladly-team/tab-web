@@ -1,6 +1,5 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import fetch from 'isomorphic-unfetch'
 import { unregister } from 'next-offline/runtime'
 import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
@@ -15,7 +14,6 @@ import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { setWindowLocation } from 'src/utils/navigation'
 import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 
-jest.mock('isomorphic-unfetch')
 jest.mock('next-offline/runtime')
 jest.mock('src/components/SettingsPage')
 jest.mock('src/utils/pageWrappers/withAuthAndData')
