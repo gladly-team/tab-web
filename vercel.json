@@ -10,7 +10,7 @@
     { "source": "/v4/(.*)", "destination": "/newtab/$1" },
     {
       "source": "/service-worker.js",
-      "destination": "/_next/static/service-worker.js"
+      "destination": "/newtab/_next/static/service-worker.js"
     }
   ],
   "headers": [
