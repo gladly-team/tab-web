@@ -1,9 +1,11 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
+import Achievement from 'src/components/Achievement'
 
 jest.mock('src/utils/featureFlags')
 jest.mock('src/utils/pageWrappers/return404If')
+jest.mock('src/components/Achievement')
 
 const getMockProps = () => ({})
 
@@ -24,21 +26,23 @@ afterEach(() => {
 // but that's causing an error with hooks:
 // https://github.com/facebook/jest/issues/8987
 
-describe('demo index page', () => {
+describe('achievement-component demo page', () => {
   it('renders without error', () => {
     expect.assertions(1)
-    const DemosIndexPage = require('src/containers/demos/index').default
+    const AchievementComponentDemoPage = require('src/pages/demos/achievement-component')
+      .default
     const mockProps = getMockProps()
     expect(() => {
-      shallow(<DemosIndexPage {...mockProps} />)
+      shallow(<AchievementComponentDemoPage {...mockProps} />)
     }).not.toThrow()
   })
 
   it('includes the title', () => {
     expect.assertions(1)
-    const DemosIndexPage = require('src/containers/demos/index').default
+    const AchievementComponentDemoPage = require('src/pages/demos/achievement-component')
+      .default
     const mockProps = getMockProps()
-    const wrapper = shallow(<DemosIndexPage {...mockProps} />)
+    const wrapper = shallow(<AchievementComponentDemoPage {...mockProps} />)
     expect(
       wrapper
         .find(Typography)
@@ -46,6 +50,15 @@ describe('demo index page', () => {
         .first()
         .render()
         .text()
-    ).toEqual('Demos')
+    ).toEqual('Demos of Achievement Types')
+  })
+
+  it('includes many Achievement components', () => {
+    expect.assertions(1)
+    const AchievementComponentDemoPage = require('src/pages/demos/achievement-component')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AchievementComponentDemoPage {...mockProps} />)
+    expect(wrapper.find(Achievement).length).toBeGreaterThan(10)
   })
 })

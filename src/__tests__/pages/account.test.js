@@ -45,7 +45,7 @@ afterEach(() => {
 describe('account.js', () => {
   it('renders without error', () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     expect(() => {
       shallow(<AccountPage {...mockProps} />)
@@ -54,7 +54,7 @@ describe('account.js', () => {
 
   it('returns a SettingsPage component', () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     expect(wrapper.at(0).type()).toEqual(SettingsPage)
@@ -62,7 +62,7 @@ describe('account.js', () => {
 
   it('has an "Account" title', () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -72,7 +72,7 @@ describe('account.js', () => {
 
   it('has a logout button', () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const logoutButton = wrapper.find(Button).first()
@@ -81,7 +81,7 @@ describe('account.js', () => {
 
   it('displays the expected text on the logout button', () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const logoutButton = wrapper.find(Button).first()
@@ -90,7 +90,7 @@ describe('account.js', () => {
 
   it('calls `logout` when clicking the logout button', async () => {
     expect.assertions(2)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const logoutButton = wrapper.find(Button).first()
@@ -102,7 +102,7 @@ describe('account.js', () => {
 
   it('disables the logout button after clicking', async () => {
     expect.assertions(2)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const logoutButton = wrapper.find(Button).first()
@@ -114,7 +114,7 @@ describe('account.js', () => {
 
   it('changes the logout text after clicking', async () => {
     expect.assertions(2)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const logoutButton = wrapper.find(Button).first()
@@ -126,7 +126,7 @@ describe('account.js', () => {
 
   it('displays a Divider after the title', () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -136,7 +136,7 @@ describe('account.js', () => {
 
   it("displays the user's username", () => {
     expect.assertions(2)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -147,7 +147,7 @@ describe('account.js', () => {
 
   it('displays a Divider after the username info', () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -157,7 +157,7 @@ describe('account.js', () => {
 
   it("displays the user's email address", () => {
     expect.assertions(2)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -170,7 +170,7 @@ describe('account.js', () => {
 
   it('displays a Divider after the email address', () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -180,7 +180,7 @@ describe('account.js', () => {
 
   it('displays the "switch back to classic" field', () => {
     expect.assertions(2)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -192,7 +192,7 @@ describe('account.js', () => {
   it('clicking the "switch back to classic" button calls the API endpoint as expected', async () => {
     expect.assertions(1)
     fetch.mockResolvedValue(getMockFetchResponse())
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -214,7 +214,7 @@ describe('account.js', () => {
 
   it('clicking the "switch back to classic" clears the service worker caches', async () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -227,7 +227,7 @@ describe('account.js', () => {
 
   it('clicking the "switch back to classic" unregisters the service worker', async () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -240,7 +240,7 @@ describe('account.js', () => {
 
   it('clicking the "switch back to classic" calls SetV4BetaMutation', async () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = {
       ...getMockProps(),
       user: {
@@ -262,7 +262,7 @@ describe('account.js', () => {
 
   it('clicking the "switch back to classic" navigates to the dashboard', async () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -277,7 +277,7 @@ describe('account.js', () => {
 describe('account.js: getInitialProps', () => {
   it('does not define getInitialProps', () => {
     expect.assertions(1)
-    const AccountPage = require('src/containers/account.js').default
+    const AccountPage = require('src/pages/account.js').default
     expect(AccountPage.getInitialProps).toBeUndefined()
   })
 })

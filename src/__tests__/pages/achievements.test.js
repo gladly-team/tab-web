@@ -35,7 +35,7 @@ afterEach(() => {
 //     const { showMockAchievements } = require('src/utils/featureFlags')
 //     showMockAchievements.mockReturnValue(false)
 //     const return404If = require('src/utils/pageWrappers/return404If').default
-//     const AchievementsPage = require('src/containers/achievements').default
+//     const AchievementsPage = require('src/pages/achievements').default
 //     const mockProps = getMockProps()
 //     shallow(<AchievementsPage {...mockProps} />)
 //     expect(return404If).toHaveBeenCalledWith(true)
@@ -46,7 +46,7 @@ afterEach(() => {
 //     const { showMockAchievements } = require('src/utils/featureFlags')
 //     showMockAchievements.mockReturnValue(true)
 //     const return404If = require('src/utils/pageWrappers/return404If').default
-//     const AchievementsPage = require('src/containers/achievements').default
+//     const AchievementsPage = require('src/pages/achievements').default
 //     const mockProps = getMockProps()
 //     shallow(<AchievementsPage {...mockProps} />)
 //     expect(return404If).toHaveBeenCalledWith(false)
@@ -56,7 +56,7 @@ afterEach(() => {
 describe('achievements.js', () => {
   it('renders without error', () => {
     expect.assertions(1)
-    const AchievementsPage = require('src/containers/achievements').default
+    const AchievementsPage = require('src/pages/achievements').default
     const mockProps = getMockProps()
     expect(() => {
       shallow(<AchievementsPage {...mockProps} />).dive()
@@ -65,7 +65,7 @@ describe('achievements.js', () => {
 
   it('contains multiple Achievement components', () => {
     expect.assertions(1)
-    const AchievementsPage = require('src/containers/achievements').default
+    const AchievementsPage = require('src/pages/achievements').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AchievementsPage {...mockProps} />).dive()
     expect(wrapper.find(Achievement).length).toBeGreaterThan(2)
