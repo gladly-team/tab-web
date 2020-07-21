@@ -26,14 +26,16 @@ import {
 import theme from 'src/utils/theme'
 
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_app.js
-if (process.env.SENTRY_DSN) {
+if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
   Sentry.init({
     enabled: process.env.NODE_ENV === 'production',
-    dsn: process.env.SENTRY_DSN,
+    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   })
 } else {
   // eslint-disable-next-line no-console
-  console.warn(`SENTRY_DSN env var not defined. Not initializing Sentry.`)
+  console.warn(
+    `NEXT_PUBLIC_SENTRY_DSN env var not defined. Not initializing Sentry.`
+  )
 }
 
 const MyApp = (props) => {
@@ -42,7 +44,8 @@ const MyApp = (props) => {
   // Optionally, enable or disable the service worker:
   // https://github.com/hanford/next-offline#runtime-registration
   useEffect(() => {
-    const isServiceWorkerEnabled = process.env.SERVICE_WORKER_ENABLED === 'true'
+    const isServiceWorkerEnabled =
+      process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true'
     if (isClientSide()) {
       if (isServiceWorkerEnabled) {
         register('/newtab/service-worker.js')

@@ -5,7 +5,7 @@ import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 import { isServerSide } from 'src/utils/ssr'
 import logger from 'src/utils/logger'
 
-const relayEndpoint = process.env.RELAY_ENDPOINT
+const relayEndpoint = process.env.NEXT_PUBLIC_RELAY_ENDPOINT
 let relayEnvironment = null
 
 /**

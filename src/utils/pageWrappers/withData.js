@@ -125,7 +125,8 @@ export default (getRelayQuery) => (ComposedComponent) => {
     // In addition, if getInitialProps is called on the client side,
     // like during client-side navigation, we don't need to refetch.
     const refetchDataOnMount =
-      process.env.SERVICE_WORKER_ENABLED === 'true' && !isClientSide()
+      process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true' &&
+      !isClientSide()
 
     return {
       ...composedInitialProps,

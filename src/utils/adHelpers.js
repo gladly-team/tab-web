@@ -65,13 +65,15 @@ export const getAdUnits = () => {
  * @return {Boolean} Whether ads are enabled.
  */
 export const areAdsEnabled = () =>
-  process.env.ADS_ENABLED === 'true' && !hasUserReachedMaxTabsToday()
+  process.env.NEXT_PUBLIC_ADS_ENABLED === 'true' &&
+  !hasUserReachedMaxTabsToday()
 
 /**
  * Return true if we want to show mock ads (for development only).
  * @return {Boolean} Whether to show mock ads.
  */
-export const showMockAds = () => process.env.ADS_USE_MOCK_ADS === 'true'
+export const showMockAds = () =>
+  process.env.NEXT_PUBLIC_ADS_USE_MOCK_ADS === 'true'
 
 // TODO: implement
 export const isInEuropeanUnion = async () => false
