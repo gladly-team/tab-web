@@ -50,7 +50,7 @@ beforeEach(() => {
 describe('index.js', () => {
   it('renders without error', () => {
     expect.assertions(1)
-    const IndexPage = require('src/containers/index').default
+    const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     expect(() => {
       shallow(<IndexPage {...mockProps} />)
@@ -59,7 +59,7 @@ describe('index.js', () => {
 
   it('includes a settings icon link to the account page', () => {
     expect.assertions(1)
-    const IndexPage = require('src/containers/index').default
+    const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     const wrapper = shallow(<IndexPage {...mockProps} />)
     const settingsLink = wrapper
@@ -70,7 +70,7 @@ describe('index.js', () => {
 
   it('uses an settings icon button to link to the account page', () => {
     expect.assertions(2)
-    const IndexPage = require('src/containers/index').default
+    const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     const wrapper = shallow(<IndexPage {...mockProps} />)
     const settingsLink = wrapper
@@ -83,7 +83,7 @@ describe('index.js', () => {
   it('does not show the achievements content if showMockAchievements returns false', () => {
     expect.assertions(1)
     showMockAchievements.mockReturnValue(false)
-    const IndexPage = require('src/containers/index').default
+    const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     const wrapper = shallow(<IndexPage {...mockProps} />)
     expect(wrapper.find('[data-test-id="achievements"]').exists()).toBe(false)
@@ -92,7 +92,7 @@ describe('index.js', () => {
   it('shows the achievements content if showMockAchievements returns true', () => {
     expect.assertions(1)
     showMockAchievements.mockReturnValue(true)
-    const IndexPage = require('src/containers/index').default
+    const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     const wrapper = shallow(<IndexPage {...mockProps} />)
     expect(wrapper.find('[data-test-id="achievements"]').exists()).toBe(true)
@@ -101,7 +101,7 @@ describe('index.js', () => {
   it('the achievements container contains Achievement components', () => {
     expect.assertions(1)
     showMockAchievements.mockReturnValue(true)
-    const IndexPage = require('src/containers/index').default
+    const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     const wrapper = shallow(<IndexPage {...mockProps} />)
     expect(

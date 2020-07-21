@@ -29,7 +29,7 @@ afterEach(() => {
 describe('_error.js: render', () => {
   it('renders without error', () => {
     expect.assertions(1)
-    const ErrorPage = require('src/containers/_error.js').default
+    const ErrorPage = require('src/pages/_error.js').default
     const mockProps = getMockProps()
     expect(() => {
       shallow(<ErrorPage {...mockProps} />)
@@ -38,7 +38,7 @@ describe('_error.js: render', () => {
 
   it('returns the NextErrorComponent', () => {
     expect.assertions(1)
-    const ErrorPage = require('src/containers/_error.js').default
+    const ErrorPage = require('src/pages/_error.js').default
     const mockProps = getMockProps()
     const wrapper = shallow(<ErrorPage {...mockProps} />)
     expect(wrapper.at(0).type()).toEqual(NextErrorComponent)
@@ -46,7 +46,7 @@ describe('_error.js: render', () => {
 
   it('passes the status code to the NextErrorComponent', () => {
     expect.assertions(1)
-    const ErrorPage = require('src/containers/_error.js').default
+    const ErrorPage = require('src/pages/_error.js').default
     const mockProps = {
       ...getMockProps(),
       statusCode: 403,
@@ -57,7 +57,7 @@ describe('_error.js: render', () => {
 
   it('logs an error if "hasGetInitialPropsRun" is false (we have not yet logged an error)', () => {
     expect.assertions(1)
-    const ErrorPage = require('src/containers/_error.js').default
+    const ErrorPage = require('src/pages/_error.js').default
     const mockProps = {
       ...getMockProps(),
       hasGetInitialPropsRun: false,
@@ -68,7 +68,7 @@ describe('_error.js: render', () => {
 
   it('does not log an error if "hasGetInitialPropsRun" is true (we already logged an error in getInitialProps)', () => {
     expect.assertions(1)
-    const ErrorPage = require('src/containers/_error.js').default
+    const ErrorPage = require('src/pages/_error.js').default
     const mockProps = {
       ...getMockProps(),
       hasGetInitialPropsRun: true,
@@ -86,7 +86,7 @@ describe('_error.js: getInitialProps', () => {
       statusCode: 403,
       err: otherMockErr,
     })
-    const ErrorPage = require('src/containers/_error.js').default
+    const ErrorPage = require('src/pages/_error.js').default
     const initialProps = await ErrorPage.getInitialProps({
       res: getMockRes(),
       err: otherMockErr,
@@ -103,7 +103,7 @@ describe('_error.js: getInitialProps', () => {
     expect.assertions(1)
     const unrelatedErr = new Error('Some unrelated error!')
     NextErrorComponent.getInitialProps.mockRejectedValue(unrelatedErr)
-    const ErrorPage = require('src/containers/_error.js').default
+    const ErrorPage = require('src/pages/_error.js').default
     await expect(
       ErrorPage.getInitialProps({
         res: getMockRes(),
@@ -115,7 +115,7 @@ describe('_error.js: getInitialProps', () => {
 
   it('logs an error to Sentry', async () => {
     expect.assertions(1)
-    const ErrorPage = require('src/containers/_error.js').default
+    const ErrorPage = require('src/pages/_error.js').default
     await ErrorPage.getInitialProps({
       res: getMockRes(),
       err: mockErr,
@@ -126,7 +126,7 @@ describe('_error.js: getInitialProps', () => {
 
   it('does not log an error for a 404 status code', async () => {
     expect.assertions(1)
-    const ErrorPage = require('src/containers/_error.js').default
+    const ErrorPage = require('src/pages/_error.js').default
     await ErrorPage.getInitialProps({
       res: {
         ...getMockRes(),
@@ -140,7 +140,7 @@ describe('_error.js: getInitialProps', () => {
 
   it('logs an error to Sentry when there is no "err" object', async () => {
     expect.assertions(1)
-    const ErrorPage = require('src/containers/_error.js').default
+    const ErrorPage = require('src/pages/_error.js').default
     await ErrorPage.getInitialProps({
       res: getMockRes(),
       err: undefined,
@@ -153,7 +153,7 @@ describe('_error.js: getInitialProps', () => {
 
   it('does not throw if "res" is not defined (getInitialProps called on the client)', async () => {
     expect.assertions(1)
-    const ErrorPage = require('src/containers/_error.js').default
+    const ErrorPage = require('src/pages/_error.js').default
     await expect(
       ErrorPage.getInitialProps({
         res: undefined,

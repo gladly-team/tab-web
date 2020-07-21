@@ -25,7 +25,7 @@ describe('_app.js: initializes Sentry', () => {
     process.env.SENTRY_DSN = 'some-dsn'
     const Sentry = require('@sentry/node')
     // eslint-disable-next-line no-unused-expressions
-    require('src/containers/_app.js').default
+    require('src/pages/_app.js').default
     expect(Sentry.init).toHaveBeenCalled()
   })
 
@@ -35,7 +35,7 @@ describe('_app.js: initializes Sentry', () => {
     process.env.NODE_ENV = 'production'
     const Sentry = require('@sentry/node')
     // eslint-disable-next-line no-unused-expressions
-    require('src/containers/_app.js').default
+    require('src/pages/_app.js').default
     expect(Sentry.init.mock.calls[0][0]).toMatchObject({
       dsn: 'this-is-my-dsn',
     })
@@ -47,7 +47,7 @@ describe('_app.js: initializes Sentry', () => {
     process.env.NODE_ENV = 'production'
     const Sentry = require('@sentry/node')
     // eslint-disable-next-line no-unused-expressions
-    require('src/containers/_app.js').default
+    require('src/pages/_app.js').default
     expect(Sentry.init.mock.calls[0][0]).toMatchObject({
       enabled: true,
     })
@@ -59,7 +59,7 @@ describe('_app.js: initializes Sentry', () => {
     process.env.NODE_ENV = 'development'
     const Sentry = require('@sentry/node')
     // eslint-disable-next-line no-unused-expressions
-    require('src/containers/_app.js').default
+    require('src/pages/_app.js').default
     expect(Sentry.init.mock.calls[0][0]).toMatchObject({
       enabled: false,
     })
@@ -74,7 +74,7 @@ describe('_app.js: initializes Sentry', () => {
 
     const Sentry = require('@sentry/node')
     // eslint-disable-next-line no-unused-expressions
-    require('src/containers/_app.js').default
+    require('src/pages/_app.js').default
     expect(Sentry.init).not.toHaveBeenCalled()
   })
 })

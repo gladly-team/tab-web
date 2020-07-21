@@ -14,7 +14,8 @@
 
 ## Documentation
 ### File Structure
-Our pages are in the `containers` directory, which allows us to colocate their tests. Currently, Next.js doesn't support non-page files in the `pages` directory (see [issue](https://github.com/zeit/next.js/issues/3728#issuecomment-363964953)). Files in the `pages` directory should simply export matching files in `containers`.
+Tests for our pages are in the `src/__tests__` directory. Currently, Next.js doesn't support non-page files in the `pages` directory (see [issue](https://github.com/zeit/next.js/issues/3728#issuecomment-363964953)).
+
 ### Authentication
 We use Firebase JS SDK authentication as the source of truth for user authentication. When the Firebase auth state changes, we call an endpoint to set client-side cookies that Next.js uses for server-side rendering. We do not store any session state on the server side.
 

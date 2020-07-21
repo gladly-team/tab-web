@@ -1,11 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
-import Achievement from 'src/components/Achievement'
 
 jest.mock('src/utils/featureFlags')
 jest.mock('src/utils/pageWrappers/return404If')
-jest.mock('src/components/Achievement')
 
 const getMockProps = () => ({})
 
@@ -26,23 +24,21 @@ afterEach(() => {
 // but that's causing an error with hooks:
 // https://github.com/facebook/jest/issues/8987
 
-describe('achievement-component demo page', () => {
+describe('demo index page', () => {
   it('renders without error', () => {
     expect.assertions(1)
-    const AchievementComponentDemoPage = require('src/containers/demos/achievement-component')
-      .default
+    const DemosIndexPage = require('src/pages/demos/index').default
     const mockProps = getMockProps()
     expect(() => {
-      shallow(<AchievementComponentDemoPage {...mockProps} />)
+      shallow(<DemosIndexPage {...mockProps} />)
     }).not.toThrow()
   })
 
   it('includes the title', () => {
     expect.assertions(1)
-    const AchievementComponentDemoPage = require('src/containers/demos/achievement-component')
-      .default
+    const DemosIndexPage = require('src/pages/demos/index').default
     const mockProps = getMockProps()
-    const wrapper = shallow(<AchievementComponentDemoPage {...mockProps} />)
+    const wrapper = shallow(<DemosIndexPage {...mockProps} />)
     expect(
       wrapper
         .find(Typography)
@@ -50,15 +46,6 @@ describe('achievement-component demo page', () => {
         .first()
         .render()
         .text()
-    ).toEqual('Demos of Achievement Types')
-  })
-
-  it('includes many Achievement components', () => {
-    expect.assertions(1)
-    const AchievementComponentDemoPage = require('src/containers/demos/achievement-component')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<AchievementComponentDemoPage {...mockProps} />)
-    expect(wrapper.find(Achievement).length).toBeGreaterThan(10)
+    ).toEqual('Demos')
   })
 })
