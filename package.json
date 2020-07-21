@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "USE_LOCAL_ENV_FILE=true NODE_ENV=development next dev",
+    "go": "USE_LOCAL_ENV_FILE=true NODE_ENV=development vercel dev",
+    "dev": "echo \"Use the 'yarn go' command to develop locally.\"",
     "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start",
     "test": "yarn run lint && yarn run relay && jest",
@@ -70,6 +71,7 @@
     "jest": "^26.0.1",
     "mockdate": "^2.0.5",
     "prettier": "^2.0.5",
-    "relay-compiler": "^9.1.0"
+    "relay-compiler": "^9.1.0",
+    "vercel": "^19.2.0"
   }
 }
