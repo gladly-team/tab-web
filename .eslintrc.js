@@ -46,6 +46,7 @@ module.exports = {
     fetch: 'writable',
   },
   settings: {
+    // Handle linting for absolute imports.
     'import/resolver': {
       alias: [
         ['src', './src']

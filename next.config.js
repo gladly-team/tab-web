@@ -86,13 +86,6 @@ const nextConfig = {
     URLS_USE_TRAILING_SLASH: process.env.URLS_USE_TRAILING_SLASH,
   },
   webpack: (config, options) => {
-    // Use absolute imports from 'src/'. See:
-    // https://github.com/zeit/next.js/blob/canary/examples/with-absolute-imports/next.config.js#L8
-    // We use eslint-import-resolver-alias in eslintrc.json to handle linting.
-    // https://github.com/benmosher/eslint-plugin-import/issues/1286
-    // eslint-disable-next-line no-param-reassign
-    config.resolve.alias.src = path.join(__dirname, 'src')
-
     // Sentry error logging. See:
     // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/next.config.js
     // 
