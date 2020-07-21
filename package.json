@@ -12,10 +12,7 @@
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\"",
-    "relay": "relay-compiler --src ./src/ --artifactDirectory ./src/relay/__generated__ --exclude '**/__test__/**'  '**/__generated__/**' --schema ./src/schema/schema.graphql",
-    "graphql": "NODE_ENV=production graphql",
-    "graphql:validate": "NODE_ENV=production graphql validate",
-    "schema": "NODE_ENV=production graphql codegen"
+    "relay": "relay-compiler --src ./src/ --artifactDirectory ./src/relay/__generated__ --exclude '**/__test__/**'  '**/__generated__/**' --schema ./src/schema/schema.graphql"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.13",
@@ -45,9 +42,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",
-    "@graphql-codegen/schema-ast": "^1.13.5",
-    "@test-graphql-cli/codegen": "4.0.1-beta.2",
-    "@test-graphql-cli/validate": "4.0.1-beta.1",
     "@testing-library/react-hooks": "^3.2.1",
     "babel-jest": "^26.0.1",
     "babel-plugin-module-resolver": "^4.0.0",
@@ -66,7 +60,6 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^4.0.0",
     "graphql": "^15.0.0",
-    "graphql-cli": "4.0.0-alpha-df0d2bc.481",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.0.1",
     "mockdate": "^2.0.5",
