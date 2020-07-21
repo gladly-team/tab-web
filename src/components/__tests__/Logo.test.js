@@ -1,10 +1,17 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import { withBasePath } from 'src/utils/urls'
+
+jest.mock('src/utils/urls')
 
 const getMockProps = () => ({
   className: undefined,
   color: 'purple',
   includeText: false,
+})
+
+beforeAll(() => {
+  withBasePath.mockImplementation((val) => `/newtab/${val}`)
 })
 
 describe('Logo component', () => {
@@ -59,7 +66,7 @@ describe('Logo component', () => {
       includeText: false,
     }
     const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('logo.svg')
+    expect(wrapper.find('img').prop('src')).toEqual('/newtab/logo.svg')
   })
 
   it('uses the correct file for color=default', () => {
@@ -69,7 +76,7 @@ describe('Logo component', () => {
       color: 'default',
     }
     const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('logo.svg')
+    expect(wrapper.find('img').prop('src')).toEqual('/newtab/logo.svg')
   })
 
   it('uses the correct file for color=purple', () => {
@@ -79,7 +86,7 @@ describe('Logo component', () => {
       color: 'purple',
     }
     const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('logo.svg')
+    expect(wrapper.find('img').prop('src')).toEqual('/newtab/logo.svg')
   })
 
   it('uses the correct file for color=white', () => {
@@ -89,7 +96,7 @@ describe('Logo component', () => {
       color: 'white',
     }
     const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('logo-white.svg')
+    expect(wrapper.find('img').prop('src')).toEqual('/newtab/logo-white.svg')
   })
 
   it('uses the correct file for color=grey', () => {
@@ -99,7 +106,7 @@ describe('Logo component', () => {
       color: 'grey',
     }
     const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('logo-grey.svg')
+    expect(wrapper.find('img').prop('src')).toEqual('/newtab/logo-grey.svg')
   })
 
   it('uses the correct file for includeText=true', () => {
@@ -109,7 +116,9 @@ describe('Logo component', () => {
       includeText: true,
     }
     const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('logo-with-text.svg')
+    expect(wrapper.find('img').prop('src')).toEqual(
+      '/newtab/logo-with-text.svg'
+    )
   })
 
   it('uses the same file for includeText=true even when another (unsupported) color is provided', () => {
@@ -118,7 +127,9 @@ describe('Logo component', () => {
     mockProps.includeText = true
     mockProps.color = 'white'
     const wrapper = shallow(<Logo {...mockProps} />)
-    expect(wrapper.find('img').prop('src')).toEqual('logo-with-text.svg')
+    expect(wrapper.find('img').prop('src')).toEqual(
+      '/newtab/logo-with-text.svg'
+    )
   })
 
   it('throws an error when passed an invalid color', () => {

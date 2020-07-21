@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import NextJsLink from 'next/link'
-import { withBasePath } from 'src/utils/urls'
 
 jest.mock('next/link', () => (props) => (
   <div data-test-id="mock-next-js-link">{props.children}</div>
@@ -12,10 +11,6 @@ const getMockProps = () => ({
   children: 'hi',
   className: 'some-class',
   to: '/some/url',
-})
-
-beforeEach(() => {
-  withBasePath.mockImplementation((url) => `/my-fake-basepath${url}`)
 })
 
 describe('Link component', () => {
@@ -49,26 +44,6 @@ describe('Link component', () => {
     }
     const wrapper = shallow(<Link {...mockProps} />)
     expect(wrapper.at(0).prop('href')).toEqual('/my/thing')
-  })
-
-  it('sets Next.js Link "as" prop to use the basePath', () => {
-    const Link = require('src/components/Link').default
-    const mockProps = {
-      ...getMockProps(),
-      to: '/my/thing',
-    }
-    const wrapper = shallow(<Link {...mockProps} />)
-    expect(wrapper.at(0).prop('href')).toEqual('/my/thing')
-  })
-
-  it('disables prefetch for the Next.js Link due to our basePath workaround', () => {
-    const Link = require('src/components/Link').default
-    const mockProps = {
-      ...getMockProps(),
-      to: '/my/thing',
-    }
-    const wrapper = shallow(<Link {...mockProps} />)
-    expect(wrapper.at(0).prop('as')).toEqual('/my-fake-basepath/my/thing')
   })
 
   it('assigns the className prop to the anchor', () => {

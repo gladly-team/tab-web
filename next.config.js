@@ -10,6 +10,8 @@ const withSourceMaps = require('@zeit/next-source-maps')({
   devtool: 'hidden-source-map'
 })
 
+const basePath = process.env.URLS_BASE_PATH
+
 // Use the SentryWebpack plugin to upload the source maps during build.
 const SentryWebpackPlugin = require('@sentry/webpack-plugin')
 
@@ -24,7 +26,46 @@ if (process.env.USE_LOCAL_ENV_FILE === 'true') {
 }
 
 const nextConfig = {
+  // For routing, we need:
+  // * the app to live on the /newtab base path.
+  // * to enforce a trailing slash on pages. This ensures a functional
+  //   service worker and matches the URL in the Tab browser extension.
+  // * the /v4 path to rewrite to the /newtab path. This allows us to
+  //   access the API from a different base path, which is important
+  //   for routing through CloudFront with the legacy app.
+  // Next.js should soon have all the features we need for routing, but
+  // they're not yet stable. In v9.4.5-canary.41, setting trailingSlash
+  // to true in both Next.js and vercel.json apparently causes 404 errors.
+  // For now, we handle base path management here Next.js and enforce
+  // other route rewrites in vercel.json, stripping the trailing slash
+  // to route to Next.js.
+  experimental: {
+    // Should be stable in v9.4.5.
+    basePath: basePath,
+  },
   exportTrailingSlash: true,
+
+  // We set the trailing slash preference in vercel.json.
+  // The trailing slash option is stable in v9.4.5-canary.41:
+  // https://github.com/vercel/next.js/releases/tag/v9.4.5-canary.41
+  // trailingSlash: true,
+
+  // Redirects should be available in v9.4.5.
+  // async redirects() {
+  //   return [
+  //     // Redirect from the index page to the base path index.
+  //     // This is for convenience in local development and when
+  //     // viewing preview deployments. It shouldn't need to be used
+  //     // in production.
+  //     (basePath && {
+  //       source: `/`,
+  //       destination: `${basePath}/`,
+  //       basePath: false,
+  //       permanent: false,
+  //     }),
+  //   ].filter(Boolean)
+  // },
+
   // Public, build-time env vars.
   // https://nextjs.org/docs#build-time-configuration
   env: {
@@ -41,7 +82,7 @@ const nextConfig = {
     SENTRY_DSN: process.env.SENTRY_DSN,
     SERVICE_WORKER_ENABLED: process.env.SERVICE_WORKER_ENABLED,
     URLS_API_BASE_PATH: process.env.URLS_API_BASE_PATH,
-    URLS_BASE_PATH: process.env.URLS_BASE_PATH, // @area/workaround/next-js-base-path
+    URLS_BASE_PATH: basePath,
     URLS_USE_TRAILING_SLASH: process.env.URLS_USE_TRAILING_SLASH,
   },
   webpack: (config, options) => {
