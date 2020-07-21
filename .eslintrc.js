@@ -9,7 +9,12 @@ module.exports = {
     'react/jsx-one-expression-per-line': 0,
     // The jsx-wrap-multilines rule conflicts with Prettier.
     // https://github.com/prettier/prettier/issues/1009#issuecomment-286993938
-    "react/jsx-wrap-multilines": ["error", {"declaration": false, "assignment": false}],
+    'react/jsx-wrap-multilines': [
+      'error',
+      {
+        declaration: false,
+        assignment: false
+    }],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error'
   },
@@ -18,7 +23,7 @@ module.exports = {
     // https://stackoverflow.com/a/49211283
     {
       files: ['**/*.test.js', '**/__mocks__/**/*.js'],
-      'extends': ['plugin:jest/recommended'],
+      extends: ['plugin:jest/recommended'],
       env: {
         jest: true
       },
@@ -35,6 +40,10 @@ module.exports = {
   },
   env: {
     es6: true
+  },
+  globals: {
+    // Polyfilled in Next.js 9.4.
+    fetch: 'writable',
   },
   settings: {
     'import/resolver': {

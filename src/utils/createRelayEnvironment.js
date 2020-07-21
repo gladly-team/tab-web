@@ -2,7 +2,6 @@
 // https://github.com/zeit/next.js/blob/canary/examples/with-relay-modern/lib/createRelayEnvironment.js
 
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
-import fetch from 'isomorphic-unfetch'
 import { isServerSide } from 'src/utils/ssr'
 import logger from 'src/utils/logger'
 

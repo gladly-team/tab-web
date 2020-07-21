@@ -1,7 +1,6 @@
 import getMockFetchResponse from 'src/utils/testHelpers/getMockFetchResponse'
 
 jest.mock('relay-runtime')
-jest.mock('isomorphic-unfetch')
 jest.mock('src/utils/ssr')
 
 beforeEach(() => {
@@ -28,8 +27,6 @@ beforeEach(() => {
   })
 
   process.env.RELAY_ENDPOINT = '/mock-relay-endpoint/here/'
-
-  const fetch = require('isomorphic-unfetch').default
   fetch.mockResolvedValue(getMockFetchResponse())
 })
 
@@ -171,7 +168,6 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const createRelayEnvironment = require('src/utils/createRelayEnvironment')
       .default
-    const fetch = require('isomorphic-unfetch').default
     fetch.mockResolvedValue(getMockFetchResponse())
     createRelayEnvironment({ token: 'some-fake-token' })
     const { Network } = require('relay-runtime')
@@ -192,7 +188,6 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const createRelayEnvironment = require('src/utils/createRelayEnvironment')
       .default
-    const fetch = require('isomorphic-unfetch').default
     fetch.mockResolvedValue(getMockFetchResponse())
     createRelayEnvironment() //  no token provided
     const { Network } = require('relay-runtime')
@@ -213,7 +208,6 @@ describe('createRelayEnvironment', () => {
     expect.assertions(1)
     const createRelayEnvironment = require('src/utils/createRelayEnvironment')
       .default
-    const fetch = require('isomorphic-unfetch').default
     fetch.mockResolvedValue({
       ...getMockFetchResponse(),
       json: () => Promise.resolve({ my: 'data' }),

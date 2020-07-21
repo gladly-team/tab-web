@@ -3,7 +3,6 @@
 // From:
 // https://github.com/zeit/next.js/blob/canary/examples/with-firebase-authentication/pages/index.js
 
-import fetch from 'isomorphic-unfetch'
 import { apiLogin, apiLogout } from 'src/utils/urls'
 
 export const setSession = async (user) => {

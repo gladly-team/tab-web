@@ -1,7 +1,6 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
 import { unregister } from 'next-offline/runtime'
-import fetch from 'isomorphic-unfetch'
 import Link from 'src/components/Link'
 import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
