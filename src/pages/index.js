@@ -390,7 +390,7 @@ export default withAuthAndData(({ AuthUser }) => {
   const userId = get(AuthUser, 'id')
   return {
     query: graphql`
-      query containersIndexQuery($userId: String!) {
+      query pagesIndexQuery($userId: String!) {
         app {
           ...MoneyRaisedContainer_app
         }
