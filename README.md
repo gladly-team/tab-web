@@ -3,6 +3,15 @@
 # [Tab for a Cause](https://tab.gladly.io/)
 *V4: adding server-side rendering*
 
+## Getting Started
+
+1. `git clone git@github.com:gladly-team/tab-web.git`
+2. `cd tab-web`
+3. `yarn`
+4. `yarn go`
+
+*Note: this also requires a running GraphQL service endpoint. We may want to update the default endpoint to a dev endpoint in the cloud for a better develeoper experience.*
+
 ## Documentation
 ### File Structure
 Our pages are in the `containers` directory, which allows us to colocate their tests. Currently, Next.js doesn't support non-page files in the `pages` directory (see [issue](https://github.com/zeit/next.js/issues/3728#issuecomment-363964953)). Files in the `pages` directory should simply export matching files in `containers`.
