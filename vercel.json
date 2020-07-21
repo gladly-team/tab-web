@@ -9,7 +9,7 @@
     { "source": "/(.*)/", "destination": "/$1" },
     { "source": "/v4/(.*)", "destination": "/newtab/$1" },
     {
-      "source": "/service-worker.js",
+      "source": "/newtab/service-worker.js",
       "destination": "/newtab/_next/static/service-worker.js"
     }
   ],
