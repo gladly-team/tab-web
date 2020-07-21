@@ -2,6 +2,8 @@ const path = require('path')
 const withOffline = require('next-offline')
 const withImages = require('next-images')
 
+console.log(`===== Loaded example env var: ${process.env.EXAMPLE_VAR} =====`)
+
 // Sentry error logging. See:
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/next.config.js
 // Use the hidden-source-map option when you don't want the source maps to be
@@ -14,16 +16,6 @@ const basePath = process.env.URLS_BASE_PATH
 
 // Use the SentryWebpack plugin to upload the source maps during build.
 const SentryWebpackPlugin = require('@sentry/webpack-plugin')
-
-// Only use the .env file for local development.
-if (process.env.USE_LOCAL_ENV_FILE === 'true') {
-  // eslint-disable-next-line no-console
-  console.log('Loading the local .env file.')
-  require('./src/env')
-} else {
-  // eslint-disable-next-line no-console
-  console.log('Ignoring the local .env file. Set env var "USE_LOCAL_ENV_FILE" to "true" if you want to use it.')
-}
 
 const nextConfig = {
   // For routing, we need:

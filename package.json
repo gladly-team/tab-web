@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "go": "USE_LOCAL_ENV_FILE=true NODE_ENV=development vercel dev",
+    "go": " NODE_ENV=development vercel dev",
     "dev": "echo \"Use the 'yarn go' command to develop locally.\"",
     "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start",

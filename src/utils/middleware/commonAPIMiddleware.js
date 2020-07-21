@@ -6,7 +6,7 @@ import customHeaderRequired from 'src/utils/middleware/customHeaderRequired'
 import onlyPostRequests from 'src/utils/middleware/onlyPostRequests'
 
 // Load environment variables.
-require('src/env')
+// require('src/env')
 
 export default (handler) =>
   onlyPostRequests(
