@@ -2,8 +2,6 @@ const path = require('path')
 const withOffline = require('next-offline')
 const withImages = require('next-images')
 
-console.log(`===== Loaded example env var: ${process.env.EXAMPLE_VAR} =====`)
-
 // Sentry error logging. See:
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/next.config.js
 // Use the hidden-source-map option when you don't want the source maps to be
