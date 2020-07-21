@@ -26,17 +26,34 @@ if (process.env.USE_LOCAL_ENV_FILE === 'true') {
 }
 
 const nextConfig = {
+  // For routing, we need:
+  // * the app to live on the /newtab base path.
+  // * to enforce a trailing slash on pages. This ensures a functional
+  //   service worker and matches the URL in the Tab browser extension.
+  // * the /v4 path to rewrite to the /newtab path. This allows us to
+  //   access the API from a different base path, which is important
+  //   for routing through CloudFront with the legacy app.
+  // Next.js should soon have all the features we need for routing, but
+  // they're not yet stable. In v9.4.5-canary.41, setting trailingSlash
+  // to true in both Next.js and vercel.json apparently causes 404 errors.
+  // For now, we handle base path management here Next.js and enforce
+  // other route rewrites in vercel.json, stripping the trailing slash
+  // to route to Next.js.
   experimental: {
     // Should be stable in v9.4.5.
     basePath: basePath,
   },
   exportTrailingSlash: true,
+
   // We set the trailing slash preference in vercel.json.
-  // Trailing slash stable in v9.4.5-canary.41:
+  // The trailing slash option is stable in v9.4.5-canary.41:
   // https://github.com/vercel/next.js/releases/tag/v9.4.5-canary.41
   // trailingSlash: true,
+
+  // Redirects should be available in v9.4.5.
   // async redirects() {
   //   return [
+  //     // Redirect from the index page to the base path index.
   //     // This is for convenience in local development and when
   //     // viewing preview deployments. It shouldn't need to be used
   //     // in production.
@@ -48,26 +65,7 @@ const nextConfig = {
   //     }),
   //   ].filter(Boolean)
   // },
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: '/service-worker.js',
-  //       destination: '/_next/static/service-worker.js'
-  //     },
-  //     // To support a /v4/ API base path.
-  //     {
-  //       source: `${process.env.URLS_API_BASE_PATH}/:path*`,
-  //       destination: `${basePath}/:path*`,
-  //       basePath: false,
-  //      },
-  //      // ... and with a trailing slash.
-  //      {
-  //       source: `${process.env.URLS_API_BASE_PATH}/:path*/`,
-  //       destination: `${basePath}/:path*/`,
-  //       basePath: false,
-  //      },
-  //   ]
-  // },
+
   // Public, build-time env vars.
   // https://nextjs.org/docs#build-time-configuration
   env: {
