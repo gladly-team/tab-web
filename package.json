@@ -34,8 +34,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-firebaseui": "^4.1.0",
-    "react-relay": "^9.1.0",
-    "relay-runtime": "^9.1.0",
+    "react-relay": "^10.0.0",
+    "relay-runtime": "^10.0.0",
     "tab-ads": "^0.7.0"
   },
   "devDependencies": {
@@ -43,7 +43,7 @@
     "@testing-library/react-hooks": "^3.2.1",
     "babel-jest": "^26.0.1",
     "babel-plugin-module-resolver": "^4.0.0",
-    "babel-plugin-relay": "^9.1.0",
+    "babel-plugin-relay": "^10.0.0",
     "codecov": "^3.6.5",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
@@ -62,7 +62,7 @@
     "jest": "^26.0.1",
     "mockdate": "^2.0.5",
     "prettier": "^2.0.5",
-    "relay-compiler": "^9.1.0",
+    "relay-compiler": "^10.0.0",
     "vercel": "^19.2.0"
   }
 }
