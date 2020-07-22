@@ -16,14 +16,14 @@
   "headers": [
     {
       "source": "/newtab/service-worker.js",
-      "headers" : [
+      "headers": [
         {
-          "key" : "Cache-Control",
-          "value" : "no-cache"
+          "key": "Cache-Control",
+          "value": "no-cache"
         },
         {
-          "key" : "Service-Worker-Allowed",
-          "value" : "/newtab/"
+          "key": "Service-Worker-Allowed",
+          "value": "/newtab/"
         }
       ]
     }

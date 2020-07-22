@@ -7,7 +7,7 @@ const withImages = require('next-images')
 // Use the hidden-source-map option when you don't want the source maps to be
 // publicly available on the servers, only to the error reporting
 const withSourceMaps = require('@zeit/next-source-maps')({
-  devtool: 'hidden-source-map'
+  devtool: 'hidden-source-map',
 })
 
 const basePath = process.env.NEXT_PUBLIC_URLS_BASE_PATH || ''
@@ -59,7 +59,7 @@ const nextConfig = {
   webpack: (config, options) => {
     // Sentry error logging. See:
     // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/next.config.js
-    // 
+    //
     // In `pages/_app.js`, Sentry is imported from @sentry/node. While
     // @sentry/browser will run in a Node.js environment, @sentry/node will use
     // Node.js-only APIs to catch even more unhandled exceptions.

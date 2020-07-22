@@ -13,10 +13,11 @@ module.exports = {
       'error',
       {
         declaration: false,
-        assignment: false
-    }],
+        assignment: false,
+      },
+    ],
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'error'
+    'react-hooks/exhaustive-deps': 'error',
   },
   overrides: [
     // Set Jest rules only for test files.
@@ -25,21 +26,21 @@ module.exports = {
       files: ['**/*.test.js', '**/__mocks__/**/*.js'],
       extends: ['plugin:jest/recommended'],
       env: {
-        jest: true
+        jest: true,
       },
-      plugins: [ 'jest' ],
+      plugins: ['jest'],
       rules: {
         'global-require': 0,
         'react/jsx-props-no-spreading': 0,
-      }
-    }
+      },
+    },
   ],
   parserOptions: {
     ecmaVersion: 2018,
-    sourceType: 'module'
+    sourceType: 'module',
   },
   env: {
-    es6: true
+    es6: true,
   },
   globals: {
     // Polyfilled in Next.js 9.4.
@@ -48,9 +49,7 @@ module.exports = {
   settings: {
     // Handle linting for absolute imports.
     'import/resolver': {
-      alias: [
-        ['src', './src']
-      ]
-    }
-  }
+      alias: [['src', './src']],
+    },
+  },
 }
