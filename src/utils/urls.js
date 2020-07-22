@@ -1,3 +1,17 @@
+import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
+
+try {
+  ensureValuesAreDefined([
+    process.env.NEXT_PUBLIC_URLS_BASE_PATH,
+    process.env.NEXT_PUBLIC_URLS_API_BASE_PATH,
+    process.env.NEXT_PUBLIC_URLS_USE_TRAILING_SLASH,
+  ])
+} catch (e) {
+  throw new Error(
+    'Environment variables NEXT_PUBLIC_URLS_BASE_PATH, NEXT_PUBLIC_URLS_API_BASE_PATH, and NEXT_PUBLIC_URLS_USE_TRAILING_SLASH must be set.'
+  )
+}
+
 // Base path set in Next config. This must match our app's
 // CloudFront routing.
 const basePath = process.env.NEXT_PUBLIC_URLS_BASE_PATH || ''
@@ -13,14 +27,12 @@ const NEXT_PUBLIC_URLS_API_BASE_PATH =
 // A trailing slash in Next is experimental:
 // https://github.com/zeit/next.js/issues/5214
 // We can use it in production with Vercel routing.
-const NEXT_PUBLIC_URLS_USE_TRAILING_SLASH =
+const useTrailingSlash =
   process.env.NEXT_PUBLIC_URLS_USE_TRAILING_SLASH === 'true'
 
 const addTrailingSlashIfNeeded = (path) => {
   const hasTrailingSlash = path[path.length - 1] === '/'
-  return `${path}${
-    !hasTrailingSlash && NEXT_PUBLIC_URLS_USE_TRAILING_SLASH ? '/' : ''
-  }`
+  return `${path}${!hasTrailingSlash && useTrailingSlash ? '/' : ''}`
 }
 
 export const withBasePath = (path) => `${basePath}${path}`
