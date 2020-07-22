@@ -1,29 +1,45 @@
+import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
+
+try {
+  ensureValuesAreDefined([
+    process.env.NEXT_PUBLIC_URLS_BASE_PATH,
+    process.env.NEXT_PUBLIC_URLS_API_BASE_PATH,
+    process.env.NEXT_PUBLIC_URLS_USE_TRAILING_SLASH,
+  ])
+} catch (e) {
+  throw new Error(
+    'Environment variables NEXT_PUBLIC_URLS_BASE_PATH, NEXT_PUBLIC_URLS_API_BASE_PATH, and NEXT_PUBLIC_URLS_USE_TRAILING_SLASH must be set.'
+  )
+}
+
 // Base path set in Next config. This must match our app's
 // CloudFront routing.
-const basePath = process.env.URLS_BASE_PATH || ''
+const basePath = process.env.NEXT_PUBLIC_URLS_BASE_PATH || ''
 
 // In CloudFront, the /v4 base path routes to this Next.js
 // app. The /newtab base paths routes to the this app -OR-
 // the legacy static app, depending on cookie settings. Thus,
 // to call one of this app's API endpoints to set the cookie
 // that opts into this app, we need to use the /v4 endpoint.
-const URLS_API_BASE_PATH = process.env.URLS_API_BASE_PATH || ''
+const NEXT_PUBLIC_URLS_API_BASE_PATH =
+  process.env.NEXT_PUBLIC_URLS_API_BASE_PATH || ''
 
 // A trailing slash in Next is experimental:
 // https://github.com/zeit/next.js/issues/5214
 // We can use it in production with Vercel routing.
-const URLS_USE_TRAILING_SLASH = process.env.URLS_USE_TRAILING_SLASH === 'true'
+const useTrailingSlash =
+  process.env.NEXT_PUBLIC_URLS_USE_TRAILING_SLASH === 'true'
 
 const addTrailingSlashIfNeeded = (path) => {
   const hasTrailingSlash = path[path.length - 1] === '/'
-  return `${path}${!hasTrailingSlash && URLS_USE_TRAILING_SLASH ? '/' : ''}`
+  return `${path}${!hasTrailingSlash && useTrailingSlash ? '/' : ''}`
 }
 
 export const withBasePath = (path) => `${basePath}${path}`
 
 // For /api/* paths.
 const createAPIURL = (url) =>
-  addTrailingSlashIfNeeded(`${URLS_API_BASE_PATH}${url}`)
+  addTrailingSlashIfNeeded(`${NEXT_PUBLIC_URLS_API_BASE_PATH}${url}`)
 
 const createPageURL = (url) => addTrailingSlashIfNeeded(url)
 

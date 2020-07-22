@@ -68,7 +68,7 @@ const mockRelayQueryGetter = jest.fn()
 beforeEach(() => {
   isClientSide.mockReturnValue(false)
   fetchQuery.mockResolvedValue({}) // data returned from Relay fetch
-  process.env.SERVICE_WORKER_ENABLED = 'false'
+  process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
   mockRelayQueryGetter.mockReturnValue({
     query: 'some-query',
     variables: {
@@ -636,10 +636,10 @@ describe('withData: getInitialProps', () => {
     })
   })
 
-  it('sets the "refetchDataOnMount" prop to true if process.env.SERVICE_WORKER_ENABLED === \'true\' and we are server-side', async () => {
+  it('sets the "refetchDataOnMount" prop to true if process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === \'true\' and we are server-side', async () => {
     expect.assertions(1)
     const withData = require('src/utils/pageWrappers/withData').default
-    process.env.SERVICE_WORKER_ENABLED = 'true'
+    process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'true'
     isClientSide.mockReturnValue(false)
     const ctx = getMockNextJSContext()
     const HOC = withData(mockRelayQueryGetter)(MockComponent)
@@ -647,10 +647,10 @@ describe('withData: getInitialProps', () => {
     expect(response.refetchDataOnMount).toBe(true)
   })
 
-  it('sets the "refetchDataOnMount" prop to false if process.env.SERVICE_WORKER_ENABLED === \'false\' and we are server-side', async () => {
+  it('sets the "refetchDataOnMount" prop to false if process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === \'false\' and we are server-side', async () => {
     expect.assertions(1)
     const withData = require('src/utils/pageWrappers/withData').default
-    process.env.SERVICE_WORKER_ENABLED = 'false'
+    process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
     isClientSide.mockReturnValue(false)
     const ctx = getMockNextJSContext()
     const HOC = withData(mockRelayQueryGetter)(MockComponent)
@@ -658,10 +658,10 @@ describe('withData: getInitialProps', () => {
     expect(response.refetchDataOnMount).toBe(false)
   })
 
-  it('sets the "refetchDataOnMount" prop to false if process.env.SERVICE_WORKER_ENABLED === \'true\' but we are client-side', async () => {
+  it('sets the "refetchDataOnMount" prop to false if process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === \'true\' but we are client-side', async () => {
     expect.assertions(1)
     const withData = require('src/utils/pageWrappers/withData').default
-    process.env.SERVICE_WORKER_ENABLED = 'true'
+    process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'true'
     isClientSide.mockReturnValue(true) // don't refetch data on client-side navigation
     const ctx = getMockNextJSContext()
     const HOC = withData(mockRelayQueryGetter)(MockComponent)

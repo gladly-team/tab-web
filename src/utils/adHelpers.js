@@ -1,4 +1,16 @@
 import { getAvailableAdUnits } from 'tab-ads'
+import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
+
+try {
+  ensureValuesAreDefined([
+    process.env.NEXT_PUBLIC_ADS_ENABLED,
+    process.env.NEXT_PUBLIC_ADS_USE_MOCK_ADS,
+  ])
+} catch (e) {
+  throw new Error(
+    'Environment variables NEXT_PUBLIC_ADS_ENABLED and NEXT_PUBLIC_ADS_USE_MOCK_ADS must be set.'
+  )
+}
 
 const DEFAULT_NUMBER_OF_ADS = 2
 
@@ -65,13 +77,15 @@ export const getAdUnits = () => {
  * @return {Boolean} Whether ads are enabled.
  */
 export const areAdsEnabled = () =>
-  process.env.ADS_ENABLED === 'true' && !hasUserReachedMaxTabsToday()
+  process.env.NEXT_PUBLIC_ADS_ENABLED === 'true' &&
+  !hasUserReachedMaxTabsToday()
 
 /**
  * Return true if we want to show mock ads (for development only).
  * @return {Boolean} Whether to show mock ads.
  */
-export const showMockAds = () => process.env.ADS_USE_MOCK_ADS === 'true'
+export const showMockAds = () =>
+  process.env.NEXT_PUBLIC_ADS_USE_MOCK_ADS === 'true'
 
 // TODO: implement
 export const isInEuropeanUnion = async () => false

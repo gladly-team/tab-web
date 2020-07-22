@@ -22,7 +22,7 @@ afterEach(() => {
 describe('_app.js: initializes Sentry', () => {
   it('intitalizes Sentry when the Sentry DSN is defined', () => {
     expect.assertions(1)
-    process.env.SENTRY_DSN = 'some-dsn'
+    process.env.NEXT_PUBLIC_SENTRY_DSN = 'some-dsn'
     const Sentry = require('@sentry/node')
     // eslint-disable-next-line no-unused-expressions
     require('src/pages/_app.js').default
@@ -31,7 +31,7 @@ describe('_app.js: initializes Sentry', () => {
 
   it('passes the Sentry DSN when intializing', () => {
     expect.assertions(1)
-    process.env.SENTRY_DSN = 'this-is-my-dsn'
+    process.env.NEXT_PUBLIC_SENTRY_DSN = 'this-is-my-dsn'
     process.env.NODE_ENV = 'production'
     const Sentry = require('@sentry/node')
     // eslint-disable-next-line no-unused-expressions
@@ -43,7 +43,7 @@ describe('_app.js: initializes Sentry', () => {
 
   it('intitalizes Sentry with "enabled" = true when NODE_ENV is production', () => {
     expect.assertions(1)
-    process.env.SENTRY_DSN = 'some-dsn'
+    process.env.NEXT_PUBLIC_SENTRY_DSN = 'some-dsn'
     process.env.NODE_ENV = 'production'
     const Sentry = require('@sentry/node')
     // eslint-disable-next-line no-unused-expressions
@@ -55,7 +55,7 @@ describe('_app.js: initializes Sentry', () => {
 
   it('intitalizes Sentry with "enabled" = false when NODE_ENV is development', () => {
     expect.assertions(1)
-    process.env.SENTRY_DSN = 'some-dsn'
+    process.env.NEXT_PUBLIC_SENTRY_DSN = 'some-dsn'
     process.env.NODE_ENV = 'development'
     const Sentry = require('@sentry/node')
     // eslint-disable-next-line no-unused-expressions
@@ -67,7 +67,7 @@ describe('_app.js: initializes Sentry', () => {
 
   it('does not intitalize Sentry when the Sentry DSN is not defined', () => {
     expect.assertions(1)
-    delete process.env.SENTRY_DSN
+    delete process.env.NEXT_PUBLIC_SENTRY_DSN
 
     // Suppress expected console warning.
     jest.spyOn(console, 'warn').mockImplementation(() => {})

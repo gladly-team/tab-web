@@ -3,7 +3,17 @@ import logger from 'src/utils/logger'
 
 // Adds a req.cookie object, which has get/set methods.
 export const withCookies = (req, res) => {
-  // Ensure that session secrets are set.
+  // Ensure that env vars are set.
+  if (
+    !(
+      process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE === 'true' ||
+      process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE === 'false'
+    )
+  ) {
+    throw new Error(
+      'Environment variable`SESSION_COOKIE_SECURE_SAME_SITE_NONE` must be set to "true" or "false".'
+    )
+  }
   if (
     !(process.env.SESSION_SECRET_CURRENT && process.env.SESSION_SECRET_PREVIOUS)
   ) {

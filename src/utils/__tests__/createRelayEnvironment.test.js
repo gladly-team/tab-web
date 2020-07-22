@@ -26,7 +26,7 @@ beforeEach(() => {
     return new MockEnvironment(args)
   })
 
-  process.env.RELAY_ENDPOINT = '/mock-relay-endpoint/here/'
+  process.env.NEXT_PUBLIC_RELAY_ENDPOINT = '/mock-relay-endpoint/here/'
   fetch.mockResolvedValue(getMockFetchResponse())
 })
 

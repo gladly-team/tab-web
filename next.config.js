@@ -10,20 +10,10 @@ const withSourceMaps = require('@zeit/next-source-maps')({
   devtool: 'hidden-source-map'
 })
 
-const basePath = process.env.URLS_BASE_PATH
+const basePath = process.env.NEXT_PUBLIC_URLS_BASE_PATH || ''
 
 // Use the SentryWebpack plugin to upload the source maps during build.
 const SentryWebpackPlugin = require('@sentry/webpack-plugin')
-
-// Only use the .env file for local development.
-if (process.env.USE_LOCAL_ENV_FILE === 'true') {
-  // eslint-disable-next-line no-console
-  console.log('Loading the local .env file.')
-  require('./src/env')
-} else {
-  // eslint-disable-next-line no-console
-  console.log('Ignoring the local .env file. Set env var "USE_LOCAL_ENV_FILE" to "true" if you want to use it.')
-}
 
 const nextConfig = {
   // For routing, we need:
@@ -66,25 +56,6 @@ const nextConfig = {
   //   ].filter(Boolean)
   // },
 
-  // Public, build-time env vars.
-  // https://nextjs.org/docs#build-time-configuration
-  env: {
-    ADS_ENABLED: process.env.ADS_ENABLED,
-    ADS_USE_MOCK_ADS: process.env.ADS_USE_MOCK_ADS,
-    FEATURE_FLAG_DEVELOPMENT_DEMO_PAGES: process.env.FEATURE_FLAG_DEVELOPMENT_DEMO_PAGES,
-    FEATURE_FLAG_MOCK_ACHIEVEMENTS: process.env.FEATURE_FLAG_MOCK_ACHIEVEMENTS,
-    FIREBASE_AUTH_DOMAIN: process.env.FIREBASE_AUTH_DOMAIN,
-    FIREBASE_DATABASE_URL: process.env.FIREBASE_DATABASE_URL,
-    FIREBASE_PROJECT_ID: process.env.FIREBASE_PROJECT_ID,
-    FIREBASE_PUBLIC_API_KEY: process.env.FIREBASE_PUBLIC_API_KEY,
-    GRAPHQL_SCHEMA_LOCATION: process.env.GRAPHQL_SCHEMA_LOCATION,
-    RELAY_ENDPOINT: process.env.RELAY_ENDPOINT,
-    SENTRY_DSN: process.env.SENTRY_DSN,
-    SERVICE_WORKER_ENABLED: process.env.SERVICE_WORKER_ENABLED,
-    URLS_API_BASE_PATH: process.env.URLS_API_BASE_PATH,
-    URLS_BASE_PATH: basePath,
-    URLS_USE_TRAILING_SLASH: process.env.URLS_USE_TRAILING_SLASH,
-  },
   webpack: (config, options) => {
     // Sentry error logging. See:
     // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/next.config.js
@@ -113,7 +84,7 @@ const nextConfig = {
     // This is an alternative to manually uploading the source maps
     // Note: This is disabled in development mode.
     if (
-      process.env.SENTRY_DSN &&
+      process.env.NEXT_PUBLIC_SENTRY_DSN &&
       process.env.SENTRY_ORG &&
       process.env.SENTRY_PROJECT &&
       process.env.SENTRY_AUTH_TOKEN &&

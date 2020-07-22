@@ -14,6 +14,7 @@ jest.mock('src/utils/auth/user')
 jest.mock('src/utils/middleware/session')
 jest.mock('src/utils/ssr')
 jest.mock('@sentry/node')
+jest.mock('src/utils/auth/hooks')
 
 const MockComponent = () => {
   return <div>hi</div>
@@ -63,8 +64,8 @@ beforeEach(() => {
     })
   })
 
-  process.env.SERVICE_WORKER_ENABLED = 'true'
-  process.env.SENTRY_DSN = 'some-sentry-dsn'
+  process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'true'
+  process.env.NEXT_PUBLIC_SENTRY_DSN = 'some-sentry-dsn'
 })
 
 afterEach(() => {
@@ -86,27 +87,27 @@ describe('_app.js', () => {
     }).not.toThrow()
   })
 
-  it('registers the service worker if process.env.SERVICE_WORKER_ENABLED === "true"', () => {
+  it('registers the service worker if process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === "true"', () => {
     expect.assertions(1)
-    process.env.SERVICE_WORKER_ENABLED = 'true'
+    process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'true'
     const App = require('src/pages/_app.js').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
     expect(register).toHaveBeenCalledWith('/newtab/service-worker.js')
   })
 
-  it('unregisters the service worker if process.env.SERVICE_WORKER_ENABLED === "false"', () => {
+  it('unregisters the service worker if process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === "false"', () => {
     expect.assertions(1)
-    process.env.SERVICE_WORKER_ENABLED = 'false'
+    process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
     const App = require('src/pages/_app.js').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
     expect(unregister).toHaveBeenCalled()
   })
 
-  it('unregisters the service worker if process.env.SERVICE_WORKER_ENABLED is undefined', () => {
+  it('unregisters the service worker if process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED is undefined', () => {
     expect.assertions(1)
-    delete process.env.SERVICE_WORKER_ENABLED
+    delete process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED
     const App = require('src/pages/_app.js').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
