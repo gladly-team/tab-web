@@ -30,10 +30,16 @@ On the `/api/logout` endpoint, we do not require the user to be authenticated, b
 
 In the future, we can consider adding session-based CSRF tokens for defense in depth.
 
+### Environment Variables
+
+* **Production:** set in the Vercel console for preview and production deployments.
+  * For reference, we add non-secret env values to `.env.preview.info` and `.env.production.info`.
+* **Local development:** set in `.env.development` (public) and `.env.local` (secrets).
+* See [.env](./.env) for more documentation.
+
 ### Deployment
 **Vercel runs unit tests and deploys**
 * Our Vercel project, [tab-web](https://vercel.com/gladly-team/tab-web), builds on commit push
-* Environment variables are set in the Vercel console, and we keep values in `.env.info` for reference
 * The "dev" Git branch is mapped to our "dev" environment
 
 **Github Action logs code coverage**
