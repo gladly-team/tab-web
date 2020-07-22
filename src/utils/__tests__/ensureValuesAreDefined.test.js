@@ -59,6 +59,14 @@ describe('ensureValuesAreDefined', () => {
     }).toThrow()
   })
 
+  it('throws if called with an empty string', () => {
+    const ensureValuesAreDefined = require('src/utils/ensureValuesAreDefined')
+      .default
+    expect(() => {
+      ensureValuesAreDefined('')
+    }).toThrow()
+  })
+
   it('throws if called with an empty array', () => {
     const ensureValuesAreDefined = require('src/utils/ensureValuesAreDefined')
       .default
@@ -80,6 +88,14 @@ describe('ensureValuesAreDefined', () => {
       .default
     expect(() => {
       ensureValuesAreDefined([12, undefined, 'hello'])
+    }).toThrow()
+  })
+
+  it('throws if called with an array that contains an empty string value', () => {
+    const ensureValuesAreDefined = require('src/utils/ensureValuesAreDefined')
+      .default
+    expect(() => {
+      ensureValuesAreDefined([12, '', 'hello'])
     }).toThrow()
   })
 })

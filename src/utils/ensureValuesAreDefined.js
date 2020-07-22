@@ -4,8 +4,8 @@ import { isNil } from 'lodash/lang'
 
 /**
  * Ensures that the value or array of values are all
- * non-nil. If any are nil, throws an error. Does not throw
- * during tests.
+ * non-nil and not empty strings. If any are nil or empty,
+ * throw an error. Do not throw during tests.
  * @param {Any|Array<Any>} value - A value or array of values
  *   of any type.
  * @return {undefined}
@@ -18,7 +18,7 @@ const ensureValuesAreDefined = (value) => {
   }
   let hasNilVal = false
   if (!Array.isArray(value)) {
-    if (isNil(value)) {
+    if (isNil(value) || value === '') {
       hasNilVal = true
     }
   } else {
@@ -28,7 +28,7 @@ const ensureValuesAreDefined = (value) => {
     }
     // Test each entry in the array.
     value.forEach((item) => {
-      if (isNil(item)) {
+      if (isNil(item) || item === '') {
         hasNilVal = true
       }
     })
