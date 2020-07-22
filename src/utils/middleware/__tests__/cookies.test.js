@@ -53,6 +53,16 @@ describe('cookies middleware: withCookies', () => {
     })
   })
 
+  it('throws if the session key SESSION_COOKIE_SECURE_SAME_SITE_NONE is not defined', () => {
+    expect.assertions(1)
+    delete process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE
+    expect(() => {
+      withCookies(getMockReq(), getMockRes())
+    }).toThrow(
+      'Environment variable`SESSION_COOKIE_SECURE_SAME_SITE_NONE` must be set to "true" or "false".'
+    )
+  })
+
   it('throws if the session key SESSION_SECRET_CURRENT is not defined', () => {
     expect.assertions(1)
     delete process.env.SESSION_SECRET_CURRENT
@@ -86,16 +96,6 @@ describe('cookies middleware: withCookies', () => {
   it('sets the "secure" option to false in Cookies when secure cookies are disabled', () => {
     expect.assertions(1)
     process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'false'
-    withCookies(getMockReq(), getMockRes())
-    const optionsForCookies = Cookies.mock.calls[0][2]
-    expect(optionsForCookies).toMatchObject({
-      secure: false,
-    })
-  })
-
-  it('sets the "secure" option to false in Cookies when secure cookies are not configured', () => {
-    expect.assertions(1)
-    delete process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE
     withCookies(getMockReq(), getMockRes())
     const optionsForCookies = Cookies.mock.calls[0][2]
     expect(optionsForCookies).toMatchObject({
