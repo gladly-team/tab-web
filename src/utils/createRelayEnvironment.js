@@ -4,6 +4,15 @@
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 import { isServerSide } from 'src/utils/ssr'
 import logger from 'src/utils/logger'
+import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
+
+try {
+  ensureValuesAreDefined(process.env.NEXT_PUBLIC_RELAY_ENDPOINT)
+} catch (e) {
+  throw new Error(
+    'Environment variable NEXT_PUBLIC_RELAY_ENDPOINT must be set.'
+  )
+}
 
 const relayEndpoint = process.env.NEXT_PUBLIC_RELAY_ENDPOINT
 let relayEnvironment = null

@@ -1,5 +1,14 @@
 import Cookies from 'cookies'
 import logger from 'src/utils/logger'
+import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
+
+try {
+  ensureValuesAreDefined(process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE)
+} catch (e) {
+  throw new Error(
+    'Environment variable SESSION_COOKIE_SECURE_SAME_SITE_NONE must be set.'
+  )
+}
 
 // Adds a req.cookie object, which has get/set methods.
 export const withCookies = (req, res) => {

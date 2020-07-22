@@ -24,6 +24,20 @@ import {
   REQ_SESSION_AUTH_USER_INFO_KEY,
 } from 'src/utils/constants'
 import theme from 'src/utils/theme'
+import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
+
+try {
+  ensureValuesAreDefined(process.env.NEXT_PUBLIC_SENTRY_DSN)
+} catch (e) {
+  throw new Error('Environment variable NEXT_PUBLIC_SENTRY_DSN must be set.')
+}
+try {
+  ensureValuesAreDefined(process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED)
+} catch (e) {
+  throw new Error(
+    'Environment variable NEXT_PUBLIC_SERVICE_WORKER_ENABLED must be set.'
+  )
+}
 
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_app.js
 if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
