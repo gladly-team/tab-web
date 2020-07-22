@@ -1,4 +1,16 @@
 import { getAvailableAdUnits } from 'tab-ads'
+import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
+
+try {
+  ensureValuesAreDefined([
+    process.env.NEXT_PUBLIC_ADS_ENABLED,
+    process.env.NEXT_PUBLIC_ADS_USE_MOCK_ADS,
+  ])
+} catch (e) {
+  throw new Error(
+    'Environment variables NEXT_PUBLIC_ADS_ENABLED and NEXT_PUBLIC_ADS_USE_MOCK_ADS must be set.'
+  )
+}
 
 const DEFAULT_NUMBER_OF_ADS = 2
 
