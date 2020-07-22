@@ -14,6 +14,7 @@ jest.mock('src/utils/auth/user')
 jest.mock('src/utils/middleware/session')
 jest.mock('src/utils/ssr')
 jest.mock('@sentry/node')
+jest.mock('src/utils/auth/hooks')
 
 const MockComponent = () => {
   return <div>hi</div>
