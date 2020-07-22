@@ -1,3 +1,7 @@
+beforeEach(() => {
+  process.env.IS_JEST_TEST_ENVIRONMENT = false
+})
+
 describe('ensureValuesAreDefined', () => {
   it('does not throw if passed a number', () => {
     const ensureValuesAreDefined = require('src/utils/ensureValuesAreDefined')

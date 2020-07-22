@@ -26,3 +26,5 @@ console.error = function (message, ...args) {
 }
 
 global.fetch = jest.fn(() => Promise.resolve())
+
+process.env.IS_JEST_TEST_ENVIRONMENT = 'true'
