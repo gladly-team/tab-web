@@ -25,6 +25,19 @@ const nextConfig = {
   basePath,
   trailingSlash: true,
 
+  async rewrites() {
+    return [
+      // Keeping this logic in vercel.json for now. Next.js 9.5
+      // requires an absolute destination URL when basePath is
+      // false, which is more trouble than it's worth.
+      // {
+      //   source: '/v4/:route(.*)',
+      //   destination: '/newtab/:route',
+      //   basePath: false,
+      // },
+    ]
+  },
+
   async redirects() {
     return [
       // Redirect from the index page to the base path index.
