@@ -25,21 +25,20 @@ const nextConfig = {
   basePath,
   trailingSlash: true,
 
-  // Redirects should be available in v9.4.5.
-  // async redirects() {
-  //   return [
-  //     // Redirect from the index page to the base path index.
-  //     // This is for convenience in local development and when
-  //     // viewing preview deployments. It shouldn't need to be used
-  //     // in production.
-  //     (basePath && {
-  //       source: `/`,
-  //       destination: `${basePath}/`,
-  //       basePath: false,
-  //       permanent: false,
-  //     }),
-  //   ].filter(Boolean)
-  // },
+  async redirects() {
+    return [
+      // Redirect from the index page to the base path index.
+      // This is for convenience in local development and when
+      // viewing preview deployments. It shouldn't need to be used
+      // in production.
+      basePath && {
+        source: `/`,
+        destination: `${basePath}/`,
+        basePath: false,
+        permanent: false,
+      },
+    ].filter(Boolean)
+  },
 
   webpack: (config, options) => {
     // Sentry error logging. See:
