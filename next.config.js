@@ -27,6 +27,11 @@ const nextConfig = {
 
   async rewrites() {
     return [
+      {
+        // This includes the base path: /newtab/service-worker.js
+        source: '/service-worker.js',
+        destination: '/_next/static/service-worker.js',
+      },
       // Keeping this logic in vercel.json for now. Next.js 9.5
       // requires an absolute destination URL when basePath is
       // false, which is more trouble than it's worth.
