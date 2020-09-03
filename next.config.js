@@ -1,4 +1,3 @@
-const path = require('path')
 const withOffline = require('next-offline')
 const withImages = require('next-images')
 
@@ -23,7 +22,7 @@ const nextConfig = {
   // * the /v4 path to rewrite to the /newtab path. This allows us to
   //   access the API from a different base path, which is important
   //   for routing through CloudFront with the legacy app.
-  basePath: basePath,
+  basePath,
   trailingSlash: true,
 
   // Redirects should be available in v9.4.5.
@@ -61,6 +60,7 @@ const nextConfig = {
     // So ask Webpack to replace @sentry/node imports with @sentry/browser when
     // building the browser's bundle
     if (!options.isServer) {
+      // eslint-disable-next-line no-param-reassign
       config.resolve.alias['@sentry/node'] = '@sentry/browser'
     }
 
