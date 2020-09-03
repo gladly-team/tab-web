@@ -4,5 +4,5 @@ build
 .next
 .serverless
 
-# This can break builds in Now.sh.
-# next.config.*js
+# We ignore next.config.*js in the NPM lint script because
+# linting the config breaks Vercel builds.
