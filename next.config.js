@@ -26,11 +26,6 @@ const nextConfig = {
   basePath: basePath,
   trailingSlash: true,
 
-  // We set the trailing slash preference in vercel.json.
-  // The trailing slash option is stable in v9.4.5-canary.41:
-  // https://github.com/vercel/next.js/releases/tag/v9.4.5-canary.41
-  // trailingSlash: true,
-
   // Redirects should be available in v9.4.5.
   // async redirects() {
   //   return [
