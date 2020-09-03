@@ -11,7 +11,7 @@ import {
   NEXT_CTX_AUTH_USER_INFO_KEY,
 } from 'src/utils/constants'
 
-const AuthRequired = ComposedComponent => {
+const AuthRequired = (ComposedComponent) => {
   const AuthRequiredComp = (props) => {
     const { AuthUserInfo } = props
 
@@ -69,9 +69,9 @@ const AuthRequired = ComposedComponent => {
   AuthRequiredComp.defaultProps = {}
 
   return AuthRequiredComp
-};
+}
 
 // Redirects to the authentication page if the user is not logged in.
 // This should wrap any other higher-order components that expect the
 // user to exist.
-export default AuthRequired;
+export default AuthRequired
