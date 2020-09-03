@@ -8,6 +8,8 @@ import authRequired from 'src/utils/pageWrappers/authRequired'
 import withAuthUserInfo from 'src/utils/pageWrappers/withAuthUserInfo'
 import withData from 'src/utils/pageWrappers/withData'
 
-export default (getRelayQuery) =>
+const withAuthAndData = (getRelayQuery) =>
   // Invokes from left to right.
   flowRight(withAuthUserInfo, authRequired, withData(getRelayQuery))
+
+export default withAuthAndData
