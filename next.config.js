@@ -23,17 +23,8 @@ const nextConfig = {
   // * the /v4 path to rewrite to the /newtab path. This allows us to
   //   access the API from a different base path, which is important
   //   for routing through CloudFront with the legacy app.
-  // Next.js should soon have all the features we need for routing, but
-  // they're not yet stable. In v9.4.5-canary.41, setting trailingSlash
-  // to true in both Next.js and vercel.json apparently causes 404 errors.
-  // For now, we handle base path management here Next.js and enforce
-  // other route rewrites in vercel.json, stripping the trailing slash
-  // to route to Next.js.
-  experimental: {
-    // Should be stable in v9.4.5.
-    basePath: basePath,
-  },
-  exportTrailingSlash: true,
+  basePath: basePath,
+  trailingSlash: true,
 
   // We set the trailing slash preference in vercel.json.
   // The trailing slash option is stable in v9.4.5-canary.41:

@@ -6,7 +6,6 @@
   "cleanUrls": true,
   "trailingSlash": true,
   "rewrites": [
-    { "source": "/(.*)/", "destination": "/$1" },
     { "source": "/v4/(.*)", "destination": "/newtab/$1" },
     {
       "source": "/newtab/service-worker.js",
