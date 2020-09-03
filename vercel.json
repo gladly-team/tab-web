@@ -7,20 +7,5 @@
   "trailingSlash": true,
   "rewrites": [
     { "source": "/v4/(.*)", "destination": "/newtab/$1" }
-  ],
-  "headers": [
-    {
-      "source": "/newtab/service-worker.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        },
-        {
-          "key": "Service-Worker-Allowed",
-          "value": "/newtab/"
-        }
-      ]
-    }
   ]
 }

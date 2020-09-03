@@ -58,6 +58,25 @@ const nextConfig = {
     ].filter(Boolean)
   },
 
+  async headers() {
+    return [
+      {
+        // This includes the base path: /newtab/service-worker.js
+        source: '/service-worker.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache',
+          },
+          {
+            key: 'Service-Worker-Allowed',
+            value: `${basePath}/`, // e.g., /newtab/
+          },
+        ],
+      },
+    ]
+  },
+
   webpack: (config, options) => {
     // Sentry error logging. See:
     // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/next.config.js
