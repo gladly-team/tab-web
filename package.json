@@ -11,7 +11,7 @@
     "test:coverage": "yarn run test --coverage && codecov",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
-    "lint": "eslint \"**/*.{js,jsx}\"",
+    "lint": "eslint \"**/*.{js,jsx}\" --ignore-pattern \"next.config.*js\"",
     "relay": "relay-compiler --src ./src/ --artifactDirectory ./src/relay/__generated__ --exclude '**/__test__/**'  '**/__generated__/**' --schema ./src/schema/schema.graphql"
   },
   "dependencies": {
@@ -27,8 +27,8 @@
     "firebase-admin": "^9.0.0",
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
-    "next": "^9.4.4",
-    "next-images": "^1.4.0",
+    "next": "^9.5.3",
+    "next-images": "^1.4.1",
     "next-offline": "^5.0.2",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
@@ -47,22 +47,22 @@
     "codecov": "^3.7.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
-    "eslint": "^7.5.0",
+    "eslint": "^7.8.1",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest": "^23.18.0",
+    "eslint-plugin-jest": "^23.20.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^3.1.4",
-    "eslint-plugin-react": "^7.20.3",
-    "eslint-plugin-react-hooks": "^4.0.8",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.0",
     "graphql": "^15.3.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.1.0",
     "mockdate": "^3.0.2",
-    "prettier": "^2.0.5",
+    "prettier": "^2.1.1",
     "relay-compiler": "^10.0.0",
-    "vercel": "^19.2.0"
+    "vercel": "^20.1.0"
   }
 }

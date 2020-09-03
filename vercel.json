@@ -6,26 +6,6 @@
   "cleanUrls": true,
   "trailingSlash": true,
   "rewrites": [
-    { "source": "/(.*)/", "destination": "/$1" },
-    { "source": "/v4/(.*)", "destination": "/newtab/$1" },
-    {
-      "source": "/newtab/service-worker.js",
-      "destination": "/newtab/_next/static/service-worker.js"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/newtab/service-worker.js",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache"
-        },
-        {
-          "key": "Service-Worker-Allowed",
-          "value": "/newtab/"
-        }
-      ]
-    }
+    { "source": "/v4/(.*)", "destination": "/newtab/$1" }
   ]
 }

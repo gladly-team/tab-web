@@ -1,4 +1,3 @@
-const path = require('path')
 const withOffline = require('next-offline')
 const withImages = require('next-images')
 
@@ -23,38 +22,60 @@ const nextConfig = {
   // * the /v4 path to rewrite to the /newtab path. This allows us to
   //   access the API from a different base path, which is important
   //   for routing through CloudFront with the legacy app.
-  // Next.js should soon have all the features we need for routing, but
-  // they're not yet stable. In v9.4.5-canary.41, setting trailingSlash
-  // to true in both Next.js and vercel.json apparently causes 404 errors.
-  // For now, we handle base path management here Next.js and enforce
-  // other route rewrites in vercel.json, stripping the trailing slash
-  // to route to Next.js.
-  experimental: {
-    // Should be stable in v9.4.5.
-    basePath: basePath,
+  basePath,
+  trailingSlash: true,
+
+  async rewrites() {
+    return [
+      {
+        // This includes the base path: /newtab/service-worker.js
+        source: '/service-worker.js',
+        destination: '/_next/static/service-worker.js',
+      },
+      // Keeping this logic in vercel.json for now. Next.js 9.5
+      // requires an absolute destination URL when basePath is
+      // false, which is more trouble than it's worth.
+      // {
+      //   source: '/v4/:route(.*)',
+      //   destination: '/newtab/:route',
+      //   basePath: false,
+      // },
+    ]
   },
-  exportTrailingSlash: true,
 
-  // We set the trailing slash preference in vercel.json.
-  // The trailing slash option is stable in v9.4.5-canary.41:
-  // https://github.com/vercel/next.js/releases/tag/v9.4.5-canary.41
-  // trailingSlash: true,
+  async redirects() {
+    return [
+      // Redirect from the index page to the base path index.
+      // This is for convenience in local development and when
+      // viewing preview deployments. It shouldn't need to be used
+      // in production.
+      basePath && {
+        source: `/`,
+        destination: `${basePath}/`,
+        basePath: false,
+        permanent: false,
+      },
+    ].filter(Boolean)
+  },
 
-  // Redirects should be available in v9.4.5.
-  // async redirects() {
-  //   return [
-  //     // Redirect from the index page to the base path index.
-  //     // This is for convenience in local development and when
-  //     // viewing preview deployments. It shouldn't need to be used
-  //     // in production.
-  //     (basePath && {
-  //       source: `/`,
-  //       destination: `${basePath}/`,
-  //       basePath: false,
-  //       permanent: false,
-  //     }),
-  //   ].filter(Boolean)
-  // },
+  async headers() {
+    return [
+      {
+        // This includes the base path: /newtab/service-worker.js
+        source: '/service-worker.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache',
+          },
+          {
+            key: 'Service-Worker-Allowed',
+            value: `${basePath}/`, // e.g., /newtab/
+          },
+        ],
+      },
+    ]
+  },
 
   webpack: (config, options) => {
     // Sentry error logging. See:
@@ -75,6 +96,7 @@ const nextConfig = {
     // So ask Webpack to replace @sentry/node imports with @sentry/browser when
     // building the browser's bundle
     if (!options.isServer) {
+      // eslint-disable-next-line no-param-reassign
       config.resolve.alias['@sentry/node'] = '@sentry/browser'
     }
 

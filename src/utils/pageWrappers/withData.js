@@ -15,7 +15,7 @@ import {
 // Adapted from:
 // https://github.com/zeit/next.js/blob/canary/examples/with-relay-modern/lib/withData.js
 
-export default (getRelayQuery) => (ComposedComponent) => {
+const withData = (getRelayQuery) => (ComposedComponent) => {
   const WithDataComp = (props) => {
     const {
       queryRecords,
@@ -150,3 +150,5 @@ export default (getRelayQuery) => (ComposedComponent) => {
 
   return WithDataComp
 }
+
+export default withData

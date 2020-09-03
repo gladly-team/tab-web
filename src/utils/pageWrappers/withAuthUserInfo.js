@@ -9,8 +9,7 @@ import {
   NEXT_CTX_AUTH_USER_INFO_KEY,
 } from 'src/utils/constants'
 
-// Provides an AuthUserInfo prop to the composed component.
-export default (ComposedComponent) => {
+const WithAuthUserInfo = (ComposedComponent) => {
   const WithAuthUserInfoComp = (props) => {
     const { AuthUserInfo: AuthUserInfoFromSession, ...otherProps } = props
     return (
@@ -63,3 +62,6 @@ export default (ComposedComponent) => {
 
   return WithAuthUserInfoComp
 }
+
+// Provides an AuthUserInfo prop to the composed component.
+export default WithAuthUserInfo
