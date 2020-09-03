@@ -27,8 +27,8 @@
     "firebase-admin": "^9.0.0",
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
-    "next": "^9.4.4",
-    "next-images": "^1.4.0",
+    "next": "^9.5.3",
+    "next-images": "^1.4.1",
     "next-offline": "^5.0.2",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
@@ -63,6 +63,6 @@
     "mockdate": "^3.0.2",
     "prettier": "^2.0.5",
     "relay-compiler": "^10.0.0",
-    "vercel": "^19.2.0"
+    "vercel": "^20.1.0"
   }
 }
