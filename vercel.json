@@ -6,7 +6,7 @@
   "cleanUrls": true,
   "trailingSlash": true,
   "rewrites": [
-    { "source": "/v4/(.*)", "destination": "/newtab/$1" },
+    { "source": "/v4/(.*)", "destination": "/newtab/$1" }
   ],
   "headers": [
     {
