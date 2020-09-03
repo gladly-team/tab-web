@@ -2,9 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import NextJsLink from 'next/link'
 
-jest.mock('next/link', () => (props) => (
-  <div data-test-id="mock-next-js-link">{props.children}</div>
-))
+jest.mock('next/link')
 jest.mock('src/utils/urls')
 
 const getMockProps = () => ({
