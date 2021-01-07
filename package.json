@@ -12,7 +12,8 @@
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\" --ignore-pattern \"next.config.*js\"",
-    "relay": "relay-compiler --src ./src/ --artifactDirectory ./src/relay/__generated__ --exclude '**/__test__/**'  '**/__generated__/**' --schema ./src/schema/schema.graphql"
+    "relay": "relay-compiler --src ./src/ --artifactDirectory ./src/relay/__generated__ --exclude '**/__test__/**'  '**/__generated__/**' --schema ./src/schema/schema.graphql",
+    "find-unused": "next-unused"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -61,8 +62,31 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.1.0",
     "mockdate": "^3.0.2",
+    "next-unused": "^0.0.3",
     "prettier": "^2.1.1",
     "relay-compiler": "^10.0.0",
     "vercel": "^20.1.0"
+  },
+  "next-unused": {
+    "alias": {
+      "src": "src/"
+    },
+    "include": [
+      "src/pages",
+      "src/assets",
+      "src/components",
+      "src/utils",
+      "src/__tests__/pages"
+    ],
+    "exclude": [
+      "./__mocks__/.",
+      ".test."
+    ],
+    "entrypoints": [
+      "src/pages",
+      "src/__tests__/pages",
+      "src/components/__tests__"
+    ],
+    "debug": true
   }
 }
