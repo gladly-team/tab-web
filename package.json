@@ -13,7 +13,7 @@
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\" --ignore-pattern \"next.config.*js\"",
     "relay": "relay-compiler --src ./src/ --artifactDirectory ./src/relay/__generated__ --exclude '**/__test__/**'  '**/__generated__/**' --schema ./src/schema/schema.graphql",
-    "find-unused": "next-unused"
+    "find-unused": "echo \"This will find unused files. However, note that it ignores mocks, tests, and utils in the testHelpers directory.\n\" && next-unused"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -75,17 +75,15 @@
       "src/pages",
       "src/assets",
       "src/components",
-      "src/utils",
-      "src/__tests__/pages"
+      "src/utils"
     ],
     "exclude": [
       "./__mocks__/.",
-      ".test."
+      "./__tests__/.",
+      "src/utils/testHelpers/."
     ],
     "entrypoints": [
-      "src/pages",
-      "src/__tests__/pages",
-      "src/components/__tests__"
+      "src/pages"
     ],
     "debug": true
   }
