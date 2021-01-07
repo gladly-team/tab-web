@@ -1,3 +1,6 @@
+// TODO: Consider deleting this. We might instead use:
+//   https://github.com/Xunnamius/next-test-api-route-handler/tree/main/docs
+
 /**
  * Create a mock HTTP request object for testing. It is an
  * incomplete set of values.
