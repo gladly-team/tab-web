@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - name: Run tests
-        run: yarn test # generates coverage
+        run: yarn test:coverage # generates coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
