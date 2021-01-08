@@ -4,7 +4,7 @@ import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { destroyAuthUserInfoInDOM } from 'src/utils/auth/user'
 import logger from 'src/utils/logger'
 
-export default async () => {
+const logout = async () => {
   try {
     await firebase.auth().signOut()
 
@@ -19,3 +19,5 @@ export default async () => {
     return false
   }
 }
+
+export default logout
