@@ -16,8 +16,8 @@ jest.mock('src/utils/auth/hooks')
 jest.mock('src/utils/ssr')
 
 // Return a mock AuthUserInfo value for a signed-in user.
-const getMockSignedInAuthUserInfo = () => {
-  return createAuthUserInfo({
+const getMockSignedInAuthUserInfo = () =>
+  createAuthUserInfo({
     firebaseUser: {
       uid: 'my-fake-id',
       email: 'fakeEmail@example.com',
@@ -26,7 +26,6 @@ const getMockSignedInAuthUserInfo = () => {
     token: 'some-mock-token',
     isClientInitialized: true,
   })
-}
 
 // A mock component that serves as the wrapped child of the
 // withData HOC we're testing.

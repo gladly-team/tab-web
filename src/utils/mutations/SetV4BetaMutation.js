@@ -11,8 +11,8 @@ const mutation = graphql`
   }
 `
 
-const SetV4BetaMutation = ({ enabled, userId }) => {
-  return callMutation({
+const SetV4BetaMutation = ({ enabled, userId }) =>
+  callMutation({
     mutation,
     variables: {
       input: {
@@ -21,6 +21,5 @@ const SetV4BetaMutation = ({ enabled, userId }) => {
       },
     },
   })
-}
 
 export default SetV4BetaMutation

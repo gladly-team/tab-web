@@ -20,12 +20,11 @@ const DEFAULT_NUMBER_OF_ADS = 2
  * today, using tab count as a proxy.
  * @return {Boolean} Whether the user has viewed the max ads today.
  */
-const hasUserReachedMaxTabsToday = () => {
+const hasUserReachedMaxTabsToday = () =>
   // If the user has exceeded the daily tab maximum,
   // do not show ads.
   // https://github.com/gladly-team/tab/issues/202
-  return false
-}
+  false
 
 // TODO: implement
 /**
@@ -33,9 +32,7 @@ const hasUserReachedMaxTabsToday = () => {
  * users for the first X hours after they join.
  * @return {Boolean} Whether to show one ad.
  */
-const shouldShowOneAd = () => {
-  return false
-}
+const shouldShowOneAd = () => false
 
 /**
  * Return an object of ad units we should display. This returns ad units

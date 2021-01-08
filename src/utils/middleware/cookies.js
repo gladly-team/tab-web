@@ -49,11 +49,10 @@ export const withCookies = (req, res) => {
     })
 
     req.cookie = {
-      get: (cookieName) => {
-        return cookies.get(cookieName, {
+      get: (cookieName) =>
+        cookies.get(cookieName, {
           signed: true,
-        })
-      },
+        }),
       set: (cookieName, cookieVal, options = {}) => {
         cookies.set(cookieName, cookieVal, {
           httpOnly: true,

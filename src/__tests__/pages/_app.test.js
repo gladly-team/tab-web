@@ -16,9 +16,7 @@ jest.mock('src/utils/ssr')
 jest.mock('@sentry/node')
 jest.mock('src/utils/auth/hooks')
 
-const MockComponent = () => {
-  return <div>hi</div>
-}
+const MockComponent = () => <div>hi</div>
 MockComponent.getInitialProps = jest.fn()
 
 const getMockProps = () => ({
@@ -119,16 +117,12 @@ describe('_app.js', () => {
     const App = require('src/pages/_app.js').default
 
     // Create a child component with a consumer of the AuthUserInfo context.
-    const MockComponentSpy = jest.fn(() => {
-      return <div>hey</div>
-    })
-    const MockComponentWithConsumer = () => {
-      return (
-        <AuthUserInfoContext.Consumer>
-          {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
-        </AuthUserInfoContext.Consumer>
-      )
-    }
+    const MockComponentSpy = jest.fn(() => <div>hey</div>)
+    const MockComponentWithConsumer = () => (
+      <AuthUserInfoContext.Consumer>
+        {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+      </AuthUserInfoContext.Consumer>
+    )
 
     useFirebaseAuth.mockReturnValue({
       initializing: true, // still initializing
@@ -167,16 +161,12 @@ describe('_app.js', () => {
     const App = require('src/pages/_app.js').default
 
     // Create a child component with a consumer of the AuthUserInfo context.
-    const MockComponentSpy = jest.fn(() => {
-      return <div>hey</div>
-    })
-    const MockComponentWithConsumer = () => {
-      return (
-        <AuthUserInfoContext.Consumer>
-          {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
-        </AuthUserInfoContext.Consumer>
-      )
-    }
+    const MockComponentSpy = jest.fn(() => <div>hey</div>)
+    const MockComponentWithConsumer = () => (
+      <AuthUserInfoContext.Consumer>
+        {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+      </AuthUserInfoContext.Consumer>
+    )
 
     useFirebaseAuth.mockReturnValue({
       initializing: false, // finished initializing
@@ -221,16 +211,12 @@ describe('_app.js', () => {
     const App = require('src/pages/_app.js').default
 
     // Create a child component with a consumer of the AuthUserInfo context.
-    const MockComponentSpy = jest.fn(() => {
-      return <div>hey</div>
-    })
-    const MockComponentWithConsumer = () => {
-      return (
-        <AuthUserInfoContext.Consumer>
-          {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
-        </AuthUserInfoContext.Consumer>
-      )
-    }
+    const MockComponentSpy = jest.fn(() => <div>hey</div>)
+    const MockComponentWithConsumer = () => (
+      <AuthUserInfoContext.Consumer>
+        {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+      </AuthUserInfoContext.Consumer>
+    )
 
     useFirebaseAuth.mockReturnValue({
       initializing: false, // finished initializing
@@ -283,16 +269,12 @@ describe('_app.js', () => {
     const App = require('src/pages/_app.js').default
 
     // Create a child component with a consumer of the AuthUserInfo context.
-    const MockComponentSpy = jest.fn(() => {
-      return <div>hey</div>
-    })
-    const MockComponentWithConsumer = () => {
-      return (
-        <AuthUserInfoContext.Consumer>
-          {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
-        </AuthUserInfoContext.Consumer>
-      )
-    }
+    const MockComponentSpy = jest.fn(() => <div>hey</div>)
+    const MockComponentWithConsumer = () => (
+      <AuthUserInfoContext.Consumer>
+        {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+      </AuthUserInfoContext.Consumer>
+    )
 
     useFirebaseAuth.mockReturnValue({
       initializing: false,
@@ -329,16 +311,12 @@ describe('_app.js', () => {
     const App = require('src/pages/_app.js').default
 
     // Create a child component with a consumer of the AuthUserInfo context.
-    const MockComponentSpy = jest.fn(() => {
-      return <div>hey</div>
-    })
-    const MockComponentWithConsumer = () => {
-      return (
-        <AuthUserInfoContext.Consumer>
-          {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
-        </AuthUserInfoContext.Consumer>
-      )
-    }
+    const MockComponentSpy = jest.fn(() => <div>hey</div>)
+    const MockComponentWithConsumer = () => (
+      <AuthUserInfoContext.Consumer>
+        {(AuthUserInfo) => <MockComponentSpy AuthUserInfo={AuthUserInfo} />}
+      </AuthUserInfoContext.Consumer>
+    )
 
     useFirebaseAuth.mockReturnValue({
       initializing: false,
@@ -402,19 +380,17 @@ describe('_app.js: getInitialProps [server-side]', () => {
         configurable: true,
         enumerable: true,
         // Session exists
-        get: jest.fn(() => {
-          return {
-            AuthUserInfo: createAuthUserInfo({
-              AuthUser: {
-                id: 'user-id-from-session',
-                email: 'MrSessionGuy@example.com',
-                emailVerified: true,
-              },
-              token: 'some-token-here',
-              isClientInitialized: false,
-            }),
-          }
-        }),
+        get: jest.fn(() => ({
+          AuthUserInfo: createAuthUserInfo({
+            AuthUser: {
+              id: 'user-id-from-session',
+              email: 'MrSessionGuy@example.com',
+              emailVerified: true,
+            },
+            token: 'some-token-here',
+            isClientInitialized: false,
+          }),
+        })),
         set: jest.fn(),
       })
     })
@@ -462,19 +438,17 @@ describe('_app.js: getInitialProps [server-side]', () => {
         configurable: true,
         enumerable: true,
         // Session exists
-        get: jest.fn(() => {
-          return {
-            AuthUserInfo: createAuthUserInfo({
-              AuthUser: {
-                id: 'user-id-from-session',
-                email: 'MrSessionGuy@example.com',
-                emailVerified: true,
-              },
-              token: 'some-token-here',
-              isClientInitialized: false,
-            }),
-          }
-        }),
+        get: jest.fn(() => ({
+          AuthUserInfo: createAuthUserInfo({
+            AuthUser: {
+              id: 'user-id-from-session',
+              email: 'MrSessionGuy@example.com',
+              emailVerified: true,
+            },
+            token: 'some-token-here',
+            isClientInitialized: false,
+          }),
+        })),
         set: jest.fn(),
       })
     })
@@ -502,19 +476,17 @@ describe('_app.js: getInitialProps [server-side]', () => {
         configurable: true,
         enumerable: true,
         // Session exists
-        get: jest.fn(() => {
-          return {
-            AuthUserInfo: createAuthUserInfo({
-              AuthUser: {
-                id: 'user-id-from-session',
-                email: 'MrSessionGuy@example.com',
-                emailVerified: true,
-              },
-              token: 'some-token-here',
-              isClientInitialized: false,
-            }),
-          }
-        }),
+        get: jest.fn(() => ({
+          AuthUserInfo: createAuthUserInfo({
+            AuthUser: {
+              id: 'user-id-from-session',
+              email: 'MrSessionGuy@example.com',
+              emailVerified: true,
+            },
+            token: 'some-token-here',
+            isClientInitialized: false,
+          }),
+        })),
         set: jest.fn(),
       })
     })

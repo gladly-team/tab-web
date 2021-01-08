@@ -4,8 +4,8 @@ import { isServerSide } from 'src/utils/ssr'
 
 // Return a Promise when committing mutations.
 // https://github.com/facebook/relay/issues/1822#issuecomment-305906204
-const commitMutation = (environment, options) => {
-  return new Promise((resolve, reject) => {
+const commitMutation = (environment, options) =>
+  new Promise((resolve, reject) => {
     commitMutationDefault(environment, {
       ...options,
       onError: (error) => {
@@ -16,7 +16,6 @@ const commitMutation = (environment, options) => {
       },
     })
   })
-}
 
 // https://relay.dev/docs/en/mutations#commitmutation
 const callMutation = async ({ mutation, variables }) => {

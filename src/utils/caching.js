@@ -8,9 +8,5 @@ export const clearAllServiceWorkerCaches = async () => {
     throw new Error('Cannot clear service worker caches on the server side.')
   }
   const cacheNames = await window.caches.keys()
-  return Promise.all(
-    cacheNames.map((key) => {
-      return window.caches.delete(key)
-    })
-  )
+  return Promise.all(cacheNames.map((key) => window.caches.delete(key)))
 }
