@@ -3,7 +3,7 @@
 // https://github.com/facebook/jest/issues/8958
 const actual = jest.requireActual('../user')
 
-const mock = jest.genMockFromModule('src/utils/auth/user')
+const mock = jest.createMockFromModule('../user')
 module.exports = {
   ...mock,
   createAuthUser: actual.createAuthUser,

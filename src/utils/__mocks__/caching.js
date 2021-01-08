@@ -1,4 +1,4 @@
-const mock = jest.genMockFromModule('src/utils/caching')
+const mock = jest.createMockFromModule('../caching')
 
 mock.clearAllServiceWorkerCaches = jest.fn(() => Promise.resolve())
 

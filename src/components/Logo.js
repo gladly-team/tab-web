@@ -7,7 +7,6 @@ import tabLogoDefault from 'src/assets/logos/logo.svg'
 import tabLogoWhite from 'src/assets/logos/logo-white.svg'
 import tabLogoGrey from 'src/assets/logos/logo-grey.svg'
 import tabLogoWithText from 'src/assets/logos/logo-with-text.svg'
-import { withBasePath } from 'src/utils/urls'
 
 const useStyles = makeStyles(() => ({
   logoDefaults: {
@@ -53,7 +52,7 @@ const Logo = (props) => {
     <img
       style={style}
       className={clsx(classes.logo, className)}
-      src={withBasePath(logo)}
+      src={logo}
       {...otherProps}
     />
   )

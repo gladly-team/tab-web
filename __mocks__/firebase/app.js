@@ -1,4 +1,4 @@
-const firebaseApp = jest.genMockFromModule('firebase')
+const firebaseApp = jest.createMockFromModule('firebase')
 
 const authMock = {
   get currentUser() {
