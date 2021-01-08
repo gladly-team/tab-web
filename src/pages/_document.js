@@ -10,6 +10,8 @@ import {
   NEXT_CTX_AUTH_USER_INFO_KEY,
 } from 'src/utils/constants'
 import theme from 'src/utils/theme'
+import Logo192Apple from 'src/assets/logos/logo192-apple.png'
+// import { withBasePath } from 'src/utils/urls'
 
 class CustomDocument extends Document {
   render() {
@@ -24,10 +26,7 @@ class CustomDocument extends Document {
         <Head>
           <link rel="manifest" href={PWAManifestURL} />
           <meta name="theme-color" content={theme.palette.primary.main} />
-          <link
-            rel="apple-touch-icon"
-            href="/static/img/logo/logo192-apple.png"
-          />
+          <link rel="apple-touch-icon" href={Logo192Apple} />
           <script
             id="__TAB_WEB_AUTH_USER_INFO"
             type="application/json"
