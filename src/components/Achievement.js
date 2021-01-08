@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { isNil } from 'lodash/lang'
-import moment from 'moment'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import green from '@material-ui/core/colors/green'
 import grey from '@material-ui/core/colors/grey'
 import red from '@material-ui/core/colors/red'
@@ -22,6 +23,8 @@ import PlayCircleFilled from '@material-ui/icons/PlayCircleFilled'
 import RadioButtonUnchecked from '@material-ui/icons/RadioButtonUnchecked'
 import Schedule from '@material-ui/icons/Schedule'
 import LinearProgress from '@material-ui/core/LinearProgress'
+
+dayjs.extend(relativeTime)
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -131,22 +134,22 @@ const PROGRESS_BAR = 'progressBar'
 /**
  * Return the formatted date to display, as a "time since X" format
  * or "time from now" format.
- * @param {String} time - An ISO timestamp
+ * @param {String} timestamp - An ISO timestamp
  * @return {String} Time text, such as "2 days ago" or "a few
  *   seconds remaining".
  */
-const getTimeDisplay = (time) => {
-  const now = moment()
-  const timeMoment = moment(time)
+const getTimeDisplay = (timestamp) => {
+  const now = dayjs()
+  const time = dayjs(timestamp)
   let displayedTime = ''
-  if (timeMoment.isBefore(now)) {
+  if (time.isBefore(now)) {
     // "time ago":
-    // https://momentjs.com/docs/#/displaying/fromnow/
-    displayedTime = timeMoment.fromNow(false)
+    // https://day.js.org/docs/en/display/from-now#docsNav
+    displayedTime = time.fromNow()
   } else {
-    // "in X time"
-    // https://momentjs.com/docs/#/displaying/from/
-    displayedTime = `${timeMoment.from(now, true)} remaining`
+    // "in X" time
+    // https://day.js.org/docs/en/display/from-now#docsNav
+    displayedTime = `${time.fromNow(true)} remaining`
   }
   return displayedTime
 }
@@ -248,7 +251,7 @@ const Achievement = (props) => {
   let timeToDisplay = null
   if (status === IN_PROGRESS && !isNil(deadlineTime)) {
     // Warn if it's not a valid time.
-    if (!moment(deadlineTime).isValid()) {
+    if (!dayjs(deadlineTime).isValid()) {
       // eslint-disable-next-line no-console
       console.warn('Invalid "deadlineTime" timestamp provided to Achievement.')
     } else {
@@ -256,7 +259,7 @@ const Achievement = (props) => {
     }
   } else if (status === SUCCESS || status === FAILURE) {
     // Warn if a valid completionTime is not provided.
-    if (isNil(completionTime) || !moment(completionTime).isValid()) {
+    if (isNil(completionTime) || !dayjs(completionTime).isValid()) {
       // eslint-disable-next-line no-console
       console.warn(
         'Invalid "completionTime" timestamp provided to Achievement.'

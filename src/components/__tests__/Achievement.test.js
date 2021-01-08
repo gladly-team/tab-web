@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import MockDate from 'mockdate'
 import Typography from '@material-ui/core/Typography'
 import CardActions from '@material-ui/core/CardActions'
@@ -18,7 +18,7 @@ import Paper from '@material-ui/core/Paper'
 const mockNow = '2020-04-02T18:00:00.000Z'
 
 beforeEach(() => {
-  MockDate.set(moment(mockNow))
+  MockDate.set(dayjs(mockNow))
 })
 
 afterEach(() => {
@@ -36,8 +36,8 @@ const getMockProps = () => ({
   impactText: 'Plant 1 tree',
   status: 'inProgress',
   taskText: 'Open 10 tabs',
-  completionTime: moment(mockNow).subtract(2, 'minutes').toISOString(),
-  deadlineTime: moment(mockNow).add(8, 'hours').toISOString(),
+  completionTime: dayjs(mockNow).subtract(2, 'minutes').toISOString(),
+  deadlineTime: dayjs(mockNow).add(8, 'hours').toISOString(),
   isCommunityGoal: undefined, // defaults to false
   progress: {
     currentNumber: 11,
@@ -181,34 +181,34 @@ describe('Achievement component', () => {
       ...getMockProps(),
       status: 'inProgress',
       completionTime: undefined,
-      deadlineTime: moment(mockNow).add(1, 'second').toISOString(),
+      deadlineTime: dayjs(mockNow).add(1, 'second').toISOString(),
     }
     const wrapper = shallow(<Achievement {...mockProps} />)
 
     expect(getTimeDisplayString(wrapper)).toEqual('a few seconds remaining')
 
     wrapper.setProps({
-      deadlineTime: moment(mockNow).add(24, 'seconds').toISOString(),
+      deadlineTime: dayjs(mockNow).add(24, 'seconds').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('a few seconds remaining')
 
     wrapper.setProps({
-      deadlineTime: moment(mockNow).add(46, 'seconds').toISOString(),
+      deadlineTime: dayjs(mockNow).add(46, 'seconds').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('a minute remaining')
 
     wrapper.setProps({
-      deadlineTime: moment(mockNow).add(192, 'seconds').toISOString(),
+      deadlineTime: dayjs(mockNow).add(192, 'seconds').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('3 minutes remaining')
 
     wrapper.setProps({
-      deadlineTime: moment(mockNow).add(54, 'minutes').toISOString(),
+      deadlineTime: dayjs(mockNow).add(54, 'minutes').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('an hour remaining')
 
     wrapper.setProps({
-      deadlineTime: moment(mockNow).add(14, 'hours').toISOString(),
+      deadlineTime: dayjs(mockNow).add(14, 'hours').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('14 hours remaining')
   })
@@ -219,35 +219,35 @@ describe('Achievement component', () => {
     const mockProps = {
       ...getMockProps(),
       status: 'success',
-      completionTime: moment(mockNow).subtract(1, 'second').toISOString(),
-      deadlineTime: moment(mockNow).add(14, 'hours').toISOString(),
+      completionTime: dayjs(mockNow).subtract(1, 'second').toISOString(),
+      deadlineTime: dayjs(mockNow).add(14, 'hours').toISOString(),
     }
     const wrapper = shallow(<Achievement {...mockProps} />)
 
     expect(getTimeDisplayString(wrapper)).toEqual('a few seconds ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(24, 'seconds').toISOString(),
+      completionTime: dayjs(mockNow).subtract(24, 'seconds').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('a few seconds ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(46, 'seconds').toISOString(),
+      completionTime: dayjs(mockNow).subtract(46, 'seconds').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('a minute ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(192, 'seconds').toISOString(),
+      completionTime: dayjs(mockNow).subtract(192, 'seconds').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('3 minutes ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(54, 'minutes').toISOString(),
+      completionTime: dayjs(mockNow).subtract(54, 'minutes').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('an hour ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(14, 'hours').toISOString(),
+      completionTime: dayjs(mockNow).subtract(14, 'hours').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('14 hours ago')
   })
@@ -258,40 +258,40 @@ describe('Achievement component', () => {
     const mockProps = {
       ...getMockProps(),
       status: 'failure',
-      completionTime: moment(mockNow).subtract(1, 'second').toISOString(),
-      deadlineTime: moment(mockNow).subtract(1, 'second').toISOString(),
+      completionTime: dayjs(mockNow).subtract(1, 'second').toISOString(),
+      deadlineTime: dayjs(mockNow).subtract(1, 'second').toISOString(),
     }
     const wrapper = shallow(<Achievement {...mockProps} />)
 
     expect(getTimeDisplayString(wrapper)).toEqual('a few seconds ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(24, 'seconds').toISOString(),
-      deadlineTime: moment(mockNow).subtract(24, 'seconds').toISOString(),
+      completionTime: dayjs(mockNow).subtract(24, 'seconds').toISOString(),
+      deadlineTime: dayjs(mockNow).subtract(24, 'seconds').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('a few seconds ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(46, 'seconds').toISOString(),
-      deadlineTime: moment(mockNow).subtract(46, 'seconds').toISOString(),
+      completionTime: dayjs(mockNow).subtract(46, 'seconds').toISOString(),
+      deadlineTime: dayjs(mockNow).subtract(46, 'seconds').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('a minute ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(192, 'seconds').toISOString(),
-      deadlineTime: moment(mockNow).subtract(192, 'seconds').toISOString(),
+      completionTime: dayjs(mockNow).subtract(192, 'seconds').toISOString(),
+      deadlineTime: dayjs(mockNow).subtract(192, 'seconds').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('3 minutes ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(54, 'minutes').toISOString(),
-      deadlineTime: moment(mockNow).subtract(54, 'minutes').toISOString(),
+      completionTime: dayjs(mockNow).subtract(54, 'minutes').toISOString(),
+      deadlineTime: dayjs(mockNow).subtract(54, 'minutes').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('an hour ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(14, 'hours').toISOString(),
-      deadlineTime: moment(mockNow).subtract(14, 'hours').toISOString(),
+      completionTime: dayjs(mockNow).subtract(14, 'hours').toISOString(),
+      deadlineTime: dayjs(mockNow).subtract(14, 'hours').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('14 hours ago')
   })
@@ -302,30 +302,30 @@ describe('Achievement component', () => {
     const mockProps = {
       ...getMockProps(),
       status: 'success',
-      completionTime: moment(mockNow).subtract(3, 'days').toISOString(),
-      deadlineTime: moment(mockNow).add(14, 'hours').toISOString(),
+      completionTime: dayjs(mockNow).subtract(3, 'days').toISOString(),
+      deadlineTime: dayjs(mockNow).add(14, 'hours').toISOString(),
     }
     const wrapper = shallow(<Achievement {...mockProps} />)
 
     expect(getTimeDisplayString(wrapper)).toEqual('3 days ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(16, 'days').toISOString(),
+      completionTime: dayjs(mockNow).subtract(16, 'days').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('16 days ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(70, 'days').toISOString(),
+      completionTime: dayjs(mockNow).subtract(70, 'days').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('2 months ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(400, 'days').toISOString(),
+      completionTime: dayjs(mockNow).subtract(400, 'days').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('a year ago')
 
     wrapper.setProps({
-      completionTime: moment(mockNow).subtract(3, 'years').toISOString(),
+      completionTime: dayjs(mockNow).subtract(3, 'years').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('3 years ago')
   })
@@ -337,29 +337,29 @@ describe('Achievement component', () => {
       ...getMockProps(),
       status: 'inProgress',
       completionTime: undefined,
-      deadlineTime: moment(mockNow).add(3, 'days').toISOString(),
+      deadlineTime: dayjs(mockNow).add(3, 'days').toISOString(),
     }
     const wrapper = shallow(<Achievement {...mockProps} />)
 
     expect(getTimeDisplayString(wrapper)).toEqual('3 days remaining')
 
     wrapper.setProps({
-      deadlineTime: moment(mockNow).add(16, 'days').toISOString(),
+      deadlineTime: dayjs(mockNow).add(16, 'days').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('16 days remaining')
 
     wrapper.setProps({
-      deadlineTime: moment(mockNow).add(70, 'days').toISOString(),
+      deadlineTime: dayjs(mockNow).add(70, 'days').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('2 months remaining')
 
     wrapper.setProps({
-      deadlineTime: moment(mockNow).add(400, 'days').toISOString(),
+      deadlineTime: dayjs(mockNow).add(400, 'days').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('a year remaining')
 
     wrapper.setProps({
-      deadlineTime: moment(mockNow).add(3, 'years').toISOString(),
+      deadlineTime: dayjs(mockNow).add(3, 'years').toISOString(),
     })
     expect(getTimeDisplayString(wrapper)).toEqual('3 years remaining')
   })
@@ -371,7 +371,7 @@ describe('Achievement component', () => {
       ...getMockProps(),
       status: 'inProgress',
       completionTime: undefined,
-      deadlineTime: moment(mockNow).add(4, 'hours').toISOString(),
+      deadlineTime: dayjs(mockNow).add(4, 'hours').toISOString(),
     }
     const wrapper = shallow(<Achievement {...mockProps} />)
     expect(
@@ -385,8 +385,8 @@ describe('Achievement component', () => {
     const mockProps = {
       ...getMockProps(),
       status: 'success',
-      completionTime: moment(mockNow).subtract(4, 'hours').toISOString(),
-      deadlineTime: moment(mockNow).subtract(4, 'hours').toISOString(),
+      completionTime: dayjs(mockNow).subtract(4, 'hours').toISOString(),
+      deadlineTime: dayjs(mockNow).subtract(4, 'hours').toISOString(),
     }
     const wrapper = shallow(<Achievement {...mockProps} />)
     expect(
@@ -400,8 +400,8 @@ describe('Achievement component', () => {
     const mockProps = {
       ...getMockProps(),
       status: 'failure',
-      completionTime: moment(mockNow).subtract(4, 'hours').toISOString(),
-      deadlineTime: moment(mockNow).subtract(4, 'hours').toISOString(),
+      completionTime: dayjs(mockNow).subtract(4, 'hours').toISOString(),
+      deadlineTime: dayjs(mockNow).subtract(4, 'hours').toISOString(),
     }
     const wrapper = shallow(<Achievement {...mockProps} />)
     expect(
@@ -444,7 +444,7 @@ describe('Achievement component', () => {
       ...getMockProps(),
       status: 'success',
       completionTime: undefined,
-      deadlineTime: moment(mockNow).subtract(4, 'hours').toISOString(),
+      deadlineTime: dayjs(mockNow).subtract(4, 'hours').toISOString(),
     }
     const wrapper = shallow(<Achievement {...mockProps} />)
     expect(
@@ -467,7 +467,7 @@ describe('Achievement component', () => {
       ...getMockProps(),
       status: 'failure',
       completionTime: undefined,
-      deadlineTime: moment(mockNow).subtract(4, 'hours').toISOString(),
+      deadlineTime: dayjs(mockNow).subtract(4, 'hours').toISOString(),
     }
     const wrapper = shallow(<Achievement {...mockProps} />)
     expect(
