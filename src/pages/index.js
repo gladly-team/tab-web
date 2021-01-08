@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
 import { get } from 'lodash/object'
 import { makeStyles } from '@material-ui/core/styles'
@@ -286,7 +286,7 @@ const Index = (props) => {
               impactText="Plant 1 tree"
               status="inProgress"
               taskText="Open tabs 5 days in a row"
-              deadlineTime={moment().add(3, 'days').toISOString()}
+              deadlineTime={dayjs().add(3, 'days').toISOString()}
               progress={{
                 currentNumber: 2,
                 targetNumber: 5,
@@ -299,8 +299,8 @@ const Index = (props) => {
               impactText="Plant 1 tree"
               status="failure"
               taskText="Recruit 1 friend"
-              completedTime={moment().subtract(2, 'days').toISOString()}
-              deadlineTime={moment().subtract(2, 'days').toISOString()}
+              completedTime={dayjs().subtract(2, 'days').toISOString()}
+              deadlineTime={dayjs().subtract(2, 'days').toISOString()}
             />
             <Achievement
               badgeClassName={classes.achievementBadge}
@@ -308,8 +308,8 @@ const Index = (props) => {
               impactText="Plant 1 tree"
               status="success"
               taskText="Open 100 tabs"
-              completedTime={moment().subtract(5, 'days').toISOString()}
-              deadlineTime={moment().subtract(5, 'days').toISOString()}
+              completedTime={dayjs().subtract(5, 'days').toISOString()}
+              deadlineTime={dayjs().subtract(5, 'days').toISOString()}
             />
             <div /> {/* take up a spacing unit */}
             <div className={classes.timelineBar} />

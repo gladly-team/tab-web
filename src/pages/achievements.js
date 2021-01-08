@@ -1,7 +1,7 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
 // import { graphql } from 'react-relay'
-import moment from 'moment'
+import dayjs from 'dayjs'
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
@@ -78,7 +78,7 @@ const Achievements = () => {
             impactText="Plant 1 tree"
             status="inProgress"
             taskText="Open tabs 5 days in a row"
-            deadlineTime={moment().add(3, 'days').toISOString()}
+            deadlineTime={dayjs().add(3, 'days').toISOString()}
             progress={{
               currentNumber: 2,
               targetNumber: 5,
@@ -90,7 +90,7 @@ const Achievements = () => {
             impactText="Build a library in Cambodia"
             status="inProgress"
             taskText="Recruit 1,000 new people"
-            deadlineTime={moment().add(40, 'days').toISOString()}
+            deadlineTime={dayjs().add(40, 'days').toISOString()}
             progress={{
               currentNumber: 772,
               targetNumber: 1000,
@@ -106,8 +106,8 @@ const Achievements = () => {
             impactText="Plant 2 trees"
             status="failure"
             taskText="Recruit 2 friends"
-            deadlineTime={moment().subtract(3, 'days').toISOString()}
-            completionTime={moment().subtract(3, 'days').toISOString()}
+            deadlineTime={dayjs().subtract(3, 'days').toISOString()}
+            completionTime={dayjs().subtract(3, 'days').toISOString()}
             // progress={{
             //   currentNumber: 1,
             //   targetNumber: 2,
@@ -119,7 +119,7 @@ const Achievements = () => {
             impactText="Fund 100 beehives in Nicaragua"
             status="success"
             taskText="Open tabs"
-            completionTime={moment().subtract(16, 'days').toISOString()}
+            completionTime={dayjs().subtract(16, 'days').toISOString()}
             // progress={{
             //   currentNumber: 772,
             //   targetNumber: 1000,
@@ -135,7 +135,7 @@ const Achievements = () => {
             impactText="Plant 1 tree"
             status="success"
             taskText="Open 100 tabs"
-            completionTime={moment().subtract(21, 'days').toISOString()}
+            completionTime={dayjs().subtract(21, 'days').toISOString()}
             // progress={{
             //   currentNumber: 100,
             //   targetNumber: 100,
@@ -148,7 +148,7 @@ const Achievements = () => {
             impactText="Gave 25,000 meals to kids"
             status="success"
             taskText="Open tabs"
-            completionTime={moment().subtract(6, 'weeks').toISOString()}
+            completionTime={dayjs().subtract(6, 'weeks').toISOString()}
             description="Nearly 22 million low-income kids in the United States rely on the free and reduced-price meals they receive at school. With schools closed in districts nationwide, children may be left without that critical lifeline to healthy meals."
             descriptionTwo="To help combat this, we supported No Kid Hungry in their efforts to make sure all children have access to nutritious meals throughout the crisis."
             isCommunityGoal
