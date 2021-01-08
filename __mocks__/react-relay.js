@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react'
 
-const mock = jest.genMockFromModule('react-relay')
+const mock = jest.createMockFromModule('react-relay')
 mock.createFragmentContainer = jest.fn((wrappedComponent) => wrappedComponent)
 mock.ReactRelayContext = {
   Consumer: jest.fn(({ children, ...otherProps }) => (

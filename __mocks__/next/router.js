@@ -1,4 +1,4 @@
-const mock = jest.genMockFromModule('next/router')
+const mock = jest.createMockFromModule('next/router')
 
 // https://nextjs.org/docs/api-reference/next/router#userouter
 mock.useRouter = jest.fn(() => ({
