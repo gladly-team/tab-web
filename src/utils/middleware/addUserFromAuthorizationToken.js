@@ -7,6 +7,8 @@ import {
 } from 'src/utils/middleware/constants'
 import logger from 'src/utils/logger'
 
+// TODO: use next-firebase-auth
+
 // Adds a tab.user object to the request.
 export default (handler) => async (req, res) => {
   try {

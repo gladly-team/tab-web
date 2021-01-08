@@ -6,6 +6,7 @@ import logger from 'src/utils/logger'
 
 const logout = async () => {
   try {
+    // TODO: use next-firebase-auth
     await firebase.auth().signOut()
 
     // Sign-out successful.

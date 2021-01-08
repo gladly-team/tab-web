@@ -4,6 +4,8 @@ import {
   AUTH_USER_INFO_KEY,
 } from 'src/utils/middleware/constants'
 
+// TODO: use next-firebase-auth
+
 // Requires an authorized user.
 export default (handler) => async (req, res) => {
   const AuthUserInfo = get(req, [CUSTOM_REQ_DATA_KEY, AUTH_USER_INFO_KEY])

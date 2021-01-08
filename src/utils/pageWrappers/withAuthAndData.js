@@ -4,12 +4,12 @@
 // - fetches data via Relay
 
 import { flowRight } from 'lodash/util'
-import authRequired from 'src/utils/pageWrappers/authRequired'
-import withAuthUserInfo from 'src/utils/pageWrappers/withAuthUserInfo'
 import withData from 'src/utils/pageWrappers/withData'
+
+// TODO: use next-firebase-auth
 
 const withAuthAndData = (getRelayQuery) =>
   // Invokes from left to right.
-  flowRight(withAuthUserInfo, authRequired, withData(getRelayQuery))
+  flowRight(withData(getRelayQuery))
 
 export default withAuthAndData

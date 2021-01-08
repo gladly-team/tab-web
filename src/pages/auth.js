@@ -6,7 +6,6 @@ import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import FirebaseAuth from 'src/components/FirebaseAuth'
 import FullPageLoader from 'src/components/FullPageLoader'
-import withAuthUserInfo from 'src/utils/pageWrappers/withAuthUserInfo'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { isClientSide } from 'src/utils/ssr'
 import { redirect, setWindowLocation } from 'src/utils/navigation'
@@ -140,6 +139,7 @@ Auth.getInitialProps = async (ctx) => {
 
 Auth.displayName = 'Auth'
 
+// TODO: use next-firebase-auth
 Auth.propTypes = {
   AuthUserInfo: PropTypes.shape({
     AuthUser: PropTypes.shape({
@@ -156,4 +156,5 @@ Auth.defaultProps = {
   AuthUserInfo: null,
 }
 
-export default withAuthUserInfo(Auth)
+// TODO: use next-firebase-auth
+export default Auth
