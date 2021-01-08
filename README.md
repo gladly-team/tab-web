@@ -49,8 +49,6 @@ In the future, we can consider adding session-based CSRF tokens for defense in d
 - Our Vercel project, [tab-web](https://vercel.com/gladly-team/tab-web), builds on commit push
 - The "dev" Git branch is mapped to our "dev" environment
 
-**Github Action logs code coverage**
+**GitHub Action runs unit tests and logs code coverage**
 
-- A Node Github action runs test coverage and logs to [Codecov](https://codecov.io/gh/gladly-team/tab-web)
-
-As needed, we may want to move the workflow entirely into a CI system.
+- A GitHub Action runs tests and logs code coverage to [Codecov](https://codecov.io/gh/gladly-team/tab-web)
