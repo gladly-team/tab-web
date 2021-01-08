@@ -57,14 +57,13 @@ const getMockProps = () => ({
   descriptionTwo: undefined,
 })
 
-const getTimeDisplayString = (wrapper) => {
-  return wrapper
+const getTimeDisplayString = (wrapper) =>
+  wrapper
     .find('[data-test-id="time-container"]')
     .find(Typography)
     .first()
     .render()
     .text()
-}
 
 describe('Achievement component', () => {
   it('renders without error', () => {

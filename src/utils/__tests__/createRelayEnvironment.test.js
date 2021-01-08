@@ -22,9 +22,7 @@ beforeEach(() => {
     this._network = network // eslint-disable-line no-underscore-dangle
     this._store = store // eslint-disable-line no-underscore-dangle
   }
-  Environment.mockImplementation((args) => {
-    return new MockEnvironment(args)
-  })
+  Environment.mockImplementation((args) => new MockEnvironment(args))
 
   process.env.NEXT_PUBLIC_RELAY_ENDPOINT = '/mock-relay-endpoint/here/'
   fetch.mockResolvedValue(getMockFetchResponse())

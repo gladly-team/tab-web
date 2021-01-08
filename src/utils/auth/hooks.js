@@ -13,9 +13,7 @@ initFirebase()
 // Defaults to empty AuthUserInfo object.
 export const AuthUserInfoContext = React.createContext(createAuthUserInfo())
 
-export const useAuthUserInfo = () => {
-  return React.useContext(AuthUserInfoContext)
-}
+export const useAuthUserInfo = () => React.useContext(AuthUserInfoContext)
 
 // FIXME: using this hook more than once will call the `onChange`
 // callback multiple times unnecessarily.
