@@ -10,6 +10,9 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import { isClientSide } from 'src/utils/ssr'
 import theme from 'src/utils/theme'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
+import initAuth from 'src/utils/auth/initAuth'
+
+initAuth()
 
 try {
   ensureValuesAreDefined(process.env.NEXT_PUBLIC_SENTRY_DSN)

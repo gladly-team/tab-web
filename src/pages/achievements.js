@@ -1,15 +1,18 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
-// import { graphql } from 'react-relay'
 import dayjs from 'dayjs'
+import { flow } from 'lodash/util'
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
-// import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import return404If from 'src/utils/pageWrappers/return404If'
 import Achievement from 'src/components/Achievement'
 import { showMockAchievements } from 'src/utils/featureFlags'
+import {
+  useAuthUser,
+  withAuthUser,
+  // withAuthUserTokenSSR,
+} from 'next-firebase-auth'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -68,6 +71,8 @@ const useStyles = makeStyles((theme) => ({
 
 const Achievements = () => {
   const classes = useStyles()
+  const AuthUser = useAuthUser()
+  console.log('AuthUser', AuthUser)
   return (
     <SettingsPage>
       <div className={classes.contentContainer}>
@@ -181,4 +186,6 @@ Achievements.displayName = 'Achievements'
 Achievements.propTypes = {}
 Achievements.defaultProps = {}
 
-export default return404If(!showMockAchievements())(Achievements)
+export default flow([withAuthUser(), return404If(!showMockAchievements())])(
+  Achievements
+)

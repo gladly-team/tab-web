@@ -15,10 +15,10 @@ export const withCookies = (req, res) => {
     )
   }
   if (
-    !(process.env.SESSION_SECRET_CURRENT && process.env.SESSION_SECRET_PREVIOUS)
+    !(process.env.COOKIE_SECRET_CURRENT && process.env.COOKIE_SECRET_PREVIOUS)
   ) {
     throw new Error(
-      'Session secrets must be set as env vars `SESSION_SECRET_CURRENT` and `SESSION_SECRET_PREVIOUS`.'
+      'Session secrets must be set as env vars `COOKIE_SECRET_CURRENT` and `COOKIE_SECRET_PREVIOUS`.'
     )
   }
 
@@ -26,8 +26,8 @@ export const withCookies = (req, res) => {
   // The first will be used to sign cookies, and the rest to validate them.
   // https://github.com/expressjs/cookie-session#keys
   const sessionSecrets = [
-    process.env.SESSION_SECRET_CURRENT,
-    process.env.SESSION_SECRET_PREVIOUS,
+    process.env.COOKIE_SECRET_CURRENT,
+    process.env.COOKIE_SECRET_PREVIOUS,
   ]
 
   const useSecureSameSiteNone =

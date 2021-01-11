@@ -9,6 +9,7 @@ import withData from 'src/utils/pageWrappers/withData'
 // TODO: use next-firebase-auth
 
 const withAuthAndData = (getRelayQuery) =>
+  // FIXME
   // Invokes from left to right.
   flowRight(withData(getRelayQuery))
 

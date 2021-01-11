@@ -11,8 +11,8 @@ const mockCookie = {
 jest.mock('cookies', () => jest.fn(() => mockCookie))
 
 beforeEach(() => {
-  process.env.SESSION_SECRET_CURRENT = 'abc'
-  process.env.SESSION_SECRET_PREVIOUS = 'def'
+  process.env.COOKIE_SECRET_CURRENT = 'abc'
+  process.env.COOKIE_SECRET_PREVIOUS = 'def'
   process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'true'
 })
 
@@ -32,8 +32,8 @@ describe('cookies middleware: withCookies', () => {
 
   it('passes the request and response objects to Cookies', () => {
     expect.assertions(1)
-    process.env.SESSION_SECRET_CURRENT = 'thing'
-    process.env.SESSION_SECRET_PREVIOUS = 'anotherThing'
+    process.env.COOKIE_SECRET_CURRENT = 'thing'
+    process.env.COOKIE_SECRET_PREVIOUS = 'anotherThing'
     const mockReq = getMockReq()
     const mockRes = getMockRes()
     withCookies(mockReq, mockRes)
@@ -42,8 +42,8 @@ describe('cookies middleware: withCookies', () => {
 
   it('passes the expected secrets to Cookies', () => {
     expect.assertions(1)
-    process.env.SESSION_SECRET_CURRENT = 'thing'
-    process.env.SESSION_SECRET_PREVIOUS = 'anotherThing'
+    process.env.COOKIE_SECRET_CURRENT = 'thing'
+    process.env.COOKIE_SECRET_PREVIOUS = 'anotherThing'
     const mockReq = getMockReq()
     const mockRes = getMockRes()
     withCookies(mockReq, mockRes)
@@ -63,23 +63,23 @@ describe('cookies middleware: withCookies', () => {
     )
   })
 
-  it('throws if the session key SESSION_SECRET_CURRENT is not defined', () => {
+  it('throws if the session key COOKIE_SECRET_CURRENT is not defined', () => {
     expect.assertions(1)
-    delete process.env.SESSION_SECRET_CURRENT
+    delete process.env.COOKIE_SECRET_CURRENT
     expect(() => {
       withCookies(getMockReq(), getMockRes())
     }).toThrow(
-      'Session secrets must be set as env vars `SESSION_SECRET_CURRENT` and `SESSION_SECRET_PREVIOUS`.'
+      'Session secrets must be set as env vars `COOKIE_SECRET_CURRENT` and `COOKIE_SECRET_PREVIOUS`.'
     )
   })
 
-  it('throws if the session key SESSION_SECRET_PREVIOUS is not defined', () => {
+  it('throws if the session key COOKIE_SECRET_PREVIOUS is not defined', () => {
     expect.assertions(1)
-    delete process.env.SESSION_SECRET_PREVIOUS
+    delete process.env.COOKIE_SECRET_PREVIOUS
     expect(() => {
       withCookies(getMockReq(), getMockRes())
     }).toThrow(
-      'Session secrets must be set as env vars `SESSION_SECRET_CURRENT` and `SESSION_SECRET_PREVIOUS`.'
+      'Session secrets must be set as env vars `COOKIE_SECRET_CURRENT` and `COOKIE_SECRET_PREVIOUS`.'
     )
   })
 
