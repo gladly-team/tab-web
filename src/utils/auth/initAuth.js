@@ -28,10 +28,10 @@ const initAuth = () => {
     firebaseAdminInitConfig: {
       credential: {
         projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-        clientEmail: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
-        // https://stackoverflow.com/a/41044630/1332513
+        clientEmail: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL,
+        // https://github.com/vercel/vercel/issues/749#issuecomment-707515089
         privateKey: firebasePrivateKey
-          ? firebasePrivateKey.replace(/\\n/g, '\n')
+          ? JSON.parse(firebasePrivateKey)
           : undefined,
       },
       databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
