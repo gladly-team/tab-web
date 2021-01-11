@@ -5,12 +5,13 @@ import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import { fetchQuery, ReactRelayContext } from 'react-relay'
 import createRelayEnvironment from 'src/utils/createRelayEnvironment'
-import { useAuthUserInfo } from 'src/utils/auth/hooks'
 import { isClientSide } from 'src/utils/ssr'
 import {
   NEXT_CTX_CUSTOM_DATA_KEY,
   NEXT_CTX_AUTH_USER_INFO_KEY,
 } from 'src/utils/constants'
+
+// FIXME: refactor
 
 // Adapted from:
 // https://github.com/zeit/next.js/blob/canary/examples/with-relay-modern/lib/withData.js
@@ -24,8 +25,10 @@ const withData = (getRelayQuery) => (ComposedComponent) => {
       ...otherProps
     } = props
 
+    // FIXME: use next-firebase-auth
     // Get the AuthUser from context.
-    const { AuthUser, token } = useAuthUserInfo()
+    const { AuthUser, token } = {}
+    // const { AuthUser, token } = useAuthUserInfo()
 
     // Create the Relay environment.
     const environment = createRelayEnvironment({

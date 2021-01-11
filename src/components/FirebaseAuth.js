@@ -5,7 +5,6 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import FullPageLoader from 'src/components/FullPageLoader'
 import { isClientSide } from 'src/utils/ssr'
-import initFirebase from 'src/utils/auth/initFirebase'
 import { dashboardURL } from 'src/utils/urls'
 
 const FirebaseAuth = (props) => {
@@ -16,9 +15,6 @@ const FirebaseAuth = (props) => {
   const [renderAuth, setRenderAuth] = useState(false)
   useEffect(() => {
     if (isClientSide()) {
-      // Init the Firebase app.
-      initFirebase()
-
       // Set that we can render the Firebase auth UI.
       setRenderAuth(true)
     }

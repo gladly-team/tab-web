@@ -6,9 +6,6 @@
 /* eslint-disable no-console */
 
 jest.mock('next-offline/runtime')
-jest.mock('src/utils/auth/hooks')
-jest.mock('src/utils/auth/user')
-jest.mock('src/utils/middleware/session')
 jest.mock('src/utils/ssr')
 jest.mock('@sentry/node')
 

@@ -3,7 +3,6 @@ import getMockRes from 'src/utils/testHelpers/mockRes'
 import betaOptInAPI from 'src/pages/api/beta-opt-in'
 
 jest.mock('src/utils/middleware/cookies')
-jest.mock('src/utils/middleware/session')
 jest.mock('src/utils/middleware/customHeaderRequired')
 
 afterEach(() => {
