@@ -7,9 +7,12 @@ import { isClientSide, isServerSide } from 'src/utils/ssr'
 jest.mock('next-offline/runtime')
 jest.mock('src/utils/ssr')
 jest.mock('@sentry/node')
+jest.mock('src/utils/auth/initAuth')
+
+// Don't enforce env vars during unit tests.
+jest.mock('src/utils/ensureValuesAreDefined')
 
 const MockComponent = () => <div>hi</div>
-MockComponent.getInitialProps = jest.fn()
 
 const getMockProps = () => ({
   Component: MockComponent,
@@ -18,11 +21,6 @@ const getMockProps = () => ({
 })
 
 beforeEach(() => {
-  // Reset most functions to some defaults.
-  MockComponent.getInitialProps.mockReturnValue({
-    some: 'data',
-  })
-
   isClientSide.mockReturnValue(true)
   isServerSide.mockReturnValue(false)
 
