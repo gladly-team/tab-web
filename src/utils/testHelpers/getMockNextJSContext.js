@@ -5,9 +5,7 @@ import getMockReq from 'src/utils/testHelpers/mockReq'
 import getMockRes from 'src/utils/testHelpers/mockRes'
 
 /**
- * Create a mock Next.js context (`ctx`) object, which is passed
- * to pages' getInitialProps.
- * https://nextjs.org/docs/api-reference/data-fetching/getInitialProps#context-object
+ * Create a mock Next.js context (`ctx`) object.
  * @param {Boolean} serverSide - Whether the mock context should
  *   be server-side, including things like the res/req objects.
  * @return {Object}
