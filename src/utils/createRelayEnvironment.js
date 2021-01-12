@@ -1,5 +1,5 @@
 // Adapted from:
-// https://github.com/zeit/next.js/blob/canary/examples/with-relay-modern/lib/createRelayEnvironment.js
+// https://github.com/vercel/next.js/blob/canary/examples/with-relay-modern/lib/relay.js
 
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 import { isServerSide } from 'src/utils/ssr'
