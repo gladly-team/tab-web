@@ -9,6 +9,7 @@ const handler = async (req, res) => {
   try {
     await unsetAuthCookies(req, res)
   } catch (e) {
+    // TODO: add error logging
     return res.status(500).json({ error: 'Unexpected error.' })
   }
   return res.status(200).json({ success: true })
