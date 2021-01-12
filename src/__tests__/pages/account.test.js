@@ -272,10 +272,10 @@ describe('account.js', () => {
   })
 })
 
-describe('account.js: getInitialProps', () => {
-  it('does not define getInitialProps', () => {
+describe('account.js: getServerSideProps', () => {
+  it('does not define getServerSideProps', () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
-    expect(AccountPage.getInitialProps).toBeUndefined()
+    const { getServerSideProps } = require('src/pages/account.js')
+    expect(getServerSideProps).toBeUndefined()
   })
 })
