@@ -101,7 +101,7 @@ describe('_error.js: getServerSideProps', () => {
     })
   })
 
-  it('throws if NextErrorComponent.getInitialProps throws', async () => {
+  it("throws if NextErrorComponent's `getServerSideProps` throws", async () => {
     expect.assertions(1)
     const unrelatedErr = new Error('Some unrelated error!')
     NextErrGetSSP.mockRejectedValue(unrelatedErr)
