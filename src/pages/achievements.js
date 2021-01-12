@@ -6,12 +6,12 @@ import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
 import return404If from 'src/utils/pageWrappers/return404If'
-import Achievement from 'src/components/Achievement'
 import { showMockAchievements } from 'src/utils/featureFlags'
+import Achievement from 'src/components/Achievement'
 import {
   useAuthUser,
   withAuthUser,
-  // withAuthUserTokenSSR,
+  withAuthUserTokenSSR,
 } from 'next-firebase-auth'
 
 const useStyles = makeStyles((theme) => ({
@@ -72,7 +72,8 @@ const useStyles = makeStyles((theme) => ({
 const Achievements = () => {
   const classes = useStyles()
   const AuthUser = useAuthUser()
-  console.log('AuthUser', AuthUser)
+  // eslint-disable-next-line no-console
+  console.log('AuthUser', AuthUser) // TODO: remove after testing
   return (
     <SettingsPage>
       <div className={classes.contentContainer}>
@@ -186,6 +187,11 @@ Achievements.displayName = 'Achievements'
 Achievements.propTypes = {}
 Achievements.defaultProps = {}
 
-export default flow([withAuthUser(), return404If(!showMockAchievements())])(
-  Achievements
-)
+// TODO: withAuthUserTokenSSR here is just for testing. Remove.
+export const getServerSideProps = flow([
+  return404If(!showMockAchievements()),
+  withAuthUserTokenSSR(),
+])()
+
+// TODO: withAuthUser here is just for testing. Remove.
+export default flow([withAuthUser()])(Achievements)
