@@ -2,6 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import Achievement from 'src/components/Achievement'
 
+jest.mock('next-firebase-auth')
 jest.mock('src/utils/featureFlags')
 jest.mock('src/utils/pageWrappers/return404If')
 jest.mock('src/components/Achievement', () => () => (
