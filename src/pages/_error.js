@@ -1,6 +1,6 @@
 // Handles error logging to Sentry.
 // Adapted from:
-// https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_error.js
+// https://github.com/vercel/next.js/blob/canary/examples/with-sentry/pages/_error.js
 
 import React from 'react'
 import PropTypes from 'prop-types'
