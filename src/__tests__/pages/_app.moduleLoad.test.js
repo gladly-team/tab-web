@@ -84,6 +84,7 @@ describe('_app.js: initializes auth', () => {
   it('initializes authentication on module load', () => {
     expect.assertions(1)
     const initAuth = require('src/utils/auth/initAuth').default
+    // eslint-disable-next-line no-unused-expressions
     require('src/pages/_app.js').default
     expect(initAuth).toHaveBeenCalledTimes(1)
   })
