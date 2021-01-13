@@ -1,6 +1,7 @@
 // Adapted from:
 // https://github.com/vercel/next.js/blob/canary/examples/with-relay-modern/lib/relay.js
 
+import { useMemo } from 'react'
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 import { isServerSide } from 'src/utils/ssr'
 import logger from 'src/utils/logger'
@@ -128,5 +129,7 @@ export const initRelayEnvironment = ({
   return relayEnvironment
 }
 
-// TODO
-export const useRelayEnvironment = () => {}
+export const useRelayEnvironment = (args) => {
+  const store = useMemo(() => initRelayEnvironment(args), [args])
+  return store
+}
