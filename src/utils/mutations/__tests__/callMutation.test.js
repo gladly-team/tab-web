@@ -1,9 +1,9 @@
 import { commitMutation as commitMutationDefault } from 'react-relay'
-import createRelayEnvironment from 'src/utils/createRelayEnvironment'
+import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 import { isServerSide } from 'src/utils/ssr'
 
 jest.mock('react-relay')
-jest.mock('src/utils/createRelayEnvironment')
+jest.mock('src/utils/relayEnvironment')
 jest.mock('src/utils/ssr')
 
 beforeEach(() => {
@@ -23,21 +23,21 @@ afterEach(() => {
 })
 
 describe('callMutation', () => {
-  it('calls createRelayEnvironment with the "throwIfNotPreviouslyCreated" option', async () => {
+  it('calls initRelayEnvironment with the "throwIfNotPreviouslyCreated" option', async () => {
     expect.assertions(1)
     const callMutation = require('src/utils/mutations/callMutation').default
     await callMutation({
       mutation: { some: 'stuff' },
       variables: { myVars: 'here' },
     })
-    expect(createRelayEnvironment).toHaveBeenCalledWith({
+    expect(initRelayEnvironment).toHaveBeenCalledWith({
       throwIfNotPreviouslyCreated: true,
     })
   })
 
   it("calls react-relay's `commitMutation` with the Relay environment and expected options", async () => {
     expect.assertions(1)
-    createRelayEnvironment.mockReturnValue({
+    initRelayEnvironment.mockReturnValue({
       thisIsAFakeEnvironment: true,
     })
     const callMutation = require('src/utils/mutations/callMutation').default

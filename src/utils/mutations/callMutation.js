@@ -1,5 +1,5 @@
 import { commitMutation as commitMutationDefault } from 'react-relay'
-import createRelayEnvironment from 'src/utils/createRelayEnvironment'
+import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 import { isServerSide } from 'src/utils/ssr'
 
 // Return a Promise when committing mutations.
@@ -34,7 +34,7 @@ const callMutation = async ({ mutation, variables }) => {
   // We can change this in the future, if needed; to do so, we need to pass
   // the AuthUserInfo to mutations here and provide the user token when
   // creating the Relay environment.
-  const environment = createRelayEnvironment({
+  const environment = initRelayEnvironment({
     throwIfNotPreviouslyCreated: true,
   })
 

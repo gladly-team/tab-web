@@ -84,11 +84,11 @@ const createFetchQuery = ({ token }) => {
  *   does not already exist, throw an error.
  * @return {Object} A Relay environment
  */
-export default function createRelayEnvironment({
+export const initRelayEnvironment = ({
   records = {},
   token = null,
   throwIfNotPreviouslyCreated = false,
-} = {}) {
+} = {}) => {
   const createNewEnvironment = () => {
     const network = Network.create(createFetchQuery({ token }))
     const store = new Store(new RecordSource(records))
@@ -127,3 +127,6 @@ export default function createRelayEnvironment({
   relayEnvironment = createNewEnvironment()
   return relayEnvironment
 }
+
+// TODO
+export const useRelayEnvironment = () => {}

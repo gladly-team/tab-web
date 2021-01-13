@@ -1,4 +1,4 @@
-export default jest.fn(({ token }) => ({
+export const initRelayEnvironment = jest.fn(({ token }) => ({
   isMockRelayEnvironment: true, // just for testing
   mockUserToken: token, // just for testing
   getStore: jest.fn(() => ({
@@ -7,3 +7,6 @@ export default jest.fn(({ token }) => ({
     })),
   })),
 }))
+
+// TODO
+export const useRelayEnvironment = jest.fn()

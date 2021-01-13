@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { get } from 'lodash/object'
 import { fetchQuery, ReactRelayContext } from 'react-relay'
-import createRelayEnvironment from 'src/utils/createRelayEnvironment'
+import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 import { isClientSide } from 'src/utils/ssr'
 import {
   NEXT_CTX_CUSTOM_DATA_KEY,
@@ -31,7 +31,7 @@ const withData = (getRelayQuery) => (ComposedComponent) => {
     // const { AuthUser, token } = useAuthUserInfo()
 
     // Create the Relay environment.
-    const environment = createRelayEnvironment({
+    const environment = initRelayEnvironment({
       records: queryRecords,
       token,
     })
@@ -105,7 +105,7 @@ const withData = (getRelayQuery) => (ComposedComponent) => {
     }
 
     // Create the Relay environment.
-    const environment = createRelayEnvironment({
+    const environment = initRelayEnvironment({
       token: AuthUserToken,
     })
 
