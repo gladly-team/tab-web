@@ -14,12 +14,11 @@ import { fetchQuery } from 'react-relay'
  *   @return {Object} queryInfo.variables - Any variables to
  *     provide to the query.
  *
- * The AuthUser is an instance of an AuthUser from
- * `next-firebase-auth`.
  */
-const withDataSSR = (getRelayQuery, AuthUser) => (
-  getServerSidePropsFunc
-) => async (ctx) => {
+const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
+  ctx
+) => {
+  const { AuthUser } = ctx
   const token = await AuthUser.getIdToken()
 
   // Create the Relay environment.

@@ -394,29 +394,24 @@ Index.defaultProps = {}
 export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.SHOW_LOADER,
   LoaderComponent: FullPageLoader,
-})(async (ctx) => {
-  const { AuthUser } = ctx
-  const response = withDataSSR(
-    async () => ({
-      query: graphql`
-        query pagesIndexQuery($userId: String!) {
-          app {
-            ...MoneyRaisedContainer_app
-          }
-          user(userId: $userId) {
-            tabs
-            vcCurrent
-          }
+})(
+  withDataSSR(async ({ AuthUser }) => ({
+    query: graphql`
+      query pagesIndexQuery($userId: String!) {
+        app {
+          ...MoneyRaisedContainer_app
         }
-      `,
-      variables: {
-        userId: AuthUser.id,
-      },
-    }),
-    AuthUser
-  )()(ctx)
-  return response
-})
+        user(userId: $userId) {
+          tabs
+          vcCurrent
+        }
+      }
+    `,
+    variables: {
+      userId: AuthUser.id,
+    },
+  }))()
+)
 
 export default withAuthUser({
   whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
