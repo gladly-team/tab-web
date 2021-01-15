@@ -43,7 +43,7 @@ const withDataSSR = (getRelayQuery, AuthUser) => (
     initialRecords = environment.getStore().getSource().toJSON()
   }
 
-  // Gete composed props.
+  // Get composed props.
   let composedProps = {}
   if (getServerSidePropsFunc) {
     composedProps = await getServerSidePropsFunc(ctx)
