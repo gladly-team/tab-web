@@ -3,14 +3,18 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
-import { get } from 'lodash/object'
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { AdComponent, fetchAds } from 'tab-ads'
-import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
+import {
+  withAuthUser,
+  withAuthUserTokenSSR,
+  AuthAction,
+} from 'next-firebase-auth'
+import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,
@@ -27,6 +31,7 @@ import SearchInput from 'src/components/SearchInput'
 import { accountURL, achievementsURL } from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
 import logger from 'src/utils/logger'
+import FullPageLoader from 'src/components/FullPageLoader'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -197,7 +202,6 @@ if (isClientSide()) {
 
 const Index = (props) => {
   const { app, user } = props
-
   const classes = useStyles()
 
   const showAchievements = showMockAchievements()
@@ -386,22 +390,36 @@ Index.propTypes = {
 
 Index.defaultProps = {}
 
-export default withAuthAndData(({ AuthUser }) => {
-  const userId = get(AuthUser, 'id')
-  return {
-    query: graphql`
-      query pagesIndexQuery($userId: String!) {
-        app {
-          ...MoneyRaisedContainer_app
+// FIXME: refactor / extract to another module
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenUnauthed: AuthAction.SHOW_LOADER,
+  LoaderComponent: FullPageLoader,
+})(async (ctx) => {
+  const { AuthUser } = ctx
+  const response = withDataSSR(
+    async () => ({
+      query: graphql`
+        query pagesIndexQuery($userId: String!) {
+          app {
+            ...MoneyRaisedContainer_app
+          }
+          user(userId: $userId) {
+            tabs
+            vcCurrent
+          }
         }
-        user(userId: $userId) {
-          tabs
-          vcCurrent
-        }
-      }
-    `,
-    variables: {
-      userId,
-    },
-  }
+      `,
+      variables: {
+        userId: AuthUser.id,
+      },
+    }),
+    AuthUser
+  )()(ctx)
+  return response
+})
+
+export default withAuthUser({
+  whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
+  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+  LoaderComponent: FullPageLoader,
 })(Index)

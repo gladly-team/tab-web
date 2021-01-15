@@ -34,7 +34,12 @@ const withDataSSR = (getRelayQuery, AuthUser) => (
   let queryProps = {}
   let initialRecords = {}
   if (query) {
-    queryProps = await fetchQuery(environment, query, variables)
+    const queryPropsRaw = await fetchQuery(environment, query, variables)
+
+    // Workaround to remove `undefined` values, which Next.js
+    // cannot serialize:
+    // https://github.com/vercel/next.js/discussions/11209#discussioncomment-35915
+    queryProps = JSON.parse(JSON.stringify(queryPropsRaw))
     initialRecords = environment.getStore().getSource().toJSON()
   }
 
@@ -43,7 +48,10 @@ const withDataSSR = (getRelayQuery, AuthUser) => (
   if (getServerSidePropsFunc) {
     composedProps = await getServerSidePropsFunc(ctx)
   }
+
   return {
+    // TODO: put in a "props" key when next-firebase-auth modifies
+    //   its composition.
     // TODO: possibly namespace these so there aren't conflicts
     //   and use a HOC to manage props.
     ...composedProps,

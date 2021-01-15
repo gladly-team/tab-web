@@ -71,7 +71,9 @@ const MyApp = (props) => {
     }
   }, [])
 
-  const environment = useRelayEnvironment(pageProps.initialRecords)
+  // TODO: consider moving from _app.js to a HOC to use
+  //   for individual pages
+  const environment = useRelayEnvironment({ records: pageProps.initialRecords })
 
   // FIXME: use next-firebase-auth
   // Set user context for Sentry error logging.
