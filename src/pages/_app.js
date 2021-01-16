@@ -73,7 +73,8 @@ const MyApp = (props) => {
 
   // TODO: consider moving from _app.js to a HOC to use
   //   for individual pages
-  const environment = useRelayEnvironment({ records: pageProps.initialRecords })
+  const { initialRecords, ...restPageProps } = pageProps
+  const environment = useRelayEnvironment({ records: initialRecords })
 
   // FIXME: use next-firebase-auth
   // Set user context for Sentry error logging.
@@ -100,7 +101,7 @@ const MyApp = (props) => {
       {/* Material UI: https://github.com/mui-org/material-ui/blob/master/examples/nextjs/pages/_app.js */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...pageProps} err={err} />
+        <Component {...restPageProps} err={err} />
       </ThemeProvider>
     </ReactRelayContext.Provider>
   )
