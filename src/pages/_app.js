@@ -71,8 +71,10 @@ const MyApp = (props) => {
     }
   }, [])
 
+  // Set up the Relay environment.
   // TODO: consider moving from _app.js to a HOC to use
   //   for individual pages
+  // TODO: we will need to init with the user's token here or elsewhere.
   const { initialRecords, ...restPageProps } = pageProps
   const environment = useRelayEnvironment({ records: initialRecords })
 

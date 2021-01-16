@@ -129,6 +129,8 @@ export const initRelayEnvironment = ({
   return relayEnvironment
 }
 
+// FIXME: we need to recreate the Relay environmnt when the
+//   user's token value changes.
 export const useRelayEnvironment = (args) => {
   const store = useMemo(() => initRelayEnvironment(args), [args])
   return store

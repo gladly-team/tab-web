@@ -11,10 +11,10 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import { AdComponent, fetchAds } from 'tab-ads'
 import {
   withAuthUser,
-  withAuthUserTokenSSR,
+  // withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
-import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
+// import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,
@@ -31,7 +31,8 @@ import SearchInput from 'src/components/SearchInput'
 import { accountURL, achievementsURL } from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
 import logger from 'src/utils/logger'
-import FullPageLoader from 'src/components/FullPageLoader'
+// import FullPageLoader from 'src/components/FullPageLoader'
+import useData from 'src/utils/hooks/useData'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -200,9 +201,31 @@ if (isClientSide()) {
   loadAds()
 }
 
-const Index = (props) => {
-  const { app, user } = props
+const getRelayQuery = async ({ AuthUser }) => ({
+  query: graphql`
+    query pagesIndexQuery($userId: String!) {
+      app {
+        ...MoneyRaisedContainer_app
+      }
+      user(userId: $userId) {
+        tabs
+        vcCurrent
+      }
+    }
+  `,
+  variables: {
+    userId: AuthUser.id,
+  },
+})
+
+const Index = ({ data: initialData }) => {
+  console.log('initial data from props', initialData)
   const classes = useStyles()
+
+  const { data } = useData({ getRelayQuery, initialData })
+  console.log('data from useData', data)
+
+  const { app, user } = data || {}
 
   const showAchievements = showMockAchievements()
 
@@ -226,7 +249,7 @@ const Index = (props) => {
 
   // Data to provide the onAdDisplayed callback
   const adContext = {
-    user,
+    user, // TODO: don't assume this will be defined
     tabId,
   }
 
@@ -265,7 +288,7 @@ const Index = (props) => {
           <div className={classes.userMenuContainer}>
             <div className={classes.moneyRaisedContainer}>
               <Typography variant="h5" className={clsx(classes.userMenuItem)}>
-                <MoneyRaisedContainer app={app} />
+                {app && <MoneyRaisedContainer app={app} />}
               </Typography>
             </div>
             <div className={classes.settingsIconContainer}>
@@ -381,40 +404,31 @@ const Index = (props) => {
 Index.displayName = 'Index'
 
 Index.propTypes = {
-  app: PropTypes.shape({}).isRequired,
-  user: PropTypes.shape({
-    tabs: PropTypes.number.isRequired,
-    vcCurrent: PropTypes.number.isRequired,
-  }).isRequired,
+  data: PropTypes.shape({
+    app: PropTypes.shape({}).isRequired,
+    user: PropTypes.shape({
+      tabs: PropTypes.number.isRequired,
+      vcCurrent: PropTypes.number.isRequired,
+    }).isRequired,
+  }),
 }
 
-Index.defaultProps = {}
+Index.defaultProps = {
+  data: null,
+}
 
 // FIXME: refactor / extract to another module
-export const getServerSideProps = withAuthUserTokenSSR({
-  whenUnauthed: AuthAction.SHOW_LOADER,
-  LoaderComponent: FullPageLoader,
-})(
-  withDataSSR(async ({ AuthUser }) => ({
-    query: graphql`
-      query pagesIndexQuery($userId: String!) {
-        app {
-          ...MoneyRaisedContainer_app
-        }
-        user(userId: $userId) {
-          tabs
-          vcCurrent
-        }
-      }
-    `,
-    variables: {
-      userId: AuthUser.id,
-    },
-  }))()
-)
+// Commenting out to work on `useData` without any initial data.
+
+// export const getServerSideProps = withAuthUserTokenSSR({
+//   // whenUnauthed: AuthAction.SHOW_LOADER,
+//   // LoaderComponent: FullPageLoader,
+//   whenUnauthed: AuthAction.RENDER,
+// })(withDataSSR(getRelayQuery)())
 
 export default withAuthUser({
-  whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
+  // whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
+  // LoaderComponent: FullPageLoader,
+  whenUnauthed: AuthAction.RENDER,
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-  LoaderComponent: FullPageLoader,
 })(Index)

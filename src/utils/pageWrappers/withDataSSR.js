@@ -54,7 +54,9 @@ const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
     // TODO: possibly namespace these so there aren't conflicts
     //   and use a HOC to manage props.
     ...composedProps,
-    ...queryProps,
+    data: {
+      ...queryProps,
+    },
     initialRecords,
   }
 }
