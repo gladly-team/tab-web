@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { unregister } from 'next-offline/runtime'
-import { graphql } from 'react-relay'
+// import { graphql } from 'react-relay'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
-import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import logout from 'src/utils/auth/logout'
 import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
@@ -188,20 +187,23 @@ Account.defaultProps = {
   },
 }
 
-export default withAuthAndData(({ AuthUser }) => {
-  const userId = AuthUser.id
-  return {
-    query: graphql`
-      query accountQuery($userId: String!) {
-        user(userId: $userId) {
-          email
-          id
-          username
-        }
-      }
-    `,
-    variables: {
-      userId,
-    },
-  }
-})(Account)
+// FIXME
+// withDataSSR(({ AuthUser }) => {
+//   const userId = AuthUser.id
+//   return {
+//     query: graphql`
+//       query accountQuery($userId: String!) {
+//         user(userId: $userId) {
+//           email
+//           id
+//           username
+//         }
+//       }
+//     `,
+//     variables: {
+//       userId,
+//     },
+//   }
+// })
+
+export default Account

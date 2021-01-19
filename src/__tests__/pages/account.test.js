@@ -16,7 +16,6 @@ import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 
 jest.mock('next-offline/runtime')
 jest.mock('src/components/SettingsPage')
-jest.mock('src/utils/pageWrappers/withAuthAndData')
 jest.mock('src/utils/auth/logout')
 jest.mock('src/utils/caching')
 jest.mock('src/utils/navigation')

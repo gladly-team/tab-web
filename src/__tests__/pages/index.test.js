@@ -7,7 +7,6 @@ import { accountURL } from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
 import Achievement from 'src/components/Achievement'
 // import { AdComponent, fetchAds } from 'tab-ads'
-// import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 // import { getHostname, getCurrentURL } from 'src/utils/navigation'
 // import {
 //   getAdUnits,
@@ -23,7 +22,6 @@ import Achievement from 'src/components/Achievement'
 jest.mock('tab-ads')
 jest.mock('@material-ui/icons/Settings')
 jest.mock('src/components/Link')
-jest.mock('src/utils/pageWrappers/withAuthAndData')
 jest.mock('src/utils/navigation')
 jest.mock('src/utils/adHelpers')
 jest.mock('src/utils/ssr')
