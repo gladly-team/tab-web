@@ -1,7 +1,6 @@
 // Adapted from:
 // https://github.com/vercel/next.js/blob/canary/examples/with-relay-modern/lib/relay.js
 
-import { useMemo } from 'react'
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 import { isServerSide } from 'src/utils/ssr'
 import logger from 'src/utils/logger'
@@ -27,8 +26,9 @@ let relayEnvironment = null
  * @return {Function} A `fetch` call that returns a Promise and
  *   resolves into fetched data.
  */
-const createFetchQuery = ({ token }) => {
+const createFetchQuery = ({ getIdToken }) => {
   const fetchQuery = async (operation, variables) => {
+    const token = await getIdToken()
     const response = await fetch(relayEndpoint, {
       method: 'POST',
       headers: {
@@ -71,13 +71,26 @@ const createFetchQuery = ({ token }) => {
   return fetchQuery
 }
 
+const createNewNetwork = (getIdToken) =>
+  Network.create(createFetchQuery({ getIdToken }))
+
+const createNewStore = (initialRecords) =>
+  new Store(new RecordSource(initialRecords))
+
+const createEnvironment = ({ network, store }) =>
+  new Environment({
+    network,
+    store,
+  })
+
+// TODO: update documentation
 /**
  * Create the Relay environment. On the server, this will always
  * return a new environment. On the client, this will typically
  * reuse the existing environment.
  * @param {Object} config
- * @param {String} config.records - The query records fetched from
- *   our API on the server-side before SSR or client rendering
+ * @param {String} config.initialRecords - The query records fetched
+ *   server-side before SSR or client rendering
  * @param {String} config.token - The user's token to use in the fetch
  *   Authorization header
  * @param {Boolean} config.throwIfNotPreviouslyCreated - If true,
@@ -86,54 +99,46 @@ const createFetchQuery = ({ token }) => {
  * @return {Object} A Relay environment
  */
 export const initRelayEnvironment = ({
-  records = {},
-  token = null,
+  initialRecords = {},
+  getIdToken,
   throwIfNotPreviouslyCreated = false,
+  recreateNetwork = false,
+  recreateStore = false,
 } = {}) => {
-  // FIXME: use this:
-  // https://github.com/vercel/next.js/blob/canary/examples/with-relay-modern/lib/relay.js#L37
-  const createNewEnvironment = () => {
-    const network = Network.create(createFetchQuery({ token }))
-    const store = new Store(new RecordSource(records))
-    return new Environment({
-      network,
-      store,
-    })
-  }
-
   // On the server, always recreate the environment so that data
   // isn't shared between connections.
   if (isServerSide()) {
-    return createNewEnvironment()
+    return createEnvironment(initialRecords, getIdToken)
   }
 
-  // Note: if the user's auth state changes, we will want to
-  // recreate the Relay environment. For now, we rely on the fact
-  // that login/logout refetches the app from the server.
-
-  // On the client side, reuse the environment if it exists.
-  // If the user's token changes, recreate the Relay environment
-  // so it doesn't use an outdated Authorization header.
-  if (relayEnvironment) {
-    return relayEnvironment
+  // On the client side, if the environment needs to be
+  // updated or doesn't exist, create a new environment.
+  if (!relayEnvironment || recreateNetwork || recreateStore) {
+    // TODO: probably just move this to another method
+    // Some callers, such as mutations, expect the environment to already
+    // exist and thus aren't providing the user token or records.
+    if (throwIfNotPreviouslyCreated) {
+      throw new Error(
+        'The Relay environment was expected to have been already created but was not.'
+      )
+    }
+    relayEnvironment = createEnvironment({
+      network:
+        recreateNetwork || !relayEnvironment
+          ? createNewNetwork(getIdToken)
+          : relayEnvironment.getNetwork(),
+      store:
+        recreateStore || !relayEnvironment
+          ? createNewStore(initialRecords)
+          : relayEnvironment.getStore(),
+    })
   }
 
-  // Some callers, such as mutations, expect the environment to already
-  // exist and thus aren't providing the user token or records.
-  if (throwIfNotPreviouslyCreated) {
-    throw new Error(
-      'The Relay environment was expected to have been already created but was not.'
-    )
-  }
-
-  // Otherwise, create a new environment.
-  relayEnvironment = createNewEnvironment()
+  // Otherwise, use the existing environment.
   return relayEnvironment
 }
 
-// FIXME: we need to recreate the Relay environmnt when the
-//   user's token value changes.
-export const useRelayEnvironment = (args) => {
-  const store = useMemo(() => initRelayEnvironment(args), [args])
-  return store
-}
+// TODO: consolidate methods and remove throwIfNotPreviouslyCreated
+export const getRelayEnvironment = () => relayEnvironment
+
+export const useRelayEnvironment = () => relayEnvironment

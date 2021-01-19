@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { flowRight } from 'lodash/util'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
@@ -15,6 +16,7 @@ import {
   AuthAction,
 } from 'next-firebase-auth'
 // import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
+import withRelay from 'src/utils/pageWrappers/withRelay'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,
@@ -219,11 +221,12 @@ const getRelayQuery = async ({ AuthUser }) => ({
 })
 
 const Index = ({ data: initialData }) => {
-  console.log('initial data from props', initialData)
   const classes = useStyles()
 
   const { data } = useData({ getRelayQuery, initialData })
-  console.log('data from useData', data)
+
+  // console.log('initial data from props', initialData)
+  // console.log('data from useData', data)
 
   const { app, user } = data || {}
 
@@ -426,9 +429,12 @@ Index.defaultProps = {
 //   whenUnauthed: AuthAction.RENDER,
 // })(withDataSSR(getRelayQuery)())
 
-export default withAuthUser({
-  // whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
-  // LoaderComponent: FullPageLoader,
-  whenUnauthed: AuthAction.RENDER,
-  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-})(Index)
+export default flowRight([
+  withAuthUser({
+    // whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
+    // LoaderComponent: FullPageLoader,
+    whenUnauthed: AuthAction.RENDER,
+    whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+  }),
+  withRelay,
+])(Index)

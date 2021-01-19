@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { fetchQuery } from 'react-relay'
 import { useAuthUser } from 'next-firebase-auth'
-import { useRelayEnvironment } from 'src/utils/relayEnvironment'
+import { getRelayEnvironment } from 'src/utils/relayEnvironment'
+
+const fetcher = async (query, variables) => {
+  const environment = getRelayEnvironment()
+  return fetchQuery(environment, query, variables)
+}
 
 // TODO:
 // Goals:
@@ -13,46 +18,31 @@ import { useRelayEnvironment } from 'src/utils/relayEnvironment'
 // * It should work with an unauthed AuthUser
 
 const useData = ({ getRelayQuery, initialData }) => {
-  // Wait for AuthUser to initialize and get the token.
+  // Before fetching data, wait for the AuthUser to initialize
+  // if it's not not already available.
   const AuthUser = useAuthUser()
   const [isAuthReady, setIsAuthReady] = useState(false)
-  const [token, setToken] = useState()
   useEffect(() => {
-    const getUserToken = async () => {
-      const userIdToken = await AuthUser.getIdToken()
-      setToken(userIdToken)
+    if (AuthUser.id || AuthUser.clientInitialized) {
       setIsAuthReady(true)
-    }
-    if (AuthUser.clientInitialized) {
-      getUserToken()
     }
   }, [AuthUser])
 
   // Set up the Relay environment and get the Relay query.
   const [relayQuery, setRelayQuery] = useState()
   const [relayVariables, setRelayVariables] = useState()
-  // const [relayEnvironment, setRelayEnvironment] = useState()
   useEffect(() => {
-    const initRelay = async () => {
+    const getRelayQueryAndVars = async () => {
       const { query, variables = {} } = await getRelayQuery({ AuthUser })
       setRelayVariables(variables)
       setRelayQuery(query)
-      // const environment = useRelayEnvironment({
-      //   initialData,
-      //   token,
-      // })
-      // setRelayEnvironment(environment)
     }
-    if (AuthUser.clientInitialized) {
-      initRelay()
+    if (isAuthReady) {
+      getRelayQueryAndVars()
     }
-  }, [isAuthReady, token, AuthUser, getRelayQuery, initialData])
+  }, [isAuthReady, AuthUser, getRelayQuery, initialData])
 
   const readyToFetch = !!relayQuery
-  const relayEnvironment = useRelayEnvironment({
-    initialData,
-    token,
-  })
 
   // TODO: handle smart refetching.
   // Can use SWR's "revalidateOnMount" option:
@@ -62,19 +52,18 @@ const useData = ({ getRelayQuery, initialData }) => {
   // const refetchDataOnMount =
   //   process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true'
 
-  // SWR won't fetch if the "key" function return snull.
-  // https://github.com/vercel/swr#dependent-fetching
-  // const queryProps = await fetchQuery(environment, query, variables)
+  // https://github.com/vercel/swr#options
   const { data, error } = useSWR(
-    () =>
-      !readyToFetch ? null : [relayEnvironment, relayQuery, relayVariables],
-    fetchQuery,
+    // SWR won't fetch if the "key" function returns null.
+    // https://github.com/vercel/swr#dependent-fetching
+    // SWR will refetch if any of these arguments change.
+    () => (!readyToFetch ? null : [relayQuery, relayVariables]),
+    fetcher,
     {
       initialData,
     }
   )
 
-  // https://github.com/vercel/swr#options
   return {
     data,
     error,
