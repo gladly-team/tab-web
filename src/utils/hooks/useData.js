@@ -1,3 +1,5 @@
+// This HOC should be wrapped in `withRelay` and `withAuthUser`.`
+
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { fetchQuery } from 'react-relay'
@@ -51,6 +53,9 @@ const useData = ({ getRelayQuery, initialData }) => {
   // If we aren't running the service worker, there's no reason to refetch.
   // const refetchDataOnMount =
   //   process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true'
+
+  // TODO: may want to cancel requests, like when a page unmounts.
+  // https://github.com/vercel/swr/issues/129
 
   // https://github.com/vercel/swr#options
   const { data, error } = useSWR(

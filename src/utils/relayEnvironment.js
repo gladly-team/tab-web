@@ -91,17 +91,20 @@ const createEnvironment = ({ network, store }) =>
  * @param {Object} config
  * @param {String} config.initialRecords - The query records fetched
  *   server-side before SSR or client rendering
- * @param {String} config.token - The user's token to use in the fetch
- *   Authorization header
- * @param {Boolean} config.throwIfNotPreviouslyCreated - If true,
- *   we will not create a new environment. Instead, if an environment
- *   does not already exist, throw an error.
+ * @param {Function} config.getIdToken - A function that should
+ *   return a valid user ID token for use in the Authorization
+ *   header.
+ * @param {Boolean} config.recreateNetwork - If true, returns a
+ *   new Relay environment with a new network even when  a Relay
+ *   environment already exists.
+ * @param {Boolean} config.recreateStore - If true, returns a
+ *   new Relay environment with a new store even when  a Relay
+ *   environment already exists.
  * @return {Object} A Relay environment
  */
 export const initRelayEnvironment = ({
   initialRecords = {},
   getIdToken,
-  throwIfNotPreviouslyCreated = false,
   recreateNetwork = false,
   recreateStore = false,
 } = {}) => {
@@ -114,14 +117,6 @@ export const initRelayEnvironment = ({
   // On the client side, if the environment needs to be
   // updated or doesn't exist, create a new environment.
   if (!relayEnvironment || recreateNetwork || recreateStore) {
-    // TODO: probably just move this to another method
-    // Some callers, such as mutations, expect the environment to already
-    // exist and thus aren't providing the user token or records.
-    if (throwIfNotPreviouslyCreated) {
-      throw new Error(
-        'The Relay environment was expected to have been already created but was not.'
-      )
-    }
     relayEnvironment = createEnvironment({
       network:
         recreateNetwork || !relayEnvironment
@@ -138,7 +133,16 @@ export const initRelayEnvironment = ({
   return relayEnvironment
 }
 
-// TODO: consolidate methods and remove throwIfNotPreviouslyCreated
-export const getRelayEnvironment = () => relayEnvironment
-
-export const useRelayEnvironment = () => relayEnvironment
+/**
+ * Return the previously-created Relay environment. If the Relay
+ * environment was not already created, throw an error.
+ * @return {Object} A Relay environment
+ */
+export const getRelayEnvironment = () => {
+  if (!relayEnvironment) {
+    throw new Error(
+      'The Relay environment was expected to have been already created but was not.'
+    )
+  }
+  return relayEnvironment
+}

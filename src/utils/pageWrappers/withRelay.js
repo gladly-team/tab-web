@@ -1,3 +1,5 @@
+// This HOC should be wrapped in `withAuthUser`.
+
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { ReactRelayContext } from 'react-relay'
@@ -5,7 +7,6 @@ import { useAuthUser } from 'next-firebase-auth'
 import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 import usePrevious from 'src/utils/hooks/usePrevious'
 
-// Should be wrapped in `withAuthUser` context.
 const withRelay = (ChildComponent) => {
   const WithRelayHOC = (props) => {
     const { initialRecords, ...otherProps } = props

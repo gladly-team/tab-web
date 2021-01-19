@@ -1,4 +1,4 @@
-export const initRelayEnvironment = jest.fn(({ token }) => ({
+const createMockRelayEnvironment = (token = null) => ({
   isMockRelayEnvironment: true, // just for testing
   mockUserToken: token, // just for testing
   getStore: jest.fn(() => ({
@@ -6,7 +6,10 @@ export const initRelayEnvironment = jest.fn(({ token }) => ({
       toJSON: jest.fn(),
     })),
   })),
-}))
+})
 
-// TODO
-export const useRelayEnvironment = jest.fn()
+export const initRelayEnvironment = jest.fn(({ token }) =>
+  createMockRelayEnvironment(token)
+)
+
+export const getRelayEnvironment = jest.fn(() => createMockRelayEnvironment())
