@@ -90,6 +90,8 @@ export const initRelayEnvironment = ({
   token = null,
   throwIfNotPreviouslyCreated = false,
 } = {}) => {
+  // FIXME: use this:
+  // https://github.com/vercel/next.js/blob/canary/examples/with-relay-modern/lib/relay.js#L37
   const createNewEnvironment = () => {
     const network = Network.create(createFetchQuery({ token }))
     const store = new Store(new RecordSource(records))
