@@ -1,28 +1,53 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { ReactRelayContext } from 'react-relay'
 import { useAuthUser } from 'next-firebase-auth'
 import { initRelayEnvironment } from 'src/utils/relayEnvironment'
+import usePrevious from 'src/utils/hooks/usePrevious'
 
 // Should be wrapped in `withAuthUser` context.
 const withRelay = (ChildComponent) => {
   const WithRelayHOC = (props) => {
-    // Set up the Relay environment.
+    const { initialRecords, ...otherProps } = props
 
     const AuthUser = useAuthUser()
 
-    // TODO:
-    // If the AuthUser's ID changes, recreate the Relay store
-    // and network.
-    // If the AuthUser's token changes, recreate the Relay network.
+    // Set up the Relay environment.
+    const [relayEnvironment, setRelayEnvironment] = useState(
+      initRelayEnvironment({
+        records: initialRecords,
+        getIdToken: AuthUser.getIdToken,
+      })
+    )
 
-    const { initialRecords, ...otherProps } = props
+    // Update the Relay environment when the AuthUser changes.
+    const previousAuthUser = usePrevious(AuthUser)
+    useEffect(() => {
+      const updateRelayEnvAsNeeded = async () => {
+        const token = await AuthUser.getIdToken()
+        const oldToken = previousAuthUser
+          ? await previousAuthUser.getIdToken()
+          : null
+        const oldId = previousAuthUser ? previousAuthUser.id : null
 
-    const relayEnvironment = initRelayEnvironment({
-      records: initialRecords,
-      getIdToken: AuthUser.getIdToken,
-      recreateNetwork: true, // FIXME
-    })
+        // If the AuthUser's ID changes, recreate the Relay store
+        // and network. Don't recreate the store if the previous user
+        // ID wasn't set because we were likely just waiting for the
+        // auth client to initialize.
+        const shouldRecreateStore =
+          !oldId && AuthUser.id ? false : AuthUser.id !== oldId
+        setRelayEnvironment(
+          initRelayEnvironment({
+            getIdToken: AuthUser.getIdToken,
+            // If the AuthUser's token or ID change, recreate the
+            // Relay network.
+            recreateNetwork: AuthUser.id !== oldId || token !== oldToken,
+            recreateStore: shouldRecreateStore,
+          })
+        )
+      }
+      updateRelayEnvAsNeeded()
+    }, [AuthUser, previousAuthUser])
 
     return (
       <ReactRelayContext.Provider
