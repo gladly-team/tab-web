@@ -1,15 +1,5 @@
-// https://github.com/gladly-team/next-firebase-auth#authuser
-const createMockAuthUser = () => ({
-  id: 'mock-user-id',
-  email: 'mockUser@example.com',
-  emailVerified: true,
-  getIdToken: jest.fn(async () => 'mock-id-token'),
-  clientInitialized: true,
-  firebaseUser: {},
-  signOut: jest.fn(),
-  serialize: jest.fn(() => ({})),
-})
+import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
-const useAuthUser = jest.fn(() => createMockAuthUser())
+const useAuthUser = jest.fn(() => getMockAuthUser())
 
 export default useAuthUser
