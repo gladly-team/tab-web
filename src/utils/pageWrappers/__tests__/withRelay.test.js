@@ -35,7 +35,7 @@ describe('withRelay', () => {
     // Mount with async hook:
     // https://github.com/enzymejs/enzyme/issues/2153#issuecomment-499219572
     await act(async () => {
-      const wrapper = mount(<MockCompWithRelay />)
+      mount(<MockCompWithRelay />)
       await flushAllPromises()
     })
     expect(relayEnv).toEqual(expect.any(Object))
