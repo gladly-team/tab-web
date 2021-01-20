@@ -300,7 +300,7 @@ const Index = ({ data: initialData }) => {
           <div className={classes.userMenuContainer}>
             <div className={classes.moneyRaisedContainer}>
               <Typography variant="h5" className={clsx(classes.userMenuItem)}>
-                {app && <MoneyRaisedContainer app={app} />}
+                <MoneyRaisedContainer app={app} />
               </Typography>
             </div>
             <div className={classes.settingsIconContainer}>
