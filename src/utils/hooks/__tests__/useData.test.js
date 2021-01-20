@@ -2,6 +2,7 @@ import { act, renderHook } from '@testing-library/react-hooks'
 import { fetchQuery } from 'react-relay'
 import { useAuthUser } from 'next-firebase-auth'
 import useData from 'src/utils/hooks/useData'
+import { getRelayEnvironment } from 'src/utils/relayEnvironment'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
 // We don't mock SWR but instead the underlying fetcher.
@@ -253,5 +254,41 @@ describe('useData', () => {
         'The `useData` HOC should be wrapped in the `withAuthUser` HOC.'
       )
     )
+  })
+
+  it('returns an error if `getRelayEnvironment` throws', async () => {
+    expect.assertions(1)
+
+    const mockErr = new Error('Problem with the Relay environment.')
+    getRelayEnvironment.mockImplementation(() => {
+      throw mockErr
+    })
+
+    useAuthUser.mockReturnValue(getUninitializedAuthUser())
+    let relayQueryPromiseResolver
+    const relayQueryPromise = new Promise((resolve) => {
+      relayQueryPromiseResolver = resolve
+    })
+    const mockGetRelayQuery = async () => relayQueryPromise
+
+    const { result, rerender, waitForNextUpdate } = renderHook(() =>
+      useData({ getRelayQuery: mockGetRelayQuery })
+    )
+
+    await act(async () => {
+      useAuthUser.mockReturnValue(getMockAuthUser())
+      relayQueryPromiseResolver({
+        query: `some query here`,
+        variables: {
+          some: 'thing',
+        },
+      })
+      rerender()
+      await waitForNextUpdate()
+    })
+    expect(result.current).toEqual({
+      data: undefined,
+      error: mockErr,
+    })
   })
 })
