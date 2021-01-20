@@ -83,7 +83,6 @@ const createEnvironment = ({ network, store }) =>
     store,
   })
 
-// TODO: update documentation
 /**
  * Create the Relay environment. On the server, this will always
  * return a new environment. On the client, this will typically
@@ -104,18 +103,22 @@ const createEnvironment = ({ network, store }) =>
  */
 export const initRelayEnvironment = ({
   initialRecords = {},
-  getIdToken,
+  getIdToken = async () => null,
   recreateNetwork = false,
   recreateStore = false,
 } = {}) => {
   // On the server, always recreate the environment so that data
   // isn't shared between connections.
   if (isServerSide()) {
-    return createEnvironment(initialRecords, getIdToken)
+    return createEnvironment({
+      network: createNewNetwork(getIdToken),
+      store: createNewStore(initialRecords),
+    })
   }
 
   // On the client side, if the environment needs to be
   // updated or doesn't exist, create a new environment.
+  // Otherwise, use the existing environment.
   if (!relayEnvironment || recreateNetwork || recreateStore) {
     relayEnvironment = createEnvironment({
       network:
@@ -129,7 +132,6 @@ export const initRelayEnvironment = ({
     })
   }
 
-  // Otherwise, use the existing environment.
   return relayEnvironment
 }
 
