@@ -10,13 +10,12 @@ import usePrevious from 'src/utils/hooks/usePrevious'
 const withRelay = (ChildComponent) => {
   const WithRelayHOC = (props) => {
     const { initialRecords, ...otherProps } = props
-
     const AuthUser = useAuthUser()
 
     // Set up the Relay environment.
     const [relayEnvironment, setRelayEnvironment] = useState(
       initRelayEnvironment({
-        records: initialRecords,
+        initialRecords,
         getIdToken: AuthUser.getIdToken,
       })
     )

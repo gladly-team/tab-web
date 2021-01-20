@@ -11,11 +11,7 @@ const fetcher = async (query, variables) => {
   return fetchQuery(environment, query, variables)
 }
 
-// TODO:
-// Goals:
-// * The Relay query logic is shared with `withDataSSR`` but
-//   this should work without any SSR and this should not be
-//   dependent on `withDataSSR` at all
+// TODO: add tests:
 // * It should work without any AuthUser (no `withUser` HOC)
 // * It should work with an unauthed AuthUser
 

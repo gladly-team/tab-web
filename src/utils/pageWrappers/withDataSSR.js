@@ -19,14 +19,14 @@ const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
   ctx
 ) => {
   const { AuthUser } = ctx
-  const token = await AuthUser.getIdToken()
+
+  // Create the Relay query. We pass the AuthUser so the caller
+  // can use the user info in the query, as needed.
+  const { query, variables } = await getRelayQuery({ AuthUser })
 
   // Create the Relay environment.
-  // We pass the AuthUser so the caller can use the user info
-  // in the query, as needed.
-  const { query, variables } = await getRelayQuery({ AuthUser })
   const environment = initRelayEnvironment({
-    token,
+    getIdToken: AuthUser.getIdToken,
   })
 
   // Fetch the Relay data.

@@ -12,10 +12,10 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import { AdComponent, fetchAds } from 'tab-ads'
 import {
   withAuthUser,
-  // withAuthUserTokenSSR,
+  withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
-// import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
+import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
@@ -222,12 +222,7 @@ const getRelayQuery = async ({ AuthUser }) => ({
 
 const Index = ({ data: initialData }) => {
   const classes = useStyles()
-
   const { data } = useData({ getRelayQuery, initialData })
-
-  // console.log('initial data from props', initialData)
-  // console.log('data from useData', data)
-
   const { app, user } = data || {}
 
   const showAchievements = showMockAchievements()
@@ -420,14 +415,11 @@ Index.defaultProps = {
   data: null,
 }
 
-// FIXME: refactor / extract to another module
-// Commenting out to work on `useData` without any initial data.
-
-// export const getServerSideProps = withAuthUserTokenSSR({
-//   // whenUnauthed: AuthAction.SHOW_LOADER,
-//   // LoaderComponent: FullPageLoader,
-//   whenUnauthed: AuthAction.RENDER,
-// })(withDataSSR(getRelayQuery)())
+export const getServerSideProps = withAuthUserTokenSSR({
+  // whenUnauthed: AuthAction.SHOW_LOADER,
+  // LoaderComponent: FullPageLoader,
+  whenUnauthed: AuthAction.RENDER,
+})(withDataSSR(getRelayQuery)())
 
 export default flowRight([
   withAuthUser({
