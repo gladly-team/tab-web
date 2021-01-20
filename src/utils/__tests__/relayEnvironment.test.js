@@ -7,12 +7,17 @@ beforeEach(() => {
   const { isServerSide } = require('src/utils/ssr')
   isServerSide.mockReturnValue(true)
 
-  const { Environment, Network, Store } = require('relay-runtime')
+  const { Environment, Network, RecordSource, Store } = require('relay-runtime')
   Network.create.mockImplementation(() => ({
     isMockRelayNetwork: true,
   }))
   Store.mockImplementation(() => ({
     isMockRelayStore: true,
+    publish: jest.fn(),
+  }))
+  RecordSource.mockImplementation((records) => ({
+    ...records,
+    isMockRecordSource: true,
   }))
 
   function MockEnvironment({ network, store }) {
@@ -92,6 +97,28 @@ describe('initRelayEnvironment', () => {
       getIdToken: async () => 'some-fake-token',
     })
     expect(firstEnv).toEqual(secondEnv)
+  })
+
+  it('publishes initialRecords when reusing the environment on the client side', () => {
+    expect.assertions(2)
+    const { RecordSource } = require('relay-runtime')
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const { initRelayEnvironment } = require('src/utils/relayEnvironment')
+    const firstEnv = initRelayEnvironment({
+      getIdToken: async () => 'some-fake-token',
+      initialRecords: { some: 'stuff' },
+    })
+    expect(firstEnv.getStore().publish).toHaveBeenCalledWith(
+      new RecordSource({ some: 'stuff' })
+    )
+    const secondEnv = initRelayEnvironment({
+      getIdToken: async () => 'some-fake-token',
+      initialRecords: { other: 'things' },
+    })
+    expect(secondEnv.getStore().publish).toHaveBeenCalledWith(
+      new RecordSource({ other: 'things' })
+    )
   })
 
   it('returns a new Relay environment when called a second time on the client-side with "recreateNetwork" and "recreateStore" set to true', () => {

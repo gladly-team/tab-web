@@ -5,6 +5,7 @@ const createMockRelayEnvironment = (token = null) => ({
     getSource: jest.fn(() => ({
       toJSON: jest.fn(),
     })),
+    publish: jest.fn(),
   })),
 })
 

@@ -240,11 +240,10 @@ describe('account.js', () => {
     expect(fetch).toHaveBeenCalledWith(apiBetaOptIn, {
       body: '{"optIn":false}',
       credentials: 'include',
-      // eslint-disable-next-line no-undef
-      headers: new Headers({
+      headers: {
         'X-Gladly-Requested-By': 'tab-web-nextjs',
         'Content-Type': 'application/json',
-      }),
+      },
       method: 'POST',
     })
   })
