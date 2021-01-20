@@ -32,12 +32,16 @@ jest.mock('src/utils/featureFlags')
 jest.mock('src/components/Achievement', () => () => (
   <div data-test-id="mock-achievement" />
 ))
+jest.mock('src/utils/pageWrappers/withRelay')
+jest.mock('src/utils/hooks/useData')
 
 const getMockProps = () => ({
-  app: {},
-  user: {
-    tabs: 221,
-    vcCurrent: 78,
+  data: {
+    app: {},
+    user: {
+      tabs: 221,
+      vcCurrent: 78,
+    },
   },
 })
 
