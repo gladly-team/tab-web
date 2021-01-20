@@ -33,7 +33,7 @@ import SearchInput from 'src/components/SearchInput'
 import { accountURL, achievementsURL } from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
 import logger from 'src/utils/logger'
-// import FullPageLoader from 'src/components/FullPageLoader'
+import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
 
 const useStyles = makeStyles((theme) => ({
@@ -203,28 +203,33 @@ if (isClientSide()) {
   loadAds()
 }
 
-const getRelayQuery = async ({ AuthUser }) => ({
-  query: graphql`
-    query pagesIndexQuery($userId: String!) {
-      app {
-        ...MoneyRaisedContainer_app
+const getRelayQuery = async ({ AuthUser }) => {
+  // If the user is not authenticated, don't try to fetch data
+  // for this page. We won't render the page until data exists.
+  if (!AuthUser.id) {
+    return {}
+  }
+  return {
+    query: graphql`
+      query pagesIndexQuery($userId: String!) {
+        app {
+          ...MoneyRaisedContainer_app
+        }
+        user(userId: $userId) {
+          tabs
+          vcCurrent
+        }
       }
-      user(userId: $userId) {
-        tabs
-        vcCurrent
-      }
-    }
-  `,
-  variables: {
-    userId: AuthUser.id,
-  },
-})
+    `,
+    variables: {
+      userId: AuthUser.id,
+    },
+  }
+}
 
 const Index = ({ data: initialData }) => {
   const classes = useStyles()
   const { data } = useData({ getRelayQuery, initialData })
-  const { app, user } = data || {}
-
   const showAchievements = showMockAchievements()
 
   // Determine which ad units we'll show only once, on mount,
@@ -241,6 +246,15 @@ const Index = ({ data: initialData }) => {
       setShouldRenderAds(true)
     }
   }, [])
+
+  // Don't load the page until there is data. Data won't exist
+  // if the user doesn't have auth cookies and thus doesn't fetch
+  // any data server-side, in which case we'll fetch data in
+  // `useData` above.
+  if (!data) {
+    return <FullPageLoader />
+  }
+  const { app, user } = data
 
   // FIXME: use UUID in state
   const tabId = 'abc-123'
@@ -417,18 +431,16 @@ Index.defaultProps = {
 
 export const getServerSideProps = flowRight([
   withAuthUserTokenSSR({
-    // whenUnauthed: AuthAction.SHOW_LOADER,
-    // LoaderComponent: FullPageLoader,
-    whenUnauthed: AuthAction.RENDER,
+    whenUnauthed: AuthAction.SHOW_LOADER,
+    LoaderComponent: FullPageLoader,
   }),
   withDataSSR(getRelayQuery),
 ])()
 
 export default flowRight([
   withAuthUser({
-    // whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
-    // LoaderComponent: FullPageLoader,
-    whenUnauthed: AuthAction.RENDER,
+    whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
+    LoaderComponent: FullPageLoader,
     whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
   }),
   withRelay,

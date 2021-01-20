@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash/lang'
 import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 import { fetchQuery } from 'react-relay'
 
@@ -54,10 +55,15 @@ const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
     // TODO: possibly namespace these so there aren't conflicts
     //   and use a HOC to manage props.
     ...composedProps,
-    data: {
-      ...queryProps,
-    },
-    initialRecords, // This prop is consumed by the `withRelay` HOC
+    // If we don't fetch data, it should be null so that SWR will
+    // fetch data on the client side (in `useData`).
+    data: isEmpty(queryProps)
+      ? null
+      : {
+          ...queryProps,
+        },
+    // The "initialRecords" prop is consumed by the `withRelay` HOC.
+    initialRecords,
   }
 }
 
