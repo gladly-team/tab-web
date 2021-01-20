@@ -261,7 +261,7 @@ const Index = ({ data: initialData }) => {
 
   // Data to provide the onAdDisplayed callback
   const adContext = {
-    user, // TODO: don't assume this will be defined
+    user,
     tabId,
   }
 
