@@ -229,6 +229,13 @@ const getRelayQuery = async ({ AuthUser }) => {
 
 const Index = ({ data: initialData }) => {
   const classes = useStyles()
+
+  // TODO: use smart refetching with SWR's "revalidateOnMount" option.
+  // Determine if we should refetch data on client-side mount.
+  // If we aren't running the service worker, there's no reason to refetch.
+  // const refetchDataOnMount =
+  //   process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true'
+
   const { data } = useData({ getRelayQuery, initialData })
   const showAchievements = showMockAchievements()
 

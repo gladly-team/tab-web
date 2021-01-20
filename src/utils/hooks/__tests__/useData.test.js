@@ -1,11 +1,13 @@
 import { act, renderHook } from '@testing-library/react-hooks'
 import { fetchQuery } from 'react-relay'
 import { useAuthUser } from 'next-firebase-auth'
+import * as useSWR from 'swr'
 import useData from 'src/utils/hooks/useData'
 import { getRelayEnvironment } from 'src/utils/relayEnvironment'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
 // We don't mock SWR but instead the underlying fetcher.
+// jest.mock('swr', () => jest.fn(() => useSWR))
 jest.mock('react-relay')
 jest.mock('next-firebase-auth')
 jest.mock('src/utils/relayEnvironment')
@@ -290,5 +292,51 @@ describe('useData', () => {
       data: undefined,
       error: mockErr,
     })
+  })
+
+  it('passes initialData and additional options to `useSWR`', async () => {
+    expect.assertions(1)
+
+    // Spying on default exports:
+    // https://stackoverflow.com/a/54245672
+    const useSWRSpy = jest.spyOn(useSWR, 'default')
+
+    useAuthUser.mockReturnValue(getUninitializedAuthUser())
+    let relayQueryPromiseResolver
+    const relayQueryPromise = new Promise((resolve) => {
+      relayQueryPromiseResolver = resolve
+    })
+    const mockGetRelayQuery = async () => relayQueryPromise
+
+    const { rerender, waitForNextUpdate } = renderHook(() =>
+      useData({
+        getRelayQuery: mockGetRelayQuery,
+        // Setting some additional SWR options.
+        initialData: { some: 'initial data' },
+        errorRetryCount: 2,
+        revalidateOnMount: true,
+      })
+    )
+    await act(async () => {
+      useAuthUser.mockReturnValue(getMockAuthUser())
+      relayQueryPromiseResolver({
+        query: `some query here`,
+        variables: {
+          some: 'thing',
+        },
+      })
+      rerender()
+      await waitForNextUpdate()
+    })
+
+    expect(useSWRSpy).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.any(Function),
+      {
+        initialData: { some: 'initial data' },
+        errorRetryCount: 2,
+        revalidateOnMount: true,
+      }
+    )
   })
 })
