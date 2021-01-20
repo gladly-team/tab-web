@@ -247,10 +247,6 @@ const Index = ({ data: initialData }) => {
     }
   }, [])
 
-  // FIXME: bug when hard refreshing account page and closing
-  // to navigate to this page. Data exists, but not all of it.
-  // This might be an error with Relay store management?
-
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
   // any data server-side, in which case we'll fetch data in
