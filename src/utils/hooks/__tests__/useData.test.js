@@ -95,7 +95,6 @@ describe('useData', () => {
       useData({ getRelayQuery: mockGetRelayQuery })
     )
 
-    // Update logic that affects the `useData` state.
     await act(async () => {
       relayQueryPromiseResolver({
         query: `some query here`,
@@ -104,8 +103,6 @@ describe('useData', () => {
         },
       })
       rerender()
-
-      // https://github.com/testing-library/react-hooks-testing-library/issues/14#issuecomment-480225170
       await waitForNextUpdate()
     })
     expect(result.current).toEqual({
@@ -130,13 +127,10 @@ describe('useData', () => {
       useData({ getRelayQuery: mockGetRelayQuery })
     )
 
-    // Update logic that affects the `useData` state.
     await act(async () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
       relayQueryPromiseResolver({}) // no query provideed
       rerender()
-
-      // https://github.com/testing-library/react-hooks-testing-library/issues/14#issuecomment-480225170
       await waitForNextUpdate()
     })
     expect(result.current).toEqual({
@@ -148,7 +142,6 @@ describe('useData', () => {
   it('provides an authed AuthUser to `getRelayQuery`', async () => {
     expect.assertions(1)
 
-    // Defer any state-affecting logic.
     useAuthUser.mockReturnValue(getUninitializedAuthUser())
     let relayQueryPromiseResolver
     const relayQueryPromise = new Promise((resolve) => {
@@ -161,8 +154,6 @@ describe('useData', () => {
     )
 
     const mockAuthUser = getMockAuthUser()
-
-    // Update logic that affects the `useData` state.
     await act(async () => {
       useAuthUser.mockReturnValue(mockAuthUser)
       relayQueryPromiseResolver({
@@ -172,8 +163,6 @@ describe('useData', () => {
         },
       })
       rerender()
-
-      // https://github.com/testing-library/react-hooks-testing-library/issues/14#issuecomment-480225170
       await waitForNextUpdate()
     })
     expect(mockGetRelayQuery).toHaveBeenCalledWith({ AuthUser: mockAuthUser })
@@ -182,7 +171,6 @@ describe('useData', () => {
   it('provides an unauthed (but initialized) AuthUser to `getRelayQuery`', async () => {
     expect.assertions(1)
 
-    // Defer any state-affecting logic.
     useAuthUser.mockReturnValue(getUninitializedAuthUser())
     let relayQueryPromiseResolver
     const relayQueryPromise = new Promise((resolve) => {
@@ -200,8 +188,6 @@ describe('useData', () => {
       email: null,
       clientInitialized: true,
     }
-
-    // Update logic that affects the `useData` state.
     await act(async () => {
       useAuthUser.mockReturnValue(mockAuthUser)
       relayQueryPromiseResolver({
@@ -211,10 +197,61 @@ describe('useData', () => {
         },
       })
       rerender()
-
-      // https://github.com/testing-library/react-hooks-testing-library/issues/14#issuecomment-480225170
       await waitForNextUpdate()
     })
     expect(mockGetRelayQuery).toHaveBeenCalledWith({ AuthUser: mockAuthUser })
+  })
+
+  it('returns an error if fetchQuery throws', async () => {
+    expect.assertions(1)
+
+    const mockErr = new Error('Problem fetching data.')
+    fetchQuery.mockImplementation(async () => {
+      throw mockErr
+    })
+
+    useAuthUser.mockReturnValue(getUninitializedAuthUser())
+    let relayQueryPromiseResolver
+    const relayQueryPromise = new Promise((resolve) => {
+      relayQueryPromiseResolver = resolve
+    })
+    const mockGetRelayQuery = async () => relayQueryPromise
+
+    const { result, rerender, waitForNextUpdate } = renderHook(() =>
+      useData({ getRelayQuery: mockGetRelayQuery })
+    )
+
+    await act(async () => {
+      useAuthUser.mockReturnValue(getMockAuthUser())
+      relayQueryPromiseResolver({
+        query: `some query here`,
+        variables: {
+          some: 'thing',
+        },
+      })
+      rerender()
+      await waitForNextUpdate()
+    })
+    expect(result.current).toEqual({
+      data: undefined,
+      error: mockErr,
+    })
+  })
+
+  it('throws an error if not wrapped in the `withAuthUser` HOC', async () => {
+    expect.assertions(1)
+    useAuthUser.mockReturnValue(undefined)
+    const mockGetRelayQuery = async () => ({
+      query: 'some query here',
+      variables: {},
+    })
+    const { result } = renderHook(() =>
+      useData({ getRelayQuery: mockGetRelayQuery })
+    )
+    expect(result.error).toEqual(
+      new Error(
+        'The `useData` HOC should be wrapped in the `withAuthUser` HOC.'
+      )
+    )
   })
 })

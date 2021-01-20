@@ -11,14 +11,15 @@ const fetcher = async (query, variables) => {
   return fetchQuery(environment, query, variables)
 }
 
-// TODO: add tests:
-// * It should work without any AuthUser (no `withUser` HOC)
-// * It should work with an unauthed AuthUser
-
 const useData = ({ getRelayQuery, initialData }) => {
   // Before fetching data, wait for the AuthUser to initialize
   // if it's not not already available.
   const AuthUser = useAuthUser()
+  if (!AuthUser) {
+    throw new Error(
+      'The `useData` HOC should be wrapped in the `withAuthUser` HOC.'
+    )
+  }
   const [isAuthReady, setIsAuthReady] = useState(false)
   useEffect(() => {
     if (AuthUser.id || AuthUser.clientInitialized) {
