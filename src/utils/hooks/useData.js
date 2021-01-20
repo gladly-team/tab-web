@@ -42,7 +42,8 @@ const useData = ({ getRelayQuery, initialData }) => {
 
   const readyToFetch = !!relayQuery
 
-  // TODO: handle smart refetching.
+  // TODO: handle smart refetching. Pass ...rest of props directly
+  // to SWR.
   // Can use SWR's "revalidateOnMount" option:
   //   https://github.com/vercel/swr#options
   // Determine if we should refetch data on client-side mount.
