@@ -415,11 +415,14 @@ Index.defaultProps = {
   data: null,
 }
 
-export const getServerSideProps = withAuthUserTokenSSR({
-  // whenUnauthed: AuthAction.SHOW_LOADER,
-  // LoaderComponent: FullPageLoader,
-  whenUnauthed: AuthAction.RENDER,
-})(withDataSSR(getRelayQuery)())
+export const getServerSideProps = flowRight([
+  withAuthUserTokenSSR({
+    // whenUnauthed: AuthAction.SHOW_LOADER,
+    // LoaderComponent: FullPageLoader,
+    whenUnauthed: AuthAction.RENDER,
+  }),
+  withDataSSR(getRelayQuery),
+])()
 
 export default flowRight([
   withAuthUser({
