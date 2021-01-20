@@ -74,7 +74,7 @@ const createFetchQuery = ({ getIdToken }) => {
 const createNewNetwork = (getIdToken) =>
   Network.create(createFetchQuery({ getIdToken }))
 
-const createNewStore = (initialRecords) =>
+const createNewStore = (initialRecords = {}) =>
   new Store(new RecordSource(initialRecords))
 
 const createEnvironment = ({ network, store }) =>
@@ -102,7 +102,7 @@ const createEnvironment = ({ network, store }) =>
  * @return {Object} A Relay environment
  */
 export const initRelayEnvironment = ({
-  initialRecords = {},
+  initialRecords,
   getIdToken = async () => null,
   recreateNetwork = false,
   recreateStore = false,
