@@ -57,7 +57,7 @@ const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
     data: {
       ...queryProps,
     },
-    initialRecords,
+    initialRecords, // This prop is consumed by the `withRelay` HOC
   }
 }
 
