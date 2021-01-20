@@ -25,6 +25,7 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.clearAllMocks()
+  jest.resetModules()
 })
 
 describe('withRelay', () => {
