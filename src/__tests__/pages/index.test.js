@@ -3,18 +3,10 @@ import { shallow } from 'enzyme'
 import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
-import {
-  withAuthUser,
-  withAuthUserTokenSSR,
-  AuthAction,
-} from 'next-firebase-auth'
-import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
-import withRelay from 'src/utils/pageWrappers/withRelay'
 import { accountURL } from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
 import Achievement from 'src/components/Achievement'
 import FullPageLoader from 'src/components/FullPageLoader'
-import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import useData from 'src/utils/hooks/useData'
 
 jest.mock('tab-ads')
@@ -51,6 +43,10 @@ beforeEach(() => {
   useData.mockReturnValue({ data: getMockProps().data })
 })
 
+afterEach(() => {
+  jest.clearAllMocks()
+})
+
 describe('index.js', () => {
   it('renders without error', () => {
     expect.assertions(1)
@@ -79,6 +75,20 @@ describe('index.js', () => {
     const wrapper = shallow(<IndexPage {...mockProps} />)
     expect(wrapper.find(FullPageLoader).exists()).toBe(false)
     expect(wrapper.find('[data-test-id="new-tab-page"]').exists()).toBe(true)
+  })
+
+  it('passes the expected initial data to `useData`', () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = {
+      ...getMockProps(),
+      data: { ...getMockProps().data, some: 'stuff' },
+    }
+    shallow(<IndexPage {...mockProps} />)
+    const useDataArg = useData.mock.calls[0][0]
+    expect(useDataArg).toMatchObject({
+      initialData: mockProps.data,
+    })
   })
 
   it('includes a settings icon link to the account page', () => {
