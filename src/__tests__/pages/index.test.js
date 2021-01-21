@@ -3,23 +3,16 @@ import { shallow } from 'enzyme'
 import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
+import { withAuthUserTokenSSR, AuthAction } from 'next-firebase-auth'
+import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import { accountURL } from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
 import Achievement from 'src/components/Achievement'
-// import { AdComponent, fetchAds } from 'tab-ads'
-// import { getHostname, getCurrentURL } from 'src/utils/navigation'
-// import {
-//   getAdUnits,
-//   areAdsEnabled,
-//   showMockAds,
-//   isInEuropeanUnion,
-// } from 'src/utils/adHelpers'
-// import { isClientSide } from 'src/utils/ssr'
-// import Logo from 'src/components/Logo'
-// import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
-// import SearchInput from 'src/components/SearchInput'
+import FullPageLoader from 'src/components/FullPageLoader'
+import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
 jest.mock('tab-ads')
+jest.mock('next-firebase-auth')
 jest.mock('@material-ui/icons/Settings')
 jest.mock('src/components/Link')
 jest.mock('src/utils/navigation')
@@ -34,6 +27,8 @@ jest.mock('src/components/Achievement', () => () => (
 ))
 jest.mock('src/utils/pageWrappers/withRelay')
 jest.mock('src/utils/hooks/useData')
+jest.mock('src/components/FullPageLoader')
+jest.mock('src/utils/pageWrappers/withDataSSR')
 
 const getMockProps = () => ({
   data: {
@@ -112,4 +107,46 @@ describe('index.js', () => {
   })
 })
 
-// TODO: test getServerSideProps
+describe('index.js: getServerSideProps', () => {
+  it('calls `withAuthUserTokenSSR` to and shows a loader when unauthed', async () => {
+    expect.assertions(1)
+    const { getServerSideProps } = require('src/pages/index')
+    await getServerSideProps()
+    expect(withAuthUserTokenSSR).toHaveBeenCalledWith({
+      whenUnauthed: AuthAction.SHOW_LOADER,
+      LoaderComponent: FullPageLoader,
+    })
+  })
+
+  it('calls `withDataSSR` with a function', async () => {
+    expect.assertions(1)
+    const { getServerSideProps } = require('src/pages/index')
+    await getServerSideProps()
+    expect(withDataSSR).toHaveBeenCalledWith(expect.any(Function))
+  })
+
+  it('returns query info from  the "getRelayQuery" passed to `withDataSSR` when we call it with an AuthUser', async () => {
+    expect.assertions(1)
+    const { getServerSideProps } = require('src/pages/index')
+    getServerSideProps()
+    const getRelayQueryFunc = withDataSSR.mock.calls[0][0]
+    const response = await getRelayQueryFunc({ AuthUser: getMockAuthUser() })
+    expect(response).toEqual({
+      query: expect.any(Object),
+      variables: {
+        userId: 'mock-user-id',
+      },
+    })
+  })
+
+  it('returns an empty object from the "getRelayQuery" passed to `withDataSSR` when we call it with an *unauthed* AuthUser', async () => {
+    expect.assertions(1)
+    const { getServerSideProps } = require('src/pages/index')
+    getServerSideProps()
+    const getRelayQueryFunc = withDataSSR.mock.calls[0][0]
+    const response = await getRelayQueryFunc({
+      AuthUser: { ...getMockAuthUser(), id: null, email: null },
+    })
+    expect(response).toEqual({})
+  })
+})
