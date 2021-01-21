@@ -301,7 +301,7 @@ const Index = ({ data: initialData }) => {
   }
 
   return (
-    <div className={classes.pageContainer}>
+    <div className={classes.pageContainer} data-test-id="new-tab-page">
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
           <div className={classes.userMenuContainer}>

@@ -15,6 +15,7 @@ import { showMockAchievements } from 'src/utils/featureFlags'
 import Achievement from 'src/components/Achievement'
 import FullPageLoader from 'src/components/FullPageLoader'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
+import useData from 'src/utils/hooks/useData'
 
 jest.mock('tab-ads')
 jest.mock('next-firebase-auth')
@@ -47,6 +48,7 @@ const getMockProps = () => ({
 
 beforeEach(() => {
   showMockAchievements.mockReturnValue(false)
+  useData.mockReturnValue({ data: getMockProps().data })
 })
 
 describe('index.js', () => {
@@ -57,6 +59,26 @@ describe('index.js', () => {
     expect(() => {
       shallow(<IndexPage {...mockProps} />)
     }).not.toThrow()
+  })
+
+  it('renders a loading component (instead of the new tab page) if no initial data is provided', () => {
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = {} // no initial data
+    useData.mockReturnValue({ data: undefined }) // no fetched data yet
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(FullPageLoader).exists()).toBe(true)
+    expect(wrapper.find('[data-test-id="new-tab-page"]').exists()).toBe(false)
+  })
+
+  it('renders the new tab page (and stops showing a loader) after we fetch data', () => {
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = {} // no initial data
+    useData.mockReturnValue({ data: getMockProps().data })
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(FullPageLoader).exists()).toBe(false)
+    expect(wrapper.find('[data-test-id="new-tab-page"]').exists()).toBe(true)
   })
 
   it('includes a settings icon link to the account page', () => {
