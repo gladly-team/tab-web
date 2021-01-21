@@ -30,18 +30,22 @@ const withRelay = (ChildComponent) => {
           : null
         const oldId = previousAuthUser ? previousAuthUser.id : null
 
-        // If the AuthUser's ID changes, recreate the Relay store
-        // and network. Don't recreate the store if the previous user
-        // ID wasn't set because we were likely just waiting for the
-        // auth client to initialize.
+        // If the AuthUser's ID changes, recreate the Relay store.
+        // Don't recreate the store if the previous user ID wasn't
+        // set, because we were likely just waiting for the auth
+        // client to initialize.
+        const shouldRecreateNetwork =
+          AuthUser.id !== oldId || token !== oldToken
+
+        // If the AuthUser's token or ID change, recreate the
+        // Relay network.
         const shouldRecreateStore =
           !oldId && AuthUser.id ? false : AuthUser.id !== oldId
+
         setRelayEnvironment(
           initRelayEnvironment({
             getIdToken: AuthUser.getIdToken,
-            // If the AuthUser's token or ID change, recreate the
-            // Relay network.
-            recreateNetwork: AuthUser.id !== oldId || token !== oldToken,
+            recreateNetwork: shouldRecreateNetwork,
             recreateStore: shouldRecreateStore,
           })
         )
