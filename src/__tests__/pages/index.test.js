@@ -3,8 +3,13 @@ import { shallow } from 'enzyme'
 import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
-import { withAuthUserTokenSSR, AuthAction } from 'next-firebase-auth'
+import {
+  withAuthUser,
+  withAuthUserTokenSSR,
+  AuthAction,
+} from 'next-firebase-auth'
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
+import withRelay from 'src/utils/pageWrappers/withRelay'
 import { accountURL } from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
 import Achievement from 'src/components/Achievement'
@@ -107,8 +112,30 @@ describe('index.js', () => {
   })
 })
 
+describe('index.js: HOC', () => {
+  it('calls `withAuthUser` and shows a loader then redirects if the user is unauthed', async () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    shallow(<IndexPage {...mockProps} />)
+    expect(withAuthUser).toHaveBeenCalledWith({
+      whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
+      LoaderComponent: FullPageLoader,
+      whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+    })
+  })
+
+  it('calls `withRelay`', async () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    shallow(<IndexPage {...mockProps} />)
+    expect(withRelay).toHaveBeenCalled()
+  })
+})
+
 describe('index.js: getServerSideProps', () => {
-  it('calls `withAuthUserTokenSSR` to and shows a loader when unauthed', async () => {
+  it('calls `withAuthUserTokenSSR` shows a loader when unauthed', async () => {
     expect.assertions(1)
     const { getServerSideProps } = require('src/pages/index')
     await getServerSideProps()
