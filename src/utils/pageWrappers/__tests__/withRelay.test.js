@@ -235,48 +235,48 @@ describe('withRelay', () => {
     expect(env1.getStore()).toEqual(env2.getStore())
   })
 
-  /// ////
+  it('passes "initialRecords" to the Relay store', async () => {
+    expect.assertions(1)
+    const withRelay = require('src/utils/pageWrappers/withRelay').default
+    const { ReactRelayContext } = require('react-relay')
+    const MockComponent = () => <div>Hello!</div>
+    const MockCompWithRelay = withRelay(MockComponent)
 
-  //
-  //   it('passes "initialRecords" to the Relay store', async () => {
-  //     expect.assertions(1)
-  //
-  //     let relayEnv
-  //     const MockComponent = () => {
-  //       ;({ environment: relayEnv } = useContext(ReactRelayContext))
-  //       return <div>Hello!</div>
-  //     }
-  //     const MockCompWithRelay = withRelay(MockComponent)
-  //
-  //     // The initial records might be provided via `withDataSSR`,
-  //     // for example.
-  //     const mockInitialRecords = {
-  //       'client:root': {
-  //         __id: 'client:root',
-  //         __typename: '__Root',
-  //         app: { __ref: 'SomeFakeID' },
-  //         'user(userId:"fakeUserId")': { __ref: 'AnotherFakeID' },
-  //       },
-  //       SomeFakeID: {
-  //         __id: 'SomeFakeID',
-  //         __typename: 'App',
-  //         moneyRaised: 1066403.92,
-  //         dollarsPerDayRate: 700,
-  //         id: 'SomeFakeID',
-  //       },
-  //       AnotherFakeID: {
-  //         __id: 'AnotherFakeID',
-  //         __typename: 'User',
-  //         tabs: 2237,
-  //         vcCurrent: 538,
-  //         id: 'AnotherFakeID',
-  //       },
-  //     }
-  //     await actions(async () => {
-  //       mount(<MockCompWithRelay initialRecords={mockInitialRecords} />)
-  //       await flushAllPromises()
-  //     })
-  //     const storeRecords = relayEnv.getStore().getSource()
-  //     expect(storeRecords).toMatchObject(new RecordSource(mockInitialRecords))
-  //   })
+    // The initial records might be provided via `withDataSSR`,
+    // for example.
+    const mockInitialRecords = {
+      'client:root': {
+        __id: 'client:root',
+        __typename: '__Root',
+        app: { __ref: 'SomeFakeID' },
+        'user(userId:"fakeUserId")': { __ref: 'AnotherFakeID' },
+      },
+      SomeFakeID: {
+        __id: 'SomeFakeID',
+        __typename: 'App',
+        moneyRaised: 1066403.92,
+        dollarsPerDayRate: 700,
+        id: 'SomeFakeID',
+      },
+      AnotherFakeID: {
+        __id: 'AnotherFakeID',
+        __typename: 'User',
+        tabs: 2237,
+        vcCurrent: 538,
+        id: 'AnotherFakeID',
+      },
+    }
+
+    const wrapper = mount(
+      <MockCompWithRelay initialRecords={mockInitialRecords} />
+    )
+    await actions(wrapper)
+    const relayEnv = wrapper.find(ReactRelayContext.Provider).prop('value')
+      .environment
+
+    // Just a mock API from relayEnvironment.js.
+    // eslint-disable-next-line no-underscore-dangle
+    const storeRecords = relayEnv.getStore()._mockInitialRecords
+    expect(storeRecords).toEqual(mockInitialRecords)
+  })
 })
