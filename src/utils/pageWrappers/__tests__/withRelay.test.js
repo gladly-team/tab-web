@@ -24,6 +24,17 @@ afterEach(() => {
   jest.resetModules()
 })
 
+// We originally approached this by trying to test on an
+// unmocked Relay. However, the Relay state would leak
+// between tests, even when resetting modules. See:
+//   https://github.com/gladly-team/tab-web/blob/38a7a8c98da18fd10d9e4c39432edcbd2276caa9/src/utils/pageWrappers/__tests__/withRelay.test.js
+// It's possible `jest.isolateModules` would solve this problem,
+// but it doesn't yet support async functions:
+//   https://jestjs.io/docs/en/jest-object#jestisolatemodulesfn
+//   https://github.com/facebook/jest/issues/10428
+// Instead, we'll simply mock the Relay environment-- it's
+// simpler but also tests internal implementation.
+
 describe('withRelay', () => {
   it('provides the Relay environment via context', async () => {
     expect.assertions(1)
