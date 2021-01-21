@@ -205,30 +205,35 @@ describe('withRelay', () => {
     expect(env1.getStore()).not.toEqual(env2.getStore())
   })
 
-  // it("does *not* create a new Relay store when the AuthUser's ID changes from null to non-null", async () => {
-  //   expect.assertions(1)
-  //   const withRelay = require('src/utils/pageWrappers/withRelay').default
-  //   const { useAuthUser } = require('next-firebase-auth')
-  //   const { ReactRelayContext } = require('react-relay')
-  //   const MockComponent = () => <div>Hello!</div>
-  //   const MockCompWithRelay = withRelay(MockComponent)
-  //   const wrapper = mount(<MockCompWithRelay />)
-  //   await actions(wrapper, () => {
-  //     useAuthUser.mockReturnValue({
-  //       ...getMockAuthUser(),
-  //       id: null,
-  //       email: null,
-  //     })
-  //   })
-  //   const env1 = wrapper.find(ReactRelayContext.Provider).prop('value')
-  //     .environment
-  //   await actions(wrapper, () => {
-  //     useAuthUser.mockReturnValue(getMockAuthUser())
-  //   })
-  //   const env2 = wrapper.find(ReactRelayContext.Provider).prop('value')
-  //     .environment
-  //   expect(env1.getStore()).toEqual(env2.getStore())
-  // })
+  it("does *not* create a new Relay store when the AuthUser's ID changes from null to non-null", async () => {
+    expect.assertions(1)
+    const withRelay = require('src/utils/pageWrappers/withRelay').default
+    const { useAuthUser } = require('next-firebase-auth')
+    const { ReactRelayContext } = require('react-relay')
+    const MockComponent = () => <div>Hello!</div>
+    const MockCompWithRelay = withRelay(MockComponent)
+    useAuthUser.mockReturnValue({
+      ...getMockAuthUser(),
+      id: null,
+      email: null,
+    })
+    const wrapper = mount(<MockCompWithRelay />)
+    await actions(wrapper, () => {
+      useAuthUser.mockReturnValue({
+        ...getMockAuthUser(),
+        id: null,
+        email: null,
+      })
+    })
+    const env1 = wrapper.find(ReactRelayContext.Provider).prop('value')
+      .environment
+    await actions(wrapper, () => {
+      useAuthUser.mockReturnValue(getMockAuthUser())
+    })
+    const env2 = wrapper.find(ReactRelayContext.Provider).prop('value')
+      .environment
+    expect(env1.getStore()).toEqual(env2.getStore())
+  })
 
   /// ////
 

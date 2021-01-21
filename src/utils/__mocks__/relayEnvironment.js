@@ -51,7 +51,7 @@ const createMockInitRelayEnv = () => {
         : createMockNetwork(getIdToken)
     mockRelayStore =
       mockRelayStore && !recreateStore
-        ? mockRelayNetwork
+        ? mockRelayStore
         : createMockStore(initialRecords)
     mockRelayEnv = createMockEnvironment({
       network: mockRelayNetwork,
