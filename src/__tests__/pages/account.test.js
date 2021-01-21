@@ -323,11 +323,3 @@ describe('account.js', () => {
     expect(setWindowLocation).toHaveBeenCalledWith(dashboardURL)
   })
 })
-
-describe('account.js: getServerSideProps', () => {
-  it('does not define getServerSideProps', () => {
-    expect.assertions(1)
-    const { getServerSideProps } = require('src/pages/account.js')
-    expect(getServerSideProps).toBeUndefined()
-  })
-})
