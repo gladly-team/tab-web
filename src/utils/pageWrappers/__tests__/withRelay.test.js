@@ -1,14 +1,6 @@
 import React, { useContext } from 'react'
 import { mount } from 'enzyme'
 import { act } from 'react-dom/test-utils'
-import { useAuthUser } from 'next-firebase-auth'
-import withRelay from 'src/utils/pageWrappers/withRelay'
-import { ReactRelayContext } from 'react-relay'
-import { RecordSource } from 'relay-runtime'
-import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
-import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
-import usePrevious from 'src/utils/hooks/usePrevious'
-import { isServerSide } from 'src/utils/ssr'
 
 // Use the real react-relay.
 jest.unmock('react-relay')
@@ -19,6 +11,10 @@ jest.mock('next-firebase-auth')
 jest.mock('src/utils/ssr')
 
 beforeEach(() => {
+  const { useAuthUser } = require('next-firebase-auth')
+  const { isServerSide } = require('src/utils/ssr')
+  const getMockAuthUser = require('src/utils/testHelpers/getMockAuthUser')
+    .default
   useAuthUser.mockReturnValue(getMockAuthUser())
   isServerSide.mockReturnValue(false)
 })
@@ -31,6 +27,10 @@ afterEach(() => {
 describe('withRelay', () => {
   it('provides the Relay environment via context', async () => {
     expect.assertions(1)
+    const withRelay = require('src/utils/pageWrappers/withRelay').default
+    const { ReactRelayContext } = require('react-relay')
+    const flushAllPromises = require('src/utils/testHelpers/flushAllPromises')
+      .default
 
     let relayEnv
     const MockComponent = () => {
@@ -50,6 +50,14 @@ describe('withRelay', () => {
 
   it('uses the same Relay environment when rerendered with no changes', async () => {
     expect.assertions(1)
+    const withRelay = require('src/utils/pageWrappers/withRelay').default
+    const usePrevious = require('src/utils/hooks/usePrevious').default
+    const { useAuthUser } = require('next-firebase-auth')
+    const { ReactRelayContext } = require('react-relay')
+    const getMockAuthUser = require('src/utils/testHelpers/getMockAuthUser')
+      .default
+    const flushAllPromises = require('src/utils/testHelpers/flushAllPromises')
+      .default
 
     let relayEnv
     let previousRelayEnv
@@ -69,8 +77,46 @@ describe('withRelay', () => {
     expect(relayEnv).toEqual(previousRelayEnv)
   })
 
+  it('[server-side] create a new Relay environment even when rerendered with no changes', async () => {
+    expect.assertions(1)
+    const withRelay = require('src/utils/pageWrappers/withRelay').default
+    const usePrevious = require('src/utils/hooks/usePrevious').default
+    const { useAuthUser } = require('next-firebase-auth')
+    const { ReactRelayContext } = require('react-relay')
+    const getMockAuthUser = require('src/utils/testHelpers/getMockAuthUser')
+      .default
+    const flushAllPromises = require('src/utils/testHelpers/flushAllPromises')
+      .default
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(true) // server-side!
+    let relayEnv
+    let previousRelayEnv
+    const MockComponent = () => {
+      ;({ environment: relayEnv } = useContext(ReactRelayContext))
+      previousRelayEnv = usePrevious(relayEnv)
+      return <div>Hello!</div>
+    }
+    const MockCompWithRelay = withRelay(MockComponent)
+    await act(async () => {
+      useAuthUser.mockReturnValue(getMockAuthUser())
+      const wrapper = mount(<MockCompWithRelay />)
+      await flushAllPromises()
+      wrapper.setProps({}) // force re-render
+      await flushAllPromises()
+    })
+    expect(relayEnv).not.toEqual(previousRelayEnv)
+  })
+
   it("creates a new Relay environment when the AuthUser's ID changes from non-null to null", async () => {
     expect.assertions(1)
+    const withRelay = require('src/utils/pageWrappers/withRelay').default
+    const usePrevious = require('src/utils/hooks/usePrevious').default
+    const { useAuthUser } = require('next-firebase-auth')
+    const { ReactRelayContext } = require('react-relay')
+    const getMockAuthUser = require('src/utils/testHelpers/getMockAuthUser')
+      .default
+    const flushAllPromises = require('src/utils/testHelpers/flushAllPromises')
+      .default
 
     let relayEnv
     let previousRelayEnv
@@ -98,6 +144,14 @@ describe('withRelay', () => {
 
   it('does *not* create a new Relay store when rerendered with no changes', async () => {
     expect.assertions(1)
+    const withRelay = require('src/utils/pageWrappers/withRelay').default
+    const usePrevious = require('src/utils/hooks/usePrevious').default
+    const { useAuthUser } = require('next-firebase-auth')
+    const { ReactRelayContext } = require('react-relay')
+    const getMockAuthUser = require('src/utils/testHelpers/getMockAuthUser')
+      .default
+    const flushAllPromises = require('src/utils/testHelpers/flushAllPromises')
+      .default
 
     let relayEnv
     let previousRelayEnv
@@ -119,6 +173,14 @@ describe('withRelay', () => {
 
   it("creates a new Relay store when the AuthUser's ID changes from non-null to null", async () => {
     expect.assertions(1)
+    const withRelay = require('src/utils/pageWrappers/withRelay').default
+    const usePrevious = require('src/utils/hooks/usePrevious').default
+    const { useAuthUser } = require('next-firebase-auth')
+    const { ReactRelayContext } = require('react-relay')
+    const getMockAuthUser = require('src/utils/testHelpers/getMockAuthUser')
+      .default
+    const flushAllPromises = require('src/utils/testHelpers/flushAllPromises')
+      .default
 
     let relayEnv
     let previousRelayEnv
@@ -146,6 +208,14 @@ describe('withRelay', () => {
 
   it("does *not* create a new Relay store when the AuthUser's ID changes from null to non-null", async () => {
     expect.assertions(1)
+    const withRelay = require('src/utils/pageWrappers/withRelay').default
+    const usePrevious = require('src/utils/hooks/usePrevious').default
+    const { useAuthUser } = require('next-firebase-auth')
+    const { ReactRelayContext } = require('react-relay')
+    const getMockAuthUser = require('src/utils/testHelpers/getMockAuthUser')
+      .default
+    const flushAllPromises = require('src/utils/testHelpers/flushAllPromises')
+      .default
 
     let relayEnv
     let previousRelayEnv
@@ -173,6 +243,11 @@ describe('withRelay', () => {
 
   it('passes "initialRecords" to the Relay store', async () => {
     expect.assertions(1)
+    const withRelay = require('src/utils/pageWrappers/withRelay').default
+    const { ReactRelayContext } = require('react-relay')
+    const flushAllPromises = require('src/utils/testHelpers/flushAllPromises')
+      .default
+    const { RecordSource } = require('relay-runtime')
 
     let relayEnv
     const MockComponent = () => {
