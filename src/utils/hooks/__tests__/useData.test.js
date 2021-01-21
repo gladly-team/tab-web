@@ -3,7 +3,10 @@ import { fetchQuery } from 'react-relay'
 import { useAuthUser } from 'next-firebase-auth'
 import * as useSWR from 'swr'
 import useData from 'src/utils/hooks/useData'
-import { getRelayEnvironment } from 'src/utils/relayEnvironment'
+import {
+  initRelayEnvironment,
+  getRelayEnvironment,
+} from 'src/utils/relayEnvironment'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
 // We don't mock SWR but instead the underlying fetcher.
@@ -20,6 +23,7 @@ const getUninitializedAuthUser = () => ({
 })
 
 beforeEach(() => {
+  initRelayEnvironment()
   fetchQuery.mockImplementation(async (environment, query) => {
     if (!environment) {
       throw new Error('fetchQuery needs a Relay environment.')

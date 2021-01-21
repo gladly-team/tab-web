@@ -39,7 +39,7 @@ const createMockInitRelayEnv = () => {
     getIdToken = async () => null,
     recreateNetwork = false,
     recreateStore = false,
-  }) => {
+  } = {}) => {
     const shouldReuseEnv =
       !isServerSide() && mockRelayEnv && !recreateNetwork && !recreateStore
     if (shouldReuseEnv) {
