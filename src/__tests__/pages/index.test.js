@@ -8,6 +8,7 @@ import { showMockAchievements } from 'src/utils/featureFlags'
 import Achievement from 'src/components/Achievement'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
+import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
 jest.mock('tab-ads')
 jest.mock('next-firebase-auth')
@@ -88,6 +89,24 @@ describe('index.js', () => {
     const useDataArg = useData.mock.calls[0][0]
     expect(useDataArg).toMatchObject({
       initialData: mockProps.data,
+    })
+  })
+
+  it('passes the expected getRelayQuery function to `useData`', async () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = {
+      ...getMockProps(),
+      data: { ...getMockProps().data, some: 'stuff' },
+    }
+    shallow(<IndexPage {...mockProps} />)
+    const useDataArg = useData.mock.calls[0][0]
+    const queryInfo = await useDataArg.getRelayQuery({
+      AuthUser: getMockAuthUser(),
+    })
+    expect(queryInfo).toMatchObject({
+      query: expect.any(Object),
+      variables: expect.any(Object),
     })
   })
 
