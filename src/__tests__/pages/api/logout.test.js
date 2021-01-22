@@ -23,3 +23,14 @@ describe('API: logout', () => {
     })
   })
 })
+
+describe('API: logout middleware', () => {
+  it('does not use `customHeaderRequired` [but we should - need to fix]', async () => {
+    expect.assertions(1)
+    const customHeaderRequired = require('src/utils/middleware/customHeaderRequired')
+      .default
+    const logoutAPI = require('src/pages/api/logout').default
+    await logoutAPI(getMockReq(), getMockRes())
+    expect(customHeaderRequired).not.toHaveBeenCalled()
+  })
+})
