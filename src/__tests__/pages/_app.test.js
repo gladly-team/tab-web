@@ -92,7 +92,8 @@ describe('_app.js', () => {
     expect(wrapper.find(MockComponent).prop('err')).toEqual(mockErr)
   })
 
-  // FIXME: use next-firebase-auth
+  // FIXME: move Sentry into its own HOC.
+
   // eslint-disable-next-line jest/no-commented-out-tests
   // it('calls Sentry.setUser when the AuthUser has an ID', () => {
   //   expect.assertions(1)
@@ -104,7 +105,6 @@ describe('_app.js', () => {
   //   })
   // })
 
-  // FIXME: use next-firebase-auth
   // eslint-disable-next-line jest/no-commented-out-tests
   // it('does not call Sentry.setUser when the AuthUser is null', () => {
   //   expect.assertions(1)

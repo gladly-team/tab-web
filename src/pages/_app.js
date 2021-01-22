@@ -69,7 +69,8 @@ const MyApp = (props) => {
     }
   }, [])
 
-  // FIXME: use next-firebase-auth
+  // FIXME: move Sentry into its own HOC. Call `initSentry` from
+  //   API functions, too.
   // Set user context for Sentry error logging.
   // const { id: userId, email } = AuthUser || {}
   // useEffect(() => {
