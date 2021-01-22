@@ -5,7 +5,8 @@ import initSentry from 'src/utils/initSentry'
 
 initSentry()
 
-const shouldLogToSentry = () => process.env.NODE_ENV === 'production'
+const shouldLogToSentry = () =>
+  process.env.NEXT_PUBLIC_ENABLE_SENTRY_LOGGING === 'true'
 
 const logMessageToSentry = (level, ...args) => {
   const msg = args.join(', ')

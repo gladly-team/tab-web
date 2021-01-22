@@ -5,7 +5,7 @@ jest.mock('@sentry/node')
 jest.mock('src/utils/initSentry')
 
 beforeEach(() => {
-  process.env.NODE_ENV = 'production'
+  process.env.NEXT_PUBLIC_ENABLE_SENTRY_LOGGING = 'true'
 
   jest.spyOn(console, 'log').mockImplementation(() => {})
   jest.spyOn(console, 'info').mockImplementation(() => {})
@@ -130,7 +130,7 @@ describe('logger: production', () => {
 
 describe('logger: development (console)', () => {
   beforeEach(() => {
-    process.env.NODE_ENV = 'development'
+    process.env.NEXT_PUBLIC_ENABLE_SENTRY_LOGGING = 'false'
   })
 
   test('logger.error calls console.error with all args', () => {
