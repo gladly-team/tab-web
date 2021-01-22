@@ -1,17 +1,19 @@
 import getMockReq from 'src/utils/testHelpers/mockReq'
 import getMockRes from 'src/utils/testHelpers/mockRes'
-import betaOptInAPI from 'src/pages/api/beta-opt-in'
 
+jest.mock('src/utils/middleware/onlyPostRequests')
 jest.mock('src/utils/middleware/cookies')
 jest.mock('src/utils/middleware/customHeaderRequired')
 
 afterEach(() => {
   jest.clearAllMocks()
+  jest.resetModules()
 })
 
 describe('API: beta-opt-in', () => {
   it('returns a 400 error if there is no request body', async () => {
     expect.assertions(2)
+    const betaOptInAPI = require('src/pages/api/beta-opt-in').default
     const mockReq = {
       ...getMockReq(),
       body: undefined,
@@ -26,6 +28,7 @@ describe('API: beta-opt-in', () => {
 
   it('returns a 200 response if the request body.optIn is set', async () => {
     expect.assertions(2)
+    const betaOptInAPI = require('src/pages/api/beta-opt-in').default
     const mockReq = {
       ...getMockReq(),
       body: { optIn: false },
@@ -38,6 +41,7 @@ describe('API: beta-opt-in', () => {
 
   it('sets the Tab v4 opt in cookie if body.optIn is true', async () => {
     expect.assertions(1)
+    const betaOptInAPI = require('src/pages/api/beta-opt-in').default
     const mockReq = {
       ...getMockReq(),
       body: { optIn: true },
@@ -53,6 +57,7 @@ describe('API: beta-opt-in', () => {
 
   it('sets the max age of the Tab v4 opt in cookie to 5 years (setting cookie when body.optIn is true)', async () => {
     expect.assertions(1)
+    const betaOptInAPI = require('src/pages/api/beta-opt-in').default
     const mockReq = {
       ...getMockReq(),
       body: { optIn: true },
@@ -66,6 +71,7 @@ describe('API: beta-opt-in', () => {
 
   it('unsets the Tab v4 opt in cookie if body.optIn is false', async () => {
     expect.assertions(1)
+    const betaOptInAPI = require('src/pages/api/beta-opt-in').default
     const mockReq = {
       ...getMockReq(),
       body: { optIn: false },
@@ -77,5 +83,33 @@ describe('API: beta-opt-in', () => {
       undefined,
       expect.any(Object)
     )
+  })
+})
+
+describe('API: beta-opt-in middleware', () => {
+  it('uses `onlyPostRequests`', async () => {
+    expect.assertions(1)
+    const onlyPostRequests = require('src/utils/middleware/onlyPostRequests')
+      .default
+    const betaOptInAPI = require('src/pages/api/beta-opt-in').default
+    await betaOptInAPI(getMockReq(), getMockRes())
+    expect(onlyPostRequests).toHaveBeenCalled()
+  })
+
+  it('uses `cookies`', async () => {
+    expect.assertions(1)
+    const cookies = require('src/utils/middleware/cookies').default
+    const betaOptInAPI = require('src/pages/api/beta-opt-in').default
+    await betaOptInAPI(getMockReq(), getMockRes())
+    expect(cookies).toHaveBeenCalled()
+  })
+
+  it('uses `customHeaderRequired`', async () => {
+    expect.assertions(1)
+    const customHeaderRequired = require('src/utils/middleware/customHeaderRequired')
+      .default
+    const betaOptInAPI = require('src/pages/api/beta-opt-in').default
+    await betaOptInAPI(getMockReq(), getMockRes())
+    expect(customHeaderRequired).toHaveBeenCalled()
   })
 })
