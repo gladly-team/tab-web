@@ -24,7 +24,7 @@ describe('withRelay', () => {
     expect.assertions(1)
     const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
     const ctx = getMockCtxWithAuthUser()
-    const mockGetRelayFunc = (async) => ({
+    const mockGetRelayFunc = async () => ({
       query: { some: 'query' },
       variables: { some: 'variables' },
     })
