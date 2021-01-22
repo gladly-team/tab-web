@@ -4,6 +4,7 @@ import getMockRes from 'src/utils/testHelpers/mockRes'
 jest.mock('next-firebase-auth')
 jest.mock('src/utils/middleware/customHeaderRequired')
 jest.mock('src/utils/auth/initAuth')
+jest.mock('src/utils/logger')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -48,6 +49,21 @@ describe('API: logout', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       error: 'Unexpected error.',
     })
+  })
+
+  it('calls logger.error if `unsetAuthCookies` errors', async () => {
+    expect.assertions(1)
+    const logger = require('src/utils/logger').default
+    const { unsetAuthCookies } = require('next-firebase-auth')
+    const mockErr = new Error('Cookies? What are cookies?')
+    unsetAuthCookies.mockImplementationOnce(() => {
+      throw mockErr
+    })
+    const logoutAPI = require('src/pages/api/logout').default
+    const mockReq = getMockReq()
+    const mockRes = getMockRes()
+    await logoutAPI(mockReq, mockRes)
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 })
 

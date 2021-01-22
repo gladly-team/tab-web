@@ -54,8 +54,11 @@ const MyApp = (props) => {
     }
   }, [])
 
-  // FIXME: move Sentry into its own HOC. Call `initSentry` from
-  //   API functions, too.
+  // FIXME: move Sentry into its own HOC. Make sure we set Sentry
+  //   context in APIs (server-side) as well as during component
+  //   rendering on both client and server. `initSentry` from
+  //   API functions, too. Clean up and consolidate Sentry logic
+  //   for reuse.
   // Set user context for Sentry error logging.
   // const { id: userId, email } = AuthUser || {}
   // useEffect(() => {
