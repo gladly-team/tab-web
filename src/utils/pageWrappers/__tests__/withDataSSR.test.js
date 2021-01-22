@@ -1,5 +1,5 @@
 import { fetchQuery } from 'react-relay'
-// import { initRelayEnvironment } from 'src/utils/relayEnvironment'
+import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
@@ -19,9 +19,26 @@ const getMockCtxWithAuthUser = () => ({
   AuthUser: getMockAuthUser(),
 })
 
+const setMockRelayRecords = (relayEnvironment, initialRecords) => {
+  // Mutate the environment as a quick mock.
+  // eslint-disable-next-line no-param-reassign
+  relayEnvironment.getStore = jest.fn(() => ({
+    getSource: jest.fn(() => ({
+      toJSON: jest.fn(() => initialRecords),
+    })),
+  }))
+}
+
 describe('withRelay', () => {
   it('returns the expected props', async () => {
     expect.assertions(1)
+
+    // Mock the Relay environment's records.
+    const env = initRelayEnvironment()
+    setMockRelayRecords(env, {
+      fake: ['initial', 'data', 'here'],
+    })
+
     const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
     const ctx = getMockCtxWithAuthUser()
     const mockGetRelayFunc = async () => ({
@@ -33,7 +50,9 @@ describe('withRelay', () => {
       data: {
         my: 'data!',
       },
-      initialData: undefined, // TODO
+      initialRecords: {
+        fake: ['initial', 'data', 'here'],
+      },
     })
   })
 })
