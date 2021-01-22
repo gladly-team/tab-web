@@ -6,7 +6,7 @@ import {
   AUTH_USER_KEY,
 } from 'src/utils/middleware/constants'
 
-// Adds a tab.user property to the `req` object.
+// Adds a tab.AuthUser property to the `req` object.
 const addUserFromAuthorizationToken = (handler) => async (req, res) => {
   try {
     const authorizationHeaderVal = get(req, 'headers.authorization')
