@@ -55,9 +55,9 @@ const initAuth = () => {
       maxAge: 12 * 60 * 60 * 24 * 1000, // twelve days
       overwrite: true,
       path: '/',
-      // Important that production serves sameSite=None and secure=true because we
-      // may load this page as an iframe on the new tab page (cross-domain).
-      // The 'none' option is supported in cookie-session ^1.4.0.
+      // Important that production serves sameSite=None and secure=true
+      // because we may load this page as an iframe on the new tab page
+      // (cross-domain).
       sameSite: useSecureSameSiteNone ? 'none' : 'strict',
       secure: useSecureSameSiteNone,
       signed: true,
