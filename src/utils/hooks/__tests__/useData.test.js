@@ -10,7 +10,6 @@ import {
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
 // We don't mock SWR but instead the underlying fetcher.
-// jest.mock('swr', () => jest.fn(() => useSWR))
 jest.mock('react-relay')
 jest.mock('next-firebase-auth')
 jest.mock('src/utils/relayEnvironment')
