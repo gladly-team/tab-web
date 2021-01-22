@@ -14,15 +14,7 @@ beforeEach(() => {
 
 afterEach(() => {
   jest.clearAllMocks()
-
-  // See below regarding:
-  // https://github.com/facebook/jest/issues/8987
-  // jest.resetModules()
 })
-
-// To test the higher-order components, we need to reset modules,
-// but that's causing an error with hooks:
-// https://github.com/facebook/jest/issues/8987
 
 describe('demo index page', () => {
   it('renders without error', () => {

@@ -7,8 +7,11 @@ import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import { flowRight } from 'lodash/util'
+import { withAuthUser, AuthAction } from 'next-firebase-auth'
+import withRelay from 'src/utils/pageWrappers/withRelay'
+import useData from 'src/utils/hooks/useData'
 import SettingsPage from 'src/components/SettingsPage'
-import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import logout from 'src/utils/auth/logout'
 import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
@@ -80,9 +83,29 @@ AccountItem.defaultProps = {
   value: null,
 }
 
-const Account = (props) => {
-  const { user } = props
-  const { id: userId, email, username } = user
+const getRelayQuery = ({ AuthUser }) => {
+  const userId = AuthUser.id
+  return {
+    query: graphql`
+      query accountQuery($userId: String!) {
+        user(userId: $userId) {
+          email
+          id
+          username
+        }
+      }
+    `,
+    variables: {
+      userId,
+    },
+  }
+}
+
+const Account = ({ data: initialData }) => {
+  const { data } = useData({ getRelayQuery, initialData })
+  const fetchInProgress = !data
+  const { user } = data || {}
+  const { id: userId, email, username } = user || {}
   const classes = useStyles()
 
   // Logging out.
@@ -97,13 +120,12 @@ const Account = (props) => {
   const setBetaOptIn = async (isOptedIn) => {
     const response = await fetch(apiBetaOptIn, {
       method: 'POST',
-      // eslint-disable-next-line no-undef
-      headers: new Headers({
+      headers: {
         // This custom header provides modest CSRF protection. See:
         // https://github.com/gladly-team/tab-web#authentication-approach
         'X-Gladly-Requested-By': 'tab-web-nextjs',
         'Content-Type': 'application/json',
-      }),
+      },
       credentials: 'include',
       body: JSON.stringify({ optIn: isOptedIn }),
     })
@@ -145,9 +167,15 @@ const Account = (props) => {
           </Button>
         </div>
         <Divider />
-        <AccountItem name="Username" value={username || 'Not signed in'} />
+        <AccountItem
+          name="Username"
+          value={fetchInProgress ? '...' : username || 'Not signed in'}
+        />
         <Divider />
-        <AccountItem name="Email" value={email || 'Not signed in'} />
+        <AccountItem
+          name="Email"
+          value={fetchInProgress ? '...' : email || 'Not signed in'}
+        />
         <Divider />
         <AccountItem
           name="Beta Enabled"
@@ -174,34 +202,21 @@ const Account = (props) => {
 
 Account.displayName = 'Account'
 Account.propTypes = {
-  user: PropTypes.shape({
-    email: PropTypes.string,
-    id: PropTypes.string,
-    username: PropTypes.string,
+  data: PropTypes.shape({
+    user: PropTypes.shape({
+      email: PropTypes.string,
+      id: PropTypes.string,
+      username: PropTypes.string,
+    }),
   }),
 }
 Account.defaultProps = {
-  user: {
-    email: null,
-    id: null,
-    username: null,
-  },
+  data: undefined,
 }
 
-export default withAuthAndData(({ AuthUser }) => {
-  const userId = AuthUser.id
-  return {
-    query: graphql`
-      query accountQuery($userId: String!) {
-        user(userId: $userId) {
-          email
-          id
-          username
-        }
-      }
-    `,
-    variables: {
-      userId,
-    },
-  }
-})(Account)
+export default flowRight([
+  withAuthUser({
+    whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+  }),
+  withRelay,
+])(Account)

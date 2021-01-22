@@ -17,7 +17,7 @@ try {
 
 const firebasePrivateKey = process.env.FIREBASE_PRIVATE_KEY
 const useSecureSameSiteNone =
-  process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE === 'true'
+  process.env.COOKIE_SECURE_SAME_SITE_NONE === 'true'
 
 const initAuth = () => {
   init({

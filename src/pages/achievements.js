@@ -1,6 +1,6 @@
 import React from 'react'
 import dayjs from 'dayjs'
-import { flow } from 'lodash/util'
+import { flowRight } from 'lodash/util'
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
@@ -8,11 +8,6 @@ import SettingsPage from 'src/components/SettingsPage'
 import return404If from 'src/utils/pageWrappers/return404If'
 import { showMockAchievements } from 'src/utils/featureFlags'
 import Achievement from 'src/components/Achievement'
-import {
-  useAuthUser,
-  withAuthUser,
-  withAuthUserTokenSSR,
-} from 'next-firebase-auth'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -71,9 +66,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Achievements = () => {
   const classes = useStyles()
-  const AuthUser = useAuthUser()
-  // eslint-disable-next-line no-console
-  console.log('AuthUser', AuthUser) // TODO: remove after testing
   return (
     <SettingsPage>
       <div className={classes.contentContainer}>
@@ -187,11 +179,8 @@ Achievements.displayName = 'Achievements'
 Achievements.propTypes = {}
 Achievements.defaultProps = {}
 
-// TODO: withAuthUserTokenSSR here is just for testing. Remove.
-export const getServerSideProps = flow([
+export const getServerSideProps = flowRight([
   return404If(!showMockAchievements()),
-  withAuthUserTokenSSR(),
 ])()
 
-// TODO: withAuthUser here is just for testing. Remove.
-export default flow([withAuthUser()])(Achievements)
+export default Achievements

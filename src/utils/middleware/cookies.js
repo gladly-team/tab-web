@@ -6,12 +6,12 @@ export const withCookies = (req, res) => {
   // Ensure that env vars are set.
   if (
     !(
-      process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE === 'true' ||
-      process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE === 'false'
+      process.env.COOKIE_SECURE_SAME_SITE_NONE === 'true' ||
+      process.env.COOKIE_SECURE_SAME_SITE_NONE === 'false'
     )
   ) {
     throw new Error(
-      'Environment variable`SESSION_COOKIE_SECURE_SAME_SITE_NONE` must be set to "true" or "false".'
+      'Environment variable`COOKIE_SECURE_SAME_SITE_NONE` must be set to "true" or "false".'
     )
   }
   if (
@@ -31,7 +31,7 @@ export const withCookies = (req, res) => {
   ]
 
   const useSecureSameSiteNone =
-    process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE === 'true'
+    process.env.COOKIE_SECURE_SAME_SITE_NONE === 'true'
 
   // https://github.com/pillarjs/cookies
   try {

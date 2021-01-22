@@ -1,5 +1,6 @@
 import React from 'react'
 import dayjs from 'dayjs'
+import { flowRight } from 'lodash/util'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Achievement from 'src/components/Achievement'
@@ -330,6 +331,8 @@ AchievementComponentDemoPage.displayName = 'AchievementComponentDemoPage'
 AchievementComponentDemoPage.propTypes = {}
 AchievementComponentDemoPage.defaultProps = {}
 
-export default return404If(!showDevelopmentOnlyDemoPages())(
-  AchievementComponentDemoPage
-)
+export const getServerSideProps = flowRight([
+  return404If(!showDevelopmentOnlyDemoPages()),
+])()
+
+export default AchievementComponentDemoPage

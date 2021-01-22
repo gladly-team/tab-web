@@ -38,6 +38,7 @@
     "react-firebaseui": "^4.1.0",
     "react-relay": "^10.1.2",
     "relay-runtime": "^10.1.2",
+    "swr": "^0.4.0",
     "tab-ads": "^0.7.0"
   },
   "devDependencies": {

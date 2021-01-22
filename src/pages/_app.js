@@ -7,12 +7,10 @@ import * as Sentry from '@sentry/node'
 import { register, unregister } from 'next-offline/runtime'
 import { ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import { ReactRelayContext } from 'react-relay'
 import { isClientSide } from 'src/utils/ssr'
 import theme from 'src/utils/theme'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import initAuth from 'src/utils/auth/initAuth'
-import { useRelayEnvironment } from 'src/utils/relayEnvironment'
 
 initAuth()
 
@@ -71,11 +69,6 @@ const MyApp = (props) => {
     }
   }, [])
 
-  // TODO: consider moving from _app.js to a HOC to use
-  //   for individual pages
-  const { initialRecords, ...restPageProps } = pageProps
-  const environment = useRelayEnvironment({ records: initialRecords })
-
   // FIXME: use next-firebase-auth
   // Set user context for Sentry error logging.
   // const { id: userId, email } = AuthUser || {}
@@ -90,7 +83,7 @@ const MyApp = (props) => {
   // See:
   // https://github.com/vercel/next.js/tree/canary/examples/with-sentry
   return (
-    <ReactRelayContext.Provider value={{ environment, variables: {} }}>
+    <>
       <Head>
         <title>Tab for a Cause</title>
         <meta
@@ -101,9 +94,9 @@ const MyApp = (props) => {
       {/* Material UI: https://github.com/mui-org/material-ui/blob/master/examples/nextjs/pages/_app.js */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...restPageProps} err={err} />
+        <Component {...pageProps} err={err} />
       </ThemeProvider>
-    </ReactRelayContext.Provider>
+    </>
   )
 }
 

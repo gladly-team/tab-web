@@ -13,16 +13,19 @@ import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { setWindowLocation } from 'src/utils/navigation'
 import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
+import useData from 'src/utils/hooks/useData'
+import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
 jest.mock('next-offline/runtime')
 jest.mock('src/components/SettingsPage')
-jest.mock('src/utils/pageWrappers/withAuthAndData')
 jest.mock('src/utils/auth/logout')
 jest.mock('src/utils/caching')
 jest.mock('src/utils/navigation')
 jest.mock('src/utils/mutations/SetV4BetaMutation')
+jest.mock('src/utils/pageWrappers/withRelay')
+jest.mock('src/utils/hooks/useData')
 
-const getMockProps = () => ({
+const getMockDataResponse = () => ({
   user: {
     id: 'some-user-id',
     email: 'fakeEmail@example.com',
@@ -30,7 +33,10 @@ const getMockProps = () => ({
   },
 })
 
+const getMockProps = () => ({})
+
 beforeEach(() => {
+  useData.mockReturnValue({ data: undefined })
   fetch.mockResolvedValue(getMockFetchResponse())
   clearAllServiceWorkerCaches.mockResolvedValue()
   SetV4BetaMutation.mockResolvedValue()
@@ -77,10 +83,40 @@ describe('account.js', () => {
     expect(logoutButton.exists()).toBe(true)
   })
 
+  it('passes the expected initial data to `useData`', () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account.js').default
+    const mockProps = {
+      ...getMockProps(),
+      data: { ...getMockProps().data, some: 'stuff' },
+    }
+    shallow(<AccountPage {...mockProps} />)
+    const useDataArg = useData.mock.calls[0][0]
+    expect(useDataArg).toMatchObject({
+      initialData: mockProps.data,
+    })
+  })
+
+  it('passes the expected getRelayQuery function to `useData`', async () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account.js').default
+    const mockProps = getMockProps()
+    shallow(<AccountPage {...mockProps} />)
+    const useDataArg = useData.mock.calls[0][0]
+    const queryInfo = await useDataArg.getRelayQuery({
+      AuthUser: getMockAuthUser(),
+    })
+    expect(queryInfo).toMatchObject({
+      query: expect.any(Object),
+      variables: expect.any(Object),
+    })
+  })
+
   it('displays the expected text on the logout button', () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const logoutButton = wrapper.find(Button).first()
     expect(logoutButton.text()).toEqual('Log Out')
@@ -90,6 +126,7 @@ describe('account.js', () => {
     expect.assertions(2)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const logoutButton = wrapper.find(Button).first()
     expect(logout).not.toHaveBeenCalled()
@@ -102,6 +139,7 @@ describe('account.js', () => {
     expect.assertions(2)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const logoutButton = wrapper.find(Button).first()
     expect(logoutButton.prop('disabled')).toBe(false)
@@ -114,6 +152,7 @@ describe('account.js', () => {
     expect.assertions(2)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const logoutButton = wrapper.find(Button).first()
     expect(logoutButton.text()).toEqual('Log Out')
@@ -126,15 +165,29 @@ describe('account.js', () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(1)
     expect(accountItem.type()).toEqual(Divider)
   })
 
-  it("displays the user's username", () => {
+  it("displays a pending value for the user's username when the fetch is still in progress", () => {
     expect.assertions(2)
     const AccountPage = require('src/pages/account.js').default
+    useData.mockReturnValue({ data: undefined })
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const content = wrapper.at(0).dive().find(Paper).first()
+    const accountItem = content.childAt(2).dive()
+    expect(accountItem.find(Typography).first().text()).toEqual('Username')
+    expect(accountItem.find(Typography).at(1).text()).toEqual('...')
+  })
+
+  it("displays the user's username when the data fetch is still complete", () => {
+    expect.assertions(2)
+    const AccountPage = require('src/pages/account.js').default
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -147,15 +200,29 @@ describe('account.js', () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(3)
     expect(accountItem.type()).toEqual(Divider)
   })
 
-  it("displays the user's email address", () => {
+  it("displays a pending value for the user's email address when the fetch is still in progress", () => {
     expect.assertions(2)
     const AccountPage = require('src/pages/account.js').default
+    useData.mockReturnValue({ data: undefined })
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const content = wrapper.at(0).dive().find(Paper).first()
+    const accountItem = content.childAt(4).dive()
+    expect(accountItem.find(Typography).first().text()).toEqual('Email')
+    expect(accountItem.find(Typography).at(1).text()).toEqual('...')
+  })
+
+  it("displays the user's email address when the fetch is complete", () => {
+    expect.assertions(2)
+    const AccountPage = require('src/pages/account.js').default
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -170,6 +237,7 @@ describe('account.js', () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(5)
@@ -192,6 +260,7 @@ describe('account.js', () => {
     fetch.mockResolvedValue(getMockFetchResponse())
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(6).dive()
@@ -201,11 +270,10 @@ describe('account.js', () => {
     expect(fetch).toHaveBeenCalledWith(apiBetaOptIn, {
       body: '{"optIn":false}',
       credentials: 'include',
-      // eslint-disable-next-line no-undef
-      headers: new Headers({
+      headers: {
         'X-Gladly-Requested-By': 'tab-web-nextjs',
         'Content-Type': 'application/json',
-      }),
+      },
       method: 'POST',
     })
   })
@@ -214,6 +282,7 @@ describe('account.js', () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(6).dive()
@@ -227,6 +296,7 @@ describe('account.js', () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(6).dive()
@@ -236,16 +306,11 @@ describe('account.js', () => {
     expect(unregister).toHaveBeenCalled()
   })
 
-  it('clicking the "switch back to classic" calls SetV4BetaMutation', async () => {
+  it('clicking the "switch back to classic" calls SetV4BetaMutation when the user is authenticated', async () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
-    const mockProps = {
-      ...getMockProps(),
-      user: {
-        ...getMockProps(),
-        id: 'my-wonderful-user-id',
-      },
-    }
+    const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(6).dive()
@@ -254,14 +319,31 @@ describe('account.js', () => {
     await flushAllPromises()
     expect(SetV4BetaMutation).toHaveBeenCalledWith({
       enabled: false,
-      userId: 'my-wonderful-user-id',
+      userId: 'some-user-id',
     })
+  })
+
+  it('clicking the "switch back to classic" does not call SetV4BetaMutation when the user is not authenticated', async () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account.js').default
+    const mockProps = getMockProps()
+    useData.mockReturnValue({
+      data: { ...getMockDataResponse(), user: undefined },
+    })
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const content = wrapper.at(0).dive().find(Paper).first()
+    const accountItem = content.childAt(6).dive()
+    const optOutButton = accountItem.find(Button).first()
+    optOutButton.simulate('click')
+    await flushAllPromises()
+    expect(SetV4BetaMutation).not.toHaveBeenCalled()
   })
 
   it('clicking the "switch back to classic" navigates to the dashboard', async () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
     const accountItem = content.childAt(6).dive()
@@ -269,13 +351,5 @@ describe('account.js', () => {
     optOutButton.simulate('click')
     await flushAllPromises()
     expect(setWindowLocation).toHaveBeenCalledWith(dashboardURL)
-  })
-})
-
-describe('account.js: getServerSideProps', () => {
-  it('does not define getServerSideProps', () => {
-    expect.assertions(1)
-    const { getServerSideProps } = require('src/pages/account.js')
-    expect(getServerSideProps).toBeUndefined()
   })
 })

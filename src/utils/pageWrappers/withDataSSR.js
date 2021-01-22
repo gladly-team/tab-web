@@ -1,5 +1,8 @@
+import { isEmpty } from 'lodash/lang'
 import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 import { fetchQuery } from 'react-relay'
+
+// TODO: add tests
 
 // A wrapper for `getServerSideProps` that fetches data
 // from our GraphQL endpoint.
@@ -19,14 +22,14 @@ const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
   ctx
 ) => {
   const { AuthUser } = ctx
-  const token = await AuthUser.getIdToken()
+
+  // Create the Relay query. We pass the AuthUser so the caller
+  // can use the user info in the query, as needed.
+  const { query, variables } = await getRelayQuery({ AuthUser })
 
   // Create the Relay environment.
-  // We pass the AuthUser so the caller can use the user info
-  // in the query, as needed.
-  const { query, variables } = await getRelayQuery({ AuthUser })
   const environment = initRelayEnvironment({
-    token,
+    getIdToken: AuthUser.getIdToken,
   })
 
   // Fetch the Relay data.
@@ -54,7 +57,14 @@ const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
     // TODO: possibly namespace these so there aren't conflicts
     //   and use a HOC to manage props.
     ...composedProps,
-    ...queryProps,
+    // If we don't fetch data, it should be null so that SWR will
+    // fetch data on the client side (in `useData`).
+    data: isEmpty(queryProps)
+      ? null
+      : {
+          ...queryProps,
+        },
+    // The "initialRecords" prop is consumed by the `withRelay` HOC.
     initialRecords,
   }
 }
