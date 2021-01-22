@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash/lang'
-import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 import { fetchQuery } from 'react-relay'
+import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 
 // TODO: add tests
 
