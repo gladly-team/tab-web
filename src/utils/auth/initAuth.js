@@ -30,11 +30,11 @@ const initAuth = () => {
         projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
         clientEmail: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL,
         // Our approach:
-        // https://stackoverflow.com/a/41044630/1332513
-        // Alternative approach:
         // https://github.com/vercel/vercel/issues/749#issuecomment-707515089
+        // Another potential approach:
+        // https://stackoverflow.com/a/41044630/1332513
         privateKey: firebasePrivateKey
-          ? firebasePrivateKey.replace(/\\n/g, '\n')
+          ? JSON.parse(firebasePrivateKey)
           : undefined,
       },
       databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
