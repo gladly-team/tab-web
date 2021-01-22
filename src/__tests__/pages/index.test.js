@@ -42,6 +42,7 @@ const getMockProps = () => ({
 beforeEach(() => {
   showMockAchievements.mockReturnValue(false)
   useData.mockReturnValue({ data: getMockProps().data })
+  process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
 })
 
 afterEach(() => {
@@ -107,6 +108,36 @@ describe('index.js', () => {
     expect(queryInfo).toMatchObject({
       query: expect.any(Object),
       variables: expect.any(Object),
+    })
+  })
+
+  it('passes "revalidateOnMount" = true to `useData` when the service worker is enabled', () => {
+    expect.assertions(1)
+    process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'true'
+    const IndexPage = require('src/pages/index').default
+    const mockProps = {
+      ...getMockProps(),
+      data: { ...getMockProps().data, some: 'stuff' },
+    }
+    shallow(<IndexPage {...mockProps} />)
+    const useDataArg = useData.mock.calls[0][0]
+    expect(useDataArg).toMatchObject({
+      revalidateOnMount: true,
+    })
+  })
+
+  it('passes "revalidateOnMount" = false to `useData` when the service worker is *not* enabled', () => {
+    expect.assertions(1)
+    process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
+    const IndexPage = require('src/pages/index').default
+    const mockProps = {
+      ...getMockProps(),
+      data: { ...getMockProps().data, some: 'stuff' },
+    }
+    shallow(<IndexPage {...mockProps} />)
+    const useDataArg = useData.mock.calls[0][0]
+    expect(useDataArg).toMatchObject({
+      revalidateOnMount: false,
     })
   })
 
