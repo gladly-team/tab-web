@@ -38,6 +38,10 @@ describe('API: login', () => {
 
   it('returns a 500 response if `setAuthCookies` errors', async () => {
     expect.assertions(2)
+
+    // TODO: remove after debugging
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+
     const { setAuthCookies } = require('next-firebase-auth')
     const mockErr = new Error('Cookies? What are cookies?')
     setAuthCookies.mockImplementationOnce(() => {
