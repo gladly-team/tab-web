@@ -25,6 +25,33 @@ describe('API: login', () => {
       success: true,
     })
   })
+
+  it("calls `next-firebase-auth`'s `setAuthCookies` with the req and res", async () => {
+    expect.assertions(1)
+    const { setAuthCookies } = require('next-firebase-auth')
+    const loginAPI = require('src/pages/api/login').default
+    const mockReq = getMockReq()
+    const mockRes = getMockRes()
+    await loginAPI(mockReq, mockRes)
+    expect(setAuthCookies).toHaveBeenCalledWith(mockReq, mockRes)
+  })
+
+  it('returns a 500 response if `setAuthCookies` errors', async () => {
+    expect.assertions(2)
+    const { setAuthCookies } = require('next-firebase-auth')
+    const mockErr = new Error('Cookies? What are cookies?')
+    setAuthCookies.mockImplementationOnce(() => {
+      throw mockErr
+    })
+    const loginAPI = require('src/pages/api/login').default
+    const mockReq = getMockReq()
+    const mockRes = getMockRes()
+    await loginAPI(mockReq, mockRes)
+    expect(mockRes.status).toHaveBeenCalledWith(500)
+    expect(mockRes.json).toHaveBeenCalledWith({
+      error: 'Unexpected error.',
+    })
+  })
 })
 
 describe('API: login middleware', () => {

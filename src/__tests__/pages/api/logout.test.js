@@ -13,13 +13,40 @@ afterEach(() => {
 describe('API: logout', () => {
   it('returns a 200 response if there are no errors', async () => {
     expect.assertions(2)
-    const logout = require('src/pages/api/logout').default
+    const logoutAPI = require('src/pages/api/logout').default
     const mockReq = getMockReq()
     const mockRes = getMockRes()
-    await logout(mockReq, mockRes)
+    await logoutAPI(mockReq, mockRes)
     expect(mockRes.status).toHaveBeenCalledWith(200)
     expect(mockRes.json).toHaveBeenCalledWith({
       success: true,
+    })
+  })
+
+  it("calls `next-firebase-auth`'s `unsetAuthCookies` with the req and res", async () => {
+    expect.assertions(1)
+    const { unsetAuthCookies } = require('next-firebase-auth')
+    const logoutAPI = require('src/pages/api/logout').default
+    const mockReq = getMockReq()
+    const mockRes = getMockRes()
+    await logoutAPI(mockReq, mockRes)
+    expect(unsetAuthCookies).toHaveBeenCalledWith(mockReq, mockRes)
+  })
+
+  it('returns a 500 response if `unsetAuthCookies` errors', async () => {
+    expect.assertions(2)
+    const { unsetAuthCookies } = require('next-firebase-auth')
+    const mockErr = new Error('Cookies? What are cookies?')
+    unsetAuthCookies.mockImplementationOnce(() => {
+      throw mockErr
+    })
+    const logoutAPI = require('src/pages/api/logout').default
+    const mockReq = getMockReq()
+    const mockRes = getMockRes()
+    await logoutAPI(mockReq, mockRes)
+    expect(mockRes.status).toHaveBeenCalledWith(500)
+    expect(mockRes.json).toHaveBeenCalledWith({
+      error: 'Unexpected error.',
     })
   })
 })
