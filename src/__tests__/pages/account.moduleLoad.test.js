@@ -31,7 +31,6 @@ describe('account.js: HOC', () => {
 
   it('calls `withRelay`', () => {
     expect.assertions(1)
-    const { withAuthUser, AuthAction } = require('next-firebase-auth')
     const withRelay = require('src/utils/pageWrappers/withRelay').default
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
