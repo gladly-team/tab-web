@@ -2,8 +2,6 @@ import { isEmpty } from 'lodash/lang'
 import { fetchQuery } from 'react-relay'
 import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 
-// TODO: add tests
-
 // A wrapper for `getServerSideProps` that fetches data
 // from our GraphQL endpoint.
 /*
