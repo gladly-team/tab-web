@@ -13,5 +13,11 @@ module.exports = {
   setAuthCookies: jest.fn(),
   unsetAuthCookies: jest.fn(),
   verifyIdToken,
-  AuthAction: {},
+  AuthAction: {
+    RENDER: 'render',
+    SHOW_LOADER: 'showLoader',
+    RETURN_NULL: 'returnNull',
+    REDIRECT_TO_LOGIN: 'redirectToLogin',
+    REDIRECT_TO_APP: 'redirectToApp',
+  },
 }

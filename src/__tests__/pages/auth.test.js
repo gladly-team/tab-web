@@ -1,23 +1,17 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
 import Logo from 'src/components/Logo'
-import { isClientSide } from 'src/utils/ssr'
+import FirebaseAuth from 'src/components/FirebaseAuth'
 
+jest.mock('src/utils/pageWrappers/withRelay')
 jest.mock('src/components/FirebaseAuth', () => () => (
   <div data-test-id="firebase-auth-mock" />
 ))
 jest.mock('src/components/FullPageLoader', () => () => (
   <div data-test-id="full-page-loader-mock" />
 ))
-jest.mock('src/utils/caching')
-jest.mock('src/utils/ssr')
-jest.mock('src/utils/navigation')
 jest.mock('src/components/Logo')
-
-beforeEach(() => {
-  isClientSide.mockReturnValue(true)
-})
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -31,7 +25,7 @@ describe('auth.js', () => {
     const AuthPage = require('src/pages/auth.js').default
     const mockProps = getMockProps()
     expect(() => {
-      mount(<AuthPage {...mockProps} />)
+      shallow(<AuthPage {...mockProps} />)
     }).not.toThrow()
   })
 
@@ -39,7 +33,7 @@ describe('auth.js', () => {
     expect.assertions(1)
     const AuthPage = require('src/pages/auth.js').default
     const mockProps = getMockProps()
-    const wrapper = mount(<AuthPage {...mockProps} />)
+    const wrapper = shallow(<AuthPage {...mockProps} />)
     expect(wrapper.find(Logo).exists()).toBe(true)
   })
 
@@ -47,7 +41,7 @@ describe('auth.js', () => {
     expect.assertions(1)
     const AuthPage = require('src/pages/auth.js').default
     const mockProps = getMockProps()
-    const wrapper = mount(<AuthPage {...mockProps} />)
+    const wrapper = shallow(<AuthPage {...mockProps} />)
     expect(wrapper.find(Typography).first().text()).toEqual(
       '"One of the simplest ways to raise money"'
     )
@@ -57,7 +51,15 @@ describe('auth.js', () => {
     expect.assertions(1)
     const AuthPage = require('src/pages/auth.js').default
     const mockProps = getMockProps()
-    const wrapper = mount(<AuthPage {...mockProps} />)
+    const wrapper = shallow(<AuthPage {...mockProps} />)
     expect(wrapper.find(Typography).at(1).text()).toEqual('- USA Today')
+  })
+
+  it('includes the FirebaseAuth component', async () => {
+    expect.assertions(1)
+    const AuthPage = require('src/pages/auth.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AuthPage {...mockProps} />)
+    expect(wrapper.find(FirebaseAuth).exists()).toBe(true)
   })
 })

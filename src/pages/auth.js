@@ -1,9 +1,11 @@
 import React from 'react'
+import { flowRight } from 'lodash/util'
+import { withAuthUser, AuthAction } from 'next-firebase-auth'
+import withRelay from 'src/utils/pageWrappers/withRelay'
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import FirebaseAuth from 'src/components/FirebaseAuth'
-// import FullPageLoader from 'src/components/FullPageLoader'
 import Logo from 'src/components/Logo'
 
 const useStyles = makeStyles((theme) => ({
@@ -71,6 +73,11 @@ Auth.propTypes = {}
 
 Auth.defaultProps = {}
 
-// TODO: use next-firebase-auth
-// TODO: set FullPageLoader as loader component
-export default Auth
+export default flowRight([
+  withAuthUser({
+    whenAuthed: AuthAction.REDIRECT_TO_APP,
+    whenUnauthedBeforeInit: AuthAction.RETURN_NULL,
+    whenUnauthedAfterInit: AuthAction.RENDER,
+  }),
+  withRelay,
+])(Auth)
