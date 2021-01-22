@@ -44,7 +44,7 @@ describe('authProtected middleware', () => {
     await authProtected(mockHandler)(mockReq, mockRes)
     expect(mockRes.status).toHaveBeenCalledWith(400)
     expect(mockRes.json).toHaveBeenCalledWith({
-      success: false,
+      error: 'Not authorized.',
     })
   })
 })

@@ -1,4 +1,4 @@
-import { flow } from 'lodash/util'
+import { flowRight } from 'lodash/util'
 import addUserFromAuthorizationToken from 'src/utils/middleware/addUserFromAuthorizationToken'
 import authProtected from 'src/utils/middleware/authProtected'
 // import customHeaderRequired from 'src/utils/middleware/customHeaderRequired'
@@ -18,7 +18,7 @@ const handler = async (req, res) => {
   return res.status(200).json({ success: true })
 }
 
-export default flow([
+export default flowRight([
   onlyPostRequests,
   // FIXME: require custom header (need to modify next-firebase-auth)
   // customHeaderRequired,

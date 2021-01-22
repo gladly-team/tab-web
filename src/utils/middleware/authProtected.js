@@ -8,7 +8,7 @@ import {
 const authProtected = (handler) => async (req, res) => {
   const AuthUser = get(req, [CUSTOM_REQ_DATA_KEY, AUTH_USER_KEY])
   if (!(AuthUser && AuthUser.id)) {
-    return res.status(400).json({ success: false })
+    return res.status(400).json({ error: 'Not authorized.' })
   }
   return handler(req, res)
 }

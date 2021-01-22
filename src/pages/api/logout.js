@@ -1,4 +1,4 @@
-import { flow } from 'lodash/util'
+import { flowRight } from 'lodash/util'
 // import customHeaderRequired from 'src/utils/middleware/customHeaderRequired'
 import { unsetAuthCookies } from 'next-firebase-auth'
 import initAuth from 'src/utils/auth/initAuth'
@@ -18,6 +18,6 @@ const handler = async (req, res) => {
 // FIXME: require custom header (need to modify next-firebase-auth)
 // Endpoint does not require the user to be authenticated. See:
 // https://github.com/gladly-team/tab-web#authentication-approach
-export default flow([
+export default flowRight([
   // customHeaderRequired
 ])(handler)
