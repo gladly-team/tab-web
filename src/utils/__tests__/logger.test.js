@@ -2,6 +2,7 @@
 import * as Sentry from '@sentry/node'
 
 jest.mock('@sentry/node')
+jest.mock('src/utils/initSentry')
 
 beforeEach(() => {
   process.env.NODE_ENV = 'production'

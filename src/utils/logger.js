@@ -1,6 +1,9 @@
 /* eslint-disable  no-console */
 import { isError } from 'lodash/lang'
 import * as Sentry from '@sentry/node'
+import initSentry from 'src/utils/initSentry'
+
+initSentry()
 
 const shouldLogToSentry = () => process.env.NODE_ENV === 'production'
 

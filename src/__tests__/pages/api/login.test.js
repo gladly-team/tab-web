@@ -7,6 +7,7 @@ jest.mock('src/utils/middleware/authProtected')
 jest.mock('src/utils/middleware/customHeaderRequired')
 jest.mock('src/utils/middleware/onlyPostRequests')
 jest.mock('src/utils/auth/initAuth')
+jest.mock('src/utils/logger')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -38,10 +39,6 @@ describe('API: login', () => {
 
   it('returns a 500 response if `setAuthCookies` errors', async () => {
     expect.assertions(2)
-
-    // TODO: remove after debugging
-    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
-
     const { setAuthCookies } = require('next-firebase-auth')
     const mockErr = new Error('Cookies? What are cookies?')
     setAuthCookies.mockImplementationOnce(() => {
@@ -55,6 +52,21 @@ describe('API: login', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       error: 'Unexpected error.',
     })
+  })
+
+  it('calls logger.error if `setAuthCookies` errors', async () => {
+    expect.assertions(1)
+    const logger = require('src/utils/logger').default
+    const { setAuthCookies } = require('next-firebase-auth')
+    const mockErr = new Error('Cookies? What are cookies?')
+    setAuthCookies.mockImplementationOnce(() => {
+      throw mockErr
+    })
+    const loginAPI = require('src/pages/api/login').default
+    const mockReq = getMockReq()
+    const mockRes = getMockRes()
+    await loginAPI(mockReq, mockRes)
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 })
 

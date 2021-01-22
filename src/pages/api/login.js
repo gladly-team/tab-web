@@ -5,6 +5,7 @@ import authProtected from 'src/utils/middleware/authProtected'
 import onlyPostRequests from 'src/utils/middleware/onlyPostRequests'
 import { setAuthCookies } from 'next-firebase-auth'
 import initAuth from 'src/utils/auth/initAuth'
+import logger from 'src/utils/logger'
 
 initAuth()
 
@@ -12,9 +13,7 @@ const handler = async (req, res) => {
   try {
     await setAuthCookies(req, res)
   } catch (e) {
-    // TODO: add error logging
-    // eslint-disable-next-line no-console
-    console.error(e)
+    logger.error(e)
     return res.status(500).json({ error: 'Unexpected error.' })
   }
   return res.status(200).json({ success: true })

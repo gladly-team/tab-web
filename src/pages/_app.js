@@ -3,42 +3,18 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
-import * as Sentry from '@sentry/node'
 import { register, unregister } from 'next-offline/runtime'
 import { ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { isClientSide } from 'src/utils/ssr'
 import theme from 'src/utils/theme'
-import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import initAuth from 'src/utils/auth/initAuth'
+import initSentry from 'src/utils/initSentry'
 
 initAuth()
 
-try {
-  ensureValuesAreDefined(process.env.NEXT_PUBLIC_SENTRY_DSN)
-} catch (e) {
-  throw new Error('Environment variable NEXT_PUBLIC_SENTRY_DSN must be set.')
-}
-try {
-  ensureValuesAreDefined(process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED)
-} catch (e) {
-  throw new Error(
-    'Environment variable NEXT_PUBLIC_SERVICE_WORKER_ENABLED must be set.'
-  )
-}
-
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_app.js
-if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
-  Sentry.init({
-    enabled: process.env.NODE_ENV === 'production',
-    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
-  })
-} else {
-  // eslint-disable-next-line no-console
-  console.warn(
-    `NEXT_PUBLIC_SENTRY_DSN env var not defined. Not initializing Sentry.`
-  )
-}
+initSentry()
 
 const MyApp = (props) => {
   const { Component, pageProps, err } = props
