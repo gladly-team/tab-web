@@ -46,7 +46,7 @@ const initAuth = () => {
       projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
     },
     cookies: {
-      name: 'TabAuth', // required
+      name: 'TabAuth',
       keys: [
         process.env.COOKIE_SECRET_CURRENT,
         process.env.COOKIE_SECRET_PREVIOUS,
