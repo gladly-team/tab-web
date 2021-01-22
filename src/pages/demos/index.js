@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import { flowRight } from 'lodash/util'
 import Typography from '@material-ui/core/Typography'
 import return404If from 'src/utils/pageWrappers/return404If'
 import { showDevelopmentOnlyDemoPages } from 'src/utils/featureFlags'
@@ -47,4 +48,8 @@ DemosIndexPage.displayName = 'DemosIndexPage'
 DemosIndexPage.propTypes = {}
 DemosIndexPage.defaultProps = {}
 
-export default return404If(!showDevelopmentOnlyDemoPages())(DemosIndexPage)
+export const getServerSideProps = flowRight([
+  return404If(!showDevelopmentOnlyDemoPages()),
+])()
+
+export default DemosIndexPage
