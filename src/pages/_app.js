@@ -8,6 +8,7 @@ import { ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { isClientSide } from 'src/utils/ssr'
 import theme from 'src/utils/theme'
+import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import initAuth from 'src/utils/auth/initAuth'
 import initSentry from 'src/utils/initSentry'
 
@@ -15,6 +16,14 @@ initAuth()
 
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_app.js
 initSentry()
+
+try {
+  ensureValuesAreDefined(process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED)
+} catch (e) {
+  throw new Error(
+    'Environment variable NEXT_PUBLIC_SERVICE_WORKER_ENABLED must be set.'
+  )
+}
 
 const MyApp = (props) => {
   const { Component, pageProps, err } = props

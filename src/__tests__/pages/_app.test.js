@@ -1,12 +1,10 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { register, unregister } from 'next-offline/runtime'
-// import * as Sentry from '@sentry/node'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
 
 jest.mock('next-offline/runtime')
 jest.mock('src/utils/ssr')
-jest.mock('@sentry/node')
 jest.mock('src/utils/auth/initAuth')
 
 // Don't enforce env vars during unit tests.
@@ -23,9 +21,6 @@ const getMockProps = () => ({
 beforeEach(() => {
   isClientSide.mockReturnValue(true)
   isServerSide.mockReturnValue(false)
-
-  process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'true'
-  process.env.NEXT_PUBLIC_SENTRY_DSN = 'some-sentry-dsn'
 })
 
 afterEach(() => {
