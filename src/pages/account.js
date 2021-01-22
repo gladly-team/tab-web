@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { flowRight } from 'lodash/util'
-import { withAuthUser, AuthAction } from 'next-firebase-auth'
+import { withAuthUser, AuthAction, useAuthUser } from 'next-firebase-auth'
 import withRelay from 'src/utils/pageWrappers/withRelay'
 import useData from 'src/utils/hooks/useData'
 import SettingsPage from 'src/components/SettingsPage'
@@ -108,11 +108,13 @@ const Account = ({ data: initialData }) => {
   const { id: userId, email, username } = user || {}
   const classes = useStyles()
 
+  const AuthUser = useAuthUser()
+
   // Logging out.
   const [isLoggingOut, setIsLoggingOut] = useState(false)
   const onLogoutClick = async () => {
     setIsLoggingOut(true)
-    await logout()
+    await logout(AuthUser)
   }
 
   // Switching to classic tab page.

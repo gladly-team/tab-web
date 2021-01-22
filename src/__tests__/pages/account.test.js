@@ -6,6 +6,7 @@ import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
+import { useAuthUser } from 'next-firebase-auth'
 import logout from 'src/utils/auth/logout'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import getMockFetchResponse from 'src/utils/testHelpers/getMockFetchResponse'
@@ -40,6 +41,7 @@ beforeEach(() => {
   fetch.mockResolvedValue(getMockFetchResponse())
   clearAllServiceWorkerCaches.mockResolvedValue()
   SetV4BetaMutation.mockResolvedValue()
+  useAuthUser.mockReturnValue(getMockAuthUser())
 })
 
 afterEach(() => {
@@ -125,6 +127,8 @@ describe('account.js', () => {
   it('calls `logout` when clicking the logout button', async () => {
     expect.assertions(2)
     const AccountPage = require('src/pages/account.js').default
+    const mockAuthUser = getMockAuthUser()
+    useAuthUser.mockReturnValue(mockAuthUser)
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
@@ -132,7 +136,7 @@ describe('account.js', () => {
     expect(logout).not.toHaveBeenCalled()
     logoutButton.simulate('click')
     await flushAllPromises()
-    expect(logout).toHaveBeenCalled()
+    expect(logout).toHaveBeenCalledWith(mockAuthUser)
   })
 
   it('disables the logout button after clicking', async () => {

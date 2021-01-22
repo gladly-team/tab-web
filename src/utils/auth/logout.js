@@ -1,12 +1,9 @@
-import firebase from 'firebase/app'
-import 'firebase/auth'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import logger from 'src/utils/logger'
 
-const logout = async () => {
+const logout = async (AuthUser) => {
   try {
-    // TODO: use next-firebase-auth
-    await firebase.auth().signOut()
+    await AuthUser.signOut()
 
     // Clear the cache so it does not contain any authed content.
     await clearAllServiceWorkerCaches()
