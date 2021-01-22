@@ -7,6 +7,7 @@ import FullPageLoader from 'src/components/FullPageLoader'
 import { isClientSide } from 'src/utils/ssr'
 import { dashboardURL } from 'src/utils/urls'
 
+// Firebase is initialized in `next-firebase-auth`.
 const FirebaseAuth = (props) => {
   const { onSuccessfulAuth } = props
 
