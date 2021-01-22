@@ -14,6 +14,7 @@ import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { setWindowLocation } from 'src/utils/navigation'
 import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 import useData from 'src/utils/hooks/useData'
+import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
 jest.mock('next-offline/runtime')
 jest.mock('src/components/SettingsPage')
@@ -80,6 +81,35 @@ describe('account.js', () => {
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const logoutButton = wrapper.find(Button).first()
     expect(logoutButton.exists()).toBe(true)
+  })
+
+  it('passes the expected initial data to `useData`', () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account.js').default
+    const mockProps = {
+      ...getMockProps(),
+      data: { ...getMockProps().data, some: 'stuff' },
+    }
+    shallow(<AccountPage {...mockProps} />)
+    const useDataArg = useData.mock.calls[0][0]
+    expect(useDataArg).toMatchObject({
+      initialData: mockProps.data,
+    })
+  })
+
+  it('passes the expected getRelayQuery function to `useData`', async () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account.js').default
+    const mockProps = getMockProps()
+    shallow(<AccountPage {...mockProps} />)
+    const useDataArg = useData.mock.calls[0][0]
+    const queryInfo = await useDataArg.getRelayQuery({
+      AuthUser: getMockAuthUser(),
+    })
+    expect(queryInfo).toMatchObject({
+      query: expect.any(Object),
+      variables: expect.any(Object),
+    })
   })
 
   it('displays the expected text on the logout button', () => {
