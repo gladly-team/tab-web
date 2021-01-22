@@ -1,5 +1,6 @@
-// TODO: Consider deleting this. We might instead use:
-//   https://github.com/Xunnamius/next-test-api-route-handler/tree/main/docs
+// If we need more complex interactions with `ctx` or `req`/`res`,
+// consider using this library:
+// https://github.com/Xunnamius/next-test-api-route-handler
 
 import getMockReq from 'src/utils/testHelpers/mockReq'
 import getMockRes from 'src/utils/testHelpers/mockRes'
