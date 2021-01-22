@@ -1,5 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
+import { accountURL } from 'src/utils/urls'
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -21,7 +22,7 @@ describe('settings/index.js: getServerSideProps', () => {
     const { getServerSideProps } = require('src/pages/settings/index')
     const result = await getServerSideProps()
     expect(result).toEqual({
-      redirect: { destination: '/account', permanent: false },
+      redirect: { destination: accountURL, permanent: false },
     })
   })
 })
