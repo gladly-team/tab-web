@@ -1,30 +1,25 @@
+import { verifyIdToken } from 'next-firebase-auth'
 import { get, set } from 'lodash/object'
-import { verifyIdToken } from 'src/utils/auth/firebaseAdmin'
-import { createAuthUserInfo } from 'src/utils/auth/user'
+import logger from 'src/utils/logger'
 import {
   CUSTOM_REQ_DATA_KEY,
-  AUTH_USER_INFO_KEY,
+  AUTH_USER_KEY,
 } from 'src/utils/middleware/constants'
-import logger from 'src/utils/logger'
 
-// Adds a tab.user object to the request.
-export default (handler) => async (req, res) => {
+// Adds a tab.AuthUser property to the `req` object.
+const addUserFromAuthorizationToken = (handler) => async (req, res) => {
   try {
     const authorizationHeaderVal = get(req, 'headers.authorization')
     if (!authorizationHeaderVal) {
       return res.status(403).json({ error: 'Invalid authorization header.' })
     }
-    let firebaseUser
+    let AuthUser
     try {
-      firebaseUser = await verifyIdToken(authorizationHeaderVal)
+      AuthUser = await verifyIdToken(authorizationHeaderVal)
     } catch (e) {
       return res.status(403).json({ error: 'Invalid authorization header.' })
     }
-    const authUserInfo = createAuthUserInfo({
-      firebaseUser,
-      token: authorizationHeaderVal,
-    })
-    set(req, [CUSTOM_REQ_DATA_KEY, AUTH_USER_INFO_KEY], authUserInfo)
+    set(req, [CUSTOM_REQ_DATA_KEY, AUTH_USER_KEY], AuthUser)
   } catch (e) {
     logger.error(e)
     return res
@@ -33,3 +28,5 @@ export default (handler) => async (req, res) => {
   }
   return handler(req, res)
 }
+
+export default addUserFromAuthorizationToken

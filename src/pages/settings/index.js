@@ -1,15 +1,10 @@
-import { redirect } from 'src/utils/navigation'
 import { accountURL } from 'src/utils/urls'
 
 const SettingsIndex = () => null
 
-SettingsIndex.getInitialProps = async (ctx) => {
-  // Redirect the base settings URL to the account page.
-  redirect({
-    location: accountURL,
-    ctx,
-  })
-}
+export const getServerSideProps = () => ({
+  redirect: { destination: accountURL, permanent: false },
+})
 
 SettingsIndex.displayName = 'SettingsIndex'
 SettingsIndex.propTypes = {}

@@ -481,7 +481,6 @@ Achievement.propTypes = {
   // Content to show when sharing. Refer to the current Tab campaign
   // logic. We may want to fetch this only after a user clicks
   // to share.
-  // TODO:
   // socialSharing: PropTypes.shape({}),
 }
 

@@ -1,5 +1,5 @@
 // Only allow POST requests.
-export default (handler) => async (req, res) => {
+const onlyPostRequests = (handler) => async (req, res) => {
   if (req.method !== 'POST') {
     return res
       .status(405)
@@ -7,3 +7,5 @@ export default (handler) => async (req, res) => {
   }
   return handler(req, res)
 }
+
+export default onlyPostRequests

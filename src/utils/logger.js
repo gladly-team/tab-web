@@ -1,8 +1,12 @@
 /* eslint-disable  no-console */
 import { isError } from 'lodash/lang'
 import * as Sentry from '@sentry/node'
+import initSentry from 'src/utils/initSentry'
 
-const shouldLogToSentry = () => process.env.NODE_ENV === 'production'
+initSentry()
+
+const shouldLogToSentry = () =>
+  process.env.NEXT_PUBLIC_ENABLE_SENTRY_LOGGING === 'true'
 
 const logMessageToSentry = (level, ...args) => {
   const msg = args.join(', ')

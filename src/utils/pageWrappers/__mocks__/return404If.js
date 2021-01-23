@@ -1,1 +1,1 @@
-export default jest.fn(() => (wrappedComponent) => wrappedComponent)
+export default jest.fn(() => (getServerSidePropsFunc) => getServerSidePropsFunc)

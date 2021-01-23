@@ -1,7 +1,6 @@
 import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { mount } from 'enzyme'
-import initFirebase from 'src/utils/auth/initFirebase'
 import { isClientSide } from 'src/utils/ssr'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import FullPageLoader from 'src/components/FullPageLoader'
@@ -14,7 +13,6 @@ jest.mock('src/components/FullPageLoader', () => () => (
   <div data-test-id="full-page-loader-mock" />
 ))
 jest.mock('src/utils/ssr')
-jest.mock('src/utils/auth/initFirebase')
 
 const getMockProps = () => ({
   onSuccessfulAuth: undefined,
@@ -36,24 +34,6 @@ describe('FirebaseAuth component', () => {
     expect(() => {
       mount(<FirebaseAuth {...mockProps} />)
     }).not.toThrow()
-  })
-
-  it('calls initFirebase on mount on the client side', () => {
-    expect.assertions(2)
-    const FirebaseAuth = require('src/components/FirebaseAuth').default
-    expect(initFirebase).not.toHaveBeenCalled()
-    const mockProps = getMockProps()
-    mount(<FirebaseAuth {...mockProps} />)
-    expect(initFirebase).toHaveBeenCalled()
-  })
-
-  it('does not call initFirebase on mount on the server side', () => {
-    expect.assertions(1)
-    isClientSide.mockReturnValue(false)
-    const FirebaseAuth = require('src/components/FirebaseAuth').default
-    const mockProps = getMockProps()
-    mount(<FirebaseAuth {...mockProps} />)
-    expect(initFirebase).not.toHaveBeenCalled()
   })
 
   it('returns an empty div when rendering on the server side', () => {

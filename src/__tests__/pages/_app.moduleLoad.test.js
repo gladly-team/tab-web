@@ -6,11 +6,12 @@
 /* eslint-disable no-console */
 
 jest.mock('next-offline/runtime')
-jest.mock('src/utils/auth/hooks')
-jest.mock('src/utils/auth/user')
-jest.mock('src/utils/middleware/session')
 jest.mock('src/utils/ssr')
-jest.mock('@sentry/node')
+jest.mock('src/utils/auth/initAuth')
+jest.mock('src/utils/initSentry')
+
+// Don't enforce env vars during unit tests.
+jest.mock('src/utils/ensureValuesAreDefined')
 
 afterEach(() => {
   if (console.warn.mockReset) {
@@ -19,62 +20,23 @@ afterEach(() => {
   jest.resetModules()
 })
 
-describe('_app.js: initializes Sentry', () => {
-  it('intitalizes Sentry when the Sentry DSN is defined', () => {
+describe('_app.js: Sentry', () => {
+  it('calls to initialize Sentry', () => {
     expect.assertions(1)
-    process.env.NEXT_PUBLIC_SENTRY_DSN = 'some-dsn'
-    const Sentry = require('@sentry/node')
+    const initSentry = require('src/utils/initSentry').default
+
     // eslint-disable-next-line no-unused-expressions
     require('src/pages/_app.js').default
-    expect(Sentry.init).toHaveBeenCalled()
+    expect(initSentry).toHaveBeenCalled()
   })
+})
 
-  it('passes the Sentry DSN when intializing', () => {
+describe('_app.js: initializes auth', () => {
+  it('initializes authentication on module load', () => {
     expect.assertions(1)
-    process.env.NEXT_PUBLIC_SENTRY_DSN = 'this-is-my-dsn'
-    process.env.NODE_ENV = 'production'
-    const Sentry = require('@sentry/node')
+    const initAuth = require('src/utils/auth/initAuth').default
     // eslint-disable-next-line no-unused-expressions
     require('src/pages/_app.js').default
-    expect(Sentry.init.mock.calls[0][0]).toMatchObject({
-      dsn: 'this-is-my-dsn',
-    })
-  })
-
-  it('intitalizes Sentry with "enabled" = true when NODE_ENV is production', () => {
-    expect.assertions(1)
-    process.env.NEXT_PUBLIC_SENTRY_DSN = 'some-dsn'
-    process.env.NODE_ENV = 'production'
-    const Sentry = require('@sentry/node')
-    // eslint-disable-next-line no-unused-expressions
-    require('src/pages/_app.js').default
-    expect(Sentry.init.mock.calls[0][0]).toMatchObject({
-      enabled: true,
-    })
-  })
-
-  it('intitalizes Sentry with "enabled" = false when NODE_ENV is development', () => {
-    expect.assertions(1)
-    process.env.NEXT_PUBLIC_SENTRY_DSN = 'some-dsn'
-    process.env.NODE_ENV = 'development'
-    const Sentry = require('@sentry/node')
-    // eslint-disable-next-line no-unused-expressions
-    require('src/pages/_app.js').default
-    expect(Sentry.init.mock.calls[0][0]).toMatchObject({
-      enabled: false,
-    })
-  })
-
-  it('does not intitalize Sentry when the Sentry DSN is not defined', () => {
-    expect.assertions(1)
-    delete process.env.NEXT_PUBLIC_SENTRY_DSN
-
-    // Suppress expected console warning.
-    jest.spyOn(console, 'warn').mockImplementation(() => {})
-
-    const Sentry = require('@sentry/node')
-    // eslint-disable-next-line no-unused-expressions
-    require('src/pages/_app.js').default
-    expect(Sentry.init).not.toHaveBeenCalled()
+    expect(initAuth).toHaveBeenCalledTimes(1)
   })
 })

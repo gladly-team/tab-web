@@ -1,15 +1,17 @@
 // Handles error logging to Sentry.
 // Adapted from:
-// https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_error.js
+// https://github.com/vercel/next.js/blob/canary/examples/with-sentry/pages/_error.js
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import NextErrorComponent from 'next/error'
+import NextErrorComponent, {
+  getServerSideProps as NextErrGetSSP,
+} from 'next/error'
 import * as Sentry from '@sentry/node'
 
-const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
-  if (!hasGetInitialPropsRun && err) {
-    // getInitialProps is not called in case of
+const MyError = ({ statusCode, hasGetServerSidePropsRun, err }) => {
+  if (!hasGetServerSidePropsRun && err) {
+    // `getServerSideProps`` is not called in case of
     // https://github.com/vercel/next.js/issues/8592. As a workaround, we pass
     // err via _app.js so it can be captured
     Sentry.captureException(err)
@@ -18,15 +20,16 @@ const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
   return <NextErrorComponent statusCode={statusCode} />
 }
 
-MyError.getInitialProps = async ({ res, err, asPath }) => {
-  const errorInitialProps = await NextErrorComponent.getInitialProps({
+export const getServerSideProps = async ({ res, err, asPath }) => {
+  const errorProps = await NextErrGetSSP({
     res,
     err,
   })
 
-  // Workaround for https://github.com/vercel/next.js/issues/8592, mark when
-  // getInitialProps has run
-  errorInitialProps.hasGetInitialPropsRun = true
+  // Mark when getServerSideProps has run.
+  // Workaround for:
+  // https://github.com/vercel/next.js/issues/8592
+  errorProps.hasGetServerSidePropsRun = true
 
   // Running on the server, the response object (`res`) is available.
   //
@@ -35,7 +38,7 @@ MyError.getInitialProps = async ({ res, err, asPath }) => {
   //
   // Running on the client (browser), Next.js will provide an err if:
   //
-  //  - a page's `getInitialProps` threw or returned a Promise that rejected
+  //  - a page's `getServerSideProps` threw or returned a Promise that rejected
   //  - an exception was thrown somewhere in the React lifecycle (render,
   //    componentDidMount, etc) that was caught by Next.js's React Error
   //    Boundary. Read more about what types of exceptions are caught by Error
@@ -50,23 +53,23 @@ MyError.getInitialProps = async ({ res, err, asPath }) => {
   } else {
     // An empty error is unexpected and may indicate a bug in Next.js.
     Sentry.captureException(
-      new Error(`_error.js getInitialProps missing data at path: ${asPath}`)
+      new Error(`_error.js getServerSideProps missing data at path: ${asPath}`)
     )
   }
 
-  return errorInitialProps
+  return errorProps
 }
 
 MyError.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   err: PropTypes.object,
-  hasGetInitialPropsRun: PropTypes.bool,
+  hasGetServerSidePropsRun: PropTypes.bool,
   statusCode: PropTypes.number.isRequired,
 }
 
 MyError.defaultProps = {
   err: undefined,
-  hasGetInitialPropsRun: false,
+  hasGetServerSidePropsRun: false,
 }
 
 export default MyError

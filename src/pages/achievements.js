@@ -1,15 +1,13 @@
 import React from 'react'
-// import PropTypes from 'prop-types'
-// import { graphql } from 'react-relay'
 import dayjs from 'dayjs'
+import { flowRight } from 'lodash/util'
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import SettingsPage from 'src/components/SettingsPage'
-// import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
 import return404If from 'src/utils/pageWrappers/return404If'
-import Achievement from 'src/components/Achievement'
 import { showMockAchievements } from 'src/utils/featureFlags'
+import Achievement from 'src/components/Achievement'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -181,4 +179,8 @@ Achievements.displayName = 'Achievements'
 Achievements.propTypes = {}
 Achievements.defaultProps = {}
 
-export default return404If(!showMockAchievements())(Achievements)
+export const getServerSideProps = flowRight([
+  return404If(!showMockAchievements()),
+])()
+
+export default Achievements

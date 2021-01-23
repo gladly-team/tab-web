@@ -1,5 +1,5 @@
-// TODO: update comment
-// Important: add any new env variables to next.config.js.
+// Important: add any new env variables locally and on
+// production. See .env for more info.
 
 export const showDevelopmentOnlyDemoPages = () =>
   process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_DEMO_PAGES === 'true'

@@ -1,7 +1,8 @@
+import { flowRight } from 'lodash/util'
 import { isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
+import onlyPostRequests from 'src/utils/middleware/onlyPostRequests'
 import cookies from 'src/utils/middleware/cookies'
-import session from 'src/utils/middleware/session'
 import customHeaderRequired from 'src/utils/middleware/customHeaderRequired'
 
 const optInCookieName = 'tabV4OptIn'
@@ -23,4 +24,6 @@ const handler = (req, res) => {
 
 // Endpoint does not require the user to be authenticated. See:
 // https://github.com/gladly-team/tab-web#authentication-approach
-export default cookies(session(customHeaderRequired(handler)))
+export default flowRight([onlyPostRequests, cookies, customHeaderRequired])(
+  handler
+)

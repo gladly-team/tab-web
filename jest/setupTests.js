@@ -28,3 +28,16 @@ console.error = function (message, ...args) {
 global.fetch = jest.fn(() => Promise.resolve())
 
 process.env.IS_JEST_TEST_ENVIRONMENT = 'true'
+
+// Fix for `jest.restModules` breaking hooks:
+// https://github.com/facebook/jest/issues/8987#issuecomment-584898030
+const RESET_MODULE_EXCEPTIONS = ['react']
+const mockActualRegistry = {}
+RESET_MODULE_EXCEPTIONS.forEach((moduleName) => {
+  jest.doMock(moduleName, () => {
+    if (!mockActualRegistry[moduleName]) {
+      mockActualRegistry[moduleName] = jest.requireActual(moduleName)
+    }
+    return mockActualRegistry[moduleName]
+  })
+})

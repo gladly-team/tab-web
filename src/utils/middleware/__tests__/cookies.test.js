@@ -11,9 +11,9 @@ const mockCookie = {
 jest.mock('cookies', () => jest.fn(() => mockCookie))
 
 beforeEach(() => {
-  process.env.SESSION_SECRET_CURRENT = 'abc'
-  process.env.SESSION_SECRET_PREVIOUS = 'def'
-  process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'true'
+  process.env.COOKIE_SECRET_CURRENT = 'abc'
+  process.env.COOKIE_SECRET_PREVIOUS = 'def'
+  process.env.COOKIE_SECURE_SAME_SITE_NONE = 'true'
 })
 
 afterEach(() => {
@@ -32,8 +32,8 @@ describe('cookies middleware: withCookies', () => {
 
   it('passes the request and response objects to Cookies', () => {
     expect.assertions(1)
-    process.env.SESSION_SECRET_CURRENT = 'thing'
-    process.env.SESSION_SECRET_PREVIOUS = 'anotherThing'
+    process.env.COOKIE_SECRET_CURRENT = 'thing'
+    process.env.COOKIE_SECRET_PREVIOUS = 'anotherThing'
     const mockReq = getMockReq()
     const mockRes = getMockRes()
     withCookies(mockReq, mockRes)
@@ -42,8 +42,8 @@ describe('cookies middleware: withCookies', () => {
 
   it('passes the expected secrets to Cookies', () => {
     expect.assertions(1)
-    process.env.SESSION_SECRET_CURRENT = 'thing'
-    process.env.SESSION_SECRET_PREVIOUS = 'anotherThing'
+    process.env.COOKIE_SECRET_CURRENT = 'thing'
+    process.env.COOKIE_SECRET_PREVIOUS = 'anotherThing'
     const mockReq = getMockReq()
     const mockRes = getMockRes()
     withCookies(mockReq, mockRes)
@@ -53,39 +53,39 @@ describe('cookies middleware: withCookies', () => {
     })
   })
 
-  it('throws if the session key SESSION_COOKIE_SECURE_SAME_SITE_NONE is not defined', () => {
+  it('throws if the session key COOKIE_SECURE_SAME_SITE_NONE is not defined', () => {
     expect.assertions(1)
-    delete process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE
+    delete process.env.COOKIE_SECURE_SAME_SITE_NONE
     expect(() => {
       withCookies(getMockReq(), getMockRes())
     }).toThrow(
-      'Environment variable`SESSION_COOKIE_SECURE_SAME_SITE_NONE` must be set to "true" or "false".'
+      'Environment variable`COOKIE_SECURE_SAME_SITE_NONE` must be set to "true" or "false".'
     )
   })
 
-  it('throws if the session key SESSION_SECRET_CURRENT is not defined', () => {
+  it('throws if the session key COOKIE_SECRET_CURRENT is not defined', () => {
     expect.assertions(1)
-    delete process.env.SESSION_SECRET_CURRENT
+    delete process.env.COOKIE_SECRET_CURRENT
     expect(() => {
       withCookies(getMockReq(), getMockRes())
     }).toThrow(
-      'Session secrets must be set as env vars `SESSION_SECRET_CURRENT` and `SESSION_SECRET_PREVIOUS`.'
+      'Session secrets must be set as env vars `COOKIE_SECRET_CURRENT` and `COOKIE_SECRET_PREVIOUS`.'
     )
   })
 
-  it('throws if the session key SESSION_SECRET_PREVIOUS is not defined', () => {
+  it('throws if the session key COOKIE_SECRET_PREVIOUS is not defined', () => {
     expect.assertions(1)
-    delete process.env.SESSION_SECRET_PREVIOUS
+    delete process.env.COOKIE_SECRET_PREVIOUS
     expect(() => {
       withCookies(getMockReq(), getMockRes())
     }).toThrow(
-      'Session secrets must be set as env vars `SESSION_SECRET_CURRENT` and `SESSION_SECRET_PREVIOUS`.'
+      'Session secrets must be set as env vars `COOKIE_SECRET_CURRENT` and `COOKIE_SECRET_PREVIOUS`.'
     )
   })
 
   it('sets the "secure" option to true in Cookies when secure cookies are configured', () => {
     expect.assertions(1)
-    process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'true'
+    process.env.COOKIE_SECURE_SAME_SITE_NONE = 'true'
     withCookies(getMockReq(), getMockRes())
     const optionsForCookies = Cookies.mock.calls[0][2]
     expect(optionsForCookies).toMatchObject({
@@ -95,7 +95,7 @@ describe('cookies middleware: withCookies', () => {
 
   it('sets the "secure" option to false in Cookies when secure cookies are disabled', () => {
     expect.assertions(1)
-    process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'false'
+    process.env.COOKIE_SECURE_SAME_SITE_NONE = 'false'
     withCookies(getMockReq(), getMockRes())
     const optionsForCookies = Cookies.mock.calls[0][2]
     expect(optionsForCookies).toMatchObject({
@@ -157,7 +157,7 @@ describe('cookies middleware: withCookies', () => {
 
   it('sets a secure cookie with SameSite=None when enabled', () => {
     expect.assertions(1)
-    process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'true'
+    process.env.COOKIE_SECURE_SAME_SITE_NONE = 'true'
     const mockReq = getMockReq()
     withCookies(mockReq, getMockRes())
     mockReq.cookie.set('chocolateChip', 'delicious')
@@ -170,7 +170,7 @@ describe('cookies middleware: withCookies', () => {
 
   it('sets an insecure cookie with SameSite=Strict when secure cookies are not enabled', () => {
     expect.assertions(1)
-    process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'false'
+    process.env.COOKIE_SECURE_SAME_SITE_NONE = 'false'
     const mockReq = getMockReq()
     withCookies(mockReq, getMockRes())
     mockReq.cookie.set('chocolateChip', 'delicious')
@@ -183,7 +183,7 @@ describe('cookies middleware: withCookies', () => {
 
   it('does not allow overriding some secure/SameSite cookie settings when calling cookie.set', () => {
     expect.assertions(1)
-    process.env.SESSION_COOKIE_SECURE_SAME_SITE_NONE = 'true'
+    process.env.COOKIE_SECURE_SAME_SITE_NONE = 'true'
     const mockReq = getMockReq()
     withCookies(mockReq, getMockRes())
     mockReq.cookie.set('chocolateChip', 'delicious', {

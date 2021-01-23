@@ -1,39 +1,20 @@
 /* eslint react/no-danger: 0 */
 import React from 'react'
 import PropTypes from 'prop-types'
-import { get } from 'lodash/object'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
 import { PWAManifestURL } from 'src/utils/urls'
-import {
-  NEXT_CTX_CUSTOM_DATA_KEY,
-  NEXT_CTX_AUTH_USER_INFO_KEY,
-} from 'src/utils/constants'
 import theme from 'src/utils/theme'
 import Logo192Apple from 'src/assets/logos/logo192-apple.png'
-// import { withBasePath } from 'src/utils/urls'
 
 class CustomDocument extends Document {
   render() {
-    // Store initial props from request data that we need to use again on
-    // the client. See:
-    // https://github.com/zeit/next.js/issues/3043#issuecomment-334521241
-    // https://github.com/zeit/next.js/issues/2252#issuecomment-353992669
-    // Alternatively, we can use a store, like Redux.
-    const { AuthUserInfo } = this.props
     return (
       <Html>
         <Head>
           <link rel="manifest" href={PWAManifestURL} />
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link rel="apple-touch-icon" href={Logo192Apple} />
-          <script
-            id="__TAB_WEB_AUTH_USER_INFO"
-            type="application/json"
-            dangerouslySetInnerHTML={{
-              __html: JSON.stringify(AuthUserInfo, null, 2),
-            }}
-          />
         </Head>
         <body style={{ margin: 0, padding: 0 }}>
           {/*
@@ -102,17 +83,9 @@ CustomDocument.getInitialProps = async (ctx) => {
       enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
     })
 
-  // Get the AuthUserInfo object. This is set in _app.js.
-  const AuthUserInfo = get(
-    ctx,
-    [NEXT_CTX_CUSTOM_DATA_KEY, NEXT_CTX_AUTH_USER_INFO_KEY],
-    null
-  )
-
   const initialProps = await Document.getInitialProps(ctx)
   return {
     ...initialProps,
-    AuthUserInfo, // Styles fragment is rendered after the app and page rendering finish.
     styles: [
       ...React.Children.toArray(initialProps.styles),
       sheets.getStyleElement(),
@@ -121,15 +94,10 @@ CustomDocument.getInitialProps = async (ctx) => {
 }
 
 CustomDocument.propTypes = {
-  AuthUserInfo: PropTypes.shape({
-    AuthUser: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      email: PropTypes.string.isRequired,
-      emailVerified: PropTypes.bool.isRequired,
-    }),
-    token: PropTypes.string,
-    isClientInitialized: PropTypes.bool.isRequired,
-  }).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  styles: PropTypes.array.isRequired,
 }
+
+CustomDocument.defaultProps = {}
 
 export default CustomDocument

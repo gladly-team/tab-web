@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import { flowRight } from 'lodash/util'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
-import { get } from 'lodash/object'
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { AdComponent, fetchAds } from 'tab-ads'
-import withAuthAndData from 'src/utils/pageWrappers/withAuthAndData'
+import {
+  withAuthUser,
+  withAuthUserTokenSSR,
+  AuthAction,
+} from 'next-firebase-auth'
+import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
+import withRelay from 'src/utils/pageWrappers/withRelay'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,
@@ -27,6 +33,8 @@ import SearchInput from 'src/components/SearchInput'
 import { accountURL, achievementsURL } from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
 import logger from 'src/utils/logger'
+import FullPageLoader from 'src/components/FullPageLoader'
+import useData from 'src/utils/hooks/useData'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -195,11 +203,44 @@ if (isClientSide()) {
   loadAds()
 }
 
-const Index = (props) => {
-  const { app, user } = props
+const getRelayQuery = async ({ AuthUser }) => {
+  // If the user is not authenticated, don't try to fetch data
+  // for this page. We won't render the page until data exists.
+  if (!AuthUser.id) {
+    return {}
+  }
+  return {
+    query: graphql`
+      query pagesIndexQuery($userId: String!) {
+        app {
+          ...MoneyRaisedContainer_app
+        }
+        user(userId: $userId) {
+          tabs
+          vcCurrent
+        }
+      }
+    `,
+    variables: {
+      userId: AuthUser.id,
+    },
+  }
+}
 
+const Index = ({ data: initialData }) => {
   const classes = useStyles()
 
+  // FIXME: this query is executing more than once. Most likely,
+  // the SWR key is changing in `useData` (possbly due to its
+  // use of shallow equality).
+  const { data } = useData({
+    getRelayQuery,
+    initialData,
+    // If we are using the service worker (serving a cached version
+    // of the page HTML), fetch fresh data on mount.
+    revalidateOnMount:
+      process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true',
+  })
   const showAchievements = showMockAchievements()
 
   // Determine which ad units we'll show only once, on mount,
@@ -216,6 +257,15 @@ const Index = (props) => {
       setShouldRenderAds(true)
     }
   }, [])
+
+  // Don't load the page until there is data. Data won't exist
+  // if the user doesn't have auth cookies and thus doesn't fetch
+  // any data server-side, in which case we'll fetch data in
+  // `useData` above.
+  if (!data) {
+    return <FullPageLoader />
+  }
+  const { app, user } = data
 
   // FIXME: use UUID in state
   const tabId = 'abc-123'
@@ -255,7 +305,7 @@ const Index = (props) => {
   }
 
   return (
-    <div className={classes.pageContainer}>
+    <div className={classes.pageContainer} data-test-id="new-tab-page">
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
           <div className={classes.userMenuContainer}>
@@ -377,31 +427,32 @@ const Index = (props) => {
 Index.displayName = 'Index'
 
 Index.propTypes = {
-  app: PropTypes.shape({}).isRequired,
-  user: PropTypes.shape({
-    tabs: PropTypes.number.isRequired,
-    vcCurrent: PropTypes.number.isRequired,
-  }).isRequired,
+  data: PropTypes.shape({
+    app: PropTypes.shape({}).isRequired,
+    user: PropTypes.shape({
+      tabs: PropTypes.number.isRequired,
+      vcCurrent: PropTypes.number.isRequired,
+    }).isRequired,
+  }),
 }
 
-Index.defaultProps = {}
+Index.defaultProps = {
+  data: null,
+}
 
-export default withAuthAndData(({ AuthUser }) => {
-  const userId = get(AuthUser, 'id')
-  return {
-    query: graphql`
-      query pagesIndexQuery($userId: String!) {
-        app {
-          ...MoneyRaisedContainer_app
-        }
-        user(userId: $userId) {
-          tabs
-          vcCurrent
-        }
-      }
-    `,
-    variables: {
-      userId,
-    },
-  }
-})(Index)
+export const getServerSideProps = flowRight([
+  withAuthUserTokenSSR({
+    whenUnauthed: AuthAction.SHOW_LOADER,
+    LoaderComponent: FullPageLoader,
+  }),
+  withDataSSR(getRelayQuery),
+])()
+
+export default flowRight([
+  withAuthUser({
+    whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
+    LoaderComponent: FullPageLoader,
+    whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+  }),
+  withRelay,
+])(Index)

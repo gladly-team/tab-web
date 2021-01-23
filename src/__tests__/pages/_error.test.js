@@ -1,6 +1,8 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import NextErrorComponent from 'next/error'
+import NextErrorComponent, {
+  getServerSideProps as NextErrGetSSP,
+} from 'next/error'
 import * as Sentry from '@sentry/node'
 import getMockRes from 'src/utils/testHelpers/mockRes'
 
@@ -11,12 +13,12 @@ const mockErr = new Error('Some mock error.')
 
 const getMockProps = () => ({
   err: mockErr,
-  hasGetInitialPropsRun: true,
+  hasGetServerSidePropsRun: true,
   statusCode: 500,
 })
 
 beforeEach(() => {
-  NextErrorComponent.getInitialProps.mockResolvedValue({
+  NextErrGetSSP.mockResolvedValue({
     statusCode: 500,
     err: mockErr,
   })
@@ -55,57 +57,57 @@ describe('_error.js: render', () => {
     expect(wrapper.find(NextErrorComponent).prop('statusCode')).toEqual(403)
   })
 
-  it('logs an error if "hasGetInitialPropsRun" is false (we have not yet logged an error)', () => {
+  it('logs an error if "hasGetServerSidePropsRun" is false (we have not yet logged an error)', () => {
     expect.assertions(1)
     const ErrorPage = require('src/pages/_error.js').default
     const mockProps = {
       ...getMockProps(),
-      hasGetInitialPropsRun: false,
+      hasGetServerSidePropsRun: false,
     }
     shallow(<ErrorPage {...mockProps} />)
     expect(Sentry.captureException).toHaveBeenCalledWith(mockErr)
   })
 
-  it('does not log an error if "hasGetInitialPropsRun" is true (we already logged an error in getInitialProps)', () => {
+  it('does not log an error if "hasGetServerSidePropsRun" is true (we already logged an error in getServerSideProps)', () => {
     expect.assertions(1)
     const ErrorPage = require('src/pages/_error.js').default
     const mockProps = {
       ...getMockProps(),
-      hasGetInitialPropsRun: true,
+      hasGetServerSidePropsRun: true,
     }
     shallow(<ErrorPage {...mockProps} />)
     expect(Sentry.captureException).not.toHaveBeenCalled()
   })
 })
 
-describe('_error.js: getInitialProps', () => {
-  it("returns the NextErrorComponent's initialProps, plus the hasGetInitialPropsRun prop", async () => {
+describe('_error.js: getServerSideProps', () => {
+  it("returns the NextErrorComponent's initialProps, plus the hasGetServerSidePropsRun prop", async () => {
     expect.assertions(1)
     const otherMockErr = new Error('Another error.')
-    NextErrorComponent.getInitialProps.mockResolvedValue({
+    NextErrGetSSP.mockResolvedValue({
       statusCode: 403,
       err: otherMockErr,
     })
-    const ErrorPage = require('src/pages/_error.js').default
-    const initialProps = await ErrorPage.getInitialProps({
+    const { getServerSideProps } = require('src/pages/_error.js')
+    const initialProps = await getServerSideProps({
       res: getMockRes(),
       err: otherMockErr,
       asPath: '/some-path/',
     })
     expect(initialProps).toMatchObject({
-      hasGetInitialPropsRun: true,
+      hasGetServerSidePropsRun: true,
       err: otherMockErr,
       statusCode: 403,
     })
   })
 
-  it('throws if NextErrorComponent.getInitialProps throws', async () => {
+  it("throws if NextErrorComponent's `getServerSideProps` throws", async () => {
     expect.assertions(1)
     const unrelatedErr = new Error('Some unrelated error!')
-    NextErrorComponent.getInitialProps.mockRejectedValue(unrelatedErr)
-    const ErrorPage = require('src/pages/_error.js').default
+    NextErrGetSSP.mockRejectedValue(unrelatedErr)
+    const { getServerSideProps } = require('src/pages/_error.js')
     await expect(
-      ErrorPage.getInitialProps({
+      getServerSideProps({
         res: getMockRes(),
         err: mockErr,
         asPath: '/some-path/',
@@ -115,8 +117,8 @@ describe('_error.js: getInitialProps', () => {
 
   it('logs an error to Sentry', async () => {
     expect.assertions(1)
-    const ErrorPage = require('src/pages/_error.js').default
-    await ErrorPage.getInitialProps({
+    const { getServerSideProps } = require('src/pages/_error.js')
+    await getServerSideProps({
       res: getMockRes(),
       err: mockErr,
       asPath: '/some-path/',
@@ -126,8 +128,8 @@ describe('_error.js: getInitialProps', () => {
 
   it('does not log an error for a 404 status code', async () => {
     expect.assertions(1)
-    const ErrorPage = require('src/pages/_error.js').default
-    await ErrorPage.getInitialProps({
+    const { getServerSideProps } = require('src/pages/_error.js')
+    await getServerSideProps({
       res: {
         ...getMockRes(),
         statusCode: 404,
@@ -140,22 +142,24 @@ describe('_error.js: getInitialProps', () => {
 
   it('logs an error to Sentry when there is no "err" object', async () => {
     expect.assertions(1)
-    const ErrorPage = require('src/pages/_error.js').default
-    await ErrorPage.getInitialProps({
+    const { getServerSideProps } = require('src/pages/_error.js')
+    await getServerSideProps({
       res: getMockRes(),
       err: undefined,
       asPath: '/some-path/',
     })
     expect(Sentry.captureException).toHaveBeenCalledWith(
-      new Error('_error.js getInitialProps missing data at path: /some-path/')
+      new Error(
+        '_error.js getServerSideProps missing data at path: /some-path/'
+      )
     )
   })
 
-  it('does not throw if "res" is not defined (getInitialProps called on the client)', async () => {
+  it('does not throw if "res" is not defined (getServerSideProps called on the client)', async () => {
     expect.assertions(1)
-    const ErrorPage = require('src/pages/_error.js').default
+    const { getServerSideProps } = require('src/pages/_error.js')
     await expect(
-      ErrorPage.getInitialProps({
+      getServerSideProps({
         res: undefined,
         err: mockErr,
         asPath: '/some-path/',
