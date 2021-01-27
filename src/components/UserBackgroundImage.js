@@ -7,6 +7,7 @@ import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDa
 
 const USER_BACKGROUND_OPTION_DAILY = 'daily'
 const UserBackgroundImage = ({ user }) => {
+  const { backgroundImage: imageURL } = user
   const useStyles = makeStyles(() => ({
     background: {
       boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
@@ -22,7 +23,10 @@ const UserBackgroundImage = ({ user }) => {
       right: 0,
       left: 0,
       zIndex: 'auto',
-      backgroundImage: `url(${user.backgroundImage.imageURL})`,
+      backgroundImage: imageURL
+        ? `url(${user.backgroundImage.imageURL})`
+        : 'none',
+      backgroundColor: !imageURL ? '#4a90e2' : undefined,
     },
   }))
   const getNewDailyImageIfNeeded = ({
@@ -33,15 +37,12 @@ const UserBackgroundImage = ({ user }) => {
     if (backgroundOption !== USER_BACKGROUND_OPTION_DAILY || isNil(timestamp)) {
       return
     }
-
-    const shouldChangeBackgroundImg =
-      // Check if today is a different day (in local time) than
-      // the last time the background image changed.
-      !moment()
-        .local()
-        .startOf('day')
-        .isSame(moment(timestamp).local().startOf('day'))
-
+    // Check if today is a different day (in local time) than
+    // the last time the background image changed.
+    const shouldChangeBackgroundImg = !moment()
+      .local()
+      .startOf('day')
+      .isSame(moment(timestamp).local().startOf('day'))
     if (shouldChangeBackgroundImg) {
       SetBackgroundDailyImageMutation(id)
     }
