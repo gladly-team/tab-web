@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "go": " NODE_ENV=development vercel dev --listen 3001",
+    "go": " NODE_ENV=development vercel dev",
     "dev": "echo \"Use the 'yarn go' command to develop locally.\"",
     "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start",
@@ -28,7 +28,6 @@
     "firebase": "^8.2.2",
     "firebase-admin": "^9.4.2",
     "lodash": "^4.17.20",
-    "moment": "^2.29.1",
     "next": "^10.0.5",
     "next-firebase-auth": "^0.10.0-beta.0",
     "next-images": "^1.6.2",
