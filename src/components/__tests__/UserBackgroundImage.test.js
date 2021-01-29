@@ -11,10 +11,6 @@ const getMockProps = () => ({
   },
 })
 
-beforeEach(() => {
-  jest.useFakeTimers()
-})
-
 describe('UserBackgroundImage component', () => {
   it('renders without error', () => {
     const UserBackgroundImage = require('src/components/UserBackgroundImage')

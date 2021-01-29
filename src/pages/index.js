@@ -36,7 +36,10 @@ import {
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import { accountURL, achievementsURL } from 'src/utils/urls'
-import { showMockAchievements } from 'src/utils/featureFlags'
+import {
+  showMockAchievements,
+  showBackgroundImages,
+} from 'src/utils/featureFlags'
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
@@ -248,7 +251,7 @@ const Index = ({ data: initialData }) => {
       process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true',
   })
   const showAchievements = showMockAchievements()
-
+  const enableBackgroundImages = showBackgroundImages()
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
   const [adUnits, setAdUnits] = useState([])
@@ -312,7 +315,11 @@ const Index = ({ data: initialData }) => {
 
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
-      <UserBackgroundImageContainer user={user} />
+      {enableBackgroundImages ? (
+        <UserBackgroundImageContainer user={user} />
+      ) : (
+        <div />
+      )}
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
           <div className={classes.userMenuContainer}>

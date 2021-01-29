@@ -5,11 +5,6 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-// TODO: we can probably create a test-util helper to
-//   run a bunch of standard tests on container modules.
-//   E.g., it would be nice to test the fetched data against
-//   the module's prop-types.
-// Will get to this when I have my legs under me a little more
 describe('UserBackgroundImage container', () => {
   it('wraps the correct component', () => {
     const { createFragmentContainer } = require('react-relay')
