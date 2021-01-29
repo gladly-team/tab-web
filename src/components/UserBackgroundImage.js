@@ -9,11 +9,11 @@ import { get } from 'lodash/object'
 import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDailyImageMutation'
 import Fade from '@material-ui/core/Fade'
 
-const FadeWrapper = ({ children }) => (
-  <Fade in out timeout={2000}>
-    {children}
-  </Fade>
-)
+// const FadeWrapper = ({ children }) => (
+  
+//     {children}
+  
+// )
 dayjs.extend(isToday)
 const useStyles = makeStyles(() => ({
   background: {
@@ -28,7 +28,7 @@ const useStyles = makeStyles(() => ({
     right: 0,
     left: 0,
     zIndex: 'auto',
-    backgroundImage: (user) =>
+    backgroundImage: ({ user }) =>
       user.backgroundImage.imageURL
         ? `url(${user.backgroundImage.imageURL})`
         : 'none',
@@ -47,33 +47,33 @@ const useStyles = makeStyles(() => ({
 }))
 const USER_BACKGROUND_OPTION_DAILY = 'daily'
 const UserBackgroundImage = ({ user }) => {
-  const getNewDailyImageIfNeeded = ({
-    backgroundImage: { timestamp },
-    backgroundOption,
-    id,
-  }) => {
-    if (backgroundOption !== USER_BACKGROUND_OPTION_DAILY || isNil(timestamp)) {
+  console.log(JSON.stringify(user), 'data called does it dif')
+  const {
+    backgroundImage: { timestamp: backgroundImageTimestamp, imageURL },
+    id: userId,
+  } = user
+  const getNewDailyImageIfNeeded = (timestamp, id) => {
+    // console.log(timestamp, id, 'my timestamp and id change')
+    if (isNil(timestamp)) {
       return
     }
     // by default dayjs displays in local time and compares in local
     const shouldChangeBackgroundImg = !dayjs(timestamp).isToday()
     if (shouldChangeBackgroundImg) {
+      console.log(shouldChangeBackgroundImg, 'fired inside of image mutation')
       SetBackgroundDailyImageMutation(id)
     }
   }
   useEffect(() => {
-    getNewDailyImageIfNeeded(user)
-  }, [user])
+    getNewDailyImageIfNeeded(backgroundImageTimestamp, userId)
+  }, [backgroundImageTimestamp, userId])
   //talk to kevin about this
-  const classes = useStyles(user)
+  const classes = useStyles({ user })
   return (
     <div>
-      <FadeWrapper>
-        <div
-          className={classes.background}
-          Key={user.backgroundImage.imageURL}
-        />
-      </FadeWrapper>
+      <Fade in out timeout={2000}>
+        <div className={classes.background} key={imageURL} />
+      </Fade>
       <div data-test-id={'background-tint-overlay'} className={classes.tint} />
     </div>
   )

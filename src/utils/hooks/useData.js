@@ -29,6 +29,7 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
 
   // Set up the Relay environment and get the Relay query.
   const [relayQuery, setRelayQuery] = useState()
+  // console.log(relayQuery, ' relay query')
   const [relayVariables, setRelayVariables] = useState()
   useEffect(() => {
     const getRelayQueryAndVars = async () => {
@@ -47,6 +48,7 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
   // https://github.com/vercel/swr/issues/129
 
   // https://github.com/vercel/swr#options
+  // console.log('')
   const { data, error } = useSWR(
     // SWR won't fetch if the "key" function returns null.
     // https://github.com/vercel/swr#dependent-fetching
