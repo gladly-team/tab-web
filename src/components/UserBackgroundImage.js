@@ -73,15 +73,5 @@ UserBackgroundImage.propTypes = {
     }),
     backgroundOption: PropTypes.string,
     id: PropTypes.string,
-  }),
-}
-UserBackgroundImage.defaultProps = {
-  user: {
-    backgroundImage: {
-      imageURL: '',
-      timestamp: '',
-    },
-    backgroundOption: 'daily',
-    id: '',
-  },
+  }).isRequired,
 }
