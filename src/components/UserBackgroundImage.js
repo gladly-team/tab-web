@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
-// switch to dayjs
 import dayjs from 'dayjs'
 import isToday from 'dayjs/plugin/isToday'
 import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDailyImageMutation'
@@ -42,18 +41,11 @@ const UserBackgroundImage = ({ user }) => {
     backgroundImage: { timestamp: backgroundImageTimestamp, imageURL },
     id: userId,
   } = user
-  const getNewDailyImageIfNeeded = (timestamp, id) => {
-    if (isNil(timestamp)) {
-      return
-    }
-    // by default dayjs displays in local time and compares in local
-    const shouldChangeBackgroundImg = !dayjs(timestamp).isToday()
-    if (shouldChangeBackgroundImg) {
-      SetBackgroundDailyImageMutation(id)
-    }
-  }
   useEffect(() => {
-    getNewDailyImageIfNeeded(backgroundImageTimestamp, userId)
+    const shouldChangeBackgroundImg = !dayjs(backgroundImageTimestamp).isToday()
+    if (shouldChangeBackgroundImg || isNil(backgroundImageTimestamp)) {
+      SetBackgroundDailyImageMutation(userId)
+    }
   }, [backgroundImageTimestamp, userId])
   const classes = useStyles({ user })
   return (
@@ -71,7 +63,6 @@ UserBackgroundImage.propTypes = {
       imageURL: PropTypes.string,
       timestamp: PropTypes.string,
     }),
-    backgroundOption: PropTypes.string,
     id: PropTypes.string,
   }).isRequired,
 }
