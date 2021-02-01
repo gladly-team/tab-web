@@ -33,7 +33,6 @@ describe('SetBackgroundDailyImageMutation', () => {
       .default
     callMutation.mockResolvedValue({
       user: {
-        backgroundOption: 'daily',
         id: 'some-id',
         backgroundImage: {
           imageURL: 'some-url',
@@ -46,7 +45,6 @@ describe('SetBackgroundDailyImageMutation', () => {
     })
     expect(response).toEqual({
       user: {
-        backgroundOption: 'daily',
         id: 'some-id',
         backgroundImage: {
           imageURL: 'some-url',

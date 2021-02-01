@@ -66,6 +66,6 @@ UserBackgroundImage.propTypes = {
       imageURL: PropTypes.string,
       timestamp: PropTypes.string,
     }),
-    id: PropTypes.string,
+    id: PropTypes.string.isRequired,
   }).isRequired,
 }

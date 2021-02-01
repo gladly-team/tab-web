@@ -5,9 +5,7 @@ const mutation = graphql`
   mutation SetBackgroundDailyImageMutation($input: SetUserBkgDailyImageInput!) {
     setUserBkgDailyImage(input: $input) {
       user {
-        backgroundOption
         backgroundImage {
-          id
           imageURL
           timestamp
         }

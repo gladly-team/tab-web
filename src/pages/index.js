@@ -317,9 +317,7 @@ const Index = ({ data: initialData }) => {
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {enableBackgroundImages ? (
         <UserBackgroundImageContainer user={user} />
-      ) : (
-        <div />
-      )}
+      ) : null}
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
           <div className={classes.userMenuContainer}>
