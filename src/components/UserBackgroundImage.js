@@ -42,6 +42,7 @@ const UserBackgroundImage = ({ user }) => {
     id: userId,
   } = user
   useEffect(() => {
+    // Show a new background image every day.
     const shouldChangeBackgroundImg = !dayjs(backgroundImageTimestamp).isToday()
     if (shouldChangeBackgroundImg || isNil(backgroundImageTimestamp)) {
       SetBackgroundDailyImageMutation(userId)
