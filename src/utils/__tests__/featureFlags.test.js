@@ -42,3 +42,23 @@ describe('feature flag: showMockAchievements', () => {
     expect(showMockAchievements()).toBe(true)
   })
 })
+
+describe('feature flag: showBackgroundImages', () => {
+  it('returns false when the env var is undefined', () => {
+    delete process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_BACKGROUND_IMAGES
+    const { showBackgroundImages } = require('src/utils/featureFlags')
+    expect(showBackgroundImages()).toBe(false)
+  })
+
+  it('returns false when the env var is "false"', () => {
+    process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_BACKGROUND_IMAGES = 'false'
+    const { showBackgroundImages } = require('src/utils/featureFlags')
+    expect(showBackgroundImages()).toBe(false)
+  })
+
+  it('returns true when the env var is "true"', () => {
+    process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_BACKGROUND_IMAGES = 'true'
+    const { showBackgroundImages } = require('src/utils/featureFlags')
+    expect(showBackgroundImages()).toBe(true)
+  })
+})

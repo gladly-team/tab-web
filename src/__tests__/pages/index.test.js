@@ -4,9 +4,13 @@ import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { accountURL } from 'src/utils/urls'
-import { showMockAchievements } from 'src/utils/featureFlags'
+import {
+  showMockAchievements,
+  showBackgroundImages,
+} from 'src/utils/featureFlags'
 import Achievement from 'src/components/Achievement'
 import FullPageLoader from 'src/components/FullPageLoader'
+import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import useData from 'src/utils/hooks/useData'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
@@ -27,6 +31,7 @@ jest.mock('src/components/Achievement', () => () => (
 jest.mock('src/utils/pageWrappers/withRelay')
 jest.mock('src/utils/hooks/useData')
 jest.mock('src/components/FullPageLoader')
+jest.mock('src/components/UserBackgroundImageContainer')
 jest.mock('src/utils/pageWrappers/withDataSSR')
 
 const getMockProps = () => ({
@@ -41,6 +46,7 @@ const getMockProps = () => ({
 
 beforeEach(() => {
   showMockAchievements.mockReturnValue(false)
+  showBackgroundImages.mockReturnValue(false)
   useData.mockReturnValue({ data: getMockProps().data })
   process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
 })
@@ -191,5 +197,23 @@ describe('index.js', () => {
     expect(
       wrapper.find('[data-test-id="achievements"]').find(Achievement).length
     ).toBeGreaterThan(1)
+  })
+
+  it('does not show the background image container if showBackgroundImages returns false', () => {
+    expect.assertions(1)
+    showBackgroundImages.mockReturnValue(false)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(UserBackgroundImageContainer).exists()).toBe(false)
+  })
+
+  it('does show the background image container if showBackgroundImages returns true', () => {
+    expect.assertions(1)
+    showBackgroundImages.mockReturnValue(true)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(UserBackgroundImageContainer).exists()).toBe(true)
   })
 })
