@@ -1,20 +1,30 @@
+// libraries
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { flowRight } from 'lodash/util'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
-import { makeStyles } from '@material-ui/core/styles'
-import grey from '@material-ui/core/colors/grey'
-import Typography from '@material-ui/core/Typography'
-import IconButton from '@material-ui/core/IconButton'
-import SettingsIcon from '@material-ui/icons/Settings'
 import { AdComponent, fetchAds } from 'tab-ads'
 import {
   withAuthUser,
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
+// custom components
+import Achievement from 'src/components/Achievement'
+import Link from 'src/components/Link'
+import Logo from 'src/components/Logo'
+import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
+import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
+import SearchInput from 'src/components/SearchInput'
+// material components
+import { makeStyles } from '@material-ui/core/styles'
+import grey from '@material-ui/core/colors/grey'
+import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
+import SettingsIcon from '@material-ui/icons/Settings'
+// utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
@@ -25,13 +35,11 @@ import {
   isInEuropeanUnion,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
-import Achievement from 'src/components/Achievement'
-import Link from 'src/components/Link'
-import Logo from 'src/components/Logo'
-import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
-import SearchInput from 'src/components/SearchInput'
 import { accountURL, achievementsURL } from 'src/utils/urls'
-import { showMockAchievements } from 'src/utils/featureFlags'
+import {
+  showMockAchievements,
+  showBackgroundImages,
+} from 'src/utils/featureFlags'
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
@@ -218,6 +226,7 @@ const getRelayQuery = async ({ AuthUser }) => {
         user(userId: $userId) {
           tabs
           vcCurrent
+          ...UserBackgroundImageContainer_user
         }
       }
     `,
@@ -242,7 +251,7 @@ const Index = ({ data: initialData }) => {
       process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true',
   })
   const showAchievements = showMockAchievements()
-
+  const enableBackgroundImages = showBackgroundImages()
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
   const [adUnits, setAdUnits] = useState([])
@@ -306,6 +315,9 @@ const Index = ({ data: initialData }) => {
 
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
+      {enableBackgroundImages ? (
+        <UserBackgroundImageContainer user={user} />
+      ) : null}
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
           <div className={classes.userMenuContainer}>
