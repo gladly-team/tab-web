@@ -19,6 +19,8 @@ const SetBackgroundDailyImageMutation = (userId) =>
     variables: {
       input: {
         userId,
+        // currently this only fires when background image feature flag is enabled
+        category: 'cats',
       },
     },
   })
