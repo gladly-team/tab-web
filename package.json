@@ -8,6 +8,7 @@
     "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start",
     "test": "yarn run lint && yarn run relay && jest",
+    "test:watch": "yarn run relay && jest --watch",
     "test:coverage": "yarn run test --coverage",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",

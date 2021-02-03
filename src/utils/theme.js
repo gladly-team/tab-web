@@ -31,7 +31,7 @@ export default theme
 export const extendTheme = (primaryTheme, extendedTheme) =>
   createMuiTheme({
     // so you can add additional fields, idk if you'd ever want to
-    // this will have to be modified if we add more things or if you want to extend just 
+    // this will have to be modified if we add more things or if you want to extend just
     // one field inside of say secondary but I believe it will handle most cases
     ...extendedTheme,
     palette: {
