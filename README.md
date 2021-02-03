@@ -9,9 +9,11 @@ _V4: adding server-side rendering_
 1. `git clone git@github.com:gladly-team/tab-web.git`
 2. `cd tab-web`
 3. `yarn`
-4. `yarn go`
-
-_Note: this also requires a running GraphQL service endpoint. We may want to update the default endpoint to a dev endpoint in the cloud for a better develeoper experience._
+4. Set up local secret environment varables
+    1. Copy `.env.local.info` to `.env.local`
+    2. Set `FIREBASE_PRIVATE_KEY` to a staging environment key
+    3. Set cookie secrets to sufficiently long, random strings
+5. `yarn go`
 
 ## Documentation
 
