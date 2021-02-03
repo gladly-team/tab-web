@@ -2,9 +2,7 @@ const theme = {
   palette: {
     text: {
       primary: '#fff',
-    },
-    action: {
-      active: '#fff',
+      contrastText: '#9d4ba3',
     },
   },
 }

@@ -18,13 +18,9 @@ import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import SearchInput from 'src/components/SearchInput'
+import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
 // material components
-import {
-  createMuiTheme,
-  makeStyles,
-  ThemeProvider,
-  useTheme,
-} from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
@@ -41,16 +37,12 @@ import {
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import { accountURL, achievementsURL } from 'src/utils/urls'
-import {
-  showMockAchievements,
-  showBackgroundImages,
-} from 'src/utils/featureFlags'
+import { showMockAchievements, showBackgroundImages } from 'src/utils/featureFlags'
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
-import { extendTheme } from 'src/utils/theme'
-import BackgroundImageActiveTheme from 'src/utils/styles/backgroundImageActiveTheme'
 
+const enableBackgroundImages = showBackgroundImages()
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
     height: '100vh',
@@ -92,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
   settingsIcon: {
     height: 20,
     width: 20,
+    color: theme.palette.text.primary,
   },
   achievementsContainer: {
     alignSelf: 'flex-end',
@@ -242,7 +235,6 @@ const getRelayQuery = async ({ AuthUser }) => {
 
 const Index = ({ data: initialData }) => {
   const classes = useStyles()
-
   // FIXME: this query is executing more than once. Most likely,
   // the SWR key is changing in `useData` (possbly due to its
   // use of shallow equality).
@@ -255,9 +247,6 @@ const Index = ({ data: initialData }) => {
       process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true',
   })
   const showAchievements = showMockAchievements()
-  const [enableBackgroundImages, setEnableBackgroundImages] = useState(
-    showBackgroundImages()
-  )
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
   const [adUnits, setAdUnits] = useState([])
@@ -273,18 +262,6 @@ const Index = ({ data: initialData }) => {
     }
   }, [])
 
-  const defaultTheme = useTheme()
-
-  const theme = useMemo(
-    () =>
-      createMuiTheme(
-        extendTheme(
-          defaultTheme,
-          enableBackgroundImages === true ? BackgroundImageActiveTheme : {}
-        )
-      ),
-    [enableBackgroundImages, defaultTheme]
-  )
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
   // any data server-side, in which case we'll fetch data in
@@ -330,36 +307,30 @@ const Index = ({ data: initialData }) => {
   const onAdError = (e) => {
     logger.error(e)
   }
-  const fliptheswitch = (event) =>
-    setEnableBackgroundImages(!enableBackgroundImages)
+
   return (
-    <div className={classes.pageContainer} data-test-id="new-tab-page" onClick={fliptheswitch}>
+    <div className={classes.pageContainer} data-test-id="new-tab-page">
       {enableBackgroundImages ? (
         <UserBackgroundImageContainer user={user} />
       ) : null}
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
-          <ThemeProvider theme={theme}>
-            <div className={classes.userMenuContainer}>
-              <div className={classes.moneyRaisedContainer}>
-                <Typography variant="h5" className={clsx(classes.userMenuItem)}>
-                  <MoneyRaisedContainer app={app} />
-                </Typography>
-              </div>
-              <div className={classes.settingsIconContainer}>
-                <Link to={accountURL}>
-                  <IconButton>
-                    <SettingsIcon
-                      className={clsx(
-                        classes.userMenuItem,
-                        classes.settingsIcon
-                      )}
-                    />
-                  </IconButton>
-                </Link>
-              </div>
+          <div className={classes.userMenuContainer}>
+            <div className={classes.moneyRaisedContainer}>
+              <Typography variant="h5" className={clsx(classes.userMenuItem)}>
+                <MoneyRaisedContainer app={app} />
+              </Typography>
             </div>
-          </ThemeProvider>
+            <div className={classes.settingsIconContainer}>
+              <Link to={accountURL}>
+                <IconButton>
+                  <SettingsIcon
+                    className={clsx(classes.userMenuItem, classes.settingsIcon)}
+                  />
+                </IconButton>
+              </Link>
+            </div>
+          </div>
         </div>
         {showAchievements ? (
           <Link
@@ -405,7 +376,7 @@ const Index = ({ data: initialData }) => {
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
           <Logo includeText className={classes.logo} />
-          <SearchInput className={classes.searchBar}/>
+          <SearchInput className={classes.searchBar} />
         </div>
       </div>
       <div className={classes.adsContainer}>
@@ -491,4 +462,5 @@ export default flowRight([
     whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
   }),
   withRelay,
+  NewTabThemeWrapperHOC,
 ])(Index)

@@ -13,9 +13,6 @@ const theme = createMuiTheme({
     text: {
       primary: 'rgba(0, 0, 0, 0.80)',
     },
-    action: {
-      active: 'rgba(0, 0, 0, 0.70)',
-    },
   },
   typography: {
     fontSize: 14,
