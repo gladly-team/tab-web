@@ -19,7 +19,11 @@ import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import SearchInput from 'src/components/SearchInput'
 // material components
-import { makeStyles } from '@material-ui/core/styles'
+import {
+  makeStyles,
+  createMuiTheme,
+  ThemeProvider,
+} from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
@@ -43,6 +47,7 @@ import {
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
+import BackgroundImageActiveTheme from 'src/utils/styles/backgroundImageEnabledTheme'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -312,7 +317,12 @@ const Index = ({ data: initialData }) => {
   const onAdError = (e) => {
     logger.error(e)
   }
-
+  const theme = React.useMemo(() => {
+    if (enableBackgroundImages === true) {
+      return createMuiTheme(BackgroundImageActiveTheme)
+    }
+    return createMuiTheme()
+  }, [enableBackgroundImages])
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {enableBackgroundImages ? (
@@ -320,22 +330,27 @@ const Index = ({ data: initialData }) => {
       ) : null}
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
-          <div className={classes.userMenuContainer}>
-            <div className={classes.moneyRaisedContainer}>
-              <Typography variant="h5" className={clsx(classes.userMenuItem)}>
-                <MoneyRaisedContainer app={app} />
-              </Typography>
+          <ThemeProvider theme={theme}>
+            <div className={classes.userMenuContainer}>
+              <div className={classes.moneyRaisedContainer}>
+                <Typography variant="h5" className={clsx(classes.userMenuItem)}>
+                  <MoneyRaisedContainer app={app} />
+                </Typography>
+              </div>
+              <div className={classes.settingsIconContainer}>
+                <Link to={accountURL}>
+                  <IconButton>
+                    <SettingsIcon
+                      className={clsx(
+                        classes.userMenuItem,
+                        classes.settingsIcon
+                      )}
+                    />
+                  </IconButton>
+                </Link>
+              </div>
             </div>
-            <div className={classes.settingsIconContainer}>
-              <Link to={accountURL}>
-                <IconButton>
-                  <SettingsIcon
-                    className={clsx(classes.userMenuItem, classes.settingsIcon)}
-                  />
-                </IconButton>
-              </Link>
-            </div>
-          </div>
+          </ThemeProvider>
         </div>
         {showAchievements ? (
           <Link
