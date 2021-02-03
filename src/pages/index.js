@@ -47,7 +47,8 @@ import {
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
-import BackgroundImageActiveTheme from 'src/utils/styles/backgroundImageEnabledTheme'
+import { extendTheme } from 'src/utils/theme'
+import BackgroundImageActiveTheme from 'src/utils/styles/backgroundImageActiveTheme'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -80,9 +81,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     padding: theme.spacing(1),
     paddingBottom: theme.spacing(0),
-  },
-  userMenuItem: {
-    color: 'rgba(0, 0, 0, 0.70)',
   },
   moneyRaisedContainer: {
     margin: theme.spacing(0.5),
@@ -257,6 +255,8 @@ const Index = ({ data: initialData }) => {
   })
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
+  const extendedTheme =
+    enableBackgroundImages === true ? BackgroundImageActiveTheme : {}
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
   const [adUnits, setAdUnits] = useState([])
@@ -317,12 +317,7 @@ const Index = ({ data: initialData }) => {
   const onAdError = (e) => {
     logger.error(e)
   }
-  const theme = React.useMemo(() => {
-    if (enableBackgroundImages === true) {
-      return createMuiTheme(BackgroundImageActiveTheme)
-    }
-    return createMuiTheme()
-  }, [enableBackgroundImages])
+
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {enableBackgroundImages ? (
@@ -330,7 +325,7 @@ const Index = ({ data: initialData }) => {
       ) : null}
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
-          <ThemeProvider theme={theme}>
+          <ThemeProvider theme={(theme) => extendTheme(theme, extendedTheme)}>
             <div className={classes.userMenuContainer}>
               <div className={classes.moneyRaisedContainer}>
                 <Typography variant="h5" className={clsx(classes.userMenuItem)}>
