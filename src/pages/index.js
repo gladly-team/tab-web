@@ -1,5 +1,5 @@
 // libraries
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { flowRight } from 'lodash/util'
 import clsx from 'clsx'
@@ -19,7 +19,12 @@ import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import SearchInput from 'src/components/SearchInput'
 // material components
-import { makeStyles, ThemeProvider } from '@material-ui/core/styles'
+import {
+  createMuiTheme,
+  makeStyles,
+  ThemeProvider,
+  useTheme,
+} from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
@@ -250,9 +255,9 @@ const Index = ({ data: initialData }) => {
       process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true',
   })
   const showAchievements = showMockAchievements()
-  const enableBackgroundImages = showBackgroundImages()
-  const extendedTheme =
-    enableBackgroundImages === true ? BackgroundImageActiveTheme : {}
+  const [enableBackgroundImages, setEnableBackgroundImages] = useState(
+    showBackgroundImages()
+  )
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
   const [adUnits, setAdUnits] = useState([])
@@ -268,6 +273,18 @@ const Index = ({ data: initialData }) => {
     }
   }, [])
 
+  const defaultTheme = useTheme()
+
+  const theme = useMemo(
+    () =>
+      createMuiTheme(
+        extendTheme(
+          defaultTheme,
+          enableBackgroundImages === true ? BackgroundImageActiveTheme : {}
+        )
+      ),
+    [enableBackgroundImages, defaultTheme]
+  )
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
   // any data server-side, in which case we'll fetch data in
@@ -313,15 +330,16 @@ const Index = ({ data: initialData }) => {
   const onAdError = (e) => {
     logger.error(e)
   }
-
+  const fliptheswitch = (event) =>
+    setEnableBackgroundImages(!enableBackgroundImages)
   return (
-    <div className={classes.pageContainer} data-test-id="new-tab-page">
+    <div className={classes.pageContainer} data-test-id="new-tab-page" onClick={fliptheswitch}>
       {enableBackgroundImages ? (
         <UserBackgroundImageContainer user={user} />
       ) : null}
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
-          <ThemeProvider theme={(theme) => extendTheme(theme, extendedTheme)}>
+          <ThemeProvider theme={theme}>
             <div className={classes.userMenuContainer}>
               <div className={classes.moneyRaisedContainer}>
                 <Typography variant="h5" className={clsx(classes.userMenuItem)}>
@@ -387,7 +405,7 @@ const Index = ({ data: initialData }) => {
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
           <Logo includeText className={classes.logo} />
-          <SearchInput className={classes.searchBar} />
+          <SearchInput className={classes.searchBar}/>
         </div>
       </div>
       <div className={classes.adsContainer}>

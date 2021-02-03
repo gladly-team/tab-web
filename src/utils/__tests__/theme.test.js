@@ -1,5 +1,6 @@
 import Theme, { extendTheme } from 'src/utils/theme'
 import BackgroundActiveTheme from 'src/utils/styles/backgroundImageActiveTheme'
+
 jest.mock('@material-ui/core/styles', () => ({
   createMuiTheme: (theme) => theme,
 }))
