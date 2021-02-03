@@ -2,7 +2,7 @@
 
 # [Tab for a Cause](https://tab.gladly.io/)
 
-_V4: adding server-side rendering_
+🚨 **Work in progress** 🚨: see [gladly-team/tab](https://github.com/gladly-team/tab) for the production web app
 
 ## Getting Started
 
