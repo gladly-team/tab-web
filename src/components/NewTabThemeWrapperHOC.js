@@ -13,7 +13,6 @@ const NewTabThemeWrapper = (Component) =>
   function ThemeComponent(props) {
     const [enableBackgroundImages] = useState(showBackgroundImages())
     const defaultTheme = useTheme()
-
     const theme = useMemo(
       () =>
         createMuiTheme(

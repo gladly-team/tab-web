@@ -1,6 +1,5 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-// import Page from '../../pages/index'
 import { flowRight } from 'lodash/util'
 import { showBackgroundImages } from 'src/utils/featureFlags'
 import NewTabThemeWrapper from '../NewTabThemeWrapperHOC'
