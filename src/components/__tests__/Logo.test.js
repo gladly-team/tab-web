@@ -118,9 +118,18 @@ describe('Logo component', () => {
     const Logo = require('src/components/Logo').default
     const mockProps = getMockProps()
     mockProps.includeText = true
-    mockProps.color = 'white'
+    mockProps.color = 'grey'
     const wrapper = shallow(<Logo {...mockProps} />)
     expect(wrapper.find('img').prop('src')).toEqual('logo-with-text.svg')
+  })
+
+  it('uses the correct file for includeText=true when a supported color is provided as well', () => {
+    const Logo = require('src/components/Logo').default
+    const mockProps = getMockProps()
+    mockProps.includeText = true
+    mockProps.color = 'white'
+    const wrapper = shallow(<Logo {...mockProps} />)
+    expect(wrapper.find('img').prop('src')).toEqual('logo-with-text-white.svg')
   })
 
   it('throws an error when passed an invalid color', () => {

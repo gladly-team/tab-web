@@ -378,7 +378,11 @@ const Index = ({ data: initialData }) => {
       </div>
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
-          <Logo includeText className={classes.logo} />
+          <Logo
+            includeText
+            color={enableBackgroundImages ? 'white' : null}
+            className={classes.logo}
+          />
           <SearchInput className={classes.searchBar} />
         </div>
       </div>
