@@ -1,5 +1,6 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 import { merge } from 'lodash/object'
+
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -26,21 +27,4 @@ const theme = createMuiTheme({
 export default theme
 
 export const extendTheme = (primaryTheme, extendedTheme) =>
-  createMuiTheme({
-    // so you can add additional fields, idk if you'd ever want to
-    // this will have to be modified if we add more things or if you want to extend just
-    // one field inside of say secondary but I believe it will handle most cases
-    ...extendedTheme,
-    palette: {
-      ...primaryTheme.palette,
-      ...extendedTheme.palette,
-    },
-    typography: {
-      ...primaryTheme.typography,
-      ...extendedTheme.typography,
-    },
-    shape: {
-      ...primaryTheme.shape,
-      ...extendedTheme.shape,
-    },
-  })
+  createMuiTheme(merge({}, primaryTheme, extendedTheme))

@@ -33,6 +33,9 @@ jest.mock('src/utils/hooks/useData')
 jest.mock('src/components/FullPageLoader')
 jest.mock('src/components/UserBackgroundImageContainer')
 jest.mock('src/utils/pageWrappers/withDataSSR')
+jest.mock('src/components/newTabThemeWrapperHOC', () => (component) =>
+  component
+)
 
 const getMockProps = () => ({
   data: {

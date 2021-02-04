@@ -1,5 +1,5 @@
 // libraries
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { flowRight } from 'lodash/util'
 import clsx from 'clsx'
@@ -37,12 +37,14 @@ import {
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import { accountURL, achievementsURL } from 'src/utils/urls'
-import { showMockAchievements, showBackgroundImages } from 'src/utils/featureFlags'
+import {
+  showMockAchievements,
+  showBackgroundImages,
+} from 'src/utils/featureFlags'
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
 
-const enableBackgroundImages = showBackgroundImages()
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
     height: '100vh',
@@ -247,6 +249,7 @@ const Index = ({ data: initialData }) => {
       process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true',
   })
   const showAchievements = showMockAchievements()
+  const enableBackgroundImages = showBackgroundImages()
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
   const [adUnits, setAdUnits] = useState([])
