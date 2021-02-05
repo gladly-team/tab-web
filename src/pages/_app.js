@@ -50,7 +50,10 @@ const MyApp = (props) => {
     // https://github.com/mui-org/material-ui/tree/master/examples/nextjs
     const jssStyles = document.querySelector('#jss-server-side')
     if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles)
+      // Debugging
+      // eslint-disable-next-line no-console
+      // console.log('===== Removing MUI server-side styles =====')
+      // jssStyles.parentElement.removeChild(jssStyles)
     }
   }, [])
 
