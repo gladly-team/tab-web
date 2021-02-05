@@ -6,6 +6,8 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
 import { AdComponent, fetchAds } from 'tab-ads'
+import uuid from 'uuid/v4'
+import { get } from 'lodash/object'
 import {
   withAuthUser,
   withAuthUserTokenSSR,
@@ -27,6 +29,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
+import useTabCount from 'src/utils/hooks/useTabCount'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,
@@ -226,6 +229,7 @@ const getRelayQuery = async ({ AuthUser }) => {
         user(userId: $userId) {
           tabs
           vcCurrent
+          userId
           ...UserBackgroundImageContainer_user
         }
       }
@@ -258,7 +262,7 @@ const Index = ({ data: initialData }) => {
   useEffect(() => {
     setAdUnits(getAdUnits())
   }, [])
-
+  // useTabCount(d)
   // Only render ads if we are on the client side.
   const [shouldRenderAds, setShouldRenderAds] = useState(false)
   useEffect(() => {
@@ -266,7 +270,11 @@ const Index = ({ data: initialData }) => {
       setShouldRenderAds(true)
     }
   }, [])
+  // FIXME: use UUID in state
+  const [tabId] = useState(uuid())
+  const { app, user } = data || {}
 
+  useTabCount(get(user, 'userId', ''), tabId)
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
   // any data server-side, in which case we'll fetch data in
@@ -274,11 +282,6 @@ const Index = ({ data: initialData }) => {
   if (!data) {
     return <FullPageLoader />
   }
-  const { app, user } = data
-
-  // FIXME: use UUID in state
-  const tabId = 'abc-123'
-
   // Data to provide the onAdDisplayed callback
   const adContext = {
     user,
