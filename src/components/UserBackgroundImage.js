@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
+import Fade from '@material-ui/core/Fade'
 import { isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import dayjs from 'dayjs'
@@ -9,12 +10,12 @@ import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDa
 
 dayjs.extend(isToday)
 const useStyles = makeStyles(() => ({
-  '@keyframes fadeIn': {
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-  },
+  // '@keyframes fadeIn': {
+  //   from: { opacity: 0 },
+  //   to: { opacity: 1 },
+  // },
   background: {
-    animation: '$fadeIn 0.5s ease',
+    // animation: '$fadeIn 0.5s ease',
     boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
@@ -64,10 +65,12 @@ const UserBackgroundImage = ({ user }) => {
   console.log('imageURL:', imageURL)
 
   return (
-    <div>
-      <div className={classes.background} key={imageURL} />
-      <div className={classes.tint} />
-    </div>
+    <Fade in timeout={400}>
+      <div>
+        <div className={classes.background} key={imageURL} />
+        <div className={classes.tint} />
+      </div>
+    </Fade>
   )
 }
 export default UserBackgroundImage
