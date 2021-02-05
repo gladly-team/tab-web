@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { CSSTransition } from 'react-transition-group'
 import { makeStyles } from '@material-ui/core/styles'
 import { isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
@@ -9,13 +10,13 @@ import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDa
 
 dayjs.extend(isToday)
 const useStyles = makeStyles(() => ({
-  '@keyframes fadeIn': {
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-  },
-  fade: {
-    animation: '$fadeIn 0.5s ease',
-  },
+  // '@keyframes fadeIn': {
+  //   from: { opacity: 0 },
+  //   to: { opacity: 1 },
+  // },
+  // fade: {
+  //   animation: '$fadeIn 0.5s ease',
+  // },
   image: {
     boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
     backgroundRepeat: 'no-repeat',
@@ -66,18 +67,20 @@ const UserBackgroundImage = ({ user }) => {
   console.log('imageURL:', imageURL)
 
   return (
-    <div key={imageURL} className={classes.fade}>
-      <div
-        className={classes.image}
-        key={imageURL}
-        style={{
-          backgroundImage: get(user, 'backgroundImage.imageURL', undefined)
-            ? `url(${user.backgroundImage.imageURL})`
-            : 'none',
-        }}
-      />
-      <div className={classes.tint} />
-    </div>
+    <CSSTransition appear in timeout={2000} classNames="background-img">
+      <div>
+        <div
+          className={classes.image}
+          key={imageURL}
+          style={{
+            backgroundImage: get(user, 'backgroundImage.imageURL', undefined)
+              ? `url(${user.backgroundImage.imageURL})`
+              : 'none',
+          }}
+        />
+        <div className={classes.tint} />
+      </div>
+    </CSSTransition>
   )
 }
 export default UserBackgroundImage
