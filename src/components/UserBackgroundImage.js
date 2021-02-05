@@ -66,7 +66,7 @@ const UserBackgroundImage = ({ user }) => {
   console.log('imageURL:', imageURL)
 
   return (
-    <div className={classes.fade}>
+    <div key={imageURL} className={classes.fade}>
       <div
         className={classes.image}
         key={imageURL}
