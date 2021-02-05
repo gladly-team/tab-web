@@ -57,7 +57,7 @@ const UserBackgroundImage = ({ user }) => {
       SetBackgroundDailyImageMutation(userId)
     }
   }, [backgroundImageTimestamp, userId])
-  const classes = useStyles({ user })
+  const classes = useStyles()
 
   // Debugging
   // eslint-disable-next-line no-console
