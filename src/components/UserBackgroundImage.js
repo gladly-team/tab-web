@@ -1,14 +1,46 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { makeStyles } from '@material-ui/core/styles'
 import { isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import dayjs from 'dayjs'
 import isToday from 'dayjs/plugin/isToday'
 import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDailyImageMutation'
-// import styles from './UserBackgroundImage.module.css'
 
 dayjs.extend(isToday)
-
+const useStyles = makeStyles(() => ({
+  '@keyframes fadeIn': {
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  },
+  background: {
+    animation: '$fadeIn 0.5s ease',
+    boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundAttachment: 'fixed',
+    backgroundSize: 'cover',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    zIndex: 'auto',
+    backgroundImage: ({ user }) =>
+      get(user, 'backgroundImage.imageURL', undefined)
+        ? `url(${user.backgroundImage.imageURL})`
+        : 'none',
+  },
+  tint: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    zIndex: 'auto',
+    backgroundColor: `rgba(0, 0, 0, 0.15)`,
+  },
+}))
 const UserBackgroundImage = ({ user }) => {
   const {
     backgroundImage: { timestamp: backgroundImageTimestamp, imageURL },
@@ -23,25 +55,11 @@ const UserBackgroundImage = ({ user }) => {
       SetBackgroundDailyImageMutation(userId)
     }
   }, [backgroundImageTimestamp, userId])
-
-  // Debugging
-  // eslint-disable-next-line no-console
-  console.log('user:', user)
-  // eslint-disable-next-line no-console
-  console.log('imageURL:', imageURL)
-
+  const classes = useStyles({ user })
   return (
-    <div className="fade">
-      <div
-        key={imageURL}
-        className="image"
-        style={{
-          backgroundImage: get(user, 'backgroundImage.imageURL', undefined)
-            ? `url(${user.backgroundImage.imageURL})`
-            : 'none',
-        }}
-      />
-      <div className="tint" />
+    <div>
+      <div className={classes.background} key={imageURL} />
+      <div className={classes.tint} />
     </div>
   )
 }
