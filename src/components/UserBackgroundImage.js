@@ -28,10 +28,10 @@ const useStyles = makeStyles(() => ({
     right: 0,
     left: 0,
     zIndex: 'auto',
-    backgroundImage: ({ user }) =>
-      get(user, 'backgroundImage.imageURL', undefined)
-        ? `url(${user.backgroundImage.imageURL})`
-        : 'none',
+    // backgroundImage: ({ user }) =>
+    //   get(user, 'backgroundImage.imageURL', undefined)
+    //     ? `url(${user.backgroundImage.imageURL})`
+    //     : 'none',
   },
   tint: {
     position: 'absolute',
@@ -67,7 +67,15 @@ const UserBackgroundImage = ({ user }) => {
 
   return (
     <div className={classes.fade}>
-      <div className={classes.image} key={imageURL} />
+      <div
+        className={classes.image}
+        key={imageURL}
+        style={{
+          backgroundImage: get(user, 'backgroundImage.imageURL', undefined)
+            ? `url(${user.backgroundImage.imageURL})`
+            : 'none',
+        }}
+      />
       <div className={classes.tint} />
     </div>
   )
