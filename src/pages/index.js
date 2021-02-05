@@ -319,12 +319,12 @@ const Index = ({ data: initialData }) => {
         <Profiler
           id="BackgroundImage"
           onRender={(...params) => {
-            // console.log('params', params)
             const [id, phase, actualDuration] = params
             const interactions = params[6]
             // For debugging only
             // eslint-disable-next-line no-console
             console.log(`Debugging: ${id} ${phase} took time ${actualDuration}`)
+            // eslint-disable-next-line no-console
             console.log('Interactions:', interactions)
           }}
         >
