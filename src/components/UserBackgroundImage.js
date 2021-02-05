@@ -56,6 +56,13 @@ const UserBackgroundImage = ({ user }) => {
     }
   }, [backgroundImageTimestamp, userId])
   const classes = useStyles({ user })
+
+  // Debugging
+  // eslint-disable-next-line no-console
+  console.log('user:', user)
+  // eslint-disable-next-line no-console
+  console.log('imageURL:', imageURL)
+
   return (
     <div>
       <div className={classes.background} key={imageURL} />
