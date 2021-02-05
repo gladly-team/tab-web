@@ -11,6 +11,7 @@ import theme from 'src/utils/theme'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import initAuth from 'src/utils/auth/initAuth'
 import initSentry from 'src/utils/initSentry'
+import 'src/utils/css/globals.css'
 
 initAuth()
 

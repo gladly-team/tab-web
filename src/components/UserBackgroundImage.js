@@ -5,7 +5,7 @@ import { get } from 'lodash/object'
 import dayjs from 'dayjs'
 import isToday from 'dayjs/plugin/isToday'
 import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDailyImageMutation'
-import styles from './UserBackgroundImage.module.css'
+// import styles from './UserBackgroundImage.module.css'
 
 dayjs.extend(isToday)
 
@@ -31,17 +31,17 @@ const UserBackgroundImage = ({ user }) => {
   console.log('imageURL:', imageURL)
 
   return (
-    <div className={styles.fade}>
+    <div className="fade">
       <div
         key={imageURL}
-        className={styles.image}
+        className="image"
         style={{
           backgroundImage: get(user, 'backgroundImage.imageURL', undefined)
             ? `url(${user.backgroundImage.imageURL})`
             : 'none',
         }}
       />
-      <div className={styles.tint} />
+      <div className="tint" />
     </div>
   )
 }
