@@ -1,5 +1,5 @@
 // libraries
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Profiler } from 'react'
 import PropTypes from 'prop-types'
 import { flowRight } from 'lodash/util'
 import clsx from 'clsx'
@@ -316,7 +316,20 @@ const Index = ({ data: initialData }) => {
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {enableBackgroundImages ? (
-        <UserBackgroundImageContainer user={user} />
+        <Profiler
+          id="BackgroundImage"
+          onRender={(...params) => {
+            // console.log('params', params)
+            const [id, phase, actualDuration] = params
+            const interactions = params[6]
+            // For debugging only
+            // eslint-disable-next-line no-console
+            console.log(`Debugging: ${id} ${phase} took time ${actualDuration}`)
+            console.log('Interactions:', interactions)
+          }}
+        >
+          <UserBackgroundImageContainer user={user} />
+        </Profiler>
       ) : null}
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
