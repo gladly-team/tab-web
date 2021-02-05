@@ -13,8 +13,10 @@ const useStyles = makeStyles(() => ({
     from: { opacity: 0 },
     to: { opacity: 1 },
   },
-  background: {
+  fade: {
     animation: '$fadeIn 0.5s ease',
+  },
+  image: {
     boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
@@ -64,8 +66,8 @@ const UserBackgroundImage = ({ user }) => {
   console.log('imageURL:', imageURL)
 
   return (
-    <div>
-      <div className={classes.background} key={imageURL} />
+    <div className={classes.fade}>
+      <div className={classes.image} key={imageURL} />
       <div className={classes.tint} />
     </div>
   )
