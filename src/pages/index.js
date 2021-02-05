@@ -262,7 +262,6 @@ const Index = ({ data: initialData }) => {
   useEffect(() => {
     setAdUnits(getAdUnits())
   }, [])
-  // useTabCount(d)
   // Only render ads if we are on the client side.
   const [shouldRenderAds, setShouldRenderAds] = useState(false)
   useEffect(() => {
