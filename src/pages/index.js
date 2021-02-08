@@ -11,6 +11,7 @@ import {
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
+import { get } from 'lodash/object'
 // custom components
 import Achievement from 'src/components/Achievement'
 import Link from 'src/components/Link'
@@ -86,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   settingsIcon: {
     height: 20,
     width: 20,
-    color: theme.palette.backgroundContrastText.main,
+    color: get(theme, 'palette.backgroundContrastText.main'),
   },
   achievementsContainer: {
     alignSelf: 'flex-end',

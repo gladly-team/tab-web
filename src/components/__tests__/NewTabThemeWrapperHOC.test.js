@@ -2,9 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { flowRight } from 'lodash/util'
 import { showBackgroundImages } from 'src/utils/featureFlags'
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import NewTabThemeWrapper from '../NewTabThemeWrapperHOC'
-import Theme, { extendTheme } from 'src/utils/theme'
 
 jest.mock('src/utils/featureFlags', () => ({
   showBackgroundImages: jest.fn(),
@@ -34,6 +32,7 @@ describe('Theme Wrapper HOC', () => {
     const WrappedHOC = flowRight([NewTabThemeWrapper])(DummyComponent)
     const testComponent = shallow(<WrappedHOC />)
     const themePassedIn = testComponent.props().theme
+    // testing that
     expect(themePassedIn.palette.text.backgroundContrastText).toEqual(undefined)
   })
 })

@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 import useInterval from 'src/utils/hooks/useInterval'
 import { currencyFormatUSD } from 'src/utils/formatting'
 import { makeStyles } from '@material-ui/core/styles'
+import { get } from 'lodash/object'
 
 const useStyles = makeStyles((theme) => ({
-  currencyText: { color: theme.palette.backgroundContrastText.main },
+  currencyText: { color: get(theme, 'palette.backgroundContrastText.main') },
 }))
 const MoneyRaised = (props) => {
   const {
