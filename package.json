@@ -39,7 +39,8 @@
     "react-relay": "^10.1.2",
     "relay-runtime": "^10.1.2",
     "swr": "^0.4.0",
-    "tab-ads": "^0.7.0"
+    "tab-ads": "^0.7.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",

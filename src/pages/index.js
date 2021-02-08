@@ -29,7 +29,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
-import useTabCount from 'src/utils/hooks/useTabCount'
+import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,
@@ -240,7 +240,7 @@ const getRelayQuery = async ({ AuthUser }) => {
   }
 }
 
-const Index = ({ data: initialData }) => {
+const Index = ({ data: initialData, tabId }) => {
   const classes = useStyles()
 
   // FIXME: this query is executing more than once. Most likely,
@@ -270,10 +270,15 @@ const Index = ({ data: initialData }) => {
     }
   }, [])
   // FIXME: use UUID in state
-  const [tabId] = useState(uuid())
   const { app, user } = data || {}
-  console.log(data,' data')
-  useTabCount(get(user, 'id', ''), tabId)
+  const [userGobalId] = useState(get(user, 'id', ''))
+  // log tab count when user first visits
+  useEffect(() => {
+    if (userGobalId && tabId) {
+      console.log('fired an update', userGobalId, tabId)
+      LogTabMutation(userGobalId, tabId)
+    }
+  }, [userGobalId, tabId])
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
   // any data server-side, in which case we'll fetch data in
