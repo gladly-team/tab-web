@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
   settingsIcon: {
     height: 20,
     width: 20,
-    color: theme.palette.text.primary,
+    color: theme.palette.backgroundContrastText.main,
   },
   achievementsContainer: {
     alignSelf: 'flex-end',

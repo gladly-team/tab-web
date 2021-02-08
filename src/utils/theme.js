@@ -14,6 +14,9 @@ const theme = createMuiTheme({
     text: {
       primary: 'rgba(0, 0, 0, 0.80)',
     },
+    backgroundContrastText: {
+      main: 'rgba(0, 0, 0, 0.80)',
+    },
   },
   typography: {
     fontSize: 14,

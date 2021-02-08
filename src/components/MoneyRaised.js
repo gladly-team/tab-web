@@ -5,7 +5,7 @@ import { currencyFormatUSD } from 'src/utils/formatting'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
-  currencyText: { color: theme.palette.text.primary },
+  currencyText: { color: theme.palette.backgroundContrastText.main },
 }))
 const MoneyRaised = (props) => {
   const {

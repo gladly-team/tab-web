@@ -2,13 +2,15 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { flowRight } from 'lodash/util'
 import { showBackgroundImages } from 'src/utils/featureFlags'
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
 import NewTabThemeWrapper from '../NewTabThemeWrapperHOC'
+import Theme, { extendTheme } from 'src/utils/theme'
 
 jest.mock('src/utils/featureFlags', () => ({
   showBackgroundImages: jest.fn(),
 }))
 
-describe('Achievement component', () => {
+describe('Theme Wrapper HOC', () => {
   it('renders without error', () => {
     const DummyComponent = (props) => <div {...props} />
     const WrappedHOC = flowRight([NewTabThemeWrapper])(DummyComponent)
@@ -23,7 +25,7 @@ describe('Achievement component', () => {
     const WrappedHOC = flowRight([NewTabThemeWrapper])(DummyComponent)
     const testComponent = shallow(<WrappedHOC />)
     const themePassedIn = testComponent.props().theme
-    expect(themePassedIn.palette.text.primary).toEqual('#fff')
+    expect(themePassedIn.palette.backgroundContrastText.main).toEqual('#fff')
   })
 
   it('renders with a black text palette when background image is disabled', () => {
@@ -32,6 +34,6 @@ describe('Achievement component', () => {
     const WrappedHOC = flowRight([NewTabThemeWrapper])(DummyComponent)
     const testComponent = shallow(<WrappedHOC />)
     const themePassedIn = testComponent.props().theme
-    expect(themePassedIn.palette.text.primary).toEqual('rgba(0, 0, 0, 0.87)')
+    expect(themePassedIn.palette.text.backgroundContrastText).toEqual(undefined)
   })
 })
