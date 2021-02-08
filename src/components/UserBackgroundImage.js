@@ -9,12 +9,7 @@ import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDa
 
 dayjs.extend(isToday)
 const useStyles = makeStyles(() => ({
-  '@keyframes fadeIn': {
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-  },
   background: {
-    animation: '$fadeIn 0.5s ease',
     boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',

@@ -45,11 +45,16 @@ import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
 
 const useStyles = makeStyles((theme) => ({
+  '@keyframes fadeIn': {
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  },
   pageContainer: {
     height: '100vh',
     width: '100vw',
     background: theme.palette.background.paper,
     overflow: 'hidden',
+    animation: '$fadeIn 0.5s ease',
   },
   fullContainer: {
     position: 'absolute',
