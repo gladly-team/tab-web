@@ -3,10 +3,9 @@ import firebase from 'firebase/app'
 import 'firebase/auth'
 import { getConfig } from 'src/config'
 
-const setAuthCookie = async (firebaseUser) => {
-  let response
+const defaultTokenChangedHandler = async (firebaseUser) => {
   const { loginAPIEndpoint, logoutAPIEndpoint } = getConfig()
-
+  let response
   // If the user is authed, call login to set a cookie.
   if (firebaseUser) {
     const userToken = await firebaseUser.getIdToken()
@@ -40,8 +39,17 @@ const setAuthCookie = async (firebaseUser) => {
       )
     }
   }
-
   return response
+}
+
+const setAuthCookie = async (firebaseUser) => {
+  // let response
+  const { tokenChangedHandler } = getConfig()
+  if (tokenChangedHandler) {
+    return tokenChangedHandler(firebaseUser)
+  }
+
+  return defaultTokenChangedHandler(firebaseUser)
 }
 
 const useFirebaseUser = () => {

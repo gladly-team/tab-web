@@ -351,9 +351,11 @@ See an [example config here](#example-config). Provide the config when you call 
 
 **appPageURL**: The default URL to navigate to when `withAuthUser` or `withAuthUserTokenSSR` need to redirect to the app. Optional unless using the `AuthAction.REDIRECT_TO_APP` auth action.
 
-**loginAPIEndpoint**: The API endpoint to call when the auth state changes for an authenticated Firebase user. **Required.**
+**loginAPIEndpoint**: The API endpoint to call when the auth state changes for an authenticated Firebase user. Must be set unless `tokenChangedHandler` is set.
 
-**logoutAPIEndpoint**: The API endpoint to call when the auth state changes for an unauthenticated Firebase user. **Required.**
+**logoutAPIEndpoint**: The API endpoint to call when the auth state changes for an unauthenticated Firebase user. Must be set unless `tokenChangedHandler` is set.
+
+**tokenChangedHandler**: A callback that runs when the auth state changes for a particular user. Cannot be set with `loginAPIEndpoint` or `logoutAPIEndpoint`.
 
 #### **firebaseAdminInitConfig**
 

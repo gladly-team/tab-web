@@ -209,4 +209,33 @@ describe('useFirebaseUser', () => {
     unmount()
     expect(onIdTokenChangedUnsubscribe).toHaveBeenCalled()
   })
+
+  it('calls "tokenChangedHandler" if is configured', async () => {
+    expect.assertions(3)
+    const tokenChangedHandler = jest.fn()
+    setConfig({
+      ...createMockConfig(),
+      tokenChangedHandler,
+    })
+
+    let onIdTokenChangedCallback
+    firebase.auth().onIdTokenChanged.mockImplementation((callback) => {
+      onIdTokenChangedCallback = callback
+      return () => {} // "unsubscribe" function
+    })
+
+    const mockToken = 'my-token-here'
+    const mockFirebaseUser = {
+      ...createMockFirebaseUserClientSDK(),
+      getIdToken: async () => mockToken,
+    }
+    renderHook(() => useFirebaseUser())
+
+    expect(fetch).not.toHaveBeenCalled()
+    await act(async () => {
+      await onIdTokenChangedCallback(mockFirebaseUser)
+    })
+    expect(fetch).not.toHaveBeenCalled()
+    expect(tokenChangedHandler).toHaveBeenCalled()
+  })
 })
