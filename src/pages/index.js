@@ -1,5 +1,6 @@
 // libraries
 import React, { useEffect, useState } from 'react'
+import * as Sentry from '@sentry/browser'
 import PropTypes from 'prop-types'
 import { flowRight } from 'lodash/util'
 import clsx from 'clsx'
@@ -27,6 +28,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
+import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,
@@ -263,6 +265,8 @@ const Index = ({ data: initialData }) => {
   const [shouldRenderAds, setShouldRenderAds] = useState(false)
   useEffect(() => {
     if (isClientSide()) {
+      // Sentry.setUser({ id: 'test', email:'testemail' })
+      
       setShouldRenderAds(true)
     }
   }, [])
@@ -312,13 +316,17 @@ const Index = ({ data: initialData }) => {
   const onAdError = (e) => {
     logger.error(e)
   }
-
+  const onClick = () => {
+    console.log('throwing error')
+    // throw new Error('error')
+  }
+  // throw new Error('error')
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {enableBackgroundImages ? (
         <UserBackgroundImageContainer user={user} />
       ) : null}
-      <div className={classes.fullContainer}>
+      <div className={classes.fullContainer} onClick={onClick}>
         <div className={classes.topContainer}>
           <div className={classes.userMenuContainer}>
             <div className={classes.moneyRaisedContainer}>
@@ -457,6 +465,7 @@ export const getServerSideProps = flowRight([
     whenUnauthed: AuthAction.SHOW_LOADER,
     LoaderComponent: FullPageLoader,
   }),
+  withSentrySSR,
   withDataSSR(getRelayQuery),
 ])()
 
@@ -466,5 +475,6 @@ export default flowRight([
     LoaderComponent: FullPageLoader,
     whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
   }),
+  withSentry,
   withRelay,
 ])(Index)
