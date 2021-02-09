@@ -1,12 +1,11 @@
 /* globals document */
 /* eslint react/jsx-props-no-spreading: 0 */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { register, unregister } from 'next-offline/runtime'
 import { ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import uuid from 'uuid/v4'
 import { isClientSide } from 'src/utils/ssr'
 import theme from 'src/utils/theme'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
@@ -28,7 +27,6 @@ try {
 
 const MyApp = (props) => {
   const { Component, pageProps, err } = props
-  const [tabId] = useState(uuid())
   // Optionally, enable or disable the service worker:
   // https://github.com/hanford/next-offline#runtime-registration
   useEffect(() => {
@@ -84,7 +82,7 @@ const MyApp = (props) => {
       {/* Material UI: https://github.com/mui-org/material-ui/blob/master/examples/nextjs/pages/_app.js */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...pageProps} tabId={tabId} err={err} />
+        <Component {...pageProps} err={err} />
       </ThemeProvider>
     </>
   )

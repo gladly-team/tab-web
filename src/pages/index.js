@@ -240,7 +240,7 @@ const getRelayQuery = async ({ AuthUser }) => {
   }
 }
 
-const Index = ({ data: initialData, tabId }) => {
+const Index = ({ data: initialData }) => {
   const classes = useStyles()
 
   // FIXME: this query is executing more than once. Most likely,
@@ -269,9 +269,9 @@ const Index = ({ data: initialData, tabId }) => {
       setShouldRenderAds(true)
     }
   }, [])
-  // FIXME: use UUID in state
   const { app, user } = data || {}
   const [userGobalId] = useState(get(user, 'id', ''))
+  const [tabId] = useState(uuid())
   // log tab count when user first visits
   useEffect(() => {
     if (userGobalId && tabId) {
