@@ -6,7 +6,7 @@
     "go": " NODE_ENV=development vercel dev --listen 3001",
     "dev": "echo \"Use the 'yarn go' command to develop locally.\"",
     "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
-    "start": "NODE_ENV=production next start",
+    "start": "NODE_ENV=production next start --port 3001",
     "test": "yarn run lint && yarn run relay && jest",
     "test:coverage": "yarn run test --coverage",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
