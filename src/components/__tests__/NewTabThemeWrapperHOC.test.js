@@ -32,7 +32,7 @@ describe('Theme Wrapper HOC', () => {
     const WrappedHOC = flowRight([NewTabThemeWrapper])(DummyComponent)
     const testComponent = shallow(<WrappedHOC />)
     const themePassedIn = testComponent.props().theme
-    // testing that
-    expect(themePassedIn.palette.text.backgroundContrastText).toEqual(undefined)
+    // make sure that our nested theme doesn't override the default theme on this value when enable background is disabled
+    expect(themePassedIn.palette.text.backgroundContrastText).toBeUndefined()
   })
 })
