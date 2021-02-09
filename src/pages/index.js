@@ -12,6 +12,7 @@ import {
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
+import { get } from 'lodash/object'
 // custom components
 import Achievement from 'src/components/Achievement'
 import Link from 'src/components/Link'
@@ -19,6 +20,7 @@ import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import SearchInput from 'src/components/SearchInput'
+import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
 // material components
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
@@ -47,11 +49,16 @@ import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
 
 const useStyles = makeStyles((theme) => ({
+  '@keyframes fadeIn': {
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  },
   pageContainer: {
     height: '100vh',
     width: '100vw',
     background: theme.palette.background.paper,
     overflow: 'hidden',
+    animation: '$fadeIn 0.5s ease',
   },
   fullContainer: {
     position: 'absolute',
@@ -78,9 +85,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     paddingBottom: theme.spacing(0),
   },
-  userMenuItem: {
-    color: 'rgba(0, 0, 0, 0.70)',
-  },
   moneyRaisedContainer: {
     margin: theme.spacing(0.5),
   },
@@ -90,6 +94,7 @@ const useStyles = makeStyles((theme) => ({
   settingsIcon: {
     height: 20,
     width: 20,
+    color: get(theme, 'palette.backgroundContrastText.main'),
   },
   achievementsContainer: {
     alignSelf: 'flex-end',
@@ -240,7 +245,6 @@ const getRelayQuery = async ({ AuthUser }) => {
 
 const Index = ({ data: initialData }) => {
   const classes = useStyles()
-
   // FIXME: this query is executing more than once. Most likely,
   // the SWR key is changing in `useData` (possbly due to its
   // use of shallow equality).
@@ -388,7 +392,11 @@ const Index = ({ data: initialData }) => {
       </div>
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
-          <Logo includeText className={classes.logo} />
+          <Logo
+            includeText
+            color={enableBackgroundImages ? 'white' : null}
+            className={classes.logo}
+          />
           <SearchInput className={classes.searchBar} />
         </div>
       </div>
@@ -477,4 +485,5 @@ export default flowRight([
   }),
   withSentry,
   withRelay,
+  NewTabThemeWrapperHOC,
 ])(Index)
