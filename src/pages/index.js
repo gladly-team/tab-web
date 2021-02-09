@@ -13,7 +13,6 @@ import {
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
-import { get } from 'lodash/object'
 // custom components
 import Achievement from 'src/components/Achievement'
 import Link from 'src/components/Link'
@@ -279,7 +278,6 @@ const Index = ({ data: initialData }) => {
   // log tab count when user first visits
   useEffect(() => {
     if (userGobalId && tabId) {
-      console.log('fired an update', userGobalId, tabId)
       LogTabMutation(userGobalId, tabId)
     }
   }, [userGobalId, tabId])

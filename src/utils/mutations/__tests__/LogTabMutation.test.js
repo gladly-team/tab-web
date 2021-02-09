@@ -15,12 +15,13 @@ describe('LogTabMutation', () => {
   it('calls callMutation with the expected arguments', async () => {
     expect.assertions(1)
     const LogTabMutation = require('src/utils/mutations/LogTabMutation').default
-    await LogTabMutation('some-user-id')
+    await LogTabMutation('some-user-id', 'some-tab-id')
     expect(callMutation).toHaveBeenCalledWith({
       mutation: expect.any(Object),
       variables: {
         input: {
           userId: 'some-user-id',
+          tabId: 'some-tab-id',
         },
       },
     })
@@ -32,22 +33,16 @@ describe('LogTabMutation', () => {
     callMutation.mockResolvedValue({
       user: {
         id: 'some-id',
-        backgroundImage: {
-          imageURL: 'some-url',
-          timestamp: 'some-timestamp',
-        },
+        tabs: 100,
+        tabsToday: 5,
       },
     })
-    const response = await LogTabMutation({
-      userId: 'some-user-id',
-    })
+    const response = await LogTabMutation('some-user-id', 'some-tab-id')
     expect(response).toEqual({
       user: {
         id: 'some-id',
-        backgroundImage: {
-          imageURL: 'some-url',
-          timestamp: 'some-timestamp',
-        },
+        tabs: 100,
+        tabsToday: 5,
       },
     })
   })
