@@ -7,6 +7,7 @@ import tabLogoDefault from 'src/assets/logos/logo.svg'
 import tabLogoWhite from 'src/assets/logos/logo-white.svg'
 import tabLogoGrey from 'src/assets/logos/logo-grey.svg'
 import tabLogoWithText from 'src/assets/logos/logo-with-text.svg'
+import tabLogoWithTextWhite from 'src/assets/logos/logo-with-text-white.svg'
 
 const useStyles = makeStyles(() => ({
   logoDefaults: {
@@ -20,7 +21,16 @@ const Logo = (props) => {
   const classes = useStyles()
   let logo
   if (includeText) {
-    logo = tabLogoWithText
+    switch (color) {
+      case 'white': {
+        logo = tabLogoWithTextWhite
+        break
+      }
+      default: {
+        logo = tabLogoWithText
+        break
+      }
+    }
   } else {
     switch (color) {
       case 'default': {
