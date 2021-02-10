@@ -3,10 +3,8 @@
 import React, { useEffect } from 'react'
 import { useAuthUser } from 'next-firebase-auth'
 import * as Sentry from '@sentry/node'
-import initSentry from 'src/utils/initSentry'
 import logger from 'src/utils/logger'
 
-initSentry()
 // A component wrapper that sets the sentry user at each page
 export const withSentry = (ChildComponent) => {
   const WithSentryHOC = (props) => {
@@ -25,8 +23,8 @@ export const withSentry = (ChildComponent) => {
   WithSentryHOC.displayName = 'WithSentryHOC'
   return WithSentryHOC
 }
-// A wrapper for `getServerSideProps` that sets the sentry user.
 
+// A wrapper for `getServerSideProps` that sets the sentry user.
 export const withSentrySSR = (getServerSidePropsFunc) => async (ctx) => {
   const { AuthUser } = ctx
   // set auth user in sentry
@@ -42,6 +40,8 @@ export const withSentrySSR = (getServerSidePropsFunc) => async (ctx) => {
   return composedProps
 }
 
+// A top level server side wrapper that catches all errors in the getServerSideProps func
+// and logs them through our logger
 export const topLevelCatchBoundary = (getServerSidePropsFunc) => async (
   ctx
 ) => {

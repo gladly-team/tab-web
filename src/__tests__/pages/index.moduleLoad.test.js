@@ -23,6 +23,11 @@ jest.mock('src/utils/pageWrappers/withRelay')
 jest.mock('src/utils/hooks/useData')
 jest.mock('src/components/FullPageLoader')
 jest.mock('src/utils/pageWrappers/withDataSSR')
+jest.mock('src/utils/pageWrappers/withSentry', () => ({
+  withSentry: (component) => component,
+  withSentrySSR: jest.fn(),
+  topLevelCatchBoundary: (input) => () => input,
+}))
 
 const getMockProps = () => ({
   data: {

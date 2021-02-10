@@ -10,25 +10,12 @@ jest.mock('src/utils/logger')
 jest.mock('next-firebase-auth', () => ({
   useAuthUser: jest.fn(),
 }))
-jest.mock('@sentry/node', () => {
-  let scopedUser = ''
-  return {
-    setUser: (user) => {
-      scopedUser = user
-    },
-    getUser: () => scopedUser,
-    clearUser: () => {
-      scopedUser = ''
-    },
-  }
+jest.mock('@sentry/node', () => ({
+  setUser: jest.fn(),
+}))
+afterEach(() => {
+  jest.clearAllMocks()
 })
-// beforeEach(() => {
-//   verifyIdToken.mockResolvedValue(getMockAuthUser())
-// })
-
-// afterEach(() => {
-//   jest.clearAllMocks()
-// })
 
 describe('set Sentry User middleware', () => {
   it('calls the handler after successfully setting the sentry user', async () => {
@@ -43,7 +30,7 @@ describe('set Sentry User middleware', () => {
     const mockHandler = jest.fn()
     const setSentryUser = require('src/utils/middleware/setSentryUser').default
     await setSentryUser(mockHandler)(mockReq, mockRes)
-    expect(Sentry.getUser()).toStrictEqual({
+    expect(Sentry.setUser).toHaveBeenCalledWith({
       email: 'some-email',
       id: 'some-id',
     })
@@ -51,7 +38,6 @@ describe('set Sentry User middleware', () => {
   })
 
   it('calls the handler even if there is no auth user', async () => {
-    Sentry.clearUser()
     expect.assertions(2)
     const mockReq = {
       ...getMockReq(),
@@ -63,7 +49,7 @@ describe('set Sentry User middleware', () => {
     const mockHandler = jest.fn()
     const setSentryUser = require('src/utils/middleware/setSentryUser').default
     await setSentryUser(mockHandler)(mockReq, mockRes)
-    expect(Sentry.getUser()).toStrictEqual('')
+    expect(Sentry.setUser).not.toHaveBeenCalled()
     expect(mockHandler).toHaveBeenCalledWith(mockReq, mockRes)
   })
 })

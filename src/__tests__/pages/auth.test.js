@@ -12,7 +12,9 @@ jest.mock('src/components/FullPageLoader', () => () => (
   <div data-test-id="full-page-loader-mock" />
 ))
 jest.mock('src/components/Logo')
-
+jest.mock('src/utils/pageWrappers/withSentry', () => ({
+  withSentry: (component) => component,
+}))
 afterEach(() => {
   jest.clearAllMocks()
 })

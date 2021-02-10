@@ -6,8 +6,7 @@ import {
 } from 'src/utils/middleware/constants'
 
 const setSentryUser = (handler) => async (req, res) => {
-  const AuthUser = get(req, [CUSTOM_REQ_DATA_KEY, AUTH_USER_KEY], {})
-  const { id, email } = AuthUser
+  const { id, email } = get(req, [CUSTOM_REQ_DATA_KEY, AUTH_USER_KEY], {})
   if (id && email) {
     Sentry.setUser({ id, email })
   }

@@ -272,8 +272,6 @@ const Index = ({ data: initialData }) => {
   const [shouldRenderAds, setShouldRenderAds] = useState(false)
   useEffect(() => {
     if (isClientSide()) {
-      // Sentry.setUser({ id: 'test', email:'testemail' })
-
       setShouldRenderAds(true)
     }
   }, [])
@@ -466,6 +464,9 @@ Index.defaultProps = {
   data: null,
 }
 
+// we have a top level Catch Boundary because sentry is not handling uncaught exceptions as expected
+// you can see the unsolved issue here: https://github.com/vercel/next.js/issues/1852
+// withSentrySSR sets the user data for our error logger once the user has been authenticated
 export const getServerSideProps = flowRight([
   topLevelCatchBoundary,
   withAuthUserTokenSSR({

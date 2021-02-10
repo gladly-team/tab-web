@@ -25,7 +25,11 @@ jest.mock('src/utils/navigation')
 jest.mock('src/utils/mutations/SetV4BetaMutation')
 jest.mock('src/utils/pageWrappers/withRelay')
 jest.mock('src/utils/hooks/useData')
-
+jest.mock('src/utils/pageWrappers/withSentry', () => ({
+  withSentry: (component) => component,
+  withSentrySSR: jest.fn(),
+  topLevelCatchBoundary: (input) => () => input,
+}))
 const getMockDataResponse = () => ({
   user: {
     id: 'some-user-id',
