@@ -45,6 +45,9 @@ const tokenChangedHandler = async (authUser) => {
     response = await fetch(apiLogout, {
       method: 'POST',
       credentials: 'include',
+      headers: {
+        [CUSTOM_HEADER_NAME]: 'tabV4',
+      },
     })
     if (!response.ok) {
       const responseJSON = await response.json()
