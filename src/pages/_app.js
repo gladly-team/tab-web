@@ -26,7 +26,7 @@ try {
 }
 
 const MyApp = (props) => {
-  const { Component, pageProps, err } = props
+  const { Component, pageProps } = props
 
   // Optionally, enable or disable the service worker:
   // https://github.com/hanford/next-offline#runtime-registration
@@ -83,7 +83,7 @@ const MyApp = (props) => {
       {/* Material UI: https://github.com/mui-org/material-ui/blob/master/examples/nextjs/pages/_app.js */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...pageProps} err={err} />
+        <Component {...pageProps} />
       </ThemeProvider>
     </>
   )
@@ -94,13 +94,10 @@ MyApp.displayName = 'App'
 MyApp.propTypes = {
   Component: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  err: PropTypes.object,
-  // eslint-disable-next-line react/forbid-prop-types
   pageProps: PropTypes.object,
 }
 
 MyApp.defaultProps = {
-  err: undefined,
   pageProps: {},
 }
 

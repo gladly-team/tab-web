@@ -2,9 +2,12 @@
 
 import React, { useEffect } from 'react'
 import { useAuthUser } from 'next-firebase-auth'
-import * as SentryBrowser from '@sentry/browser'
-import * as SentryServer from '@sentry/node'
+import * as Sentry from '@sentry/node'
+import initSentry from 'src/utils/initSentry'
+import logger from 'src/utils/logger'
 
+initSentry()
+// A component wrapper that sets the sentry user at each page
 export const withSentry = (ChildComponent) => {
   const WithSentryHOC = (props) => {
     const AuthUser = useAuthUser()
@@ -12,7 +15,7 @@ export const withSentry = (ChildComponent) => {
     const { id: userId, email } = AuthUser || {}
     useEffect(() => {
       if (userId) {
-        SentryBrowser.setUser({ id: userId, email })
+        Sentry.setUser({ id: userId, email })
       }
     }, [userId, email])
     /* eslint-disable-next-line react/jsx-props-no-spreading */
@@ -22,38 +25,33 @@ export const withSentry = (ChildComponent) => {
   WithSentryHOC.displayName = 'WithSentryHOC'
   return WithSentryHOC
 }
-// A wrapper for `getServerSideProps` that fetches data
-// from our GraphQL endpoint.
-/*
- * The `getRelayQuery` argument is a function:
- *   @param {Object} input
- *   @param {Object} input.AuthUser - An instance of an AuthUser
- *     from `next-firebase-auth`.
- *   @return {Object} queryInfo
- *   @return {Object} queryInfo.query - A GraphQLTaggedNode, the
- *     GraphQL query in a react-relay `graphql` template tag
- *   @return {Object} queryInfo.variables - Any variables to
- *     provide to the query.
- *
- */
+// A wrapper for `getServerSideProps` that sets the sentry user.
+
 export const withSentrySSR = (getServerSidePropsFunc) => async (ctx) => {
   const { AuthUser } = ctx
-  //   console.log(getServerSidePropsFunc, ctx, 'gsspf','ctx')
-  console.log(AuthUser, 'auth user?')
-  //set auth user in sentry
+  // set auth user in sentry
   const { id: userId, email } = AuthUser || {}
   if (userId) {
-    SentryServer.setUser({ id: userId, email })
+    Sentry.setUser({ id: userId, email })
   }
-
   // Get composed props.
   let composedProps = {}
   if (getServerSidePropsFunc) {
     composedProps = await getServerSidePropsFunc(ctx)
   }
+  return composedProps
+}
 
-  return {
-    ...composedProps,
-    // nothing added, just adjusted sentry context
+export const topLevelCatchBoundary = (getServerSidePropsFunc) => async (
+  ctx
+) => {
+  let composedProps = { props: {} }
+  try {
+    if (getServerSidePropsFunc) {
+      composedProps = await getServerSidePropsFunc(ctx)
+    }
+  } catch (e) {
+    logger.error(e)
   }
+  return composedProps
 }
