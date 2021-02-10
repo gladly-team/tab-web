@@ -1,10 +1,9 @@
-// This HOC should be wrapped in `withAuthUser`.
-
 import React, { useEffect } from 'react'
 import { useAuthUser } from 'next-firebase-auth'
 import * as Sentry from '@sentry/node'
 import logger from 'src/utils/logger'
 
+// This HOC should be wrapped in `withAuthUser`.
 // A component wrapper that sets the sentry user at each page
 export const withSentry = (ChildComponent) => {
   const WithSentryHOC = (props) => {
@@ -24,6 +23,7 @@ export const withSentry = (ChildComponent) => {
   return WithSentryHOC
 }
 
+// This HOC should be wrapped in `withAuthUser`.
 // A wrapper for `getServerSideProps` that sets the sentry user.
 export const withSentrySSR = (getServerSidePropsFunc) => async (ctx) => {
   const { AuthUser } = ctx

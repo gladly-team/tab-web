@@ -20,6 +20,7 @@ const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
   ctx
 ) => {
   const { AuthUser } = ctx
+
   // Create the Relay query. We pass the AuthUser so the caller
   // can use the user info in the query, as needed.
   const { query, variables } = await getRelayQuery({ AuthUser })
