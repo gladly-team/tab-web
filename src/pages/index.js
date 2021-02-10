@@ -273,14 +273,16 @@ const Index = ({ data: initialData }) => {
     }
   }, [])
   const { app, user } = data || {}
-  const [userGobalId] = useState(get(user, 'id', ''))
+  const [userGlobalId] = useState(get(user, 'id'))
   const [tabId] = useState(uuid())
+
   // log tab count when user first visits
   useEffect(() => {
-    if (userGobalId && tabId) {
-      LogTabMutation(userGobalId, tabId)
+    if (userGlobalId && tabId) {
+      LogTabMutation(userGlobalId, tabId)
     }
-  }, [userGobalId, tabId])
+  }, [userGlobalId, tabId])
+
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
   // any data server-side, in which case we'll fetch data in
