@@ -1,4 +1,4 @@
-import { apiLogin, apiLogout, authURL, dashboardURL } from 'src/utils/urls'
+import { authURL, dashboardURL } from 'src/utils/urls'
 
 jest.mock('next-firebase-auth')
 
@@ -41,8 +41,6 @@ describe('initAuth.js', () => {
     expect(config).toMatchObject({
       authPageURL: authURL,
       appPageURL: dashboardURL,
-      loginAPIEndpoint: apiLogin,
-      logoutAPIEndpoint: apiLogout,
     })
   })
 
