@@ -6,10 +6,7 @@ import { CUSTOM_HEADER_NAME } from 'src/utils/middleware/constants'
 // CSRF protection for API endpoints. See:
 // https://github.com/gladly-team/tab-web#authentication-approach
 export default (handler) => async (req, res) => {
-  const customHeaderVal = get(req, [
-    'headers',
-    CUSTOM_HEADER_NAME.toLowerCase(),
-  ])
+  const customHeaderVal = get(req, ['headers', CUSTOM_HEADER_NAME])
   if (isNil(customHeaderVal)) {
     return res
       .status(400)
