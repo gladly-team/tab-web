@@ -273,7 +273,7 @@ const Index = ({ data: initialData }) => {
     }
   }, [])
   const { app, user } = data || {}
-  const [userGlobalId] = useState(get(user, 'id'))
+  const userGlobalId = get(user, 'id')
   const [tabId] = useState(uuid())
 
   // log tab count when user first visits
