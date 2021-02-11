@@ -11,6 +11,7 @@ import theme from 'src/utils/theme'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import initAuth from 'src/utils/auth/initAuth'
 import initSentry from 'src/utils/initSentry'
+import ErrorBoundary from 'src/components/ErrorBoundary'
 
 initAuth()
 
@@ -83,7 +84,9 @@ const MyApp = (props) => {
       {/* Material UI: https://github.com/mui-org/material-ui/blob/master/examples/nextjs/pages/_app.js */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...pageProps} err={err} />
+        <ErrorBoundary>
+          <Component {...pageProps} err={err} />
+        </ErrorBoundary>
       </ThemeProvider>
     </>
   )
