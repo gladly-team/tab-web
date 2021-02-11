@@ -13,6 +13,7 @@ jest.mock('src/components/FullPageLoader', () => () => (
 ))
 jest.mock('src/components/Logo')
 jest.mock('src/utils/pageWrappers/withSentry')
+
 afterEach(() => {
   jest.clearAllMocks()
 })
