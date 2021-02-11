@@ -5,8 +5,6 @@ import { mount, shallow } from 'enzyme'
 import Logo from 'src/components/Logo'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-// import { externalContactUsURL } from 'src'
-// import { externalRedirect } from 'js/navigation/utils'
 import logger from 'src/utils/logger'
 import {
   EXTERNAL_CONTACT_US_URL,
@@ -20,11 +18,6 @@ jest.mock('src/utils/urls', () => ({
 }))
 jest.mock('src/components/Logo')
 jest.mock('src/utils/logger')
-// jest.mock('global')
-const getMockProps = () => ({
-  brand: 'tab',
-  ignoreErrors: false,
-})
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -33,10 +26,9 @@ afterEach(() => {
 describe('ErrorBoundary', () => {
   it('renders without error', () => {
     const ErrorBoundary = require('src/components/ErrorBoundary').default
-    const mockProps = getMockProps()
     expect(() => {
       shallow(
-        <ErrorBoundary {...mockProps}>
+        <ErrorBoundary>
           <div />
         </ErrorBoundary>
       )
@@ -45,11 +37,10 @@ describe('ErrorBoundary', () => {
 
   it('logs when an error is thrown', () => {
     const ErrorBoundary = require('src/components/ErrorBoundary').default
-    const mockProps = getMockProps()
     const err = new Error('Uh oh.')
     const ProblemComponent = () => null
     const wrapper = mount(
-      <ErrorBoundary {...mockProps}>
+      <ErrorBoundary>
         <ProblemComponent />
       </ErrorBoundary>
     )
@@ -59,9 +50,8 @@ describe('ErrorBoundary', () => {
 
   it('returns the children until an error is thrown', () => {
     const ErrorBoundary = require('src/components/ErrorBoundary').default
-    const mockProps = getMockProps()
     const wrapper = mount(
-      <ErrorBoundary {...mockProps}>
+      <ErrorBoundary>
         <div>hey there</div>
       </ErrorBoundary>
     )
@@ -75,9 +65,8 @@ describe('ErrorBoundary', () => {
 
   it('shows the logo with expected props', () => {
     const ErrorBoundary = require('src/components/ErrorBoundary').default
-    const mockProps = getMockProps()
     const wrapper = mount(
-      <ErrorBoundary {...mockProps}>
+      <ErrorBoundary>
         <div>hey there</div>
       </ErrorBoundary>
     )
@@ -91,9 +80,8 @@ describe('ErrorBoundary', () => {
 
   it('shows a button to contact us', () => {
     const ErrorBoundary = require('src/components/ErrorBoundary').default
-    const mockProps = getMockProps()
     const wrapper = mount(
-      <ErrorBoundary {...mockProps}>
+      <ErrorBoundary>
         <div>hey there</div>
       </ErrorBoundary>
     )
@@ -107,9 +95,8 @@ describe('ErrorBoundary', () => {
 
   it('sends the user to the contact page when they click the "contact us" button', () => {
     const ErrorBoundary = require('src/components/ErrorBoundary').default
-    const mockProps = getMockProps()
     const wrapper = mount(
-      <ErrorBoundary {...mockProps}>
+      <ErrorBoundary>
         <div>hey there</div>
       </ErrorBoundary>
     )
@@ -124,9 +111,8 @@ describe('ErrorBoundary', () => {
 
   it('shows a button to reload the page', () => {
     const ErrorBoundary = require('src/components/ErrorBoundary').default
-    const mockProps = getMockProps()
     const wrapper = mount(
-      <ErrorBoundary {...mockProps}>
+      <ErrorBoundary>
         <div>hey there</div>
       </ErrorBoundary>
     )
@@ -140,9 +126,8 @@ describe('ErrorBoundary', () => {
 
   it('reloads the page when the user clicks the "reload" button', () => {
     const ErrorBoundary = require('src/components/ErrorBoundary').default
-    const mockProps = getMockProps()
     const wrapper = mount(
-      <ErrorBoundary {...mockProps}>
+      <ErrorBoundary>
         <div>hey there</div>
       </ErrorBoundary>
     )
