@@ -36,11 +36,7 @@ jest.mock('src/utils/pageWrappers/withDataSSR')
 jest.mock('src/components/NewTabThemeWrapperHOC', () => (component) =>
   component
 )
-jest.mock('src/utils/pageWrappers/withSentry', () => ({
-  withSentry: (component) => component,
-  withSentrySSR: jest.fn(),
-  topLevelCatchBoundary: jest.fn(),
-}))
+jest.mock('src/utils/pageWrappers/withSentry')
 
 const getMockProps = () => ({
   data: {

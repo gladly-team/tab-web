@@ -1,16 +1,11 @@
 import React from 'react'
-import {
-  withSentry,
-  withSentrySSR,
-  topLevelCatchBoundary,
-} from 'src/utils/pageWrappers/withSentry'
+import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
 import * as Sentry from '@sentry/node'
 import { flowRight } from 'lodash/util'
 import { mount } from 'enzyme'
 import { useAuthUser } from 'next-firebase-auth'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
-import logger from 'src/utils/logger'
 
 jest.mock('react-relay')
 jest.mock('src/utils/relayEnvironment')
@@ -75,7 +70,7 @@ describe('Sentry SSRWrapper', () => {
     })
   })
 
-  it('doesnt set the user if there is no authd user', async () => {
+  it("doesn't set the user if the user isn't authenticated", async () => {
     const ctx = getMockNextJSContext()
     await withSentrySSR(() => {})(ctx)
     expect(Sentry.setUser).not.toHaveBeenCalled()
@@ -87,35 +82,6 @@ describe('Sentry SSRWrapper', () => {
       sillyProp: 'sillyProp',
     })
     const composedProps = await withSentrySSR(serverSidePropsFunc)(ctx)
-    expect(composedProps).toStrictEqual({ sillyProp: 'sillyProp' })
-  })
-})
-
-describe('topLevelCatchBoundary', () => {
-  it('catches any error in server side prop function and passes it to the logger', async () => {
-    const ctx = getMockCtxWithAuthUser()
-    const serverSidePropsErrorFunc = async () => {
-      throw new Error('ahhh error')
-    }
-    await topLevelCatchBoundary(serverSidePropsErrorFunc)(ctx)
-    expect(logger.error).toHaveBeenCalled()
-  })
-
-  it("doesn't throw the caught error", async () => {
-    const ctx = getMockCtxWithAuthUser()
-    const serverSidePropsErrorFunc = async () => {
-      throw new Error('ahhh error')
-    }
-    await topLevelCatchBoundary(serverSidePropsErrorFunc)(ctx)
-    expect(topLevelCatchBoundary).not.toThrow()
-  })
-
-  it('returns the composed props from server side function', async () => {
-    const ctx = getMockCtxWithAuthUser()
-    const serverSidePropsFunc = async () => ({
-      sillyProp: 'sillyProp',
-    })
-    const composedProps = await topLevelCatchBoundary(serverSidePropsFunc)(ctx)
     expect(composedProps).toStrictEqual({ sillyProp: 'sillyProp' })
   })
 })

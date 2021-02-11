@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import { useAuthUser } from 'next-firebase-auth'
 import * as Sentry from '@sentry/node'
-import logger from 'src/utils/logger'
+// Our Webpack config swaps in the browser Sentry package when in
+// a browser environment. See this example:
+// https://github.com/vercel/next.js/blob/canary/examples/with-sentry/next.config.js#L45
 
 // This HOC should be wrapped in `withAuthUser`.
 // A component wrapper that sets the sentry user at each page
@@ -23,7 +25,7 @@ export const withSentry = (ChildComponent) => {
   return WithSentryHOC
 }
 
-// This HOC should be wrapped in `withAuthUser`.
+// This HOC should be wrapped in `withAuthUserSSR`.
 // A wrapper for `getServerSideProps` that sets the sentry user.
 export const withSentrySSR = (getServerSidePropsFunc) => async (ctx) => {
   const { AuthUser } = ctx
@@ -36,22 +38,6 @@ export const withSentrySSR = (getServerSidePropsFunc) => async (ctx) => {
   let composedProps = {}
   if (getServerSidePropsFunc) {
     composedProps = await getServerSidePropsFunc(ctx)
-  }
-  return composedProps
-}
-
-// A top level server side wrapper that catches all errors in the getServerSideProps func
-// and logs them through our logger
-export const topLevelCatchBoundary = (getServerSidePropsFunc) => async (
-  ctx
-) => {
-  let composedProps = { props: {} }
-  try {
-    if (getServerSidePropsFunc) {
-      composedProps = await getServerSidePropsFunc(ctx)
-    }
-  } catch (e) {
-    logger.error(e)
   }
   return composedProps
 }

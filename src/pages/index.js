@@ -29,11 +29,8 @@ import SettingsIcon from '@material-ui/icons/Settings'
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
-import {
-  withSentry,
-  withSentrySSR,
-  topLevelCatchBoundary,
-} from 'src/utils/pageWrappers/withSentry'
+import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
+import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,
@@ -464,11 +461,13 @@ Index.defaultProps = {
   data: null,
 }
 
-// we have a top level Catch Boundary because sentry is not handling uncaught exceptions as expected
-// you can see the unsolved issue here: https://github.com/vercel/next.js/issues/1852
-// withSentrySSR sets the user data for our error logger once the user has been authenticated
+// We have a top level Catch Boundary because sentry is not handling
+// uncaught exceptions as expected.  You can see the unsolved issue
+// here: https://github.com/vercel/next.js/issues/1852.
+// withSentrySSR sets the user in our logger so that errors passed to
+// the top level catch pass user data to sentry.
 export const getServerSideProps = flowRight([
-  topLevelCatchBoundary,
+  logUncaughtErrors,
   withAuthUserTokenSSR({
     whenUnauthed: AuthAction.SHOW_LOADER,
     LoaderComponent: FullPageLoader,
