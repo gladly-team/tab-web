@@ -36,16 +36,16 @@ const useData = ({
   // const [relayQuery, setRelayQuery] = useState()
   const [relayVariables, setRelayVariables] = useState()
   useEffect(() => {
-    const getRelayQueryAndVars = async () => {
+    const getRelayVars = async () => {
       const resolvedVariables = await getRelayVariables({ AuthUser })
       setRelayVariables(resolvedVariables)
     }
     if (isAuthReady) {
-      getRelayQueryAndVars()
+      getRelayVars()
     }
   }, [isAuthReady, AuthUser, getRelayVariables])
 
-  const readyToFetch = !!relayQuery
+  const readyToFetch = relayQuery && isAuthReady
 
   // TODO: may want to cancel requests, like when a page unmounts.
   // https://github.com/vercel/swr/issues/129

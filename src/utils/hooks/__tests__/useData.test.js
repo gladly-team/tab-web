@@ -83,7 +83,7 @@ describe('useData', () => {
     })
   })
 
-  xit('returns undefined data when auth has not yet initialized', async () => {
+  it('returns undefined data when auth has not yet initialized', async () => {
     expect.assertions(1)
 
     // We will not initialize the AuthUser.
@@ -91,7 +91,6 @@ describe('useData', () => {
 
     let relayQueryPromiseResolver
     const relayQueryPromise = new Promise((resolve) => {
-      console.log('invoked')
       relayQueryPromiseResolver = resolve
     })
     const getRelayVariables = async () => relayQueryPromise
