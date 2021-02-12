@@ -20,12 +20,8 @@ const setMockRelayRecords = (relayEnvironment, initialRecords) => {
     })),
   }))
 }
-
-const mockGetRelayFunc = jest.fn(async () => ({
-  query: { some: 'query' },
-  variables: { some: 'variables' },
-}))
-
+const mockRelayQuery = { some: 'query' }
+const mockGetRelayVariables = jest.fn()
 beforeEach(() => {
   fetchQuery.mockResolvedValue({ my: 'data!' })
 })
@@ -42,10 +38,11 @@ describe('withRelay', () => {
     setMockRelayRecords(env, {
       fake: ['initial', 'data', 'here'],
     })
-
     const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
     const ctx = getMockCtxWithAuthUser()
-    const response = await withDataSSR(mockGetRelayFunc)()(ctx)
+    const response = await withDataSSR(mockRelayQuery, mockGetRelayVariables)()(
+      ctx
+    )
     expect(response).toEqual({
       data: {
         my: 'data!',
@@ -60,8 +57,8 @@ describe('withRelay', () => {
     expect.assertions(1)
     const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
     const ctx = getMockCtxWithAuthUser()
-    await withDataSSR(mockGetRelayFunc)()(ctx)
-    expect(mockGetRelayFunc).toHaveBeenCalledWith({
+    await withDataSSR(mockRelayQuery, mockGetRelayVariables)()(ctx)
+    expect(mockGetRelayVariables).toHaveBeenCalledWith({
       AuthUser: ctx.AuthUser,
     })
   })
@@ -70,7 +67,7 @@ describe('withRelay', () => {
     expect.assertions(1)
     const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
     const ctx = getMockCtxWithAuthUser()
-    await withDataSSR(mockGetRelayFunc)()(ctx)
+    await withDataSSR(mockRelayQuery, mockGetRelayVariables)()(ctx)
     expect(initRelayEnvironment).toHaveBeenCalledWith({
       getIdToken: ctx.AuthUser.getIdToken,
     })
@@ -87,7 +84,9 @@ describe('withRelay', () => {
     })
     const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
     const ctx = getMockCtxWithAuthUser()
-    const response = await withDataSSR(mockGetRelayFunc)()(ctx)
+    const response = await withDataSSR(mockRelayQuery, mockGetRelayVariables)()(
+      ctx
+    )
     expect(response).toMatchObject({
       data: { my: 'data!', another: { thing: 'here' } },
     })
@@ -98,18 +97,9 @@ describe('withRelay', () => {
     fetchQuery.mockResolvedValue({})
     const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
     const ctx = getMockCtxWithAuthUser()
-    const response = await withDataSSR(mockGetRelayFunc)()(ctx)
-    expect(response).toMatchObject({
-      data: null,
-    })
-  })
-
-  it('if the Relay query is not defined, it returns null for the data value', async () => {
-    expect.assertions(1)
-    const myMockGetRelayFunc = jest.fn(() => ({}))
-    const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
-    const ctx = getMockCtxWithAuthUser()
-    const response = await withDataSSR(myMockGetRelayFunc)()(ctx)
+    const response = await withDataSSR(mockRelayQuery, mockGetRelayVariables)()(
+      ctx
+    )
     expect(response).toMatchObject({
       data: null,
     })
@@ -122,7 +112,10 @@ describe('withRelay', () => {
     })
     const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
     const ctx = getMockCtxWithAuthUser()
-    const response = await withDataSSR(mockGetRelayFunc)(getSSPFunc)(ctx)
+    const response = await withDataSSR(
+      mockRelayQuery,
+      mockGetRelayVariables
+    )(getSSPFunc)(ctx)
     expect(response).toMatchObject({
       other: 'stuff',
       data: {

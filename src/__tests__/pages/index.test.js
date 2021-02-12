@@ -118,11 +118,11 @@ describe('index.js', () => {
       data: { ...getMockProps().data, some: 'stuff' },
     }
     shallow(<IndexPage {...mockProps} />)
-    const useDataArg = useData.mock.calls[0][0]
-    const queryInfo = await useDataArg.getRelayQuery({
+    const { relayQuery, getRelayVariables } = useData.mock.calls[0][0]
+    const variables = await getRelayVariables({
       AuthUser: getMockAuthUser(),
     })
-    expect(queryInfo).toMatchObject({
+    expect({ query: relayQuery, variables }).toMatchObject({
       query: expect.any(Object),
       variables: expect.any(Object),
     })
@@ -153,9 +153,7 @@ describe('index.js', () => {
     }
     shallow(<IndexPage {...mockProps} />)
     const useDataArg = useData.mock.calls[0][0]
-    expect(useDataArg).toMatchObject({
-      revalidateOnMount: false,
-    })
+    expect(useDataArg).not.toHaveProperty('revalidateOnMount')
   })
 
   it('includes a settings icon link to the account page', () => {

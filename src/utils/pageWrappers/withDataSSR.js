@@ -16,14 +16,14 @@ import { initRelayEnvironment } from 'src/utils/relayEnvironment'
  *     provide to the query.
  *
  */
-const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
-  ctx
-) => {
+const withDataSSR = (relayQuery, getRelayVariables) => (
+  getServerSidePropsFunc
+) => async (ctx) => {
   const { AuthUser } = ctx
 
   // Create the Relay query. We pass the AuthUser so the caller
   // can use the user info in the query, as needed.
-  const { query, variables } = await getRelayQuery({ AuthUser })
+  const resolvedVariables = await getRelayVariables({ AuthUser })
 
   // Create the Relay environment.
   const environment = initRelayEnvironment({
@@ -33,8 +33,12 @@ const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
   // Fetch the Relay data.
   let queryProps = {}
   let initialRecords = {}
-  if (query) {
-    const queryPropsRaw = await fetchQuery(environment, query, variables)
+  if (relayQuery) {
+    const queryPropsRaw = await fetchQuery(
+      environment,
+      relayQuery,
+      resolvedVariables
+    )
 
     // Workaround to remove `undefined` values, which Next.js
     // cannot serialize:

@@ -77,22 +77,28 @@ describe('index.js: getServerSideProps', () => {
     })
   })
 
-  it('calls `withDataSSR` with a function', async () => {
+  it('calls `withDataSSR` with a query object and variable function', async () => {
     expect.assertions(1)
     const { getServerSideProps } = require('src/pages/index')
     const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
     await getServerSideProps()
-    expect(withDataSSR).toHaveBeenCalledWith(expect.any(Function))
+    expect(withDataSSR).toHaveBeenCalledWith(
+      expect.any(Object),
+      expect.any(Function)
+    )
   })
 
-  it('returns query info from  the "getRelayQuery" passed to `withDataSSR` when we call it with an AuthUser', async () => {
+  it('returns query info from  the "RelayQuery" variable and "getRelayQueryVariables" passed to `withDataSSR` when we call it with an AuthUser', async () => {
     expect.assertions(1)
     const { getServerSideProps } = require('src/pages/index')
     const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
     getServerSideProps()
-    const getRelayQueryFunc = withDataSSR.mock.calls[0][0]
-    const response = await getRelayQueryFunc({ AuthUser: getMockAuthUser() })
-    expect(response).toEqual({
+    const relayQuery = withDataSSR.mock.calls[0][0]
+    const getRelayQueryVariablesFunc = withDataSSR.mock.calls[0][1]
+    const variables = await getRelayQueryVariablesFunc({
+      AuthUser: getMockAuthUser(),
+    })
+    expect({ query: relayQuery, variables }).toEqual({
       query: expect.any(Object),
       variables: {
         userId: 'mock-user-id',
@@ -100,13 +106,13 @@ describe('index.js: getServerSideProps', () => {
     })
   })
 
-  it('returns an empty object from the "getRelayQuery" passed to `withDataSSR` when we call it with an *unauthed* AuthUser', async () => {
+  it('returns an empty object from the "getRelayQueryVariables" passed to `withDataSSR` when we call it with an *unauthed* AuthUser', async () => {
     expect.assertions(1)
     const { getServerSideProps } = require('src/pages/index')
     const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
     getServerSideProps()
-    const getRelayQueryFunc = withDataSSR.mock.calls[0][0]
-    const response = await getRelayQueryFunc({
+    const getRelayQueryVariablesFunc = withDataSSR.mock.calls[0][1]
+    const response = await getRelayQueryVariablesFunc({
       AuthUser: { ...getMockAuthUser(), id: null, email: null },
     })
     expect(response).toEqual({})

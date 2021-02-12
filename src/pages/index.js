@@ -217,30 +217,27 @@ if (isClientSide()) {
   }
   loadAds()
 }
-
-const getRelayQuery = async ({ AuthUser }) => {
+const relayQuery = graphql`
+  query pagesIndexQuery($userId: String!) {
+    app {
+      ...MoneyRaisedContainer_app
+    }
+    user(userId: $userId) {
+      tabs
+      vcCurrent
+      id
+      ...UserBackgroundImageContainer_user
+    }
+  }
+`
+const getRelayVariables = async ({ AuthUser }) => {
   // If the user is not authenticated, don't try to fetch data
   // for this page. We won't render the page until data exists.
   if (!AuthUser.id) {
     return {}
   }
   return {
-    query: graphql`
-      query pagesIndexQuery($userId: String!) {
-        app {
-          ...MoneyRaisedContainer_app
-        }
-        user(userId: $userId) {
-          tabs
-          vcCurrent
-          id
-          ...UserBackgroundImageContainer_user
-        }
-      }
-    `,
-    variables: {
-      userId: AuthUser.id,
-    },
+    userId: AuthUser.id,
   }
 }
 
@@ -250,12 +247,15 @@ const Index = ({ data: initialData }) => {
   // the SWR key is changing in `useData` (possbly due to its
   // use of shallow equality).
   const { data } = useData({
-    getRelayQuery,
+    relayQuery,
+    getRelayVariables,
     initialData,
     // If we are using the service worker (serving a cached version
     // of the page HTML), fetch fresh data on mount.
-    revalidateOnMount:
-      process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true',
+    ...(process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true' && {
+      revalidateOnMount: true,
+    }),
+    // process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true',
   })
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
@@ -472,7 +472,7 @@ export const getServerSideProps = flowRight([
     whenUnauthed: AuthAction.SHOW_LOADER,
     LoaderComponent: FullPageLoader,
   }),
-  withDataSSR(getRelayQuery),
+  withDataSSR(relayQuery, getRelayVariables),
 ])()
 
 export default flowRight([

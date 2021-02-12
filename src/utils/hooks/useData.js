@@ -11,7 +11,12 @@ const fetcher = async (query, variables) => {
   return fetchQuery(environment, query, variables)
 }
 
-const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
+const useData = ({
+  relayQuery,
+  getRelayVariables,
+  initialData,
+  ...SWROptions
+}) => {
   // Before fetching data, wait for the AuthUser to initialize
   // if it's not not already available.
   const AuthUser = useAuthUser()
@@ -28,18 +33,17 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
   }, [AuthUser])
 
   // Set up the Relay environment and get the Relay query.
-  const [relayQuery, setRelayQuery] = useState()
+  // const [relayQuery, setRelayQuery] = useState()
   const [relayVariables, setRelayVariables] = useState()
   useEffect(() => {
     const getRelayQueryAndVars = async () => {
-      const { query, variables = {} } = await getRelayQuery({ AuthUser })
-      setRelayVariables(variables)
-      setRelayQuery(query)
+      const resolvedVariables = await getRelayVariables({ AuthUser })
+      setRelayVariables(resolvedVariables)
     }
     if (isAuthReady) {
       getRelayQueryAndVars()
     }
-  }, [isAuthReady, AuthUser, getRelayQuery, initialData])
+  }, [isAuthReady, AuthUser, getRelayVariables])
 
   const readyToFetch = !!relayQuery
 

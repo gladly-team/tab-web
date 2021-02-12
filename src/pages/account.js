@@ -82,27 +82,21 @@ AccountItem.defaultProps = {
   actionButton: null,
   value: null,
 }
-
-const getRelayQuery = ({ AuthUser }) => {
-  const userId = AuthUser.id
-  return {
-    query: graphql`
-      query accountQuery($userId: String!) {
-        user(userId: $userId) {
-          email
-          id
-          username
-        }
-      }
-    `,
-    variables: {
-      userId,
-    },
+const relayQuery = graphql`
+  query accountQuery($userId: String!) {
+    user(userId: $userId) {
+      email
+      id
+      username
+    }
   }
-}
+`
+const getRelayVariables = ({ AuthUser }) => ({
+  userId: AuthUser.id,
+})
 
 const Account = ({ data: initialData }) => {
-  const { data } = useData({ getRelayQuery, initialData })
+  const { data } = useData({ relayQuery, getRelayVariables, initialData })
   const fetchInProgress = !data
   const { user } = data || {}
   const { id: userId, email, username } = user || {}
