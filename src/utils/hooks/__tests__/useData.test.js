@@ -210,7 +210,7 @@ describe('useData', () => {
     })
   })
 
-  xit('returns an error if fetchQuery throws', async () => {
+  it('returns an error if fetchQuery throws', async () => {
     expect.assertions(1)
 
     const mockErr = new Error('Problem fetching data.')
@@ -256,7 +256,10 @@ describe('useData', () => {
       variables: {},
     })
     const { result } = renderHook(() =>
-      useData({ relayQuery:'some query here', getRelayVariables: mockGetRelayVariables })
+      useData({
+        relayQuery: 'some query here',
+        getRelayVariables: mockGetRelayVariables,
+      })
     )
     expect(result.error).toEqual(
       new Error(
