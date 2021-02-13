@@ -33,7 +33,6 @@ const useData = ({
   }, [AuthUser])
 
   // Set up the Relay environment and get the Relay query.
-  // const [relayQuery, setRelayQuery] = useState()
   const [relayVariables, setRelayVariables] = useState()
   useEffect(() => {
     const getRelayVars = async () => {

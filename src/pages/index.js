@@ -217,6 +217,7 @@ if (isClientSide()) {
   }
   loadAds()
 }
+
 const relayQuery = graphql`
   query pagesIndexQuery($userId: String!) {
     app {
@@ -255,7 +256,6 @@ const Index = ({ data: initialData }) => {
     ...(process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true' && {
       revalidateOnMount: true,
     }),
-    // process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true',
   })
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()

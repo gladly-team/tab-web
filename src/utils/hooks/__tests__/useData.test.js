@@ -268,85 +268,87 @@ describe('useData', () => {
     )
   })
 
-  // it('returns an error if `getRelayEnvironment` throws', async () => {
-  //   expect.assertions(1)
+  it('returns an error if `getRelayEnvironment` throws', async () => {
+    expect.assertions(1)
 
-  //   const mockErr = new Error('Problem with the Relay environment.')
-  //   getRelayEnvironment.mockImplementation(() => {
-  //     throw mockErr
-  //   })
+    const mockErr = new Error('Problem with the Relay environment.')
+    getRelayEnvironment.mockImplementation(() => {
+      throw mockErr
+    })
 
-  //   useAuthUser.mockReturnValue(getUninitializedAuthUser())
-  //   let relayQueryPromiseResolver
-  //   const relayQueryPromise = new Promise((resolve) => {
-  //     relayQueryPromiseResolver = resolve
-  //   })
-  //   const mockGetRelayQuery = async () => relayQueryPromise
+    useAuthUser.mockReturnValue(getUninitializedAuthUser())
+    const relayQueryPromiseResolver = jest.fn()
+    const mockGetRelayVariables = async () => ({
+      variables: {},
+    })
 
-  //   const { result, rerender, waitForNextUpdate } = renderHook(() =>
-  //     useData({ getRelayQuery: mockGetRelayQuery })
-  //   )
+    const { result, rerender, waitForNextUpdate } = renderHook(() =>
+      useData({
+        relayQuery: 'some query here',
+        getRelayVariables: mockGetRelayVariables,
+      })
+    )
 
-  //   await act(async () => {
-  //     useAuthUser.mockReturnValue(getMockAuthUser())
-  //     relayQueryPromiseResolver({
-  //       query: `some query here`,
-  //       variables: {
-  //         some: 'thing',
-  //       },
-  //     })
-  //     rerender()
-  //     await waitForNextUpdate()
-  //   })
-  //   expect(result.current).toEqual({
-  //     data: undefined,
-  //     error: mockErr,
-  //   })
-  // })
+    await act(async () => {
+      useAuthUser.mockReturnValue(getMockAuthUser())
+      relayQueryPromiseResolver({
+        query: `some query here`,
+        variables: {
+          some: 'thing',
+        },
+      })
+      rerender()
+      await waitForNextUpdate()
+    })
+    expect(result.current).toEqual({
+      data: undefined,
+      error: mockErr,
+    })
+  })
 
-  // it('passes initialData and additional options to `useSWR`', async () => {
-  //   expect.assertions(1)
+  it('passes initialData and additional options to `useSWR`', async () => {
+    expect.assertions(1)
 
-  //   // Spying on default exports:
-  //   // https://stackoverflow.com/a/54245672
-  //   const useSWRSpy = jest.spyOn(useSWR, 'default')
+    // Spying on default exports:
+    // https://stackoverflow.com/a/54245672
+    const useSWRSpy = jest.spyOn(useSWR, 'default')
 
-  //   useAuthUser.mockReturnValue(getUninitializedAuthUser())
-  //   let relayQueryPromiseResolver
-  //   const relayQueryPromise = new Promise((resolve) => {
-  //     relayQueryPromiseResolver = resolve
-  //   })
-  //   const mockGetRelayQuery = async () => relayQueryPromise
+    useAuthUser.mockReturnValue(getUninitializedAuthUser())
+    const relayQueryPromiseResolver = jest.fn()
+    const mockGetRelayVariables = async () => ({
+      variables: {},
+    })
 
-  //   const { rerender, waitForNextUpdate } = renderHook(() =>
-  //     useData({
-  //       getRelayQuery: mockGetRelayQuery,
-  //       // Setting some additional SWR options.
-  //       initialData: { some: 'initial data' },
-  //       errorRetryCount: 2,
-  //       revalidateOnMount: true,
-  //     })
-  //   )
-  //   await act(async () => {
-  //     useAuthUser.mockReturnValue(getMockAuthUser())
-  //     relayQueryPromiseResolver({
-  //       query: `some query here`,
-  //       variables: {
-  //         some: 'thing',
-  //       },
-  //     })
-  //     rerender()
-  //     await waitForNextUpdate()
-  //   })
+    const { rerender, waitForNextUpdate } = renderHook(() =>
+      useData({
+        relayQuery: 'some query here',
+        getRelayVariables: mockGetRelayVariables,
+        // Setting some additional SWR options.
+        initialData: { some: 'initial data' },
+        errorRetryCount: 2,
+        revalidateOnMount: true,
+      })
+    )
+    await act(async () => {
+      useAuthUser.mockReturnValue(getMockAuthUser())
+      relayQueryPromiseResolver({
+        query: `some query here`,
+        variables: {
+          some: 'thing',
+        },
+      })
+      rerender()
+      await waitForNextUpdate()
+    })
 
-  //   expect(useSWRSpy).toHaveBeenCalledWith(
-  //     expect.any(Function),
-  //     expect.any(Function),
-  //     {
-  //       initialData: { some: 'initial data' },
-  //       errorRetryCount: 2,
-  //       revalidateOnMount: true,
-  //     }
-  //   )
-  // })
+    expect(useSWRSpy).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.any(Function),
+      {
+        initialData: { some: 'initial data' },
+        errorRetryCount: 2,
+        revalidateOnMount: true,
+      }
+    )
+  })
 })

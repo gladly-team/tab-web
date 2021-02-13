@@ -99,18 +99,17 @@ describe('account.js', () => {
     })
   })
 
-  it('passes the expected getRelayQuery function to `useData`', async () => {
+  it('passes the expected getRelayVariables function to `useData`', async () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     shallow(<AccountPage {...mockProps} />)
     const useDataArg = useData.mock.calls[0][0]
-    const queryInfo = await useDataArg.getRelayQuery({
+    const queryInfo = await useDataArg.getRelayVariables({
       AuthUser: getMockAuthUser(),
     })
     expect(queryInfo).toMatchObject({
-      query: expect.any(Object),
-      variables: expect.any(Object),
+      userId: expect.any(String),
     })
   })
 

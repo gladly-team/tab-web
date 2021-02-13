@@ -1,12 +1,12 @@
-const useData = jest.fn(({ getRelayQuery, initialData }) => {
-  if (!getRelayQuery) {
+const useData = jest.fn(({ getRelayVariables, initialData }) => {
+  if (!getRelayVariables) {
     throw new Error(
-      'Validation in mock: `useData` expects a value for "getRelayQuery.'
+      'Validation in mock: `useData` expects a value for "getRelayVariables.'
     )
   }
-  if (typeof getRelayQuery !== 'function') {
+  if (typeof getRelayVariables !== 'function') {
     throw new Error(
-      'Validation in mock: `useData` expects a function for "getRelayQuery.'
+      'Validation in mock: `useData` expects a function for "getRelayVariables.'
     )
   }
   return { data: initialData, error: undefined }
