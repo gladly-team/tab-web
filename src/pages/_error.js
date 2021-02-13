@@ -4,12 +4,11 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import NextErrorComponent, {
-  getServerSideProps as NextErrGetSSP,
-} from 'next/error'
+import { getServerSideProps as NextErrGetSSP } from 'next/error'
 import * as Sentry from '@sentry/node'
+import ErrorPage from 'src/components/ErrorPage'
 
-const MyError = ({ statusCode, hasGetServerSidePropsRun, err }) => {
+const MyError = ({ hasGetServerSidePropsRun, err }) => {
   if (!hasGetServerSidePropsRun && err) {
     // `getServerSideProps`` is not called in case of
     // https://github.com/vercel/next.js/issues/8592. As a workaround, we pass
@@ -17,7 +16,7 @@ const MyError = ({ statusCode, hasGetServerSidePropsRun, err }) => {
     Sentry.captureException(err)
   }
 
-  return <NextErrorComponent statusCode={statusCode} />
+  return <ErrorPage />
 }
 
 export const getServerSideProps = async ({ res, err, asPath }) => {
@@ -64,7 +63,6 @@ MyError.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   err: PropTypes.object,
   hasGetServerSidePropsRun: PropTypes.bool,
-  statusCode: PropTypes.number.isRequired,
 }
 
 MyError.defaultProps = {
