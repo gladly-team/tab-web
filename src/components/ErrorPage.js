@@ -24,7 +24,7 @@ const ErrorPage = () => (
         left: 0,
       }}
     >
-      <Logo style={{ height: 40 }} includeText="true" />
+      <Logo style={{ height: 40 }} includeText />
     </div>
     <div
       style={{

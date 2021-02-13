@@ -1,10 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import NextErrorComponent, {
-  getServerSideProps as NextErrGetSSP,
-} from 'next/error'
+import { getServerSideProps as NextErrGetSSP } from 'next/error'
 import * as Sentry from '@sentry/node'
 import getMockRes from 'src/utils/testHelpers/mockRes'
+import ErrorPageComponent from 'src/components/ErrorPage'
 
 jest.mock('next/error')
 jest.mock('@sentry/node')
@@ -38,23 +37,11 @@ describe('_error.js: render', () => {
     }).not.toThrow()
   })
 
-  it('returns the NextErrorComponent', () => {
+  it('returns the ErrorPageComponent', () => {
     expect.assertions(1)
     const ErrorPage = require('src/pages/_error.js').default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<ErrorPage {...mockProps} />)
-    expect(wrapper.at(0).type()).toEqual(NextErrorComponent)
-  })
-
-  it('passes the status code to the NextErrorComponent', () => {
-    expect.assertions(1)
-    const ErrorPage = require('src/pages/_error.js').default
-    const mockProps = {
-      ...getMockProps(),
-      statusCode: 403,
-    }
-    const wrapper = shallow(<ErrorPage {...mockProps} />)
-    expect(wrapper.find(NextErrorComponent).prop('statusCode')).toEqual(403)
+    const wrapper = shallow(<ErrorPage />)
+    expect(wrapper.at(0).type()).toEqual(ErrorPageComponent)
   })
 
   it('logs an error if "hasGetServerSidePropsRun" is false (we have not yet logged an error)', () => {
