@@ -47,11 +47,13 @@ describe('withRelay', () => {
     const ctx = getMockCtxWithAuthUser()
     const response = await withDataSSR(mockGetRelayFunc)()(ctx)
     expect(response).toEqual({
-      data: {
-        my: 'data!',
-      },
-      initialRecords: {
-        fake: ['initial', 'data', 'here'],
+      props: {
+        data: {
+          my: 'data!',
+        },
+        initialRecords: {
+          fake: ['initial', 'data', 'here'],
+        },
       },
     })
   })
@@ -89,7 +91,7 @@ describe('withRelay', () => {
     const ctx = getMockCtxWithAuthUser()
     const response = await withDataSSR(mockGetRelayFunc)()(ctx)
     expect(response).toMatchObject({
-      data: { my: 'data!', another: { thing: 'here' } },
+      props: { data: { my: 'data!', another: { thing: 'here' } } },
     })
   })
 
@@ -100,7 +102,7 @@ describe('withRelay', () => {
     const ctx = getMockCtxWithAuthUser()
     const response = await withDataSSR(mockGetRelayFunc)()(ctx)
     expect(response).toMatchObject({
-      data: null,
+      props: { data: null },
     })
   })
 
@@ -111,7 +113,7 @@ describe('withRelay', () => {
     const ctx = getMockCtxWithAuthUser()
     const response = await withDataSSR(myMockGetRelayFunc)()(ctx)
     expect(response).toMatchObject({
-      data: null,
+      props: { data: null },
     })
   })
 
@@ -125,8 +127,10 @@ describe('withRelay', () => {
     const response = await withDataSSR(mockGetRelayFunc)(getSSPFunc)(ctx)
     expect(response).toMatchObject({
       other: 'stuff',
-      data: {
-        my: 'data!',
+      props: {
+        data: {
+          my: 'data!',
+        },
       },
     })
   })
