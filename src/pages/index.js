@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { flowRight } from 'lodash/util'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { graphql } from 'react-relay'
+// import { graphql } from 'react-relay'
 import { AdComponent, fetchAds } from 'tab-ads'
 import uuid from 'uuid/v4'
 import { get } from 'lodash/object'
@@ -218,31 +218,35 @@ if (isClientSide()) {
   loadAds()
 }
 
-const getRelayQuery = async ({ AuthUser }) => {
-  // If the user is not authenticated, don't try to fetch data
-  // for this page. We won't render the page until data exists.
-  if (!AuthUser.id) {
-    return {}
-  }
-  return {
-    query: graphql`
-      query pagesIndexQuery($userId: String!) {
-        app {
-          ...MoneyRaisedContainer_app
-        }
-        user(userId: $userId) {
-          tabs
-          vcCurrent
-          id
-          ...UserBackgroundImageContainer_user
-        }
-      }
-    `,
-    variables: {
-      userId: AuthUser.id,
-    },
-  }
+const getRelayQuery = async () => {
+  throw new Error('Whoops')
 }
+
+// const getRelayQuery = async ({ AuthUser }) => {
+//   // If the user is not authenticated, don't try to fetch data
+//   // for this page. We won't render the page until data exists.
+//   if (!AuthUser.id) {
+//     return {}
+//   }
+//   return {
+//     query: graphql`
+//       query pagesIndexQuery($userId: String!) {
+//         app {
+//           ...MoneyRaisedContainer_app
+//         }
+//         user(userId: $userId) {
+//           tabs
+//           vcCurrent
+//           id
+//           ...UserBackgroundImageContainer_user
+//         }
+//       }
+//     `,
+//     variables: {
+//       userId: AuthUser.id,
+//     },
+//   }
+// }
 
 const Index = ({ data: initialData }) => {
   const classes = useStyles()

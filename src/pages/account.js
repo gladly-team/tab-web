@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { unregister } from 'next-offline/runtime'
 import { graphql } from 'react-relay'
@@ -109,6 +109,10 @@ const Account = ({ data: initialData }) => {
   const classes = useStyles()
 
   const AuthUser = useAuthUser()
+
+  useEffect(() => {
+    throw new Error('Fake error here')
+  }, [])
 
   // Logging out.
   const [isLoggingOut, setIsLoggingOut] = useState(false)

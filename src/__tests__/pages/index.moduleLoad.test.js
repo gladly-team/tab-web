@@ -64,7 +64,8 @@ describe('index.js: HOC', () => {
   })
 })
 
-describe('index.js: getServerSideProps', () => {
+// eslint-disable-next-line jest/no-disabled-tests
+describe.skip('index.js: getServerSideProps', () => {
   it('calls `withAuthUserTokenSSR` shows a loader when unauthed', async () => {
     expect.assertions(1)
     const { getServerSideProps } = require('src/pages/index')
