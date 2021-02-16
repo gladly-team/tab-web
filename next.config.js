@@ -178,6 +178,8 @@ const nextConfig = {
       },
     ],
   },
+  // Automatically inline all images under this size.
+  inlineImageLimit: 16384,
 }
 
 module.exports = withSourceMaps(withOffline(withImages(nextConfig)))
