@@ -11,6 +11,7 @@ import theme from 'src/utils/theme'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import initAuth from 'src/utils/auth/initAuth'
 import initSentry from 'src/utils/initSentry'
+import ErrorBoundary from 'src/components/ErrorBoundary'
 
 initAuth()
 
@@ -65,7 +66,9 @@ const MyApp = (props) => {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...pageProps} />
+        <ErrorBoundary>
+          <Component {...pageProps} />
+        </ErrorBoundary>
       </ThemeProvider>
     </>
   )
