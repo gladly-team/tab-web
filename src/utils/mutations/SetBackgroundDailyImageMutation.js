@@ -13,7 +13,7 @@ const mutation = graphql`
     }
   }
 `
-const SetBackgroundDailyImageMutation = async (userId) =>
+const SetBackgroundDailyImageMutation = (userId) =>
   callMutation({
     mutation,
     variables: {
