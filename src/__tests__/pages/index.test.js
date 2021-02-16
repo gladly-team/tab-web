@@ -43,6 +43,7 @@ jest.mock('src/utils/pageWrappers/withDataSSR')
 jest.mock('src/components/NewTabThemeWrapperHOC', () => (component) =>
   component
 )
+jest.mock('src/utils/pageWrappers/withSentry')
 jest.mock('src/utils/mutations/LogTabMutation')
 const getMockProps = () => ({
   data: {

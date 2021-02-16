@@ -8,6 +8,7 @@ import SettingsPage from 'src/components/SettingsPage'
 import return404If from 'src/utils/pageWrappers/return404If'
 import { showMockAchievements } from 'src/utils/featureFlags'
 import Achievement from 'src/components/Achievement'
+import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -180,6 +181,7 @@ Achievements.propTypes = {}
 Achievements.defaultProps = {}
 
 export const getServerSideProps = flowRight([
+  logUncaughtErrors,
   return404If(!showMockAchievements()),
 ])()
 

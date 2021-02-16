@@ -30,6 +30,8 @@ import SettingsIcon from '@material-ui/icons/Settings'
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
+import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
+import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
@@ -323,7 +325,6 @@ const Index = ({ data: initialData }) => {
   const onAdError = (e) => {
     logger.error(e)
   }
-
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {enableBackgroundImages ? (
@@ -467,11 +468,18 @@ Index.defaultProps = {
   data: null,
 }
 
+// We have a top level Catch Boundary because sentry is not handling
+// uncaught exceptions as expected.  You can see the unsolved issue
+// here: https://github.com/vercel/next.js/issues/1852.
+// withSentrySSR sets the user in our logger so that errors passed to
+// the top level catch pass user data to sentry.
 export const getServerSideProps = flowRight([
+  logUncaughtErrors,
   withAuthUserTokenSSR({
     whenUnauthed: AuthAction.SHOW_LOADER,
     LoaderComponent: FullPageLoader,
   }),
+  withSentrySSR,
   withDataSSR(getRelayQuery),
 ])()
 
@@ -481,6 +489,7 @@ export default flowRight([
     LoaderComponent: FullPageLoader,
     whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
   }),
+  withSentry,
   withRelay,
   NewTabThemeWrapperHOC,
 ])(Index)
