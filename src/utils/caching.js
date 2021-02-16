@@ -10,6 +10,9 @@ export const clearAllServiceWorkerCaches = async () => {
   return Promise.all(cacheNames.map((key) => window.caches.delete(key)))
 }
 export const recachePage = async () => {
+  if (!isClientSide()) {
+    return
+  }
   const { caches } = window
-  caches.open('tab-resources').then((cache) => cache.add('/newtab/'))
+  await caches.open('tab-resources').then((cache) => cache.add('/newtab/'))
 }
