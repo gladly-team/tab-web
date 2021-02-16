@@ -153,9 +153,7 @@ describe('index.js', () => {
     }
     shallow(<IndexPage {...mockProps} />)
     const useDataArg = useData.mock.calls[0][0]
-    expect(useDataArg).toMatchObject({
-      revalidateOnMount: false,
-    })
+    expect(useDataArg).not.toHaveProperty('revalidateOnMount')
   })
 
   it('includes a settings icon link to the account page', () => {
