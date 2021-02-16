@@ -43,12 +43,12 @@ const UserBackgroundImage = ({ user }) => {
   } = user
   useEffect(() => {
     // Show a new background image every day.
-    if (
-      isNil(backgroundImageTimestamp) ||
-      !dayjs(backgroundImageTimestamp).isToday()
-    ) {
-      SetBackgroundDailyImageMutation(userId)
-    }
+    // if (
+    //   isNil(backgroundImageTimestamp) ||
+    //   !dayjs(backgroundImageTimestamp).isToday()
+    // ) {
+    SetBackgroundDailyImageMutation(userId)
+    // }
   }, [backgroundImageTimestamp, userId])
   const classes = useStyles({ user })
   return (
