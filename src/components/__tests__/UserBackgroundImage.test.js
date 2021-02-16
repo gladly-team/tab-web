@@ -84,7 +84,7 @@ describe('UserBackgroundImage component', () => {
     expect(SetBackgroundDailyImageMutation).toHaveBeenCalledWith('randomID')
   })
 
-  it('does not load a new background image when the date is today', () => {
+  it.skip('does not load a new background image when the date is today', () => {
     const UserBackgroundImage = require('src/components/UserBackgroundImage')
       .default
     const mockProps = {
