@@ -38,7 +38,7 @@ const useStyles = makeStyles(() => ({
 }))
 const UserBackgroundImage = ({ user }) => {
   const {
-    backgroundImage: { timestamp: backgroundImageTimestamp, imageURL },
+    backgroundImage: { imageURL },
     id: userId,
   } = user
   useEffect(() => {
@@ -49,7 +49,7 @@ const UserBackgroundImage = ({ user }) => {
     // ) {
     SetBackgroundDailyImageMutation(userId)
     // }
-  }, [backgroundImageTimestamp, userId])
+  }, [userId])
   const classes = useStyles({ user })
   return (
     <div>
