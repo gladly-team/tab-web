@@ -27,17 +27,21 @@ describe('logUncaughtErrors', () => {
     const serverSidePropsErrorFunc = async () => {
       throw new Error('ahhh error')
     }
-    await logUncaughtErrors(serverSidePropsErrorFunc)(ctx)
+    try {
+      await logUncaughtErrors(serverSidePropsErrorFunc)(ctx)
+      // eslint-disable-next-line no-empty
+    } catch (e) {}
     expect(logger.error).toHaveBeenCalled()
   })
 
-  it("doesn't throw the caught error", async () => {
+  it('rethrows the caught error', async () => {
     const ctx = getMockCtxWithAuthUser()
     const serverSidePropsErrorFunc = async () => {
       throw new Error('ahhh error')
     }
-    await logUncaughtErrors(serverSidePropsErrorFunc)(ctx)
-    expect(logUncaughtErrors).not.toThrow()
+    await expect(
+      logUncaughtErrors(serverSidePropsErrorFunc)(ctx)
+    ).rejects.toThrow()
   })
 
   it('returns the composed props from server side function', async () => {

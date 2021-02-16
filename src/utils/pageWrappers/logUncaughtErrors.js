@@ -9,6 +9,7 @@ const logUncaughtErrors = (getServerSidePropsFunc) => async (ctx) => {
     }
   } catch (e) {
     logger.error(e)
+    throw e
   }
   return composedProps
 }
