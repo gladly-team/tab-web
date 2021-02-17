@@ -12,6 +12,7 @@ import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import initAuth from 'src/utils/auth/initAuth'
 import initSentry from 'src/utils/initSentry'
 import ErrorBoundary from 'src/components/ErrorBoundary'
+import initializeCMP from 'src/utils/initializeCMP'
 
 initAuth()
 
@@ -26,7 +27,6 @@ try {
   )
 }
 
-// TODO:
 // Initialize the CMP.
 // Delaying the CMP initialization avoids delaying any CMP
 // responses needed for our ad partner bid requests.
@@ -37,10 +37,12 @@ try {
 // any pages that rely on other CMP methods, such as the
 // account page, should initialize the CMP before calling
 // those methods.
-// const initCMP = () => {
-//   initializeCMP()
-// }
-// setTimeout(initCMP, 1500)
+if (isClientSide()) {
+  const initCMP = () => {
+    initializeCMP()
+  }
+  setTimeout(initCMP, 1500)
+}
 
 const MyApp = (props) => {
   const { Component, pageProps } = props
