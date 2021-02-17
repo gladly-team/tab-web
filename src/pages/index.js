@@ -256,8 +256,9 @@ const Index = ({ data: initialData }) => {
     initialData,
     // If we are using the service worker (serving a cached version
     // of the page HTML), fetch fresh data on mount.
-    revalidateOnMount:
-      process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true',
+    ...(process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true' && {
+      revalidateOnMount: true,
+    }),
   })
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
