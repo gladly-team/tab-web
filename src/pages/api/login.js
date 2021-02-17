@@ -3,6 +3,7 @@ import addUserFromAuthorizationToken from 'src/utils/middleware/addUserFromAutho
 import authProtected from 'src/utils/middleware/authProtected'
 // import customHeaderRequired from 'src/utils/middleware/customHeaderRequired'
 import onlyPostRequests from 'src/utils/middleware/onlyPostRequests'
+import setSentryUser from 'src/utils/middleware/setSentryUser'
 import { setAuthCookies } from 'next-firebase-auth'
 import initAuth from 'src/utils/auth/initAuth'
 import logger from 'src/utils/logger'
@@ -24,5 +25,6 @@ export default flowRight([
   // FIXME: require custom header (need to modify next-firebase-auth)
   // customHeaderRequired,
   addUserFromAuthorizationToken,
+  setSentryUser,
   authProtected,
 ])(handler)

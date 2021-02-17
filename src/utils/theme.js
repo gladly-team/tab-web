@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles'
+import { merge } from 'lodash/object'
 
 const theme = createMuiTheme({
   palette: {
@@ -13,6 +14,10 @@ const theme = createMuiTheme({
     text: {
       primary: 'rgba(0, 0, 0, 0.80)',
     },
+    // this is a custom theme palette color for the index page
+    backgroundContrastText: {
+      main: 'rgba(0, 0, 0, 0.80)',
+    },
   },
   typography: {
     fontSize: 14,
@@ -24,3 +29,6 @@ const theme = createMuiTheme({
 })
 
 export default theme
+
+export const extendTheme = (primaryTheme, extendedTheme) =>
+  createMuiTheme(merge({}, primaryTheme, extendedTheme))

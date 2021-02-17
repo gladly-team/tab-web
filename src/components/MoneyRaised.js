@@ -2,12 +2,17 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import useInterval from 'src/utils/hooks/useInterval'
 import { currencyFormatUSD } from 'src/utils/formatting'
+import { makeStyles } from '@material-ui/core/styles'
+import { get } from 'lodash/object'
 
+const useStyles = makeStyles((theme) => ({
+  currencyText: { color: get(theme, 'palette.backgroundContrastText.main') },
+}))
 const MoneyRaised = (props) => {
   const {
     app: { dollarsPerDayRate, moneyRaised },
   } = props
-
+  const classes = useStyles()
   const [currentMoneyRaised, setMoneyRaised] = useState(moneyRaised)
 
   // If the moneyRaised prop changes, use the new value.
@@ -25,7 +30,11 @@ const MoneyRaised = (props) => {
     setMoneyRaised(currentMoneyRaised + 0.01)
   }, msPerPenny)
 
-  return <span>{currencyFormatUSD(currentMoneyRaised)}</span>
+  return (
+    <span className={classes.currencyText}>
+      {currencyFormatUSD(currentMoneyRaised)}
+    </span>
+  )
 }
 
 MoneyRaised.displayName = 'MoneyRaised'

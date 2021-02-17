@@ -6,6 +6,8 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
 import { AdComponent, fetchAds } from 'tab-ads'
+import uuid from 'uuid/v4'
+import { get } from 'lodash/object'
 import {
   withAuthUser,
   withAuthUserTokenSSR,
@@ -18,6 +20,7 @@ import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import SearchInput from 'src/components/SearchInput'
+import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
 // material components
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
@@ -27,6 +30,9 @@ import SettingsIcon from '@material-ui/icons/Settings'
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
+import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
+import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
+import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,
@@ -45,11 +51,16 @@ import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
 
 const useStyles = makeStyles((theme) => ({
+  '@keyframes fadeIn': {
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  },
   pageContainer: {
     height: '100vh',
     width: '100vw',
     background: theme.palette.background.paper,
     overflow: 'hidden',
+    animation: '$fadeIn 0.5s ease',
   },
   fullContainer: {
     position: 'absolute',
@@ -76,9 +87,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     paddingBottom: theme.spacing(0),
   },
-  userMenuItem: {
-    color: 'rgba(0, 0, 0, 0.70)',
-  },
   moneyRaisedContainer: {
     margin: theme.spacing(0.5),
   },
@@ -88,6 +96,7 @@ const useStyles = makeStyles((theme) => ({
   settingsIcon: {
     height: 20,
     width: 20,
+    color: get(theme, 'palette.backgroundContrastText.main'),
   },
   achievementsContainer: {
     alignSelf: 'flex-end',
@@ -226,6 +235,7 @@ const getRelayQuery = async ({ AuthUser }) => {
         user(userId: $userId) {
           tabs
           vcCurrent
+          id
           ...UserBackgroundImageContainer_user
         }
       }
@@ -238,7 +248,6 @@ const getRelayQuery = async ({ AuthUser }) => {
 
 const Index = ({ data: initialData }) => {
   const classes = useStyles()
-
   // FIXME: this query is executing more than once. Most likely,
   // the SWR key is changing in `useData` (possbly due to its
   // use of shallow equality).
@@ -258,7 +267,6 @@ const Index = ({ data: initialData }) => {
   useEffect(() => {
     setAdUnits(getAdUnits())
   }, [])
-
   // Only render ads if we are on the client side.
   const [shouldRenderAds, setShouldRenderAds] = useState(false)
   useEffect(() => {
@@ -266,6 +274,16 @@ const Index = ({ data: initialData }) => {
       setShouldRenderAds(true)
     }
   }, [])
+  const { app, user } = data || {}
+  const userGlobalId = get(user, 'id')
+  const [tabId] = useState(uuid())
+
+  // log tab count when user first visits
+  useEffect(() => {
+    if (userGlobalId && tabId) {
+      LogTabMutation(userGlobalId, tabId)
+    }
+  }, [userGlobalId, tabId])
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -274,11 +292,6 @@ const Index = ({ data: initialData }) => {
   if (!data) {
     return <FullPageLoader />
   }
-  const { app, user } = data
-
-  // FIXME: use UUID in state
-  const tabId = 'abc-123'
-
   // Data to provide the onAdDisplayed callback
   const adContext = {
     user,
@@ -312,7 +325,6 @@ const Index = ({ data: initialData }) => {
   const onAdError = (e) => {
     logger.error(e)
   }
-
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {enableBackgroundImages ? (
@@ -380,7 +392,11 @@ const Index = ({ data: initialData }) => {
       </div>
       <div className={classes.centerContainer}>
         <div className={classes.searchBarContainer}>
-          <Logo includeText className={classes.logo} />
+          <Logo
+            includeText
+            color={enableBackgroundImages ? 'white' : null}
+            className={classes.logo}
+          />
           <SearchInput className={classes.searchBar} />
         </div>
       </div>
@@ -452,11 +468,18 @@ Index.defaultProps = {
   data: null,
 }
 
+// We have a top level Catch Boundary because sentry is not handling
+// uncaught exceptions as expected.  You can see the unsolved issue
+// here: https://github.com/vercel/next.js/issues/1852.
+// withSentrySSR sets the user in our logger so that errors passed to
+// the top level catch pass user data to sentry.
 export const getServerSideProps = flowRight([
+  logUncaughtErrors,
   withAuthUserTokenSSR({
     whenUnauthed: AuthAction.SHOW_LOADER,
     LoaderComponent: FullPageLoader,
   }),
+  withSentrySSR,
   withDataSSR(getRelayQuery),
 ])()
 
@@ -466,5 +489,7 @@ export default flowRight([
     LoaderComponent: FullPageLoader,
     whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
   }),
+  withSentry,
   withRelay,
+  NewTabThemeWrapperHOC,
 ])(Index)

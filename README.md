@@ -2,16 +2,22 @@
 
 # [Tab for a Cause](https://tab.gladly.io/)
 
-_V4: adding server-side rendering_
+🚨 **Work in progress** 🚨: see [gladly-team/tab](https://github.com/gladly-team/tab) for the production web app
 
 ## Getting Started
 
 1. `git clone git@github.com:gladly-team/tab-web.git`
 2. `cd tab-web`
 3. `yarn`
-4. `yarn go`
-
-_Note: this also requires a running GraphQL service endpoint. We may want to update the default endpoint to a dev endpoint in the cloud for a better develeoper experience._
+4. Set up local secret environment varables
+    1. Copy `.env.local.info` to `.env.local`
+    2. Set `FIREBASE_PRIVATE_KEY` to the staging environment key
+    3. Set cookie secrets to sufficiently long, random strings
+5. Create a user (by default, this repo relies on a cloud backend)
+    1. Visit [this staging environment](https://dev-tab2017.gladly.io/newtab/)
+    2. Sign up with **username and email**, not 3rd-party auth
+6. `yarn go`
+7. Visit `http://localhost:3001` and sign in with the user you created above
 
 ## Documentation
 
@@ -29,7 +35,7 @@ With this approach:
 
 - **We should use cookies as authentication _only_ for server-side rendering of pages.** This reduces the surface area for CSRF attacks and simplifies cross-platform development.
 - **Endpoints for pages must not change state.** These requests might be made by other sites, and session cookies will be included in those requests.
-- **All API endpoints should rely on custom headers.** This provides basic protection against CSRF. Most API endpoints should use the `Authorization` header to get and validate the user's token. However, if an endpoint doesn't require authentication, it should verify that some other custom header is set, such as `X-Gladly-Requested-By'`.
+- **All API endpoints should rely on custom headers.** This provides [basic protection](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.md#use-of-custom-request-headers) against CSRF, given our requirement for `SameSite=None` cookies. Most API endpoints should use the `Authorization` header to get and validate the user's token. However, if an endpoint doesn't require authentication, it should verify that some other custom header is set, such as `X-Gladly-Requested-By'`.
 
 On the `/api/logout` endpoint, we do not require the user to be authenticated, because if the user's Firebase credentials are invalidated or removed, the user would not be able to unset their session cookies and would continue to receive authed content until the session cookie expires. For basic CSRF protection, the logout endpoint verifies that the custom header `X-Gladly-Requested-By` is set.
 

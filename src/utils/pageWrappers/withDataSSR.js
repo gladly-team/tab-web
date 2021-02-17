@@ -50,18 +50,19 @@ const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
   }
 
   return {
-    // TODO: put in a "props" key when next-firebase-auth modifies
-    //   its composition.
     ...composedProps,
-    // If we don't fetch data, it should be null so that SWR will
-    // fetch data on the client side (in `useData`).
-    data: isEmpty(queryProps)
-      ? null
-      : {
-          ...queryProps,
-        },
-    // The "initialRecords" prop is consumed by the `withRelay` HOC.
-    initialRecords,
+    props: {
+      ...composedProps.props,
+      // If we don't fetch data, it should be null so that SWR will
+      // fetch data on the client side (in `useData`).
+      data: isEmpty(queryProps)
+        ? null
+        : {
+            ...queryProps,
+          },
+      // The "initialRecords" prop is consumed by the `withRelay` HOC.
+      initialRecords,
+    },
   }
 }
 
