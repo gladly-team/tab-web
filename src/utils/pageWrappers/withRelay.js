@@ -67,14 +67,6 @@ const withRelay = (ChildComponent) => {
         // eslint-disable-next-line no-console
         console.log('Debugging: Recreating Relay store:', shouldRecreateStore)
 
-        // Debugging only
-        // eslint-disable-next-line no-console
-        console.log(
-          'Debugging: Relay records:',
-          previousInitialRecords,
-          initialRecords
-        )
-
         setRelayEnvironment(
           initRelayEnvironment({
             getIdToken: AuthUser.getIdToken,
