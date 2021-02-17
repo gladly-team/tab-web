@@ -10,7 +10,7 @@ const withSourceMaps = require('@zeit/next-source-maps')({
 })
 
 const basePath = process.env.NEXT_PUBLIC_URLS_BASE_PATH || ''
-const url = process.env.VERCEL_URL || 'http://localhost:3001'
+const url = process.env.VERCEL_URL || 'http://localhost:3001/'
 const devAssetsRegex = 'https://prod-tab2017-media.gladly.io/.*'
 const prodAssetsRegex = 'https://dev-tab2017-media.gladly.io/.*'
 const cachingRegex = new RegExp(
