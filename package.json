@@ -41,6 +41,7 @@
     "relay-runtime": "^10.1.2",
     "swr": "^0.4.0",
     "tab-ads": "^1.0.2",
+    "tab-cmp": "^0.13.0",
     "uuid": "^3.3.2"
   },
   "devDependencies": {

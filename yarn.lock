@@ -10305,6 +10305,11 @@ tab-ads@^1.0.2:
   dependencies:
     lodash "^4.17.15"
 
+tab-cmp@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.13.0.tgz#76aa959c91b5b1763b5646537138438eaa0b9021"
+  integrity sha512-+U8Z1XAOmWwZ0aymjvHj0tKp+k0ojoqnRjD+v7d1l7NvHSVGlT6GByQQnMTrhLHdugb9HpVVvpGb9MmddbC1tg==
+
 table@^6.0.4:
   version "6.0.7"
   resolved "https://registry.yarnpkg.com/table/-/table-6.0.7.tgz"
