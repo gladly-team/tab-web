@@ -18,13 +18,6 @@ const withRelay = (ChildComponent) => {
     const previousInitialRecords = usePrevious(initialRecords)
     const publishInitialRecords = previousInitialRecords !== initialRecords
 
-    // Debugging only
-    // eslint-disable-next-line no-console
-    console.log(
-      'Debugging: Relay will publishInitialRecords',
-      publishInitialRecords
-    )
-
     // Set up the Relay environment.
     const [relayEnvironment, setRelayEnvironment] = useState(
       initRelayEnvironment({
@@ -55,17 +48,6 @@ const withRelay = (ChildComponent) => {
         // client to initialize.
         const shouldRecreateStore =
           !oldId && AuthUser.id ? false : AuthUser.id !== oldId
-
-        // Debugging only
-        // eslint-disable-next-line no-console
-        console.log(
-          'Debugging: Recreating Relay network:',
-          shouldRecreateNetwork
-        )
-
-        // Debugging only
-        // eslint-disable-next-line no-console
-        console.log('Debugging: Recreating Relay store:', shouldRecreateStore)
 
         setRelayEnvironment(
           initRelayEnvironment({

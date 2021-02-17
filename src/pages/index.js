@@ -248,11 +248,6 @@ const getRelayQuery = async ({ AuthUser }) => {
 
 const Index = ({ data: initialData }) => {
   const classes = useStyles()
-
-  // Debugging only
-  // eslint-disable-next-line no-console
-  console.log('Debugging: initialData', initialData)
-
   const { data } = useData({
     getRelayQuery,
     initialData,
