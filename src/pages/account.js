@@ -59,7 +59,7 @@ const AccountItem = (props) => {
   const { actionButton, name, value } = props
   const classes = useStyles()
   return (
-    <div className={classes.accountItem}>
+    <div className={classes.accountItem} data-test-id="account-item">
       <Typography variant="body2" className={classes.accountItemName}>
         {name}
       </Typography>
