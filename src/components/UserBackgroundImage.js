@@ -6,6 +6,7 @@ import { get } from 'lodash/object'
 import dayjs from 'dayjs'
 import isToday from 'dayjs/plugin/isToday'
 import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDailyImageMutation'
+import { recachePage } from 'src/utils/caching'
 
 dayjs.extend(isToday)
 const useStyles = makeStyles(() => ({
@@ -43,11 +44,16 @@ const UserBackgroundImage = ({ user }) => {
   } = user
   useEffect(() => {
     // Show a new background image every day.
+
+    async function updateBackgroundAndCachePage() {
+      await SetBackgroundDailyImageMutation(userId)
+      await recachePage()
+    }
     if (
       isNil(backgroundImageTimestamp) ||
       !dayjs(backgroundImageTimestamp).isToday()
     ) {
-      SetBackgroundDailyImageMutation(userId)
+      updateBackgroundAndCachePage()
     }
   }, [backgroundImageTimestamp, userId])
   const classes = useStyles({ user })
