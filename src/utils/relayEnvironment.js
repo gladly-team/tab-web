@@ -106,6 +106,7 @@ export const initRelayEnvironment = ({
   getIdToken = async () => null,
   recreateNetwork = false,
   recreateStore = false,
+  publishInitialRecords = false,
 } = {}) => {
   // On the server, always recreate the environment so that data
   // isn't shared between connections.
@@ -134,9 +135,13 @@ export const initRelayEnvironment = ({
 
   // Add initial records to the environment. This is important
   // when client-side navigating to a page that expects new
-  // data to exist in the store.
+  // data to exist in the store (e.g., loading our app on our account
+  // page and closing the settings to nav to the new tab page.)
+  // However, we should only call it when we know initialRecords
+  // contain new and fresh data; otherwise, it may overwrite
+  // existing state.
   // https://github.com/vercel/next.js/blob/canary/examples/with-relay-modern/lib/relay.js#L36
-  if (initialRecords) {
+  if (initialRecords && publishInitialRecords) {
     relayEnvironment.getStore().publish(new RecordSource(initialRecords))
   }
 
