@@ -8,7 +8,7 @@ import { getRelayEnvironment } from 'src/utils/relayEnvironment'
 
 const fetcher = async (query, variables) => {
   const environment = getRelayEnvironment()
-  return fetchQuery(environment, query, variables)
+  return fetchQuery(environment, JSON.parse(query), JSON.parse(variables))
 }
 
 const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
@@ -51,7 +51,10 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
     // SWR won't fetch if the "key" function returns null.
     // https://github.com/vercel/swr#dependent-fetching
     // SWR will refetch if any of these arguments change.
-    () => (!readyToFetch ? null : [relayQuery, relayVariables]),
+    () =>
+      !readyToFetch
+        ? null
+        : [JSON.stringify(relayQuery), JSON.stringify(relayVariables)],
     fetcher,
     {
       initialData,
