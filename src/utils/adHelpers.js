@@ -83,6 +83,3 @@ export const areAdsEnabled = () =>
  */
 export const showMockAds = () =>
   process.env.NEXT_PUBLIC_ADS_USE_MOCK_ADS === 'true'
-
-// TODO: implement
-export const isInEuropeanUnion = async () => false

@@ -34,12 +34,7 @@ import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
 import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
-import {
-  getAdUnits,
-  areAdsEnabled,
-  showMockAds,
-  isInEuropeanUnion,
-} from 'src/utils/adHelpers'
+import { getAdUnits, areAdsEnabled, showMockAds } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import { accountURL, achievementsURL } from 'src/utils/urls'
 import {
@@ -197,10 +192,15 @@ if (isClientSide()) {
     try {
       fetchAds({
         adUnits: Object.values(getAdUnits()),
-        auctionTimeout: 1200,
-        bidderTimeout: 900,
+        auctionTimeout: 1000,
+        bidderTimeout: 700,
         consent: {
-          isEU: isInEuropeanUnion,
+          enabled: false, // FIXME: add tab-cmp
+          // Time to wait for the consent management platform (CMP) to respond.
+          // If the CMP does not respond in this time, ad auctions may be cancelled.
+          // The tab-cmp package aims to make the CMP respond much more quickly
+          // than this after the user's first page load.
+          timeout: 500,
         },
         publisher: {
           domain: getHostname(),
