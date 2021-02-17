@@ -9,6 +9,9 @@ import {
 } from 'src/utils/relayEnvironment'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
+// SWR is currently caching the query between each test.  See:
+// github issue https://github.com/vercel/swr/issues/781
+// for now we're making each query unique as a workaround.
 // We don't mock SWR but instead the underlying fetcher.
 jest.mock('react-relay')
 jest.mock('next-firebase-auth')
@@ -64,7 +67,7 @@ describe('useData', () => {
     await act(async () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
       relayQueryPromiseResolver({
-        query: `some query here`,
+        query: `returns fetched data when auth has initialized and a query is provided`,
         variables: {
           some: 'thing',
         },
@@ -103,7 +106,7 @@ describe('useData', () => {
 
     await act(async () => {
       relayQueryPromiseResolver({
-        query: `some query here`,
+        query: `returns undefined data when auth has not yet initialized`,
         variables: {
           some: 'thing',
         },
@@ -163,7 +166,7 @@ describe('useData', () => {
     await act(async () => {
       useAuthUser.mockReturnValue(mockAuthUser)
       relayQueryPromiseResolver({
-        query: `some query here`,
+        query: `provides an authed AuthUser to getRelayQuery`,
         variables: {
           some: 'thing',
         },
@@ -197,7 +200,7 @@ describe('useData', () => {
     await act(async () => {
       useAuthUser.mockReturnValue(mockAuthUser)
       relayQueryPromiseResolver({
-        query: `some query here`,
+        query: `provides an unauthed (but initialized) AuthUser to getRelayQuery`,
         variables: {
           some: 'thing',
         },
@@ -230,7 +233,7 @@ describe('useData', () => {
     await act(async () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
       relayQueryPromiseResolver({
-        query: `some query here`,
+        query: `returns an error if fetchQuery throws`,
         variables: {
           some: 'thing',
         },
@@ -283,7 +286,7 @@ describe('useData', () => {
     await act(async () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
       relayQueryPromiseResolver({
-        query: `some query here`,
+        query: `returns an error if getRelayEnvironment throws`,
         variables: {
           some: 'thing',
         },
@@ -323,7 +326,7 @@ describe('useData', () => {
     await act(async () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
       relayQueryPromiseResolver({
-        query: `some query here`,
+        query: `passes initialData and additional options to useSWR`,
         variables: {
           some: 'thing',
         },

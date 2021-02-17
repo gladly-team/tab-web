@@ -248,16 +248,14 @@ const getRelayQuery = async ({ AuthUser }) => {
 
 const Index = ({ data: initialData }) => {
   const classes = useStyles()
-  // FIXME: this query is executing more than once. Most likely,
-  // the SWR key is changing in `useData` (possbly due to its
-  // use of shallow equality).
   const { data } = useData({
     getRelayQuery,
     initialData,
     // If we are using the service worker (serving a cached version
     // of the page HTML), fetch fresh data on mount.
-    revalidateOnMount:
-      process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true',
+    ...(process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true' && {
+      revalidateOnMount: true,
+    }),
   })
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()

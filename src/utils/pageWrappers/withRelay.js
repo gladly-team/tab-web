@@ -12,11 +12,18 @@ const withRelay = (ChildComponent) => {
     const { initialRecords, ...otherProps } = props
     const AuthUser = useAuthUser()
 
+    // Publish initial records to the store only if they've
+    // changed. Otherwise, old initial records might overwrite
+    // new store data.
+    const previousInitialRecords = usePrevious(initialRecords)
+    const publishInitialRecords = previousInitialRecords !== initialRecords
+
     // Set up the Relay environment.
     const [relayEnvironment, setRelayEnvironment] = useState(
       initRelayEnvironment({
         initialRecords,
         getIdToken: AuthUser.getIdToken,
+        publishInitialRecords,
       })
     )
 
@@ -30,15 +37,15 @@ const withRelay = (ChildComponent) => {
           : null
         const oldId = previousAuthUser ? previousAuthUser.id : null
 
+        // If the AuthUser's token or ID change, recreate the
+        // Relay network.
+        const shouldRecreateNetwork =
+          AuthUser.id !== oldId || token !== oldToken
+
         // If the AuthUser's ID changes, recreate the Relay store.
         // Don't recreate the store if the previous user ID wasn't
         // set, because we were likely just waiting for the auth
         // client to initialize.
-        const shouldRecreateNetwork =
-          AuthUser.id !== oldId || token !== oldToken
-
-        // If the AuthUser's token or ID change, recreate the
-        // Relay network.
         const shouldRecreateStore =
           !oldId && AuthUser.id ? false : AuthUser.id !== oldId
 
@@ -47,11 +54,12 @@ const withRelay = (ChildComponent) => {
             getIdToken: AuthUser.getIdToken,
             recreateNetwork: shouldRecreateNetwork,
             recreateStore: shouldRecreateStore,
+            publishInitialRecords,
           })
         )
       }
       updateRelayEnvAsNeeded()
-    }, [AuthUser, previousAuthUser])
+    }, [AuthUser, previousAuthUser, publishInitialRecords])
 
     return (
       <ReactRelayContext.Provider
