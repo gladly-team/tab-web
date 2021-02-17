@@ -134,7 +134,8 @@ export const initRelayEnvironment = ({
 
   // Add initial records to the environment. This is important
   // when client-side navigating to a page that expects new
-  // data to exist in the store.
+  // data to exist in the store (e.g., loading our app on our account
+  // page and closing the settings to nav to the new tab page.)
   // https://github.com/vercel/next.js/blob/canary/examples/with-relay-modern/lib/relay.js#L36
   if (initialRecords) {
     // Debugging only
