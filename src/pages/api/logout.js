@@ -16,7 +16,4 @@ const handler = async (req, res) => {
   return res.status(200).json({ success: true })
 }
 
-// FIXME: require custom header (need to modify next-firebase-auth)
-// Endpoint does not require the user to be authenticated. See:
-// https://github.com/gladly-team/tab-web#authentication-approach
 export default flowRight([customHeaderRequired])(handler)
