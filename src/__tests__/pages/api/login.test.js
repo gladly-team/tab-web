@@ -80,13 +80,13 @@ describe('API: login middleware', () => {
     expect(onlyPostRequests).toHaveBeenCalled()
   })
 
-  it('does not use `customHeaderRequired` [but we should - need to fix]', async () => {
+  it('use `customHeaderRequired`', async () => {
     expect.assertions(1)
     const customHeaderRequired = require('src/utils/middleware/customHeaderRequired')
       .default
     const loginAPI = require('src/pages/api/login').default
     await loginAPI(getMockReq(), getMockRes())
-    expect(customHeaderRequired).not.toHaveBeenCalled()
+    expect(customHeaderRequired).toHaveBeenCalled()
   })
 
   it('uses `addUserFromAuthorizationToken`', async () => {

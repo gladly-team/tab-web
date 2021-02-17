@@ -11,18 +11,17 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('SetBackgroundDailyImageMutation', () => {
+describe('LogTabMutation', () => {
   it('calls callMutation with the expected arguments', async () => {
     expect.assertions(1)
-    const SetBackgroundDailyImageMutation = require('src/utils/mutations/SetBackgroundDailyImageMutation')
-      .default
-    await SetBackgroundDailyImageMutation('some-user-id')
+    const LogTabMutation = require('src/utils/mutations/LogTabMutation').default
+    await LogTabMutation('some-user-id', 'some-tab-id')
     expect(callMutation).toHaveBeenCalledWith({
       mutation: expect.any(Object),
       variables: {
         input: {
           userId: 'some-user-id',
-          category: 'cats',
+          tabId: 'some-tab-id',
         },
       },
     })
@@ -30,27 +29,20 @@ describe('SetBackgroundDailyImageMutation', () => {
 
   it('returns the callMutation response', async () => {
     expect.assertions(1)
-    const SetBackgroundDailyImageMutation = require('src/utils/mutations/SetBackgroundDailyImageMutation')
-      .default
+    const LogTabMutation = require('src/utils/mutations/LogTabMutation').default
     callMutation.mockResolvedValue({
       user: {
         id: 'some-id',
-        backgroundImage: {
-          imageURL: 'some-url',
-          timestamp: 'some-timestamp',
-        },
+        tabs: 100,
+        tabsToday: 5,
       },
     })
-    const response = await SetBackgroundDailyImageMutation({
-      userId: 'some-user-id',
-    })
+    const response = await LogTabMutation('some-user-id', 'some-tab-id')
     expect(response).toEqual({
       user: {
         id: 'some-id',
-        backgroundImage: {
-          imageURL: 'some-url',
-          timestamp: 'some-timestamp',
-        },
+        tabs: 100,
+        tabsToday: 5,
       },
     })
   })

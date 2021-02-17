@@ -2,6 +2,7 @@ import React from 'react'
 import { flowRight } from 'lodash/util'
 import { withAuthUser, AuthAction } from 'next-firebase-auth'
 import withRelay from 'src/utils/pageWrappers/withRelay'
+import { withSentry } from 'src/utils/pageWrappers/withSentry'
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
@@ -79,5 +80,6 @@ export default flowRight([
     whenUnauthedBeforeInit: AuthAction.RETURN_NULL,
     whenUnauthedAfterInit: AuthAction.RENDER,
   }),
+  withSentry,
   withRelay,
 ])(Auth)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
@@ -13,7 +13,11 @@ import FullPageLoader from 'src/components/FullPageLoader'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import useData from 'src/utils/hooks/useData'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
+import LogTabMutation from 'src/utils/mutations/LogTabMutation'
+import uuid from 'uuid/v4'
 
+jest.mock('uuid/v4')
+uuid.mockReturnValue('some-uuid')
 jest.mock('tab-ads')
 jest.mock('next-firebase-auth')
 jest.mock('@material-ui/icons/Settings')
@@ -21,9 +25,12 @@ jest.mock('src/components/Link')
 jest.mock('src/utils/navigation')
 jest.mock('src/utils/adHelpers')
 jest.mock('src/utils/ssr')
+jest.mock('src/utils/adHelpers', () => ({
+  getAdUnits: jest.fn().mockReturnValue({}),
+}))
 jest.mock('src/components/Logo')
-jest.mock('src/components/MoneyRaisedContainer')
-jest.mock('src/components/SearchInput')
+jest.mock('src/components/MoneyRaisedContainer', () => () => <div />)
+jest.mock('src/components/SearchInput', () => () => <div />)
 jest.mock('src/utils/featureFlags')
 jest.mock('src/components/Achievement', () => () => (
   <div data-test-id="mock-achievement" />
@@ -36,13 +43,15 @@ jest.mock('src/utils/pageWrappers/withDataSSR')
 jest.mock('src/components/NewTabThemeWrapperHOC', () => (component) =>
   component
 )
-
+jest.mock('src/utils/pageWrappers/withSentry')
+jest.mock('src/utils/mutations/LogTabMutation')
 const getMockProps = () => ({
   data: {
     app: {},
     user: {
       tabs: 221,
       vcCurrent: 78,
+      id: 'asdf',
     },
   },
 })
@@ -145,9 +154,7 @@ describe('index.js', () => {
     }
     shallow(<IndexPage {...mockProps} />)
     const useDataArg = useData.mock.calls[0][0]
-    expect(useDataArg).toMatchObject({
-      revalidateOnMount: false,
-    })
+    expect(useDataArg).not.toHaveProperty('revalidateOnMount')
   })
 
   it('includes a settings icon link to the account page', () => {
@@ -218,5 +225,28 @@ describe('index.js', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<IndexPage {...mockProps} />)
     expect(wrapper.find(UserBackgroundImageContainer).exists()).toBe(true)
+  })
+
+  it('logs a tab count if the user is defined', () => {
+    const mockProps = getMockProps()
+    const IndexPage = require('src/pages/index').default
+    mount(<IndexPage {...mockProps} />)
+    expect(LogTabMutation).toHaveBeenCalledWith('asdf', 'some-uuid')
+  })
+
+  it('does not log a tab count if user is not defined', () => {
+    const mockProps = getMockProps()
+    useData.mockReturnValue({
+      data: {
+        app: {},
+        user: {
+          tabs: 221,
+          vcCurrent: 78,
+        },
+      },
+    })
+    const IndexPage = require('src/pages/index').default
+    mount(<IndexPage {...mockProps} />)
+    expect(LogTabMutation).not.toHaveBeenCalled()
   })
 })

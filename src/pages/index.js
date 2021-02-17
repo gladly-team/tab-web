@@ -6,12 +6,13 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
 import { AdComponent, fetchAds } from 'tab-ads'
+import uuid from 'uuid/v4'
+import { get } from 'lodash/object'
 import {
   withAuthUser,
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
-import { get } from 'lodash/object'
 // custom components
 import Achievement from 'src/components/Achievement'
 import Link from 'src/components/Link'
@@ -29,6 +30,9 @@ import SettingsIcon from '@material-ui/icons/Settings'
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
+import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
+import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
+import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,
@@ -231,6 +235,7 @@ const getRelayQuery = async ({ AuthUser }) => {
         user(userId: $userId) {
           tabs
           vcCurrent
+          id
           ...UserBackgroundImageContainer_user
         }
       }
@@ -243,16 +248,14 @@ const getRelayQuery = async ({ AuthUser }) => {
 
 const Index = ({ data: initialData }) => {
   const classes = useStyles()
-  // FIXME: this query is executing more than once. Most likely,
-  // the SWR key is changing in `useData` (possbly due to its
-  // use of shallow equality).
   const { data } = useData({
     getRelayQuery,
     initialData,
     // If we are using the service worker (serving a cached version
     // of the page HTML), fetch fresh data on mount.
-    revalidateOnMount:
-      process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true',
+    ...(process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true' && {
+      revalidateOnMount: true,
+    }),
   })
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
@@ -262,7 +265,6 @@ const Index = ({ data: initialData }) => {
   useEffect(() => {
     setAdUnits(getAdUnits())
   }, [])
-
   // Only render ads if we are on the client side.
   const [shouldRenderAds, setShouldRenderAds] = useState(false)
   useEffect(() => {
@@ -270,6 +272,16 @@ const Index = ({ data: initialData }) => {
       setShouldRenderAds(true)
     }
   }, [])
+  const { app, user } = data || {}
+  const userGlobalId = get(user, 'id')
+  const [tabId] = useState(uuid())
+
+  // log tab count when user first visits
+  useEffect(() => {
+    if (userGlobalId && tabId) {
+      LogTabMutation(userGlobalId, tabId)
+    }
+  }, [userGlobalId, tabId])
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -278,11 +290,6 @@ const Index = ({ data: initialData }) => {
   if (!data) {
     return <FullPageLoader />
   }
-  const { app, user } = data
-
-  // FIXME: use UUID in state
-  const tabId = 'abc-123'
-
   // Data to provide the onAdDisplayed callback
   const adContext = {
     user,
@@ -316,7 +323,6 @@ const Index = ({ data: initialData }) => {
   const onAdError = (e) => {
     logger.error(e)
   }
-
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {enableBackgroundImages ? (
@@ -460,11 +466,18 @@ Index.defaultProps = {
   data: null,
 }
 
+// We have a top level Catch Boundary because sentry is not handling
+// uncaught exceptions as expected.  You can see the unsolved issue
+// here: https://github.com/vercel/next.js/issues/1852.
+// withSentrySSR sets the user in our logger so that errors passed to
+// the top level catch pass user data to sentry.
 export const getServerSideProps = flowRight([
+  logUncaughtErrors,
   withAuthUserTokenSSR({
     whenUnauthed: AuthAction.SHOW_LOADER,
     LoaderComponent: FullPageLoader,
   }),
+  withSentrySSR,
   withDataSSR(getRelayQuery),
 ])()
 
@@ -474,6 +487,7 @@ export default flowRight([
     LoaderComponent: FullPageLoader,
     whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
   }),
+  withSentry,
   withRelay,
   NewTabThemeWrapperHOC,
 ])(Index)

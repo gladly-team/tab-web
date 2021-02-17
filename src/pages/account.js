@@ -17,6 +17,7 @@ import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { setWindowLocation } from 'src/utils/navigation'
 import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
+import { withSentry } from 'src/utils/pageWrappers/withSentry'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -220,5 +221,6 @@ export default flowRight([
   withAuthUser({
     whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
   }),
+  withSentry,
   withRelay,
 ])(Account)

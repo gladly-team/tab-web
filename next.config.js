@@ -10,7 +10,12 @@ const withSourceMaps = require('@zeit/next-source-maps')({
 })
 
 const basePath = process.env.NEXT_PUBLIC_URLS_BASE_PATH || ''
-
+const url = process.env.VERCEL_URL || 'http://localhost:3001/'
+const devAssetsRegex = 'https://prod-tab2017-media.gladly.io/.*'
+const prodAssetsRegex = 'https://dev-tab2017-media.gladly.io/.*'
+const cachingRegex = new RegExp(
+  `${url}${basePath}.*|${devAssetsRegex}|${prodAssetsRegex}`
+)
 // Use the SentryWebpack plugin to upload the source maps during build.
 const SentryWebpackPlugin = require('@sentry/webpack-plugin')
 
@@ -152,7 +157,7 @@ const nextConfig = {
         // variants with our base path. Note that our base path, "/newtab", is
         // hardcoded here.
         // https://regex101.com/r/5cs6L7/1/tests
-        urlPattern: /^http[s]?:\/\/(?:[^/\s]+\/)(?:(?!api\/|graphql(?:\/)?$|newtab\/api\/|newtab\/graphql(?:\/)?$)).*$/,
+        urlPattern: cachingRegex,
         handler: 'StaleWhileRevalidate',
         options: {
           cacheName: 'tab-resources',
@@ -178,6 +183,8 @@ const nextConfig = {
       },
     ],
   },
+  // Automatically inline all images under this size.
+  inlineImageLimit: 16384,
 }
 
 module.exports = withSourceMaps(withOffline(withImages(nextConfig)))
