@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import MockDate from 'mockdate'
 
 jest.mock('src/utils/mutations/SetBackgroundDailyImageMutation')
-
+jest.mock('src/utils/caching')
 const getMockProps = () => ({
   user: {
     backgroundImage: {
