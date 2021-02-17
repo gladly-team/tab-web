@@ -1,7 +1,7 @@
 import { flowRight } from 'lodash/util'
 import addUserFromAuthorizationToken from 'src/utils/middleware/addUserFromAuthorizationToken'
 import authProtected from 'src/utils/middleware/authProtected'
-// import customHeaderRequired from 'src/utils/middleware/customHeaderRequired'
+import customHeaderRequired from 'src/utils/middleware/customHeaderRequired'
 import onlyPostRequests from 'src/utils/middleware/onlyPostRequests'
 import setSentryUser from 'src/utils/middleware/setSentryUser'
 import { setAuthCookies } from 'next-firebase-auth'
@@ -22,8 +22,7 @@ const handler = async (req, res) => {
 
 export default flowRight([
   onlyPostRequests,
-  // FIXME: require custom header (need to modify next-firebase-auth)
-  // customHeaderRequired,
+  customHeaderRequired,
   addUserFromAuthorizationToken,
   setSentryUser,
   authProtected,
