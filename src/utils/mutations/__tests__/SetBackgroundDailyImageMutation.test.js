@@ -22,6 +22,7 @@ describe('SetBackgroundDailyImageMutation', () => {
       variables: {
         input: {
           userId: 'some-user-id',
+          category: 'cats',
         },
       },
     })

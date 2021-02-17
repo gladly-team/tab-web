@@ -27,7 +27,7 @@ try {
 }
 
 const MyApp = (props) => {
-  const { Component, pageProps, err } = props
+  const { Component, pageProps } = props
 
   // Optionally, enable or disable the service worker:
   // https://github.com/hanford/next-offline#runtime-registration
@@ -55,23 +55,6 @@ const MyApp = (props) => {
     }
   }, [])
 
-  // FIXME: move Sentry into its own HOC. Make sure we set Sentry
-  //   context in APIs (server-side) as well as during component
-  //   rendering on both client and server. `initSentry` from
-  //   API functions, too. Clean up and consolidate Sentry logic
-  //   for reuse.
-  // Set user context for Sentry error logging.
-  // const { id: userId, email } = AuthUser || {}
-  // useEffect(() => {
-  //   if (userId) {
-  //     Sentry.setUser({ id: userId, email })
-  //   }
-  // }, [userId, email])
-
-  // Including the "err" prop as a workaround for:
-  // https://github.com/vercel/next.js/issues/8592
-  // See:
-  // https://github.com/vercel/next.js/tree/canary/examples/with-sentry
   return (
     <>
       <Head>
@@ -81,11 +64,10 @@ const MyApp = (props) => {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      {/* Material UI: https://github.com/mui-org/material-ui/blob/master/examples/nextjs/pages/_app.js */}
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <ErrorBoundary>
-          <Component {...pageProps} err={err} />
+          <Component {...pageProps} />
         </ErrorBoundary>
       </ThemeProvider>
     </>
@@ -97,13 +79,10 @@ MyApp.displayName = 'App'
 MyApp.propTypes = {
   Component: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  err: PropTypes.object,
-  // eslint-disable-next-line react/forbid-prop-types
   pageProps: PropTypes.object,
 }
 
 MyApp.defaultProps = {
-  err: undefined,
   pageProps: {},
 }
 

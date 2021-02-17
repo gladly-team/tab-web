@@ -99,8 +99,8 @@ describe('initRelayEnvironment', () => {
     expect(firstEnv).toEqual(secondEnv)
   })
 
-  it('publishes initialRecords when reusing the environment on the client side', () => {
-    expect.assertions(2)
+  it('publishes initialRecords when reusing the environment on the client side, initialRecords are defined, and "publishInitialRecords" is true', () => {
+    expect.assertions(1)
     const { RecordSource } = require('relay-runtime')
     const { isServerSide } = require('src/utils/ssr')
     isServerSide.mockReturnValue(false)
@@ -108,17 +108,37 @@ describe('initRelayEnvironment', () => {
     const firstEnv = initRelayEnvironment({
       getIdToken: async () => 'some-fake-token',
       initialRecords: { some: 'stuff' },
+      publishInitialRecords: true,
     })
     expect(firstEnv.getStore().publish).toHaveBeenCalledWith(
       new RecordSource({ some: 'stuff' })
     )
-    const secondEnv = initRelayEnvironment({
+  })
+
+  it('does not publish initialRecords when reusing the environment on the client side, "publishInitialRecords" is true, but initialRecords is *not* defined', () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const { initRelayEnvironment } = require('src/utils/relayEnvironment')
+    const firstEnv = initRelayEnvironment({
       getIdToken: async () => 'some-fake-token',
-      initialRecords: { other: 'things' },
+      initialRecords: undefined,
+      publishInitialRecords: true,
     })
-    expect(secondEnv.getStore().publish).toHaveBeenCalledWith(
-      new RecordSource({ other: 'things' })
-    )
+    expect(firstEnv.getStore().publish).not.toHaveBeenCalled()
+  })
+
+  it('does not publish initialRecords when reusing the environment on the client side, initialRecords are defined, but "publishInitialRecords" is *not* set', () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const { initRelayEnvironment } = require('src/utils/relayEnvironment')
+    const firstEnv = initRelayEnvironment({
+      getIdToken: async () => 'some-fake-token',
+      initialRecords: { some: 'stuff' },
+      publishInitialRecords: undefined,
+    })
+    expect(firstEnv.getStore().publish).not.toHaveBeenCalled()
   })
 
   it('returns a new Relay environment when called a second time on the client-side with "recreateNetwork" and "recreateStore" set to true', () => {
