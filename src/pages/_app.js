@@ -26,6 +26,22 @@ try {
   )
 }
 
+// TODO:
+// Initialize the CMP.
+// Delaying the CMP initialization avoids delaying any CMP
+// responses needed for our ad partner bid requests.
+// Our modified CMP API stubs are quick to respond, but the
+// core CMP JS, which replaces the stubs and is out of our
+// control, may be slower to respond.
+// Note that because we delay CMP initialization by default,
+// any pages that rely on other CMP methods, such as the
+// account page, should initialize the CMP before calling
+// those methods.
+// const initCMP = () => {
+//   initializeCMP()
+// }
+// setTimeout(initCMP, 1500)
+
 const MyApp = (props) => {
   const { Component, pageProps } = props
 

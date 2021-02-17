@@ -19,6 +19,8 @@ import { setWindowLocation } from 'src/utils/navigation'
 import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 import { withSentry } from 'src/utils/pageWrappers/withSentry'
 
+// TODO: add privacy management buttons
+
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
     width: '100%',

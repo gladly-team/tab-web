@@ -7,6 +7,7 @@ import { PWAManifestURL } from 'src/utils/urls'
 import theme from 'src/utils/theme'
 import Logo192Apple from 'src/assets/logos/logo192-apple.png'
 
+// TODO: add tab-cmp code
 class CustomDocument extends Document {
   render() {
     return (
