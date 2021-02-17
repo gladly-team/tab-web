@@ -42,6 +42,8 @@ const UserBackgroundImage = ({ user }) => {
     backgroundImage: { imageURL },
     id: userId,
   } = user
+  // eslint-disable-next-line no-console
+  console.log(imageURL)
   useEffect(() => {
     // Show a new background image every day.
 
