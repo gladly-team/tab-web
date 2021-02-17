@@ -137,6 +137,11 @@ export const initRelayEnvironment = ({
   // data to exist in the store.
   // https://github.com/vercel/next.js/blob/canary/examples/with-relay-modern/lib/relay.js#L36
   if (initialRecords) {
+    // Debugging only
+    // eslint-disable-next-line no-console
+    console.log(
+      'Debugging: Relay environment is publishing initial records to store'
+    )
     relayEnvironment.getStore().publish(new RecordSource(initialRecords))
   }
 

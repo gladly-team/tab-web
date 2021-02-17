@@ -248,9 +248,11 @@ const getRelayQuery = async ({ AuthUser }) => {
 
 const Index = ({ data: initialData }) => {
   const classes = useStyles()
-  // FIXME: this query is executing more than once. Most likely,
-  // the SWR key is changing in `useData` (possbly due to its
-  // use of shallow equality).
+
+  // Debugging only
+  // eslint-disable-next-line no-console
+  console.log('Debugging: initialData', initialData)
+
   const { data } = useData({
     getRelayQuery,
     initialData,

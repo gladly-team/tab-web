@@ -42,6 +42,17 @@ const withRelay = (ChildComponent) => {
         const shouldRecreateStore =
           !oldId && AuthUser.id ? false : AuthUser.id !== oldId
 
+        // Debugging only
+        // eslint-disable-next-line no-console
+        console.log(
+          'Debugging: Recreating Relay network:',
+          shouldRecreateNetwork
+        )
+
+        // Debugging only
+        // eslint-disable-next-line no-console
+        console.log('Debugging: Recreating Relay store:', shouldRecreateStore)
+
         setRelayEnvironment(
           initRelayEnvironment({
             getIdToken: AuthUser.getIdToken,

@@ -12,6 +12,11 @@ const MoneyRaised = (props) => {
   const {
     app: { dollarsPerDayRate, moneyRaised },
   } = props
+
+  // Debugging only
+  // eslint-disable-next-line no-console
+  console.log('Debugging: moneyRaised', moneyRaised)
+
   const classes = useStyles()
   const [currentMoneyRaised, setMoneyRaised] = useState(moneyRaised)
 
