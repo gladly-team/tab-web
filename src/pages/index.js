@@ -323,6 +323,8 @@ const Index = ({ data: initialData }) => {
   const onAdError = (e) => {
     logger.error(e)
   }
+  // eslint-disable-next-line no-console
+  console.log(process.env.VERCEL_URL)
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {enableBackgroundImages ? (

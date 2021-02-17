@@ -10,7 +10,8 @@ const withSourceMaps = require('@zeit/next-source-maps')({
 })
 
 const basePath = process.env.NEXT_PUBLIC_URLS_BASE_PATH || ''
-
+const url = process.env.VERCEL_URL || 'http://localhost:3001'
+const cachingRegex = new RegExp(`${url}${basePath}.*`)
 // Use the SentryWebpack plugin to upload the source maps during build.
 const SentryWebpackPlugin = require('@sentry/webpack-plugin')
 
@@ -152,7 +153,7 @@ const nextConfig = {
         // variants with our base path. Note that our base path, "/newtab", is
         // hardcoded here.
         // https://regex101.com/r/5cs6L7/1/tests
-        urlPattern: /^http[s]?:\/\/(?:[^/\s]+\/)(?:(?!api\/|graphql(?:\/)?$|newtab\/api\/|newtab\/graphql(?:\/)?$)).*$/,
+        urlPattern: cachingRegex,
         handler: 'StaleWhileRevalidate',
         options: {
           cacheName: 'tab-resources',
