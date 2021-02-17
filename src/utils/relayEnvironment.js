@@ -106,6 +106,7 @@ export const initRelayEnvironment = ({
   getIdToken = async () => null,
   recreateNetwork = false,
   recreateStore = false,
+  publishInitialRecords = false,
 } = {}) => {
   // On the server, always recreate the environment so that data
   // isn't shared between connections.
@@ -137,7 +138,7 @@ export const initRelayEnvironment = ({
   // data to exist in the store (e.g., loading our app on our account
   // page and closing the settings to nav to the new tab page.)
   // https://github.com/vercel/next.js/blob/canary/examples/with-relay-modern/lib/relay.js#L36
-  if (initialRecords) {
+  if (initialRecords && publishInitialRecords) {
     // Debugging only
     // eslint-disable-next-line no-console
     console.log(

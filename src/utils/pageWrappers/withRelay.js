@@ -20,6 +20,8 @@ const withRelay = (ChildComponent) => {
       })
     )
 
+    const previousInitialRecords = usePrevious(initialRecords)
+
     // Update the Relay environment when the AuthUser changes.
     const previousAuthUser = usePrevious(AuthUser)
     useEffect(() => {
@@ -30,17 +32,23 @@ const withRelay = (ChildComponent) => {
           : null
         const oldId = previousAuthUser ? previousAuthUser.id : null
 
+        // If the AuthUser's token or ID change, recreate the
+        // Relay network.
+        const shouldRecreateNetwork =
+          AuthUser.id !== oldId || token !== oldToken
+
         // If the AuthUser's ID changes, recreate the Relay store.
         // Don't recreate the store if the previous user ID wasn't
         // set, because we were likely just waiting for the auth
         // client to initialize.
-        const shouldRecreateNetwork =
-          AuthUser.id !== oldId || token !== oldToken
-
-        // If the AuthUser's token or ID change, recreate the
-        // Relay network.
         const shouldRecreateStore =
           !oldId && AuthUser.id ? false : AuthUser.id !== oldId
+
+        // Publish initial records to the store only if they've
+        // changed. Otherwise, old initial records might overwrite
+        // new store data.
+        const shouldPublishInitialRecords =
+          previousInitialRecords !== initialRecords
 
         // Debugging only
         // eslint-disable-next-line no-console
@@ -53,16 +61,32 @@ const withRelay = (ChildComponent) => {
         // eslint-disable-next-line no-console
         console.log('Debugging: Recreating Relay store:', shouldRecreateStore)
 
+        // Debugging only
+        // eslint-disable-next-line no-console
+        console.log(
+          'Debugging: Relay shouldPublishInitialRecords',
+          shouldPublishInitialRecords
+        )
+
+        // Debugging only
+        // eslint-disable-next-line no-console
+        console.log(
+          'Debugging: Relay records:',
+          previousInitialRecords,
+          initialRecords
+        )
+
         setRelayEnvironment(
           initRelayEnvironment({
             getIdToken: AuthUser.getIdToken,
             recreateNetwork: shouldRecreateNetwork,
             recreateStore: shouldRecreateStore,
+            publishInitialRecords: shouldPublishInitialRecords,
           })
         )
       }
       updateRelayEnvAsNeeded()
-    }, [AuthUser, previousAuthUser])
+    }, [AuthUser, previousAuthUser, initialRecords, previousInitialRecords])
 
     return (
       <ReactRelayContext.Provider
