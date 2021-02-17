@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-// import { isNil } from 'lodash/lang'
+import { isNil } from 'lodash/lang'
 import { get } from 'lodash/object'
 import dayjs from 'dayjs'
 import isToday from 'dayjs/plugin/isToday'
@@ -39,13 +39,9 @@ const useStyles = makeStyles(() => ({
 }))
 const UserBackgroundImage = ({ user }) => {
   const {
-    backgroundImage: { imageURL },
+    backgroundImage: { timestamp: backgroundImageTimestamp, imageURL },
     id: userId,
   } = user
-  // eslint-disable-next-line no-console
-  console.log(imageURL)
-  // eslint-disable-next-line no-console
-  console.log(new Date())
   useEffect(() => {
     // Show a new background image every day.
 
@@ -53,9 +49,13 @@ const UserBackgroundImage = ({ user }) => {
       await SetBackgroundDailyImageMutation(userId)
       await recachePage()
     }
-    updateBackgroundAndCachePage()
-    // }
-  }, [userId])
+    if (
+      isNil(backgroundImageTimestamp) ||
+      !dayjs(backgroundImageTimestamp).isToday()
+    ) {
+      updateBackgroundAndCachePage()
+    }
+  }, [backgroundImageTimestamp, userId])
   const classes = useStyles({ user })
   return (
     <div>

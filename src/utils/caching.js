@@ -1,6 +1,7 @@
 /* eslint import/prefer-default-export: 0 */
 /* globals window */
 import { isClientSide } from 'src/utils/ssr'
+
 // Delete all cached data.
 export const clearAllServiceWorkerCaches = async () => {
   if (!isClientSide()) {
@@ -9,6 +10,9 @@ export const clearAllServiceWorkerCaches = async () => {
   const cacheNames = await window.caches.keys()
   return Promise.all(cacheNames.map((key) => window.caches.delete(key)))
 }
+
+// ideally caching should never be called server side and only used in
+// a useEffect hook.  This is just defensive coding
 export const recachePage = async () => {
   if (!isClientSide()) {
     return
