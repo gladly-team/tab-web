@@ -6,6 +6,7 @@ import { ServerStyleSheets } from '@material-ui/core/styles'
 import { PWAManifestURL } from 'src/utils/urls'
 import theme from 'src/utils/theme'
 import Logo192Apple from 'src/assets/logos/logo192-apple.png'
+import TabCMPHeadElements from 'src/components/TabCMPHeadElements'
 
 class CustomDocument extends Document {
   render() {
@@ -15,6 +16,7 @@ class CustomDocument extends Document {
           <link rel="manifest" href={PWAManifestURL} />
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link rel="apple-touch-icon" href={Logo192Apple} />
+          <TabCMPHeadElements />
         </Head>
         <body style={{ margin: 0, padding: 0 }}>
           {/*

@@ -9,9 +9,14 @@ jest.mock('next-offline/runtime')
 jest.mock('src/utils/ssr')
 jest.mock('src/utils/auth/initAuth')
 jest.mock('src/utils/initSentry')
+jest.mock('src/utils/initializeCMP')
 
 // Don't enforce env vars during unit tests.
 jest.mock('src/utils/ensureValuesAreDefined')
+
+beforeEach(() => {
+  jest.useFakeTimers()
+})
 
 afterEach(() => {
   if (console.warn.mockReset) {
@@ -38,5 +43,33 @@ describe('_app.js: initializes auth', () => {
     // eslint-disable-next-line no-unused-expressions
     require('src/pages/_app.js').default
     expect(initAuth).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('_app.js: tab-cmp', () => {
+  it('initializes the CMP when on the client side', () => {
+    expect.assertions(1)
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(true)
+
+    const initializeCMP = require('src/utils/initializeCMP').default
+
+    // eslint-disable-next-line no-unused-expressions
+    require('src/pages/_app.js').default
+    jest.runAllTimers()
+    expect(initializeCMP).toHaveBeenCalled()
+  })
+
+  it('does not initialize the CMP when on the server side', () => {
+    expect.assertions(1)
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(false)
+
+    const initializeCMP = require('src/utils/initializeCMP').default
+
+    // eslint-disable-next-line no-unused-expressions
+    require('src/pages/_app.js').default
+    jest.runAllTimers()
+    expect(initializeCMP).not.toHaveBeenCalled()
   })
 })

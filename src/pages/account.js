@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { unregister } from 'next-offline/runtime'
 import { graphql } from 'react-relay'
@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import { flowRight } from 'lodash/util'
 import { withAuthUser, AuthAction, useAuthUser } from 'next-firebase-auth'
+import tabCMP from 'tab-cmp'
 import withRelay from 'src/utils/pageWrappers/withRelay'
 import useData from 'src/utils/hooks/useData'
 import SettingsPage from 'src/components/SettingsPage'
@@ -18,6 +19,7 @@ import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { setWindowLocation } from 'src/utils/navigation'
 import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 import { withSentry } from 'src/utils/pageWrappers/withSentry'
+import initializeCMP from 'src/utils/initializeCMP'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -57,7 +59,7 @@ const AccountItem = (props) => {
   const { actionButton, name, value } = props
   const classes = useStyles()
   return (
-    <div className={classes.accountItem}>
+    <div className={classes.accountItem} data-test-id="account-item">
       <Typography variant="body2" className={classes.accountItemName}>
         {name}
       </Typography>
@@ -110,6 +112,27 @@ const Account = ({ data: initialData }) => {
   const classes = useStyles()
 
   const AuthUser = useAuthUser()
+
+  // Conditionally show privacy management buttons.
+  const [doesGDPRApply, setDoesGDPRApply] = useState(false)
+  const [doesCCPAApply, setDoesCCPAApply] = useState(false)
+
+  useEffect(() => {
+    const initCMP = async () => {
+      await initializeCMP()
+
+      // Determine if any data privacy frameworks apply.
+      const gdprApplies = await tabCMP.doesGDPRApply()
+      if (gdprApplies) {
+        setDoesGDPRApply(true)
+      }
+      const ccpaApplies = await tabCMP.doesCCPAApply()
+      if (ccpaApplies) {
+        setDoesCCPAApply(true)
+      }
+    }
+    initCMP()
+  }, [])
 
   // Logging out.
   const [isLoggingOut, setIsLoggingOut] = useState(false)
@@ -198,6 +221,61 @@ const Account = ({ data: initialData }) => {
             </Button>
           }
         />
+        {doesGDPRApply ? (
+          <>
+            <Divider />
+            <AccountItem
+              name="Data privacy choices"
+              actionButton={
+                <Button
+                  color="default"
+                  variant="contained"
+                  onClick={() => tabCMP.openTCFConsentDialog()}
+                >
+                  Review choices
+                </Button>
+              }
+            />
+          </>
+        ) : null}
+        {doesCCPAApply ? (
+          <>
+            <Divider />
+            <AccountItem
+              name="Ad personalization choices"
+              actionButton={
+                <div>
+                  {/* Disable a11y tags that are incompatible with Next.js */}
+                  {/* eslint-disable-next-line */}
+                  <a onClick={() => tabCMP.openCCPAConsentDialog()}>
+                    <Typography
+                      variant="body2"
+                      style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                      gutterBottom
+                    >
+                      Do Not Sell My Info
+                    </Typography>
+                  </a>
+                  <Typography
+                    variant="caption"
+                    style={{
+                      lineHeight: '1.16',
+                      color: 'rgba(0, 0, 0, 0.54)',
+                      maxWidth: '80%',
+                    }}
+                  >
+                    This preference sets whether advertisers can personalize ads
+                    to you. Personalized ads can be more interesting and often
+                    raise more money for charity. We{' '}
+                    <span style={{ fontWeight: 'bold' }}>never</span> sell
+                    personal information like email addresses, nor do we collect
+                    your browsing history on other sites.
+                  </Typography>
+                </div>
+              }
+            />
+          </>
+        ) : null}
       </Paper>
     </SettingsPage>
   )
