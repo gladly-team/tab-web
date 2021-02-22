@@ -19,6 +19,7 @@ import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
+import UserImpactContainer from 'src/components/UserImpact'
 import SearchInput from 'src/components/SearchInput'
 import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
 // material components
@@ -33,6 +34,7 @@ import withRelay from 'src/utils/pageWrappers/withRelay'
 import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
 import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
+import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import { getAdUnits, areAdsEnabled, showMockAds } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
@@ -45,6 +47,7 @@ import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
 
+const CAT_CHARITY = '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z'
 const useStyles = makeStyles((theme) => ({
   '@keyframes fadeIn': {
     from: { opacity: 0 },
@@ -228,7 +231,7 @@ const getRelayQuery = async ({ AuthUser }) => {
   }
   return {
     query: graphql`
-      query pagesIndexQuery($userId: String!) {
+      query pagesIndexQuery($userId: String!, $charityId: String!) {
         app {
           ...MoneyRaisedContainer_app
         }
@@ -238,10 +241,18 @@ const getRelayQuery = async ({ AuthUser }) => {
           id
           ...UserBackgroundImageContainer_user
         }
+        userImpact(userId: $userId, charityId: $charityId) {
+          userImpactMetric
+          confirmedImpact
+          visitsUntilNextImpact
+          pendingUserReferralImpact
+          ...UserImpactContainer_userImpact
+        }
       }
     `,
     variables: {
       userId: AuthUser.id,
+      charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z',
     },
   }
 }
@@ -272,7 +283,7 @@ const Index = ({ data: initialData }) => {
       setShouldRenderAds(true)
     }
   }, [])
-  const { app, user } = data || {}
+  const { app, user, userImpact } = data || {}
   const userGlobalId = get(user, 'id')
   const [tabId] = useState(uuid())
 
@@ -280,6 +291,7 @@ const Index = ({ data: initialData }) => {
   useEffect(() => {
     if (userGlobalId && tabId) {
       LogTabMutation(userGlobalId, tabId)
+      UpdateImpactMutation(userGlobalId, CAT_CHARITY, { logImpact: true })
     }
   }, [userGlobalId, tabId])
 
@@ -333,6 +345,7 @@ const Index = ({ data: initialData }) => {
           <div className={classes.userMenuContainer}>
             <div className={classes.moneyRaisedContainer}>
               <Typography variant="h5" className={clsx(classes.userMenuItem)}>
+                <UserImpactContainer userImpact={userImpact} />
                 <MoneyRaisedContainer app={app} />
               </Typography>
             </div>
