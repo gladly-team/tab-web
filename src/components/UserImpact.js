@@ -1,15 +1,59 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
-import { get } from 'lodash/object'
+import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
+import { CAT_CHARITY } from 'src/utils/constants'
+import Notification from 'src/components/Notification'
+import ImpactDialog from 'src/components/ImpactDialog'
 
-const useStyles = makeStyles((theme) => ({
-  currencyText: { color: get(theme, 'palette.backgroundContrastText.main') },
-}))
-const UserImpact = ({ userImpact }) => {
-  const classes = useStyles()
+const UserImpact = ({ userImpact, userId }) => {
+  const {
+    confirmedImpact,
+    hasClaimedLatestReward,
+    userImpactMetric,
+  } = userImpact
+  const showReward = confirmedImpact && !hasClaimedLatestReward
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(!confirmedImpact)
+  const [alertDialogOpen, setAlertDialogOpen] = useState(false)
+  const [rewardNotificationOpen, setRewardNotification] = useState(showReward)
+  const [rewardDialogOpen, setRewardDialogOpen] = useState(false)
+  const handleConfirmDialogClose = () => {
+    UpdateImpactMutation(userId, CAT_CHARITY, { confirmImpact: true })
+    setConfirmDialogOpen(false)
+    setAlertDialogOpen(true)
+  }
+  const handleAlertDialogClose = () => {
+    setAlertDialogOpen(false)
+  }
+  const handleClaimReward = () => {
+    UpdateImpactMutation(userId, CAT_CHARITY, { claimLatestReward: true })
+    setRewardDialogOpen(true)
+    setRewardNotification(false)
+  }
+  const handleRewardDialogClose = () => {
+    setRewardDialogOpen(false)
+  }
   return (
-    <span className={classes.currencyText}>{userImpact.userImpactMetric}</span>
+    <div>
+      <ImpactDialog
+        modalType="confirmImpact"
+        open={confirmDialogOpen}
+        buttonOnClick={handleConfirmDialogClose}
+      />
+      <ImpactDialog
+        modalType="impactWalkMe"
+        open={alertDialogOpen}
+        onClose={handleAlertDialogClose}
+      />
+      <ImpactDialog
+        modalType="claimImpactReward"
+        open={rewardDialogOpen}
+        buttonOnClick={handleRewardDialogClose}
+      />
+      <span>{userImpactMetric}</span>
+      {rewardNotificationOpen && (
+        <Notification buttonOnClick={handleClaimReward} />
+      )}
+    </div>
   )
 }
 
@@ -20,8 +64,10 @@ UserImpact.propTypes = {
     pendingUserReferralImpact: PropTypes.number.isRequired,
     userImpactMetric: PropTypes.number.isRequired,
     confirmedImpact: PropTypes.bool.isRequired,
+    hasClaimedLatestReward: PropTypes.bool.isRequired,
   }).isRequired,
+  // eslint-disable-next-line react/require-default-props
+  userId: PropTypes.string,
 }
-UserImpact.defaultProps = {}
 
 export default UserImpact

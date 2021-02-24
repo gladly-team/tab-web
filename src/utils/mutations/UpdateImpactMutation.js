@@ -17,8 +17,8 @@ const mutation = graphql`
 
 const UpdateImpactMutation = (
   userId,
-  charityId
-  // { logImpact, claimPendingReferralImpact, confirmImpact }
+  charityId,
+  { logImpact, claimPendingReferralImpact, confirmImpact, claimLatestReward }
 ) =>
   callMutation({
     mutation,
@@ -26,9 +26,10 @@ const UpdateImpactMutation = (
       input: {
         userId,
         charityId,
-        // logImpact,
-        // claimPendingReferralImpact,
-        // confirmImpact,
+        logImpact,
+        claimPendingReferralImpact,
+        confirmImpact,
+        claimLatestReward,
       },
     },
   })

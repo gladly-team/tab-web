@@ -53,6 +53,14 @@ const getMockProps = () => ({
       vcCurrent: 78,
       id: 'asdf',
     },
+    userImpact: {
+      userId: 'asdf',
+      visitsUntilNextImpact: 2,
+      pendingUserReferralImpact: 10,
+      userImpactMetric: 3,
+      confirmedImpact: true,
+      hasClaimedLatestReward: true,
+    },
   },
 })
 
@@ -242,6 +250,14 @@ describe('index.js', () => {
         user: {
           tabs: 221,
           vcCurrent: 78,
+        },
+        userImpact: {
+          userId: 'asdf',
+          visitsUntilNextImpact: 2,
+          pendingUserReferralImpact: 10,
+          userImpactMetric: 3,
+          confirmedImpact: true,
+          hasClaimedLatestReward: true,
         },
       },
     })

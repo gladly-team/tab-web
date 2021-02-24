@@ -19,7 +19,7 @@ import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
-import UserImpactContainer from 'src/components/UserImpact'
+import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
 import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
 // material components
@@ -46,8 +46,8 @@ import {
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
+import { CAT_CHARITY } from 'src/utils/constants'
 
-const CAT_CHARITY = '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z'
 const useStyles = makeStyles((theme) => ({
   '@keyframes fadeIn': {
     from: { opacity: 0 },
@@ -150,7 +150,7 @@ const useStyles = makeStyles((theme) => ({
   },
   searchBar: {
     position: 'relative',
-    zIndex: 1e4, // must be higher than all content besides ads
+    zIndex: 1e4, // must be higher than all content besides ads and modal
   },
   logo: {
     height: 50,
@@ -242,10 +242,6 @@ const getRelayQuery = async ({ AuthUser }) => {
           ...UserBackgroundImageContainer_user
         }
         userImpact(userId: $userId, charityId: $charityId) {
-          userImpactMetric
-          confirmedImpact
-          visitsUntilNextImpact
-          pendingUserReferralImpact
           ...UserImpactContainer_userImpact
         }
       }
@@ -343,9 +339,12 @@ const Index = ({ data: initialData }) => {
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
           <div className={classes.userMenuContainer}>
+            <UserImpactContainer
+              userId={userGlobalId}
+              userImpact={userImpact}
+            />
             <div className={classes.moneyRaisedContainer}>
               <Typography variant="h5" className={clsx(classes.userMenuItem)}>
-                <UserImpactContainer userImpact={userImpact} />
                 <MoneyRaisedContainer app={app} />
               </Typography>
             </div>
