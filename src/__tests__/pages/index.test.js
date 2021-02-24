@@ -77,6 +77,15 @@ describe('index.js', () => {
     }).not.toThrow()
   })
 
+  it('duplicate test', () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    expect(() => {
+      shallow(<IndexPage {...mockProps} />)
+    }).not.toThrow()
+  })
+
   it('renders a loading component (instead of the new tab page) if no initial data is provided', () => {
     expect.assertions(2)
     const IndexPage = require('src/pages/index').default
