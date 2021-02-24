@@ -26,6 +26,13 @@ describe('ImpactDialog component', () => {
     }).not.toThrow()
   })
 
+  it('renders a default dialog without functions', () => {
+    const ImpactDialog = require('src/components/ImpactDialog').default
+    expect(() => {
+      shallow(<ImpactDialog modalType="claimImpactReward" open />)
+    }).not.toThrow()
+  })
+
   it('renders the confirmImpact dialog correctly', () => {
     const ImpactDialog = require('src/components/ImpactDialog').default
     const mockProps = getMockProps()

@@ -119,4 +119,14 @@ describe('UserImpact component', () => {
     confirmDialogue.find(Button).simulate('click')
     expect(wrapper.find(ImpactDialog).at(1).props().open).toBe(true)
   })
+
+  it('closing walkMe calls setAlertDialogOpen', async () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps({ confirmedImpact: false })
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    const confirmDialogue = wrapper.find(ImpactDialog).at(0)
+    confirmDialogue.find(Button).simulate('click')
+    await wrapper.find(ImpactDialog).at(1).invoke('onClose')()
+    expect(wrapper.find(ImpactDialog).at(1).props().open).toBe(false)
+  })
 })

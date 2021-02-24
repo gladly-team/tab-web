@@ -18,6 +18,13 @@ describe('Notification component', () => {
     }).not.toThrow()
   })
 
+  it('renders with default props', () => {
+    const Notification = require('src/components/Notification').default
+    expect(() => {
+      shallow(<Notification />)
+    }).not.toThrow()
+  })
+
   it('calls buttonOnClick prop when button is clicked', () => {
     const Notification = require('src/components/Notification').default
     const mockProps = getMockProps()
