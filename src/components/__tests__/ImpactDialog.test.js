@@ -26,11 +26,11 @@ describe('ImpactDialog component', () => {
     }).not.toThrow()
   })
 
-  it('renders a default dialog without functions', () => {
+  it('renders a default dialog with functions', () => {
     const ImpactDialog = require('src/components/ImpactDialog').default
-    expect(() => {
-      shallow(<ImpactDialog modalType="claimImpactReward" open />)
-    }).not.toThrow()
+    const wrapper = shallow(<ImpactDialog modalType="claimImpactReward" open />)
+    expect(typeof wrapper.props().onClose).toBe('function')
+    expect(typeof wrapper.find(Button).props().onClick).toBe('function')
   })
 
   it('renders the confirmImpact dialog correctly', () => {
