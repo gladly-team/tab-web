@@ -77,4 +77,27 @@ describe('ImpactDialog component', () => {
     clickButton.simulate('click')
     expect(mockButtonOnClick).toHaveBeenCalled()
   })
+
+  it('renders the claimReferralImpactReward dialog correctly', () => {
+    const ImpactDialog = require('src/components/ImpactDialog').default
+    const mockProps = {
+      ...getMockProps(),
+      modalType: 'claimReferralReward',
+      referralImpact: 9001,
+    }
+    const wrapper = shallow(<ImpactDialog {...mockProps} />)
+    expect(wrapper.find(Typography).at(0).text()).toEqual(
+      'You just put 9001 cats on track for adoption!'
+    )
+  })
+
+  it('calls buttonOnClick prop when button is clicked for claimReferralImpactReward', () => {
+    const ImpactDialog = require('src/components/ImpactDialog').default
+    const mockProps = { ...getMockProps(), modalType: 'claimReferralReward' }
+    const wrapper = shallow(<ImpactDialog {...mockProps} />)
+    const clickButton = wrapper.find(Button).first()
+    expect(mockButtonOnClick).not.toHaveBeenCalled()
+    clickButton.simulate('click')
+    expect(mockButtonOnClick).toHaveBeenCalled()
+  })
 })

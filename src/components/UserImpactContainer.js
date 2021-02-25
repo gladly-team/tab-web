@@ -9,6 +9,7 @@ export default createFragmentContainer(UserImpact, {
       userImpactMetric
       confirmedImpact
       hasClaimedLatestReward
+      pendingUserReferralCount
     }
   `,
 })

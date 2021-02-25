@@ -15,7 +15,13 @@ const useStyles = makeStyles((theme) => ({
   rootModal: { zIndex: '10000000 !important' },
   centerImage: { display: 'flex', justifyContent: 'center' },
 }))
-const ImpactDialog = ({ modalType, open, buttonOnClick, onClose }) => {
+const ImpactDialog = ({
+  modalType,
+  open,
+  buttonOnClick,
+  onClose,
+  referralImpact,
+}) => {
   const classes = useStyles()
   let dialogContent
   switch (modalType) {
@@ -105,6 +111,38 @@ const ImpactDialog = ({ modalType, open, buttonOnClick, onClose }) => {
         </>
       )
       break
+    case 'claimReferralReward':
+      dialogContent = (
+        <>
+          <MuiDialogTitle disableTypography className={classes.root}>
+            <Typography variant="h6">
+              {`You just put ${referralImpact} cats on track for adoption!`}
+            </Typography>
+          </MuiDialogTitle>
+          <MuiDialogContent>
+            <div className={classes.centerImage}>
+              <iframe
+                src="https://giphy.com/embed/vFKqnCdLPNOKc"
+                title="giphytitle"
+                width="344"
+                height="219"
+                frameBorder="0"
+                allowFullScreen
+              />
+            </div>
+            <Typography gutterBottom>
+              Congratulations! You're making a huge impact for these animals in
+              need. Want to help even more cats? Invite a few more friends!
+            </Typography>
+          </MuiDialogContent>
+          <MuiDialogActions>
+            <Button autoFocus onClick={buttonOnClick} color="primary">
+              DONE
+            </Button>
+          </MuiDialogActions>
+        </>
+      )
+      break
     default:
       dialogContent = <div />
       break
@@ -128,10 +166,13 @@ ImpactDialog.propTypes = {
     'confirmImpact',
     'impactWalkMe',
     'claimImpactReward',
+    'claimReferralReward',
   ]).isRequired,
   buttonOnClick: PropTypes.func,
   onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,
+  // eslint-disable-next-line react/require-default-props
+  referralImpact: PropTypes.number,
 }
 ImpactDialog.defaultProps = {
   onClose: () => {},

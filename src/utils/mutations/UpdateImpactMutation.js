@@ -10,6 +10,8 @@ const mutation = graphql`
         pendingUserReferralImpact
         userImpactMetric
         confirmedImpact
+        hasClaimedLatestReward
+        pendingUserReferralCount
       }
     }
   }
@@ -18,7 +20,12 @@ const mutation = graphql`
 const UpdateImpactMutation = (
   userId,
   charityId,
-  { logImpact, claimPendingReferralImpact, confirmImpact, claimLatestReward }
+  {
+    logImpact,
+    claimPendingUserReferralImpact,
+    confirmImpact,
+    claimLatestReward,
+  }
 ) =>
   callMutation({
     mutation,
@@ -27,7 +34,7 @@ const UpdateImpactMutation = (
         userId,
         charityId,
         logImpact,
-        claimPendingReferralImpact,
+        claimPendingUserReferralImpact,
         confirmImpact,
         claimLatestReward,
       },
