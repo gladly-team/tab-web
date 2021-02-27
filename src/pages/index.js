@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { flowRight } from 'lodash/util'
+import { isNil } from 'lodash/lang'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
@@ -33,6 +34,7 @@ import withRelay from 'src/utils/pageWrappers/withRelay'
 import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
 import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
+import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import { getAdUnits, areAdsEnabled, showMockAds } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
@@ -312,6 +314,35 @@ const Index = ({ data: initialData }) => {
     if (!displayedAdInfo) {
       return
     }
+
+    const {
+      revenue,
+      encodedRevenue,
+      GAMAdvertiserId,
+      GAMAdUnitId,
+      adSize,
+    } = displayedAdInfo
+
+    // Log the revenue from the ad.
+    LogUserRevenueMutation({
+      userId: context.user.id,
+      revenue,
+      ...(encodedRevenue && {
+        encodedRevenue: {
+          encodingType: 'AMAZON_CPM',
+          encodedValue: encodedRevenue,
+        },
+      }),
+      dfpAdvertiserId: GAMAdvertiserId.toString(),
+      adSize,
+      // Only send aggregationOperation value if we have more than one
+      // revenue value
+      aggregationOperation:
+        !isNil(revenue) && !isNil(encodedRevenue) ? 'MAX' : null,
+      tabId: context.tabId,
+      adUnitCode: GAMAdUnitId,
+    })
+
     console.log('Ad displayed:', displayedAdInfo, context) // eslint-disable-line no-console
   }
 
