@@ -4,12 +4,14 @@ import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import { CAT_CHARITY } from 'src/utils/constants'
 import Notification from 'src/components/Notification'
 import ImpactDialog from 'src/components/ImpactDialog'
+import ImpactCounter from 'src/components/ImpactCounter'
 import { Typography } from '@material-ui/core'
 
 const UserImpact = ({ userImpact, userId }) => {
   const {
     confirmedImpact,
     hasClaimedLatestReward,
+    visitsUntilNextImpact,
     userImpactMetric,
     pendingUserReferralImpact,
     pendingUserReferralCount,
@@ -50,6 +52,11 @@ const UserImpact = ({ userImpact, userId }) => {
     setReferralRewardDialogOpen(false)
   return (
     <div>
+      <ImpactCounter
+        includeNumber
+        number={userImpactMetric}
+        progress={(1 - visitsUntilNextImpact / 14) * 100}
+      />
       <ImpactDialog
         modalType="confirmImpact"
         open={confirmDialogOpen}
@@ -71,7 +78,6 @@ const UserImpact = ({ userImpact, userId }) => {
         buttonOnClick={handleReferralRewardDialogClose}
         referralImpact={pendingUserReferralImpact}
       />
-      <span>{userImpactMetric}</span>
       {rewardNotificationOpen && (
         <Notification
           text={

@@ -11,9 +11,11 @@ import {
 import Achievement from 'src/components/Achievement'
 import FullPageLoader from 'src/components/FullPageLoader'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
+// import UserImpactContainer from 'src/components/UserImpactContainer'
 import useData from 'src/utils/hooks/useData'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
+// import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import uuid from 'uuid/v4'
 
 jest.mock('uuid/v4')
@@ -30,6 +32,7 @@ jest.mock('src/utils/adHelpers', () => ({
 }))
 jest.mock('src/components/Logo')
 jest.mock('src/components/MoneyRaisedContainer', () => () => <div />)
+jest.mock('src/components/UserImpactContainer', () => () => <div />)
 jest.mock('src/components/SearchInput', () => () => <div />)
 jest.mock('src/utils/featureFlags')
 jest.mock('src/components/Achievement', () => () => (
@@ -45,6 +48,7 @@ jest.mock('src/components/NewTabThemeWrapperHOC', () => (component) =>
 )
 jest.mock('src/utils/pageWrappers/withSentry')
 jest.mock('src/utils/mutations/LogTabMutation')
+jest.mock('src/utils/mutations/UpdateImpactMutation')
 const getMockProps = () => ({
   data: {
     app: {},
