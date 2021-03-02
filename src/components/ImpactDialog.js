@@ -7,12 +7,18 @@ import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import MuiDialogActions from '@material-ui/core/DialogActions'
-import DialogContentText from '@material-ui/core/DialogContentText'
 import Typography from '@material-ui/core/Typography'
+import ImpactCounter from 'src/components/ImpactCounter'
+import tickle from 'src/assets/gifs/tickle.gif'
+import turntable from 'src/assets/gifs/turntable.gif'
+import highfive from 'src/assets/gifs/highfive.gif'
 
 const useStyles = makeStyles((theme) => ({
   currencyText: { color: get(theme, 'palette.backgroundContrastText.main') },
-  rootModal: { zIndex: '10000000 !important' },
+  rootModal: { zIndex: '10000000 !important', borderRadius: '5px' },
+  walkMe: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
+  impactCounter: { padding: '15px' },
+  typographySpacing: { paddingTop: '15px' },
   centerImage: { display: 'flex', justifyContent: 'center' },
 }))
 const ImpactDialog = ({
@@ -35,19 +41,19 @@ const ImpactDialog = ({
           </MuiDialogTitle>
           <MuiDialogContent>
             <div className={classes.centerImage}>
-              <iframe
-                src="https://giphy.com/embed/vFKqnCdLPNOKc"
-                title="giphytitle"
-                width="344"
-                height="219"
-                frameBorder="0"
-                allowFullScreen
-              />
+              <img src={tickle} alt="loading cats!" />
             </div>
-            <Typography gutterBottom>
+            <Typography className={classes.typographySpacing}>
               Each time you open a tab, you'll be helping shelter cats get
-              adopted by providing treats to be used in positive reinforcement
-              training. Ready to get started?
+              adopted by{' '}
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://thejacksongalaxyproject.greatergood.org/about/cat-pawsitive/"
+              >
+                providing treats to be used in positive reinforcement training.
+              </a>{' '}
+              Ready to get started?
             </Typography>
           </MuiDialogContent>
           <MuiDialogActions>
@@ -69,12 +75,15 @@ const ImpactDialog = ({
           <MuiDialogTitle disableTypography className={classes.root}>
             <Typography variant="h6">Open a new tab</Typography>
           </MuiDialogTitle>
-          <MuiDialogContent>
-            <DialogContentText id="alert-dialog-description">
+          <MuiDialogContent className={classes.walkMe}>
+            <Typography id="alert-dialog-description">
               When you do, you'll donate enough to give a shelter cat a treat
               during training. We'll track how many treats you've given on the
               top of the page:
-            </DialogContentText>
+            </Typography>
+            <div className={classes.impactCounter}>
+              <ImpactCounter includeNumber number={0} progress={100} />
+            </div>
           </MuiDialogContent>
         </>
       )
@@ -89,17 +98,10 @@ const ImpactDialog = ({
           </MuiDialogTitle>
           <MuiDialogContent>
             <div className={classes.centerImage}>
-              <iframe
-                src="https://giphy.com/embed/vFKqnCdLPNOKc"
-                title="giphytitle"
-                width="344"
-                height="219"
-                frameBorder="0"
-                allowFullScreen
-              />
+              <img src={turntable} alt="cat turntable!" loading="lazy" />
             </div>
-            <Typography gutterBottom>
-              The more people who open tabs, the more good we can do! \n Get a
+            <Typography className={classes.typographySpacing}>
+              The more people who open tabs, the more good we can do!  Get a
               friend on board and we'll give a treat to another 10 shelter cats:
             </Typography>
           </MuiDialogContent>
@@ -121,16 +123,9 @@ const ImpactDialog = ({
           </MuiDialogTitle>
           <MuiDialogContent>
             <div className={classes.centerImage}>
-              <iframe
-                src="https://giphy.com/embed/vFKqnCdLPNOKc"
-                title="giphytitle"
-                width="344"
-                height="219"
-                frameBorder="0"
-                allowFullScreen
-              />
+              <img src={highfive} alt="cat high five!" />
             </div>
-            <Typography gutterBottom>
+            <Typography className={classes.typographySpacing}>
               Congratulations! You're making a huge impact for these animals in
               need. Want to help even more cats? Invite a few more friends!
             </Typography>

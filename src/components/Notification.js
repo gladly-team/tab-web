@@ -9,6 +9,7 @@ const useStylesNotification = makeStyles(() => ({
     position: 'absolute',
     padding: '15px',
     marginTop: '10px',
+    marginRight: '15px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',

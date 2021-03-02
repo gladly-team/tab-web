@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import { CAT_CHARITY } from 'src/utils/constants'
@@ -6,7 +6,11 @@ import Notification from 'src/components/Notification'
 import ImpactDialog from 'src/components/ImpactDialog'
 import ImpactCounter from 'src/components/ImpactCounter'
 import { Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 
+const useStyles = makeStyles(() => ({
+  impactCounter: { backgroundColor: '#fff', marginRight: '15px' },
+}))
 const UserImpact = ({ userImpact, userId }) => {
   const {
     confirmedImpact,
@@ -17,14 +21,10 @@ const UserImpact = ({ userImpact, userId }) => {
     pendingUserReferralCount,
   } = userImpact
   const showReward = confirmedImpact && !hasClaimedLatestReward
+  const referralRewardNotificationOpen = pendingUserReferralImpact > 0
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(!confirmedImpact)
   const [alertDialogOpen, setAlertDialogOpen] = useState(false)
-  const [rewardNotificationOpen, setRewardNotification] = useState(showReward)
   const [rewardDialogOpen, setRewardDialogOpen] = useState(false)
-  const [
-    referralRewardNotificationOpen,
-    setReferralRewardNotification,
-  ] = useState(pendingUserReferralImpact > 0)
   const [referralRewardDialogOpen, setReferralRewardDialogOpen] = useState(
     false
   )
@@ -37,23 +37,24 @@ const UserImpact = ({ userImpact, userId }) => {
   const handleClaimReward = () => {
     UpdateImpactMutation(userId, CAT_CHARITY, { claimLatestReward: true })
     setRewardDialogOpen(true)
-    setRewardNotification(false)
   }
   const handleRewardDialogClose = () => setRewardDialogOpen(false)
 
   const handleClaimReferralNotification = async () => {
+    setReferralRewardDialogOpen(true)
+  }
+  const handleReferralRewardDialogClose = () => {
+    setReferralRewardDialogOpen(false)
     UpdateImpactMutation(userId, CAT_CHARITY, {
       claimPendingUserReferralImpact: true,
     })
-    setReferralRewardNotification(false)
-    setReferralRewardDialogOpen(true)
   }
-  const handleReferralRewardDialogClose = () =>
-    setReferralRewardDialogOpen(false)
+  const classes = useStyles()
   return (
     <div>
       <ImpactCounter
         includeNumber
+        className={classes.impactCounter}
         number={userImpactMetric}
         progress={(1 - visitsUntilNextImpact / 14) * 100}
       />
@@ -78,7 +79,7 @@ const UserImpact = ({ userImpact, userId }) => {
         buttonOnClick={handleReferralRewardDialogClose}
         referralImpact={pendingUserReferralImpact}
       />
-      {rewardNotificationOpen && (
+      {showReward && (
         <Notification
           text={
             <Typography>
