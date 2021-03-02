@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { makeStyles } from '@material-ui/core/styles'
 import {
   EmailIcon,
   EmailShareButton,
@@ -13,7 +14,7 @@ import {
   TwitterShareButton,
 } from 'react-share'
 
-const useStyles = () => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     justifyContent: 'center',
@@ -22,7 +23,7 @@ const useStyles = () => ({
   button: {
     padding: 4,
   },
-})
+}))
 
 const SocialShare = (props) => {
   const {
@@ -40,7 +41,7 @@ const SocialShare = (props) => {
   // We may want to move them server-side if we use them often.
   return (
     <div className={classes.root}>
-      {FacebookShareButtonProps ? (
+      {FacebookShareButtonProps.quote ? (
         <div className={classes.button}>
           <FacebookShareButton
             quote={FacebookShareButtonProps.quote}
@@ -51,7 +52,7 @@ const SocialShare = (props) => {
           </FacebookShareButton>
         </div>
       ) : null}
-      {TwitterShareButtonProps ? (
+      {TwitterShareButtonProps.title ? (
         <div className={classes.button}>
           <TwitterShareButton
             title={TwitterShareButtonProps.title}
@@ -64,14 +65,14 @@ const SocialShare = (props) => {
           </TwitterShareButton>
         </div>
       ) : null}
-      {RedditShareButtonProps ? (
+      {RedditShareButtonProps.title ? (
         <div className={classes.button}>
           <RedditShareButton title={RedditShareButtonProps.title} url={url}>
             <RedditIcon size={iconSize} round />
           </RedditShareButton>
         </div>
       ) : null}
-      {TumblrShareButtonProps ? (
+      {TumblrShareButtonProps.title ? (
         <div className={classes.button}>
           <TumblrShareButton
             title={TumblrShareButtonProps.title}
@@ -82,7 +83,7 @@ const SocialShare = (props) => {
           </TumblrShareButton>
         </div>
       ) : null}
-      {EmailShareButtonProps ? (
+      {EmailShareButtonProps.subject ? (
         <div className={classes.button}>
           <EmailShareButton
             subject={EmailShareButtonProps.subject}
@@ -128,10 +129,24 @@ SocialShare.propTypes = {
 
 SocialShare.defaultProps = {
   EmailShareButtonProps: undefined,
-  FacebookShareButtonProps: undefined,
-  RedditShareButtonProps: undefined,
-  TumblrShareButtonProps: undefined,
-  TwitterShareButtonProps: undefined,
+  TumblrShareButtonProps: {
+    title:
+      'Want to make a paw-sitive impact? Help give shelter cats a new chance for a forever home!',
+    caption:
+      'Every time I open a new tab I am able to give a treat to a cat for positive reinforcement training with Tab for a Cause’s latest project, Tab for a Cats! Download it for free with my link and give 10 treats right away!',
+  },
+  TwitterShareButtonProps: {
+    title:
+      'I just found the purr-fect new way to help shelter cats get adopted! All I had to do was open a new browser tab ( with super cute cat pictures!) on Tab for Cats! Check it out:',
+  },
+  RedditShareButtonProps: {
+    title:
+      ' Looking for the purr-fect way to help shelter cats get adopted? Check out Tab for Cats!',
+  },
+  FacebookShareButtonProps: {
+    quote:
+      'I just found, purr-haps, the most claw-ver browser extension ever! With Tab for a Cause’s latest project, Tab for Cats, I can give a cat a treat to a shelter cat for positive reinforcement training everytime I open a new tab. Check it out:',
+  },
   iconSize: 32,
 }
 

@@ -8,12 +8,14 @@ import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import dynamic from 'next/dynamic'
 
-const ImpactDialog = dynamic(()=>import('src/components/ImpactDialog'),{ssr:false})
+const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
+  ssr: false,
+})
 
 const useStyles = makeStyles(() => ({
   impactCounter: { backgroundColor: '#fff', marginRight: '15px' },
 }))
-const UserImpact = ({ userImpact, userId }) => {
+const UserImpact = ({ userImpact, userId, user }) => {
   const {
     confirmedImpact,
     hasClaimedLatestReward,
@@ -74,12 +76,14 @@ const UserImpact = ({ userImpact, userId }) => {
         modalType="claimImpactReward"
         open={rewardDialogOpen}
         buttonOnClick={handleRewardDialogClose}
+        user={user}
       />
       <ImpactDialog
         modalType="claimReferralReward"
         open={referralRewardDialogOpen}
         buttonOnClick={handleReferralRewardDialogClose}
         referralImpact={pendingUserReferralImpact}
+        user={user}
       />
       {showReward && (
         <Notification
@@ -127,6 +131,12 @@ UserImpact.propTypes = {
   }).isRequired,
   // eslint-disable-next-line react/require-default-props
   userId: PropTypes.string,
+  user: PropTypes.shape({
+    username: PropTypes.string,
+  }),
 }
 
+UserImpact.defaultProps = {
+  user: {},
+}
 export default UserImpact

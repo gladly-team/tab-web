@@ -5,9 +5,12 @@ import Button from '@material-ui/core/Button'
 import Notification from 'src/components/Notification'
 import ImpactDialog from 'src/components/ImpactDialog'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
+import preloadAll from 'jest-next-dynamic'
 
 jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('@material-ui/core/Typography')
+jest.mock('src/components/SocialShare', () => () => <div />)
+jest.mock('src/components/InviteFriends', () => () => <div />)
 const getMockProps = (userImpactOverrides) => ({
   userImpact: {
     visitsUntilNextImpact: 3,
@@ -20,8 +23,9 @@ const getMockProps = (userImpactOverrides) => ({
   },
   userId: 'someId',
 })
-beforeEach(() => {
+beforeEach(async () => {
   jest.clearAllMocks()
+  await preloadAll()
 })
 
 describe('UserImpact component', () => {

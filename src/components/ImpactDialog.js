@@ -10,6 +10,8 @@ import MuiDialogActions from '@material-ui/core/DialogActions'
 import Typography from '@material-ui/core/Typography'
 import ImpactCounter from 'src/components/ImpactCounter'
 import RandomGif from 'src/components/RandomGif'
+import SocialShare from 'src/components/SocialShare'
+import InviteFriends from 'src/components/InviteFriends'
 
 const useStyles = makeStyles((theme) => ({
   currencyText: { color: get(theme, 'palette.backgroundContrastText.main') },
@@ -18,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
   impactCounter: { padding: '15px' },
   typographySpacing: { paddingTop: '15px' },
   centerImage: { display: 'flex', justifyContent: 'center' },
+  shareContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: '15px',
+  },
 }))
 const ImpactDialog = ({
   modalType,
@@ -25,6 +33,7 @@ const ImpactDialog = ({
   buttonOnClick,
   onClose,
   referralImpact,
+  user,
 }) => {
   const classes = useStyles()
   let dialogContent
@@ -102,6 +111,10 @@ const ImpactDialog = ({
               The more people who open tabs, the more good we can do! Get a
               friend on board and we'll give a treat to another 10 shelter cats:
             </Typography>
+            <div className={classes.shareContainer}>
+              <InviteFriends user={user} />
+              <SocialShare url="https://tab.gladly.io" />
+            </div>
           </MuiDialogContent>
           <MuiDialogActions>
             <Button autoFocus onClick={buttonOnClick} color="primary">
@@ -127,6 +140,10 @@ const ImpactDialog = ({
               Congratulations! You're making a huge impact for these animals in
               need. Want to help even more cats? Invite a few more friends!
             </Typography>
+            <div className={classes.shareContainer}>
+              <InviteFriends user={user} />
+              <SocialShare url="https://tab.gladly.io" />
+            </div>
           </MuiDialogContent>
           <MuiDialogActions>
             <Button autoFocus onClick={buttonOnClick} color="primary">
@@ -166,10 +183,12 @@ ImpactDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   // eslint-disable-next-line react/require-default-props
   referralImpact: PropTypes.number,
+  user: PropTypes.shape({ username: PropTypes.string }),
 }
 ImpactDialog.defaultProps = {
   onClose: () => {},
   buttonOnClick: () => {},
+  user: {},
 }
 
 export default ImpactDialog

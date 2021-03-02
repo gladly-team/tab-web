@@ -12,4 +12,9 @@ export default createFragmentContainer(UserImpact, {
       pendingUserReferralCount
     }
   `,
+  user: graphql`
+    fragment UserImpactContainer_user on User {
+      username
+    }
+  `,
 })

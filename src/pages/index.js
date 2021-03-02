@@ -242,6 +242,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           vcCurrent
           id
           ...UserBackgroundImageContainer_user
+          ...UserImpactContainer_user
         }
         userImpact(userId: $userId, charityId: $charityId) {
           ...UserImpactContainer_userImpact
@@ -371,6 +372,7 @@ const Index = ({ data: initialData }) => {
             <UserImpactContainer
               userId={userGlobalId}
               userImpact={userImpact}
+              user={user}
             />
             <div className={classes.moneyRaisedContainer}>
               <Typography variant="h5" className={clsx(classes.userMenuItem)}>

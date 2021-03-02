@@ -69,11 +69,11 @@ describe('SocialShare component', () => {
     })
   })
 
-  it('does not render an EmailShareButton or EmailIcon when EmailShareButtonProps is not provided', () => {
+  it('does not render an EmailShareButton or EmailIcon when EmailShareButtonProps is overwritten with an empty object', () => {
     const SocialShare = require('src/components/SocialShare').default
     const mockProps = {
       ...getMockProps(),
-      EmailShareButtonProps: undefined,
+      EmailShareButtonProps: {},
     }
     const wrapper = shallow(<SocialShare {...mockProps} />)
     expect(wrapper.find(EmailIcon).exists()).toBe(false)
@@ -98,11 +98,11 @@ describe('SocialShare component', () => {
     })
   })
 
-  it('does not render a FacebookShareButton or FacebookIcon when FacebookShareButtonProps is not provided', () => {
+  it('does not render a FacebookShareButton or FacebookIcon when FacebookShareButtonProps is overwritten as undefined', () => {
     const SocialShare = require('src/components/SocialShare').default
     const mockProps = {
       ...getMockProps(),
-      FacebookShareButtonProps: undefined,
+      FacebookShareButtonProps: {},
     }
     const wrapper = shallow(<SocialShare {...mockProps} />)
     expect(wrapper.find(FacebookIcon).exists()).toBe(false)
@@ -127,11 +127,11 @@ describe('SocialShare component', () => {
     })
   })
 
-  it('does not render a RedditShareButton or RedditIcon when RedditShareButtonProps is not provided', () => {
+  it('does not render a RedditShareButton or RedditIcon when RedditShareButtonProps is overwritten with an empty object', () => {
     const SocialShare = require('src/components/SocialShare').default
     const mockProps = {
       ...getMockProps(),
-      RedditShareButtonProps: undefined,
+      RedditShareButtonProps: {},
     }
     const wrapper = shallow(<SocialShare {...mockProps} />)
     expect(wrapper.find(RedditIcon).exists()).toBe(false)
@@ -157,11 +157,11 @@ describe('SocialShare component', () => {
     })
   })
 
-  it('does not render a TumblrShareButton or TumblrIcon when TumblrShareButtonProps is not provided', () => {
+  it('does not render a TumblrShareButton or TumblrIcon when TumblrShareButtonProps is overwritten with an empty object', () => {
     const SocialShare = require('src/components/SocialShare').default
     const mockProps = {
       ...getMockProps(),
-      TumblrShareButtonProps: undefined,
+      TumblrShareButtonProps: {},
     }
     const wrapper = shallow(<SocialShare {...mockProps} />)
     expect(wrapper.find(TumblrIcon).exists()).toBe(false)
@@ -187,11 +187,11 @@ describe('SocialShare component', () => {
     })
   })
 
-  it('does not render a TwitterShareButton or TwitterIcon when TwitterShareButtonProps is not provided', () => {
+  it('does not render a TwitterShareButton or TwitterIcon when TwitterShareButtonProps is overwritten with an empty object', () => {
     const SocialShare = require('src/components/SocialShare').default
     const mockProps = {
       ...getMockProps(),
-      TwitterShareButtonProps: undefined,
+      TwitterShareButtonProps: {},
     }
     const wrapper = shallow(<SocialShare {...mockProps} />)
     expect(wrapper.find(TwitterIcon).exists()).toBe(false)
