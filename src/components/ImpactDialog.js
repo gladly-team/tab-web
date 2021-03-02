@@ -9,9 +9,7 @@ import MuiDialogContent from '@material-ui/core/DialogContent'
 import MuiDialogActions from '@material-ui/core/DialogActions'
 import Typography from '@material-ui/core/Typography'
 import ImpactCounter from 'src/components/ImpactCounter'
-import tickle from 'src/assets/gifs/tickle.gif'
-import turntable from 'src/assets/gifs/turntable.gif'
-import highfive from 'src/assets/gifs/highfive.gif'
+import RandomGif from 'src/components/RandomGif'
 
 const useStyles = makeStyles((theme) => ({
   currencyText: { color: get(theme, 'palette.backgroundContrastText.main') },
@@ -41,7 +39,7 @@ const ImpactDialog = ({
           </MuiDialogTitle>
           <MuiDialogContent>
             <div className={classes.centerImage}>
-              <img src={tickle} alt="loading cats!" />
+              <RandomGif />
             </div>
             <Typography className={classes.typographySpacing}>
               Each time you open a tab, you'll be helping shelter cats get
@@ -98,7 +96,7 @@ const ImpactDialog = ({
           </MuiDialogTitle>
           <MuiDialogContent>
             <div className={classes.centerImage}>
-              <img src={turntable} alt="cat turntable!" loading="lazy" />
+              <RandomGif />
             </div>
             <Typography className={classes.typographySpacing}>
               The more people who open tabs, the more good we can do! Get a
@@ -123,7 +121,7 @@ const ImpactDialog = ({
           </MuiDialogTitle>
           <MuiDialogContent>
             <div className={classes.centerImage}>
-              <img src={highfive} alt="cat high five!" />
+              <RandomGif />
             </div>
             <Typography className={classes.typographySpacing}>
               Congratulations! You're making a huge impact for these animals in

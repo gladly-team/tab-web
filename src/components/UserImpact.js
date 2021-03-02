@@ -3,10 +3,12 @@ import PropTypes from 'prop-types'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import { CAT_CHARITY } from 'src/utils/constants'
 import Notification from 'src/components/Notification'
-import ImpactDialog from 'src/components/ImpactDialog'
 import ImpactCounter from 'src/components/ImpactCounter'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import dynamic from 'next/dynamic'
+
+const ImpactDialog = dynamic(()=>import('src/components/ImpactDialog'),{ssr:false})
 
 const useStyles = makeStyles(() => ({
   impactCounter: { backgroundColor: '#fff', marginRight: '15px' },
