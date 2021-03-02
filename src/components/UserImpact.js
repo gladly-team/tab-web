@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import { CAT_CHARITY } from 'src/utils/constants'

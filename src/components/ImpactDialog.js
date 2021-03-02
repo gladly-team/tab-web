@@ -101,7 +101,7 @@ const ImpactDialog = ({
               <img src={turntable} alt="cat turntable!" loading="lazy" />
             </div>
             <Typography className={classes.typographySpacing}>
-              The more people who open tabs, the more good we can do!  Get a
+              The more people who open tabs, the more good we can do! Get a
               friend on board and we'll give a treat to another 10 shelter cats:
             </Typography>
           </MuiDialogContent>
