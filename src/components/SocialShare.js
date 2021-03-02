@@ -128,7 +128,7 @@ SocialShare.propTypes = {
 }
 
 SocialShare.defaultProps = {
-  EmailShareButtonProps: undefined,
+  EmailShareButtonProps: {},
   TumblrShareButtonProps: {
     title:
       'Want to make a paw-sitive impact? Help give shelter cats a new chance for a forever home!',
