@@ -1,8 +1,7 @@
-/* eslint-env jest */
-
 import React from 'react'
 import TextField from '@material-ui/core/TextField'
 import { mount, shallow } from 'enzyme'
+import SocialShare from 'src/components/SocialShare'
 
 const getMockProps = () => ({
   baseURL: undefined,
@@ -78,5 +77,12 @@ describe('Invite friend component', () => {
     const wrapper = mount(<InviteFriends {...mockProps} />)
     const referralUrl = 'https://tab.gladly.io/cats'
     expect(wrapper.find(TextField).first().prop('value')).toBe(referralUrl)
+  })
+
+  it('renders social share', () => {
+    const InviteFriends = require('src/components/InviteFriends').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<InviteFriends {...mockProps} />)
+    expect(wrapper.find(SocialShare).length).toEqual(1)
   })
 })

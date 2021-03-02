@@ -6,8 +6,15 @@ import { makeStyles } from '@material-ui/core/styles'
 import { getReferralUrl } from 'src/utils/urls'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
+import SocialShare from 'src/components/SocialShare'
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   copyIcon: {
     color: theme.palette.text.secondary,
   },
@@ -25,7 +32,7 @@ const InviteFriends = ({ user: { username } }) => {
   }
 
   return (
-    <>
+    <div className={classes.root}>
       <TextField
         id="refer-friend-input"
         inputRef={textFieldRef}
@@ -41,7 +48,8 @@ const InviteFriends = ({ user: { username } }) => {
           ),
         }}
       />
-    </>
+      <SocialShare url={referralUrl} iconSize={24} />
+    </div>
   )
 }
 

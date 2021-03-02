@@ -18,9 +18,11 @@ const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     justifyContent: 'center',
+    flexDirection: 'row',
     padding: 0,
   },
   button: {
+    display: 'inline',
     padding: 4,
   },
 }))
@@ -37,8 +39,6 @@ const SocialShare = (props) => {
   } = props
 
   const classes = useStyles()
-  // Note: hashtags for Facebook and Twitter are hardcoded.
-  // We may want to move them server-side if we use them often.
   return (
     <div className={classes.root}>
       {FacebookShareButtonProps.quote ? (
