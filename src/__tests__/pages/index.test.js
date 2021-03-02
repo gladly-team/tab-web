@@ -17,10 +17,13 @@ import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 // import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import uuid from 'uuid/v4'
+import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
+import { AdComponent } from 'tab-ads'
+import { isClientSide } from 'src/utils/ssr'
+import { getAdUnits } from 'src/utils/adHelpers'
 
 jest.mock('uuid/v4')
 uuid.mockReturnValue('some-uuid')
-jest.mock('tab-ads')
 jest.mock('next-firebase-auth')
 jest.mock('@material-ui/icons/Settings')
 jest.mock('src/components/Link')
@@ -49,6 +52,32 @@ jest.mock('src/components/NewTabThemeWrapperHOC', () => (component) =>
 jest.mock('src/utils/pageWrappers/withSentry')
 jest.mock('src/utils/mutations/LogTabMutation')
 jest.mock('src/utils/mutations/UpdateImpactMutation')
+jest.mock('src/utils/mutations/LogUserRevenueMutation')
+
+const setUpAds = () => {
+  isClientSide.mockReturnValue(true)
+  getAdUnits.mockReturnValue({
+    leaderboard: {
+      // The long leaderboard ad.
+      adId: 'div-gpt-ad-1464385677836-0',
+      adUnitId: '/43865596/HBTL',
+      sizes: [[728, 90]],
+    },
+    rectangleAdPrimary: {
+      // The primary rectangle ad (bottom-right).
+      adId: 'div-gpt-ad-1464385742501-0',
+      adUnitId: '/43865596/HBTR',
+      sizes: [[300, 250]],
+    },
+    rectangleAdSecondary: {
+      // The second rectangle ad (right side, above the first).
+      adId: 'div-gpt-ad-1539903223131-0',
+      adUnitId: '/43865596/HBTR2',
+      sizes: [[300, 250]],
+    },
+  })
+}
+
 const getMockProps = () => ({
   data: {
     app: {},
@@ -270,5 +299,151 @@ describe('index.js', () => {
     const IndexPage = require('src/pages/index').default
     mount(<IndexPage {...mockProps} />)
     expect(LogTabMutation).not.toHaveBeenCalled()
+  })
+
+  it('calls LogUserRevenueMutation for each Ad when the onAdDisplayed prop is invoked', () => {
+    setUpAds()
+    const IndexPage = require('src/pages/index').default
+    const wrapper = mount(<IndexPage {...getMockProps()} />)
+    const firstAd = wrapper.find(AdComponent).at(0)
+    const secondAd = wrapper.find(AdComponent).at(1)
+    const thirdAd = wrapper.find(AdComponent).at(2)
+
+    const mockDisplayedAdInfo = {
+      adId: 'first-ad-here',
+      revenue: 0.0123,
+      encodedRevenue: 'encoded-first-ad',
+      GAMAdvertiserId: 1111,
+      GAMAdUnitId: '/12345/SomeAdUnit',
+      adSize: '728x90',
+    }
+
+    // Call each Ad's onAdDisplayed with a mock ad info.
+    firstAd.prop('onAdDisplayed')(mockDisplayedAdInfo)
+    secondAd.prop('onAdDisplayed')({
+      ...mockDisplayedAdInfo,
+      adId: 'second-ad-here',
+      revenue: 0.082,
+      encodedRevenue: 'encoded-second-ad',
+      GAMAdvertiserId: 2222,
+      GAMAdUnitId: '/12345/SecondAdThing',
+      adSize: '300x250',
+    })
+    thirdAd.prop('onAdDisplayed')({
+      ...mockDisplayedAdInfo,
+      adId: 'third-ad-here',
+      revenue: 0.0001472,
+      encodedRevenue: 'encoded-third-ad',
+      GAMAdvertiserId: 3333,
+      GAMAdUnitId: '/12345/ThirdAdHere',
+      adSize: '300x250',
+    })
+
+    expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
+      userId: 'asdf',
+      revenue: 0.0123,
+      encodedRevenue: {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'encoded-first-ad',
+      },
+      dfpAdvertiserId: '1111',
+      adSize: '728x90',
+      aggregationOperation: 'MAX',
+      tabId: 'some-uuid',
+      adUnitCode: '/12345/SomeAdUnit',
+    })
+    expect(LogUserRevenueMutation.mock.calls[1][0]).toEqual({
+      userId: 'asdf',
+      revenue: 0.082,
+      encodedRevenue: {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'encoded-second-ad',
+      },
+      dfpAdvertiserId: '2222',
+      adSize: '300x250',
+      aggregationOperation: 'MAX',
+      tabId: 'some-uuid',
+      adUnitCode: '/12345/SecondAdThing',
+    })
+    expect(LogUserRevenueMutation.mock.calls[2][0]).toEqual({
+      userId: 'asdf',
+      revenue: 0.0001472,
+      encodedRevenue: {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'encoded-third-ad',
+      },
+      dfpAdvertiserId: '3333',
+      adSize: '300x250',
+      aggregationOperation: 'MAX',
+      tabId: 'some-uuid',
+      adUnitCode: '/12345/ThirdAdHere',
+    })
+  })
+
+  it('does not call LogUserRevenueMutation when the ad info is null', () => {
+    setUpAds()
+    const IndexPage = require('src/pages/index').default
+    const wrapper = mount(<IndexPage {...getMockProps()} />)
+    const firstAd = wrapper.find(AdComponent).at(0)
+    const secondAd = wrapper.find(AdComponent).at(1)
+
+    const mockDisplayedAdInfo = {
+      adId: 'first-ad-here',
+      revenue: 0.0123,
+      encodedRevenue: 'encoded-first-ad',
+      GAMAdvertiserId: 1111,
+      GAMAdUnitId: '/12345/SomeAdUnit',
+      adSize: '728x90',
+    }
+
+    // Call each Ad's onAdDisplayed with a mock ad info.
+    firstAd.prop('onAdDisplayed')(mockDisplayedAdInfo)
+    secondAd.prop('onAdDisplayed')(null) // no ad
+
+    expect(LogUserRevenueMutation).toHaveBeenCalledTimes(1)
+    expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
+      userId: 'asdf',
+      revenue: 0.0123,
+      encodedRevenue: {
+        encodingType: 'AMAZON_CPM',
+        encodedValue: 'encoded-first-ad',
+      },
+      dfpAdvertiserId: '1111',
+      adSize: '728x90',
+      aggregationOperation: 'MAX',
+      tabId: 'some-uuid',
+      adUnitCode: '/12345/SomeAdUnit',
+    })
+  })
+
+  it('does not include encodedRevenue in the LogUserRevenueMutation when the encodedRevenue value is nil', () => {
+    setUpAds()
+    const IndexPage = require('src/pages/index').default
+    const wrapper = mount(<IndexPage {...getMockProps()} />)
+    const firstAd = wrapper.find(AdComponent).at(0)
+
+    const mockDisplayedAdInfo = {
+      adId: 'first-ad-here',
+      revenue: 0.0123,
+      encodedRevenue: null, // no encodedRevenue
+      GAMAdvertiserId: 1111,
+      GAMAdUnitId: '/12345/SomeAdUnit',
+      adSize: '728x90',
+    }
+
+    // Call each Ad's onAdDisplayed with a mock ad info.
+    firstAd.prop('onAdDisplayed')(mockDisplayedAdInfo)
+
+    expect(LogUserRevenueMutation).toHaveBeenCalledTimes(1)
+    expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
+      userId: 'asdf',
+      revenue: 0.0123,
+      // no encodedRevenue value
+      dfpAdvertiserId: '1111',
+      adSize: '728x90',
+      aggregationOperation: null,
+      tabId: 'some-uuid',
+      adUnitCode: '/12345/SomeAdUnit',
+    })
   })
 })

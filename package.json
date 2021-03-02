@@ -38,6 +38,7 @@
     "react-dom": "^16.13.1",
     "react-firebaseui": "^4.1.0",
     "react-relay": "^10.1.2",
+    "react-share": "^4.4.0",
     "relay-runtime": "^10.1.2",
     "swr": "^0.4.0",
     "tab-ads": "^1.0.2",
