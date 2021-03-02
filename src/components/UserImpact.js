@@ -129,7 +129,6 @@ UserImpact.propTypes = {
     confirmedImpact: PropTypes.bool.isRequired,
     hasClaimedLatestReward: PropTypes.bool.isRequired,
   }).isRequired,
-  // eslint-disable-next-line react/require-default-props
   userId: PropTypes.string,
   user: PropTypes.shape({
     username: PropTypes.string,
@@ -138,5 +137,6 @@ UserImpact.propTypes = {
 
 UserImpact.defaultProps = {
   user: {},
+  userId: '',
 }
 export default UserImpact
