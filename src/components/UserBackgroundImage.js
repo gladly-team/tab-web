@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { isNil } from 'lodash/lang'
@@ -7,9 +7,13 @@ import dayjs from 'dayjs'
 import isToday from 'dayjs/plugin/isToday'
 import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDailyImageMutation'
 import { recachePage } from 'src/utils/caching'
+import usePrevious from 'src/utils/hooks/usePrevious'
 
 dayjs.extend(isToday)
 const useStyles = makeStyles(() => ({
+  hiddenImage: {
+    display: 'none',
+  },
   background: {
     boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
     backgroundRepeat: 'no-repeat',
@@ -42,6 +46,9 @@ const UserBackgroundImage = ({ user }) => {
     backgroundImage: { timestamp: backgroundImageTimestamp, imageURL },
     id: userId,
   } = user
+  const imgRef = useRef(null)
+  const [showBackground, setShowBackground] = useState(true)
+  const previousImage = usePrevious(imageURL)
   useEffect(() => {
     // Show a new background image every day.
 
@@ -56,11 +63,43 @@ const UserBackgroundImage = ({ user }) => {
       updateBackgroundAndCachePage()
     }
   }, [backgroundImageTimestamp, userId])
+  useEffect(() => {
+    // Show a new background image every day.
+    if (
+      previousImage !== undefined &&
+      imageURL !== previousImage &&
+      imgRef &&
+      imgRef.current &&
+      imgRef.current.complete
+    ) {
+      setShowBackground(false)
+    }
+  }, [imageURL, previousImage])
+
+  if (
+    imgRef &&
+    imgRef.current &&
+    imgRef.current.complete &&
+    showBackground === false
+  ) {
+    setShowBackground(true)
+  }
+  console.log(showBackground, imgRef.current)
   const classes = useStyles({ user })
   return (
     <div>
-      <div className={classes.background} key={imageURL} />
-      <div className={classes.tint} />
+      <img
+        ref={imgRef}
+        src={imageURL}
+        alt="background"
+        className={classes.hiddenImage}
+      />
+      {showBackground && (
+        <>
+          <div className={classes.background} key={imageURL} />
+          <div className={classes.tint} />
+        </>
+      )}
     </div>
   )
 }
