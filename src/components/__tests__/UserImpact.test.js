@@ -11,6 +11,7 @@ jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('@material-ui/core/Typography')
 jest.mock('src/components/SocialShare', () => () => <div />)
 jest.mock('src/components/InviteFriends', () => () => <div />)
+jest.mock('src/utils/caching')
 const getMockProps = (userImpactOverrides) => ({
   userImpact: {
     visitsUntilNextImpact: 3,
