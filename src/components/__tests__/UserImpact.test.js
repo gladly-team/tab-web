@@ -21,7 +21,10 @@ const getMockProps = (userImpactOverrides) => ({
     hasClaimedLatestReward: false,
     ...userImpactOverrides,
   },
-  userId: 'someId',
+  user: {
+    id: 'someId',
+    username: 'someUsername',
+  },
 })
 beforeEach(async () => {
   jest.clearAllMocks()
@@ -155,7 +158,7 @@ describe('UserImpact component', () => {
     expect(notification.exists()).toBe(true)
   })
 
-  it('test', async () => {
+  it('renders referral reward dialog correctly', async () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = getMockProps({
       pendingUserReferralImpact: 10,

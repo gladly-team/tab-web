@@ -137,11 +137,11 @@ SocialShare.defaultProps = {
   },
   TwitterShareButtonProps: {
     title:
-      'I just found the purr-fect new way to help shelter cats get adopted! All I had to do was open a new browser tab ( with super cute cat pictures!) on Tab for Cats! Check it out:',
+      'I just found the purr-fect new way to help shelter cats get adopted! All I had to do was open a new browser tab (with super cute cat pictures!) on Tab for Cats! Check it out:',
   },
   RedditShareButtonProps: {
     title:
-      ' Looking for the purr-fect way to help shelter cats get adopted? Check out Tab for Cats!',
+      'Looking for the purr-fect way to help shelter cats get adopted? Check out Tab for Cats!',
   },
   FacebookShareButtonProps: {
     quote:

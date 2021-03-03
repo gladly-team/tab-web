@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
-import { CAT_CHARITY } from 'src/utils/constants'
+import { CAT_CHARITY, CAT_IMPACT_VISITS } from 'src/utils/constants'
 import Notification from 'src/components/Notification'
 import ImpactCounter from 'src/components/ImpactCounter'
 import { Typography } from '@material-ui/core'
@@ -15,7 +15,7 @@ const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
 const useStyles = makeStyles(() => ({
   impactCounter: { backgroundColor: '#fff', marginRight: '15px' },
 }))
-const UserImpact = ({ userImpact, userId, user }) => {
+const UserImpact = ({ userImpact, user }) => {
   const {
     confirmedImpact,
     hasClaimedLatestReward,
@@ -24,6 +24,7 @@ const UserImpact = ({ userImpact, userId, user }) => {
     pendingUserReferralImpact,
     pendingUserReferralCount,
   } = userImpact
+  const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
   const referralRewardNotificationOpen = pendingUserReferralImpact > 0
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(!confirmedImpact)
@@ -60,7 +61,7 @@ const UserImpact = ({ userImpact, userId, user }) => {
         includeNumber
         className={classes.impactCounter}
         number={userImpactMetric}
-        progress={(1 - visitsUntilNextImpact / 14) * 100}
+        progress={(1 - visitsUntilNextImpact / CAT_IMPACT_VISITS) * 100}
       />
       <ImpactDialog
         modalType="confirmImpact"
@@ -101,14 +102,15 @@ const UserImpact = ({ userImpact, userId, user }) => {
         <Notification
           text={
             <Typography>
-              congrats! You recruited{' '}
+              Congrats! You recruited{' '}
               <span style={{ fontWeight: 'bold' }}>
                 {`${pendingUserReferralCount} friend${
                   pendingUserReferralCount > 1 ? 's' : ''
                 } `}
               </span>
               to help shelter cats just by opening tabs. To celebrate, we'll
-              give a treat to an extra {pendingUserReferralImpact} cats.
+              give a treat to an extra {pendingUserReferralImpact} cat
+              {pendingUserReferralImpact > 1 ? 's' : ''}.
             </Typography>
           }
           buttonText="Claim"
@@ -129,14 +131,11 @@ UserImpact.propTypes = {
     confirmedImpact: PropTypes.bool.isRequired,
     hasClaimedLatestReward: PropTypes.bool.isRequired,
   }).isRequired,
-  userId: PropTypes.string,
   user: PropTypes.shape({
-    username: PropTypes.string,
-  }),
+    username: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+  }).isRequired,
 }
 
-UserImpact.defaultProps = {
-  user: {},
-  userId: '',
-}
+UserImpact.defaultProps = {}
 export default UserImpact

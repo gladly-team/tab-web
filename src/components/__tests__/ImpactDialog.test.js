@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 
 jest.mock('src/utils/urls')
+jest.mock('src/components/SocialShare')
 
 const mockButtonOnClick = jest.fn()
 const mockOnClose = jest.fn()
@@ -12,6 +13,9 @@ const getMockProps = () => ({
   buttonOnClick: mockButtonOnClick,
   onClose: mockOnClose,
   open: true,
+  user: {
+    username: 'someUsername',
+  },
 })
 beforeEach(() => {
   jest.clearAllMocks()
@@ -26,13 +30,6 @@ describe('ImpactDialog component', () => {
     }).not.toThrow()
   })
 
-  it('renders a default dialog with functions', () => {
-    const ImpactDialog = require('src/components/ImpactDialog').default
-    const wrapper = shallow(<ImpactDialog modalType="claimImpactReward" open />)
-    expect(typeof wrapper.props().onClose).toBe('function')
-    expect(typeof wrapper.find(Button).props().onClick).toBe('function')
-  })
-
   it('renders the confirmImpact dialog correctly', () => {
     const ImpactDialog = require('src/components/ImpactDialog').default
     const mockProps = getMockProps()
@@ -40,6 +37,12 @@ describe('ImpactDialog component', () => {
     expect(wrapper.find(Typography).at(0).text()).toEqual(
       'Are you ready to turn your Tabs into a force for good?'
     )
+  })
+
+  it('thows the confirmImpact dialog correctly if buttonOnClick is undefined', () => {
+    const ImpactDialog = require('src/components/ImpactDialog').default
+    const mockProps = { ...getMockProps(), buttonOnClick: undefined }
+    expect(() => shallow(<ImpactDialog {...mockProps} />)).toThrow()
   })
 
   it('calls buttonOnClick prop when button is clicked for confirmImpact', () => {
@@ -68,6 +71,26 @@ describe('ImpactDialog component', () => {
     )
   })
 
+  it('thows the claimImpactReward dialog correctly if buttonOnClick is undefined', () => {
+    const ImpactDialog = require('src/components/ImpactDialog').default
+    const mockProps = {
+      ...getMockProps(),
+      modalType: 'claimImpactReward',
+      buttonOnClick: undefined,
+    }
+    expect(() => shallow(<ImpactDialog {...mockProps} />)).toThrow()
+  })
+
+  it('thows the claimImpactReward dialog correctly if user is undefined', () => {
+    const ImpactDialog = require('src/components/ImpactDialog').default
+    const mockProps = {
+      ...getMockProps(),
+      modalType: 'claimImpactReward',
+      user: undefined,
+    }
+    expect(() => shallow(<ImpactDialog {...mockProps} />)).toThrow()
+  })
+
   it('calls buttonOnClick prop when button is clicked for claimImpactReward', () => {
     const ImpactDialog = require('src/components/ImpactDialog').default
     const mockProps = getMockProps()
@@ -91,9 +114,50 @@ describe('ImpactDialog component', () => {
     )
   })
 
+  it('thows the claimReferralImpactReward dialog correctly if buttonOnClick is undefined', () => {
+    const ImpactDialog = require('src/components/ImpactDialog').default
+    const mockProps = {
+      ...getMockProps(),
+      modalType: 'claimReferralReward',
+      buttonOnClick: undefined,
+      referralImpact: 9001,
+    }
+    expect(() => shallow(<ImpactDialog {...mockProps} />)).toThrow()
+  })
+
+  it('thows the claimReferralImpactReward dialog correctly if user is undefined', () => {
+    const ImpactDialog = require('src/components/ImpactDialog').default
+    const mockProps = {
+      ...getMockProps(),
+      ...getMockProps(),
+      modalType: 'claimReferralReward',
+      buttonOnClick: () => {},
+      referralImpact: 9001,
+      user: undefined,
+    }
+    expect(() => shallow(<ImpactDialog {...mockProps} />)).toThrow()
+  })
+
+  it('thows the claimReferralImpactReward dialog correctly if referralImpact is undefined', () => {
+    const ImpactDialog = require('src/components/ImpactDialog').default
+    const mockProps = {
+      ...getMockProps(),
+      ...getMockProps(),
+      modalType: 'claimReferralReward',
+      buttonOnClick: () => {},
+      referralImpact: undefined,
+      user: { username: 'username' },
+    }
+    expect(() => shallow(<ImpactDialog {...mockProps} />)).toThrow()
+  })
+
   it('calls buttonOnClick prop when button is clicked for claimReferralImpactReward', () => {
     const ImpactDialog = require('src/components/ImpactDialog').default
-    const mockProps = { ...getMockProps(), modalType: 'claimReferralReward' }
+    const mockProps = {
+      ...getMockProps(),
+      modalType: 'claimReferralReward',
+      referralImpact: 10,
+    }
     const wrapper = shallow(<ImpactDialog {...mockProps} />)
     const clickButton = wrapper.find(Button).first()
     expect(mockButtonOnClick).not.toHaveBeenCalled()

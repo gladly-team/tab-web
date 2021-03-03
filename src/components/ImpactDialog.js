@@ -12,6 +12,7 @@ import ImpactCounter from 'src/components/ImpactCounter'
 import RandomGif from 'src/components/RandomGif'
 import SocialShare from 'src/components/SocialShare'
 import InviteFriends from 'src/components/InviteFriends'
+import { getReferralUrl } from 'src/utils/urls'
 
 const useStyles = makeStyles((theme) => ({
   currencyText: { color: get(theme, 'palette.backgroundContrastText.main') },
@@ -39,6 +40,9 @@ const ImpactDialog = ({
   let dialogContent
   switch (modalType) {
     case 'confirmImpact':
+      if (open && typeof buttonOnClick !== 'function') {
+        throw new Error('props in confirm Impact dialog are incorrect')
+      }
       dialogContent = (
         <>
           <MuiDialogTitle disableTypography className={classes.root}>
@@ -96,6 +100,9 @@ const ImpactDialog = ({
       )
       break
     case 'claimImpactReward':
+      if (open && (!user || typeof buttonOnClick !== 'function')) {
+        throw new Error('missing props in claim impact reward dialog')
+      }
       dialogContent = (
         <>
           <MuiDialogTitle disableTypography className={classes.root}>
@@ -113,7 +120,9 @@ const ImpactDialog = ({
             </Typography>
             <div className={classes.shareContainer}>
               <InviteFriends user={user} />
-              <SocialShare url="https://tab.gladly.io" />
+              <SocialShare
+                url={getReferralUrl('https://tab.gladly.io', user.username)}
+              />
             </div>
           </MuiDialogContent>
           <MuiDialogActions>
@@ -125,11 +134,19 @@ const ImpactDialog = ({
       )
       break
     case 'claimReferralReward':
+      if (
+        open &&
+        (!referralImpact || !user || typeof buttonOnClick !== 'function')
+      ) {
+        throw new Error('missing props in claim referral reward dialog')
+      }
       dialogContent = (
         <>
           <MuiDialogTitle disableTypography className={classes.root}>
             <Typography variant="h6">
-              {`You just put ${referralImpact} cats on track for adoption!`}
+              {`You just put ${referralImpact} cat${
+                referralImpact > 1 ? 's' : ''
+              } on track for adoption!`}
             </Typography>
           </MuiDialogTitle>
           <MuiDialogContent>
@@ -142,7 +159,9 @@ const ImpactDialog = ({
             </Typography>
             <div className={classes.shareContainer}>
               <InviteFriends user={user} />
-              <SocialShare url="https://tab.gladly.io" />
+              <SocialShare
+                url={getReferralUrl('https://tab.gladly.io', user.username)}
+              />
             </div>
           </MuiDialogContent>
           <MuiDialogActions>
@@ -154,8 +173,7 @@ const ImpactDialog = ({
       )
       break
     default:
-      dialogContent = <div />
-      break
+      throw new Error('incorrect dialog type')
   }
 
   return (
@@ -181,14 +199,14 @@ ImpactDialog.propTypes = {
   buttonOnClick: PropTypes.func,
   onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,
-  // eslint-disable-next-line react/require-default-props
   referralImpact: PropTypes.number,
   user: PropTypes.shape({ username: PropTypes.string }),
 }
 ImpactDialog.defaultProps = {
-  onClose: () => {},
-  buttonOnClick: () => {},
-  user: {},
+  onClose: undefined,
+  referralImpact: undefined,
+  buttonOnClick: undefined,
+  user: undefined,
 }
 
 export default ImpactDialog

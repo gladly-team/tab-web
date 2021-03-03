@@ -15,6 +15,7 @@ export default createFragmentContainer(UserImpact, {
   user: graphql`
     fragment UserImpactContainer_user on User {
       username
+      id
     }
   `,
 })

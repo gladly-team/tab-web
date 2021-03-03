@@ -37,11 +37,9 @@ const Notification = ({ buttonOnClick, text, buttonText }) => {
 }
 Notification.displayName = 'Notification'
 Notification.propTypes = {
-  buttonOnClick: PropTypes.func,
+  buttonOnClick: PropTypes.func.isRequired,
   text: PropTypes.element.isRequired,
   buttonText: PropTypes.string.isRequired,
 }
-Notification.defaultProps = {
-  buttonOnClick: () => {},
-}
+Notification.defaultProps = {}
 export default Notification
