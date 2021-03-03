@@ -51,6 +51,7 @@ jest.mock('src/utils/pageWrappers/withSentry')
 jest.mock('src/utils/mutations/LogTabMutation')
 jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('src/utils/mutations/LogUserRevenueMutation')
+jest.mock('src/utils/caching')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
