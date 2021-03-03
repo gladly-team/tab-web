@@ -57,14 +57,10 @@ const ImpactDialog = ({
             <Typography className={classes.typographySpacing}>
               Each time you open a tab, you'll be helping shelter cats get
               adopted by{' '}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://thejacksongalaxyproject.greatergood.org/about/cat-pawsitive/"
-              >
-                providing treats to be used in positive reinforcement training.
-              </a>{' '}
-              Ready to get started?
+              <a target="_blank" rel="noopener noreferrer" href="nba.com">
+                test
+              </a>
+              . Ready to get started?
             </Typography>
           </MuiDialogContent>
           <MuiDialogActions>
@@ -178,7 +174,7 @@ const ImpactDialog = ({
 
   return (
     <Dialog
-      onClose={onClose || buttonOnClick}
+      onClose={onClose}
       aria-labelledby="customized-dialog-title"
       open={open}
       className={classes.rootModal}

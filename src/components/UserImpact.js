@@ -7,6 +7,7 @@ import ImpactCounter from 'src/components/ImpactCounter'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import dynamic from 'next/dynamic'
+import { recachePage } from 'src/utils/caching'
 
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
@@ -33,26 +34,29 @@ const UserImpact = ({ userImpact, user }) => {
   const [referralRewardDialogOpen, setReferralRewardDialogOpen] = useState(
     false
   )
-  const handleConfirmDialogClose = () => {
-    UpdateImpactMutation(userId, CAT_CHARITY, { confirmImpact: true })
+  const handleConfirmDialogClose = async () => {
     setConfirmDialogOpen(false)
     setAlertDialogOpen(true)
+    await UpdateImpactMutation(userId, CAT_CHARITY, { confirmImpact: true })
+    recachePage()
   }
   const handleAlertDialogClose = () => setAlertDialogOpen(false)
-  const handleClaimReward = () => {
-    UpdateImpactMutation(userId, CAT_CHARITY, { claimLatestReward: true })
+  const handleClaimReward = async () => {
     setRewardDialogOpen(true)
+    await UpdateImpactMutation(userId, CAT_CHARITY, { claimLatestReward: true })
+    recachePage()
   }
   const handleRewardDialogClose = () => setRewardDialogOpen(false)
 
   const handleClaimReferralNotification = async () => {
     setReferralRewardDialogOpen(true)
   }
-  const handleReferralRewardDialogClose = () => {
+  const handleReferralRewardDialogClose = async () => {
     setReferralRewardDialogOpen(false)
-    UpdateImpactMutation(userId, CAT_CHARITY, {
+    await UpdateImpactMutation(userId, CAT_CHARITY, {
       claimPendingUserReferralImpact: true,
     })
+    recachePage()
   }
   const classes = useStyles()
   return (
@@ -61,7 +65,12 @@ const UserImpact = ({ userImpact, user }) => {
         includeNumber
         className={classes.impactCounter}
         number={userImpactMetric}
-        progress={(1 - visitsUntilNextImpact / CAT_IMPACT_VISITS) * 100}
+        progress={
+          // if user achieves a new milestone show the progress bar as full
+          visitsUntilNextImpact === CAT_IMPACT_VISITS
+            ? 100
+            : (1 - visitsUntilNextImpact / CAT_IMPACT_VISITS) * 100
+        }
       />
       <ImpactDialog
         modalType="confirmImpact"
@@ -89,9 +98,9 @@ const UserImpact = ({ userImpact, user }) => {
       {showReward && (
         <Notification
           text={
-            <Typography>
+            <Typography gutterBottom>
               You did it! You just turned your tab into a treat for a cat. Keep
-              it up, and do good with every new tab!"
+              it up, and do good with every new tab!
             </Typography>
           }
           buttonText="Hooray"
