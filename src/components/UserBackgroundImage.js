@@ -84,7 +84,7 @@ const UserBackgroundImage = ({ user }) => {
   ) {
     setShowBackground(true)
   }
-  console.log(showBackground, imgRef.current)
+  // console.log(showBackground, imgRef.current)
   const classes = useStyles({ user })
   return (
     <div>
