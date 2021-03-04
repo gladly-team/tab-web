@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
   rootModal: { zIndex: '10000000 !important', borderRadius: '5px' },
   walkMe: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
   impactCounter: { padding: '15px' },
+  InviteFriends: { marginRight: '15px' },
   typographySpacing: { paddingTop: '15px' },
   centerImage: { display: 'flex', justifyContent: 'center' },
   shareContainer: {
@@ -57,8 +58,12 @@ const ImpactDialog = ({
             <Typography className={classes.typographySpacing}>
               Each time you open a tab, you'll be helping shelter cats get
               adopted by{' '}
-              <a target="_blank" rel="noopener noreferrer" href="nba.com">
-                test
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="https://thejacksongalaxyproject.greatergood.org/about/cat-pawsitive/"
+              >
+                providing treats to be used in positive reinforcement training
               </a>
               . Ready to get started?
             </Typography>
@@ -115,7 +120,9 @@ const ImpactDialog = ({
               friend on board and we'll give a treat to another 10 shelter cats:
             </Typography>
             <div className={classes.shareContainer}>
-              <InviteFriends user={user} />
+              <div className={classes.InviteFriends}>
+                <InviteFriends user={user} className={classes.InviteFriends} />
+              </div>
               <SocialShare
                 url={getReferralUrl('https://tab.gladly.io', user.username)}
               />
@@ -154,7 +161,9 @@ const ImpactDialog = ({
               need. Want to help even more cats? Invite a few more friends!
             </Typography>
             <div className={classes.shareContainer}>
-              <InviteFriends user={user} />
+              <div className={classes.InviteFriends}>
+                <InviteFriends user={user} />
+              </div>
               <SocialShare
                 url={getReferralUrl('https://tab.gladly.io', user.username)}
               />

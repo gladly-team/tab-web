@@ -5,6 +5,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy'
 import { makeStyles } from '@material-ui/core/styles'
 import { getReferralUrl } from 'src/utils/urls'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import IconButton from '@material-ui/core/IconButton'
 
 const useStyles = makeStyles((theme) => ({
   copyIcon: {
@@ -29,13 +30,13 @@ const InviteFriends = ({ baseURL, user: { username } }) => {
         id="refer-friend-input"
         inputRef={textFieldRef}
         value={referralUrl}
+        onClick={highlightReferralUrl}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <FileCopyIcon
-                className={classes.copyIcon}
-                onClick={highlightReferralUrl}
-              />
+              <IconButton onClick={highlightReferralUrl}>
+                <FileCopyIcon className={classes.copyIcon} />
+              </IconButton>
             </InputAdornment>
           ),
         }}
