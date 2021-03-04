@@ -252,7 +252,7 @@ const getRelayQuery = async ({ AuthUser }) => {
     `,
     variables: {
       userId: AuthUser.id,
-      charityId: '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z',
+      charityId: CAT_CHARITY,
     },
   }
 }
