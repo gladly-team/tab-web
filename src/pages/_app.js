@@ -86,7 +86,7 @@ const MyApp = (props) => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <ErrorBoundary>
-          <Component {...pageProps} Inline />
+          <Component {...pageProps} />
         </ErrorBoundary>
       </ThemeProvider>
     </>
