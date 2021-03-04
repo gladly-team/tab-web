@@ -1,3 +1,24 @@
 a {
   color: #9d4ba3;
 }
+.my-node-enter {
+  opacity: 0;
+}
+.my-node-enter-active {
+  opacity: 1;
+  transition: opacity 2000ms;
+}
+.my-node-appear {
+  opacity: 0;
+}
+.my-node-appear-active {
+  opacity: 1;
+  transition: opacity 2000ms;
+}
+.my-node-exit {
+  opacity: 1;
+}
+.my-node-exit-active {
+  opacity: 0;
+  transition: opacity 2000ms;
+}

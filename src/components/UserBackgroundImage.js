@@ -8,11 +8,13 @@ import isToday from 'dayjs/plugin/isToday'
 import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDailyImageMutation'
 import { recachePage } from 'src/utils/caching'
 import usePrevious from 'src/utils/hooks/usePrevious'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
+// import 'src/utils/styles/componentStyles.css'
 
 dayjs.extend(isToday)
 const useStyles = makeStyles(() => ({
   hiddenImage: {
-    display: 'none',
+    visibility: 'hidden',
   },
   background: {
     boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
@@ -26,10 +28,23 @@ const useStyles = makeStyles(() => ({
     right: 0,
     left: 0,
     zIndex: 'auto',
-    backgroundImage: ({ user }) =>
-      get(user, 'backgroundImage.imageURL', undefined)
-        ? `url(${user.backgroundImage.imageURL})`
-        : 'none',
+    backgroundImage: ({ originalImage }) =>
+    originalImage ? `url(${originalImage})` : 'none',
+  },
+  newBackground: {
+    boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
+    backgroundAttachment: 'fixed',
+    backgroundSize: 'cover',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    zIndex: 'auto',
+    backgroundImage: ({ newImage }) =>
+    newImage ? `url(${newImage})` : 'none',
   },
   tint: {
     position: 'absolute',
@@ -46,14 +61,18 @@ const UserBackgroundImage = ({ user }) => {
     backgroundImage: { timestamp: backgroundImageTimestamp, imageURL },
     id: userId,
   } = user
-  const imgRef = useRef(null)
-  const [showBackground, setShowBackground] = useState(true)
-  const previousImage = usePrevious(imageURL)
+  const [originalImage] = useState(imageURL)
+  const [newImage, setNewImage] = useState(false)
+
+  const fireOnLoad = () => {
+    setNewImage(imageURL)
+    // setShowBackground(true)
+  }
   useEffect(() => {
     // Show a new background image every day.
-
     async function updateBackgroundAndCachePage() {
       await SetBackgroundDailyImageMutation(userId)
+      // setShowBackground(false)
       await recachePage()
     }
     if (
@@ -63,43 +82,27 @@ const UserBackgroundImage = ({ user }) => {
       updateBackgroundAndCachePage()
     }
   }, [backgroundImageTimestamp, userId])
-  useEffect(() => {
-    // Show a new background image every day.
-    if (
-      previousImage !== undefined &&
-      imageURL !== previousImage &&
-      imgRef &&
-      imgRef.current &&
-      imgRef.current.complete
-    ) {
-      setShowBackground(false)
-    }
-  }, [imageURL, previousImage])
-
-  if (
-    imgRef &&
-    imgRef.current &&
-    imgRef.current.complete &&
-    showBackground === false
-  ) {
-    setShowBackground(true)
-  }
-  // console.log(showBackground, imgRef.current)
-  const classes = useStyles({ user })
+  const classes = useStyles({ originalImage, newImage })
   return (
     <div>
       <img
-        ref={imgRef}
         src={imageURL}
         alt="background"
         className={classes.hiddenImage}
+        onLoad={fireOnLoad}
       />
-      {showBackground && (
-        <>
-          <div className={classes.background} key={imageURL} />
+      {/* <TransitionGroup enter exit> */}
+      <div >
+          <div className={classes.background} />
           <div className={classes.tint} />
-        </>
-      )}
+        </div>
+        <CSSTransition in={newImage} appear timeout={2000} classNames="my-node" >
+        {newImage && <div >
+          <div className={classes.newBackground} />
+          <div className={classes.tint} />
+        </div>}
+        </CSSTransition>
+      {/* </TransitionGroup> */}
     </div>
   )
 }
