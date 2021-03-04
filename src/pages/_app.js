@@ -12,6 +12,8 @@ import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import initAuth from 'src/utils/auth/initAuth'
 import initSentry from 'src/utils/initSentry'
 import ErrorBoundary from 'src/components/ErrorBoundary'
+import initializeCMP from 'src/utils/initializeCMP'
+import 'src/utils/styles/globalStyles.css'
 
 initAuth()
 
@@ -24,6 +26,23 @@ try {
   throw new Error(
     'Environment variable NEXT_PUBLIC_SERVICE_WORKER_ENABLED must be set.'
   )
+}
+
+// Initialize the CMP.
+// Delaying the CMP initialization avoids delaying any CMP
+// responses needed for our ad partner bid requests.
+// Our modified CMP API stubs are quick to respond, but the
+// core CMP JS, which replaces the stubs and is out of our
+// control, may be slower to respond.
+// Note that because we delay CMP initialization by default,
+// any pages that rely on other CMP methods, such as the
+// account page, should initialize the CMP before calling
+// those methods.
+if (isClientSide()) {
+  const initCMP = () => {
+    initializeCMP()
+  }
+  setTimeout(initCMP, 1500)
 }
 
 const MyApp = (props) => {

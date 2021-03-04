@@ -1,5 +1,6 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { act } from 'react-dom/test-utils'
+import { shallow, mount } from 'enzyme'
 import { unregister } from 'next-offline/runtime'
 import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
@@ -16,8 +17,11 @@ import { setWindowLocation } from 'src/utils/navigation'
 import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 import useData from 'src/utils/hooks/useData'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
+import initializeCMP from 'src/utils/initializeCMP'
 
 jest.mock('next-offline/runtime')
+jest.mock('tab-cmp')
+jest.mock('src/utils/initializeCMP')
 jest.mock('src/components/SettingsPage')
 jest.mock('src/utils/auth/logout')
 jest.mock('src/utils/caching')
@@ -248,7 +252,9 @@ describe('account.js', () => {
     const accountItem = content.childAt(5)
     expect(accountItem.type()).toEqual(Divider)
   })
+})
 
+describe('account.js: "switch back to classic"', () => {
   it('displays the "switch back to classic" field', () => {
     expect.assertions(2)
     const AccountPage = require('src/pages/account.js').default
@@ -356,5 +362,171 @@ describe('account.js', () => {
     optOutButton.simulate('click')
     await flushAllPromises()
     expect(setWindowLocation).toHaveBeenCalledWith(dashboardURL)
+  })
+})
+
+describe('account.js: CMP privacy management', () => {
+  it('calls initializeCMP on mount', async () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account.js').default
+    const mockProps = getMockProps()
+    mount(<AccountPage {...mockProps} />)
+    await flushAllPromises()
+    expect(initializeCMP).toHaveBeenCalled()
+  })
+
+  it('shows the GDPR data privacy button when the client is in the EU', async () => {
+    expect.assertions(1)
+
+    // Mock that the client is in the EU
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesGDPRApply.mockResolvedValue(true)
+    tabCMP.doesCCPAApply.mockResolvedValue(false)
+
+    const AccountPage = require('src/pages/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+      wrapper.update()
+    })
+
+    // Find the data privacy choices setting.
+    const privacyChoicesSection = wrapper
+      .find('[data-test-id="account-item"]')
+      .last()
+    expect(privacyChoicesSection.find('p').first().text()).toEqual(
+      'Data privacy choices'
+    )
+  })
+
+  it('opens the GDPR dialog when clicking the GDPR data privacy button', async () => {
+    expect.assertions(2)
+
+    // Mock that the client is in the EU
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesGDPRApply.mockResolvedValue(true)
+    tabCMP.doesCCPAApply.mockResolvedValue(false)
+
+    const AccountPage = require('src/pages/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+      wrapper.update()
+    })
+
+    const privacyChoicesSection = wrapper
+      .find('[data-test-id="account-item"]')
+      .last()
+    const button = privacyChoicesSection.find('button').first()
+
+    expect(tabCMP.openTCFConsentDialog).not.toHaveBeenCalled()
+    button.simulate('click')
+    await flushAllPromises()
+    expect(tabCMP.openTCFConsentDialog).toHaveBeenCalled()
+  })
+
+  it('does not show the GDPR data privacy button when the client is not in the EU', async () => {
+    expect.assertions(1)
+
+    // Mock that the client is not in the EU or US
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesGDPRApply.mockResolvedValue(false)
+    tabCMP.doesCCPAApply.mockResolvedValue(false)
+
+    const AccountPage = require('src/pages/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+      wrapper.update()
+    })
+
+    const accountItems = wrapper.find('[data-test-id="account-item"]')
+    let containsDataPrivacyOption = false
+    accountItems.forEach((item) => {
+      if (item.find('p').first().text() === 'Data privacy choices') {
+        containsDataPrivacyOption = true
+      }
+    })
+    expect(containsDataPrivacyOption).toBe(false)
+  })
+
+  it('shows the CCPA data privacy button when the client is in the US', async () => {
+    expect.assertions(1)
+
+    // Mock that the client is in the US
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesCCPAApply.mockResolvedValue(true)
+    tabCMP.doesGDPRApply.mockResolvedValue(false)
+
+    const AccountPage = require('src/pages/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+      wrapper.update()
+    })
+
+    const privacyChoicesSection = wrapper
+      .find('[data-test-id="account-item"]')
+      .last()
+    expect(privacyChoicesSection.find('p').first().text()).toEqual(
+      'Ad personalization choices'
+    )
+  })
+
+  it('opens the CCPA dialog when clicking the CCPA data privacy link', async () => {
+    expect.assertions(2)
+
+    // Mock that the client is in the US
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesGDPRApply.mockResolvedValue(false)
+    tabCMP.doesCCPAApply.mockResolvedValue(true)
+
+    const AccountPage = require('src/pages/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+      wrapper.update()
+    })
+
+    const privacyChoicesSection = wrapper
+      .find('[data-test-id="account-item"]')
+      .last()
+    const link = privacyChoicesSection.find('a').first()
+
+    expect(tabCMP.openCCPAConsentDialog).not.toHaveBeenCalled()
+    link.simulate('click')
+    await flushAllPromises()
+    expect(tabCMP.openCCPAConsentDialog).toHaveBeenCalled()
+  })
+
+  it('does not show the CCPA data privacy section when the client is not in the US', async () => {
+    expect.assertions(1)
+
+    // Mock that the client is not in the US or EU
+    const tabCMP = require('tab-cmp')
+    tabCMP.doesCCPAApply.mockResolvedValue(false)
+    tabCMP.doesGDPRApply.mockResolvedValue(false)
+
+    const AccountPage = require('src/pages/account.js').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+      wrapper.update()
+    })
+
+    const accountItems = wrapper.find('[data-test-id="account-item"]')
+    let containsDataPrivacyOption = false
+    accountItems.forEach((item) => {
+      if (item.find('p').first().text() === 'Ad personalization choices') {
+        containsDataPrivacyOption = true
+      }
+    })
+    expect(containsDataPrivacyOption).toBe(false)
   })
 })

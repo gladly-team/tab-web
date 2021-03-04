@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { flowRight } from 'lodash/util'
+import { isNil } from 'lodash/lang'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
@@ -19,6 +20,7 @@ import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
+import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
 import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
 // material components
@@ -33,13 +35,10 @@ import withRelay from 'src/utils/pageWrappers/withRelay'
 import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
 import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
+import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
+import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
-import {
-  getAdUnits,
-  areAdsEnabled,
-  showMockAds,
-  isInEuropeanUnion,
-} from 'src/utils/adHelpers'
+import { getAdUnits, areAdsEnabled, showMockAds } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import { accountURL, achievementsURL } from 'src/utils/urls'
 import {
@@ -49,6 +48,8 @@ import {
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
+import { CAT_CHARITY } from 'src/utils/constants'
+import { recachePage } from 'src/utils/caching'
 
 const useStyles = makeStyles((theme) => ({
   '@keyframes fadeIn': {
@@ -152,7 +153,7 @@ const useStyles = makeStyles((theme) => ({
   },
   searchBar: {
     position: 'relative',
-    zIndex: 1e4, // must be higher than all content besides ads
+    zIndex: 1e4, // must be higher than all content besides ads and modal
   },
   logo: {
     height: 50,
@@ -197,10 +198,15 @@ if (isClientSide()) {
     try {
       fetchAds({
         adUnits: Object.values(getAdUnits()),
-        auctionTimeout: 1200,
-        bidderTimeout: 900,
+        auctionTimeout: 1000,
+        bidderTimeout: 700,
         consent: {
-          isEU: isInEuropeanUnion,
+          enabled: true,
+          // Time to wait for the consent management platform (CMP) to respond.
+          // If the CMP does not respond in this time, ad auctions may be cancelled.
+          // The tab-cmp package aims to make the CMP respond much more quickly
+          // than this after the user's first page load.
+          timeout: 500,
         },
         publisher: {
           domain: getHostname(),
@@ -228,7 +234,7 @@ const getRelayQuery = async ({ AuthUser }) => {
   }
   return {
     query: graphql`
-      query pagesIndexQuery($userId: String!) {
+      query pagesIndexQuery($userId: String!, $charityId: String!) {
         app {
           ...MoneyRaisedContainer_app
         }
@@ -237,11 +243,16 @@ const getRelayQuery = async ({ AuthUser }) => {
           vcCurrent
           id
           ...UserBackgroundImageContainer_user
+          ...UserImpactContainer_user
+        }
+        userImpact(userId: $userId, charityId: $charityId) {
+          ...UserImpactContainer_userImpact
         }
       }
     `,
     variables: {
       userId: AuthUser.id,
+      charityId: CAT_CHARITY,
     },
   }
 }
@@ -272,15 +283,22 @@ const Index = ({ data: initialData }) => {
       setShouldRenderAds(true)
     }
   }, [])
-  const { app, user } = data || {}
+  const { app, user, userImpact } = data || {}
   const userGlobalId = get(user, 'id')
   const [tabId] = useState(uuid())
 
   // log tab count when user first visits
   useEffect(() => {
-    if (userGlobalId && tabId) {
-      LogTabMutation(userGlobalId, tabId)
+    async function mutateNCache() {
+      if (userGlobalId && tabId) {
+        LogTabMutation(userGlobalId, tabId)
+        await UpdateImpactMutation(userGlobalId, CAT_CHARITY, {
+          logImpact: true,
+        })
+        recachePage()
+      }
     }
+    mutateNCache()
   }, [userGlobalId, tabId])
 
   // Don't load the page until there is data. Data won't exist
@@ -312,7 +330,34 @@ const Index = ({ data: initialData }) => {
     if (!displayedAdInfo) {
       return
     }
-    console.log('Ad displayed:', displayedAdInfo, context) // eslint-disable-line no-console
+
+    const {
+      revenue,
+      encodedRevenue,
+      GAMAdvertiserId,
+      GAMAdUnitId,
+      adSize,
+    } = displayedAdInfo
+
+    // Log the revenue from the ad.
+    LogUserRevenueMutation({
+      userId: context.user.id,
+      revenue,
+      ...(encodedRevenue && {
+        encodedRevenue: {
+          encodingType: 'AMAZON_CPM',
+          encodedValue: encodedRevenue,
+        },
+      }),
+      dfpAdvertiserId: GAMAdvertiserId.toString(),
+      adSize,
+      // Only send aggregationOperation value if we have more than one
+      // revenue value
+      aggregationOperation:
+        !isNil(revenue) && !isNil(encodedRevenue) ? 'MAX' : null,
+      tabId: context.tabId,
+      adUnitCode: GAMAdUnitId,
+    })
   }
 
   /*
@@ -331,6 +376,11 @@ const Index = ({ data: initialData }) => {
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
           <div className={classes.userMenuContainer}>
+            <UserImpactContainer
+              userId={userGlobalId}
+              userImpact={userImpact}
+              user={user}
+            />
             <div className={classes.moneyRaisedContainer}>
               <Typography variant="h5" className={clsx(classes.userMenuItem)}>
                 <MoneyRaisedContainer app={app} />
