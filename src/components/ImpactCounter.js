@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import PetsIcon from '@material-ui/icons/Pets'
 import { makeStyles } from '@material-ui/core/styles'
+import clsx from 'clsx'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,10 +30,10 @@ const useStyles = makeStyles(() => ({
 const ImpactCounter = (props) => {
   const classes = useStyles()
 
-  const { includeNumber, number, progress } = props
+  const { includeNumber, number, progress, className } = props
 
   return (
-    <div className={classes.root}>
+    <div className={clsx(classes.root, className)}>
       {includeNumber && (
         <Typography className={classes.counter} variant="h5">
           {number}
@@ -51,11 +52,13 @@ ImpactCounter.propTypes = {
   includeNumber: PropTypes.bool,
   number: PropTypes.number,
   progress: PropTypes.number.isRequired,
+  className: PropTypes.string,
 }
 
 ImpactCounter.defaultProps = {
   includeNumber: false,
   number: 0,
+  className: '',
 }
 
 export default ImpactCounter

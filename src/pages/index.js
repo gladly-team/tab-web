@@ -20,6 +20,7 @@ import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
+import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
 import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
 // material components
@@ -34,6 +35,7 @@ import withRelay from 'src/utils/pageWrappers/withRelay'
 import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
 import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
+import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import { getAdUnits, areAdsEnabled, showMockAds } from 'src/utils/adHelpers'
@@ -46,6 +48,8 @@ import {
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
+import { CAT_CHARITY } from 'src/utils/constants'
+import { recachePage } from 'src/utils/caching'
 
 const useStyles = makeStyles((theme) => ({
   '@keyframes fadeIn': {
@@ -149,7 +153,7 @@ const useStyles = makeStyles((theme) => ({
   },
   searchBar: {
     position: 'relative',
-    zIndex: 1e4, // must be higher than all content besides ads
+    zIndex: 1e4, // must be higher than all content besides ads and modal
   },
   logo: {
     height: 50,
@@ -230,7 +234,7 @@ const getRelayQuery = async ({ AuthUser }) => {
   }
   return {
     query: graphql`
-      query pagesIndexQuery($userId: String!) {
+      query pagesIndexQuery($userId: String!, $charityId: String!) {
         app {
           ...MoneyRaisedContainer_app
         }
@@ -239,11 +243,16 @@ const getRelayQuery = async ({ AuthUser }) => {
           vcCurrent
           id
           ...UserBackgroundImageContainer_user
+          ...UserImpactContainer_user
+        }
+        userImpact(userId: $userId, charityId: $charityId) {
+          ...UserImpactContainer_userImpact
         }
       }
     `,
     variables: {
       userId: AuthUser.id,
+      charityId: CAT_CHARITY,
     },
   }
 }
@@ -274,15 +283,22 @@ const Index = ({ data: initialData }) => {
       setShouldRenderAds(true)
     }
   }, [])
-  const { app, user } = data || {}
+  const { app, user, userImpact } = data || {}
   const userGlobalId = get(user, 'id')
   const [tabId] = useState(uuid())
 
   // log tab count when user first visits
   useEffect(() => {
-    if (userGlobalId && tabId) {
-      LogTabMutation(userGlobalId, tabId)
+    async function mutateNCache() {
+      if (userGlobalId && tabId) {
+        LogTabMutation(userGlobalId, tabId)
+        await UpdateImpactMutation(userGlobalId, CAT_CHARITY, {
+          logImpact: true,
+        })
+        recachePage()
+      }
     }
+    mutateNCache()
   }, [userGlobalId, tabId])
 
   // Don't load the page until there is data. Data won't exist
@@ -360,6 +376,11 @@ const Index = ({ data: initialData }) => {
       <div className={classes.fullContainer}>
         <div className={classes.topContainer}>
           <div className={classes.userMenuContainer}>
+            <UserImpactContainer
+              userId={userGlobalId}
+              userImpact={userImpact}
+              user={user}
+            />
             <div className={classes.moneyRaisedContainer}>
               <Typography variant="h5" className={clsx(classes.userMenuItem)}>
                 <MoneyRaisedContainer app={app} />

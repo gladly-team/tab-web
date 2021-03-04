@@ -72,27 +72,6 @@ describe('Invite friend component', () => {
     )
   })
 
-  it('contains the correct label text', () => {
-    const InviteFriends = require('src/components/InviteFriends').default
-    const mockProps = getMockProps()
-    const wrapper = mount(<InviteFriends {...mockProps} />)
-    expect(wrapper.find(TextField).first().prop('label')).toBe(
-      `Share this link`
-    )
-  })
-
-  it('contains the correct label text if overriden', () => {
-    const InviteFriends = require('src/components/InviteFriends').default
-    const mockProps = {
-      ...getMockProps(),
-      label: 'Click this link',
-    }
-    const wrapper = mount(<InviteFriends {...mockProps} />)
-    expect(wrapper.find(TextField).first().prop('label')).toBe(
-      `Click this link`
-    )
-  })
-
   it('contains the correct referral URL when there is no provided username', () => {
     const InviteFriends = require('src/components/InviteFriends').default
     const mockProps = getMockProps()
@@ -105,7 +84,7 @@ describe('Invite friend component', () => {
   it('contains the correct referral URL when there is no user', () => {
     const InviteFriends = require('src/components/InviteFriends').default
     const mockProps = getMockProps()
-    mockProps.user = null
+    mockProps.user = undefined
     const wrapper = mount(<InviteFriends {...mockProps} />)
     const referralUrl = 'https://tab.gladly.io'
     expect(wrapper.find(TextField).first().prop('value')).toBe(referralUrl)

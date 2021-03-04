@@ -33,6 +33,7 @@ jest.mock('src/utils/adHelpers', () => ({
 }))
 jest.mock('src/components/Logo')
 jest.mock('src/components/MoneyRaisedContainer', () => () => <div />)
+jest.mock('src/components/UserImpactContainer', () => () => <div />)
 jest.mock('src/components/SearchInput', () => () => <div />)
 jest.mock('src/utils/featureFlags')
 jest.mock('src/components/Achievement', () => () => (
@@ -48,7 +49,9 @@ jest.mock('src/components/NewTabThemeWrapperHOC', () => (component) =>
 )
 jest.mock('src/utils/pageWrappers/withSentry')
 jest.mock('src/utils/mutations/LogTabMutation')
+jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('src/utils/mutations/LogUserRevenueMutation')
+jest.mock('src/utils/caching')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
@@ -81,6 +84,15 @@ const getMockProps = () => ({
       tabs: 221,
       vcCurrent: 78,
       id: 'asdf',
+    },
+    userImpact: {
+      userId: 'asdf',
+      visitsUntilNextImpact: 2,
+      pendingUserReferralImpact: 10,
+      pendingUserReferralCount: 1,
+      userImpactMetric: 3,
+      confirmedImpact: true,
+      hasClaimedLatestReward: true,
     },
   },
 })
@@ -271,6 +283,15 @@ describe('index.js', () => {
         user: {
           tabs: 221,
           vcCurrent: 78,
+        },
+        userImpact: {
+          userId: 'asdf',
+          visitsUntilNextImpact: 2,
+          pendingUserReferralImpact: 10,
+          pendingUserReferralCount: 1,
+          userImpactMetric: 3,
+          confirmedImpact: true,
+          hasClaimedLatestReward: true,
         },
       },
     })
