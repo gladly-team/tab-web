@@ -124,10 +124,6 @@ const UserBackgroundImage = ({ user }) => {
             </CSSTransition>
           ) : undefined
         )}
-        <div>
-          <div className={classes.background} />
-          <div className={classes.tint} />
-        </div>
       </TransitionGroup>
     </div>
   )
