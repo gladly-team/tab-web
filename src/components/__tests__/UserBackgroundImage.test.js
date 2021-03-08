@@ -153,13 +153,6 @@ describe('UserBackgroundImage component', () => {
   })
 
   it('updates the background image when the new image onLoad completes', async () => {
-    global.Image = class {
-      constructor() {
-        setTimeout(() => {
-          this.onload() // simulate success
-        }, 100)
-      }
-    }
     const UserBackgroundImage = require('src/components/UserBackgroundImage')
       .default
     const mockProps = {
