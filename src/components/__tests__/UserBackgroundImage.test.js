@@ -5,22 +5,19 @@ import dayjs from 'dayjs'
 import MockDate from 'mockdate'
 import { act } from 'react-dom/test-utils'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
+
 jest.mock('src/utils/mutations/SetBackgroundDailyImageMutation')
 jest.mock('src/utils/caching')
-jest.mock('react-transition-group', () => ({
-  CSSTransition: () => <div />,
-  TransitionGroup: () => <div />,
-}))
+const mockNow = '2021-01-30T18:37:04.604Z'
 SetBackgroundDailyImageMutation.mockReturnValue({
   setUserBkgDailyImage: {
-    user: { backgroundImage: { imageURL: 'somenewURL' } },
+    user: { backgroundImage: { imageURL: 'somenewURL', timestamp: mockNow } },
   },
 })
-const mockNow = '2021-01-30T18:37:04.604Z'
 const getMockProps = () => ({
   user: {
     backgroundImage: {
-      imageUrl: 'randomstringurl',
+      imageURL: 'randomstringurl',
       timestamp: mockNow,
     },
     id: 'randomID',
@@ -153,5 +150,39 @@ describe('UserBackgroundImage component', () => {
       await flushAllPromises()
     })
     expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
+  })
+
+  it('updates the background image when the new image onLoad completes', async () => {
+    global.Image = class {
+      constructor() {
+        setTimeout(() => {
+          this.onload() // simulate success
+        }, 100)
+      }
+    }
+    const UserBackgroundImage = require('src/components/UserBackgroundImage')
+      .default
+    const mockProps = {
+      ...getMockProps(),
+      user: {
+        ...getMockProps().user,
+        backgroundImage: {
+          ...getMockProps().user.backgroundImage,
+          timestamp: '2021-01-29T18:37:04.604Z',
+        },
+      },
+    }
+    const wrapper = mount(<UserBackgroundImage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+    })
+    expect(wrapper.find('CSSTransition').length).toEqual(1)
+    await act(async () => {
+      await wrapper.find('img').props().onLoad()
+    })
+    await act(async () => {
+      wrapper.update()
+    })
+    expect(wrapper.find('CSSTransition').length).toEqual(2)
   })
 })
