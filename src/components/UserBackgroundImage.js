@@ -1,22 +1,19 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { isNil } from 'lodash/lang'
-import { get } from 'lodash/object'
 import dayjs from 'dayjs'
 import isToday from 'dayjs/plugin/isToday'
 import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDailyImageMutation'
 import { recachePage } from 'src/utils/caching'
-import usePrevious from 'src/utils/hooks/usePrevious'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
-// import 'src/utils/styles/componentStyles.css'
 
 dayjs.extend(isToday)
 const useStyles = makeStyles(() => ({
   hiddenImage: {
     visibility: 'hidden',
   },
-  background: {
+  previousImage: {
     boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
@@ -28,10 +25,10 @@ const useStyles = makeStyles(() => ({
     right: 0,
     left: 0,
     zIndex: 'auto',
-    backgroundImage: ({ originalImage }) =>
-    originalImage ? `url(${originalImage})` : 'none',
+    backgroundImage: ({ previousImage }) =>
+      previousImage ? `url(${previousImage.imageURL})` : 'none',
   },
-  newBackground: {
+  latestImage: {
     boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
@@ -43,8 +40,8 @@ const useStyles = makeStyles(() => ({
     right: 0,
     left: 0,
     zIndex: 'auto',
-    backgroundImage: ({ newImage }) =>
-    newImage ? `url(${newImage})` : 'none',
+    backgroundImage: ({ latestImage }) =>
+      latestImage ? `url(${latestImage.imageURL})` : 'none',
   },
   tint: {
     position: 'absolute',
@@ -61,18 +58,31 @@ const UserBackgroundImage = ({ user }) => {
     backgroundImage: { timestamp: backgroundImageTimestamp, imageURL },
     id: userId,
   } = user
-  const [originalImage] = useState(imageURL)
-  const [newImage, setNewImage] = useState(false)
+  const [backgroundImages, setBackgroundImages] = useState([
+    { imageURL, preloaded: true },
+  ])
 
   const fireOnLoad = () => {
-    setNewImage(imageURL)
-    // setShowBackground(true)
+    setBackgroundImages((prevState) => [
+      prevState[prevState.length - 2],
+      { ...prevState[prevState.length - 1], preloaded: true },
+    ])
   }
   useEffect(() => {
     // Show a new background image every day.
     async function updateBackgroundAndCachePage() {
-      await SetBackgroundDailyImageMutation(userId)
-      // setShowBackground(false)
+      const {
+        setUserBkgDailyImage: {
+          user: {
+            // eslint-disable-next-line no-shadow
+            backgroundImage: { imageURL },
+          },
+        },
+      } = await SetBackgroundDailyImageMutation(userId)
+      setBackgroundImages((prevImages) => [
+        ...prevImages,
+        { imageURL, preloaded: false },
+      ])
       await recachePage()
     }
     if (
@@ -82,27 +92,43 @@ const UserBackgroundImage = ({ user }) => {
       updateBackgroundAndCachePage()
     }
   }, [backgroundImageTimestamp, userId])
-  const classes = useStyles({ originalImage, newImage })
+  const previousImage = backgroundImages[0]
+  const latestImage = backgroundImages[backgroundImages.length - 1]
+  const classes = useStyles({ previousImage, latestImage })
+
   return (
     <div>
       <img
-        src={imageURL}
+        src={latestImage.imageURL}
         alt="background"
         className={classes.hiddenImage}
         onLoad={fireOnLoad}
       />
-      {/* <TransitionGroup enter exit> */}
-      <div >
+      <TransitionGroup>
+        {backgroundImages.map((img, index) =>
+          img.imageURL ? (
+            <CSSTransition
+              key={img.imageURL}
+              appear
+              timeout={2000}
+              classNames="my-node"
+            >
+              <div>
+                <div
+                  className={
+                    classes[index === 0 ? 'previousImage' : 'latestImage']
+                  }
+                />
+                <div className={classes.tint} />
+              </div>
+            </CSSTransition>
+          ) : undefined
+        )}
+        <div>
           <div className={classes.background} />
           <div className={classes.tint} />
         </div>
-        <CSSTransition in={newImage} appear timeout={2000} classNames="my-node" >
-        {newImage && <div >
-          <div className={classes.newBackground} />
-          <div className={classes.tint} />
-        </div>}
-        </CSSTransition>
-      {/* </TransitionGroup> */}
+      </TransitionGroup>
     </div>
   )
 }
