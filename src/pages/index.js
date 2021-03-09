@@ -88,9 +88,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     paddingBottom: theme.spacing(0),
   },
-  moneyRaisedContainer: {
-    margin: theme.spacing(0.5),
-  },
   settingsIconContainer: {
     margin: theme.spacing(0.5),
   },
@@ -381,7 +378,7 @@ const Index = ({ data: initialData }) => {
               userImpact={userImpact}
               user={user}
             />
-            <div className={classes.moneyRaisedContainer}>
+            <div>
               <Typography variant="h5" className={clsx(classes.userMenuItem)}>
                 <MoneyRaisedContainer app={app} />
               </Typography>
