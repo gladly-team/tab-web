@@ -1,7 +1,7 @@
 import { commitMutation as commitMutationDefault } from 'react-relay'
 import { getRelayEnvironment } from 'src/utils/relayEnvironment'
 import { isServerSide } from 'src/utils/ssr'
-
+import { recachePage } from 'src/utils/caching'
 // Return a Promise when committing mutations.
 // https://github.com/facebook/relay/issues/1822#issuecomment-305906204
 const commitMutation = (environment, options) =>
@@ -18,7 +18,7 @@ const commitMutation = (environment, options) =>
   })
 
 // https://relay.dev/docs/en/mutations#commitmutation
-const callMutation = async ({ mutation, variables }) => {
+const callMutation = async ({ mutation, variables, cache = true }) => {
   // We want page GETs to be idempotent. This makes it easier to
   // reason about user data and also mitigates the impact of any
   // CSRF attacks.
@@ -36,10 +36,12 @@ const callMutation = async ({ mutation, variables }) => {
   // creating the Relay environment.
   const environment = getRelayEnvironment()
 
-  return commitMutation(environment, {
+  const result = await commitMutation(environment, {
     mutation,
     variables,
   })
+  cache && recachePage()
+  return result
 }
 
 export default callMutation

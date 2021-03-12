@@ -1,10 +1,12 @@
 import { commitMutation as commitMutationDefault } from 'react-relay'
 import { getRelayEnvironment } from 'src/utils/relayEnvironment'
 import { isServerSide } from 'src/utils/ssr'
+import { recachePage } from 'src/utils/caching'
 
 jest.mock('react-relay')
 jest.mock('src/utils/relayEnvironment')
 jest.mock('src/utils/ssr')
+jest.mock('src/utils/caching')
 
 beforeEach(() => {
   commitMutationDefault.mockImplementation((environment, options) => {
@@ -31,6 +33,27 @@ describe('callMutation', () => {
       variables: { myVars: 'here' },
     })
     expect(getRelayEnvironment).toHaveBeenCalled()
+  })
+
+  it('recaches the page by default', async () => {
+    expect.assertions(1)
+    const callMutation = require('src/utils/mutations/callMutation').default
+    await callMutation({
+      mutation: { some: 'stuff' },
+      variables: { myVars: 'here' },
+    })
+    expect(recachePage).toHaveBeenCalled()
+  })
+
+  it('does not recache the page when cache param is set to false', async () => {
+    expect.assertions(1)
+    const callMutation = require('src/utils/mutations/callMutation').default
+    await callMutation({
+      mutation: { some: 'stuff' },
+      variables: { myVars: 'here' },
+      cache: false,
+    })
+    expect(recachePage).not.toHaveBeenCalled()
   })
 
   it("calls react-relay's `commitMutation` with the Relay environment and expected options", async () => {

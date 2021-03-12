@@ -15,6 +15,7 @@ const LogUserRevenueMutation = (input) =>
     variables: {
       input,
     },
+    cache: false,
   })
 
 export default LogUserRevenueMutation

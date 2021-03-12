@@ -160,6 +160,10 @@ const nextConfig = {
         // variants with our base path. Note that our base path, "/newtab", is
         // hardcoded here.
         // https://regex101.com/r/5cs6L7/1/tests
+        // see caching strategies here https://developers.google.com/web/tools/workbox/modules/workbox-strategies
+        // I think we still want stale while revalidating although maybe we want cache only?
+        // "The cache only strategy ensures that responses are obtained from a cache. 
+        // This is less common in workbox, but can be useful if you have your own precaching step.""
         urlPattern: cachingRegex,
         handler: 'StaleWhileRevalidate',
         options: {
