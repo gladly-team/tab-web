@@ -28,17 +28,7 @@ describe('Invite friend component', () => {
     mockProps.user.username = 'bob'
     const wrapper = mount(<InviteFriends {...mockProps} />)
     expect(wrapper.find(TextField).first().prop('value')).toBe(
-      'https://tab.gladly.io/?u=bob'
-    )
-  })
-
-  it('contains the correct referral URL when passed a custom "baseURL" prop value', () => {
-    const InviteFriends = require('src/components/InviteFriends').default
-    const mockProps = getMockProps()
-    mockProps.baseURL = 'https://foo.example.com'
-    const wrapper = mount(<InviteFriends {...mockProps} />)
-    expect(wrapper.find(TextField).first().prop('value')).toBe(
-      'https://foo.example.com/?u=bob'
+      'https://tab.gladly.io/cats?u=bob'
     )
   })
 
@@ -48,7 +38,7 @@ describe('Invite friend component', () => {
     mockProps.user.username = 'Bugs Bunny'
     const wrapper = mount(<InviteFriends {...mockProps} />)
     expect(wrapper.find(TextField).first().prop('value')).toBe(
-      'https://tab.gladly.io/?u=Bugs%20Bunny'
+      'https://tab.gladly.io/cats?u=Bugs%20Bunny'
     )
   })
 
@@ -58,7 +48,7 @@ describe('Invite friend component', () => {
     mockProps.user.username = 'my+username'
     const wrapper = mount(<InviteFriends {...mockProps} />)
     expect(wrapper.find(TextField).first().prop('value')).toBe(
-      'https://tab.gladly.io/?u=my%2Busername'
+      'https://tab.gladly.io/cats?u=my%2Busername'
     )
   })
 
@@ -68,7 +58,7 @@ describe('Invite friend component', () => {
     mockProps.user.username = 'Stinky💩'
     const wrapper = mount(<InviteFriends {...mockProps} />)
     expect(wrapper.find(TextField).first().prop('value')).toBe(
-      'https://tab.gladly.io/?u=Stinky%F0%9F%92%A9'
+      'https://tab.gladly.io/cats?u=Stinky%F0%9F%92%A9'
     )
   })
 
@@ -77,7 +67,7 @@ describe('Invite friend component', () => {
     const mockProps = getMockProps()
     mockProps.user.username = undefined
     const wrapper = mount(<InviteFriends {...mockProps} />)
-    const referralUrl = 'https://tab.gladly.io'
+    const referralUrl = 'https://tab.gladly.io/cats'
     expect(wrapper.find(TextField).first().prop('value')).toBe(referralUrl)
   })
 
@@ -86,7 +76,7 @@ describe('Invite friend component', () => {
     const mockProps = getMockProps()
     mockProps.user = undefined
     const wrapper = mount(<InviteFriends {...mockProps} />)
-    const referralUrl = 'https://tab.gladly.io'
+    const referralUrl = 'https://tab.gladly.io/cats'
     expect(wrapper.find(TextField).first().prop('value')).toBe(referralUrl)
   })
 })
