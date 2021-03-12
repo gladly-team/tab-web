@@ -60,10 +60,9 @@ export const externalNavigation = (url) => {
   // eslint-disable-next-line no-undef
   window.location = url
 }
-export const baseURL = 'https://tab.gladly.io/cats'
-export const getReferralUrl = (username) => {
+export const getReferralUrl = (baseURL, username) => {
   const referralUrl = username
-    ? `${baseURL}?u=${encodeURIComponent(username)}`
+    ? `${baseURL}/?u=${encodeURIComponent(username)}`
     : baseURL
   return referralUrl
 }

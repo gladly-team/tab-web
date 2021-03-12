@@ -13,9 +13,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const InviteFriends = ({ user: { username } }) => {
+const InviteFriends = ({ baseURL, user: { username } }) => {
   const classes = useStyles()
-  const referralUrl = getReferralUrl(username)
+  const referralUrl = getReferralUrl(baseURL, username)
   const textFieldRef = React.createRef()
 
   const highlightReferralUrl = () => {
@@ -46,12 +46,14 @@ const InviteFriends = ({ user: { username } }) => {
 }
 
 InviteFriends.propTypes = {
+  baseURL: PropTypes.string,
   user: PropTypes.shape({
     username: PropTypes.string,
   }),
 }
 
 InviteFriends.defaultProps = {
+  baseURL: 'https://tab.gladly.io',
   user: {},
 }
 

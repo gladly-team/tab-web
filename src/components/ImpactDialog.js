@@ -123,7 +123,9 @@ const ImpactDialog = ({
               <div className={classes.InviteFriends}>
                 <InviteFriends user={user} className={classes.InviteFriends} />
               </div>
-              <SocialShare url={getReferralUrl(user.username)} />
+              <SocialShare
+                url={getReferralUrl('https://tab.gladly.io', user.username)}
+              />
             </div>
           </MuiDialogContent>
           <MuiDialogActions>
@@ -162,7 +164,9 @@ const ImpactDialog = ({
               <div className={classes.InviteFriends}>
                 <InviteFriends user={user} />
               </div>
-              <SocialShare url={getReferralUrl(user.username)} />
+              <SocialShare
+                url={getReferralUrl('https://tab.gladly.io', user.username)}
+              />
             </div>
           </MuiDialogContent>
           <MuiDialogActions>
