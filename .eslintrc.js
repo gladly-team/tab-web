@@ -19,7 +19,6 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
     'no-console': 'error',
-    'no-unused-expressions': ['error', { allowShortCircuit: true }],
   },
   overrides: [
     // Set Jest rules only for test files.

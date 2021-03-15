@@ -40,7 +40,9 @@ const callMutation = async ({ mutation, variables, cache = true }) => {
     mutation,
     variables,
   })
-  cache && recachePage()
+  if (cache) {
+    recachePage()
+  }
   return result
 }
 
