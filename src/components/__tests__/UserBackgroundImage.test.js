@@ -178,4 +178,31 @@ describe('UserBackgroundImage component', () => {
     })
     expect(wrapper.find('CSSTransition').length).toEqual(2)
   })
+
+  it('does not create an error if the first image doesnt load from cache', async () => {
+    const UserBackgroundImage = require('src/components/UserBackgroundImage')
+      .default
+    const mockProps = {
+      ...getMockProps(),
+      user: {
+        ...getMockProps().user,
+        backgroundImage: {
+          ...getMockProps().user.backgroundImage,
+          timestamp: '2021-01-30T18:37:04.604Z',
+        },
+      },
+    }
+    const wrapper = mount(<UserBackgroundImage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+    })
+    expect(wrapper.find('CSSTransition').length).toEqual(1)
+    await act(async () => {
+      await wrapper.find('img').props().onLoad()
+    })
+    await act(async () => {
+      wrapper.update()
+    })
+    expect(wrapper.find('CSSTransition').length).toEqual(1)
+  })
 })

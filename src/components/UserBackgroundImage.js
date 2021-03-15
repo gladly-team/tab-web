@@ -7,13 +7,14 @@ import isToday from 'dayjs/plugin/isToday'
 import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDailyImageMutation'
 import { recachePage } from 'src/utils/caching'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
+import clsx from 'clsx'
 
 dayjs.extend(isToday)
 const useStyles = makeStyles(() => ({
   hiddenImage: {
     visibility: 'hidden',
   },
-  previousImage: {
+  backgroundImage: {
     boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
@@ -25,21 +26,12 @@ const useStyles = makeStyles(() => ({
     right: 0,
     left: 0,
     zIndex: 'auto',
+  },
+  previousImage: {
     backgroundImage: ({ previousImage }) =>
       previousImage ? `url(${previousImage.imageURL})` : 'none',
   },
   latestImage: {
-    boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
-    backgroundAttachment: 'fixed',
-    backgroundSize: 'cover',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    zIndex: 'auto',
     backgroundImage: ({ latestImage }) =>
       latestImage ? `url(${latestImage.imageURL})` : 'none',
   },
@@ -52,6 +44,27 @@ const useStyles = makeStyles(() => ({
     zIndex: 'auto',
     backgroundColor: `rgba(0, 0, 0, 0.15)`,
   },
+  backgroundImageEnter: {
+    opacity: 0,
+  },
+  backgroundImageEnterActive: {
+    opacity: 1,
+    transition: 'opacity 2000ms',
+  },
+  backgroundImageAppear: {
+    opacity: 0,
+  },
+  backgroundImageAppearActive: {
+    opacity: 1,
+    transition: 'opacity 2000ms',
+  },
+  backgroundImageExit: {
+    opacity: 1,
+  },
+  backgroundImageExitActive: {
+    opacity: 0,
+    transition: 'opacity 2000ms',
+  },
 }))
 const UserBackgroundImage = ({ user }) => {
   const {
@@ -63,10 +76,12 @@ const UserBackgroundImage = ({ user }) => {
   ])
 
   const fireOnLoad = () => {
-    setBackgroundImages((prevState) => [
-      prevState[prevState.length - 2],
-      { ...prevState[prevState.length - 1], preloaded: true },
-    ])
+    if (backgroundImages.length > 1) {
+      setBackgroundImages((prevState) => [
+        prevState[prevState.length - 2],
+        { ...prevState[prevState.length - 1], preloaded: true },
+      ])
+    }
   }
   useEffect(() => {
     // Show a new background image every day.
@@ -75,13 +90,13 @@ const UserBackgroundImage = ({ user }) => {
         setUserBkgDailyImage: {
           user: {
             // eslint-disable-next-line no-shadow
-            backgroundImage: { imageURL },
+            backgroundImage: { imageURL: updatedImageURL },
           },
         },
       } = await SetBackgroundDailyImageMutation(userId)
       setBackgroundImages((prevImages) => [
         ...prevImages,
-        { imageURL, preloaded: false },
+        { imageURL: updatedImageURL, preloaded: false },
       ])
       await recachePage()
     }
@@ -95,7 +110,6 @@ const UserBackgroundImage = ({ user }) => {
   const previousImage = backgroundImages[0]
   const latestImage = backgroundImages[backgroundImages.length - 1]
   const classes = useStyles({ previousImage, latestImage })
-
   return (
     <div>
       <img
@@ -111,13 +125,21 @@ const UserBackgroundImage = ({ user }) => {
               key={img.imageURL}
               appear
               timeout={2000}
-              classNames="my-node"
+              classNames={{
+                appear: classes.backgroundImageAppear,
+                appearActive: classes.backgroundImageAppearActive,
+                enter: classes.backgroundImageEnter,
+                enterActive: classes.backgroundImageEnterActive,
+                exit: classes.backgroundImageExit,
+                exitActive: classes.backgroundImageExitActive,
+              }}
             >
               <div>
                 <div
-                  className={
+                  className={clsx(
+                    classes.backgroundImage,
                     classes[index === 0 ? 'previousImage' : 'latestImage']
-                  }
+                  )}
                 />
                 <div className={classes.tint} />
               </div>
