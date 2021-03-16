@@ -169,10 +169,14 @@ describe('UserBackgroundImage component', () => {
     await act(async () => {
       await flushAllPromises()
     })
+    await act(async () => {
+      wrapper.update()
+    })
     expect(wrapper.find('CSSTransition').length).toEqual(1)
     await act(async () => {
       await wrapper.find('img').props().onLoad()
     })
+
     await act(async () => {
       wrapper.update()
     })

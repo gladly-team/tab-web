@@ -13,6 +13,13 @@ dayjs.extend(isToday)
 const useStyles = makeStyles(() => ({
   hiddenImage: {
     visibility: 'hidden',
+    height: '1%',
+    width: '1%',
+  },
+  wrapper: {
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
   },
   backgroundImage: {
     boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
@@ -89,7 +96,6 @@ const UserBackgroundImage = ({ user }) => {
       const {
         setUserBkgDailyImage: {
           user: {
-            // eslint-disable-next-line no-shadow
             backgroundImage: { imageURL: updatedImageURL },
           },
         },
@@ -111,7 +117,7 @@ const UserBackgroundImage = ({ user }) => {
   const latestImage = backgroundImages[backgroundImages.length - 1]
   const classes = useStyles({ previousImage, latestImage })
   return (
-    <div>
+    <div className={classes.wrapper}>
       <img
         src={latestImage.imageURL}
         alt="background"
@@ -120,7 +126,7 @@ const UserBackgroundImage = ({ user }) => {
       />
       <TransitionGroup>
         {backgroundImages.map((img, index) =>
-          img.imageURL ? (
+          img.imageURL && img.preloaded ? (
             <CSSTransition
               key={img.imageURL}
               appear
