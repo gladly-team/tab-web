@@ -2,13 +2,18 @@
 
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
-import { fetchQuery } from 'react-relay'
+// eslint-disable-next-line camelcase
+import { fetchQuery_DEPRECATED } from 'react-relay'
 import { useAuthUser } from 'next-firebase-auth'
 import { getRelayEnvironment } from 'src/utils/relayEnvironment'
 
 const fetcher = async (query, variables) => {
   const environment = getRelayEnvironment()
-  return fetchQuery(environment, JSON.parse(query), JSON.parse(variables))
+  return fetchQuery_DEPRECATED(
+    environment,
+    JSON.parse(query),
+    JSON.parse(variables)
+  )
 }
 
 const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
