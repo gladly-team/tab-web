@@ -11,6 +11,10 @@ import clsx from 'clsx'
 
 dayjs.extend(isToday)
 const useStyles = makeStyles(() => ({
+  '@keyframes fadeIn': {
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+  },
   hiddenImage: {
     visibility: 'hidden',
     height: '1%',
@@ -20,6 +24,7 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     height: '100%',
     width: '100%',
+    animation: '$fadeIn 0.5s ease',
   },
   backgroundImage: {
     boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
@@ -56,21 +61,14 @@ const useStyles = makeStyles(() => ({
   },
   backgroundImageEnterActive: {
     opacity: 1,
-    transition: 'opacity 2000ms',
-  },
-  backgroundImageAppear: {
-    opacity: 0,
-  },
-  backgroundImageAppearActive: {
-    opacity: 1,
-    transition: 'opacity 2000ms',
+    transition: 'opacity 1000ms',
   },
   backgroundImageExit: {
     opacity: 1,
   },
   backgroundImageExitActive: {
     opacity: 0,
-    transition: 'opacity 2000ms',
+    transition: 'opacity 1000ms',
   },
 }))
 const UserBackgroundImage = ({ user }) => {
@@ -129,11 +127,10 @@ const UserBackgroundImage = ({ user }) => {
           img.imageURL && img.preloaded ? (
             <CSSTransition
               key={img.imageURL}
-              appear
-              timeout={2000}
+              in
+              timeout={1000}
+              enter={index > 0}
               classNames={{
-                appear: classes.backgroundImageAppear,
-                appearActive: classes.backgroundImageAppearActive,
                 enter: classes.backgroundImageEnter,
                 enterActive: classes.backgroundImageEnterActive,
                 exit: classes.backgroundImageExit,
