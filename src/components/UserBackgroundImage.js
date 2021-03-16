@@ -98,10 +98,12 @@ const UserBackgroundImage = ({ user }) => {
           },
         },
       } = await SetBackgroundDailyImageMutation(userId)
-      setBackgroundImages((prevImages) => [
-        ...prevImages,
-        { imageURL: updatedImageURL, preloaded: false },
-      ])
+      setBackgroundImages((prevImages) => {
+        const newImage = { imageURL: updatedImageURL, preloaded: false }
+        return prevImages.length > 1
+          ? [prevImages[1], newImage]
+          : [prevImages[0], newImage]
+      })
       await recachePage()
     }
     if (
