@@ -37,6 +37,7 @@ import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
+import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntroFlowMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import { getAdUnits, areAdsEnabled, showMockAds } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
@@ -50,6 +51,7 @@ import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
 import { CAT_CHARITY } from 'src/utils/constants'
 import { recachePage } from 'src/utils/caching'
+import OnboardingFlow from 'src/components/OnboardingFlow'
 
 const useStyles = makeStyles((theme) => ({
   '@keyframes fadeIn': {
@@ -62,6 +64,12 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.background.paper,
     overflow: 'hidden',
     animation: '$fadeIn 0.5s ease',
+  },
+  OnboardingFlow: {
+    display: 'flex',
+    height: '100vh',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   fullContainer: {
     position: 'absolute',
@@ -239,6 +247,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           tabs
           vcCurrent
           id
+          hasViewedIntroFlow
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
         }
@@ -365,134 +374,152 @@ const Index = ({ data: initialData }) => {
   const onAdError = (e) => {
     logger.error(e)
   }
+
+  const onCompletedOnboarding = () => {
+    SetHasViewedIntroFlowMutation({ enabled: true, userId: userGlobalId })
+  }
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
-      {enableBackgroundImages ? (
-        <UserBackgroundImageContainer user={user} />
-      ) : null}
-      <div className={classes.fullContainer}>
-        <div className={classes.topContainer}>
-          <div className={classes.userMenuContainer}>
-            <UserImpactContainer
-              userId={userGlobalId}
-              userImpact={userImpact}
-              user={user}
-            />
-            <div>
-              <Typography variant="h5" className={clsx(classes.userMenuItem)}>
-                <MoneyRaisedContainer app={app} />
-              </Typography>
+      {!user.hasViewedIntroFlow ? (
+        <div className={classes.OnboardingFlow}>
+          <OnboardingFlow onComplete={onCompletedOnboarding} />
+        </div>
+      ) : (
+        <>
+          {enableBackgroundImages ? (
+            <UserBackgroundImageContainer user={user} />
+          ) : null}
+          <div className={classes.fullContainer}>
+            <div className={classes.topContainer}>
+              <div className={classes.userMenuContainer}>
+                <UserImpactContainer
+                  userId={userGlobalId}
+                  userImpact={userImpact}
+                  user={user}
+                />
+                <div className={classes.moneyRaisedContainer}>
+                  <Typography
+                    variant="h5"
+                    className={clsx(classes.userMenuItem)}
+                  >
+                    <MoneyRaisedContainer app={app} />
+                  </Typography>
+                </div>
+                <div className={classes.settingsIconContainer}>
+                  <Link to={accountURL}>
+                    <IconButton>
+                      <SettingsIcon
+                        className={clsx(
+                          classes.userMenuItem,
+                          classes.settingsIcon
+                        )}
+                      />
+                    </IconButton>
+                  </Link>
+                </div>
+              </div>
             </div>
-            <div className={classes.settingsIconContainer}>
-              <Link to={accountURL}>
-                <IconButton>
-                  <SettingsIcon
-                    className={clsx(classes.userMenuItem, classes.settingsIcon)}
-                  />
-                </IconButton>
+            {showAchievements ? (
+              <Link
+                to={achievementsURL}
+                className={classes.achievementsContainer}
+                data-test-id="achievements"
+              >
+                <Achievement
+                  className={classes.achievement}
+                  impactText="Plant 1 tree"
+                  status="inProgress"
+                  taskText="Open tabs 5 days in a row"
+                  deadlineTime={dayjs().add(3, 'days').toISOString()}
+                  progress={{
+                    currentNumber: 2,
+                    targetNumber: 5,
+                    visualizationType: 'checkmarks',
+                  }}
+                />
+                <Achievement
+                  badgeClassName={classes.achievementBadge}
+                  badgeOnly
+                  impactText="Plant 1 tree"
+                  status="failure"
+                  taskText="Recruit 1 friend"
+                  completedTime={dayjs().subtract(2, 'days').toISOString()}
+                  deadlineTime={dayjs().subtract(2, 'days').toISOString()}
+                />
+                <Achievement
+                  badgeClassName={classes.achievementBadge}
+                  badgeOnly
+                  impactText="Plant 1 tree"
+                  status="success"
+                  taskText="Open 100 tabs"
+                  completedTime={dayjs().subtract(5, 'days').toISOString()}
+                  deadlineTime={dayjs().subtract(5, 'days').toISOString()}
+                />
+                <div /> {/* take up a spacing unit */}
+                <div className={classes.timelineBar} />
               </Link>
+            ) : null}
+          </div>
+          <div className={classes.centerContainer}>
+            <div className={classes.searchBarContainer}>
+              <Logo
+                includeText
+                color={enableBackgroundImages ? 'white' : null}
+                className={classes.logo}
+              />
+              <SearchInput className={classes.searchBar} />
             </div>
           </div>
-        </div>
-        {showAchievements ? (
-          <Link
-            to={achievementsURL}
-            className={classes.achievementsContainer}
-            data-test-id="achievements"
-          >
-            <Achievement
-              className={classes.achievement}
-              impactText="Plant 1 tree"
-              status="inProgress"
-              taskText="Open tabs 5 days in a row"
-              deadlineTime={dayjs().add(3, 'days').toISOString()}
-              progress={{
-                currentNumber: 2,
-                targetNumber: 5,
-                visualizationType: 'checkmarks',
-              }}
-            />
-            <Achievement
-              badgeClassName={classes.achievementBadge}
-              badgeOnly
-              impactText="Plant 1 tree"
-              status="failure"
-              taskText="Recruit 1 friend"
-              completedTime={dayjs().subtract(2, 'days').toISOString()}
-              deadlineTime={dayjs().subtract(2, 'days').toISOString()}
-            />
-            <Achievement
-              badgeClassName={classes.achievementBadge}
-              badgeOnly
-              impactText="Plant 1 tree"
-              status="success"
-              taskText="Open 100 tabs"
-              completedTime={dayjs().subtract(5, 'days').toISOString()}
-              deadlineTime={dayjs().subtract(5, 'days').toISOString()}
-            />
-            <div /> {/* take up a spacing unit */}
-            <div className={classes.timelineBar} />
-          </Link>
-        ) : null}
-      </div>
-      <div className={classes.centerContainer}>
-        <div className={classes.searchBarContainer}>
-          <Logo
-            includeText
-            color={enableBackgroundImages ? 'white' : null}
-            className={classes.logo}
-          />
-          <SearchInput className={classes.searchBar} />
-        </div>
-      </div>
-      <div className={classes.adsContainer}>
-        <div className={classes.adsContainerRectangles}>
-          {adUnits.rectangleAdSecondary && shouldRenderAds ? (
-            <AdComponent
-              adId={adUnits.rectangleAdSecondary.adId}
-              onAdDisplayed={(displayedAdInfo) => {
-                onAdDisplayed(displayedAdInfo, adContext)
-              }}
-              onError={onAdError}
-              style={{
-                display: 'flex',
-                minWidth: 300,
-                overflow: 'visible',
-              }}
-            />
-          ) : null}
-          {adUnits.rectangleAdPrimary && shouldRenderAds ? (
-            <AdComponent
-              adId={adUnits.rectangleAdPrimary.adId}
-              onAdDisplayed={(displayedAdInfo) => {
-                onAdDisplayed(displayedAdInfo, adContext)
-              }}
-              onError={onAdError}
-              style={{
-                display: 'flex',
-                minWidth: 300,
-                overflow: 'visible',
-                marginTop: 10,
-              }}
-            />
-          ) : null}
-        </div>
-        {adUnits.leaderboard && shouldRenderAds ? (
-          <div className={classes.adContainerLeaderboard}>
-            <AdComponent
-              adId={adUnits.leaderboard.adId}
-              onAdDisplayed={(displayedAdInfo) => {
-                onAdDisplayed(displayedAdInfo, adContext)
-              }}
-              onError={onAdError}
-              style={{
-                overflow: 'visible',
-                minWidth: 728,
-              }}
-            />
+          <div className={classes.adsContainer}>
+            <div className={classes.adsContainerRectangles}>
+              {adUnits.rectangleAdSecondary && shouldRenderAds ? (
+                <AdComponent
+                  adId={adUnits.rectangleAdSecondary.adId}
+                  onAdDisplayed={(displayedAdInfo) => {
+                    onAdDisplayed(displayedAdInfo, adContext)
+                  }}
+                  onError={onAdError}
+                  style={{
+                    display: 'flex',
+                    minWidth: 300,
+                    overflow: 'visible',
+                  }}
+                />
+              ) : null}
+              {adUnits.rectangleAdPrimary && shouldRenderAds ? (
+                <AdComponent
+                  adId={adUnits.rectangleAdPrimary.adId}
+                  onAdDisplayed={(displayedAdInfo) => {
+                    onAdDisplayed(displayedAdInfo, adContext)
+                  }}
+                  onError={onAdError}
+                  style={{
+                    display: 'flex',
+                    minWidth: 300,
+                    overflow: 'visible',
+                    marginTop: 10,
+                  }}
+                />
+              ) : null}
+            </div>
+            {adUnits.leaderboard && shouldRenderAds ? (
+              <div className={classes.adContainerLeaderboard}>
+                <AdComponent
+                  adId={adUnits.leaderboard.adId}
+                  onAdDisplayed={(displayedAdInfo) => {
+                    onAdDisplayed(displayedAdInfo, adContext)
+                  }}
+                  onError={onAdError}
+                  style={{
+                    overflow: 'visible',
+                    minWidth: 728,
+                  }}
+                />
+              </div>
+            ) : null}
           </div>
-        ) : null}
-      </div>
+        </>
+      )}
     </div>
   )
 }
