@@ -85,6 +85,9 @@ const nextConfig = {
     ]
   },
 
+  // https://nextjs.org/docs/api-reference/next.config.js/react-strict-mode
+  reactStrictMode: true,
+
   webpack: (config, options) => {
     // Sentry error logging. See:
     // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/next.config.js
