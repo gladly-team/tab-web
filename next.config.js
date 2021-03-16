@@ -85,8 +85,10 @@ const nextConfig = {
     ]
   },
 
+  // Strict mode may break styles:
+  // https://github.com/vercel/next.js/issues/11600#issuecomment-734784460
   // https://nextjs.org/docs/api-reference/next.config.js/react-strict-mode
-  reactStrictMode: true,
+  // reactStrictMode: true,
 
   webpack: (config, options) => {
     // Sentry error logging. See:
