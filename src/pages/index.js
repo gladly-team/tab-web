@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100vw',
     background: theme.palette.background.paper,
     overflow: 'hidden',
-    animation: '$fadeIn 0.5s ease',
+    // animation: '$fadeIn 0.5s ease',
   },
   fullContainer: {
     position: 'absolute',
