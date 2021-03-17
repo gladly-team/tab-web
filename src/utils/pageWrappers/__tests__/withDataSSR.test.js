@@ -1,4 +1,5 @@
-import { fetchQuery } from 'react-relay'
+// eslint-disable-next-line camelcase
+import { fetchQuery_DEPRECATED as fetchQuery } from 'react-relay'
 import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'

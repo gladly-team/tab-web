@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash/lang'
-// eslint-disable-next-line camelcase
-import { fetchQuery_DEPRECATED } from 'react-relay'
+// TODO: use new fetchQuery
+import { fetchQuery_DEPRECATED as fetchQuery } from 'react-relay'
 import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 
 // A wrapper for `getServerSideProps` that fetches data
@@ -35,11 +35,7 @@ const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
   let queryProps = {}
   let initialRecords = {}
   if (query) {
-    const queryPropsRaw = await fetchQuery_DEPRECATED(
-      environment,
-      query,
-      variables
-    )
+    const queryPropsRaw = await fetchQuery(environment, query, variables)
 
     // Workaround to remove `undefined` values, which Next.js
     // cannot serialize:
