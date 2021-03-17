@@ -13,7 +13,12 @@ import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
-import { accountURL, achievementsURL, dashboardURL } from 'src/utils/urls'
+import {
+  accountURL,
+  achievementsURL,
+  dashboardURL,
+  HELP_URL,
+} from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
 
 const sidebarWidth = 240
@@ -111,6 +116,7 @@ const SettingsPage = (props) => {
             </SettingsMenuItem>
           ) : null}
           <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
+          <SettingsMenuItem to={HELP_URL}>Help</SettingsMenuItem>
         </List>
       </div>
       <div
