@@ -374,12 +374,10 @@ const Index = ({ data: initialData }) => {
     await SetHasViewedIntroFlowMutation({ enabled: true, userId: userGlobalId })
     setJustFinishedIntroFlow(true)
   }
-  const hasViewedIntroFlow = get(user, 'hasViewedIntroFlow')
-    ? get(user, 'hasViewedIntroFlow')
-    : justFinishedIntroFlow
+  const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
-      {!hasViewedIntroFlow ? (
+      {showIntro ? (
         <div className={classes.OnboardingFlow}>
           <div
             style={{
