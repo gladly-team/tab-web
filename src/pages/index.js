@@ -293,6 +293,20 @@ const Index = ({ data: initialData }) => {
   const userGlobalId = get(user, 'id')
   const [tabId] = useState(uuid())
 
+  // this is a temporary workaround as the latest updates to the
+  // relay store do not push into this component, so we are manually
+  // toggling state and a rerender when we successfully fire the
+  // SetHasViewedIntroFlowMutation
+  const [hasViewedIntroFlow, setHasViewedIntroFlow] = useState(
+    get(user, 'hasViewedIntroFlow')
+  )
+  useEffect(() => {
+    setHasViewedIntroFlow((prevState) =>
+      user.hasViewedIntroFlow !== prevState
+        ? user.hasViewedIntroFlow
+        : prevState
+    )
+  }, [user])
   // log tab count when user first visits
   useEffect(() => {
     async function mutateNCache() {
@@ -375,12 +389,13 @@ const Index = ({ data: initialData }) => {
     logger.error(e)
   }
 
-  const onCompletedOnboarding = () => {
-    SetHasViewedIntroFlowMutation({ enabled: true, userId: userGlobalId })
+  const onCompletedOnboarding = async () => {
+    await SetHasViewedIntroFlowMutation({ enabled: true, userId: userGlobalId })
+    setHasViewedIntroFlow(true)
   }
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
-      {!user.hasViewedIntroFlow ? (
+      {!hasViewedIntroFlow ? (
         <div className={classes.OnboardingFlow}>
           <OnboardingFlow onComplete={onCompletedOnboarding} />
         </div>

@@ -4,12 +4,15 @@ import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { accountURL } from 'src/utils/urls'
+import { act } from 'react-dom/test-utils'
 import {
   showMockAchievements,
   showBackgroundImages,
 } from 'src/utils/featureFlags'
+import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import Achievement from 'src/components/Achievement'
 import FullPageLoader from 'src/components/FullPageLoader'
+import OnboardingFlow from 'src/components/OnboardingFlow'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import useData from 'src/utils/hooks/useData'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
@@ -31,6 +34,9 @@ jest.mock('src/utils/ssr')
 jest.mock('src/utils/adHelpers', () => ({
   getAdUnits: jest.fn().mockReturnValue({}),
 }))
+
+jest.mock('src/utils/mutations/SetHasViewedIntroFlowMutation', () => () => {})
+jest.mock('src/components/OnboardingFlow', () => () => <div />)
 jest.mock('src/components/Logo')
 jest.mock('src/components/MoneyRaisedContainer', () => () => <div />)
 jest.mock('src/components/UserImpactContainer', () => () => <div />)
@@ -84,6 +90,7 @@ const getMockProps = () => ({
       tabs: 221,
       vcCurrent: 78,
       id: 'asdf',
+      hasViewedIntroFlow: true,
     },
     userImpact: {
       userId: 'asdf',
@@ -283,6 +290,7 @@ describe('index.js', () => {
         user: {
           tabs: 221,
           vcCurrent: 78,
+          hasViewedIntroFlow: true,
         },
         userImpact: {
           userId: 'asdf',
@@ -445,4 +453,84 @@ describe('index.js', () => {
       adUnitCode: '/12345/SomeAdUnit',
     })
   })
+})
+it('shows the intro flow if a user has not completed it', () => {
+  const mockProps = {
+    data: {
+      app: {},
+      user: {
+        tabs: 221,
+        vcCurrent: 78,
+        id: 'asdf',
+        hasViewedIntroFlow: false,
+      },
+      userImpact: {
+        userId: 'asdf',
+        visitsUntilNextImpact: 2,
+        pendingUserReferralImpact: 10,
+        pendingUserReferralCount: 1,
+        userImpactMetric: 3,
+        confirmedImpact: true,
+        hasClaimedLatestReward: true,
+      },
+    },
+  }
+  useData.mockReturnValue({
+    data: {
+      ...getMockProps().data,
+      user: {
+        tabs: 221,
+        vcCurrent: 78,
+        id: 'asdf',
+        hasViewedIntroFlow: false,
+      },
+    },
+  })
+  const IndexPage = require('src/pages/index').default
+  const wrapper = mount(<IndexPage {...mockProps} />)
+  expect(wrapper.find(OnboardingFlow).exists()).toBe(true)
+})
+
+it('shows the homepage once a user completes the introflow', async () => {
+  const mockProps = {
+    data: {
+      app: {},
+      user: {
+        tabs: 221,
+        vcCurrent: 78,
+        id: 'asdf',
+        hasViewedIntroFlow: false,
+      },
+      userImpact: {
+        userId: 'asdf',
+        visitsUntilNextImpact: 2,
+        pendingUserReferralImpact: 10,
+        pendingUserReferralCount: 1,
+        userImpactMetric: 3,
+        confirmedImpact: true,
+        hasClaimedLatestReward: true,
+      },
+    },
+  }
+  useData.mockReturnValue({
+    data: {
+      ...getMockProps().data,
+      user: {
+        tabs: 221,
+        vcCurrent: 78,
+        id: 'asdf',
+        hasViewedIntroFlow: false,
+      },
+    },
+  })
+  const IndexPage = require('src/pages/index').default
+  const wrapper = mount(<IndexPage {...mockProps} />)
+  expect(wrapper.find(OnboardingFlow).exists()).toBe(true)
+  const flow = wrapper.find(OnboardingFlow)
+  await act(async () => {
+    flow.props().onComplete()
+    await flushAllPromises()
+    wrapper.update()
+  })
+  expect(wrapper.find(OnboardingFlow).exists()).toBe(false)
 })
