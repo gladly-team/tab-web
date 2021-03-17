@@ -183,7 +183,6 @@ const Account = ({ data: initialData }) => {
             Account
           </Typography>
           <Button
-            color="default"
             variant="contained"
             onClick={onLogoutClick}
             disabled={isLoggingOut}
@@ -207,7 +206,6 @@ const Account = ({ data: initialData }) => {
           name="Beta Enabled"
           actionButton={
             <Button
-              color="default"
               variant="contained"
               disabled={isRevertingToClassicTab}
               onClick={() => {
@@ -228,7 +226,6 @@ const Account = ({ data: initialData }) => {
               name="Data privacy choices"
               actionButton={
                 <Button
-                  color="default"
                   variant="contained"
                   onClick={() => tabCMP.openTCFConsentDialog()}
                 >
