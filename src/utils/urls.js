@@ -54,6 +54,7 @@ export const dashboardURL = createPageURL('/')
 export const PWAManifestURL = withBasePath('/manifest.json')
 export const EXTERNAL_CONTACT_US_URL =
   'https://gladly.zendesk.com/hc/en-us/requests/new'
+export const HELP_URL = 'https://tab.gladly.io/help/'
 // eslint-disable-next-line no-undef
 export const reload = () => window.location.reload()
 export const externalNavigation = (url) => {

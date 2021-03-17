@@ -11,13 +11,16 @@ import Typography from '@material-ui/core/Typography'
 import ImpactCounter from 'src/components/ImpactCounter'
 import RandomGif from 'src/components/RandomGif'
 import InviteFriends from 'src/components/InviteFriends'
+import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
   currencyText: { color: get(theme, 'palette.backgroundContrastText.main') },
+  title: { textAlign: 'center' },
   rootModal: { zIndex: '10000000 !important', borderRadius: '5px' },
   walkMe: { display: 'flex', flexDirection: 'column', alignItems: 'center' },
   impactCounter: { padding: '15px' },
   InviteFriends: { marginRight: '15px' },
+  justify: { textAlign: 'justify' },
   typographySpacing: { paddingTop: '15px' },
   centerImage: { display: 'flex', justifyContent: 'center' },
   shareContainer: {
@@ -45,7 +48,7 @@ const ImpactDialog = ({
       dialogContent = (
         <>
           <MuiDialogTitle disableTypography className={classes.root}>
-            <Typography variant="h6">
+            <Typography variant="h6" className={classes.title}>
               Are you ready to turn your Tabs into a force for good?
             </Typography>
           </MuiDialogTitle>
@@ -53,7 +56,9 @@ const ImpactDialog = ({
             <div className={classes.centerImage}>
               <RandomGif />
             </div>
-            <Typography className={classes.typographySpacing}>
+            <Typography
+              className={clsx(classes.typographySpacing, classes.justify)}
+            >
               Each time you open a tab, you'll be helping shelter cats get
               adopted by{' '}
               <a
@@ -83,10 +88,12 @@ const ImpactDialog = ({
       dialogContent = (
         <>
           <MuiDialogTitle disableTypography className={classes.root}>
-            <Typography variant="h6">Open a new tab</Typography>
+            <Typography variant="h6" className={classes.title}>
+              Open a new tab
+            </Typography>
           </MuiDialogTitle>
           <MuiDialogContent className={classes.walkMe}>
-            <Typography id="alert-dialog-description">
+            <Typography className={classes.justify}>
               When you do, you'll donate enough to give a shelter cat a treat
               during training. We'll track how many treats you've given on the
               top of the page:
@@ -105,7 +112,7 @@ const ImpactDialog = ({
       dialogContent = (
         <>
           <MuiDialogTitle disableTypography className={classes.root}>
-            <Typography variant="h6">
+            <Typography variant="h6" className={classes.title}>
               You just helped a shelter cat! Congrats!
             </Typography>
           </MuiDialogTitle>
@@ -113,7 +120,9 @@ const ImpactDialog = ({
             <div className={classes.centerImage}>
               <RandomGif />
             </div>
-            <Typography className={classes.typographySpacing}>
+            <Typography
+              className={clsx(classes.typographySpacing, classes.justify)}
+            >
               The more people who open tabs, the more good we can do! Get a
               friend on board and we'll give a treat to another 10 shelter cats:
             </Typography>
@@ -141,7 +150,7 @@ const ImpactDialog = ({
       dialogContent = (
         <>
           <MuiDialogTitle disableTypography className={classes.root}>
-            <Typography variant="h6">
+            <Typography variant="h6" className={classes.title}>
               {`You just put ${referralImpact} cat${
                 referralImpact > 1 ? 's' : ''
               } on track for adoption!`}
@@ -151,7 +160,9 @@ const ImpactDialog = ({
             <div className={classes.centerImage}>
               <RandomGif />
             </div>
-            <Typography className={classes.typographySpacing}>
+            <Typography
+              className={clsx(classes.typographySpacing, classes.justify)}
+            >
               Congratulations! You're making a huge impact for these animals in
               need. Want to help even more cats? Invite a few more friends!
             </Typography>
