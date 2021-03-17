@@ -8,7 +8,7 @@ import { PWAManifestURL } from 'src/utils/urls'
 import Logo192Apple from 'src/assets/logos/logo192-apple.png'
 import TabCMPHeadElements from 'src/components/TabCMPHeadElements'
 import theme from 'src/utils/theme'
-import { cache } from './_app.js'
+import { cache } from './_app'
 
 const { extractCritical } = createEmotionServer(cache)
 
