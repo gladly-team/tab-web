@@ -7,6 +7,7 @@ import { register, unregister } from 'next-offline/runtime'
 import { ThemeProvider } from '@material-ui/core/styles'
 import { CacheProvider } from '@emotion/react'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import StyledEngineProvider from '@material-ui/core/StyledEngineProvider'
 import createCache from '@emotion/cache'
 import { isClientSide } from 'src/utils/ssr'
 import theme from 'src/utils/theme'
@@ -89,12 +90,14 @@ const MyApp = (props) => {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <ErrorBoundary>
-          <Component {...pageProps} />
-        </ErrorBoundary>
-      </ThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <ErrorBoundary>
+            <Component {...pageProps} />
+          </ErrorBoundary>
+        </ThemeProvider>
+      </StyledEngineProvider>
     </CacheProvider>
   )
 }
