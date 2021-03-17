@@ -80,6 +80,12 @@ const MyApp = (props) => {
     }
   }, [])
 
+  // FIXME:
+  // SSR styles are broken, probably because of a MUI bug:
+  // https://github.com/mui-org/material-ui/issues/24109
+  // We might also need to migrate styles from `makeStyles` to Emotion.
+  // https://github.com/mui-org/material-ui/issues/24748#issuecomment-771856001
+  // https://next.material-ui.com/guides/interoperability/#styled-components
   return (
     <CacheProvider value={cache}>
       <Head>
