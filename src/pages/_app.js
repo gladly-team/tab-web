@@ -7,6 +7,7 @@ import { register, unregister } from 'next-offline/runtime'
 import { ThemeProvider } from '@material-ui/core/styles'
 import { CacheProvider } from '@emotion/react'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import StyledEngineProvider from '@material-ui/core/StyledEngineProvider'
 import createCache from '@emotion/cache'
 import { isClientSide } from 'src/utils/ssr'
 import theme from 'src/utils/theme'
@@ -96,10 +97,12 @@ const MyApp = (props) => {
         />
       </Head>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <ErrorBoundary>
-          <Component {...pageProps} />
-        </ErrorBoundary>
+        <StyledEngineProvider injectFirst>
+          <CssBaseline />
+          <ErrorBoundary>
+            <Component {...pageProps} />
+          </ErrorBoundary>
+        </StyledEngineProvider>
       </ThemeProvider>
     </CacheProvider>
   )
