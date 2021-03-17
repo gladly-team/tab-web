@@ -10,9 +10,7 @@ import MuiDialogActions from '@material-ui/core/DialogActions'
 import Typography from '@material-ui/core/Typography'
 import ImpactCounter from 'src/components/ImpactCounter'
 import RandomGif from 'src/components/RandomGif'
-import SocialShare from 'src/components/SocialShare'
 import InviteFriends from 'src/components/InviteFriends'
-import { getReferralUrl } from 'src/utils/urls'
 
 const useStyles = makeStyles((theme) => ({
   currencyText: { color: get(theme, 'palette.backgroundContrastText.main') },
@@ -123,7 +121,6 @@ const ImpactDialog = ({
               <div className={classes.InviteFriends}>
                 <InviteFriends user={user} className={classes.InviteFriends} />
               </div>
-              <SocialShare url={getReferralUrl(user.username)} />
             </div>
           </MuiDialogContent>
           <MuiDialogActions>
@@ -162,7 +159,6 @@ const ImpactDialog = ({
               <div className={classes.InviteFriends}>
                 <InviteFriends user={user} />
               </div>
-              <SocialShare url={getReferralUrl(user.username)} />
             </div>
           </MuiDialogContent>
           <MuiDialogActions>
