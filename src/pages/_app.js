@@ -5,7 +5,9 @@ import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { register, unregister } from 'next-offline/runtime'
 import { ThemeProvider } from '@material-ui/core/styles'
+import { CacheProvider } from '@emotion/react'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import createCache from '@emotion/cache'
 import { isClientSide } from 'src/utils/ssr'
 import theme from 'src/utils/theme'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
@@ -14,6 +16,10 @@ import initSentry from 'src/utils/initSentry'
 import ErrorBoundary from 'src/components/ErrorBoundary'
 import initializeCMP from 'src/utils/initializeCMP'
 import 'src/utils/styles/globalStyles.css'
+
+// For Material UI:
+// https://github.com/mui-org/material-ui/blob/next/examples/nextjs/pages/_app.js
+export const cache = createCache({ key: 'css', prepend: true })
 
 initAuth()
 
@@ -75,7 +81,7 @@ const MyApp = (props) => {
   }, [])
 
   return (
-    <>
+    <CacheProvider value={cache}>
       <Head>
         <title>Tab for a Cause</title>
         <meta
@@ -89,7 +95,7 @@ const MyApp = (props) => {
           <Component {...pageProps} />
         </ErrorBoundary>
       </ThemeProvider>
-    </>
+    </CacheProvider>
   )
 }
 

@@ -3,10 +3,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
+import createEmotionServer from '@emotion/server/create-instance'
 import { PWAManifestURL } from 'src/utils/urls'
-import theme from 'src/utils/theme'
 import Logo192Apple from 'src/assets/logos/logo192-apple.png'
 import TabCMPHeadElements from 'src/components/TabCMPHeadElements'
+import theme from 'src/utils/theme'
+import { cache } from './_app.js'
+
+const { extractCritical } = createEmotionServer(cache)
 
 class CustomDocument extends Document {
   render() {
@@ -76,9 +80,11 @@ class CustomDocument extends Document {
 CustomDocument.getInitialProps = async (ctx) => {
   // Material UI:
   // Render app and page and get the context of the page with collected side effects.
-  // https://github.com/mui-org/material-ui/tree/master/examples/nextjs
+  // https://github.com/mui-org/material-ui/tree/next/examples/nextjs
+  // Render app and page and get the context of the page with collected side effects.
   const sheets = new ServerStyleSheets()
   const originalRenderPage = ctx.renderPage
+
   ctx.renderPage = () =>
     originalRenderPage({
       // eslint-disable-next-line react/jsx-props-no-spreading
@@ -86,11 +92,20 @@ CustomDocument.getInitialProps = async (ctx) => {
     })
 
   const initialProps = await Document.getInitialProps(ctx)
+  const styles = extractCritical(initialProps.html)
+
   return {
     ...initialProps,
+    // Styles fragment is rendered after the app and page rendering finish.
     styles: [
       ...React.Children.toArray(initialProps.styles),
       sheets.getStyleElement(),
+      <style
+        key="emotion-style-tag"
+        data-emotion={`css ${styles.ids.join(' ')}`}
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: styles.css }}
+      />,
     ],
   }
 }
