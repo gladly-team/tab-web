@@ -20,7 +20,7 @@ module.exports = {
       '<rootDir>/jest/mediaFileTransformer.js',
   },
   transformIgnorePatterns: [
-    '/node_modules/',
+    '/node_modules/(?!(@material-ui/core)/)',
     '/.yalc/',
     '^.+\\.module\\.(css|sass|scss)$',
   ],
