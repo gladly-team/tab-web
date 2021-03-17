@@ -56,7 +56,6 @@ const ErrorPage = () => (
           }}
         >
           <Button
-            color="default"
             style={{ margin: 10 }}
             onClick={() => {
               externalNavigation(EXTERNAL_CONTACT_US_URL)

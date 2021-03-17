@@ -421,15 +421,11 @@ const Achievement = (props) => {
       </CardContent>
       {hasButton ? (
         <CardActions>
-          {showNextGoalButton ? (
-            <Button color="default">{nextGoalButtonText}</Button>
-          ) : null}
+          {showNextGoalButton ? <Button>{nextGoalButtonText}</Button> : null}
           {showInviteFriendsButton ? (
-            <Button color="default">{inviteFriendsButtonText}</Button>
+            <Button>{inviteFriendsButtonText}</Button>
           ) : null}
-          {showShareButton ? (
-            <Button color="default">{shareButtonText}</Button>
-          ) : null}
+          {showShareButton ? <Button>{shareButtonText}</Button> : null}
         </CardActions>
       ) : null}
     </Card>
