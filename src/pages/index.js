@@ -389,6 +389,16 @@ const Index = ({ data: initialData }) => {
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {!hasViewedIntroFlow ? (
         <div className={classes.OnboardingFlow}>
+          <div
+            style={{
+              padding: '20px 40px',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+            }}
+          >
+            <Logo style={{ height: 40 }} includeText />
+          </div>
           <OnboardingFlow onComplete={onCompletedOnboarding} />
         </div>
       ) : (
