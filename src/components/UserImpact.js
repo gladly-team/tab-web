@@ -7,7 +7,6 @@ import ImpactCounter from 'src/components/ImpactCounter'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import dynamic from 'next/dynamic'
-import { recachePage } from 'src/utils/caching'
 
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
@@ -38,13 +37,11 @@ const UserImpact = ({ userImpact, user }) => {
     setConfirmDialogOpen(false)
     setAlertDialogOpen(true)
     await UpdateImpactMutation(userId, CAT_CHARITY, { confirmImpact: true })
-    recachePage()
   }
   const handleAlertDialogClose = () => setAlertDialogOpen(false)
   const handleClaimReward = async () => {
     setRewardDialogOpen(true)
     await UpdateImpactMutation(userId, CAT_CHARITY, { claimLatestReward: true })
-    recachePage()
   }
   const handleRewardDialogClose = () => setRewardDialogOpen(false)
 
@@ -56,7 +53,6 @@ const UserImpact = ({ userImpact, user }) => {
     await UpdateImpactMutation(userId, CAT_CHARITY, {
       claimPendingUserReferralImpact: true,
     })
-    recachePage()
   }
   const classes = useStyles()
   return (

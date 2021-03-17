@@ -1,21 +1,28 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import SetBackgroundDailyImageMutation from 'src/utils/mutations/SetBackgroundDailyImageMutation'
 import dayjs from 'dayjs'
 import MockDate from 'mockdate'
+import { act } from 'react-dom/test-utils'
+import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 
 jest.mock('src/utils/mutations/SetBackgroundDailyImageMutation')
 jest.mock('src/utils/caching')
+const mockNow = '2021-01-30T18:37:04.604Z'
+SetBackgroundDailyImageMutation.mockReturnValue({
+  setUserBkgDailyImage: {
+    user: { backgroundImage: { imageURL: 'somenewURL', timestamp: mockNow } },
+  },
+})
 const getMockProps = () => ({
   user: {
     backgroundImage: {
-      imageUrl: 'randomstringurl',
-      timestamp: 'randomtimestamp',
+      imageURL: 'randomstringurl',
+      timestamp: mockNow,
     },
     id: 'randomID',
   },
 })
-const mockNow = '2021-01-30T18:37:04.604Z'
 
 beforeEach(() => {
   MockDate.set(dayjs(mockNow))
@@ -45,12 +52,10 @@ describe('UserBackgroundImage component', () => {
         backgroundImage: {},
       },
     }
-    expect(() => {
-      mount(<UserBackgroundImage {...mockProps} />)
-    }).not.toThrow()
+    expect(() => shallow(<UserBackgroundImage {...mockProps} />)).not.toThrow()
   })
 
-  it('loads a new background image when the date is not today', () => {
+  it('loads a new background image when the date is not today', async () => {
     const UserBackgroundImage = require('src/components/UserBackgroundImage')
       .default
     const mockProps = {
@@ -64,10 +69,13 @@ describe('UserBackgroundImage component', () => {
       },
     }
     mount(<UserBackgroundImage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+    })
     expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
   })
 
-  it('passes the userID into the setBackgroundDailyImageMutation', () => {
+  it('passes the userID into the setBackgroundDailyImageMutation', async () => {
     const UserBackgroundImage = require('src/components/UserBackgroundImage')
       .default
     const mockProps = {
@@ -81,10 +89,13 @@ describe('UserBackgroundImage component', () => {
       },
     }
     mount(<UserBackgroundImage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+    })
     expect(SetBackgroundDailyImageMutation).toHaveBeenCalledWith('randomID')
   })
 
-  it('does not load a new background image when the date is today', () => {
+  it('does not load a new background image when the date is today', async () => {
     const UserBackgroundImage = require('src/components/UserBackgroundImage')
       .default
     const mockProps = {
@@ -98,10 +109,13 @@ describe('UserBackgroundImage component', () => {
       },
     }
     mount(<UserBackgroundImage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+    })
     expect(SetBackgroundDailyImageMutation).not.toHaveBeenCalled()
   })
 
-  it('loads a new background image if background Image props are missing', () => {
+  it('loads a new background image if background Image props are missing', async () => {
     const UserBackgroundImage = require('src/components/UserBackgroundImage')
       .default
     const mockProps = {
@@ -112,10 +126,13 @@ describe('UserBackgroundImage component', () => {
       },
     }
     mount(<UserBackgroundImage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+    })
     expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
   })
 
-  it('loads a new background image if background Image timestamp is nil', () => {
+  it('loads a new background image if background Image timestamp is nil', async () => {
     const UserBackgroundImage = require('src/components/UserBackgroundImage')
       .default
     const mockProps = {
@@ -129,6 +146,67 @@ describe('UserBackgroundImage component', () => {
       },
     }
     mount(<UserBackgroundImage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+    })
     expect(SetBackgroundDailyImageMutation).toHaveBeenCalled()
+  })
+
+  it('updates the background image when the new image onLoad completes', async () => {
+    const UserBackgroundImage = require('src/components/UserBackgroundImage')
+      .default
+    const mockProps = {
+      ...getMockProps(),
+      user: {
+        ...getMockProps().user,
+        backgroundImage: {
+          ...getMockProps().user.backgroundImage,
+          timestamp: '2021-01-29T18:37:04.604Z',
+        },
+      },
+    }
+    const wrapper = mount(<UserBackgroundImage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+    })
+    await act(async () => {
+      wrapper.update()
+    })
+    expect(wrapper.find('CSSTransition').length).toEqual(1)
+    await act(async () => {
+      await wrapper.find('img').props().onLoad()
+    })
+
+    await act(async () => {
+      wrapper.update()
+    })
+    expect(wrapper.find('CSSTransition').length).toEqual(2)
+  })
+
+  it('does not create an error if the first image doesnt load from cache', async () => {
+    const UserBackgroundImage = require('src/components/UserBackgroundImage')
+      .default
+    const mockProps = {
+      ...getMockProps(),
+      user: {
+        ...getMockProps().user,
+        backgroundImage: {
+          ...getMockProps().user.backgroundImage,
+          timestamp: '2021-01-30T18:37:04.604Z',
+        },
+      },
+    }
+    const wrapper = mount(<UserBackgroundImage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+    })
+    expect(wrapper.find('CSSTransition').length).toEqual(1)
+    await act(async () => {
+      await wrapper.find('img').props().onLoad()
+    })
+    await act(async () => {
+      wrapper.update()
+    })
+    expect(wrapper.find('CSSTransition').length).toEqual(1)
   })
 })
