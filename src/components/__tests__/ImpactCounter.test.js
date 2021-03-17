@@ -2,6 +2,8 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import DashboardPopover from 'src/components/DashboardPopover'
+import Button from '@material-ui/core/Button'
 
 const getMockProps = () => ({
   includeNumber: false,
@@ -21,7 +23,11 @@ describe('ImpactCounter component', () => {
   it('hides the number on includeNumber false', () => {
     const ImpactCounter = require('src/components/ImpactCounter').default
     const wrapper = shallow(<ImpactCounter {...getMockProps()} />)
-    expect(wrapper.find(Typography).exists()).toEqual(false)
+    expect(
+      wrapper
+        .find(Typography)
+        .filterWhere((elem) => elem.prop('variant') === 'h3').length
+    ).toEqual(0)
   })
 
   it('displays the number on includeNumber true', () => {
@@ -60,5 +66,31 @@ describe('ImpactCounter component', () => {
     expect(wrapper.find(CircularProgress).first().prop('variant')).toEqual(
       'determinate'
     )
+  })
+
+  it('displays the popup when clicked on', () => {
+    const ImpactCounter = require('src/components/ImpactCounter').default
+    const defaultMockProps = getMockProps()
+
+    const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+
+    wrapper.find(Button).first().simulate('click')
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(true)
+  })
+
+  it('popover onClose sets isPopoverOpen to false', () => {
+    const ImpactCounter = require('src/components/ImpactCounter').default
+    const defaultMockProps = getMockProps()
+
+    const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+
+    wrapper.find(Button).simulate('click')
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(true)
+
+    wrapper.find(DashboardPopover).prop('onClose')()
+    wrapper.update()
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
   })
 })
