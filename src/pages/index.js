@@ -49,7 +49,6 @@ import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
 import { CAT_CHARITY } from 'src/utils/constants'
-import { recachePage } from 'src/utils/caching'
 
 const useStyles = makeStyles((theme) => ({
   '@keyframes fadeIn': {
@@ -286,16 +285,12 @@ const Index = ({ data: initialData }) => {
 
   // log tab count when user first visits
   useEffect(() => {
-    async function mutateNCache() {
-      if (userGlobalId && tabId) {
-        LogTabMutation(userGlobalId, tabId)
-        await UpdateImpactMutation(userGlobalId, CAT_CHARITY, {
-          logImpact: true,
-        })
-        recachePage()
-      }
+    if (userGlobalId && tabId) {
+      LogTabMutation(userGlobalId, tabId)
+      UpdateImpactMutation(userGlobalId, CAT_CHARITY, {
+        logImpact: true,
+      })
     }
-    mutateNCache()
   }, [userGlobalId, tabId])
 
   // Don't load the page until there is data. Data won't exist

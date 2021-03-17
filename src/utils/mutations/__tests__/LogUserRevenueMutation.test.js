@@ -27,6 +27,7 @@ describe('LogUserRevenueMutation', () => {
     await LogUserRevenueMutation(args)
     expect(callMutation).toHaveBeenCalledWith({
       mutation: expect.any(Object),
+      cache: false,
       variables: {
         input: args,
       },
