@@ -20,13 +20,6 @@ const SetHasViewedIntroFlowMutation = ({ enabled, userId }) =>
         userId,
       },
     },
-    optimisticResponse: {
-      __typename: 'Mutation',
-      setHasViewedIntroFlow: {
-        __typename: 'user',
-        hasViewedIntroFlow: true,
-      },
-    },
   })
 
 export default SetHasViewedIntroFlowMutation
