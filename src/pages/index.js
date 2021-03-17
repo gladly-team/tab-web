@@ -1,5 +1,5 @@
 // libraries
-import React, { useEffect, useState, useReducer } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { flowRight } from 'lodash/util'
 import { isNil } from 'lodash/lang'
@@ -291,18 +291,7 @@ const Index = ({ data: initialData }) => {
   // relay store do not push into this component, so we are manually
   // toggling state and a rerender when we successfully fire the
   // SetHasViewedIntroFlowMutation
-  const [hasViewedIntroFlow, hasViewedIntroFlowDispatch] = useReducer(
-    (prevState, { newValue }) =>
-      newValue !== prevState ? newValue : prevState,
-    get(user, 'hasViewedIntroFlow', false)
-  )
-
-  useEffect(() => {
-    const newHasViewedIntroFlowValue = get(user, 'hasViewedIntroFlow')
-    if (newHasViewedIntroFlowValue !== undefined) {
-      hasViewedIntroFlowDispatch({ newValue: newHasViewedIntroFlowValue })
-    }
-  }, [user])
+  const [justFinishedIntroFlow, setJustFinishedIntroFlow] = useState(false)
   // log tab count when user first visits
   useEffect(() => {
     if (userGlobalId && tabId) {
@@ -383,8 +372,11 @@ const Index = ({ data: initialData }) => {
 
   const onCompletedOnboarding = async () => {
     await SetHasViewedIntroFlowMutation({ enabled: true, userId: userGlobalId })
-    hasViewedIntroFlowDispatch({ newValue: true })
+    setJustFinishedIntroFlow(true)
   }
+  const hasViewedIntroFlow = get(user, 'hasViewedIntroFlow')
+    ? get(user, 'hasViewedIntroFlow')
+    : justFinishedIntroFlow
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {!hasViewedIntroFlow ? (
