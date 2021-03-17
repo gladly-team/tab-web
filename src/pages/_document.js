@@ -81,10 +81,12 @@ CustomDocument.getInitialProps = async (ctx) => {
   // Manage Material UI styles:
   // https://next.material-ui.com/guides/server-rendering/#material-ui-on-the-server
   // https://github.com/mui-org/material-ui/blob/next/examples/nextjs/pages/_document.js
+  //
   // Note as of v5 alpha, the CSS injection order is buggy:
   // https://github.com/mui-org/material-ui/issues/24109
   // And `makeStyles` will likely be deprecated:
   // https://github.com/mui-org/material-ui/issues/22342
+  // https://github.com/mui-org/material-ui/issues/24748#issuecomment-771832852
   const sheets = new ServerStyleSheets()
   const originalRenderPage = ctx.renderPage
 
