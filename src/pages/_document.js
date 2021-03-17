@@ -78,10 +78,9 @@ class CustomDocument extends Document {
 }
 
 CustomDocument.getInitialProps = async (ctx) => {
-  // Material UI:
-  // Render app and page and get the context of the page with collected side effects.
-  // https://github.com/mui-org/material-ui/tree/next/examples/nextjs
-  // Render app and page and get the context of the page with collected side effects.
+  // Manage Material UI styles:
+  // https://next.material-ui.com/guides/server-rendering/#material-ui-on-the-server
+  // https://github.com/mui-org/material-ui/blob/next/examples/nextjs/pages/_document.js
   const sheets = new ServerStyleSheets()
   const originalRenderPage = ctx.renderPage
 
