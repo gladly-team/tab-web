@@ -10,10 +10,6 @@ const getMockProps = () => ({
   },
 })
 
-beforeEach(() => {
-  jest.useFakeTimers()
-})
-
 describe('InviteFriendsIcon component', () => {
   it('renders without error', () => {
     const InviteFriendsIcon = require('src/components/InviteFriendsIcon')
