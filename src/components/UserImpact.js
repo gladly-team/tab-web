@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import { CAT_CHARITY, CAT_IMPACT_VISITS } from 'src/utils/constants'
@@ -39,6 +39,14 @@ const UserImpact = ({ userImpact, user }) => {
     false
   )
   const [claimedReferralImpact, setClaimedReferralImpact] = useState(0)
+
+  useEffect(() => {
+    setShowReward(confirmedImpact && !hasClaimedLatestReward)
+  }, [confirmedImpact, hasClaimedLatestReward])
+  useEffect(() => {
+    setReferralRewardNotificationOpen(pendingUserReferralImpact > 0)
+  }, [pendingUserReferralImpact])
+
   const handleConfirmDialogClose = async () => {
     setConfirmDialogOpen(false)
     setAlertDialogOpen(true)
