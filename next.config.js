@@ -64,16 +64,14 @@ const nextConfig = {
         permanent: false,
       },
       {
-        source: `${basePath}/uninstalled/`,
+        source: `/uninstalled/`,
         destination: 'https://forms.gle/2q33AzpTA3A6vvZo6',
-        basePath: false,
-        permanent: true,
+        permanent: false,
       },
       {
-        source: `${basePath}/first-tab/`,
-        destination: `${basePath}/`,
-        basePath: false,
-        permanent: true,
+        source: `/first-tab/`,
+        destination: `/`,
+        permanent: false,
       },
     ].filter(Boolean)
   },
