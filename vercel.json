@@ -4,5 +4,8 @@
   "scope": "gladly-team",
   "alias": ["dev-tab-web"],
   "cleanUrls": true,
-  "trailingSlash": true
+  "trailingSlash": true,
+  "rewrites": [
+    { "source": "/v4/(.*)", "destination": "/newtab/$1" }
+  ]
 }
