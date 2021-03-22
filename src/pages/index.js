@@ -23,6 +23,7 @@ import UserBackgroundImageContainer from 'src/components/UserBackgroundImageCont
 import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
 import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
+import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 // material components
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
@@ -244,6 +245,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           hasViewedIntroFlow
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
+          ...InviteFriendsIconContainer_user
         }
         userImpact(userId: $userId, charityId: $charityId) {
           ...UserImpactContainer_userImpact
@@ -399,6 +401,7 @@ const Index = ({ data: initialData }) => {
           <div className={classes.fullContainer}>
             <div className={classes.topContainer}>
               <div className={classes.userMenuContainer}>
+                <InviteFriendsIconContainer user={user} />
                 <UserImpactContainer
                   userId={userGlobalId}
                   userImpact={userImpact}

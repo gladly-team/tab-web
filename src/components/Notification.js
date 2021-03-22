@@ -18,20 +18,22 @@ const useStylesNotification = makeStyles(() => ({
     maxWidth: '78px',
   },
 }))
-const Notification = ({ buttonOnClick, text, buttonText }) => {
+const Notification = ({ buttonOnClick, text, buttonText, includeButton }) => {
   const classes = useStylesNotification()
   return (
     <Paper className={classes.root}>
       {text}
-      <Button
-        className={classes.button}
-        size="small"
-        variant="contained"
-        color="primary"
-        onClick={buttonOnClick}
-      >
-        {buttonText}
-      </Button>
+      {includeButton ? (
+        <Button
+          className={classes.button}
+          size="small"
+          variant="contained"
+          color="primary"
+          onClick={buttonOnClick}
+        >
+          {buttonText}
+        </Button>
+      ) : null}
     </Paper>
   )
 }
@@ -40,6 +42,9 @@ Notification.propTypes = {
   buttonOnClick: PropTypes.func.isRequired,
   text: PropTypes.element.isRequired,
   buttonText: PropTypes.string.isRequired,
+  includeButton: PropTypes.bool,
 }
-Notification.defaultProps = {}
+Notification.defaultProps = {
+  includeButton: true,
+}
 export default Notification
