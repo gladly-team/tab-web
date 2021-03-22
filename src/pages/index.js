@@ -30,6 +30,7 @@ import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
+import Button from '@material-ui/core/Button'
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
@@ -68,8 +69,8 @@ const useStyles = makeStyles((theme) => ({
   },
   feedbackLink: {
     position: 'absolute',
-    left: '24px',
-    top: '24px',
+    left: '18px',
+    top: '16px',
     color: get(theme, 'palette.backgroundContrastText.main'),
   },
   fullContainer: {
@@ -406,9 +407,11 @@ const Index = ({ data: initialData }) => {
           ) : null}
           <div className={classes.fullContainer}>
             <div className={classes.topContainer}>
-              <Link className={classes.feedbackLink} to={surveyLink}>
-                <Typography>FEEDBACK</Typography>
-              </Link>
+              <Button className={classes.feedbackLink}>
+                <Link to={surveyLink}>
+                  <Typography>FEEDBACK</Typography>
+                </Link>
+              </Button>
               <div className={classes.userMenuContainer}>
                 <InviteFriendsIconContainer user={user} />
                 <UserImpactContainer

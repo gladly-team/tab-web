@@ -13,8 +13,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   friendsIcon: {
-    height: 32,
-    width: 32,
+    height: 24,
+    width: 24,
+    marginRight: '11px',
     color: get(theme, 'palette.backgroundContrastText.main'),
   },
   titleSection: {
@@ -54,7 +55,7 @@ const InviteFriendsIcon = ({ user: { username, numUsersRecruited } }) => {
             </span>{' '}
           </Typography>
           <Typography variant="body2">
-            invite a friend! When they join, you'll earn a treat for 10 shelter
+            Invite a friend! When they join, you'll earn a treat for 10 shelter
             cats:
           </Typography>
           <InviteFriends
