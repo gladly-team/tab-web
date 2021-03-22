@@ -9,15 +9,48 @@ const withSourceMaps = require('@zeit/next-source-maps')({
   devtool: 'hidden-source-map',
 })
 
+// The VERCEL_GIT_COMMIT_REF env var provides the branch name.
+// We can use this to set behavior specific to the prod or dev sites.
+// https://vercel.com/docs/environment-variables#provided-by-system
+const isProdDeployment =
+  process.env.VERCEL_GIT_COMMIT_REF === 'main' ||
+  process.env.VERCEL_GIT_COMMIT_REF === 'master'
+const isDevBranchDeployment = process.env.VERCEL_GIT_COMMIT_REF === 'dev'
+const PROD_HOSTNAME = 'tab.gladly.io'
+const DEV_HOSTNAME = 'dev-tab2017.gladly.io'
+const LOCAL_DEV_HOSTNAME = 'localhost:3001'
+
+// TODO: remove after debugging
+// eslint-disable-next-line no-console
+console.log('Current VERCEL_GIT_COMMIT_REF:', process.env.VERCEL_GIT_COMMIT_REF)
+
+// Determine what the viewer's domain is. We will want to use
+// a non-Vercel domain when we're calling Vercel through our
+// CloudFront routing.
+let viewerDomain
+let viewerProtocol = 'https'
+if (isProdDeployment) {
+  viewerDomain = PROD_HOSTNAME
+} else if (isDevBranchDeployment) {
+  viewerDomain = DEV_HOSTNAME
+} else if (process.env.NODE_ENV === 'development') {
+  viewerDomain = LOCAL_DEV_HOSTNAME
+  viewerProtocol = 'http'
+} else if (process.env.VERCEL_URL) {
+  viewerDomain = process.env.VERCEL_URL
+} else {
+  throw new Error('Could not determine the app domain.')
+}
+
 const basePath = process.env.NEXT_PUBLIC_URLS_BASE_PATH || ''
-const url = process.env.VERCEL_URL || 'http://localhost:3001/'
+const viewerCacheURL = `${viewerProtocol}://${viewerDomain}/newtab/`
 const devAssetsRegex = 'https://prod-tab2017-media.gladly.io/.*'
 const prodAssetsRegex = 'https://dev-tab2017-media.gladly.io/.*'
-const devCloudFrontRegex = 'https://dev-tab2017.gladly.io/newtab/.*'
-const prodCloudFrontRegex = 'https://tab.gladly.io/newtab/.*'
+const devCloudFrontRegex = `https://${DEV_HOSTNAME}/newtab/.*`
+const prodCloudFrontRegex = `https://${PROD_HOSTNAME}/newtab/.*`
 
 const cachingRegex = new RegExp(
-  `${url}${basePath}.*|${devAssetsRegex}|${prodAssetsRegex}|${devCloudFrontRegex}|${prodCloudFrontRegex}`
+  `${viewerCacheURL}${basePath}.*|${devAssetsRegex}|${prodAssetsRegex}|${devCloudFrontRegex}|${prodCloudFrontRegex}`
 )
 // Use the SentryWebpack plugin to upload the source maps during build.
 const SentryWebpackPlugin = require('@sentry/webpack-plugin')
@@ -40,14 +73,13 @@ const nextConfig = {
         source: '/service-worker.js',
         destination: '/_next/static/service-worker.js',
       },
-      // Keeping this logic in vercel.json for now. Next.js 9.5
-      // requires an absolute destination URL when basePath is
-      // false, which is more trouble than it's worth.
-      // {
-      //   source: '/v4/:route(.*)',
-      //   destination: '/newtab/:route',
-      //   basePath: false,
-      // },
+      // Rewrites without basePath must specify an absolute URL.
+      // https://nextjs.org/docs/api-reference/next.config.js/rewrites#rewrites-with-basepath-support
+      {
+        source: '/v4/:route(.*)',
+        destination: `${viewerProtocol}://${viewerDomain}/newtab/:route`,
+        basePath: false,
+      },
     ]
   },
 
