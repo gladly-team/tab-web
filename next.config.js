@@ -160,6 +160,7 @@ const nextConfig = {
         // variants with our base path. Note that our base path, "/newtab", is
         // hardcoded here.
         // https://regex101.com/r/5cs6L7/1/tests
+        // see caching strategies here https://developers.google.com/web/tools/workbox/modules/workbox-strategies
         urlPattern: cachingRegex,
         handler: 'StaleWhileRevalidate',
         options: {

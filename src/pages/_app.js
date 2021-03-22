@@ -13,6 +13,7 @@ import initAuth from 'src/utils/auth/initAuth'
 import initSentry from 'src/utils/initSentry'
 import ErrorBoundary from 'src/components/ErrorBoundary'
 import initializeCMP from 'src/utils/initializeCMP'
+import 'src/utils/styles/globalStyles.css'
 
 initAuth()
 
