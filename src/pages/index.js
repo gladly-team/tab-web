@@ -42,7 +42,7 @@ import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntro
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import { getAdUnits, areAdsEnabled, showMockAds } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
-import { accountURL, achievementsURL } from 'src/utils/urls'
+import { accountURL, achievementsURL, surveyLink } from 'src/utils/urls'
 import {
   showMockAchievements,
   showBackgroundImages,
@@ -65,6 +65,12 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  feedbackLink: {
+    position: 'absolute',
+    left: '24px',
+    top: '24px',
+    color: get(theme, 'palette.backgroundContrastText.main'),
   },
   fullContainer: {
     position: 'absolute',
@@ -400,6 +406,9 @@ const Index = ({ data: initialData }) => {
           ) : null}
           <div className={classes.fullContainer}>
             <div className={classes.topContainer}>
+              <Link className={classes.feedbackLink} to={surveyLink}>
+                <Typography>FEEDBACK</Typography>
+              </Link>
               <div className={classes.userMenuContainer}>
                 <InviteFriendsIconContainer user={user} />
                 <UserImpactContainer

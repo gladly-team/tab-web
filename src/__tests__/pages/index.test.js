@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme'
 import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
-import { accountURL } from 'src/utils/urls'
+import { accountURL, surveyLink } from 'src/utils/urls'
 import { act } from 'react-dom/test-utils'
 import {
   showMockAchievements,
@@ -227,6 +227,17 @@ describe('index.js', () => {
       .filterWhere((el) => el.prop('to') === accountURL)
     expect(settingsLink.childAt(0).type()).toEqual(IconButton)
     expect(settingsLink.childAt(0).childAt(0).type()).toEqual(SettingsIcon)
+  })
+
+  it('shows a feedback link and links to the survey url', () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    const settingsLink = wrapper
+      .find(Link)
+      .filterWhere((el) => el.prop('to') === surveyLink)
+    expect(settingsLink.childAt(0).exists()).toBe(true)
   })
 
   it('does not show the achievements content if showMockAchievements returns false', () => {
