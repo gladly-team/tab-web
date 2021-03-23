@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import { CAT_CHARITY, CAT_IMPACT_VISITS } from 'src/utils/constants'
@@ -25,13 +25,9 @@ const UserImpact = ({ userImpact, user }) => {
     pendingUserReferralCount,
   } = userImpact
   const userId = user.id
-  const [showReward, setShowReward] = useState(
-    confirmedImpact && !hasClaimedLatestReward
-  )
-  const [
-    referralRewardNotificationOpen,
-    setReferralRewardNotificationOpen,
-  ] = useState(pendingUserReferralImpact > 0)
+  const showReward = confirmedImpact && !hasClaimedLatestReward
+
+  const referralRewardNotificationOpen = pendingUserReferralImpact > 0
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(!confirmedImpact)
   const [alertDialogOpen, setAlertDialogOpen] = useState(false)
   const [rewardDialogOpen, setRewardDialogOpen] = useState(false)
@@ -40,13 +36,6 @@ const UserImpact = ({ userImpact, user }) => {
   )
   const [claimedReferralImpact, setClaimedReferralImpact] = useState(0)
 
-  useEffect(() => {
-    setShowReward(confirmedImpact && !hasClaimedLatestReward)
-  }, [confirmedImpact, hasClaimedLatestReward])
-  useEffect(() => {
-    setReferralRewardNotificationOpen(pendingUserReferralImpact > 0)
-  }, [pendingUserReferralImpact])
-
   const handleConfirmDialogClose = async () => {
     setConfirmDialogOpen(false)
     setAlertDialogOpen(true)
@@ -54,7 +43,6 @@ const UserImpact = ({ userImpact, user }) => {
   }
   const handleAlertDialogClose = () => setAlertDialogOpen(false)
   const handleClaimReward = async () => {
-    setShowReward(false)
     setRewardDialogOpen(true)
     await UpdateImpactMutation(userId, CAT_CHARITY, { claimLatestReward: true })
   }
@@ -62,7 +50,6 @@ const UserImpact = ({ userImpact, user }) => {
 
   const handleClaimReferralNotification = () => {
     setClaimedReferralImpact(pendingUserReferralImpact)
-    setReferralRewardNotificationOpen(false)
     setReferralRewardDialogOpen(true)
     UpdateImpactMutation(userId, CAT_CHARITY, {
       claimPendingUserReferralImpact: true,
