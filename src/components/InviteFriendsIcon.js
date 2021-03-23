@@ -12,16 +12,18 @@ const useStyles = makeStyles((theme) => ({
   copyIcon: {
     color: theme.palette.text.secondary,
   },
-  friendsIcon: {
-    height: 24,
-    width: 24,
+  topLevel: {
     marginRight: '11px',
+  },
+  friendsIcon: {
+    height: 28,
+    width: 28,
     color: get(theme, 'palette.backgroundContrastText.main'),
   },
   titleSection: {
     marginBottom: '10px',
   },
-  popover: { marginTop: 9 },
+  popover: { marginTop: '4px' },
   popoverContent: {
     padding: 12,
     width: 402,
@@ -35,7 +37,11 @@ const InviteFriendsIcon = ({ user: { username, numUsersRecruited } }) => {
 
   return (
     <>
-      <IconButton ref={buttonRef} onClick={() => setIsPopoverOpen(true)}>
+      <IconButton
+        className={classes.topLevel}
+        ref={buttonRef}
+        onClick={() => setIsPopoverOpen(true)}
+      >
         <GroupAddIcon className={classes.friendsIcon} />
       </IconButton>
       <DashboardPopover
@@ -44,6 +50,7 @@ const InviteFriendsIcon = ({ user: { username, numUsersRecruited } }) => {
         onClose={() => {
           setIsPopoverOpen(false)
         }}
+        className={classes.popover}
       >
         <div className={classes.popoverContent}>
           <Typography className={classes.titleSection}>
@@ -54,7 +61,7 @@ const InviteFriendsIcon = ({ user: { username, numUsersRecruited } }) => {
               } `}
             </span>{' '}
           </Typography>
-          <Typography variant="body2">
+          <Typography gutterBottom variant="body2">
             Invite a friend! When they join, you'll earn a treat for 10 shelter
             cats:
           </Typography>
