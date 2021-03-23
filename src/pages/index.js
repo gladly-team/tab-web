@@ -418,11 +418,9 @@ const Index = ({ data: initialData }) => {
           ) : null}
           <div className={classes.fullContainer}>
             <div className={classes.topContainer}>
-              <Button className={classes.feedbackLink}>
-                <Link to={surveyLink}>
-                  <Typography>FEEDBACK</Typography>
-                </Link>
-              </Button>
+              <Link to={surveyLink}>
+                <Button className={classes.feedbackLink}>FEEDBACK</Button>
+              </Link>
               <div className={classes.userMenuContainer}>
                 <InviteFriendsIconContainer user={user} />
                 <UserImpactContainer
