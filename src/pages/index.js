@@ -24,6 +24,7 @@ import UserBackgroundImageContainer from 'src/components/UserBackgroundImageCont
 import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
 import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
+import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -31,6 +32,7 @@ import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
+import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -44,7 +46,7 @@ import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntro
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import { getAdUnits, areAdsEnabled, showMockAds } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
-import { accountURL, achievementsURL } from 'src/utils/urls'
+import { accountURL, achievementsURL, surveyLink } from 'src/utils/urls'
 import {
   showMockAchievements,
   showBackgroundImages,
@@ -67,6 +69,12 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  feedbackLink: {
+    position: 'absolute',
+    left: '18px',
+    top: '16px',
+    color: get(theme, 'palette.backgroundContrastText.main'),
   },
   fullContainer: {
     position: 'absolute',
@@ -249,6 +257,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           hasViewedIntroFlow
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
+          ...InviteFriendsIconContainer_user
         }
         userImpact(userId: $userId, charityId: $charityId) {
           ...UserImpactContainer_userImpact
@@ -409,7 +418,11 @@ const Index = ({ data: initialData }) => {
           ) : null}
           <div className={classes.fullContainer}>
             <div className={classes.topContainer}>
+              <Link to={surveyLink}>
+                <Button className={classes.feedbackLink}>FEEDBACK</Button>
+              </Link>
               <div className={classes.userMenuContainer}>
+                <InviteFriendsIconContainer user={user} />
                 <UserImpactContainer
                   userId={userGlobalId}
                   userImpact={userImpact}

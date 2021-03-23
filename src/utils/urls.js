@@ -68,3 +68,4 @@ export const getReferralUrl = (username) => {
     : baseURL
   return referralUrl
 }
+export const surveyLink = 'https://forms.gle/WKNUZSamJQvT12b5A'
