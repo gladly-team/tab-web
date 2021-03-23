@@ -51,6 +51,7 @@ const getMockProps = () => ({
   },
   nextGoalButton: {
     show: false,
+
     // text: 'Next Goal' // it provides default text
   },
   description: 'Some info here.',

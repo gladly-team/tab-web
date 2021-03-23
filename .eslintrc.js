@@ -7,6 +7,7 @@ module.exports = {
     'react/no-unescaped-entities': 0,
     'react/jsx-filename-extension': 0,
     'react/jsx-one-expression-per-line': 0,
+
     // The jsx-wrap-multilines rule conflicts with Prettier.
     // https://github.com/prettier/prettier/issues/1009#issuecomment-286993938
     'react/jsx-wrap-multilines': [
@@ -17,6 +18,21 @@ module.exports = {
       },
     ],
     'react-hooks/rules-of-hooks': 'error',
+    'lines-around-comment': [
+      'error',
+      {
+        beforeLineComment: true,
+        allowBlockStart: true,
+        allowBlockEnd: true,
+        allowObjectStart: true,
+        allowObjectEnd: true,
+        allowArrayStart: true,
+        allowArrayEnd: true,
+        allowClassStart: true,
+        allowClassEnd: true,
+        applyDefaultIgnorePatterns: true,
+      },
+    ],
     'react-hooks/exhaustive-deps': 'error',
     'no-console': 'error',
   },

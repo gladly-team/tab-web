@@ -457,6 +457,7 @@ describe('index.js', () => {
     expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
       userId: 'asdf',
       revenue: 0.0123,
+
       // no encodedRevenue value
       dfpAdvertiserId: '1111',
       adSize: '728x90',

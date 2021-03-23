@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useAuthUser } from 'next-firebase-auth'
 import * as Sentry from '@sentry/node'
+
 // Our Webpack config swaps in the browser Sentry package when in
 // a browser environment. See this example:
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry/next.config.js#L45
@@ -10,6 +11,7 @@ import * as Sentry from '@sentry/node'
 export const withSentry = (ChildComponent) => {
   const WithSentryHOC = (props) => {
     const AuthUser = useAuthUser()
+
     // Set user context for Sentry error logging.
     const { id: userId, email } = AuthUser || {}
     useEffect(() => {
@@ -29,11 +31,13 @@ export const withSentry = (ChildComponent) => {
 // A wrapper for `getServerSideProps` that sets the sentry user.
 export const withSentrySSR = (getServerSidePropsFunc) => async (ctx) => {
   const { AuthUser } = ctx
+
   // set auth user in sentry
   const { id: userId, email } = AuthUser || {}
   if (userId) {
     Sentry.setUser({ id: userId, email })
   }
+
   // Get composed props.
   let composedProps = {}
   if (getServerSidePropsFunc) {
