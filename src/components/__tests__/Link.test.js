@@ -1,14 +1,16 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import NextJsLink from 'next/link'
+import { isURLForDifferentApp } from 'src/utils/navigationUtils'
 
 jest.mock('next/link')
 jest.mock('src/utils/urls')
+jest.mock('src/utils/navigationUtils')
 
 const getMockProps = () => ({
   children: 'hi',
   className: 'some-class',
-  to: '/some/url',
+  to: 'https://tab.gladly.io/newtab/blah/',
 })
 
 describe('Link component', () => {
@@ -53,5 +55,26 @@ describe('Link component', () => {
     const wrapper = shallow(<Link {...mockProps} />)
     const anchor = wrapper.childAt(0)
     expect(anchor.prop('className')).toContain('some-class-here')
+  })
+
+  it('has no target prop on anchor tag by default', () => {
+    const Link = require('src/components/Link').default
+
+    const wrapper = shallow(<Link {...getMockProps()} />)
+    const anchor = wrapper.find('a').first()
+    expect(anchor.prop('target')).toBeUndefined()
+  })
+
+  it('sets target to _top for external app', () => {
+    isURLForDifferentApp.mockReturnValue(true)
+    const Link = require('src/components/Link').default
+
+    const mockProps = {
+      ...getMockProps(),
+      url: 'https://blahblah.com',
+    }
+    const wrapper = mount(<Link {...mockProps} />)
+    const anchor = wrapper.find('a').first()
+    expect(anchor.prop('target')).toEqual('_top')
   })
 })
