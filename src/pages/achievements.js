@@ -107,6 +107,7 @@ const Achievements = () => {
             taskText="Recruit 2 friends"
             deadlineTime={dayjs().subtract(3, 'days').toISOString()}
             completionTime={dayjs().subtract(3, 'days').toISOString()}
+
             // progress={{
             //   currentNumber: 1,
             //   targetNumber: 2,
@@ -119,11 +120,14 @@ const Achievements = () => {
             status="success"
             taskText="Open tabs"
             completionTime={dayjs().subtract(16, 'days').toISOString()}
+            // eslint-disable-next-line prettier/prettier
+            
             // progress={{
             //   currentNumber: 772,
             //   targetNumber: 1000,
             //   visualizationType: 'progressBar',
             // }}
+            // eslint-disable-next-line react/jsx-props-no-multi-spaces
             description="Tiramisu caramels jelly beans ice cream sesame snaps marshmallow lollipop pastry danish. Gummi bears oat cake donut cookie chocolate jelly jujubes. Muffin marzipan marshmallow danish oat cake. Chupa chups candy pastry."
             descriptionTwo="Gummi bears oat cake donut cookie chocolate jelly jujubes."
             isCommunityGoal
@@ -135,11 +139,14 @@ const Achievements = () => {
             status="success"
             taskText="Open 100 tabs"
             completionTime={dayjs().subtract(21, 'days').toISOString()}
+            // eslint-disable-next-line prettier/prettier
+            
             // progress={{
             //   currentNumber: 100,
             //   targetNumber: 100,
             //   visualizationType: 'progressBar',
             // }}
+            // eslint-disable-next-line react/jsx-props-no-multi-spaces
             shareButton={{ show: true }}
           />
           <Achievement

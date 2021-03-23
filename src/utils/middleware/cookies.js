@@ -40,6 +40,7 @@ export const withCookies = (req, res) => {
       // to enable cryptographic signing based on SHA1 HMAC, using rotated credentials."
       // https://github.com/pillarjs/cookies#cookies--new-cookies-request-response--options--
       keys: sessionSecrets,
+
       // Important that production serves sameSite=None and secure=true because we
       // may load this page as an iframe on the new tab page (cross-domain).
       // "A Boolean can optionally be passed as options.secure to explicitly specify
@@ -59,6 +60,7 @@ export const withCookies = (req, res) => {
           maxAge: 604800000, // week
           overwrite: true,
           ...options,
+
           // Important that production serves sameSite=None and secure=true because we
           // may load this page as an iframe on the new tab page (cross-domain).
           // The 'none' option is supported in cookie-session ^1.4.0.

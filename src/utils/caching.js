@@ -2,6 +2,7 @@
 /* globals window */
 import { isClientSide } from 'src/utils/ssr'
 import debounce from 'lodash/debounce'
+
 // Delete all cached data.
 export const clearAllServiceWorkerCaches = async () => {
   if (!isClientSide()) {

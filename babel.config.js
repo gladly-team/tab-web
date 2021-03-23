@@ -12,6 +12,7 @@ module.exports = {
         artifactDirectory: './src/relay/__generated__',
       },
     ],
+
     // Even though Next.js has built-in absolute imports, we need
     // this for imports in Jest tests.
     [

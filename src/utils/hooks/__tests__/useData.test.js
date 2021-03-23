@@ -33,6 +33,7 @@ beforeEach(() => {
     if (!query) {
       return {}
     }
+
     // Some mock data.
     return {
       user: {
@@ -317,6 +318,7 @@ describe('useData', () => {
     const { rerender, waitForNextUpdate } = renderHook(() =>
       useData({
         getRelayQuery: mockGetRelayQuery,
+
         // Setting some additional SWR options.
         initialData: { some: 'initial data' },
         errorRetryCount: 2,

@@ -20,11 +20,10 @@ const DEFAULT_NUMBER_OF_ADS = 2
  * today, using tab count as a proxy.
  * @return {Boolean} Whether the user has viewed the max ads today.
  */
-const hasUserReachedMaxTabsToday = () =>
-  // If the user has exceeded the daily tab maximum,
-  // do not show ads.
-  // https://github.com/gladly-team/tab/issues/202
-  false
+// If the user has exceeded the daily tab maximum,
+// do not show ads.
+// https://github.com/gladly-team/tab/issues/202
+const hasUserReachedMaxTabsToday = () => false
 
 // TODO: implement
 /**
@@ -68,6 +67,7 @@ export const getAdUnits = () => {
     ...(numberOfAdsToShow > 2 && { rectangleAdSecondary }),
   }
 }
+
 /**
  * Determine if we should fetch and display ads. Ads are disabled
  * by env variable or if the user views a lot of ads in a single day.

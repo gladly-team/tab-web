@@ -14,6 +14,7 @@ import {
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
+
 // custom components
 import Achievement from 'src/components/Achievement'
 import Link from 'src/components/Link'
@@ -23,12 +24,14 @@ import UserBackgroundImageContainer from 'src/components/UserBackgroundImageCont
 import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
 import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
+
 // material components
 import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
+
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
@@ -110,6 +113,7 @@ const useStyles = makeStyles((theme) => ({
     transition: 'all 0.1s ease-in-out',
     '&:hover': {
       transform: 'scale(1.01)',
+
       // TODO
       // Increase elevation on hover.
     },
@@ -201,6 +205,7 @@ if (isClientSide()) {
         bidderTimeout: 700,
         consent: {
           enabled: true,
+
           // Time to wait for the consent management platform (CMP) to respond.
           // If the CMP does not respond in this time, ad auctions may be cancelled.
           // The tab-cmp package aims to make the CMP respond much more quickly
@@ -262,6 +267,7 @@ const Index = ({ data: initialData }) => {
   const { data } = useData({
     getRelayQuery,
     initialData,
+
     // If we are using the service worker (serving a cached version
     // of the page HTML), fetch fresh data on mount.
     ...(process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === 'true' && {
@@ -270,12 +276,14 @@ const Index = ({ data: initialData }) => {
   })
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
+
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
   const [adUnits, setAdUnits] = useState([])
   useEffect(() => {
     setAdUnits(getAdUnits())
   }, [])
+
   // Only render ads if we are on the client side.
   const [shouldRenderAds, setShouldRenderAds] = useState(false)
   useEffect(() => {
@@ -292,6 +300,7 @@ const Index = ({ data: initialData }) => {
   // toggling state and a rerender when we successfully fire the
   // SetHasViewedIntroFlowMutation
   const [justFinishedIntroFlow, setJustFinishedIntroFlow] = useState(false)
+
   // log tab count when user first visits
   useEffect(() => {
     if (userGlobalId && tabId) {
@@ -309,6 +318,7 @@ const Index = ({ data: initialData }) => {
   if (!data) {
     return <FullPageLoader />
   }
+
   // Data to provide the onAdDisplayed callback
   const adContext = {
     user,
@@ -352,6 +362,7 @@ const Index = ({ data: initialData }) => {
       }),
       dfpAdvertiserId: GAMAdvertiserId.toString(),
       adSize,
+
       // Only send aggregationOperation value if we have more than one
       // revenue value
       aggregationOperation:
