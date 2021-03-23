@@ -62,6 +62,8 @@ const UserImpact = ({ userImpact, user }) => {
         className={classes.impactCounter}
         number={userImpactMetric}
         progress={
+          // eslint-disable-next-line prettier/prettier
+
           // if user achieves a new milestone show the progress bar as full
           visitsUntilNextImpact === CAT_IMPACT_VISITS
             ? 100

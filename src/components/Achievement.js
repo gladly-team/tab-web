@@ -448,22 +448,28 @@ Achievement.propTypes = {
   // May want to accept descriptionMarkdown in the future.
   description: PropTypes.string,
   descriptionTwo: PropTypes.string,
+
   // Whether the achievement has been completed or not.
   status: PropTypes.oneOf([IN_PROGRESS, SUCCESS, FAILURE]).isRequired,
+
   // ISO timestamp or null. Null if not yet completed.
   // If successful, the successful completion time.
   // If failed, the time the goal ended.
   completionTime: PropTypes.string,
+
   // ISO timestamp or null. Null if there is no deadline.
   deadlineTime: PropTypes.string,
+
   // Whether this is a goal for the entire Tab community. Default
   // to false.
   isCommunityGoal: PropTypes.bool,
   progress: PropTypes.shape({
     currentNumber: PropTypes.number.isRequired,
     targetNumber: PropTypes.number.isRequired,
+
     // How to visually display the progress.
     visualizationType: PropTypes.oneOf([PROGRESS_BAR, CHECKMARKS]).isRequired,
+
     // Perhaps add: leftLabelText, rightLabelText?
   }),
   shareButton: PropTypes.shape({
@@ -478,6 +484,7 @@ Achievement.propTypes = {
     show: PropTypes.bool.isRequired,
     text: PropTypes.string,
   }),
+
   // Content to show when sharing. Refer to the current Tab campaign
   // logic. We may want to fetch this only after a user clicks
   // to share.

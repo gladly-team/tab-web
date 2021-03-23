@@ -4,13 +4,15 @@ const authMock = {
   get currentUser() {
     return null
   },
+
   // Takes a callback.
   onAuthStateChanged: jest.fn(),
+
+  // Should resolve into a non-null Firebase user credential.
+  // https://firebase.google.com/docs/reference/js/firebase.auth.Auth?authuser=0#signInAnonymously
+  // `firebaseUser` should be non-null, so we should call
+  // `__setFirebaseUser` beforehand.
   signInAnonymously: jest.fn(() =>
-    // Should resolve into a non-null Firebase user credential.
-    // https://firebase.google.com/docs/reference/js/firebase.auth.Auth?authuser=0#signInAnonymously
-    // `firebaseUser` should be non-null, so we should call
-    // `__setFirebaseUser` beforehand.
     Promise.resolve({
       credential: {},
       user: null,
@@ -18,8 +20,9 @@ const authMock = {
     })
   ),
   signOut: jest.fn(() => Promise.resolve()),
+
+  // Should resolve into a non-null Firebase user credential.
   signInAndRetrieveDataWithCredential: jest.fn(() =>
-    // Should resolve into a non-null Firebase user credential.
     Promise.resolve({
       credential: {},
       user: null,

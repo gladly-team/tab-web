@@ -26,6 +26,7 @@ const ensureValuesAreDefined = (value) => {
     if (!value.length) {
       hasNilVal = true
     }
+
     // Test each entry in the array.
     value.forEach((item) => {
       if (isNil(item) || item === '') {

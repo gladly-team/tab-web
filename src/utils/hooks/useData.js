@@ -47,10 +47,10 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
   // https://github.com/vercel/swr/issues/129
 
   // https://github.com/vercel/swr#options
+  // SWR won't fetch if the "key" function returns null.
+  // https://github.com/vercel/swr#dependent-fetching
+  // SWR will refetch if any of these arguments change.
   const { data, error } = useSWR(
-    // SWR won't fetch if the "key" function returns null.
-    // https://github.com/vercel/swr#dependent-fetching
-    // SWR will refetch if any of these arguments change.
     () =>
       !readyToFetch
         ? null

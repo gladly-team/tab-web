@@ -29,9 +29,7 @@ const mockReq = () => ({
     'accept-language': 'en-US,en;q=0.9,es;q=0.8,es-419;q=0.7',
     cookie: 'someCookie=foo; somethingElse=bar}',
   },
-  rawHeaders: {
-    // stuff here
-  },
+  rawHeaders: {},
   trailers: {},
   rawTrailers: {},
   aborted: false,
@@ -40,9 +38,7 @@ const mockReq = () => ({
   method: 'GET',
   statusCode: null,
   statusMessage: null,
-  client: {
-    // stuff here
-  },
+  client: {},
 })
 
 export default mockReq

@@ -21,6 +21,7 @@ const useSecureSameSiteNone =
   process.env.COOKIE_SECURE_SAME_SITE_NONE === 'true'
 const tokenChangedHandler = async (authUser) => {
   let response
+
   // If the user is authed, call login to set a cookie.
   if (authUser.id) {
     const userToken = await authUser.getIdToken()
@@ -71,6 +72,7 @@ const initAuth = () => {
       credential: {
         projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
         clientEmail: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL,
+
         // Our approach:
         // https://github.com/vercel/vercel/issues/749#issuecomment-707515089
         // Another potential approach:
@@ -97,6 +99,7 @@ const initAuth = () => {
       maxAge: 12 * 60 * 60 * 24 * 1000, // twelve days
       overwrite: true,
       path: '/',
+
       // Important that production serves sameSite=None and secure=true
       // because we may load this page as an iframe on the new tab page
       // (cross-domain).

@@ -11,6 +11,7 @@ mock.useRouter = jest.fn(() => ({
   push: jest.fn(),
   reload: jest.fn(),
   replace: jest.fn(),
+
   // ... other things here
 }))
 module.exports = mock

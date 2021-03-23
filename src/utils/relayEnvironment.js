@@ -34,6 +34,7 @@ const createFetchQuery = ({ getIdToken }) => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+
         // If the user does not have a token, send a placeholder value.
         // We do this because AWS API Gateway's custom authorizers will
         // reject any request without a token and we want to provide
