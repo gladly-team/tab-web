@@ -24,7 +24,7 @@ initSentry()
 
 // We use Tab Legacy for authentication logic, so we should override
 // any routing to the auth page to force a hard navigation rather
-// than navigating within this sapp.
+// than navigating within this app.
 // Remove when we want to use this app for auth. See:
 // https://github.com/gladly-team/tab/pull/891
 // Router override workarounds:
