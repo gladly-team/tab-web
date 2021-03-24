@@ -30,7 +30,7 @@ class CustomDocument extends Document {
             dangerouslySetInnerHTML={{
               __html: `
             window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments,{'tfac_app_version': 'v4'});}
+            function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-LDFLQCKVHG');
             gtag('set','tfac_app_version','v4'); 
