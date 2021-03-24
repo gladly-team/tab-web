@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography'
 import ImpactCounter from 'src/components/ImpactCounter'
 import RandomGif from 'src/components/RandomGif'
 import InviteFriends from 'src/components/InviteFriends'
+import { isPlural } from 'src/utils/formatting'
 import clsx from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
@@ -151,9 +152,9 @@ const ImpactDialog = ({
         <>
           <MuiDialogTitle disableTypography className={classes.root}>
             <Typography variant="h6" className={classes.title}>
-              {`You just put ${referralImpact} cat${
-                referralImpact > 1 ? 's' : ''
-              } on track for adoption!`}
+              {`You just put ${referralImpact} cat${isPlural(
+                referralImpact
+              )} on track for adoption!`}
             </Typography>
           </MuiDialogTitle>
           <MuiDialogContent>
