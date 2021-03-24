@@ -7,6 +7,7 @@ import ImpactCounter from 'src/components/ImpactCounter'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import dynamic from 'next/dynamic'
+import { isPlural } from 'src/utils/formatting'
 
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
@@ -115,13 +116,13 @@ const UserImpact = ({ userImpact, user }) => {
             <Typography>
               Congrats! You recruited{' '}
               <span style={{ fontWeight: 'bold' }}>
-                {`${pendingUserReferralCount} friend${
-                  pendingUserReferralCount > 1 ? 's' : ''
-                } `}
+                {`${pendingUserReferralCount} friend${isPlural(
+                  pendingUserReferralCount
+                )} `}
               </span>
               to help shelter cats just by opening tabs. To celebrate, we'll
               give a treat to an extra {pendingUserReferralImpact} cat
-              {pendingUserReferralImpact > 1 ? 's' : ''}.
+              {isPlural(pendingUserReferralImpact)}.
             </Typography>
           }
           buttonText="Claim"

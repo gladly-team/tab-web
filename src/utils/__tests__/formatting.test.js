@@ -1,3 +1,5 @@
+import { isPlural } from 'src/utils/formatting'
+
 describe('commaFormatted', () => {
   it('comma-formats a large stringified float as expected', () => {
     const { commaFormatted } = require('src/utils/formatting')
@@ -76,5 +78,22 @@ describe('currencyFormatUSD', () => {
     expect(() => {
       currencyFormatUSD('xyz')
     }).toThrow('Could not parse this value for currency formatting: xyz')
+  })
+})
+describe('isPlural', () => {
+  it('formats correctly if value is 0', () => {
+    expect(isPlural(0)).toBe('s')
+  })
+
+  it('formats correctly if value is 1', () => {
+    expect(isPlural(1)).toBe('')
+  })
+
+  it('formats correctly if value is greater than 1', () => {
+    expect(isPlural(1234)).toBe('s')
+  })
+
+  it("doesn't throw if value is not a number", () => {
+    expect(isPlural('thisshouldneverhappen')).toBe('s')
   })
 })
