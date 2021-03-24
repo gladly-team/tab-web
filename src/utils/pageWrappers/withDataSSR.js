@@ -53,6 +53,7 @@ const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
     ...composedProps,
     props: {
       ...composedProps.props,
+
       // If we don't fetch data, it should be null so that SWR will
       // fetch data on the client side (in `useData`).
       data: isEmpty(queryProps)
@@ -60,6 +61,7 @@ const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
         : {
             ...queryProps,
           },
+
       // The "initialRecords" prop is consumed by the `withRelay` HOC.
       initialRecords,
     },

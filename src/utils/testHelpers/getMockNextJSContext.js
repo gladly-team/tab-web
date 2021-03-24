@@ -14,14 +14,19 @@ import getMockRes from 'src/utils/testHelpers/mockRes'
 const getMockNextJSContext = ({ serverSide = true } = {}) => ({
   // Current route. That is the path of the page in /pages
   pathname: 'index',
+
   // Query string section of URL parsed as an object
   query: {},
+
   // String of the actual path (including the query) shown in the browser
   asPath: 'index',
+
   // HTTP request object (server only)
   ...(serverSide && { req: getMockReq() }),
+
   // HTTP response object (server only)
   ...(serverSide && { res: getMockRes() }),
+
   // Error object if any error is encountered during the rendering
   err: undefined,
 })

@@ -54,6 +54,7 @@ const Logo = (props) => {
       }
     }
   }
+
   // The alt text flashes on Firefox.
   // Note we need to manually add the basePath to assets:
   // https://github.com/vercel/next.js/issues/4998#issuecomment-657233398

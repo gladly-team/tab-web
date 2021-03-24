@@ -49,4 +49,13 @@ describe('Notification component', () => {
     const clickButton = wrapper.find(Button).first()
     expect(clickButton.text()).toEqual('some text')
   })
+
+  it('does not render a button if includeButton is set to false', () => {
+    const Notification = require('src/components/Notification').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(
+      <Notification {...mockProps} includeButton={false} />
+    )
+    expect(wrapper.find(Button).length).toBe(0)
+  })
 })

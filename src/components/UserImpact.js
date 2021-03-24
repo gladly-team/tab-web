@@ -26,6 +26,7 @@ const UserImpact = ({ userImpact, user }) => {
   } = userImpact
   const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
+
   const referralRewardNotificationOpen = pendingUserReferralImpact > 0
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(!confirmedImpact)
   const [alertDialogOpen, setAlertDialogOpen] = useState(false)
@@ -33,6 +34,8 @@ const UserImpact = ({ userImpact, user }) => {
   const [referralRewardDialogOpen, setReferralRewardDialogOpen] = useState(
     false
   )
+  const [claimedReferralImpact, setClaimedReferralImpact] = useState(0)
+
   const handleConfirmDialogClose = async () => {
     setConfirmDialogOpen(false)
     setAlertDialogOpen(true)
@@ -45,14 +48,15 @@ const UserImpact = ({ userImpact, user }) => {
   }
   const handleRewardDialogClose = () => setRewardDialogOpen(false)
 
-  const handleClaimReferralNotification = async () => {
+  const handleClaimReferralNotification = () => {
+    setClaimedReferralImpact(pendingUserReferralImpact)
     setReferralRewardDialogOpen(true)
+    UpdateImpactMutation(userId, CAT_CHARITY, {
+      claimPendingUserReferralImpact: true,
+    })
   }
   const handleReferralRewardDialogClose = async () => {
     setReferralRewardDialogOpen(false)
-    await UpdateImpactMutation(userId, CAT_CHARITY, {
-      claimPendingUserReferralImpact: true,
-    })
   }
   const classes = useStyles()
   return (
@@ -62,6 +66,8 @@ const UserImpact = ({ userImpact, user }) => {
         className={classes.impactCounter}
         number={userImpactMetric}
         progress={
+          // eslint-disable-next-line prettier/prettier
+
           // if user achieves a new milestone show the progress bar as full
           visitsUntilNextImpact === CAT_IMPACT_VISITS
             ? 100
@@ -88,7 +94,7 @@ const UserImpact = ({ userImpact, user }) => {
         modalType="claimReferralReward"
         open={referralRewardDialogOpen}
         buttonOnClick={handleReferralRewardDialogClose}
-        referralImpact={pendingUserReferralImpact}
+        referralImpact={claimedReferralImpact}
         user={user}
       />
       {showReward && (

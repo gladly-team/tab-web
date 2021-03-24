@@ -63,6 +63,16 @@ const nextConfig = {
         basePath: false,
         permanent: false,
       },
+      {
+        source: `/uninstalled/`,
+        destination: 'https://forms.gle/2q33AzpTA3A6vvZo6',
+        permanent: false,
+      },
+      {
+        source: `/first-tab/`,
+        destination: `/`,
+        permanent: false,
+      },
     ].filter(Boolean)
   },
 

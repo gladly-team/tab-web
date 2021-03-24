@@ -20,6 +20,7 @@ describe('getMockNextJSContext', () => {
       query: expect.any(Object),
       asPath: expect.any(String),
       err: undefined,
+
       // No req or res values.
     })
   })

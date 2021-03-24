@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
     padding: 12,
     width: 220,
   },
-  popover: { marginTop: 9 },
+  popover: { marginTop: 10 },
 }))
 
 const ImpactCounter = (props) => {

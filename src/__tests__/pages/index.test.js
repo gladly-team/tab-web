@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme'
 import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
-import { accountURL } from 'src/utils/urls'
+import { accountURL, surveyLink } from 'src/utils/urls'
 import { act } from 'react-dom/test-utils'
 import {
   showMockAchievements,
@@ -39,6 +39,7 @@ jest.mock('src/utils/mutations/SetHasViewedIntroFlowMutation', () => () => {})
 jest.mock('src/components/OnboardingFlow', () => () => <div />)
 jest.mock('src/components/Logo')
 jest.mock('src/components/MoneyRaisedContainer', () => () => <div />)
+jest.mock('src/components/InviteFriendsIconContainer', () => () => <div />)
 jest.mock('src/components/UserImpactContainer', () => () => <div />)
 jest.mock('src/components/SearchInput', () => () => <div />)
 jest.mock('src/utils/featureFlags')
@@ -226,6 +227,17 @@ describe('index.js', () => {
       .filterWhere((el) => el.prop('to') === accountURL)
     expect(settingsLink.childAt(0).type()).toEqual(IconButton)
     expect(settingsLink.childAt(0).childAt(0).type()).toEqual(SettingsIcon)
+  })
+
+  it('shows a feedback link and links to the survey url', () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    const settingsLink = wrapper
+      .find(Link)
+      .filterWhere((el) => el.prop('to') === surveyLink)
+    expect(settingsLink.childAt(0).exists()).toBe(true)
   })
 
   it('does not show the achievements content if showMockAchievements returns false', () => {
@@ -445,6 +457,7 @@ describe('index.js', () => {
     expect(LogUserRevenueMutation.mock.calls[0][0]).toEqual({
       userId: 'asdf',
       revenue: 0.0123,
+
       // no encodedRevenue value
       dfpAdvertiserId: '1111',
       adSize: '728x90',
