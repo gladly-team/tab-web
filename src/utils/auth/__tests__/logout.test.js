@@ -1,9 +1,12 @@
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import logger from 'src/utils/logger'
+import { authURL } from 'src/utils/urls'
+import { setWindowLocation } from 'src/utils/navigation'
 
 jest.mock('src/utils/caching')
 jest.mock('src/utils/logger')
+jest.mock('src/utils/navigation')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -24,6 +27,14 @@ describe('logout.js', () => {
     const logout = require('src/utils/auth/logout').default
     await logout(mockAuthUser)
     expect(clearAllServiceWorkerCaches).toHaveBeenCalled()
+  })
+
+  it('calls setWindowLocation to navigate to the auth page', async () => {
+    expect.assertions(1)
+    const mockAuthUser = getMockAuthUser()
+    const logout = require('src/utils/auth/logout').default
+    await logout(mockAuthUser)
+    expect(setWindowLocation).toHaveBeenCalledWith(authURL)
   })
 
   it('logs an error when something fails', async () => {
