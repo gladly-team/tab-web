@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
+import Router from 'next/router'
 import { register, unregister } from 'next-offline/runtime'
 import { ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -13,12 +14,34 @@ import initAuth from 'src/utils/auth/initAuth'
 import initSentry from 'src/utils/initSentry'
 import ErrorBoundary from 'src/components/ErrorBoundary'
 import initializeCMP from 'src/utils/initializeCMP'
+import { setWindowLocation } from 'src/utils/navigation'
 import 'src/utils/styles/globalStyles.css'
 
 initAuth()
 
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_app.js
 initSentry()
+
+// We use Tab Legacy for authentication logic, so we should override
+// any routing to the auth page to force a hard navigation rather
+// than navigating within this app.
+// Remove when we want to use this app for auth. See:
+// https://github.com/gladly-team/tab/pull/891
+// Router override workarounds:
+// https://github.com/vercel/next.js/discussions/12348#discussioncomment-8089
+// https://github.com/vercel/next.js/issues/2476
+Router.events.on('routeChangeStart', (route) => {
+  const isAuthPage = route.includes('/newtab/auth/')
+  if (isAuthPage) {
+    // Cancel routeChange event by erroring. See:
+    // https://github.com/zeit/next.js/issues/2476
+    Router.events.emit('routeChangeError')
+    setWindowLocation(route, { addBasePath: false })
+    throw new Error(
+      `routeChange aborted. This error can be safely ignored. See: https://github.com/zeit/next.js/issues/2476.`
+    )
+  }
+})
 
 try {
   ensureValuesAreDefined(process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED)
