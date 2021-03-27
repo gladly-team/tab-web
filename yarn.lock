@@ -2675,13 +2675,6 @@ async-each@^1.0.1:
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.3.tgz"
   integrity sha512-z/WhQ5FPySLdvREByI2vZiTWwCnF0moMJ1hK9YQwDTHKh6I7/uSckMetoRGb5UBZPC1z0jlw+n/XCgjeH7y1AQ==
 
-async-stream-flow@~1.0.1:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/async-stream-flow/-/async-stream-flow-1.0.2.tgz"
-  integrity sha1-QttjUlxdEWJn6miwNp2bNcqjhNs=
-  dependencies:
-    through3 "~1.1.5"
-
 asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz"
@@ -5390,14 +5383,6 @@ fs-extra@^8.1.0, fs-extra@~8.1.0:
     jsonfile "^4.0.0"
     universalify "^0.1.0"
 
-fs-flow@~1.0.1:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/fs-flow/-/fs-flow-1.0.2.tgz"
-  integrity sha1-a3Ez0UNaSpTz3KYk0IbfKTalM+c=
-  dependencies:
-    async-stream-flow "~1.0.1"
-    through3 "~1.1.5"
-
 fs-write-stream-atomic@^1.0.8:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/fs-write-stream-atomic/-/fs-write-stream-atomic-1.0.10.tgz"
@@ -5980,60 +5965,6 @@ human-signals@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-1.1.1.tgz"
   integrity sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==
-
-husk-async@~1.0.2:
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/husk-async/-/husk-async-1.0.3.tgz"
-  integrity sha1-taXK4ns+JkESbeB7JGripkd/o4I=
-  dependencies:
-    async-stream-flow "~1.0.1"
-
-husk-core@~1.0.4:
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/husk-core/-/husk-core-1.0.4.tgz"
-  integrity sha1-hwsmGcAoPWoSYrmKmkt2YSKS5H0=
-  dependencies:
-    husk-print "~1.0.2"
-    husk-through "~1.0.2"
-
-husk-exec@~1.0.4:
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/husk-exec/-/husk-exec-1.0.4.tgz"
-  integrity sha1-+B6v/RWAuR2joTwHzlaPyKcs6bQ=
-  dependencies:
-    process-flow "~1.0.2"
-
-husk-fs@~1.0.2:
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/husk-fs/-/husk-fs-1.0.3.tgz"
-  integrity sha1-PDKpblYXU9YxsajuXEojbR2J4Tg=
-  dependencies:
-    fs-flow "~1.0.1"
-
-husk-print@~1.0.2:
-  version "1.0.3"
-  resolved "https://registry.npmjs.org/husk-print/-/husk-print-1.0.3.tgz"
-  integrity sha1-PdE0tGvHAcy+gRPI1svrgwVlZpc=
-  dependencies:
-    print-flow "~1.0.2"
-
-husk-through@~1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/husk-through/-/husk-through-1.0.2.tgz"
-  integrity sha1-99ZoviZ+He644oWoaHvvORaVyrw=
-  dependencies:
-    through-flow "~1.0.1"
-
-husk@^0.5.3:
-  version "0.5.3"
-  resolved "https://registry.npmjs.org/husk/-/husk-0.5.3.tgz"
-  integrity sha1-hpOqCxZMy2MU3HzTR43k95ZpFFg=
-  dependencies:
-    husk-async "~1.0.2"
-    husk-core "~1.0.4"
-    husk-exec "~1.0.4"
-    husk-fs "~1.0.2"
-    zephyr "~1.2.6"
 
 husky@^5.2.0:
   version "5.2.0"
@@ -8829,20 +8760,6 @@ pretty-ms@^7.0.0:
   dependencies:
     parse-ms "^2.1.0"
 
-print-flow@~1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/print-flow/-/print-flow-1.0.2.tgz"
-  integrity sha1-KHU6TmrqUSI5e7W8hbZ/UFSLnGc=
-  dependencies:
-    through3 "~1.1.5"
-
-process-flow@~1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/process-flow/-/process-flow-1.0.2.tgz"
-  integrity sha1-7QJLLN9wBBk9RhA2UMqTkwZ+fsA=
-  dependencies:
-    through3 "~1.1.5"
-
 process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-2.0.1.tgz"
@@ -10556,13 +10473,6 @@ throat@^5.0.0:
   resolved "https://registry.yarnpkg.com/throat/-/throat-5.0.0.tgz"
   integrity sha512-fcwX4mndzpLQKBS1DVYhGAcYaYt7vsHNIvQV+WXMvnow5cgjPphq5CaayLaGsjRdSCKZFNGt7/GYAuXaNOiYCA==
 
-through-flow@~1.0.1:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/through-flow/-/through-flow-1.0.2.tgz"
-  integrity sha1-PkezECV3YuPp4PlxN0MvvniTvAw=
-  dependencies:
-    through3 "~1.1.5"
-
 through2@^2.0.0:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/through2/-/through2-2.0.5.tgz"
@@ -10570,11 +10480,6 @@ through2@^2.0.0:
   dependencies:
     readable-stream "~2.3.6"
     xtend "~4.0.1"
-
-through3@~1.1.5:
-  version "1.1.6"
-  resolved "https://registry.npmjs.org/through3/-/through3-1.1.6.tgz"
-  integrity sha1-UEqlF179VNnGlXeEyJBmS4aFz3c=
 
 timers-browserify@^2.0.4:
   version "2.0.12"
@@ -11550,8 +11455,3 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
-
-zephyr@~1.2.6:
-  version "1.2.8"
-  resolved "https://registry.npmjs.org/zephyr/-/zephyr-1.2.8.tgz"
-  integrity sha1-r3NKl9u9No4rc1l8fmBU28vWmmw=
