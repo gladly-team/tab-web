@@ -77,6 +77,11 @@
     "relay-compiler": "^10.1.2",
     "vercel": "^21.0.1"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn test"
+    }
+  },
   "next-unused": {
     "alias": {
       "src": "src/"
