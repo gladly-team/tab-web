@@ -5,6 +5,8 @@ import NextJsLink from 'next/link'
 import { makeStyles } from '@material-ui/core/styles'
 import { isURLForDifferentApp } from 'src/utils/navigationUtils'
 
+// import { withBasePath } from 'src/utils/urls'
+
 const useStyles = makeStyles(() => ({
   anchor: {
     display: 'inline-block',
@@ -22,7 +24,13 @@ const Link = (props) => {
   // If that causes problems, use the URL from the request when
   // server-side rendering.
   useEffect(() => {
-    if (isURLForDifferentApp(to)) {
+    // FIXME
+    // "When linking to other pages using next/link and next/router
+    // the basePath will be automatically applied."
+    // https://nextjs.org/docs/api-reference/next.config.js/basepath#links
+    // const url = withBasePath(to)
+    const url = to
+    if (isURLForDifferentApp(url)) {
       setDestInternal(false)
     }
   }, [to])
