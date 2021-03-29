@@ -24,24 +24,24 @@ class CustomDocument extends Document {
             https://github.com/gladly-team/tab-ads#html-tags
            */}
 
-          {/* Google Publisher Tag */}
+          {/* Google Analytics V4 Tag */}
           <script
             async
             src="https://www.googletagmanager.com/gtag/js?id=G-LDFLQCKVHG"
           />
           <script
-            key="gtag-global"
+            key="gtag-global-ga4"
             dangerouslySetInnerHTML={{
               __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-LDFLQCKVHG');
-            gtag('config', 'G-LDFLQCKVHG',{'debug_mode':true});
             gtag('config', 'G-LDFLQCKVHG',{'tfac_app_version':'v4'});
             `,
             }}
           />
+          {/* Google Publisher Tag */}
           <script
             dangerouslySetInnerHTML={{
               __html: `
