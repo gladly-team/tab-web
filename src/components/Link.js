@@ -5,7 +5,7 @@ import NextJsLink from 'next/link'
 import { makeStyles } from '@material-ui/core/styles'
 import { isURLForDifferentApp } from 'src/utils/navigationUtils'
 
-// import { withBasePath } from 'src/utils/urls'
+// import { withBasePath } from 'src/utils/navigationUtils'
 
 const useStyles = makeStyles(() => ({
   anchor: {

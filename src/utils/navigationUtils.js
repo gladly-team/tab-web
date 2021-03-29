@@ -2,6 +2,12 @@
 export const isAbsoluteURL = (url) =>
   !!(url.startsWith('http://') || url.startsWith('https://'))
 
+// Base path set in Next config. This must match our app's
+// CloudFront routing.
+const basePath = process.env.NEXT_PUBLIC_URLS_BASE_PATH || ''
+
+export const withBasePath = (path) => `${basePath}${path}`
+
 /**
  * Determine whether a URL is for a different app from the current
  * URL. In other words, navigating to the new URL cannot simply
