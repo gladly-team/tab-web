@@ -26,14 +26,18 @@ class CustomDocument extends Document {
 
           {/* Google Publisher Tag */}
           <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-97R0W6NWB0"
+          />
+          <script
             key="gtag-global"
             dangerouslySetInnerHTML={{
               __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-LDFLQCKVHG');
-            gtag('set','tfac_app_version','v4'); 
+            gtag('config', 'G-97R0W6NWB0',{'debug_mode':true});
+            gtag('config', 'G-97R0W6NWB0',{'user_app_version':'legacy', 'tfac_app_version':'legacy'});
             `,
             }}
           />
