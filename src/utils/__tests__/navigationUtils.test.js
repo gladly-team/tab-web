@@ -6,6 +6,7 @@ beforeAll(() => {
 
 afterEach(() => {
   jest.clearAllMocks()
+  jest.resetModules()
 })
 
 describe('isURLForDifferentApp', () => {
@@ -102,5 +103,29 @@ describe('isAbsoluteURL', () => {
     expect(isAbsoluteURL('http://example.com/blah/path/')).toBe(true)
     expect(isAbsoluteURL('https://example.com')).toBe(true)
     expect(isAbsoluteURL('http://localhost:3000')).toBe(true)
+  })
+})
+
+describe('withBasePath', () => {
+  beforeEach(() => {
+    process.env.NEXT_PUBLIC_URLS_BASE_PATH = '/some-path'
+  })
+
+  it('adds the basePath, when it is defined, to a relative URL', () => {
+    const { withBasePath } = require('src/utils/navigationUtils')
+    expect(withBasePath('/my-url')).toEqual('/some-path/my-url')
+  })
+
+  it('does not add the basePath, when it is not defined, to a relative URL', () => {
+    delete process.env.NEXT_PUBLIC_URLS_BASE_PATH
+    const { withBasePath } = require('src/utils/navigationUtils')
+    expect(withBasePath('/my-url')).toEqual('/my-url')
+  })
+
+  it('does not add the basePath to an absolute URL', () => {
+    const { withBasePath } = require('src/utils/navigationUtils')
+    expect(withBasePath('https://example.com/my-url')).toEqual(
+      'https://example.com/my-url'
+    )
   })
 })

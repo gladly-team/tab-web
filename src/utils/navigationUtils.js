@@ -6,7 +6,8 @@ export const isAbsoluteURL = (url) =>
 // CloudFront routing.
 const basePath = process.env.NEXT_PUBLIC_URLS_BASE_PATH || ''
 
-export const withBasePath = (path) => `${basePath}${path}`
+export const withBasePath = (url) =>
+  isAbsoluteURL(url) ? url : `${basePath}${url}`
 
 /**
  * Determine whether a URL is for a different app from the current
