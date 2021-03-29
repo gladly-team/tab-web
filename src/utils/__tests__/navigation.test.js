@@ -3,7 +3,7 @@ import { isServerSide } from 'src/utils/ssr'
 import { withBasePath } from 'src/utils/navigationUtils'
 
 jest.mock('src/utils/ssr')
-jest.mock('src/utils/urls')
+jest.mock('src/utils/navigationUtils')
 
 // Strategy for testing against `window.location`:
 // https://www.benmvp.com/blog/mocking-window-location-methods-jest-jsdom/
