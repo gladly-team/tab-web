@@ -10,7 +10,7 @@ afterEach(() => {
 })
 
 describe('isURLForDifferentApp', () => {
-  it('[absolute URL] is not a different app when the URL is absolute with the same domain and a "newtab" path', () => {
+  it('[absolute URL] is *not* a different app when the URL is absolute with the same domain and a "newtab" path', () => {
     const { isURLForDifferentApp } = require('src/utils/navigationUtils')
     setWindowLocation({
       host: 'example.com',
@@ -57,7 +57,7 @@ describe('isURLForDifferentApp', () => {
     )
   })
 
-  it('[relative URL] is not a different app if the URL is exactly the same with a newtab subpath', () => {
+  it('[relative URL] is *not* a different app if the URL is exactly the same with a "newtab" subpath', () => {
     const { isURLForDifferentApp } = require('src/utils/navigationUtils')
     setWindowLocation({
       host: 'example.com',
@@ -72,7 +72,7 @@ describe('isURLForDifferentApp', () => {
     expect(isURLForDifferentApp('/newtab/path/')).toBe(false)
   })
 
-  it('[relative URL] is not a differenta app if the URLs are both on the "newtab" subpath', () => {
+  it('[relative URL] is *not* a different app if the URL has a "newtab" subpath', () => {
     const { isURLForDifferentApp } = require('src/utils/navigationUtils')
     setWindowLocation({
       host: 'example.com',
