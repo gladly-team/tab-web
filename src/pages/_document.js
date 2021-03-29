@@ -38,7 +38,7 @@ class CustomDocument extends Document {
             gtag('js', new Date());
             gtag('config', 'G-LDFLQCKVHG');
             gtag('config', 'G-LDFLQCKVHG',{'debug_mode':true});
-            gtag('config', 'G-LDFLQCKVHG',{'user_app_version':'v4', 'tfac_app_version':'v4'});
+            gtag('config', 'G-LDFLQCKVHG',{'tfac_app_version':'v4'});
             `,
             }}
           />
