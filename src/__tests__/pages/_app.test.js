@@ -3,6 +3,7 @@ import { mount } from 'enzyme'
 import { register, unregister } from 'next-offline/runtime'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
 
+jest.mock('next/router')
 jest.mock('next-offline/runtime')
 jest.mock('src/utils/ssr')
 jest.mock('src/utils/auth/initAuth')

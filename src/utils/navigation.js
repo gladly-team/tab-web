@@ -38,16 +38,16 @@ export const goTo = (location) => {
 // Call window.location.
 // Note that this may cause problems if we navigate to
 // external URLs while in the new tab page iframe.
-export const setWindowLocation = (location) => {
+export const setWindowLocation = (location, { addBasePath = true } = {}) => {
   if (isServerSide()) {
     throw new Error(
       'The `setWindowLocation` function cannot be called server-side.'
     )
   } else {
     // The Next.js router handles the base path automatically, but
-    // we need to add it manually here.
-    const locationWithBasePath = withBasePath(location)
-    window.location = locationWithBasePath
+    // we typically need to add it manually here.
+    const finalLocation = addBasePath ? withBasePath(location) : location
+    window.location = finalLocation
   }
 }
 
