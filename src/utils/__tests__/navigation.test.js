@@ -1,6 +1,6 @@
 /* globals window */
 import { isServerSide } from 'src/utils/ssr'
-import { withBasePath } from 'src/utils/urls'
+import { withBasePath } from 'src/utils/navigationUtils'
 
 jest.mock('src/utils/ssr')
 jest.mock('src/utils/urls')
