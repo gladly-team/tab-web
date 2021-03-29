@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import NextJsLink from 'next/link'
-import { isURLForDifferentApp } from 'src/utils/navigationUtils'
+import { isURLForDifferentApp, withBasePath } from 'src/utils/navigationUtils'
 
 jest.mock('next/link')
 jest.mock('src/utils/urls')
@@ -11,6 +11,14 @@ const getMockProps = () => ({
   children: 'hi',
   className: 'some-class',
   to: 'https://tab.gladly.io/newtab/blah/',
+})
+
+beforeEach(() => {
+  withBasePath.mockImplementation((url) => url)
+})
+
+afterEach(() => {
+  jest.clearAllMocks()
 })
 
 describe('Link component', () => {
@@ -76,5 +84,16 @@ describe('Link component', () => {
     const wrapper = mount(<Link {...mockProps} />)
     const anchor = wrapper.find('a').first()
     expect(anchor.prop('target')).toEqual('_top')
+  })
+
+  it('includes the base path when calling isURLForDifferentApp', () => {
+    const Link = require('src/components/Link').default
+    withBasePath.mockImplementation((url) => `/my-base-path${url}`)
+    const mockProps = {
+      ...getMockProps(),
+      to: '/my/thing',
+    }
+    mount(<Link {...mockProps} />)
+    expect(isURLForDifferentApp).toHaveBeenCalledWith(`/my-base-path/my/thing`)
   })
 })
