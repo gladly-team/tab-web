@@ -37,7 +37,7 @@ class CustomDocument extends Document {
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-97R0W6NWB0',{'debug_mode':true});
-            gtag('config', 'G-97R0W6NWB0',{'user_app_version':'legacy', 'tfac_app_version':'legacy'});
+            gtag('config', 'G-97R0W6NWB0',{'user_app_version':'v4', 'tfac_app_version':'v4'});
             `,
             }}
           />
