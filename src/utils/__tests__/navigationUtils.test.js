@@ -1,4 +1,4 @@
-import { setWindowLocation } from 'src/utils/testHelpers/testUtils'
+import setWindowLocation from 'src/utils/testHelpers/setWindowLocation'
 
 beforeAll(() => {
   process.env.REACT_APP_WEBSITE_PROTOCOL = 'https'
@@ -9,22 +9,7 @@ afterEach(() => {
 })
 
 describe('isURLForDifferentApp', () => {
-  it('[absolute URL] considers the apps different if the URL is absolute, even if the URL is exactly the same', () => {
-    const { isURLForDifferentApp } = require('src/utils/navigationUtils')
-    setWindowLocation({
-      host: 'example.com',
-      hostname: 'example.com',
-      href: 'https://example.com/blah/path/',
-      origin: 'https://example.com',
-      pathname: '/blah/path/',
-      port: '',
-      protocol: 'https:',
-      search: '',
-    })
-    expect(isURLForDifferentApp('https://example.com/blah/path/')).toBe(true)
-  })
-
-  it('[absolute URL] considers the apps different if the URL is absolute and the URL is on a different app subpath', () => {
+  it('[absolute URL] is not a different app when the URL is absolute with the same domain and a "newtab" path', () => {
     const { isURLForDifferentApp } = require('src/utils/navigationUtils')
     setWindowLocation({
       host: 'example.com',
@@ -36,40 +21,57 @@ describe('isURLForDifferentApp', () => {
       protocol: 'https:',
       search: '',
     })
-    expect(isURLForDifferentApp('https://example.com/search/path/')).toBe(true)
+    expect(isURLForDifferentApp('https://example.com/newtab/path/')).toBe(false)
   })
 
-  it('[relative URL] considers the apps the same if the URL is exactly the same', () => {
+  it('[absolute URL] is a different app when the URL is absolute with a different domain', () => {
     const { isURLForDifferentApp } = require('src/utils/navigationUtils')
     setWindowLocation({
       host: 'example.com',
       hostname: 'example.com',
-      href: 'https://example.com/blah/path/',
+      href: 'https://example.com/newtab/path/',
       origin: 'https://example.com',
-      pathname: '/blah/path/',
+      pathname: '/newtab/path/',
       port: '',
       protocol: 'https:',
       search: '',
     })
-    expect(isURLForDifferentApp('/blah/path/')).toBe(false)
+    expect(isURLForDifferentApp('https://foo.com/newtab/path/')).toBe(true)
   })
 
-  it('[relative URL] considers the apps the same if the URLs are pages on the same "homepage" app (not part of the "newtab" or "search" subpaths)', () => {
+  it('[absolute URL] is a different app when the URL is absolute and on the same domain but with a non-"newtab" app subpath', () => {
     const { isURLForDifferentApp } = require('src/utils/navigationUtils')
     setWindowLocation({
       host: 'example.com',
       hostname: 'example.com',
-      href: 'https://example.com/blah/path/',
+      href: 'https://example.com/newtab/path/',
       origin: 'https://example.com',
-      pathname: '/blah/path/',
+      pathname: '/newtab/path/',
       port: '',
       protocol: 'https:',
       search: '',
     })
-    expect(isURLForDifferentApp('/some/thing/')).toBe(false)
+    expect(isURLForDifferentApp('https://example.com/something/path/')).toBe(
+      true
+    )
   })
 
-  it('[relative URL] considers the apps the same if the URLs are both on the "newtab" subpath', () => {
+  it('[relative URL] is not a different app if the URL is exactly the same with a newtab subpath', () => {
+    const { isURLForDifferentApp } = require('src/utils/navigationUtils')
+    setWindowLocation({
+      host: 'example.com',
+      hostname: 'example.com',
+      href: 'https://example.com/newtab/path/',
+      origin: 'https://example.com',
+      pathname: '/newtab/path/',
+      port: '',
+      protocol: 'https:',
+      search: '',
+    })
+    expect(isURLForDifferentApp('/newtab/path/')).toBe(false)
+  })
+
+  it('[relative URL] is not a differenta app if the URLs are both on the "newtab" subpath', () => {
     const { isURLForDifferentApp } = require('src/utils/navigationUtils')
     setWindowLocation({
       host: 'example.com',
@@ -82,81 +84,6 @@ describe('isURLForDifferentApp', () => {
       search: '',
     })
     expect(isURLForDifferentApp('/newtab/foobar/')).toBe(false)
-  })
-
-  it('[relative URL] considers the apps the same if the URLs are both on the "search" subpath', () => {
-    const { isURLForDifferentApp } = require('src/utils/navigationUtils')
-    setWindowLocation({
-      host: 'example.com',
-      hostname: 'example.com',
-      href: 'https://example.com/search/thing/',
-      origin: 'https://example.com',
-      pathname: '/search/thing/',
-      port: '',
-      protocol: 'https:',
-      search: '',
-    })
-    expect(isURLForDifferentApp('/search/foobar/')).toBe(false)
-  })
-
-  it('[relative URL] considers the apps different if the current location is on the "search" subpath and the URL is for the "homepage" app', () => {
-    const { isURLForDifferentApp } = require('src/utils/navigationUtils')
-    setWindowLocation({
-      host: 'example.com',
-      hostname: 'example.com',
-      href: 'https://example.com/search/thing/',
-      origin: 'https://example.com',
-      pathname: '/search/thing/',
-      port: '',
-      protocol: 'https:',
-      search: '',
-    })
-    expect(isURLForDifferentApp('/my-homepage/')).toBe(true)
-  })
-
-  it('[relative URL] considers the apps different if the current location is on the "search" subpath and the URL is for the "newtab" app', () => {
-    const { isURLForDifferentApp } = require('src/utils/navigationUtils')
-    setWindowLocation({
-      host: 'example.com',
-      hostname: 'example.com',
-      href: 'https://example.com/search/thing/',
-      origin: 'https://example.com',
-      pathname: '/search/thing/',
-      port: '',
-      protocol: 'https:',
-      search: '',
-    })
-    expect(isURLForDifferentApp('/newtab/foobar/')).toBe(true)
-  })
-
-  it('[relative URL] considers the apps different if the current location is on the "newtab" subpath and the URL is for the "homepage" app', () => {
-    const { isURLForDifferentApp } = require('src/utils/navigationUtils')
-    setWindowLocation({
-      host: 'example.com',
-      hostname: 'example.com',
-      href: 'https://example.com/newtab/thing/',
-      origin: 'https://example.com',
-      pathname: '/newtab/thing/',
-      port: '',
-      protocol: 'https:',
-      newtab: '',
-    })
-    expect(isURLForDifferentApp('/my-homepage/')).toBe(true)
-  })
-
-  it('[relative URL] considers the apps different if the current location is on the "newtab" subpath and the URL is for the "search" app', () => {
-    const { isURLForDifferentApp } = require('src/utils/navigationUtils')
-    setWindowLocation({
-      host: 'example.com',
-      hostname: 'example.com',
-      href: 'https://example.com/newtab/thing/',
-      origin: 'https://example.com',
-      pathname: '/newtab/thing/',
-      port: '',
-      protocol: 'https:',
-      search: '',
-    })
-    expect(isURLForDifferentApp('/search/foobar/')).toBe(true)
   })
 })
 

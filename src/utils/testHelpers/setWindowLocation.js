@@ -6,7 +6,7 @@
  *   to modify on the window.location object.
  * @return {undefined}
  */
-export const setWindowLocation = (modifiedLocation) => {
+const setWindowLocation = (modifiedLocation) => {
   const windowLocation = JSON.stringify(window.location)
   delete window.location
   Object.defineProperty(window, 'location', {

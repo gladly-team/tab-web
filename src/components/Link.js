@@ -18,9 +18,11 @@ const Link = (props) => {
   const classes = useStyles()
   const [destInternal, setDestInternal] = useState(true)
 
+  // We won't always server-render the "target" prop correctly.
+  // If that causes problems, use the URL from the request when
+  // server-side rendering.
   useEffect(() => {
     if (isURLForDifferentApp(to)) {
-      // Set that we can render the Firebase auth UI.
       setDestInternal(false)
     }
   }, [to])

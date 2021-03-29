@@ -1,7 +1,8 @@
 /* globals window */
 
 test('setWindowLocation modifies the window.location object', () => {
-  const { setWindowLocation } = require('src/utils/testHelpers/testUtils')
+  const setWindowLocation = require('src/utils/testHelpers/setWindowLocation')
+    .default
   expect(window.location.hostname).not.toEqual('foo.com')
   setWindowLocation({
     hostname: 'foo.com',
