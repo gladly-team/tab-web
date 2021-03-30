@@ -63,7 +63,7 @@ export const onboardingStepContents = (classes) => [
           align="center"
           className={classes.childrenTypography}
         >
-          Tabbers like you are supporting critical nonprofit all around the
+          Tabbers like you are supporting critical nonprofit work all around the
           world. Thank you!
         </Typography>
       </div>
