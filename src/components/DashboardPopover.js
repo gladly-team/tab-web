@@ -20,7 +20,7 @@ const DashboardPopover = (props) => {
   return (
     <Popover
       open={open}
-      anchorEl={anchorEl}
+      anchorEl={open && anchorEl}
       onClose={onClose}
       anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       transformOrigin={{ horizontal: 'center', vertical: 'top' }}
