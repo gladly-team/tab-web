@@ -14,10 +14,12 @@ const useStyles = makeStyles(() => ({
 }))
 
 const Link = (props) => {
-  const { children, className, to } = props
+  const { children, className, target, to } = props
   const classes = useStyles()
   const [destInternal, setDestInternal] = useState(true)
 
+  // Explicitly set target="_top" for external links, because our
+  // app may be served in an iframe.
   // We won't always server-render the "target" prop correctly.
   // If that causes problems, use the URL from the request when
   // server-side rendering.
@@ -31,12 +33,18 @@ const Link = (props) => {
     }
   }, [to])
 
+  // Always use the anchor prop, if provided; otherwise, fall
+  // back to the default.
+  let anchorTarget
+  if (target) {
+    anchorTarget = target
+  } else {
+    anchorTarget = destInternal ? undefined : '_top'
+  }
+
   return (
     <NextJsLink href={to}>
-      <a
-        target={destInternal ? undefined : '_top'}
-        className={clsx(classes.anchor, className)}
-      >
+      <a target={anchorTarget} className={clsx(classes.anchor, className)}>
         {children}
       </a>
     </NextJsLink>
@@ -52,10 +60,12 @@ Link.propTypes = {
   ]).isRequired,
   className: PropTypes.string,
   to: PropTypes.string.isRequired,
+  target: PropTypes.string,
 }
 
 Link.defaultProps = {
   className: '',
+  target: undefined,
 }
 
 export default Link

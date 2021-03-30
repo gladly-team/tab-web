@@ -11,7 +11,7 @@ import onboarding3 from 'src/assets/onboarding/onboarding3.png'
 import PropTypes from 'prop-types'
 import Link from 'src/components/Link'
 
-export const useStyles = makeStyles(() => ({
+export const useStyles = makeStyles((theme) => ({
   card: {
     display: 'flex',
     width: '400px',
@@ -43,6 +43,11 @@ export const useStyles = makeStyles(() => ({
     justifyContent: 'flex-end',
     display: 'flex',
   },
+  link: {
+    display: 'inline',
+    color: theme.palette.primary.main,
+    textDecoration: 'none',
+  },
 }))
 
 export const onboardingStepContents = (classes) => [
@@ -63,7 +68,7 @@ export const onboardingStepContents = (classes) => [
           align="center"
           className={classes.childrenTypography}
         >
-          Tabbers like you are supporting critical nonprofit all around the
+          Tabbers like you are supporting critical nonprofit work all around the
           world. Thank you!
         </Typography>
       </div>
@@ -79,9 +84,14 @@ export const onboardingStepContents = (classes) => [
           align="center"
           className={classes.childrenTypography}
         >
-          Your tabs will help shelter cats get adopted by
-          <Link to="https://thejacksongalaxyproject.greatergood.org/about/cat-pawsitive/">
-            providing treats used in positive reinforcement training.
+          Your tabs support initiatives that help shelter cats get adopted,
+          including initiatives that{' '}
+          <Link
+            target="_blank"
+            to="https://thejacksongalaxyproject.greatergood.org/about/cat-pawsitive/"
+            className={classes.link}
+          >
+            use treats in positive reinforcement training.
           </Link>
         </Typography>
         <Typography

@@ -11,6 +11,7 @@ const getMockProps = () => ({
   children: 'hi',
   className: 'some-class',
   to: 'https://tab.gladly.io/newtab/blah/',
+  target: undefined,
 })
 
 beforeEach(() => {
@@ -61,7 +62,7 @@ describe('Link component', () => {
       className: 'some-class-here',
     }
     const wrapper = shallow(<Link {...mockProps} />)
-    const anchor = wrapper.childAt(0)
+    const anchor = wrapper.find('a').first()
     expect(anchor.prop('className')).toContain('some-class-here')
   })
 
@@ -95,5 +96,26 @@ describe('Link component', () => {
     }
     mount(<Link {...mockProps} />)
     expect(isURLForDifferentApp).toHaveBeenCalledWith(`/my-base-path/my/thing`)
+  })
+
+  it('assigns the "target" prop to the anchor if it is provided', () => {
+    const Link = require('src/components/Link').default
+    const mockProps = {
+      ...getMockProps(),
+      target: '_blank',
+    }
+    const wrapper = shallow(<Link {...mockProps} />)
+    expect(wrapper.find('a').first().prop('target')).toEqual('_blank')
+  })
+
+  it('uses the "target" prop when provided, rather than target="_top", when it is an external link', () => {
+    const Link = require('src/components/Link').default
+    const mockProps = {
+      ...getMockProps(),
+      url: 'https://blahblah.com',
+      target: '_blank',
+    }
+    const wrapper = shallow(<Link {...mockProps} />)
+    expect(wrapper.find('a').first().prop('target')).toEqual('_blank')
   })
 })
