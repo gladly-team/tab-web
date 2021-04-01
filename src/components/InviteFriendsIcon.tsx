@@ -30,8 +30,11 @@ const useStyles = makeStyles((theme) => ({
     width: 402,
   },
 }))
+type Props = {
+  user: {username: string, numUsersRecruited: number}
+}
 
-const InviteFriendsIcon = ({ user: { username, numUsersRecruited } }) => {
+const InviteFriendsIcon = ({ user: { username, numUsersRecruited } }: Props) => {
   const buttonRef = useRef(undefined)
   const [isPopoverOpen, setIsPopoverOpen] = useState()
   const classes = useStyles()
