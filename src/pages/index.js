@@ -69,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'auto',
   },
   feedbackLink: {
     position: 'absolute',
