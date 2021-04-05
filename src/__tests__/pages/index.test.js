@@ -556,6 +556,7 @@ describe('index.js', () => {
     })
   })
 })
+
 it('shows the intro flow if a user has not completed it', () => {
   const mockProps = {
     data: {
