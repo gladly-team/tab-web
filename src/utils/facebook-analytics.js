@@ -7,15 +7,9 @@ const facebookAnalytics = (...args) => {
     logger.error('Facebook analytics are not available on `window.fbq`.')
     return
   }
-  const DEBUG = false
-
   // eslint-disable-next-line no-undef
   const { fbq } = window
   try {
-    if (DEBUG) {
-      // eslint-disable-next-line no-console
-      console.log('Logging Facebook event with args:', args)
-    }
     fbq.apply(this, args)
   } catch (e) {
     logger.error(e)

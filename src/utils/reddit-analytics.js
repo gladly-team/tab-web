@@ -8,15 +8,9 @@ const redditAnalytics = (...args) => {
     logger.error('Reddit analytics are not available on `window.rdt`.')
     return
   }
-  const DEBUG = false
-
   // eslint-disable-next-line no-undef
   const { rdt } = window
   try {
-    if (DEBUG) {
-      // eslint-disable-next-line no-console
-      console.log('Logging Reddit event with args:', args)
-    }
     rdt.apply(this, args)
   } catch (e) {
     logger.error(e)
