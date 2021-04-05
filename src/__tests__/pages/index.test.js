@@ -381,6 +381,7 @@ describe('index.js', () => {
     mount(<IndexPage {...mockProps} />)
     expect(accountCreated).toHaveBeenCalled()
   })
+
   it('does not log account created to facebook and reddit if user is not visiting for the first time', () => {
     const mockProps = getMockProps()
     useData.mockReturnValue({
