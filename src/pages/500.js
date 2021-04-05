@@ -1,6 +1,6 @@
 import React from 'react'
-import Error from 'next/error'
+import ErrorPage from 'src/components/ErrorPage'
 
 export default function Custom500() {
-  return <Error statusCode={500} />
+  return <ErrorPage />
 }
