@@ -5,7 +5,8 @@ import { flowRight } from 'lodash/util'
 import { isNil } from 'lodash/lang'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
-import { graphql } from 'react-relay'
+
+// import { graphql } from 'react-relay'
 import { AdComponent, fetchAds } from 'tab-ads'
 import uuid from 'uuid/v4'
 import { get } from 'lodash/object'
@@ -238,37 +239,39 @@ if (isClientSide()) {
   loadAds()
 }
 
-const getRelayQuery = async ({ AuthUser }) => {
-  // If the user is not authenticated, don't try to fetch data
-  // for this page. We won't render the page until data exists.
-  if (!AuthUser.id) {
-    return {}
-  }
-  return {
-    query: graphql`
-      query pagesIndexQuery($userId: String!, $charityId: String!) {
-        app {
-          ...MoneyRaisedContainer_app
-        }
-        user(userId: $userId) {
-          tabs
-          vcCurrent
-          id
-          hasViewedIntroFlow
-          ...UserBackgroundImageContainer_user
-          ...UserImpactContainer_user
-          ...InviteFriendsIconContainer_user
-        }
-        userImpact(userId: $userId, charityId: $charityId) {
-          ...UserImpactContainer_userImpact
-        }
-      }
-    `,
-    variables: {
-      userId: AuthUser.id,
-      charityId: CAT_CHARITY,
-    },
-  }
+const getRelayQuery = async () => {
+  throw new Error('500')
+
+  // // If the user is not authenticated, don't try to fetch data
+  // // for this page. We won't render the page until data exists.
+  // if (!AuthUser.id) {
+  //   return {}
+  // }
+  // return {
+  //   query: graphql`
+  //     query pagesIndexQuery($userId: String!, $charityId: String!) {
+  //       app {
+  //         ...MoneyRaisedContainer_app
+  //       }
+  //       user(userId: $userId) {
+  //         tabs
+  //         vcCurrent
+  //         id
+  //         hasViewedIntroFlow
+  //         ...UserBackgroundImageContainer_user
+  //         ...UserImpactContainer_user
+  //         ...InviteFriendsIconContainer_user
+  //       }
+  //       userImpact(userId: $userId, charityId: $charityId) {
+  //         ...UserImpactContainer_userImpact
+  //       }
+  //     }
+  //   `,
+  //   variables: {
+  //     userId: AuthUser.id,
+  //     charityId: CAT_CHARITY,
+  //   },
+  // }
 }
 
 const Index = ({ data: initialData }) => {
