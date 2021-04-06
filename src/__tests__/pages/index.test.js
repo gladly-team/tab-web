@@ -22,6 +22,7 @@ import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import { AdComponent } from 'tab-ads'
 import { isClientSide } from 'src/utils/ssr'
 import { getAdUnits } from 'src/utils/adHelpers'
+import { accountCreated, newTabView } from 'src/utils/events'
 
 jest.mock('uuid/v4')
 uuid.mockReturnValue('some-uuid')
@@ -29,6 +30,7 @@ jest.mock('next-firebase-auth')
 jest.mock('@material-ui/icons/Settings')
 jest.mock('src/components/Link')
 jest.mock('src/utils/navigation')
+jest.mock('src/utils/events')
 jest.mock('src/utils/adHelpers')
 jest.mock('src/utils/ssr')
 jest.mock('src/utils/adHelpers', () => ({
@@ -320,6 +322,93 @@ describe('index.js', () => {
     expect(LogTabMutation).not.toHaveBeenCalled()
   })
 
+  it('logs to facebook and reddit if the user is defined', () => {
+    const mockProps = getMockProps()
+    const IndexPage = require('src/pages/index').default
+    mount(<IndexPage {...mockProps} />)
+    expect(newTabView).toHaveBeenCalled()
+  })
+
+  it('does not log to facebook and reddit if user is not defined', () => {
+    const mockProps = getMockProps()
+    useData.mockReturnValue({
+      data: {
+        app: {},
+        user: {
+          tabs: 221,
+          vcCurrent: 78,
+          hasViewedIntroFlow: true,
+        },
+        userImpact: {
+          userId: 'asdf',
+          visitsUntilNextImpact: 2,
+          pendingUserReferralImpact: 10,
+          pendingUserReferralCount: 1,
+          userImpactMetric: 3,
+          confirmedImpact: true,
+          hasClaimedLatestReward: true,
+        },
+      },
+    })
+    const IndexPage = require('src/pages/index').default
+    mount(<IndexPage {...mockProps} />)
+    expect(newTabView).not.toHaveBeenCalled()
+  })
+
+  it('logs to facebook and reddit if user is visiting for the first time', () => {
+    const mockProps = getMockProps()
+    useData.mockReturnValue({
+      data: {
+        app: {},
+        user: {
+          tabs: 0,
+          id: 'asdf',
+          vcCurrent: 78,
+          hasViewedIntroFlow: true,
+        },
+        userImpact: {
+          userId: 'asdf',
+          visitsUntilNextImpact: 2,
+          pendingUserReferralImpact: 10,
+          pendingUserReferralCount: 1,
+          userImpactMetric: 3,
+          confirmedImpact: true,
+          hasClaimedLatestReward: true,
+        },
+      },
+    })
+    const IndexPage = require('src/pages/index').default
+    mount(<IndexPage {...mockProps} />)
+    expect(accountCreated).toHaveBeenCalled()
+  })
+
+  it('does not log account created to facebook and reddit if user is not visiting for the first time', () => {
+    const mockProps = getMockProps()
+    useData.mockReturnValue({
+      data: {
+        app: {},
+        user: {
+          tabs: 1,
+          id: 'asdf',
+          vcCurrent: 78,
+          hasViewedIntroFlow: true,
+        },
+        userImpact: {
+          userId: 'asdf',
+          visitsUntilNextImpact: 2,
+          pendingUserReferralImpact: 10,
+          pendingUserReferralCount: 1,
+          userImpactMetric: 3,
+          confirmedImpact: true,
+          hasClaimedLatestReward: true,
+        },
+      },
+    })
+    const IndexPage = require('src/pages/index').default
+    mount(<IndexPage {...mockProps} />)
+    expect(accountCreated).not.toHaveBeenCalled()
+  })
+
   it('calls LogUserRevenueMutation for each Ad when the onAdDisplayed prop is invoked', () => {
     setUpAds()
     const IndexPage = require('src/pages/index').default
@@ -467,6 +556,7 @@ describe('index.js', () => {
     })
   })
 })
+
 it('shows the intro flow if a user has not completed it', () => {
   const mockProps = {
     data: {
