@@ -20,7 +20,7 @@ describe('reddit-analytics', () => {
   })
 
   test('does not call or throw if serverside', () => {
-    const fbAnalytics = require('src/utils/facebook-analytics').default
+    const fbAnalytics = require('src/utils/reddit-analytics').default
     isClientSide.mockReturnValue(false)
 
     // Suppress an expected console error

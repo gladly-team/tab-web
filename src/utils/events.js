@@ -1,7 +1,7 @@
-// Call once on a new user's first tab.
 import fbq from 'src/utils/facebook-analytics'
 import rdt from 'src/utils/reddit-analytics'
 
+// Call once on a new user's first tab.
 export const accountCreated = () => {
   fbq('track', 'CompleteRegistration', { content_name: 'AccountCreated' })
   rdt('track', 'SignUp')
