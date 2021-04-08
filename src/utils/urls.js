@@ -1,4 +1,5 @@
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
+import { withBasePath } from 'src/utils/navigationUtils'
 
 try {
   ensureValuesAreDefined([
@@ -11,10 +12,6 @@ try {
     'Environment variables NEXT_PUBLIC_URLS_BASE_PATH, NEXT_PUBLIC_URLS_API_BASE_PATH, and NEXT_PUBLIC_URLS_USE_TRAILING_SLASH must be set.'
   )
 }
-
-// Base path set in Next config. This must match our app's
-// CloudFront routing.
-const basePath = process.env.NEXT_PUBLIC_URLS_BASE_PATH || ''
 
 // In CloudFront, the /v4 base path routes to this Next.js
 // app. The /newtab base paths routes to the this app -OR-
@@ -31,8 +28,6 @@ const addTrailingSlashIfNeeded = (path) => {
   const hasTrailingSlash = path[path.length - 1] === '/'
   return `${path}${!hasTrailingSlash && useTrailingSlash ? '/' : ''}`
 }
-
-export const withBasePath = (path) => `${basePath}${path}`
 
 // For /api/* paths.
 const createAPIURL = (url) =>
@@ -55,6 +50,7 @@ export const PWAManifestURL = withBasePath('/manifest.json')
 export const EXTERNAL_CONTACT_US_URL =
   'https://gladly.zendesk.com/hc/en-us/requests/new'
 export const HELP_URL = 'https://tab.gladly.io/help/'
+export const FINANCIALS_URL = 'https://tab.gladly.io/financials/'
 // eslint-disable-next-line no-undef
 export const reload = () => window.location.reload()
 export const externalNavigation = (url) => {

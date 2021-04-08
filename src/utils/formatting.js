@@ -32,3 +32,4 @@ export const currencyFormatUSD = (num) => {
     currency: 'USD',
   }).format(num)
 }
+export const isPlural = (num) => (num === 1 ? '' : 's')

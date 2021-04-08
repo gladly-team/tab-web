@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import DashboardPopover from 'src/components/DashboardPopover'
 import { get } from 'lodash/object'
 import InviteFriends from 'src/components/InviteFriends'
+import { isPlural } from 'src/utils/formatting'
 
 const useStyles = makeStyles((theme) => ({
   copyIcon: {
@@ -56,9 +57,7 @@ const InviteFriendsIcon = ({ user: { username, numUsersRecruited } }) => {
           <Typography className={classes.titleSection}>
             You've recruited{' '}
             <span style={{ fontWeight: 'bold' }}>
-              {`${numUsersRecruited} friend${
-                numUsersRecruited > 1 ? 's' : ''
-              } `}
+              {`${numUsersRecruited} friend${isPlural(numUsersRecruited)} `}
             </span>{' '}
           </Typography>
           <Typography gutterBottom variant="body2">

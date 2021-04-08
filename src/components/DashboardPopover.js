@@ -2,8 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Popover from '@material-ui/core/Popover'
 import { makeStyles } from '@material-ui/core/styles'
+import clsx from 'clsx'
 
 const useStyles = makeStyles(() => ({
+  root: {
+    zIndex: '10000000 !important',
+  },
   popoverStyle: {
     width: '100%',
     height: 3,
@@ -20,7 +24,7 @@ const DashboardPopover = (props) => {
       onClose={onClose}
       anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
       transformOrigin={{ horizontal: 'center', vertical: 'top' }}
-      className={className}
+      className={clsx(classes.root, className)}
     >
       <div className={classes.popoverStyle} />
       {children}

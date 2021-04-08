@@ -24,23 +24,24 @@ class CustomDocument extends Document {
             https://github.com/gladly-team/tab-ads#html-tags
            */}
 
-          {/* Google Publisher Tag */}
+          {/* Google Analytics V4 Tag */}
           <script
             async
-            src="https://www.googletagmanager.com/gtag/js?id=G-97R0W6NWB0"
+            src="https://www.googletagmanager.com/gtag/js?id=G-LDFLQCKVHG"
           />
           <script
-            key="gtag-global"
+            key="gtag-global-ga4"
             dangerouslySetInnerHTML={{
               __html: `
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-97R0W6NWB0',{'debug_mode':true});
-            gtag('config', 'G-97R0W6NWB0',{'user_app_version':'v4', 'tfac_app_version':'v4'});
+            gtag('config', 'G-LDFLQCKVHG');
+            gtag('config', 'G-LDFLQCKVHG',{'tfac_app_version':'v4'});
             `,
             }}
           />
+          {/* Google Publisher Tag */}
           <script
             dangerouslySetInnerHTML={{
               __html: `
@@ -74,7 +75,38 @@ class CustomDocument extends Document {
                 `,
             }}
           />
-
+          {/* Reddit Pixel */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','t2_9btvy');rdt('track', 'PageVisit');`,
+            }}
+          />
+          {/* Facebook Pixel */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                  try {
+                    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+                      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+                      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+                      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+                      fbq('init', '1813501258922708');
+                  } catch(e) {
+                    console.error(e)
+                  }`,
+            }}
+          />
+          <noscript>
+            <img
+              alt=""
+              height="1"
+              width="1"
+              style={{ display: 'none' }}
+              src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
+            />
+          </noscript>
           {/* Index Exchange */}
           <script
             async

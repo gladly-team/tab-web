@@ -17,9 +17,12 @@ import {
   accountURL,
   achievementsURL,
   dashboardURL,
+  FINANCIALS_URL,
   HELP_URL,
+  surveyLink,
 } from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
+import { Divider } from '@material-ui/core'
 
 const sidebarWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -58,6 +61,10 @@ const useStyles = makeStyles((theme) => ({
   sidebarContentContainer: {
     width: sidebarWidth,
     position: 'fixed',
+  },
+  divider: {
+    marginTop: '10px',
+    marginBottom: '10px',
   },
 }))
 
@@ -116,7 +123,15 @@ const SettingsPage = (props) => {
             </SettingsMenuItem>
           ) : null}
           <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
+          <Divider className={classes.divider} />
+          <ListSubheader disableSticky className={classes.listSubheader}>
+            More Info
+          </ListSubheader>
           <SettingsMenuItem to={HELP_URL}>Help</SettingsMenuItem>
+          <SettingsMenuItem to={FINANCIALS_URL}>
+            Our Financials
+          </SettingsMenuItem>
+          <SettingsMenuItem to={surveyLink}>Feedback</SettingsMenuItem>
         </List>
       </div>
       <div

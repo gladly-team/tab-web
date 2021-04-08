@@ -85,8 +85,8 @@ const ImpactCounter = (props) => {
             className={classes.dropdownText}
             gutterBottom
           >
-            This shows how many treats you've provided to help shelter cats get
-            adopted. Every tab you open helps. Keep it up!
+            This shows how many treats your tabs can provide to help shelter
+            cats get adopted. Every tab you open helps. Keep it up!
           </Typography>
         </div>
       </DashboardPopover>

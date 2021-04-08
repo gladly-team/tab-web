@@ -1,7 +1,7 @@
 /* globals window */
 import Router from 'next/router'
 import { isServerSide } from 'src/utils/ssr'
-import { withBasePath } from 'src/utils/urls'
+import { withBasePath } from 'src/utils/navigationUtils'
 
 // Handle redirects on both the client side and server side.
 // Adapted from:
