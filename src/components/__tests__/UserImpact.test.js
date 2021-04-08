@@ -7,12 +7,17 @@ import Notification from 'src/components/Notification'
 import ImpactDialog from 'src/components/ImpactDialog'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import preloadAll from 'jest-next-dynamic'
+import confetti from 'canvas-confetti'
 
 jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('@material-ui/core/Typography')
 jest.mock('src/components/SocialShare', () => () => <div />)
 jest.mock('src/components/InviteFriends', () => () => <div />)
 jest.mock('src/utils/caching')
+jest.mock('canvas-confetti', () => ({
+  create: jest.fn().mockReturnValue(() => {}),
+}))
+
 const getMockProps = (userImpactOverrides) => ({
   userImpact: {
     visitsUntilNextImpact: 3,
@@ -201,5 +206,28 @@ describe('UserImpact component', () => {
     const rewardDialog = wrapper.find(ImpactDialog).at(3)
     rewardDialog.find(Button).simulate('click')
     expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(false)
+  })
+
+  it('launches cofetti if a user hits 100 percent on the progress bar', async () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps({ visitsUntilNextImpact: 14 })
+    mount(<UserImpact {...mockProps} />)
+    expect(confetti.create).toHaveBeenCalledTimes(1)
+  })
+
+  it('launches cofetti if a user hits 100 percent on the progress bar and only fires once', async () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps({ visitsUntilNextImpact: 14 })
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(Notification).at(0)
+    notification.find(Button).simulate('click')
+    expect(confetti.create).toHaveBeenCalledTimes(1)
+  })
+
+  it('does notlaunch the cofetti if a user is not at 100% progress', async () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps({ visitsUntilNextImpact: 12 })
+    mount(<UserImpact {...mockProps} />)
+    expect(confetti.create).toHaveBeenCalledTimes(0)
   })
 })
