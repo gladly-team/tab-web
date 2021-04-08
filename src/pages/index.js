@@ -56,6 +56,7 @@ import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
 import { CAT_CHARITY } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
+import { accountCreated, newTabView } from 'src/utils/events'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -69,6 +70,7 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'auto',
   },
   feedbackLink: {
     position: 'absolute',
@@ -302,6 +304,7 @@ const Index = ({ data: initialData }) => {
   }, [])
   const { app, user, userImpact } = data || {}
   const userGlobalId = get(user, 'id')
+  const globalTabCount = get(user, 'tabs')
   const [tabId] = useState(uuid())
 
   // this is a temporary workaround as the latest updates to the
@@ -317,8 +320,16 @@ const Index = ({ data: initialData }) => {
       UpdateImpactMutation(userGlobalId, CAT_CHARITY, {
         logImpact: true,
       })
+      newTabView()
     }
   }, [userGlobalId, tabId])
+
+  // log reddit and fbook event if first visit
+  useEffect(() => {
+    if (globalTabCount === 0) {
+      accountCreated()
+    }
+  }, [globalTabCount])
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
