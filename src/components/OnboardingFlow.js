@@ -16,6 +16,7 @@ export const useStyles = makeStyles((theme) => ({
     display: 'flex',
     width: '400px',
     height: '460px',
+    overflow: 'auto',
     boxShadow: 'none',
     backgroundColor: grey,
   },
@@ -24,6 +25,7 @@ export const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
+    overflow: 'auto',
   },
   cardTitle: {
     padding: '12px',
