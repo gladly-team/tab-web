@@ -56,10 +56,13 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const AccountItem = (props) => {
-  const { actionButton, name, value } = props
+  const { actionButton, name, value, testId } = props
   const classes = useStyles()
   return (
-    <div className={classes.accountItem} data-test-id="account-item">
+    <div
+      className={classes.accountItem}
+      data-test-id={testId || 'account-item'}
+    >
       <Typography variant="body2" className={classes.accountItemName}>
         {name}
       </Typography>
@@ -79,11 +82,13 @@ AccountItem.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string,
   actionButton: PropTypes.element,
+  testId: PropTypes.string,
 }
 
 AccountItem.defaultProps = {
   actionButton: null,
   value: null,
+  testId: undefined,
 }
 
 const getRelayQuery = ({ AuthUser }) => {
@@ -235,6 +240,7 @@ const Account = ({ data: initialData }) => {
                   Review choices
                 </Button>
               }
+              testId="data-privacy"
             />
           </>
         ) : null}
@@ -273,6 +279,7 @@ const Account = ({ data: initialData }) => {
                   </Typography>
                 </div>
               }
+              testId="data-privacy"
             />
           </>
         ) : null}

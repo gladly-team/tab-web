@@ -392,9 +392,7 @@ describe('account.js: CMP privacy management', () => {
     })
 
     // Find the data privacy choices setting.
-    const privacyChoicesSection = wrapper
-      .find('[data-test-id="account-item"]')
-      .last()
+    const privacyChoicesSection = wrapper.find('[data-test-id="data-privacy"]')
     expect(privacyChoicesSection.find('p').first().text()).toEqual(
       'Data privacy choices'
     )
@@ -416,9 +414,7 @@ describe('account.js: CMP privacy management', () => {
       wrapper.update()
     })
 
-    const privacyChoicesSection = wrapper
-      .find('[data-test-id="account-item"]')
-      .last()
+    const privacyChoicesSection = wrapper.find('[data-test-id="data-privacy"]')
     const button = privacyChoicesSection.find('button').first()
 
     expect(tabCMP.openTCFConsentDialog).not.toHaveBeenCalled()
@@ -443,14 +439,8 @@ describe('account.js: CMP privacy management', () => {
       wrapper.update()
     })
 
-    const accountItems = wrapper.find('[data-test-id="account-item"]')
-    let containsDataPrivacyOption = false
-    accountItems.forEach((item) => {
-      if (item.find('p').first().text() === 'Data privacy choices') {
-        containsDataPrivacyOption = true
-      }
-    })
-    expect(containsDataPrivacyOption).toBe(false)
+    const privacyChoicesSection = wrapper.find('[data-test-id="data-privacy"]')
+    expect(privacyChoicesSection.exists()).toBe(false)
   })
 
   it('shows the CCPA data privacy button when the client is in the US', async () => {
@@ -469,9 +459,7 @@ describe('account.js: CMP privacy management', () => {
       wrapper.update()
     })
 
-    const privacyChoicesSection = wrapper
-      .find('[data-test-id="account-item"]')
-      .last()
+    const privacyChoicesSection = wrapper.find('[data-test-id="data-privacy"]')
     expect(privacyChoicesSection.find('p').first().text()).toEqual(
       'Ad personalization choices'
     )
@@ -493,9 +481,7 @@ describe('account.js: CMP privacy management', () => {
       wrapper.update()
     })
 
-    const privacyChoicesSection = wrapper
-      .find('[data-test-id="account-item"]')
-      .last()
+    const privacyChoicesSection = wrapper.find('[data-test-id="data-privacy"]')
     const link = privacyChoicesSection.find('a').first()
 
     expect(tabCMP.openCCPAConsentDialog).not.toHaveBeenCalled()
@@ -520,13 +506,7 @@ describe('account.js: CMP privacy management', () => {
       wrapper.update()
     })
 
-    const accountItems = wrapper.find('[data-test-id="account-item"]')
-    let containsDataPrivacyOption = false
-    accountItems.forEach((item) => {
-      if (item.find('p').first().text() === 'Ad personalization choices') {
-        containsDataPrivacyOption = true
-      }
-    })
-    expect(containsDataPrivacyOption).toBe(false)
+    const privacyChoicesSection = wrapper.find('[data-test-id="data-privacy"]')
+    expect(privacyChoicesSection.exists()).toBe(false)
   })
 })
