@@ -18,6 +18,7 @@ import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 import useData from 'src/utils/hooks/useData'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import initializeCMP from 'src/utils/initializeCMP'
+import Accordion from '@material-ui/core/Accordion'
 
 jest.mock('next-offline/runtime')
 jest.mock('tab-cmp')
@@ -254,29 +255,35 @@ describe('account.js', () => {
   })
 })
 
-describe('account.js: "switch back to classic"', () => {
-  it('displays the "switch back to classic" field', () => {
+const getAdvancedOptionsSection = (wrapper) => wrapper.find(Accordion).first()
+
+const getRevertButton = (wrapper) =>
+  getAdvancedOptionsSection(wrapper).children().find(Button).first()
+
+describe('account.js: button to revert to classic Tab for a Cause', () => {
+  it('displays the "revert" button field in the advanced options section', () => {
     expect.assertions(2)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
-    const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
-    const accountItem = content.childAt(6).dive()
-    expect(accountItem.find(Typography).first().text()).toEqual('Beta Enabled')
-    expect(accountItem.find(Button).first().text()).toEqual('Switch to Classic')
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const advancedOptions = getAdvancedOptionsSection(wrapper)
+    expect(advancedOptions.children().find(Typography).at(1).text()).toEqual(
+      'Leave Tab for Cats'
+    )
+    expect(advancedOptions.children().find(Button).first().text()).toEqual(
+      'Switch to Classic'
+    )
   })
 
-  it('clicking the "switch back to classic" button calls the API endpoint as expected', async () => {
+  it('clicking the "revert" button button calls the API endpoint as expected', async () => {
     expect.assertions(1)
     fetch.mockResolvedValue(getMockFetchResponse())
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
-    const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
-    const accountItem = content.childAt(6).dive()
-    const optOutButton = accountItem.find(Button).first()
-    optOutButton.simulate('click')
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const revertButton = getRevertButton(wrapper)
+    revertButton.simulate('click')
     await flushAllPromises()
     expect(fetch).toHaveBeenCalledWith(apiBetaOptIn, {
       body: '{"optIn":false}',
@@ -289,44 +296,38 @@ describe('account.js: "switch back to classic"', () => {
     })
   })
 
-  it('clicking the "switch back to classic" clears the service worker caches', async () => {
+  it('clicking the "revert" button clears the service worker caches', async () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
-    const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
-    const accountItem = content.childAt(6).dive()
-    const optOutButton = accountItem.find(Button).first()
-    optOutButton.simulate('click')
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const revertButton = getRevertButton(wrapper)
+    revertButton.simulate('click')
     await flushAllPromises()
     expect(clearAllServiceWorkerCaches).toHaveBeenCalled()
   })
 
-  it('clicking the "switch back to classic" unregisters the service worker', async () => {
+  it('clicking the "revert" button unregisters the service worker', async () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
-    const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
-    const accountItem = content.childAt(6).dive()
-    const optOutButton = accountItem.find(Button).first()
-    optOutButton.simulate('click')
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const revertButton = getRevertButton(wrapper)
+    revertButton.simulate('click')
     await flushAllPromises()
     expect(unregister).toHaveBeenCalled()
   })
 
-  it('clicking the "switch back to classic" calls SetV4BetaMutation when the user is authenticated', async () => {
+  it('clicking the "revert" button calls SetV4BetaMutation when the user is authenticated', async () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
-    const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
-    const accountItem = content.childAt(6).dive()
-    const optOutButton = accountItem.find(Button).first()
-    optOutButton.simulate('click')
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const revertButton = getRevertButton(wrapper)
+    revertButton.simulate('click')
     await flushAllPromises()
     expect(SetV4BetaMutation).toHaveBeenCalledWith({
       enabled: false,
@@ -334,32 +335,28 @@ describe('account.js: "switch back to classic"', () => {
     })
   })
 
-  it('clicking the "switch back to classic" does not call SetV4BetaMutation when the user is not authenticated', async () => {
+  it('clicking the "revert" button does not call SetV4BetaMutation when the user is not authenticated', async () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     useData.mockReturnValue({
       data: { ...getMockDataResponse(), user: undefined },
     })
-    const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
-    const accountItem = content.childAt(6).dive()
-    const optOutButton = accountItem.find(Button).first()
-    optOutButton.simulate('click')
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const revertButton = getRevertButton(wrapper)
+    revertButton.simulate('click')
     await flushAllPromises()
     expect(SetV4BetaMutation).not.toHaveBeenCalled()
   })
 
-  it('clicking the "switch back to classic" navigates to the dashboard', async () => {
+  it('clicking the "revert" button navigates to the dashboard', async () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
-    const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
-    const accountItem = content.childAt(6).dive()
-    const optOutButton = accountItem.find(Button).first()
-    optOutButton.simulate('click')
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const revertButton = getRevertButton(wrapper)
+    revertButton.simulate('click')
     await flushAllPromises()
     expect(setWindowLocation).toHaveBeenCalledWith(dashboardURL)
   })
