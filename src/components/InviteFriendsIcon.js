@@ -62,7 +62,7 @@ const InviteFriendsIcon = ({ user: { username, numUsersRecruited } }) => {
           </Typography>
           <Typography gutterBottom variant="body2">
             Invite a friend! When they join, you'll each earn 5 treats to give
-            to shelter:
+            to shelter cats:
           </Typography>
           <InviteFriends
             user={{ username }}

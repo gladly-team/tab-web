@@ -111,17 +111,15 @@ const ImpactDialog = ({
         <>
           <MuiDialogTitle disableTypography className={classes.root}>
             <Typography variant="h6" className={classes.title}>
-              You've already made a difference!
+              Open a new tab
             </Typography>
           </MuiDialogTitle>
           <MuiDialogContent className={classes.walkMe}>
             <Typography className={classes.justify}>
-              When your friend referred you to Tab For Cats, you each earned
-              five treats to give to shelter cats. Now, when you open a new tab
-              you'll generate enough money to give a 6th shelter cat a treat.
-              These treats are used during training sessions and are crucial to
-              getting shelter cats adopted. We'll track how many treats you've
-              given on the top of the page:
+              Your friend started you off with 5 cat treats, which are crucial
+              to getting shelter cats adopted. Open a new tab now to earn your
+              6th treat! We'll track how many treats you've given on the top of
+              the page:
             </Typography>
             <div className={classes.impactCounter}>
               <ImpactCounter includeNumber number={5} progress={100} />
