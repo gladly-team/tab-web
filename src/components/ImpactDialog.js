@@ -149,7 +149,8 @@ const ImpactDialog = ({
               className={clsx(classes.typographySpacing, classes.justify)}
             >
               The more people who open tabs, the more good we can do! Get a
-              friend on board and we'll give a treat to another 10 shelter cats:
+              friend on board and you'll each earn another 5 treats to give to
+              shelter cats:
             </Typography>
             <div className={classes.shareContainer}>
               <div className={classes.InviteFriends}>
