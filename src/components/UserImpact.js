@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import dynamic from 'next/dynamic'
 import { isPlural } from 'src/utils/formatting'
 import confetti from 'canvas-confetti'
+import usePrevious from 'src/utils/hooks/usePrevious'
 
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
@@ -35,7 +36,7 @@ const UserImpact = ({ userImpact, user }) => {
   } = userImpact
   const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
-
+  const prevVisitsUntilNextImpact = usePrevious(visitsUntilNextImpact)
   const referralRewardNotificationOpen = pendingUserReferralImpact > 0
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(!confirmedImpact)
   const [alertDialogOpen, setAlertDialogOpen] = useState(false)
@@ -86,10 +87,13 @@ const UserImpact = ({ userImpact, user }) => {
     })
   }
   useEffect(() => {
-    if (visitsUntilNextImpact === CAT_IMPACT_VISITS) {
+    if (
+      visitsUntilNextImpact === CAT_IMPACT_VISITS &&
+      prevVisitsUntilNextImpact === 1
+    ) {
       confettiFunc()
     }
-  }, [visitsUntilNextImpact])
+  }, [visitsUntilNextImpact, prevVisitsUntilNextImpact])
   const handleConfirmDialogClose = async () => {
     setConfirmDialogOpen(false)
     setAlertDialogOpen(true)
@@ -115,13 +119,15 @@ const UserImpact = ({ userImpact, user }) => {
   const classes = useStyles()
   return (
     <div>
-      <canvas
-        id="confettiCanvas"
-        width="400"
-        height="300"
-        className={classes.canvas}
-        ref={confettiCanvasRef}
-      />
+      {visitsUntilNextImpact === CAT_IMPACT_VISITS ? (
+        <canvas
+          id="confettiCanvas"
+          width="400"
+          height="300"
+          className={classes.canvas}
+          ref={confettiCanvasRef}
+        />
+      ) : null}
       <ImpactCounter
         includeNumber
         className={classes.impactCounter}

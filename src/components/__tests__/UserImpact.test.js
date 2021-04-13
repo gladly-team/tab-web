@@ -8,6 +8,8 @@ import ImpactDialog from 'src/components/ImpactDialog'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import preloadAll from 'jest-next-dynamic'
 import confetti from 'canvas-confetti'
+import { act } from 'react-dom/test-utils'
+import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 
 jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('@material-ui/core/Typography')
@@ -208,23 +210,32 @@ describe('UserImpact component', () => {
     expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(false)
   })
 
-  it('launches cofetti if a user hits 100 percent on the progress bar', async () => {
-    const UserImpact = require('src/components/UserImpact').default
-    const mockProps = getMockProps({ visitsUntilNextImpact: 14 })
-    mount(<UserImpact {...mockProps} />)
-    expect(confetti.create).toHaveBeenCalledTimes(1)
-  })
-
-  it('launches cofetti if a user hits 100 percent on the progress bar and only fires once', async () => {
+  it('renders the confetti canvas if a user hits 100 percent on the progress bar', async () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = getMockProps({ visitsUntilNextImpact: 14 })
     const wrapper = mount(<UserImpact {...mockProps} />)
-    const notification = wrapper.find(Notification).at(0)
-    notification.find(Button).simulate('click')
+    expect(wrapper.find('canvas').length).toBe(1)
+  })
+
+  it('does not render the confetti canvas if a user isnt at 100 percent', async () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps({ visitsUntilNextImpact: 2 })
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    expect(wrapper.find('canvas').length).toBe(0)
+  })
+
+  it('launches confetti if a user hits 100 percent on the progress bar and only fires once', async () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps({ visitsUntilNextImpact: 1 })
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    wrapper.setProps(getMockProps({ visitsUntilNextImpact: 14 }))
+    await act(async () => {
+      flushAllPromises()
+    })
     expect(confetti.create).toHaveBeenCalledTimes(1)
   })
 
-  it('does notlaunch the cofetti if a user is not at 100% progress', async () => {
+  it('does notlaunch the confetti if a user is not at 100% progress', async () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = getMockProps({ visitsUntilNextImpact: 12 })
     mount(<UserImpact {...mockProps} />)
