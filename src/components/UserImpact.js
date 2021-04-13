@@ -28,8 +28,10 @@ const UserImpact = ({ userImpact, user }) => {
   const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
 
-  const referralRewardNotificationOpen = pendingUserReferralImpact > 0
+  const referralRewardNotificationOpen =
+    pendingUserReferralImpact > 0 && pendingUserReferralCount > 0
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(!confirmedImpact)
+  const [newlyReferredDialogOpen, setNewlyReferredDialogOpen] = useState(false)
   const [alertDialogOpen, setAlertDialogOpen] = useState(false)
   const [rewardDialogOpen, setRewardDialogOpen] = useState(false)
   const [referralRewardDialogOpen, setReferralRewardDialogOpen] = useState(
@@ -39,8 +41,21 @@ const UserImpact = ({ userImpact, user }) => {
 
   const handleConfirmDialogClose = async () => {
     setConfirmDialogOpen(false)
-    setAlertDialogOpen(true)
-    await UpdateImpactMutation(userId, CAT_CHARITY, { confirmImpact: true })
+    if (pendingUserReferralImpact) {
+      setNewlyReferredDialogOpen(true)
+    } else {
+      setAlertDialogOpen(true)
+    }
+    await UpdateImpactMutation(userId, CAT_CHARITY, {
+      confirmImpact: true,
+      claimPendingUserReferralImpact: pendingUserReferralImpact
+        ? true
+        : undefined,
+      claimLatestReward: pendingUserReferralImpact ? true : undefined,
+    })
+  }
+  const handleNewlyReferredDialogOpen = () => {
+    setNewlyReferredDialogOpen((prev) => !prev)
   }
   const handleAlertDialogClose = () => setAlertDialogOpen(false)
   const handleClaimReward = async () => {
@@ -79,6 +94,11 @@ const UserImpact = ({ userImpact, user }) => {
         modalType="confirmImpact"
         open={confirmDialogOpen}
         buttonOnClick={handleConfirmDialogClose}
+      />
+      <ImpactDialog
+        modalType="newlyReferredImpactWalkMe"
+        open={newlyReferredDialogOpen}
+        onClose={handleNewlyReferredDialogOpen}
       />
       <ImpactDialog
         modalType="impactWalkMe"

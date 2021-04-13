@@ -70,10 +70,10 @@ describe('UserImpact component', () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = getMockProps()
     const wrapper = mount(<UserImpact {...mockProps} />)
-    expect(wrapper.find(ImpactDialog).at(2).props().open).toBe(false)
+    expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(false)
     const notification = wrapper.find(Notification)
     notification.find(Button).simulate('click')
-    expect(wrapper.find(ImpactDialog).at(2).props().open).toBe(true)
+    expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(true)
   })
 
   it('dismisses reward dialog and fires off correct updateImpact mutation', () => {
@@ -82,9 +82,9 @@ describe('UserImpact component', () => {
     const wrapper = mount(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(0)
     notification.find(Button).simulate('click')
-    const rewardDialog = wrapper.find(ImpactDialog).at(2)
+    const rewardDialog = wrapper.find(ImpactDialog).at(3)
     rewardDialog.find(Button).simulate('click')
-    expect(wrapper.find(ImpactDialog).at(2).props().open).toBe(false)
+    expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(false)
     expect(UpdateImpactMutation).toHaveBeenCalledWith(
       'someId',
       '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z',
@@ -121,9 +121,44 @@ describe('UserImpact component', () => {
     )
   })
 
+  it('dismisses the confirm Impact dialog fires off correct updateImpact mutation when the user has been refered', () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps({
+      confirmedImpact: false,
+      pendingUserReferralImpact: 5,
+    })
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    const confirmDialogue = wrapper.find(ImpactDialog).at(0)
+    expect(wrapper.find(ImpactDialog).at(0).props().open).toBe(true)
+    confirmDialogue.find(Button).simulate('click')
+    expect(wrapper.find(ImpactDialog).at(0).props().open).toBe(false)
+    expect(UpdateImpactMutation).toHaveBeenCalledWith(
+      'someId',
+      '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z',
+      {
+        confirmImpact: true,
+        claimPendingUserReferralImpact: true,
+        claimLatestReward: true,
+      }
+    )
+  })
+
   it('confirming Impact dialog shows walkMe', () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = getMockProps({ confirmedImpact: false })
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    const confirmDialogue = wrapper.find(ImpactDialog).at(0)
+    expect(wrapper.find(ImpactDialog).at(2).props().open).toBe(false)
+    confirmDialogue.find(Button).simulate('click')
+    expect(wrapper.find(ImpactDialog).at(2).props().open).toBe(true)
+  })
+
+  it('confirming Impact dialog shows referral walkMe if user has been referred', () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps({
+      confirmedImpact: false,
+      pendingUserReferralImpact: 5,
+    })
     const wrapper = mount(<UserImpact {...mockProps} />)
     const confirmDialogue = wrapper.find(ImpactDialog).at(0)
     expect(wrapper.find(ImpactDialog).at(1).props().open).toBe(false)
@@ -134,6 +169,19 @@ describe('UserImpact component', () => {
   it('closing walkMe calls setAlertDialogOpen', async () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = getMockProps({ confirmedImpact: false })
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    const confirmDialogue = wrapper.find(ImpactDialog).at(0)
+    confirmDialogue.find(Button).simulate('click')
+    await wrapper.find(ImpactDialog).at(2).invoke('onClose')()
+    expect(wrapper.find(ImpactDialog).at(2).props().open).toBe(false)
+  })
+
+  it('closing referral walkMe calls setNewlyReferredDialogOpen', async () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps({
+      confirmedImpact: false,
+      pendingUserReferralImpact: 5,
+    })
     const wrapper = mount(<UserImpact {...mockProps} />)
     const confirmDialogue = wrapper.find(ImpactDialog).at(0)
     confirmDialogue.find(Button).simulate('click')
@@ -168,9 +216,9 @@ describe('UserImpact component', () => {
     })
     const wrapper = mount(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(1)
-    expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(false)
+    expect(wrapper.find(ImpactDialog).at(4).props().open).toBe(false)
     notification.find(Button).simulate('click')
-    expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(true)
+    expect(wrapper.find(ImpactDialog).at(4).props().open).toBe(true)
   })
 
   it('fires off correct updateImpact mutation when use claims impact on referral notification', () => {
@@ -198,8 +246,8 @@ describe('UserImpact component', () => {
     const wrapper = mount(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(1)
     notification.find(Button).simulate('click')
-    const rewardDialog = wrapper.find(ImpactDialog).at(3)
+    const rewardDialog = wrapper.find(ImpactDialog).at(4)
     rewardDialog.find(Button).simulate('click')
-    expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(false)
+    expect(wrapper.find(ImpactDialog).at(4).props().open).toBe(false)
   })
 })

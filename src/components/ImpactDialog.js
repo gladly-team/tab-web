@@ -106,6 +106,30 @@ const ImpactDialog = ({
         </>
       )
       break
+    case 'newlyReferredImpactWalkMe':
+      dialogContent = (
+        <>
+          <MuiDialogTitle disableTypography className={classes.root}>
+            <Typography variant="h6" className={classes.title}>
+              You've already made a difference!
+            </Typography>
+          </MuiDialogTitle>
+          <MuiDialogContent className={classes.walkMe}>
+            <Typography className={classes.justify}>
+              When your friend referred you to Tab For Cats, you each earned
+              five treats to give to shelter cats. Now, when you open a new tab
+              you'll generate enough money to give a 6th shelter cat a treat.
+              These treats are used during training sessions and are crucial to
+              getting shelter cats adopted. We'll track how many treats you've
+              given on the top of the page:
+            </Typography>
+            <div className={classes.impactCounter}>
+              <ImpactCounter includeNumber number={5} progress={100} />
+            </div>
+          </MuiDialogContent>
+        </>
+      )
+      break
     case 'claimImpactReward':
       if (open && (!user || typeof buttonOnClick !== 'function')) {
         throw new Error('missing props in claim impact reward dialog')
@@ -125,7 +149,8 @@ const ImpactDialog = ({
               className={clsx(classes.typographySpacing, classes.justify)}
             >
               The more people who open tabs, the more good we can do! Get a
-              friend on board and we'll give a treat to another 10 shelter cats:
+              friend on board and you'll each earn another 5 treats to give to
+              shelter cats:
             </Typography>
             <div className={classes.shareContainer}>
               <div className={classes.InviteFriends}>
@@ -202,6 +227,7 @@ ImpactDialog.propTypes = {
   modalType: PropTypes.oneOf([
     'confirmImpact',
     'impactWalkMe',
+    'newlyReferredImpactWalkMe',
     'claimImpactReward',
     'claimReferralReward',
   ]).isRequired,
