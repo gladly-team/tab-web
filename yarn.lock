@@ -3268,6 +3268,11 @@ caniuse-lite@^1.0.30001173:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001173.tgz"
   integrity sha512-R3aqmjrICdGCTAnSXtNyvWYMK3YtV5jwudbq0T7nN9k4kmE4CBuwPqyJ+KBzepSTh0huivV2gLbSMEzTTmfeYw==
 
+canvas-confetti@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/canvas-confetti/-/canvas-confetti-1.4.0.tgz#840f6db4a566f8f32abe28c00dcd82acf39c92bd"
+  integrity sha512-S18o4Y9PqI/uabdlT/jI3MY7XBJjNxnfapFIkjkMwpz6qNxLFZOm2b22OMf4ZYDL9lpNWI+Ih4fEMVPwO1KHFQ==
+
 capture-exit@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/capture-exit/-/capture-exit-2.0.0.tgz"
@@ -7473,7 +7478,7 @@ lodash.templatesettings@^4.0.0:
   dependencies:
     lodash._reinterpolate "^3.0.0"
 
-lodash@^4.17.11, lodash@^4.17.13:
+lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -10401,12 +10406,12 @@ symbol-tree@^3.2.4:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
-tab-ads@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.0.2.tgz"
-  integrity sha512-geCWa8iTFurrMGRJJiX46U7I6IwSRaBOuRQij6hrnk3O+s2knt4YOGBQrIB3BYM3vuhif9d7hCtQNYsO3B2enw==
+tab-ads@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.0.3.tgz#9b731489d9a0fcd4219ccc86411b4e7df752bca6"
+  integrity sha512-xnCiKfgHdZI3/60MFtugsvH3mA5O8uBZDBIGGcjH/RzQiFG1tAAdqeRy5KZf/JlVjcVQSgrM/Q/nzOspX9tYhQ==
   dependencies:
-    lodash "^4.17.15"
+    lodash "^4.17.21"
 
 tab-cmp@^0.13.0:
   version "0.13.0"

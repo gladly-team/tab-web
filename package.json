@@ -23,6 +23,7 @@
     "@sentry/node": "^6.1.0",
     "@sentry/webpack-plugin": "^1.14.0",
     "@zeit/next-source-maps": "^0.0.4-canary.1",
+    "canvas-confetti": "^1.4.0",
     "clsx": "^1.1.1",
     "cookies": "^0.8.0",
     "dayjs": "^1.10.2",
@@ -42,7 +43,7 @@
     "react-transition-group": "^4.4.1",
     "relay-runtime": "^10.1.2",
     "swr": "^0.4.0",
-    "tab-ads": "^1.0.2",
+    "tab-ads": "^1.0.3",
     "tab-cmp": "^0.13.0",
     "uuid": "^3.3.2"
   },
