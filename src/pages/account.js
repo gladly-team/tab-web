@@ -20,6 +20,10 @@ import { setWindowLocation } from 'src/utils/navigation'
 import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 import { withSentry } from 'src/utils/pageWrappers/withSentry'
 import initializeCMP from 'src/utils/initializeCMP'
+import Accordion from '@material-ui/core/Accordion'
+import AccordionSummary from '@material-ui/core/AccordionSummary'
+import AccordionDetails from '@material-ui/core/AccordionDetails'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -53,13 +57,28 @@ const useStyles = makeStyles((theme) => ({
   accountItemActionButton: {
     flex: 2,
   },
+  advancedOptionsChildren: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  revertButton: {
+    marginBottom: theme.spacing(1),
+  },
+  revertButtonText: {
+    lineHeight: '1.16',
+    color: 'rgba(0, 0, 0, 0.54)',
+    maxWidth: '80%',
+  },
 }))
 
 const AccountItem = (props) => {
-  const { actionButton, name, value } = props
+  const { actionButton, name, value, testId } = props
   const classes = useStyles()
   return (
-    <div className={classes.accountItem} data-test-id="account-item">
+    <div
+      className={classes.accountItem}
+      data-test-id={testId || 'account-item'}
+    >
       <Typography variant="body2" className={classes.accountItemName}>
         {name}
       </Typography>
@@ -79,11 +98,13 @@ AccountItem.propTypes = {
   name: PropTypes.string.isRequired,
   value: PropTypes.string,
   actionButton: PropTypes.element,
+  testId: PropTypes.string,
 }
 
 AccountItem.defaultProps = {
   actionButton: null,
   value: null,
+  testId: undefined,
 }
 
 const getRelayQuery = ({ AuthUser }) => {
@@ -202,25 +223,6 @@ const Account = ({ data: initialData }) => {
           name="Email"
           value={fetchInProgress ? '...' : email || 'Not signed in'}
         />
-        <Divider />
-        <AccountItem
-          name="Beta Enabled"
-          actionButton={
-            <Button
-              color="default"
-              variant="contained"
-              disabled={isRevertingToClassicTab}
-              onClick={() => {
-                setIsRevertingToClassicTab(true)
-                setBetaOptIn(false)
-              }}
-            >
-              {isRevertingToClassicTab
-                ? 'Switching Back...'
-                : 'Switch to Classic'}
-            </Button>
-          }
-        />
         {doesGDPRApply ? (
           <>
             <Divider />
@@ -235,6 +237,7 @@ const Account = ({ data: initialData }) => {
                   Review choices
                 </Button>
               }
+              testId="data-privacy"
             />
           </>
         ) : null}
@@ -273,9 +276,57 @@ const Account = ({ data: initialData }) => {
                   </Typography>
                 </div>
               }
+              testId="data-privacy"
             />
           </>
         ) : null}
+
+        <Divider />
+        <div>
+          <Accordion elevation={0}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              className={classes.accountItem}
+            >
+              <Typography variant="body2" className={classes.accountItemName}>
+                Advanced
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails className={classes.advancedOptionsChildren}>
+              <AccountItem
+                name="Leave Tab for Cats"
+                actionButton={
+                  <div>
+                    <div>
+                      <Button
+                        color="default"
+                        variant="contained"
+                        className={classes.revertButton}
+                        disabled={isRevertingToClassicTab}
+                        onClick={() => {
+                          setIsRevertingToClassicTab(true)
+                          setBetaOptIn(false)
+                        }}
+                      >
+                        {isRevertingToClassicTab
+                          ? 'Switching Back...'
+                          : 'Switch to Classic'}
+                      </Button>
+                    </div>
+                    <Typography
+                      variant="caption"
+                      className={classes.revertButtonText}
+                    >
+                      Warning: This will remove your ability to support cats. It
+                      will send you to classic Tab for a Cause, which has other
+                      (non-cat) nonprofits you can support.
+                    </Typography>
+                  </div>
+                }
+              />
+            </AccordionDetails>
+          </Accordion>
+        </div>
       </Paper>
     </SettingsPage>
   )
