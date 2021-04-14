@@ -136,7 +136,7 @@ const ImpactDialog = ({
         <>
           <MuiDialogTitle disableTypography className={classes.root}>
             <Typography variant="h6" className={classes.title}>
-              You just helped a shelter cat! Congrats!
+              Feed 10 more cats right now with the help of a friend!
             </Typography>
           </MuiDialogTitle>
           <MuiDialogContent>

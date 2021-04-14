@@ -55,10 +55,7 @@ const InviteFriendsIcon = ({ user: { username, numUsersRecruited } }) => {
       >
         <div className={classes.popoverContent}>
           <Typography className={classes.titleSection}>
-            You've recruited{' '}
-            <span style={{ fontWeight: 'bold' }}>
-              {`${numUsersRecruited} friend${isPlural(numUsersRecruited)} `}
-            </span>{' '}
+            helping cats feels even better with friends
           </Typography>
           <Typography gutterBottom variant="body2">
             Invite a friend! When they join, you'll each earn 5 treats to give
