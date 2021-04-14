@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography'
 import DashboardPopover from 'src/components/DashboardPopover'
 import { get } from 'lodash/object'
 import InviteFriends from 'src/components/InviteFriends'
-import { isPlural } from 'src/utils/formatting'
 
 const useStyles = makeStyles((theme) => ({
   copyIcon: {
@@ -31,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const InviteFriendsIcon = ({ user: { username, numUsersRecruited } }) => {
+const InviteFriendsIcon = ({ user: { username } }) => {
   const buttonRef = useRef(undefined)
   const [isPopoverOpen, setIsPopoverOpen] = useState()
   const classes = useStyles()
