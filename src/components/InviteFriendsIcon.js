@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   titleSection: {
     marginBottom: '10px',
+    fontWeight: 'bold',
   },
   popover: { marginTop: '4px' },
   popoverContent: {
@@ -54,7 +55,7 @@ const InviteFriendsIcon = ({ user: { username } }) => {
       >
         <div className={classes.popoverContent}>
           <Typography className={classes.titleSection}>
-            helping cats feels even better with friends
+            Helping cats feels even better with friends
           </Typography>
           <Typography gutterBottom variant="body2">
             Invite a friend! When they join, you'll each earn 5 treats to give
