@@ -48,13 +48,15 @@ describe('InviteFriendsIcon component', () => {
     expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
   })
 
-  it('displays the number of users recruited', () => {
-    const InviteFriendsIcon = require('src/components/InviteFriendsIcon')
-      .default
-    const defaultMockProps = getMockProps()
+  // bringing this back in a later ticket
+  // eslint-disable-next-line jest/no-commented-out-tests
+  // it('displays the number of users recruited', () => {
+  //   const InviteFriendsIcon = require('src/components/InviteFriendsIcon')
+  //     .default
+  //   const defaultMockProps = getMockProps()
 
-    const wrapper = shallow(<InviteFriendsIcon {...defaultMockProps} />)
-    wrapper.find(DashboardPopover).simulate('click')
-    expect(wrapper.find('span').first().text()).toEqual('99999 friends ')
-  })
+  //   const wrapper = shallow(<InviteFriendsIcon {...defaultMockProps} />)
+  //   wrapper.find(DashboardPopover).simulate('click')
+  //   expect(wrapper.find('span').first().text()).toEqual('99999 friends ')
+  // })
 })

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import { CAT_CHARITY, CAT_IMPACT_VISITS } from 'src/utils/constants'
@@ -8,6 +8,8 @@ import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import dynamic from 'next/dynamic'
 import { isPlural } from 'src/utils/formatting'
+import confetti from 'canvas-confetti'
+import usePrevious from 'src/utils/hooks/usePrevious'
 
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
@@ -15,6 +17,13 @@ const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
 
 const useStyles = makeStyles(() => ({
   impactCounter: { backgroundColor: '#fff', marginRight: '15px' },
+  canvas: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    zIndex: '90000',
+    pointerEvents: 'none',
+  },
 }))
 const UserImpact = ({ userImpact, user }) => {
   const {
@@ -30,6 +39,7 @@ const UserImpact = ({ userImpact, user }) => {
 
   const referralRewardNotificationOpen =
     pendingUserReferralImpact > 0 && pendingUserReferralCount > 0
+  const prevVisitsUntilNextImpact = usePrevious(visitsUntilNextImpact)
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(!confirmedImpact)
   const [newlyReferredDialogOpen, setNewlyReferredDialogOpen] = useState(false)
   const [alertDialogOpen, setAlertDialogOpen] = useState(false)
@@ -38,7 +48,55 @@ const UserImpact = ({ userImpact, user }) => {
     false
   )
   const [claimedReferralImpact, setClaimedReferralImpact] = useState(0)
+  const confettiCanvasRef = useRef(null)
+  const confettiFunc = () => {
+    const myConfetti = confetti.create(confettiCanvasRef.current, {
+      resize: true,
+    })
+    const count = 200
+    const defaults = {
+      origin: { y: 0.51, x: 0.9 },
+      angle: 140,
+    }
 
+    const fire = (particleRatio, opts) =>
+      myConfetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio),
+      })
+
+    fire(0.25, {
+      spread: 26,
+      startVelocity: 55,
+    })
+    fire(0.2, {
+      spread: 60,
+    })
+    fire(0.35, {
+      spread: 100,
+      decay: 0.91,
+      scalar: 0.8,
+    })
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2,
+    })
+    fire(0.1, {
+      spread: 120,
+      startVelocity: 45,
+    })
+  }
+  useEffect(() => {
+    if (
+      visitsUntilNextImpact === CAT_IMPACT_VISITS &&
+      prevVisitsUntilNextImpact === 1
+    ) {
+      confettiFunc()
+    }
+  }, [visitsUntilNextImpact, prevVisitsUntilNextImpact])
   const handleConfirmDialogClose = async () => {
     setConfirmDialogOpen(false)
     if (pendingUserReferralImpact) {
@@ -77,6 +135,15 @@ const UserImpact = ({ userImpact, user }) => {
   const classes = useStyles()
   return (
     <div>
+      {visitsUntilNextImpact === CAT_IMPACT_VISITS ? (
+        <canvas
+          id="confettiCanvas"
+          width="400"
+          height="300"
+          className={classes.canvas}
+          ref={confettiCanvasRef}
+        />
+      ) : null}
       <ImpactCounter
         includeNumber
         className={classes.impactCounter}
