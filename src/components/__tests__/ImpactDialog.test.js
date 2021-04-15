@@ -67,7 +67,7 @@ describe('ImpactDialog component', () => {
     const mockProps = { ...getMockProps(), modalType: 'claimImpactReward' }
     const wrapper = shallow(<ImpactDialog {...mockProps} />)
     expect(wrapper.find(Typography).at(0).text()).toEqual(
-      'You just helped a shelter cat! Congrats!'
+      'Feed 10 more cats right now with the help of a friend!'
     )
   })
 

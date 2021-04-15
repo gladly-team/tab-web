@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography'
 import DashboardPopover from 'src/components/DashboardPopover'
 import { get } from 'lodash/object'
 import InviteFriends from 'src/components/InviteFriends'
-import { isPlural } from 'src/utils/formatting'
 
 const useStyles = makeStyles((theme) => ({
   copyIcon: {
@@ -23,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   titleSection: {
     marginBottom: '10px',
+    fontWeight: 'bold',
   },
   popover: { marginTop: '4px' },
   popoverContent: {
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const InviteFriendsIcon = ({ user: { username, numUsersRecruited } }) => {
+const InviteFriendsIcon = ({ user: { username } }) => {
   const buttonRef = useRef(undefined)
   const [isPopoverOpen, setIsPopoverOpen] = useState()
   const classes = useStyles()
@@ -55,14 +55,11 @@ const InviteFriendsIcon = ({ user: { username, numUsersRecruited } }) => {
       >
         <div className={classes.popoverContent}>
           <Typography className={classes.titleSection}>
-            You've recruited{' '}
-            <span style={{ fontWeight: 'bold' }}>
-              {`${numUsersRecruited} friend${isPlural(numUsersRecruited)} `}
-            </span>{' '}
+            Helping cats feels even better with friends
           </Typography>
           <Typography gutterBottom variant="body2">
-            Invite a friend! When they join, you'll earn a treat for 10 shelter
-            cats:
+            Invite a friend! When they join, you'll each earn 5 treats to give
+            to shelter cats:
           </Typography>
           <InviteFriends
             user={{ username }}
