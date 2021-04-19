@@ -7,14 +7,15 @@
     "dev": "echo \"Use the 'yarn go' command to develop locally.\"",
     "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start --port 3001",
-    "test": "yarn run lint && yarn run relay && jest",
+    "test": "yarn run relay && jest",
     "test:watch": "yarn run relay && jest --watch",
     "test:coverage": "yarn run test --coverage",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\" --ignore-pattern \"next.config.*js\"",
     "relay": "relay-compiler --src ./src/ --artifactDirectory ./src/relay/__generated__ --exclude '**/__test__/**'  '**/__generated__/**' --schema ./src/schema/schema.graphql",
-    "find-unused": "echo \"This will find unused files. However, note that it ignores mocks, tests, and utils in the testHelpers directory.\n\" && next-unused"
+    "find-unused": "echo \"This will find unused files. However, note that it ignores mocks, tests, and utils in the testHelpers directory.\n\" && next-unused",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
@@ -67,6 +68,7 @@
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "graphql": "^15.4.0",
+    "husky": "^6.0.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.6.3",
     "jest-next-dynamic": "^1.0.1",
