@@ -57,6 +57,7 @@ import useData from 'src/utils/hooks/useData'
 import { CAT_CHARITY } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
+import { setOptIn } from 'src/pages/beta-opt-in'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -257,6 +258,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           vcCurrent
           id
           hasViewedIntroFlow
+          v4BetaEnabled
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
           ...InviteFriendsIconContainer_user
@@ -330,6 +332,18 @@ const Index = ({ data: initialData }) => {
       accountCreated()
     }
   }, [globalTabCount])
+
+  // set v4 beta cookie to false if meant to be on legacy
+  useEffect(() => {
+    const asyncFunc = async () => {
+      await setOptIn(false)
+      // eslint-disable-next-line no-undef
+      window.location.reload()
+    }
+    if (user && user.v4BetaEnabled === false) {
+      asyncFunc()
+    }
+  })
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
