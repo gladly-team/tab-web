@@ -211,6 +211,7 @@ if (isClientSide()) {
     try {
       fetchAds({
         adUnits: Object.values(getAdUnits()),
+        pageLevelKeyValues: { v4: 'true' },
         auctionTimeout: 1000,
         bidderTimeout: 700,
         consent: {
