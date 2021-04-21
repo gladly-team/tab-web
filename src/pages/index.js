@@ -58,6 +58,7 @@ import { CAT_CHARITY } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
 import { setOptIn } from 'src/pages/beta-opt-in'
+import usePrevious from 'src/utils/hooks/usePrevious'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -334,16 +335,17 @@ const Index = ({ data: initialData }) => {
   }, [globalTabCount])
 
   // set v4 beta cookie to false if meant to be on legacy
+  const v4BetaEnabled = usePrevious(user ? user.v4BetaEnabled : undefined)
   useEffect(() => {
     const asyncFunc = async () => {
       await setOptIn(false)
       // eslint-disable-next-line no-undef
       window.location.reload()
     }
-    if (user && user.v4BetaEnabled === false) {
+    if (v4BetaEnabled !== undefined && v4BetaEnabled === false) {
       asyncFunc()
     }
-  })
+  }, [v4BetaEnabled])
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
