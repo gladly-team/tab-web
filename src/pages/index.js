@@ -46,7 +46,7 @@ import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntro
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import { getAdUnits, areAdsEnabled, showMockAds } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
-import { accountURL, achievementsURL, surveyLink } from 'src/utils/urls'
+import { accountURL, achievementsURL, surveyLink, reload } from 'src/utils/urls'
 import {
   showMockAchievements,
   showBackgroundImages,
@@ -339,8 +339,7 @@ const Index = ({ data: initialData }) => {
   useEffect(() => {
     const asyncFunc = async () => {
       await setOptIn(false)
-      // eslint-disable-next-line no-undef
-      window.location.reload()
+      reload()
     }
     if (v4BetaEnabled !== undefined && v4BetaEnabled === false) {
       asyncFunc()
