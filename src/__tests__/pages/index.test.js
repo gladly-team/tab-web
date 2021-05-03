@@ -436,7 +436,7 @@ describe('index.js', () => {
     expect(setOptIn).toHaveBeenCalledTimes(1)
   })
 
-  it('does not redirect to legacy if v4BetaEnabled is set to false', async () => {
+  it('does not redirect to legacy if v4BetaEnabled is set to true', async () => {
     const mockProps = getMockProps()
     useData.mockReturnValue({
       data: {
