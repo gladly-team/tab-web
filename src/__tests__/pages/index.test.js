@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme'
 import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
-import { accountURL, surveyLink } from 'src/utils/urls'
+import { accountURL, surveyLink, reload } from 'src/utils/urls'
 import { act } from 'react-dom/test-utils'
 import {
   showMockAchievements,
@@ -23,6 +23,7 @@ import { AdComponent } from 'tab-ads'
 import { isClientSide } from 'src/utils/ssr'
 import { getAdUnits } from 'src/utils/adHelpers'
 import { accountCreated, newTabView } from 'src/utils/events'
+import { setOptIn } from 'src/pages/beta-opt-in'
 
 jest.mock('uuid/v4')
 uuid.mockReturnValue('some-uuid')
@@ -61,7 +62,8 @@ jest.mock('src/utils/mutations/LogTabMutation')
 jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('src/utils/mutations/LogUserRevenueMutation')
 jest.mock('src/utils/caching')
-
+jest.mock('src/pages/beta-opt-in')
+jest.mock('src/utils/urls')
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
   getAdUnits.mockReturnValue({
@@ -407,6 +409,55 @@ describe('index.js', () => {
     const IndexPage = require('src/pages/index').default
     mount(<IndexPage {...mockProps} />)
     expect(accountCreated).not.toHaveBeenCalled()
+  })
+
+  it('updates cookie and redirects to legacy if v4BetaEnabled is set to false', async () => {
+    const mockProps = getMockProps()
+    useData.mockReturnValue({
+      data: {
+        app: {},
+        user: {
+          tabs: 1,
+          id: 'asdf',
+          vcCurrent: 78,
+          v4BetaEnabled: false,
+          hasViewedIntroFlow: true,
+        },
+      },
+    })
+    const IndexPage = require('src/pages/index').default
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    expect(setOptIn).toHaveBeenCalledWith(false)
+    await act(async () => {
+      await flushAllPromises()
+      wrapper.update()
+    })
+    expect(reload).toHaveBeenCalled()
+    expect(setOptIn).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not redirect to legacy if v4BetaEnabled is set to true', async () => {
+    const mockProps = getMockProps()
+    useData.mockReturnValue({
+      data: {
+        app: {},
+        user: {
+          tabs: 1,
+          id: 'asdf',
+          vcCurrent: 78,
+          v4BetaEnabled: true,
+          hasViewedIntroFlow: true,
+        },
+      },
+    })
+    const IndexPage = require('src/pages/index').default
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    expect(setOptIn).not.toHaveBeenCalled()
+    await act(async () => {
+      await flushAllPromises()
+      wrapper.update()
+    })
+    expect(reload).not.toHaveBeenCalled()
   })
 
   it('calls LogUserRevenueMutation for each Ad when the onAdDisplayed prop is invoked', () => {
