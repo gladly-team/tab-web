@@ -1,6 +1,6 @@
 const { Octokit } = require('@octokit/action')
-const run = async () => {
-  const octokit = new Octokit()
+const octokit = new Octokit()
+async function run() {
   const ref = await octokit.request(
     'PATCH /repos/{owner}/{repo}/git/refs/{ref}',
     {
@@ -10,5 +10,6 @@ const run = async () => {
       sha: 'refs/heads/dev',
     }
   )
+  console.log(ref)
 }
 run()
