@@ -24,11 +24,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Merge feature -> qa
-        uses: devmasx/merge-branch@v1.3.1
+      - name: merge master to qa
+        uses: repo-sync/github-sync@v2
         with:
-          type: now
-          from_branch: ${GITHUB_REF}
-          target_branch: qa
+          source_repo: "tab-web"
+          source_branch: "dev"
+          destination_branch: "qa"
           github_token: ${{ github.token }}
 
