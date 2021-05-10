@@ -24,13 +24,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - name: Merge feature -> qa
+        uses: devmasx/merge-branch@v1.3.1
         with:
-          version: 12
-      - run: npm install @octokit/action
-      # Node.js script can be anywhere. A good convention is to put local GitHub Actions
-      # into the `.github/actions` folder
-      - run: node .github/actions/set-qa-branch.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          type: now
+          from_branch: ${GITHUB_REF##*/}
+          target_branch: qa
+          github_token: ${{ github.token }}
 
