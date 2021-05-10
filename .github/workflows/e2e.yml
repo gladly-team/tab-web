@@ -27,7 +27,7 @@ jobs:
       - name: merge master to qa
         uses: repo-sync/github-sync@v2
         with:
-          source_repo: "tab-web"
+          source_repo: "gladly-team/tab-web"
           source_branch: "dev"
           destination_branch: "qa"
           github_token: ${{ github.token }}
