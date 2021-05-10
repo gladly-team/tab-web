@@ -28,7 +28,16 @@ jobs:
         uses: repo-sync/github-sync@v2
         with:
           source_repo: "gladly-team/tab-web"
-          source_branch: "dev"
+          source_branch: "master"
           destination_branch: "qa"
+          github_token: ${{ github.token }}
+      - run: npm ci
+      - uses: nelonoel/branch-name@v1.0.1
+      - name: Merge feature branch -> qa
+        uses: devmasx/merge-branch@v1.3.1
+        with:
+          type: now
+          from_branch: ${BRANCH_NAME}
+          target_branch: qa
           github_token: ${{ github.token }}
 
