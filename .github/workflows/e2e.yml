@@ -22,10 +22,16 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-
-      # Runs a single command using the runners shell
-      - name: Run e2e tests
-        run: npm test:e2e
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2 # So Codecov can get the commit SHA
+      - name: Use Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Install dependencies
+        run: yarn install
+      - name: yarn e2e tests
+        run: yarn test:e2e
 
