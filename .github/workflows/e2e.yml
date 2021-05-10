@@ -24,9 +24,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
-          fetch-depth: 2 # So Codecov can get the commit SHA
-          ref: qa
-      - run: |
-          git checkout master
+          version: 12
+      - run: npm install @octokit/action
+      # Node.js script can be anywhere. A good convention is to put local GitHub Actions
+      # into the `.github/actions` folder
+      - run: node .github/actions/set-qa-branch.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
