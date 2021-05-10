@@ -38,7 +38,7 @@ jobs:
         uses: devmasx/merge-branch@v1.3.1
         with:
           type: now
-          from_branch: ${{ steps.vars.outputs.short_ref }}
+          from_branch: ${{ github.head_ref }}
           target_branch: qa
           github_token: ${{ github.token }}
 
