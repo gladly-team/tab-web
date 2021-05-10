@@ -44,7 +44,7 @@ jobs:
       - name: Sleep for 30 seconds
         uses: jakejarvis/wait-action@master
         with:
-          time: '30s'
+          time: '180s'
       - name: waiting for vercel to finish building
         uses: UnlyEd/github-action-await-vercel@v1.1.0
         id: await-vercel
