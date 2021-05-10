@@ -41,4 +41,18 @@ jobs:
           from_branch: ${{ github.head_ref }}
           target_branch: qa
           github_token: ${{ github.token }}
+      - name: Sleep for 30 seconds
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '30s'
+      - name: waiting for vercel to finish building
+        uses: UnlyEd/github-action-await-vercel@v1.1.0
+        id: await-vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        with:
+          deployment-url: tab-web-qa-gladly-team.vercel.app # TODO Replace by the domain you want to test
+          timeout: 400 # Wait for 400 seconds before failing
+      - name: Display deployment status
+        run: "echo The deployment at ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).url }} is ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).readyState }}"
 
