@@ -7,7 +7,8 @@
     "dev": "echo \"Use the 'yarn go' command to develop locally.\"",
     "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start --port 3001",
-    "test": "yarn run lint && yarn run relay && jest",
+    "test": "yarn run relay && yarn run jest --testPathMatchPatterns=e2e",
+    "test:e2e": "dotenv-extended --defaults=./.env --path=./.env.local yarn run jest e2e-tests.test.js",
     "test:watch": "yarn run relay && jest --watch",
     "test:coverage": "yarn run test --coverage",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
@@ -27,6 +28,7 @@
     "clsx": "^1.1.1",
     "cookies": "^0.8.0",
     "dayjs": "^1.10.2",
+    "dotenv-extended": "^2.9.0",
     "firebase": "^8.2.2",
     "firebase-admin": "^9.4.2",
     "lodash": "^4.17.20",
@@ -45,6 +47,7 @@
     "swr": "^0.4.0",
     "tab-ads": "^1.0.3",
     "tab-cmp": "^0.13.0",
+    "tab-e2e": "file:.yalc/tab-e2e",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
