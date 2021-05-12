@@ -10,7 +10,7 @@ const tests = init({
     BROWSERSTACK_USER: process.env.BROWSERSTACK_USER,
     BROWSERSTACK_KEY: process.env.BROWSERSTACK_KEY,
   },
-  build: {},
+  build: { TRAVIS_BUILD_NUMBER: process.env.TRAVIS_BUILD_NUMBER },
   mailosaur: {
     MAILOSAUR_SERVER_ID: process.env.MAILOSAUR_SERVER_ID,
     MAILOSAUR_API_KEY: process.env.MAILOSAUR_API_KEY,
