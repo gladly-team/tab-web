@@ -55,6 +55,6 @@ jobs:
           timeout: 100 # Wait for 100 seconds before failing
       - name: Display deployment status
         run: "echo The deployment at ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).url }} is ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).readyState }}"
-      # - name: Run e2e tests
-      #   run: yarn test:e2e
+      - name: Run e2e tests
+        run: yarn test:e2e
 
