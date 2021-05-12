@@ -38,6 +38,9 @@ jobs:
           from_branch: ${{ github.head_ref }}
           target_branch: qa
           github_token: ${{ github.token }}
+      # Vercel deploys the pr branch first, we can't poll for the QA deploy until that build 
+      # has started so we sleeep 150 seconds.  The trade off is that if two people merge to 
+      # master in the span of a few minutes, we'll only e2e test the most recent commit.
       - name: Sleep for 150 seconds
         uses: jakejarvis/wait-action@master
         with:
@@ -52,4 +55,6 @@ jobs:
           timeout: 100 # Wait for 100 seconds before failing
       - name: Display deployment status
         run: "echo The deployment at ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).url }} is ${{ fromJson(steps.await-vercel.outputs.deploymentDetails).readyState }}"
+      # - name: Run e2e tests
+      #   run: yarn test:e2e
 
