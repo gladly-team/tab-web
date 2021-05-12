@@ -31,7 +31,7 @@
     "dotenv-extended": "^2.9.0",
     "firebase": "^8.2.2",
     "firebase-admin": "^9.4.2",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "next": "10.0.5",
     "next-firebase-auth": "^0.12.0",
     "next-images": "^1.6.2",
