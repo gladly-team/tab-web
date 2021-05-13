@@ -78,7 +78,7 @@ export const onboardingStepContents = (classes) => [
   },
   {
     imageSrc: onboarding2,
-    title: 'Make a difference right now',
+    title: 'Make a difference right meow',
     children: (
       <div>
         <Typography
