@@ -49,7 +49,6 @@ const SearchInput = (props) => {
   return (
     <div className={className}>
       <Input
-        autoFocus
         type="text"
         inputRef={searchInputRef}
         onKeyPress={(e) => {
