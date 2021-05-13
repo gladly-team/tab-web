@@ -28,7 +28,6 @@
     "clsx": "^1.1.1",
     "cookies": "^0.8.0",
     "dayjs": "^1.10.2",
-    "dotenv-extended": "^2.9.0",
     "firebase": "^8.2.2",
     "firebase-admin": "^9.4.2",
     "lodash": "^4.17.21",
