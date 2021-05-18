@@ -7,35 +7,10 @@ import { useAuthUser } from 'next-firebase-auth'
 import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 import usePrevious from 'src/utils/hooks/usePrevious'
 
-const expiredToken = 'token-here'
-
-const mockUnauthedUser = {
-  id: null,
-  email: null,
-  emailVerified: false,
-  getIdToken: async () => expiredToken, // mutations throw with "message: null"
-  clientInitialized: false,
-  firebaseUser: {},
-  signOut: () => {},
-  serialize: () => {},
-}
-
-// Mock a delay in loading Firebase client.
-const useMockAuthUser = () => {
-  const [user, setUser] = useState(mockUnauthedUser)
-  const realAuthUser = useAuthUser()
-  setTimeout(() => {
-    setUser(realAuthUser)
-  }, 3000)
-  return user
-}
-
 const withRelay = (ChildComponent) => {
   const WithRelayHOC = (props) => {
     const { initialRecords, ...otherProps } = props
-
-    const AuthUser = useMockAuthUser()
-    console.log(AuthUser)
+    const AuthUser = useAuthUser()
 
     // Publish initial records to the store only if they've
     // changed. Otherwise, old initial records might overwrite
