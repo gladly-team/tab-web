@@ -22,6 +22,7 @@ const withRelay = (ChildComponent) => {
     const [relayEnvironment, setRelayEnvironment] = useState(
       initRelayEnvironment({
         initialRecords,
+        clientAuthInitialized: AuthUser.clientInitialized,
         getIdToken: AuthUser.getIdToken,
         publishInitialRecords,
       })
@@ -52,6 +53,7 @@ const withRelay = (ChildComponent) => {
         setRelayEnvironment(
           initRelayEnvironment({
             getIdToken: AuthUser.getIdToken,
+            clientAuthInitialized: AuthUser.clientInitialized,
             recreateNetwork: shouldRecreateNetwork,
             recreateStore: shouldRecreateStore,
             publishInitialRecords,

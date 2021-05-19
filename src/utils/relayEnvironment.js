@@ -18,6 +18,49 @@ const relayEndpoint = process.env.NEXT_PUBLIC_RELAY_ENDPOINT
 let relayEnvironment = null
 
 /**
+  Auth service initialization
+ */
+
+// Manage whether the client-side authentication service has initialized.
+// This lets us queue logic that needs to wait on auth initialization,
+// such as mutations.
+
+let isClientAuthInitialized = false
+
+// A queue of resolvers for calls to `waitForAuthInitialized`.
+let clientAuthInitResolvers = []
+
+// Resolve all promises returned from `waitForAuthInitialized` and
+// set future calls to immediately resolve.
+const setClientAuthInitialized = () => {
+  clientAuthInitResolvers.forEach((resolver) => resolver())
+  isClientAuthInitialized = true
+  clientAuthInitResolvers = []
+}
+
+/**
+ * An async function that resolves when the client authentication
+ *   service has initialized.
+ * @return {Promise}
+ */
+export const waitForAuthInitialized = async () =>
+  new Promise((resolve) => {
+    // If client auth has initialized, resolve immediately.
+    if (isClientAuthInitialized) {
+      resolve()
+      return
+    }
+
+    // Otherwise, queue the promise resolver for it to be called
+    // when client auth initializes.
+    clientAuthInitResolvers.push(resolve)
+  })
+
+/**
+  End: auth service initialization
+ */
+
+/**
  * Create the `fetch` function that serves as the network interface
  * for Relay fetches.
  * @param {Object} config
@@ -108,6 +151,7 @@ export const initRelayEnvironment = ({
   recreateNetwork = false,
   recreateStore = false,
   publishInitialRecords = false,
+  clientAuthInitialized = false,
 } = {}) => {
   // On the server, always recreate the environment so that data
   // isn't shared between connections.
@@ -144,6 +188,14 @@ export const initRelayEnvironment = ({
   // https://github.com/vercel/next.js/blob/canary/examples/with-relay-modern/lib/relay.js#L36
   if (initialRecords && publishInitialRecords) {
     relayEnvironment.getStore().publish(new RecordSource(initialRecords))
+  }
+
+  // As appropriate, set that the client authentication has initialized.
+  // This needs to happen after Relay environment config above so that
+  // the Relay environment is updated before we do any auth-dependent data
+  // fetching.
+  if (clientAuthInitialized) {
+    setClientAuthInitialized()
   }
 
   return relayEnvironment
