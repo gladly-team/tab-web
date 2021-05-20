@@ -158,6 +158,32 @@ describe('withRelay', () => {
     expect(env1.getNetwork()).not.toEqual(env2.getNetwork())
   })
 
+  it('passes clientInitialized to initRelayEnvironment', async () => {
+    expect.assertions(2)
+    const { initRelayEnvironment } = require('src/utils/relayEnvironment')
+    const withRelay = require('src/utils/pageWrappers/withRelay').default
+    const { useAuthUser } = require('next-firebase-auth')
+    const MockComponent = () => <div>Hello!</div>
+    const MockCompWithRelay = withRelay(MockComponent)
+    const wrapper = mount(<MockCompWithRelay />)
+    await actions(wrapper, () => {
+      useAuthUser.mockReturnValue({
+        ...getMockAuthUser(),
+        clientInitialized: false,
+      })
+    })
+    const latestArg = initRelayEnvironment.mock.calls.pop()[0]
+    expect(latestArg.clientAuthInitialized).toBe(false)
+    await actions(wrapper, () => {
+      useAuthUser.mockReturnValue({
+        ...getMockAuthUser(),
+        clientInitialized: true,
+      })
+    })
+    const newLatestArg = initRelayEnvironment.mock.calls.pop()[0]
+    expect(newLatestArg.clientAuthInitialized).toBe(true)
+  })
+
   it('does *not* create a new Relay network when AuthUser.clientInitialized changes from false to true', async () => {
     expect.assertions(1)
     const withRelay = require('src/utils/pageWrappers/withRelay').default
