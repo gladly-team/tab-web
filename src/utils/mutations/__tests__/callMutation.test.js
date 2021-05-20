@@ -1,7 +1,11 @@
 import { commitMutation as commitMutationDefault } from 'react-relay'
-import { getRelayEnvironment } from 'src/utils/relayEnvironment'
+import {
+  getRelayEnvironment,
+  waitForAuthInitialized,
+} from 'src/utils/relayEnvironment'
 import { isServerSide } from 'src/utils/ssr'
 import { recachePage } from 'src/utils/caching'
+import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 
 jest.mock('react-relay')
 jest.mock('src/utils/relayEnvironment')
@@ -33,6 +37,29 @@ describe('callMutation', () => {
       variables: { myVars: 'here' },
     })
     expect(getRelayEnvironment).toHaveBeenCalled()
+  })
+
+  it('waits for client auth to load before calling `getRelayEnvironment` or `commitMutation`', async () => {
+    expect.assertions(4)
+    let resolver
+    waitForAuthInitialized.mockImplementationOnce(
+      async () =>
+        new Promise((resolve) => {
+          resolver = resolve
+        })
+    )
+    const callMutation = require('src/utils/mutations/callMutation').default
+    callMutation({
+      mutation: { some: 'stuff' },
+      variables: { myVars: 'here' },
+    })
+    await flushAllPromises()
+    expect(getRelayEnvironment).not.toHaveBeenCalled()
+    expect(commitMutationDefault).not.toHaveBeenCalled()
+    resolver()
+    await flushAllPromises()
+    expect(getRelayEnvironment).toHaveBeenCalled()
+    expect(commitMutationDefault).toHaveBeenCalled()
   })
 
   it('recaches the page by default', async () => {

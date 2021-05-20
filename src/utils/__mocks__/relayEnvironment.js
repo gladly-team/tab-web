@@ -64,3 +64,5 @@ const createMockInitRelayEnv = () => {
 export const initRelayEnvironment = jest.fn(createMockInitRelayEnv())
 
 export const getRelayEnvironment = jest.fn(() => mockRelayEnv)
+
+export const waitForAuthInitialized = jest.fn(async () => Promise.resolve())
