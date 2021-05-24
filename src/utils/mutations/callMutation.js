@@ -1,5 +1,8 @@
 import { commitMutation as commitMutationDefault } from 'react-relay'
-import { getRelayEnvironment } from 'src/utils/relayEnvironment'
+import {
+  getRelayEnvironment,
+  waitForAuthInitialized,
+} from 'src/utils/relayEnvironment'
 import { isServerSide } from 'src/utils/ssr'
 import { recachePage } from 'src/utils/caching'
 
@@ -26,6 +29,10 @@ const callMutation = async ({ mutation, variables, cache = true }) => {
   if (isServerSide()) {
     throw new Error('Mutations must only be called on the client.')
   }
+
+  // Wait for authentication to initialize to be sure that the
+  // Relay environment has a valid ID token.
+  await waitForAuthInitialized()
 
   // We will reuse the Relay environment created earlier in the "withData"
   // HOC, which will include the user's token. This is a convenience so that

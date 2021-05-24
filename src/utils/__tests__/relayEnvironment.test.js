@@ -1,4 +1,5 @@
 import getMockFetchResponse from 'src/utils/testHelpers/getMockFetchResponse'
+import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 
 jest.mock('relay-runtime')
 jest.mock('src/utils/ssr')
@@ -328,5 +329,95 @@ describe('getRelayEnvironment', () => {
     })
     const response = getRelayEnvironment()
     expect(response).toEqual(expectedEnv)
+  })
+})
+
+describe('waitForAuthInitialized', () => {
+  it('resolves if the Relay environment was already created with clientAuthInitialized=true', async () => {
+    expect.assertions(0)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const {
+      initRelayEnvironment,
+      waitForAuthInitialized,
+    } = require('src/utils/relayEnvironment')
+    initRelayEnvironment({
+      clientAuthInitialized: true,
+    })
+    await waitForAuthInitialized()
+  })
+
+  it('resolves after the Relay environment is initialized with clientAuthInitialized=true', async () => {
+    expect.assertions(2)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const {
+      initRelayEnvironment,
+      waitForAuthInitialized,
+    } = require('src/utils/relayEnvironment')
+    let promiseResolved = false
+    waitForAuthInitialized().then(() => {
+      promiseResolved = true
+    })
+    expect(promiseResolved).toBe(false)
+    initRelayEnvironment({
+      clientAuthInitialized: true,
+    })
+    await flushAllPromises()
+    expect(promiseResolved).toBe(true)
+  })
+
+  it('resolves after the Relay environment is *recreated* with clientAuthInitialized=true', async () => {
+    expect.assertions(2)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const {
+      initRelayEnvironment,
+      waitForAuthInitialized,
+    } = require('src/utils/relayEnvironment')
+    initRelayEnvironment({
+      clientAuthInitialized: false,
+    })
+    let promiseResolved = false
+    waitForAuthInitialized().then(() => {
+      promiseResolved = true
+    })
+    await flushAllPromises()
+    expect(promiseResolved).toBe(false)
+    initRelayEnvironment({
+      clientAuthInitialized: true,
+    })
+    await flushAllPromises()
+    expect(promiseResolved).toBe(true)
+  })
+
+  it('resolves all queued promises', async () => {
+    expect.assertions(4)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+    const {
+      initRelayEnvironment,
+      waitForAuthInitialized,
+    } = require('src/utils/relayEnvironment')
+    initRelayEnvironment({
+      clientAuthInitialized: false,
+    })
+    let promiseResolved = false
+    waitForAuthInitialized().then(() => {
+      promiseResolved = true
+    })
+    let promiseTwoResolved = false
+    waitForAuthInitialized().then(() => {
+      promiseTwoResolved = true
+    })
+    await flushAllPromises()
+    expect(promiseResolved).toBe(false)
+    expect(promiseTwoResolved).toBe(false)
+    initRelayEnvironment({
+      clientAuthInitialized: true,
+    })
+    await flushAllPromises()
+    expect(promiseResolved).toBe(true)
+    expect(promiseTwoResolved).toBe(true)
   })
 })

@@ -22,6 +22,7 @@ const withRelay = (ChildComponent) => {
     const [relayEnvironment, setRelayEnvironment] = useState(
       initRelayEnvironment({
         initialRecords,
+        clientAuthInitialized: AuthUser.clientInitialized,
         getIdToken: AuthUser.getIdToken,
         publishInitialRecords,
       })
@@ -37,8 +38,10 @@ const withRelay = (ChildComponent) => {
           : null
         const oldId = previousAuthUser ? previousAuthUser.id : null
 
-        // If the AuthUser's token or ID change, recreate the
-        // Relay network.
+        // If there is a change in the AuthUser's token or ID, recreate
+        // the Relay network. We don't recreate it when auth intialization
+        // state changes, because the main consequence of that is a possible
+        // change in the token.
         const shouldRecreateNetwork =
           AuthUser.id !== oldId || token !== oldToken
 
@@ -52,6 +55,7 @@ const withRelay = (ChildComponent) => {
         setRelayEnvironment(
           initRelayEnvironment({
             getIdToken: AuthUser.getIdToken,
+            clientAuthInitialized: AuthUser.clientInitialized,
             recreateNetwork: shouldRecreateNetwork,
             recreateStore: shouldRecreateStore,
             publishInitialRecords,
