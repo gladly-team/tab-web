@@ -19,6 +19,11 @@ const initSentry = () => {
   alreadyInit = true
   Sentry.init({
     dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+    ignoreErrors: [
+      // Expected error thrown in _app.js. See:
+      // https://github.com/zeit/next.js/issues/2476
+      /^routeChange aborted. This error can be safely ignored./,
+    ],
   })
 }
 
