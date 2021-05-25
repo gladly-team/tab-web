@@ -22,7 +22,7 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
   }
   const [isAuthReady, setIsAuthReady] = useState(false)
   useEffect(() => {
-    if (AuthUser.id || AuthUser.clientInitialized) {
+    if (AuthUser.clientInitialized) {
       setIsAuthReady(true)
     }
   }, [AuthUser])
