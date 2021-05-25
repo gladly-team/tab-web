@@ -301,6 +301,108 @@ describe('useData', () => {
     })
   })
 
+  it('does not fetch until the auth client has initialized (passes `useSWR` a key of null)', async () => {
+    expect.assertions(2)
+
+    // Spying on default exports:
+    // https://stackoverflow.com/a/54245672
+    const useSWRSpy = jest.spyOn(useSWR, 'default')
+
+    useAuthUser.mockReturnValue(getUninitializedAuthUser())
+    const mockRelayQuery = `some query here`
+    const mockRelayVariables = {
+      some: 'thing',
+    }
+    const mockGetRelayQuery = async () => ({
+      query: mockRelayQuery,
+      variables: mockRelayVariables,
+    })
+
+    const { rerender, waitForNextUpdate } = renderHook(() =>
+      useData({
+        getRelayQuery: mockGetRelayQuery,
+
+        // Setting some additional SWR options.
+        initialData: { some: 'initial data' },
+        errorRetryCount: 2,
+        revalidateOnMount: true,
+      })
+    )
+    await act(async () => {
+      rerender()
+      await waitForNextUpdate()
+    })
+
+    const useSWRKey1 = useSWRSpy.mock.calls.pop()[0]
+    expect(useSWRKey1()).toBeNull()
+
+    useAuthUser.mockReturnValue(getMockAuthUser()) // authed
+    await act(async () => {
+      rerender()
+      await waitForNextUpdate()
+    })
+
+    const useSWRKey2 = useSWRSpy.mock.calls.pop()[0]
+    expect(useSWRKey2()).toEqual([
+      JSON.stringify(mockRelayQuery),
+      JSON.stringify(mockRelayVariables),
+    ])
+  })
+
+  it('fetches after the auth client has initialized even if the user is unauthed', async () => {
+    expect.assertions(2)
+
+    // Spying on default exports:
+    // https://stackoverflow.com/a/54245672
+    const useSWRSpy = jest.spyOn(useSWR, 'default')
+
+    useAuthUser.mockReturnValue(getUninitializedAuthUser())
+    const mockRelayQuery = `some query here`
+    const mockRelayVariables = {
+      some: 'thing',
+    }
+    const mockGetRelayQuery = async () => ({
+      query: mockRelayQuery,
+      variables: mockRelayVariables,
+    })
+
+    const { rerender, waitForNextUpdate } = renderHook(() =>
+      useData({
+        getRelayQuery: mockGetRelayQuery,
+
+        // Setting some additional SWR options.
+        initialData: { some: 'initial data' },
+        errorRetryCount: 2,
+        revalidateOnMount: true,
+      })
+    )
+    await act(async () => {
+      rerender()
+      await waitForNextUpdate()
+    })
+
+    const useSWRKey1 = useSWRSpy.mock.calls.pop()[0]
+    expect(useSWRKey1()).toBeNull()
+
+    useAuthUser.mockReturnValue({
+      ...getMockAuthUser(),
+
+      // unauthed
+      id: null,
+      email: null,
+    })
+    await act(async () => {
+      rerender()
+      await waitForNextUpdate()
+    })
+
+    const useSWRKey2 = useSWRSpy.mock.calls.pop()[0]
+    expect(useSWRKey2()).toEqual([
+      JSON.stringify(mockRelayQuery),
+      JSON.stringify(mockRelayVariables),
+    ])
+  })
+
   it('passes initialData and additional options to `useSWR`', async () => {
     expect.assertions(1)
 
