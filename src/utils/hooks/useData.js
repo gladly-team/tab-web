@@ -1,6 +1,6 @@
 // This HOC should be wrapped in `withRelay` and `withAuthUser`.`
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { fetchQuery } from 'react-relay'
 import { useAuthUser } from 'next-firebase-auth'
@@ -23,7 +23,6 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
   const [isAuthReady, setIsAuthReady] = useState(false)
   useEffect(() => {
     if (AuthUser.clientInitialized) {
-      // console.log('SET IS AUTH READY')
       setIsAuthReady(true)
     }
   }, [AuthUser])
