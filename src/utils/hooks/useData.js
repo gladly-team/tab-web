@@ -1,6 +1,6 @@
 // This HOC should be wrapped in `withRelay` and `withAuthUser`.`
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
 import { fetchQuery } from 'react-relay'
 import { useAuthUser } from 'next-firebase-auth'
@@ -23,23 +23,29 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
   const [isAuthReady, setIsAuthReady] = useState(false)
   useEffect(() => {
     if (AuthUser.clientInitialized) {
+      // console.log('SET IS AUTH READY')
       setIsAuthReady(true)
     }
   }, [AuthUser])
 
-  // Set up the Relay environment and get the Relay query.
-  const [relayQuery, setRelayQuery] = useState()
-  const [relayVariables, setRelayVariables] = useState()
+  // Get the Relay query.
+  const [relayInfo, setRelayInfo] = useState({
+    query: null,
+    variables: {},
+  })
   useEffect(() => {
     const getRelayQueryAndVars = async () => {
       const { query, variables = {} } = await getRelayQuery({ AuthUser })
-      setRelayVariables(variables)
-      setRelayQuery(query)
+      setRelayInfo({
+        query,
+        variables,
+      })
     }
     if (isAuthReady) {
       getRelayQueryAndVars()
     }
-  }, [isAuthReady, AuthUser, getRelayQuery, initialData])
+  }, [isAuthReady, AuthUser, getRelayQuery])
+  const { query: relayQuery, variables: relayVariables } = relayInfo
 
   const readyToFetch = !!relayQuery
 
