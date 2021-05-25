@@ -26,7 +26,7 @@ const initSentry = () => {
 
       // Ignore network errors. Stop ignoring these in the future if we
       // more gracefully handle network failures.
-      /^Failed to fetch$/,
+      /^TypeError: Failed to fetch$/,
       /^Network Error$/,
       /^NetworkError when attempting to fetch resource.$/,
     ],
