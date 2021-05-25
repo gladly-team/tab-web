@@ -22,6 +22,11 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
   }
   const [isAuthReady, setIsAuthReady] = useState(false)
   useEffect(() => {
+    // We need the authentication client to have initialized before
+    // fetching any data so we can be sure the Relay environment will
+    // use an unexpired user ID token. (When a SSR page is loaded from
+    // browser cache, the AuthUser may be defined but have an expired
+    // token value.)
     if (AuthUser.clientInitialized) {
       setIsAuthReady(true)
     }
