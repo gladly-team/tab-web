@@ -6,6 +6,7 @@ import useData from 'src/utils/hooks/useData'
 import {
   initRelayEnvironment,
   getRelayEnvironment,
+  waitForAuthInitialized,
 } from 'src/utils/relayEnvironment'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 
@@ -246,6 +247,50 @@ describe('useData', () => {
       data: undefined,
       error: mockErr,
     })
+  })
+
+  it('does not fetch data until auth is initialized', async () => {
+    expect.assertions(2)
+
+    let authInitResolver
+    waitForAuthInitialized.mockImplementationOnce(
+      async () =>
+        new Promise((resolve) => {
+          authInitResolver = resolve
+        })
+    )
+
+    useAuthUser.mockReturnValue(getUninitializedAuthUser())
+    let relayQueryPromiseResolver
+    const relayQueryPromise = new Promise((resolve) => {
+      relayQueryPromiseResolver = resolve
+    })
+    const mockGetRelayQuery = async () => relayQueryPromise
+
+    const { rerender, waitForNextUpdate } = renderHook(() =>
+      useData({ getRelayQuery: mockGetRelayQuery })
+    )
+
+    await act(async () => {
+      useAuthUser.mockReturnValue(getMockAuthUser())
+      relayQueryPromiseResolver({
+        query: `returns an error if fetchQuery throws`,
+        variables: {
+          some: 'thing',
+        },
+      })
+      rerender()
+      await waitForNextUpdate()
+    })
+
+    expect(fetchQuery).not.toHaveBeenCalled()
+
+    await act(async () => {
+      authInitResolver()
+      await waitForNextUpdate()
+    })
+
+    expect(fetchQuery).toHaveBeenCalled()
   })
 
   it('throws an error if not wrapped in the `withAuthUser` HOC', async () => {
