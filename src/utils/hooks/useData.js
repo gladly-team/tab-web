@@ -11,16 +11,6 @@ const fetcher = async (query, variables) => {
   return fetchQuery(environment, JSON.parse(query), JSON.parse(variables))
 }
 
-const createFetcher = (AuthUser) => async (...args) => {
-  // Ensure a valid/refreshed ID token before fetching.
-  // This is a hacky "make sure it works" workaround, because the
-  // Relay environment should use an updated user, but it's possible
-  // there's a race condition between the token refreshing + the Relay
-  // environment updating and `swr` fetching data.
-  await AuthUser.getIdToken()
-  return fetcher(...args)
-}
-
 const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
   // Before fetching data, wait for the AuthUser to initialize
   // if it's not not already available.
@@ -75,7 +65,7 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
       !readyToFetch
         ? null
         : [JSON.stringify(relayQuery), JSON.stringify(relayVariables)],
-    createFetcher(AuthUser),
+    fetcher,
     {
       initialData,
       ...SWROptions,
