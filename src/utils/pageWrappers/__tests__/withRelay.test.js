@@ -184,7 +184,7 @@ describe('withRelay', () => {
     expect(newLatestArg.clientAuthInitialized).toBe(true)
   })
 
-  it('does *not* create a new Relay network when AuthUser.clientInitialized changes from false to true', async () => {
+  it('creates a new Relay network when AuthUser.clientInitialized changes from false to true', async () => {
     expect.assertions(1)
     const withRelay = require('src/utils/pageWrappers/withRelay').default
     const { useAuthUser } = require('next-firebase-auth')
@@ -208,7 +208,7 @@ describe('withRelay', () => {
     })
     const env2 = wrapper.find(ReactRelayContext.Provider).prop('value')
       .environment
-    expect(env1.getNetwork()).toEqual(env2.getNetwork())
+    expect(env1.getNetwork()).not.toEqual(env2.getNetwork())
   })
 
   it('does *not* create a new Relay store when AuthUser.clientInitialized changes', async () => {
