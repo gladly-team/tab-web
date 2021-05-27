@@ -4,9 +4,14 @@ import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { fetchQuery } from 'react-relay'
 import { useAuthUser } from 'next-firebase-auth'
-import { getRelayEnvironment } from 'src/utils/relayEnvironment'
+import {
+  getRelayEnvironment,
+  waitForAuthInitialized,
+} from 'src/utils/relayEnvironment'
 
 const fetcher = async (query, variables) => {
+  // Make sure the Relay environment has a valid ID token.
+  await waitForAuthInitialized()
   const environment = getRelayEnvironment()
   return fetchQuery(environment, JSON.parse(query), JSON.parse(variables))
 }
