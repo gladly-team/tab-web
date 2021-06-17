@@ -18,14 +18,24 @@ import catsSent from 'src/assets/images/catsSent.png'
 import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
 import Fade from '@material-ui/core/Fade'
-
+import CloseIcon from '@material-ui/icons/Close'
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: theme.spacing(2),
+    // padding: theme.spacing(1),
+    // marginBottom: theme.spacing(2),
+  },
+  dialogContentRoot: {
+    padding: theme.spacing(4),
+  },
+  titleText: {
+    fontSize: '24px',
+    fontWeight: 700,
+    lineHeight: '2rem',
+    marginTop: theme.spacing(0.5),
   },
   purpleColor: {
     color: theme.palette.text.primary,
@@ -33,9 +43,14 @@ const useStyles = makeStyles((theme) => ({
   chipContainer: {
     display: 'flex',
     flexWrap: 'wrap',
-    minHeight: '30px',
+    minHeight: '40px',
     maxHeight: '90px',
     overflowY: 'auto',
+  },
+  sendButton: {
+    marginTop: theme.spacing(2),
+    height: theme.spacing(6),
+    backgroundColor: theme.palette.colors.purple1,
   },
   sentBox: {
     display: 'flex',
@@ -47,6 +62,10 @@ const useStyles = makeStyles((theme) => ({
   },
   chip: {
     margin: theme.spacing(0.5),
+    backgroundColor: theme.palette.primary.background,
+  },
+  chipDelete: {
+    color: theme.palette.primary.main,
   },
   copyIcon: {
     color: theme.palette.text.secondary,
@@ -56,6 +75,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     color: theme.palette.text.secondary,
     marginTop: theme.spacing(1),
+    minHeight: '322px',
+    justifyContent: 'space-evenly',
   },
 }))
 
@@ -81,16 +102,14 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 }
 
-const EmailInviteFriendsDialog = ({ username, userId }) => {
+const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
   const classes = useStyles()
   const [value, setValue] = React.useState(0)
   const [emailInput, setEmailInputChange] = useState('')
   const [isValidEmail, setIsValidEmail] = useState(true)
   const [validEmails, setValidEmails] = useState([])
   const [name, setName] = useState('')
-  const [personalMessage, setPersonalMessage] = useState(
-    'Hey, I found this great little thing. Check it out!'
-  )
+  const [personalMessage, setPersonalMessage] = useState('')
   const [personalMessageError, setPersonalMessageError] = useState(false)
   const [sendingState, setSendingState] = useState('Send Invite')
   const referralUrl = getReferralUrl(username)
@@ -149,13 +168,21 @@ const EmailInviteFriendsDialog = ({ username, userId }) => {
   }
   return (
     <div className={classes.root}>
-      <MuiDialogContent>
-        <img src={shareCats} alt="cats" />
-        <Typography variant="h4">
+      <MuiDialogContent classes={{ root: classes.dialogContentRoot }}>
+        {/* MuiDialog modifies the padding on the 1st child and i cant override it so adding this style */}
+        <img src={shareCats} alt="cats" style={{ marginTop: '12px' }} />
+        <IconButton
+          onClick={closeFunction}
+          style={{ position: 'absolute', right: '16px', top: '20px' }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <Typography variant="h4" classes={{ h4: classes.titleText }}>
           Share Tab for Cats with your friends
         </Typography>
         <Typography>
-          Save more cats! The more people on the bus, the more cats we save
+          Save more cats! When you invite a friend, we'll donate an additional
+          10 treats the moment they sign up. 😺
         </Typography>
         <Tabs value={value} onChange={setChange} indicatorColor="primary">
           <Tab label="Email" />
@@ -166,6 +193,7 @@ const EmailInviteFriendsDialog = ({ username, userId }) => {
             <div>
               <TextField
                 fullWidth
+                size="small"
                 disabled={validEmails.length >= 20}
                 error={!isValidEmail}
                 id="recipientsInput"
@@ -189,9 +217,14 @@ const EmailInviteFriendsDialog = ({ username, userId }) => {
                   <Fade in key={item}>
                     <Chip
                       size="small"
-                      className={classes.chip}
+                      // className={classes.chip}
+                      classes={{
+                        deleteIconSmall: classes.chipDelete,
+                        root: classes.chip,
+                      }}
                       label={item}
                       key={item}
+                      // color="primary"
                       onDelete={() => deleteEmail(item)}
                     />
                   </Fade>
@@ -200,13 +233,16 @@ const EmailInviteFriendsDialog = ({ username, userId }) => {
               <TextField
                 fullWidth
                 value={name}
+                size="small"
                 label="Sender"
                 helperText="Enter your name"
                 variant="outlined"
                 onChange={(event) => setName(event.target.value)}
               />
               <TextField
+                style={{ marginTop: '12px' }}
                 fullWidth
+                size="small"
                 value={personalMessage}
                 label="Message"
                 multiline
@@ -232,7 +268,7 @@ const EmailInviteFriendsDialog = ({ username, userId }) => {
             </Fade>
           )}
           <Button
-            // className={classes.button}
+            className={classes.sendButton}
             fullWidth
             variant="contained"
             color="primary"
@@ -266,7 +302,6 @@ const EmailInviteFriendsDialog = ({ username, userId }) => {
               style={{
                 display: 'flex',
                 flexDirection: 'column',
-                marginTop: '24px',
               }}
             >
               <Typography color="primary" variant="caption">
@@ -284,6 +319,7 @@ const EmailInviteFriendsDialog = ({ username, userId }) => {
 EmailInviteFriendsDialog.propTypes = {
   username: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
+  closeFunction: PropTypes.func.isRequired,
 }
 
 EmailInviteFriendsDialog.defaultProps = {}

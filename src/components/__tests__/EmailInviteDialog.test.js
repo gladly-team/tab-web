@@ -1,5 +1,5 @@
 import React from 'react'
-import { mount, shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import CreateInvitedUsersMutation from 'src/utils/mutations/CreateInvitedUsersMutation'
 import TextField from '@material-ui/core/TextField'
@@ -7,10 +7,13 @@ import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
 import { act } from 'react-dom/test-utils'
 import SocialShare from 'src/components/SocialShare'
+import { ThemeProvider } from '@material-ui/core/styles'
+import theme from 'src/utils/theme'
 
 const getMockProps = () => ({
   username: 'someUsername',
   userId: 'someId',
+  closeFunction: jest.fn(),
 })
 jest.mock('src/utils/mutations/CreateInvitedUsersMutation')
 
@@ -24,7 +27,11 @@ describe('EmailInviteDialog component', () => {
       .default
     const mockProps = getMockProps()
     expect(() => {
-      mount(<EmailInviteFriendsDialog {...mockProps} />)
+      mount(
+        <ThemeProvider theme={theme}>
+          <EmailInviteFriendsDialog {...mockProps} />
+        </ThemeProvider>
+      )
     }).not.toThrow()
   })
 
@@ -33,27 +40,37 @@ describe('EmailInviteDialog component', () => {
       .default
     const mockProps = getMockProps()
 
-    const wrapper = shallow(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     expect(wrapper.find(Button).prop('disabled')).toBe(true)
     expect(wrapper.find(Button).prop('variant')).toBe('contained')
   })
 
-  it('there is a default message', () => {
+  it('there is no default message', () => {
     const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
       .default
     const mockProps = getMockProps()
 
-    const wrapper = shallow(<EmailInviteFriendsDialog {...mockProps} />)
-    expect(wrapper.find(TextField).at(2).prop('value')).toBe(
-      'Hey, I found this great little thing. Check it out!'
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
     )
+    expect(wrapper.find(TextField).at(2).prop('value')).toBe('')
   })
 
   it('successfully adds a valid email', async () => {
     const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
       .default
     const mockProps = getMockProps()
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     const emailInput = wrapper.find(TextField).at(0)
     emailInput
       .find('input')
@@ -70,7 +87,11 @@ describe('EmailInviteDialog component', () => {
     const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
       .default
     const mockProps = getMockProps()
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     expect(wrapper.find(Button).prop('disabled')).toBe(true)
     const emailInput = wrapper.find(TextField).at(0)
     emailInput
@@ -85,7 +106,11 @@ describe('EmailInviteDialog component', () => {
     const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
       .default
     const mockProps = getMockProps()
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     const emailInput = wrapper.find(TextField).at(0)
     emailInput
       .find('input')
@@ -104,7 +129,11 @@ describe('EmailInviteDialog component', () => {
     const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
       .default
     const mockProps = getMockProps()
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     const emailInput = wrapper.find(TextField).at(0)
     emailInput
       .find('input')
@@ -134,35 +163,15 @@ describe('EmailInviteDialog component', () => {
     )
   })
 
-  it('calls the create invited users mutation with default message even if name is left empty', async () => {
-    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
-      .default
-    const mockProps = getMockProps()
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
-    const emailInput = wrapper.find(TextField).at(0)
-    emailInput
-      .find('input')
-      .simulate('change', { target: { value: 'testdsf@gmail.com' } })
-    wrapper.update()
-    emailInput.find('input').simulate('blur')
-    wrapper.update()
-    wrapper.find(Button).simulate('click')
-    await act(async () => {
-      await flushAllPromises()
-    })
-    expect(CreateInvitedUsersMutation).toHaveBeenCalledWith(
-      'someId',
-      ['testdsf@gmail.com'],
-      '',
-      'Hey, I found this great little thing. Check it out!'
-    )
-  })
-
   it('shows the successful send state when emails are successfully sent', async () => {
     const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
       .default
     const mockProps = getMockProps()
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     const emailInput = wrapper.find(TextField).at(0)
     emailInput
       .find('input')
@@ -183,7 +192,11 @@ describe('EmailInviteDialog component', () => {
     const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
       .default
     const mockProps = getMockProps()
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     const emailInput = wrapper.find(TextField).at(0)
     emailInput
       .find('input')
@@ -206,7 +219,11 @@ describe('social share component', () => {
     const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
       .default
     const mockProps = getMockProps()
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     const subNav = wrapper.findWhere(
       (n) => n.prop('id') === 'simple-tabpanel-1'
     )
@@ -222,7 +239,11 @@ describe('social share component', () => {
       .default
     const mockProps = getMockProps()
     mockProps.username = 'bob'
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     const subNav = wrapper.findWhere(
       (n) => n.prop('id') === 'simple-tabpanel-1'
     )
@@ -242,7 +263,11 @@ describe('social share component', () => {
       .default
     const mockProps = getMockProps()
     mockProps.username = 'Bugs Bunny'
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     const subNav = wrapper.findWhere(
       (n) => n.prop('id') === 'simple-tabpanel-1'
     )
@@ -258,7 +283,11 @@ describe('social share component', () => {
       .default
     const mockProps = getMockProps()
     mockProps.username = 'my+username'
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     const subNav = wrapper.findWhere(
       (n) => n.prop('id') === 'simple-tabpanel-1'
     )
@@ -274,7 +303,11 @@ describe('social share component', () => {
       .default
     const mockProps = getMockProps()
     mockProps.username = 'Stinky💩'
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     const subNav = wrapper.findWhere(
       (n) => n.prop('id') === 'simple-tabpanel-1'
     )
@@ -289,7 +322,11 @@ describe('social share component', () => {
     const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
       .default
     const mockProps = getMockProps()
-    const wrapper = mount(<EmailInviteFriendsDialog {...mockProps} />)
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
     const subNav = wrapper.findWhere(
       (n) => n.prop('id') === 'simple-tabpanel-1'
     )

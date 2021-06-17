@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '11px',
   },
   rootModal: { zIndex: '10000000 !important', borderRadius: '5px' },
+  customMaxWidthDialog: { maxWidth: '512px' },
   friendsIcon: {
     height: 28,
     width: 28,
@@ -48,6 +49,7 @@ const InviteFriendsIcon = ({ user: { username, id } }) => {
       </IconButton>
       <Dialog
         maxWidth="sm"
+        classes={{ paperWidthSm: classes.customMaxWidthDialog }}
         fullWidth
         onClose={() => {
           setIsDialogOpen(false)
@@ -56,7 +58,13 @@ const InviteFriendsIcon = ({ user: { username, id } }) => {
         open={isDialogOpen}
         className={classes.rootModal}
       >
-        <EmailInviteDialog username={username} userId={id} />
+        <EmailInviteDialog
+          username={username}
+          userId={id}
+          closeFunction={() => {
+            setIsDialogOpen(false)
+          }}
+        />
       </Dialog>
     </>
   )
