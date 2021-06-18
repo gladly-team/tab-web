@@ -6,6 +6,7 @@ export default createFragmentContainer(InviteFriendsIcon, {
     fragment InviteFriendsIconContainer_user on User {
       numUsersRecruited
       username
+      id
     }
   `,
 })

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import GroupAddIcon from '@material-ui/icons/GroupAdd'
-import Typography from '@material-ui/core/Typography'
-import DashboardPopover from 'src/components/DashboardPopover'
 import { get } from 'lodash/object'
 import InviteFriends from 'src/components/InviteFriends'
+import EmailInviteDialog from 'src/components/EmailInviteDialog'
+import Dialog from '@material-ui/core/Dialog'
 
 const useStyles = makeStyles((theme) => ({
   copyIcon: {
@@ -15,6 +15,8 @@ const useStyles = makeStyles((theme) => ({
   topLevel: {
     marginRight: '11px',
   },
+  rootModal: { zIndex: '10000000 !important', borderRadius: '5px' },
+  customMaxWidthDialog: { maxWidth: '512px' },
   friendsIcon: {
     height: 28,
     width: 28,
@@ -31,9 +33,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const InviteFriendsIcon = ({ user: { username } }) => {
+const InviteFriendsIcon = ({ user: { username, id } }) => {
   const buttonRef = useRef(undefined)
-  const [isPopoverOpen, setIsPopoverOpen] = useState()
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const classes = useStyles()
 
   return (
@@ -41,32 +43,29 @@ const InviteFriendsIcon = ({ user: { username } }) => {
       <IconButton
         className={classes.topLevel}
         ref={buttonRef}
-        onClick={() => setIsPopoverOpen(true)}
+        onClick={() => setIsDialogOpen(true)}
       >
         <GroupAddIcon className={classes.friendsIcon} />
       </IconButton>
-      <DashboardPopover
-        open={isPopoverOpen}
-        anchorEl={buttonRef.current}
+      <Dialog
+        maxWidth="sm"
+        classes={{ paperWidthSm: classes.customMaxWidthDialog }}
+        fullWidth
         onClose={() => {
-          setIsPopoverOpen(false)
+          setIsDialogOpen(false)
         }}
-        className={classes.popover}
+        aria-labelledby="customized-dialog-title"
+        open={isDialogOpen}
+        className={classes.rootModal}
       >
-        <div className={classes.popoverContent}>
-          <Typography className={classes.titleSection}>
-            Helping cats feels even better with friends
-          </Typography>
-          <Typography gutterBottom variant="body2">
-            Invite a friend! When they join, you'll each earn 5 treats to give
-            to shelter cats:
-          </Typography>
-          <InviteFriends
-            user={{ username }}
-            className={classes.InviteFriends}
-          />
-        </div>
-      </DashboardPopover>
+        <EmailInviteDialog
+          username={username}
+          userId={id}
+          closeFunction={() => {
+            setIsDialogOpen(false)
+          }}
+        />
+      </Dialog>
     </>
   )
 }
@@ -74,6 +73,7 @@ const InviteFriendsIcon = ({ user: { username } }) => {
 InviteFriendsIcon.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string,
+    id: PropTypes.string,
     numUsersRecruited: PropTypes.number,
   }),
 }
@@ -81,6 +81,7 @@ InviteFriendsIcon.propTypes = {
 InviteFriendsIcon.defaultProps = {
   user: {
     username: '',
+    id: PropTypes.string,
     numUsersRecruited: 0,
   },
 }
