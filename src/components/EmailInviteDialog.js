@@ -217,14 +217,12 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
                   <Fade in key={item}>
                     <Chip
                       size="small"
-                      // className={classes.chip}
                       classes={{
                         deleteIconSmall: classes.chipDelete,
                         root: classes.chip,
                       }}
                       label={item}
                       key={item}
-                      // color="primary"
                       onDelete={() => deleteEmail(item)}
                     />
                   </Fade>
