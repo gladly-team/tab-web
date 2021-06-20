@@ -10,10 +10,12 @@ import preloadAll from 'jest-next-dynamic'
 import confetti from 'canvas-confetti'
 import { act } from 'react-dom/test-utils'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
+import Dialog from '@material-ui/core/Dialog'
 
 jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('@material-ui/core/Typography')
 jest.mock('src/components/SocialShare', () => () => <div />)
+jest.mock('src/components/EmailInviteDialog', () => () => <div />)
 jest.mock('src/components/InviteFriends', () => () => <div />)
 jest.mock('src/utils/caching')
 jest.mock('canvas-confetti', () => ({
@@ -77,10 +79,10 @@ describe('UserImpact component', () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = getMockProps()
     const wrapper = mount(<UserImpact {...mockProps} />)
-    expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(false)
+    expect(wrapper.find(Dialog).at(3).props().open).toBe(false)
     const notification = wrapper.find(Notification)
     notification.find(Button).simulate('click')
-    expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(true)
+    expect(wrapper.find(Dialog).at(3).props().open).toBe(true)
   })
 
   it('dismisses reward dialog and fires off correct updateImpact mutation', () => {
@@ -89,9 +91,6 @@ describe('UserImpact component', () => {
     const wrapper = mount(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(0)
     notification.find(Button).simulate('click')
-    const rewardDialog = wrapper.find(ImpactDialog).at(3)
-    rewardDialog.find(Button).simulate('click')
-    expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(false)
     expect(UpdateImpactMutation).toHaveBeenCalledWith(
       'someId',
       '6ce5ad8e-7dd4-4de5-ba4f-13868e7d212z',
@@ -223,9 +222,9 @@ describe('UserImpact component', () => {
     })
     const wrapper = mount(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(1)
-    expect(wrapper.find(ImpactDialog).at(4).props().open).toBe(false)
+    expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(false)
     notification.find(Button).simulate('click')
-    expect(wrapper.find(ImpactDialog).at(4).props().open).toBe(true)
+    expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(true)
   })
 
   it('fires off correct updateImpact mutation when use claims impact on referral notification', () => {
@@ -253,9 +252,9 @@ describe('UserImpact component', () => {
     const wrapper = mount(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(1)
     notification.find(Button).simulate('click')
-    const rewardDialog = wrapper.find(ImpactDialog).at(4)
+    const rewardDialog = wrapper.find(ImpactDialog).at(3)
     rewardDialog.find(Button).simulate('click')
-    expect(wrapper.find(ImpactDialog).at(4).props().open).toBe(false)
+    expect(wrapper.find(ImpactDialog).at(3).props().open).toBe(false)
   })
 
   it('renders the confetti canvas if a user hits 100 percent on the progress bar', async () => {
