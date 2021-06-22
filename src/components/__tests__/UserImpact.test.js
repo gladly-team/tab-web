@@ -85,6 +85,20 @@ describe('UserImpact component', () => {
     expect(wrapper.find(Dialog).at(3).props().open).toBe(true)
   })
 
+  it('dismisses the share dialog if dialog onclose is triggered', async () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    expect(wrapper.find(Dialog).at(3).props().open).toBe(false)
+    const notification = wrapper.find(Notification)
+    notification.find(Button).simulate('click')
+    act(() => {
+      wrapper.find(Dialog).at(3).prop('onClose')()
+    })
+    wrapper.update()
+    expect(wrapper.find(Dialog).at(3).prop('open')).toBe(false)
+  })
+
   it('dismisses reward dialog and fires off correct updateImpact mutation', () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = getMockProps()
