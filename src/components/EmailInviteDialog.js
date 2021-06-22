@@ -19,14 +19,13 @@ import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
 import Fade from '@material-ui/core/Fade'
 import CloseIcon from '@material-ui/icons/Close'
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    // padding: theme.spacing(1),
-    // marginBottom: theme.spacing(2),
   },
   dialogContentRoot: {
     padding: theme.spacing(4),
@@ -56,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     height: '260px',
-    // justifyContent: 'center',
     alignItems: 'center',
     paddingTop: theme.spacing(4),
   },
