@@ -179,9 +179,7 @@ const UserImpact = ({ userImpact, user }) => {
         maxWidth="sm"
         classes={{ paperWidthSm: classes.customMaxWidthDialog }}
         fullWidth
-        onClose={() => {
-          setRewardDialogOpen(false)
-        }}
+        onClose={handleRewardDialogClose}
         aria-labelledby="customized-dialog-title"
         open={rewardDialogOpen}
         className={classes.rootModal}
@@ -189,9 +187,7 @@ const UserImpact = ({ userImpact, user }) => {
         <EmailInviteDialog
           username={user.username}
           userId={user.id}
-          closeFunction={() => {
-            setRewardDialogOpen(false)
-          }}
+          closeFunction={handleRewardDialogClose}
         />
       </Dialog>
       <ImpactDialog

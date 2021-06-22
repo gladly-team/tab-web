@@ -319,7 +319,7 @@ describe('EmailInviteDialog component', () => {
     expect(CreateInvitedUsersMutation).toHaveBeenCalled()
     expect(wrapper.find(TextField).at(2).props().error).toBe(false)
     expect(wrapper.find(TextField).at(2).props().helperText).toBe(
-      'include a personalized message in our email invitation!'
+      'Let your friend know why they should join.'
     )
   })
 
