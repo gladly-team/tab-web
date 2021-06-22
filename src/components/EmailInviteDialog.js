@@ -75,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     color: theme.palette.text.secondary,
     marginTop: theme.spacing(1),
-    minHeight: '322px',
+    minHeight: '332px',
     justifyContent: 'space-evenly',
   },
 }))
@@ -180,9 +180,9 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
         <Typography variant="h4" classes={{ h4: classes.titleText }}>
           Share Tab for Cats with your friends
         </Typography>
-        <Typography>
-          Save more cats! When you invite a friend, we'll donate an additional
-          10 treats the moment they sign up. 😺
+        <Typography style={{ marginBottom: '8px' }}>
+          Save more cats! When a friend signs up, you'll each earn 5 additional
+          treats to help a shelter cat get adopted. 😺
         </Typography>
         <Tabs value={value} onChange={setChange} indicatorColor="primary">
           <Tab label="Email" />
@@ -192,6 +192,7 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
           {sendingState !== 'invitations sent! ✅' ? (
             <div>
               <TextField
+                style={{ marginTop: '8px' }}
                 fullWidth
                 size="small"
                 disabled={validEmails.length >= 20}
@@ -232,7 +233,7 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
                 fullWidth
                 value={name}
                 size="small"
-                label="Sender"
+                label="Your name"
                 helperText="Enter your name"
                 variant="outlined"
                 onChange={(event) => setName(event.target.value)}
@@ -248,7 +249,7 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
                 helperText={
                   personalMessageError
                     ? 'the max length of the personal message is 160 characters'
-                    : 'include a personalized message in our email invitation!'
+                    : 'Let your friend know why they should join.'
                 }
                 variant="outlined"
                 error={personalMessageError}
@@ -283,7 +284,7 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
               id="refer-friend-input"
               inputRef={textFieldRef}
               value={referralUrl}
-              label="copy link"
+              label="Send a link"
               focused
               onClick={highlightReferralUrl}
               InputProps={{
@@ -303,7 +304,7 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
               }}
             >
               <Typography color="primary" variant="caption">
-                Share to Social
+                Share to social media
               </Typography>
               <SocialShare url={referralUrl} iconSize={60} />
             </div>

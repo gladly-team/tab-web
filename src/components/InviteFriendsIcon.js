@@ -37,7 +37,7 @@ const InviteFriendsIcon = ({ user: { username, id } }) => {
   const buttonRef = useRef(undefined)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const classes = useStyles()
-
+  const closeDialog = () => setIsDialogOpen(false)
   return (
     <>
       <IconButton
@@ -51,9 +51,7 @@ const InviteFriendsIcon = ({ user: { username, id } }) => {
         maxWidth="sm"
         classes={{ paperWidthSm: classes.customMaxWidthDialog }}
         fullWidth
-        onClose={() => {
-          setIsDialogOpen(false)
-        }}
+        onClose={closeDialog}
         aria-labelledby="customized-dialog-title"
         open={isDialogOpen}
         className={classes.rootModal}
@@ -61,9 +59,7 @@ const InviteFriendsIcon = ({ user: { username, id } }) => {
         <EmailInviteDialog
           username={username}
           userId={id}
-          closeFunction={() => {
-            setIsDialogOpen(false)
-          }}
+          closeFunction={closeDialog}
         />
       </Dialog>
     </>
