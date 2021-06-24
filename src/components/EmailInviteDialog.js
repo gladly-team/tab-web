@@ -270,7 +270,9 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
             variant="contained"
             color="primary"
             onClick={sendEmailInvites}
-            disabled={!validEmails.length || personalMessageError}
+            disabled={
+              !(validEmails.length && name.length) || personalMessageError
+            }
           >
             {sendingState}
           </Button>

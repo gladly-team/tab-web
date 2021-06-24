@@ -127,7 +127,7 @@ describe('EmailInviteDialog component', () => {
     expect(wrapper.find(Chip).exists()).toBe(false)
   })
 
-  it('enables send button if there is atleast one valid email', async () => {
+  it('enables send button if there is atleast one valid email and a name', async () => {
     const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
       .default
     const mockProps = getMockProps()
@@ -142,6 +142,9 @@ describe('EmailInviteDialog component', () => {
       .find('input')
       .simulate('change', { target: { value: 'test@gmail.com' } })
     emailInput.find('input').simulate('blur')
+    const nameInput = wrapper.find(TextField).at(1)
+    nameInput.find('input').simulate('change', { target: { value: 'yolo' } })
+    nameInput.find('input').simulate('blur')
     wrapper.update()
     expect(wrapper.find(Button).prop('disabled')).toBe(false)
   })
@@ -287,6 +290,9 @@ describe('EmailInviteDialog component', () => {
       .simulate('change', { target: { value: 'testdsf@gmail.com' } })
     wrapper.update()
     emailInput.find('input').simulate('blur')
+    const nameInput = wrapper.find(TextField).at(1)
+    nameInput.find('input').simulate('change', { target: { value: 'yolo' } })
+    nameInput.find('input').simulate('blur')
     wrapper.update()
     const messageInput = wrapper.find(TextField).at(2)
     messageInput.find('textarea').simulate('change', {
@@ -338,6 +344,9 @@ describe('EmailInviteDialog component', () => {
       .simulate('change', { target: { value: 'testdsf@gmail.com' } })
     wrapper.update()
     emailInput.find('input').simulate('blur')
+    const nameInput = wrapper.find(TextField).at(1)
+    nameInput.find('input').simulate('change', { target: { value: 'yolo' } })
+    nameInput.find('input').simulate('blur')
     wrapper.update()
     wrapper.find(Button).simulate('click')
     wrapper.update()
