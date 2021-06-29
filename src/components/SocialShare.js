@@ -14,7 +14,7 @@ import {
   TwitterShareButton,
 } from 'react-share'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     justifyContent: 'center',
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     display: 'inline',
-    padding: theme.spacing(2),
+    padding: 4,
   },
 }))
 

@@ -10,8 +10,6 @@ import dynamic from 'next/dynamic'
 import { isPlural } from 'src/utils/formatting'
 import confetti from 'canvas-confetti'
 import usePrevious from 'src/utils/hooks/usePrevious'
-import EmailInviteDialog from 'src/components/EmailInviteDialog'
-import Dialog from '@material-ui/core/Dialog'
 
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
@@ -19,7 +17,6 @@ const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
 
 const useStyles = makeStyles(() => ({
   impactCounter: { backgroundColor: '#fff', marginRight: '15px' },
-  rootModal: { zIndex: '10000000 !important', borderRadius: '5px' },
   canvas: {
     position: 'absolute',
     top: 0,
@@ -175,21 +172,12 @@ const UserImpact = ({ userImpact, user }) => {
         open={alertDialogOpen}
         onClose={handleAlertDialogClose}
       />
-      <Dialog
-        maxWidth="sm"
-        classes={{ paperWidthSm: classes.customMaxWidthDialog }}
-        fullWidth
-        onClose={handleRewardDialogClose}
-        aria-labelledby="customized-dialog-title"
+      <ImpactDialog
+        modalType="claimImpactReward"
         open={rewardDialogOpen}
-        className={classes.rootModal}
-      >
-        <EmailInviteDialog
-          username={user.username}
-          userId={user.id}
-          closeFunction={handleRewardDialogClose}
-        />
-      </Dialog>
+        buttonOnClick={handleRewardDialogClose}
+        user={user}
+      />
       <ImpactDialog
         modalType="claimReferralReward"
         open={referralRewardDialogOpen}
