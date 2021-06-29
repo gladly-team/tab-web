@@ -18,7 +18,6 @@ import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 import useData from 'src/utils/hooks/useData'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import initializeCMP from 'src/utils/initializeCMP'
-import Accordion from '@material-ui/core/Accordion'
 
 jest.mock('next-offline/runtime')
 jest.mock('tab-cmp')
@@ -255,10 +254,11 @@ describe('account.js', () => {
   })
 })
 
-const getAdvancedOptionsSection = (wrapper) => wrapper.find(Accordion).first()
+const getRevertAccountItem = (wrapper) =>
+  wrapper.find('[data-test-id="account-item"]').last()
 
 const getRevertButton = (wrapper) =>
-  getAdvancedOptionsSection(wrapper).children().find(Button).first()
+  getRevertAccountItem(wrapper).find(Button).last()
 
 describe('account.js: button to revert to classic Tab for a Cause', () => {
   it('displays the "revert" button field in the advanced options section', () => {
@@ -266,16 +266,16 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
     const AccountPage = require('src/pages/account.js').default
     const mockProps = getMockProps()
     const wrapper = mount(<AccountPage {...mockProps} />)
-    const advancedOptions = getAdvancedOptionsSection(wrapper)
-    expect(advancedOptions.children().find(Typography).at(1).text()).toEqual(
+    const switchModeAccountItem = getRevertAccountItem(wrapper)
+    expect(switchModeAccountItem.find(Typography).at(0).text()).toEqual(
       'Leave Tab for Cats'
     )
-    expect(advancedOptions.children().find(Button).first().text()).toEqual(
+    expect(switchModeAccountItem.find(Button).first().text()).toEqual(
       'Switch to Classic'
     )
   })
 
-  it('clicking the "revert" button button calls the API endpoint as expected', async () => {
+  it('clicking the "revert" button calls the API endpoint as expected', async () => {
     expect.assertions(1)
     fetch.mockResolvedValue(getMockFetchResponse())
     const AccountPage = require('src/pages/account.js').default
