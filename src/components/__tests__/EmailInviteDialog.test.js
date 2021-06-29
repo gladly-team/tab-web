@@ -168,7 +168,7 @@ describe('EmailInviteDialog component', () => {
     wrapper.update()
     expect(wrapper.find(TextField).at(0).props().error).toBe(true)
     expect(wrapper.find(TextField).at(0).props().helperText).toBe(
-      'oops.  It looks like this email address is incorrect!'
+      'Oops.  It looks like this email address is incorrect!'
     )
   })
 
@@ -191,7 +191,7 @@ describe('EmailInviteDialog component', () => {
     wrapper.update()
     expect(wrapper.find(TextField).at(0).props().error).toBe(true)
     expect(wrapper.find(TextField).at(0).props().helperText).toBe(
-      'oops.  It looks like this email address is incorrect!'
+      'Oops.  It looks like this email address is incorrect!'
     )
     emailInput
       .find('input')
@@ -271,7 +271,7 @@ describe('EmailInviteDialog component', () => {
     expect(CreateInvitedUsersMutation).not.toHaveBeenCalled()
     expect(wrapper.find(TextField).at(2).props().error).toBe(true)
     expect(wrapper.find(TextField).at(2).props().helperText).toBe(
-      'the max length of the personal message is 160 characters'
+      'The max length of the personal message is 160 characters.'
     )
   })
 
