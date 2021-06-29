@@ -19,6 +19,7 @@ import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
 import Fade from '@material-ui/core/Fade'
 import CloseIcon from '@material-ui/icons/Close'
+import logger from 'src/utils/logger'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -115,8 +116,12 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
 
   const highlightReferralUrl = () => {
     textFieldRef.current.select()
-    // eslint-disable-next-line no-undef
-    document.execCommand('copy')
+    try {
+      // eslint-disable-next-line no-undef
+      document.execCommand('copy')
+    } catch (e) {
+      logger.error(e)
+    }
   }
 
   const setChange = (event, newValue) => {
@@ -200,10 +205,10 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
                 label="Recipients"
                 helperText={
                   !isValidEmail
-                    ? 'oops.  It looks like this email address is incorrect!'
+                    ? 'Oops.  It looks like this email address is incorrect!'
                     : validEmails.length >= 20
-                    ? 'you can send 20 emails at a time'
-                    : "add your friend's email"
+                    ? 'You can send 20 emails at a time.'
+                    : "Add your friend's email."
                 }
                 variant="outlined"
                 onChange={emailInputOnChange}
@@ -232,7 +237,7 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
                 value={name}
                 size="small"
                 label="Your name"
-                helperText="Enter your name"
+                helperText="Let your friend know who's inviting them."
                 variant="outlined"
                 onChange={(event) => setName(event.target.value)}
               />
@@ -246,7 +251,7 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
                 rows={2}
                 helperText={
                   personalMessageError
-                    ? 'the max length of the personal message is 160 characters'
+                    ? 'The max length of the personal message is 160 characters.'
                     : 'Let your friend know why they should join.'
                 }
                 variant="outlined"
