@@ -72,6 +72,9 @@ export const waitForAuthInitialized = async () =>
 const createFetchQuery = ({ getIdToken }) => {
   const fetchQuery = async (operation, variables) => {
     const token = await getIdToken()
+    const body = JSON.stringify({
+      query: operation.text, // GraphQL text from input
+      variables})
     const response = await fetch(relayEndpoint, {
       method: 'POST',
       headers: {
@@ -88,16 +91,13 @@ const createFetchQuery = ({ getIdToken }) => {
         // https://docs.aws.amazon.com/apigateway/latest/developerguide/configure-api-gateway-lambda-authorization-with-console.html"
         Authorization: token || 'unauthenticated',
       },
-      body: JSON.stringify({
-        query: operation.text, // GraphQL text from input
-        variables,
-      }),
+      body,
     })
     const responseJSON = await response.json()
 
     // If the response is not a 200, throw.
     if (!response.ok) {
-      throw new Error(`Bad GraphQL response. ${JSON.stringify(responseJSON)}`)
+      throw new Error(`Bad GraphQL response. ${JSON.stringify(responseJSON)}. Query Body: ${body}`)
     }
 
     // If there are any errors returned from GraphQL, log them and throw.
