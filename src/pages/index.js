@@ -46,7 +46,7 @@ import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntro
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import { getAdUnits, areAdsEnabled, showMockAds } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
-import { accountURL, achievementsURL, surveyLink, reload } from 'src/utils/urls'
+import { accountURL, achievementsURL, surveyLink } from 'src/utils/urls'
 import {
   showMockAchievements,
   showBackgroundImages,
@@ -57,8 +57,6 @@ import useData from 'src/utils/hooks/useData'
 import { CAT_CHARITY } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
-import { setOptIn } from 'src/pages/beta-opt-in'
-import usePrevious from 'src/utils/hooks/usePrevious'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -260,7 +258,6 @@ const getRelayQuery = async ({ AuthUser }) => {
           vcCurrent
           id
           hasViewedIntroFlow
-          v4BetaEnabled
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
           ...InviteFriendsIconContainer_user
@@ -334,18 +331,6 @@ const Index = ({ data: initialData }) => {
       accountCreated()
     }
   }, [globalTabCount])
-
-  // set v4 beta cookie to false if meant to be on legacy
-  const v4BetaEnabled = usePrevious(user ? user.v4BetaEnabled : undefined)
-  useEffect(() => {
-    const asyncFunc = async () => {
-      await setOptIn(false)
-      reload()
-    }
-    if (v4BetaEnabled !== undefined && v4BetaEnabled === false) {
-      asyncFunc()
-    }
-  }, [v4BetaEnabled])
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
