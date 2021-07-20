@@ -261,6 +261,16 @@ const getRelayQuery = async ({ AuthUser }) => {
           id
           hasViewedIntroFlow
           v4BetaEnabled
+          currentMission {
+            squadName
+          }
+          pastMissions {
+            edges {
+              node {
+                squadName
+              }
+            }
+          }
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
           ...InviteFriendsIconContainer_user
@@ -289,6 +299,7 @@ const Index = ({ data: initialData }) => {
       revalidateOnMount: true,
     }),
   })
+  console.log(data, 'data')
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
 
