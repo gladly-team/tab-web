@@ -4,25 +4,19 @@ export default {
   setItem: (key, value) => {
     try {
       localStorage.setItem(key, value)
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log('localStorage not supported on server side', e)
-    }
+      // eslint-disable-next-line no-empty
+    } catch (e) {}
   },
   getItem: (key, value) => {
     try {
       localStorage.getItem(key, value)
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log('localStorage not supported on server side', e)
-    }
+      // eslint-disable-next-line no-empty
+    } catch (e) {}
   },
   removeItem: (key, value) => {
     try {
       localStorage.removeItem(key, value)
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.log('localStorage not supported on server side', e)
-    }
+      // eslint-disable-next-line no-empty
+    } catch (e) {}
   },
 }
