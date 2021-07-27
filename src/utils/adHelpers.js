@@ -83,3 +83,11 @@ export const areAdsEnabled = () =>
  */
 export const showMockAds = () =>
   process.env.NEXT_PUBLIC_ADS_USE_MOCK_ADS === 'true'
+
+/**
+ * Return true if we want to pass a development-only key-value to our
+ * ad server.
+ * @return {Boolean}
+ */
+export const isGAMDevEnvironment = () =>
+  process.env.NEXT_PUBLIC_GAM_DEV_ENVIRONMENT === 'true'

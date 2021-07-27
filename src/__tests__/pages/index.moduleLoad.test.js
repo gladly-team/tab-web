@@ -36,6 +36,16 @@ const getMockProps = () => ({
   },
 })
 
+const setUpAds = () => {
+  const { getAdUnits } = require('src/utils/adHelpers')
+  const { getAvailableAdUnits } = require('tab-ads')
+  getAdUnits.mockReturnValue(getAvailableAdUnits())
+}
+
+beforeEach(() => {
+  setUpAds()
+})
+
 afterEach(() => {
   jest.clearAllMocks()
   jest.resetModules()
@@ -113,5 +123,60 @@ describe('index.js: getServerSideProps', () => {
       AuthUser: { ...getMockAuthUser(), id: null, email: null },
     })
     expect(response).toEqual({})
+  })
+})
+
+describe('index.js: ads', () => {
+  it('calls `fetchAds` on the client side', async () => {
+    expect.assertions(1)
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(true)
+    const { fetchAds } = require('tab-ads')
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    shallow(<IndexPage {...mockProps} />)
+    expect(fetchAds).toHaveBeenCalled()
+  })
+
+  it('sets the "v4=true" GAM key during fetchAds', async () => {
+    expect.assertions(1)
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(true)
+    const { isGAMDevEnvironment } = require('src/utils/adHelpers')
+    isGAMDevEnvironment.mockReturnValue(false)
+    const { fetchAds } = require('tab-ads')
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    shallow(<IndexPage {...mockProps} />)
+    const config = fetchAds.mock.calls[0][0]
+    expect(config.pageLevelKeyValues.v4).toEqual('true') // should be a string
+  })
+
+  it('does not set the "dev" GAM key during fetchAds by default', async () => {
+    expect.assertions(1)
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(true)
+    const { isGAMDevEnvironment } = require('src/utils/adHelpers')
+    isGAMDevEnvironment.mockReturnValue(false)
+    const { fetchAds } = require('tab-ads')
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    shallow(<IndexPage {...mockProps} />)
+    const config = fetchAds.mock.calls[0][0]
+    expect(config.pageLevelKeyValues.dev).toBeUndefined()
+  })
+
+  it('sets the "dev=true" GAM key during fetchAds when in a dev environment', async () => {
+    expect.assertions(1)
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(true)
+    const { isGAMDevEnvironment } = require('src/utils/adHelpers')
+    isGAMDevEnvironment.mockReturnValue(true)
+    const { fetchAds } = require('tab-ads')
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    shallow(<IndexPage {...mockProps} />)
+    const config = fetchAds.mock.calls[0][0]
+    expect(config.pageLevelKeyValues.dev).toEqual('true') // should be a string
   })
 })

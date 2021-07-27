@@ -27,6 +27,7 @@ import { accountCreated, newTabView } from 'src/utils/events'
 jest.mock('uuid/v4')
 uuid.mockReturnValue('some-uuid')
 jest.mock('next-firebase-auth')
+jest.mock('tab-ads')
 jest.mock('@material-ui/icons/Settings')
 jest.mock('src/components/Link')
 jest.mock('src/utils/navigation')
