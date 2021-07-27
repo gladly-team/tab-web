@@ -44,7 +44,12 @@ import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntroFlowMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
-import { getAdUnits, areAdsEnabled, showMockAds } from 'src/utils/adHelpers'
+import {
+  getAdUnits,
+  areAdsEnabled,
+  showMockAds,
+  isGAMDevEnvironment,
+} from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import { accountURL, achievementsURL, surveyLink } from 'src/utils/urls'
 import {
@@ -209,9 +214,13 @@ if (isClientSide()) {
   // this file rather than waiting for component mount.
   const loadAds = () => {
     try {
+      const setGAMDevKey = isGAMDevEnvironment()
       fetchAds({
         adUnits: Object.values(getAdUnits()),
-        pageLevelKeyValues: { v4: 'true' },
+        pageLevelKeyValues: {
+          v4: 'true',
+          ...(setGAMDevKey && { dev: 'true' }),
+        },
         auctionTimeout: 1000,
         bidderTimeout: 700,
         consent: {
