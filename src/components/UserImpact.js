@@ -18,12 +18,13 @@ import EmailInviteDialog from 'src/components/EmailInviteDialog'
 import Dialog from '@material-ui/core/Dialog'
 import { get } from 'lodash/object'
 import localStorageMgr from 'src/utils/localstorage-mgr'
+import Link from 'src/components/Link'
 
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
 })
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   impactCounter: { backgroundColor: '#fff', marginRight: '15px' },
   rootModal: { zIndex: '10000000 !important', borderRadius: '5px' },
   canvas: {
@@ -32,6 +33,11 @@ const useStyles = makeStyles(() => ({
     right: 0,
     zIndex: '90000',
     pointerEvents: 'none',
+  },
+  link: {
+    display: 'inline',
+    color: theme.palette.primary.main,
+    textDecoration: 'none',
   },
 }))
 const UserImpact = ({ userImpact, user }) => {
@@ -251,11 +257,46 @@ const UserImpact = ({ userImpact, user }) => {
       {IntlCatDayNotification && (
         <Notification
           text={
-            <Typography>
-              Did you know it's international cat day? It was created in 2002 by
-              the International Fund for Animal Welfare. It is a day to raise
-              awareness for cats and learn about ways to help and protect them.
-            </Typography>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'space-between',
+              }}
+            >
+              <Typography
+                variant="h6"
+                align="center"
+                style={{ marginBottom: '16px' }}
+              >
+                Help us celebrate International Cat Day (August 8)!
+              </Typography>
+              <Typography variant="body2" gutterBottom>
+                Invite your friends to try Tab for Cats, and we will give an
+                extra dollar to{' '}
+                <Link
+                  target="_blank"
+                  to="https://greatergood.org/jackson-galaxy"
+                  className={classes.link}
+                >
+                  The Jackson Galaxy Project
+                </Link>{' '}
+                for every new user that joins August 3 - 10.
+              </Typography>
+              <Typography variant="body2">
+                Participate in our photo challenge for the chance to be featured
+                on Tab for Cats and win $100 for the charity of your choice.
+                Contest details can be found{' '}
+                <Link
+                  target="_blank"
+                  to="https://www.instagram.com/tabforacause"
+                  className={classes.link}
+                >
+                  @tabforacause
+                </Link>{' '}
+                on Instagram and Facebook.
+              </Typography>
+            </div>
           }
           buttonText="Ok!"
           buttonOnClick={dismissCatDayNotification}
