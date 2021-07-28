@@ -13,6 +13,7 @@ import SocialShare from 'src/components/SocialShare'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import CreateInvitedUsersMutation from 'src/utils/mutations/CreateInvitedUsersMutation'
+import CreateSquadInvitesMutation from 'src/utils/mutations/CreateSquadInvitesMutation'
 import shareCats from 'src/assets/images/shareCats.png'
 import catsSent from 'src/assets/images/catsSent.png'
 import Typography from '@material-ui/core/Typography'
@@ -146,7 +147,7 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
   }
   const sendEmailInvites = async () => {
     setSendingState('sending...')
-    await CreateInvitedUsersMutation(userId, validEmails, name, personalMessage)
+    await CreateSquadInvitesMutation(userId, validEmails, name, personalMessage)
     setSendingState('invitations sent! ✅')
     setValidEmails([])
     setTimeout(() => {

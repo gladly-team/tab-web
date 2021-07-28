@@ -523,6 +523,17 @@ type CreateInvitedUsersPayload {
   clientMutationId: String
 }
 
+input CreateNewMissionInput {
+  userId: String!
+  squadName: String!
+  clientMutationId: String
+}
+
+type CreateNewMissionPayload {
+  squadId: String
+  clientMutationId: String
+}
+
 input CreateNewUserInput {
   userId: String!
   email: String
@@ -531,11 +542,28 @@ input CreateNewUserInput {
   extensionInstallId: String
   extensionInstallTimeApprox: String
   v4BetaEnabled: Boolean
+  missionId: String
   clientMutationId: String
 }
 
 type CreateNewUserPayload {
   user: User
+  clientMutationId: String
+}
+
+input CreateSquadInviteInput {
+  inviterId: String!
+  invitedEmails: [String]!
+  inviterName: String
+  inviterMessage: String
+  clientMutationId: String
+}
+
+type CreateSquadInvitePayload {
+  successfulEmailAddresses: [successfulSquadEmailAddresses]
+  existingUserInvited: [successfulExistingUsers]
+  failedEmailAddresses: [failedSquadEmailAddresses]
+  existingUserRejected: [rejectedExistingUsers]
   clientMutationId: String
 }
 
@@ -612,7 +640,7 @@ type EndOfMissionAward {
   awardType: String!
 
   """
-  the unit for the award IE tab count
+  the numerical stat for the award, such as number of tabs
   """
   unit: Int!
 }
@@ -733,6 +761,11 @@ enum ExperimentGroupVariousAdSizes {
 }
 
 type failedEmailAddresses {
+  email: String
+  error: String
+}
+
+type failedSquadEmailAddresses {
   email: String
   error: String
 }
@@ -870,13 +903,13 @@ type MergeIntoExistingUserPayload {
 }
 
 """
-the shape of a single mission
+A goal that Tabbers complete with a group of friends
 """
 type Mission {
   """
   Mission ID
   """
-  missionId: String
+  missionId: String!
 
   """
   the current status of the current mission - pending, started, completed
@@ -886,37 +919,37 @@ type Mission {
   """
   the name of the squad
   """
-  squadName: String
+  squadName: String!
 
   """
   the number of tabs to complete mission
   """
-  tabGoal: Int
+  tabGoal: Int!
 
   """
   the sum of users' number of tabs towards mission
   """
-  tabCount: Int
+  tabCount: Int!
 
   """
   if a user has acknowledged mission complete
   """
-  acknowledgedMissionComplete: Boolean
+  acknowledgedMissionComplete: Boolean!
 
   """
   if a user has acknowledged mission started
   """
-  acknowledgedMissionStarted: Boolean
+  acknowledgedMissionStarted: Boolean!
 
   """
   stats and state of each squad member
   """
-  squadMembers: [SquadMemberInfo]
+  squadMembers: [SquadMemberInfo]!
 
   """
   the end of mission awards calculated when mission completes
   """
-  endOfMissionAwards: [EndOfMissionAward]
+  endOfMissionAwards: [EndOfMissionAward]!
 }
 
 """
@@ -962,6 +995,7 @@ type Mutation {
   logTab(input: LogTabInput!): LogTabPayload
   updateImpact(input: UpdateImpactInput!): UpdateImpactPayload
   createInvitedUsers(input: CreateInvitedUsersInput!): CreateInvitedUsersPayload
+  createSquadInvites(input: CreateSquadInviteInput!): CreateSquadInvitePayload
   logSearch(input: LogSearchInput!): LogSearchPayload
   logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
   logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
@@ -995,6 +1029,7 @@ type Mutation {
     input: SetUserActiveWidgetInput!
   ): SetUserActiveWidgetPayload
   createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
+  createNewMission(input: CreateNewMissionInput!): CreateNewMissionPayload
   setUsername(input: SetUsernameInput!): SetUsernamePayload
   setEmail(input: SetEmailInput!): SetEmailPayload
   updateUserExperimentGroups(
@@ -1008,6 +1043,12 @@ type Mutation {
     input: SetHasViewedIntroFlowInput!
   ): SetHasViewedIntroFlowPayload
   deleteUser(input: DeleteUserInput!): DeleteUserPayload
+  squadInviteResponse(
+    input: SquadInviteResponseInput!
+  ): SquadInviteResponsePayload
+  updateMissionNotification(
+    input: UpdateMissionNotificationInput!
+  ): UpdateMissionNotificationPayload
 }
 
 """
@@ -1063,6 +1104,10 @@ type Query {
 input ReferralData {
   referringUser: String
   referringChannel: String
+}
+
+type rejectedExistingUsers {
+  username: String
 }
 
 """
@@ -1192,12 +1237,24 @@ type SetV4BetaPayload {
 }
 
 """
-whether a usuer has accepted rejected or is pending invitation
+whether a user has accepted rejected or is pending invitation
 """
 enum squadAcceptedStatus {
   pending
   accepted
   rejected
+}
+
+input SquadInviteResponseInput {
+  userId: String!
+  missionId: String!
+  accepted: Boolean!
+  clientMutationId: String
+}
+
+type SquadInviteResponsePayload {
+  success: Boolean!
+  clientMutationId: String
 }
 
 """
@@ -1240,6 +1297,14 @@ type successfulEmailAddresses {
   email: String
 }
 
+type successfulExistingUsers {
+  username: String
+}
+
+type successfulSquadEmailAddresses {
+  email: String
+}
+
 input UpdateImpactInput {
   userId: String!
   charityId: String!
@@ -1252,6 +1317,17 @@ input UpdateImpactInput {
 
 type UpdateImpactPayload {
   userImpact: UserImpact
+  clientMutationId: String
+}
+
+input UpdateMissionNotificationInput {
+  userId: String!
+  missionId: String!
+  clientMutationId: String
+}
+
+type UpdateMissionNotificationPayload {
+  success: Boolean!
   clientMutationId: String
 }
 

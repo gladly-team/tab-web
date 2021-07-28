@@ -43,6 +43,7 @@ import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntroFlowMutation'
+import CreateNewMissionMutation from 'src/utils/mutations/CreateNewMissionMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import { getAdUnits, areAdsEnabled, showMockAds } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
@@ -263,6 +264,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           v4BetaEnabled
           currentMission {
             squadName
+            missionId
           }
           pastMissions {
             edges {
@@ -309,7 +311,6 @@ const Index = ({ data: initialData }) => {
   useEffect(() => {
     setAdUnits(getAdUnits())
   }, [])
-
   // Only render ads if we are on the client side.
   const [shouldRenderAds, setShouldRenderAds] = useState(false)
   useEffect(() => {
@@ -396,6 +397,8 @@ const Index = ({ data: initialData }) => {
       GAMAdUnitId,
       adSize,
     } = displayedAdInfo
+    console.log(context.user.id, 'what')
+    CreateNewMissionMutation(context.user.id, 'test')
 
     // Log the revenue from the ad.
     LogUserRevenueMutation({
