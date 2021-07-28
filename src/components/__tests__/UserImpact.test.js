@@ -11,6 +11,8 @@ import confetti from 'canvas-confetti'
 import { act } from 'react-dom/test-utils'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import Dialog from '@material-ui/core/Dialog'
+import localStorageMgr from 'src/utils/localstorage-mgr'
+import { INTL_CAT_DAY_2021_NOTIFICATION } from 'src/utils/constants'
 
 jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('@material-ui/core/Typography')
@@ -20,6 +22,10 @@ jest.mock('src/components/InviteFriends', () => () => <div />)
 jest.mock('src/utils/caching')
 jest.mock('canvas-confetti', () => ({
   create: jest.fn().mockReturnValue(() => {}),
+}))
+jest.mock('src/utils/localstorage-mgr', () => ({
+  getItem: jest.fn(),
+  setItem: jest.fn(),
 }))
 
 const getMockProps = (userImpactOverrides) => ({
@@ -35,6 +41,7 @@ const getMockProps = (userImpactOverrides) => ({
   user: {
     id: 'someId',
     username: 'someUsername',
+    notifications: [],
   },
 })
 beforeEach(async () => {
@@ -301,5 +308,63 @@ describe('UserImpact component', () => {
     const mockProps = getMockProps({ visitsUntilNextImpact: 12 })
     mount(<UserImpact {...mockProps} />)
     expect(confetti.create).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not render international cat day notification if it is not international cat day', () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(Notification).at(1)
+    expect(notification.exists()).not.toBe(true)
+  })
+
+  it('does not render international cat day notification if it is international cat day but user has already dismissed', () => {
+    const UserImpact = require('src/components/UserImpact').default
+    localStorageMgr.getItem.mockReturnValue('true')
+    const mockProps = getMockProps()
+    const wrapper = shallow(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(Notification).at(1)
+    expect(notification.exists()).not.toBe(true)
+  })
+
+  it('does render international cat day notification if user has not dismissed and it is intl cat day', async () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = {
+      ...getMockProps(),
+      user: {
+        id: 'someId',
+        username: 'someUsername',
+        notifications: [{ code: 'intlCatDay2021' }],
+      },
+    }
+    localStorageMgr.getItem.mockReturnValue(undefined)
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(Notification).at(1)
+    expect(notification.exists()).toBe(true)
+  })
+
+  it('dismissing intl cat notification updates local storage and dismisses notification', async () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = {
+      ...getMockProps(),
+      user: {
+        id: 'someId',
+        username: 'someUsername',
+        notifications: [{ code: 'intlCatDay2021' }],
+      },
+    }
+    localStorageMgr.getItem.mockReturnValue(undefined)
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(Notification).at(1)
+    notification.find(Button).simulate('click')
+    await act(async () => {
+      wrapper.update()
+      flushAllPromises()
+    })
+    expect(notification.exists()).toBe(true)
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      INTL_CAT_DAY_2021_NOTIFICATION,
+      'true'
+    )
   })
 })

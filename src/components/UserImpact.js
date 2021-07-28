@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
-import { CAT_CHARITY, CAT_IMPACT_VISITS } from 'src/utils/constants'
+import {
+  CAT_CHARITY,
+  CAT_IMPACT_VISITS,
+  INTL_CAT_DAY_2021_NOTIFICATION,
+} from 'src/utils/constants'
 import Notification from 'src/components/Notification'
 import ImpactCounter from 'src/components/ImpactCounter'
 import { Typography } from '@material-ui/core'
@@ -12,6 +16,8 @@ import confetti from 'canvas-confetti'
 import usePrevious from 'src/utils/hooks/usePrevious'
 import EmailInviteDialog from 'src/components/EmailInviteDialog'
 import Dialog from '@material-ui/core/Dialog'
+import { get } from 'lodash/object'
+import localStorageMgr from 'src/utils/localstorage-mgr'
 
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
@@ -51,6 +57,7 @@ const UserImpact = ({ userImpact, user }) => {
     false
   )
   const [claimedReferralImpact, setClaimedReferralImpact] = useState(0)
+  const [IntlCatDayNotification, setIntlCatDayNotification] = useState(false)
   const confettiCanvasRef = useRef(null)
   const confettiFunc = () => {
     const myConfetti = confetti.create(confettiCanvasRef.current, {
@@ -93,6 +100,15 @@ const UserImpact = ({ userImpact, user }) => {
     })
   }
   useEffect(() => {
+    const internationalCatDay =
+      get(user, 'notifications[0].code', false) === 'intlCatDay2021'
+    const hasDismissedCatDayNotification =
+      localStorageMgr.getItem(INTL_CAT_DAY_2021_NOTIFICATION) === 'true'
+    if (internationalCatDay && !hasDismissedCatDayNotification) {
+      setIntlCatDayNotification(true)
+    }
+  }, [user])
+  useEffect(() => {
     if (
       visitsUntilNextImpact === CAT_IMPACT_VISITS &&
       prevVisitsUntilNextImpact === 1
@@ -134,6 +150,10 @@ const UserImpact = ({ userImpact, user }) => {
   }
   const handleReferralRewardDialogClose = async () => {
     setReferralRewardDialogOpen(false)
+  }
+  const dismissCatDayNotification = () => {
+    localStorageMgr.setItem(INTL_CAT_DAY_2021_NOTIFICATION, 'true')
+    setIntlCatDayNotification(false)
   }
   const classes = useStyles()
   return (
@@ -228,6 +248,19 @@ const UserImpact = ({ userImpact, user }) => {
           buttonOnClick={handleClaimReferralNotification}
         />
       )}
+      {IntlCatDayNotification && (
+        <Notification
+          text={
+            <Typography>
+              Did you know it's international cat day? It was created in 2002 by
+              the International Fund for Animal Welfare. It is a day to raise
+              awareness for cats and learn about ways to help and protect them.
+            </Typography>
+          }
+          buttonText="Ok!"
+          buttonOnClick={dismissCatDayNotification}
+        />
+      )}
     </div>
   )
 }
@@ -245,6 +278,9 @@ UserImpact.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
+    notifications: PropTypes.arrayOf(
+      PropTypes.shape({ code: PropTypes.string })
+    ),
   }).isRequired,
 }
 

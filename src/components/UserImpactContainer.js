@@ -16,6 +16,9 @@ export default createFragmentContainer(UserImpact, {
     fragment UserImpactContainer_user on User {
       username
       id
+      notifications {
+        code
+      }
     }
   `,
 })
