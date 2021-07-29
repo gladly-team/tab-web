@@ -23,5 +23,5 @@ jobs:
         # Options required for Chromatic's GitHub Action
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          token: ${{ github.token }}
+          token: ${{ secrets.GITHUB_TOKEN}}
           autoAcceptChanges: true
