@@ -47,6 +47,6 @@ describe('MissionHubButton component', () => {
   it('navigates to missionhub page on click', () => {
     const MissionHubButton = require('src/components/MissionHubButton').default
     const wrapper = mount(<MissionHubButton {...getMockProps('started')} />)
-    expect(wrapper.find(Link).prop('to')).toBe('/missions')
+    expect(wrapper.find(Link).prop('to')).toBe('/missions/')
   })
 })
