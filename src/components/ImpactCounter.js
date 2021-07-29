@@ -95,8 +95,19 @@ const ImpactCounter = (props) => {
 }
 
 ImpactCounter.propTypes = {
+  /**
+   Checks if the number of treats should be included
+  */
   includeNumber: PropTypes.bool,
+
+  /**
+   The amount of treats a person has earned
+  */
   number: PropTypes.number,
+
+  /**
+   The progress to next treat as a number between 0 and 100 
+  */
   progress: PropTypes.number.isRequired,
   className: PropTypes.string,
 }
