@@ -16,6 +16,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
+          fetch-depth: 0
       - run: yarn
         #👇 Adds Chromatic as a step in the workflow
       - uses: chromaui/action@v1
