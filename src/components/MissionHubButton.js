@@ -48,7 +48,6 @@ const MissionHubButton = ({ status }) => {
     </Link>
   )
 }
-export default MissionHubButton
 MissionHubButton.displayName = 'MissionHubButton'
 MissionHubButton.propTypes = {
   /**
@@ -59,3 +58,4 @@ MissionHubButton.propTypes = {
 MissionHubButton.defaultProps = {
   status: '',
 }
+export default MissionHubButton
