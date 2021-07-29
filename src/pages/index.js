@@ -25,7 +25,7 @@ import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
 import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
 
-// import MissionHubButton from 'src/components/MissionHubButton'
+import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 
 // material components
@@ -448,10 +448,10 @@ const Index = ({ data: initialData }) => {
                 <Button className={classes.feedbackLink}>FEEDBACK</Button>
               </Link>
               <div className={classes.userMenuContainer}>
-                {/* <MissionHubButton
+                <MissionHubButton
                   status="pending"
                   className={classes.missionHub}
-                /> */}
+                />
                 <InviteFriendsIconContainer user={user} />
                 <UserImpactContainer
                   userId={userGlobalId}
