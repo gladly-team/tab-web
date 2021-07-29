@@ -19,7 +19,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "storybook-docs": "start-storybook --docs --no-manager-cache",
-    "build-storybook-docs": "build-storybook --docs"
+    "build-storybook-docs": "build-storybook --docs",
+    "chromatic": "npx chromatic"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
@@ -65,6 +66,7 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-relay": "^10.1.2",
     "babel-plugin-transform-dynamic-import": "^2.1.0",
+    "chromatic": "^5.10.0-canary.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "eslint": "^7.17.0",

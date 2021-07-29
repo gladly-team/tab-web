@@ -24,6 +24,8 @@ import UserBackgroundImageContainer from 'src/components/UserBackgroundImageCont
 import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
 import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
+
+// import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 
 // material components
@@ -206,6 +208,9 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'visible',
     marginBottom: 10,
     pointerEvents: 'all', // needs to be clickable
+  },
+  missionHub: {
+    marginRight: theme.spacing(2),
   },
 }))
 
@@ -443,6 +448,10 @@ const Index = ({ data: initialData }) => {
                 <Button className={classes.feedbackLink}>FEEDBACK</Button>
               </Link>
               <div className={classes.userMenuContainer}>
+                {/* <MissionHubButton
+                  status="pending"
+                  className={classes.missionHub}
+                /> */}
                 <InviteFriendsIconContainer user={user} />
                 <UserImpactContainer
                   userId={userGlobalId}
