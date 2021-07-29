@@ -2,10 +2,7 @@
 name: 'Chromatic Deployment'
 
 # Event for the workflow
-on:
-  # Triggers the workflow on pull request events but only for the master or dev branch
-  pull_request:
-    branches: [ master, dev ]
+on: push
 
 # List of jobs
 jobs:
@@ -23,5 +20,5 @@ jobs:
         # Options required for Chromatic's GitHub Action
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          token: ${{ secrets.GITHUB_TOKEN}}
+          token: ${{ secrets.GITHUB_TOKEN }}
           autoAcceptChanges: true

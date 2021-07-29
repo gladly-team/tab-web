@@ -49,7 +49,7 @@ const MissionHubButton = ({ status }) => {
   )
 }
 export default MissionHubButton
-
+MissionHubButton.displayName = 'MissionHubButton'
 MissionHubButton.propTypes = {
   /**
     the status of the current mission
