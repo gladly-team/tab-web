@@ -39,7 +39,7 @@ describe('MissionHubButton component', () => {
 
   it('renders the correct text when mission has completed', () => {
     const MissionHubButton = require('src/components/MissionHubButton').default
-    const wrapper = mount(<MissionHubButton {...getMockProps('started')} />)
+    const wrapper = mount(<MissionHubButton {...getMockProps('completed')} />)
     const missionButton = wrapper.find(Button)
     expect(missionButton.text()).toBe('mission hub')
   })
