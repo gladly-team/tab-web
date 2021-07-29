@@ -24,3 +24,10 @@ standard.args = {
   number: 10,
   progress: 50,
 }
+
+export const test1 = Template.bind({})
+test1.args = {
+  includeNumber: true,
+  number: 15,
+  progress: 50,
+}
