@@ -6,6 +6,8 @@ module.exports = {
     '!**/__generated__/**',
     '!**/__mocks__/**',
     '!**/__tests__/**',
+    '!**/*.stories.@(js|jsx|ts|tsx)',
+    '!**/.storybook/**',
   ],
   coverageDirectory: './coverage/',
   moduleNameMapper: {
