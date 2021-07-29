@@ -32,8 +32,3 @@ export const started = Template.bind({})
 started.args = {
   status: 'started',
 }
-
-export const completed = Template.bind({})
-completed.args = {
-  status: 'completed',
-}
