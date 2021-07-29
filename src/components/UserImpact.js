@@ -264,11 +264,7 @@ const UserImpact = ({ userImpact, user }) => {
                 alignItems: 'space-between',
               }}
             >
-              <Typography
-                variant="h6"
-                align="center"
-                style={{ marginBottom: '16px' }}
-              >
+              <Typography variant="h6" align="center">
                 Help us celebrate International Cat Day (August 8)!
               </Typography>
               <Typography variant="body2" gutterBottom>
@@ -286,15 +282,23 @@ const UserImpact = ({ userImpact, user }) => {
               <Typography variant="body2">
                 Participate in our photo challenge for the chance to be featured
                 on Tab for Cats and win $100 for the charity of your choice.
-                Contest details can be found{' '}
+                Contest details can be found on{' '}
                 <Link
                   target="_blank"
                   to="https://www.instagram.com/tabforacause"
                   className={classes.link}
                 >
-                  @tabforacause
+                  Instagram
                 </Link>{' '}
-                on Instagram and Facebook.
+                and{' '}
+                <Link
+                  target="_blank"
+                  to="https://www.facebook.com/TabForACause"
+                  className={classes.link}
+                >
+                  Facebook
+                </Link>
+                .
               </Typography>
             </div>
           }
