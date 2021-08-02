@@ -264,8 +264,8 @@ const UserImpact = ({ userImpact, user }) => {
                 alignItems: 'space-between',
               }}
             >
-              <Typography variant="h6" align="center">
-                Help us celebrate International Cat Day (August 8)!
+              <Typography variant="h6" align="center" gutterBottom>
+                Help us celebrate International Cat Day (Aug. 8)!
               </Typography>
               <Typography variant="body2" gutterBottom>
                 Invite your friends to try Tab for Cats, and we will give an
