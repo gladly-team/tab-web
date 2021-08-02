@@ -90,7 +90,7 @@ export const onboardingStepContents = (classes) => [
           including initiatives that{' '}
           <Link
             target="_blank"
-            to="https://thejacksongalaxyproject.greatergood.org/about/cat-pawsitive/"
+            to="https://greatergood.org/jackson-galaxy"
             className={classes.link}
           >
             use treats in positive reinforcement training.

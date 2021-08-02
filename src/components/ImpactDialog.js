@@ -65,7 +65,7 @@ const ImpactDialog = ({
               <a
                 target="_blank"
                 rel="noopener noreferrer"
-                href="https://thejacksongalaxyproject.greatergood.org/about/cat-pawsitive/"
+                href="https://greatergood.org/jackson-galaxy"
               >
                 providing treats to be used in positive reinforcement training
               </a>
