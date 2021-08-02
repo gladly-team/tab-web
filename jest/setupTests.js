@@ -29,7 +29,7 @@ global.fetch = jest.fn(() => Promise.resolve())
 
 process.env.IS_JEST_TEST_ENVIRONMENT = 'true'
 
-// Fix for `jest.restModules` breaking hooks:
+// Fix for `jest.resetModules` breaking hooks:
 // https://github.com/facebook/jest/issues/8987#issuecomment-584898030
 const RESET_MODULE_EXCEPTIONS = ['react']
 const mockActualRegistry = {}
@@ -40,4 +40,25 @@ RESET_MODULE_EXCEPTIONS.forEach((moduleName) => {
     }
     return mockActualRegistry[moduleName]
   })
+})
+
+// Add a mock localStorage.
+const mockLocalStorage = (() => {
+  let store = {}
+  return {
+    getItem: jest.fn((key) => store[key] || null),
+    setItem: jest.fn((key, value) => {
+      store[key] = value.toString()
+    }),
+    removeItem: jest.fn((key) => {
+      delete store[key]
+    }),
+    clear: jest.fn(() => {
+      store = {}
+    }),
+  }
+})()
+
+Object.defineProperty(global, 'localStorage', {
+  value: mockLocalStorage,
 })
