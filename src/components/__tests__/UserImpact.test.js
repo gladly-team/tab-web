@@ -343,6 +343,34 @@ describe('UserImpact component', () => {
     expect(notification.exists()).toBe(true)
   })
 
+  it('hides international cat day notification if it ends after initial render (this avoids "+1" problem of page loads after campaign end)', async () => {
+    expect.assertions(2)
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = {
+      ...getMockProps(),
+      user: {
+        id: 'someId',
+        username: 'someUsername',
+        notifications: [{ code: 'intlCatDay2021' }],
+      },
+    }
+    localStorageMgr.getItem.mockReturnValue(undefined)
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(Notification).at(1)
+    expect(notification.exists()).toBe(true)
+
+    wrapper.setProps({
+      ...getMockProps(),
+      user: {
+        id: 'someId',
+        username: 'someUsername',
+        notifications: [], // ended
+      },
+    })
+    wrapper.update()
+    expect(wrapper.find(Notification).at(1).exists()).toBe(false)
+  })
+
   it('dismissing intl cat notification updates local storage and dismisses notification', async () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = {

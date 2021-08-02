@@ -112,6 +112,8 @@ const UserImpact = ({ userImpact, user }) => {
       localStorageMgr.getItem(INTL_CAT_DAY_2021_NOTIFICATION) === 'true'
     if (internationalCatDay && !hasDismissedCatDayNotification) {
       setIntlCatDayNotification(true)
+    } else {
+      setIntlCatDayNotification(false)
     }
   }, [user])
   useEffect(() => {
@@ -264,12 +266,8 @@ const UserImpact = ({ userImpact, user }) => {
                 alignItems: 'space-between',
               }}
             >
-              <Typography
-                variant="h6"
-                align="center"
-                style={{ marginBottom: '16px' }}
-              >
-                Help us celebrate International Cat Day (August 8)!
+              <Typography variant="h6" align="center" gutterBottom>
+                Help us celebrate International Cat Day (Aug. 8)!
               </Typography>
               <Typography variant="body2" gutterBottom>
                 Invite your friends to try Tab for Cats, and we will give an
@@ -286,15 +284,23 @@ const UserImpact = ({ userImpact, user }) => {
               <Typography variant="body2">
                 Participate in our photo challenge for the chance to be featured
                 on Tab for Cats and win $100 for the charity of your choice.
-                Contest details can be found{' '}
+                Contest details can be found on{' '}
                 <Link
                   target="_blank"
                   to="https://www.instagram.com/tabforacause"
                   className={classes.link}
                 >
-                  @tabforacause
+                  Instagram
                 </Link>{' '}
-                on Instagram and Facebook.
+                and{' '}
+                <Link
+                  target="_blank"
+                  to="https://www.facebook.com/TabForACause"
+                  className={classes.link}
+                >
+                  Facebook
+                </Link>
+                .
               </Typography>
             </div>
           }
