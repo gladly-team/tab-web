@@ -112,6 +112,8 @@ const UserImpact = ({ userImpact, user }) => {
       localStorageMgr.getItem(INTL_CAT_DAY_2021_NOTIFICATION) === 'true'
     if (internationalCatDay && !hasDismissedCatDayNotification) {
       setIntlCatDayNotification(true)
+    } else {
+      setIntlCatDayNotification(false)
     }
   }, [user])
   useEffect(() => {
