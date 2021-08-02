@@ -8,6 +8,7 @@ import { act } from 'react-dom/test-utils'
 import {
   showMockAchievements,
   showBackgroundImages,
+  showDevelopmentOnlyDemoPages,
 } from 'src/utils/featureFlags'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import Achievement from 'src/components/Achievement'
@@ -23,6 +24,8 @@ import { AdComponent } from 'tab-ads'
 import { isClientSide } from 'src/utils/ssr'
 import { getAdUnits } from 'src/utils/adHelpers'
 import { accountCreated, newTabView } from 'src/utils/events'
+import MissionHubButton from 'src/components/MissionHubButton'
+import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 
 jest.mock('uuid/v4')
 uuid.mockReturnValue('some-uuid')
@@ -288,6 +291,26 @@ describe('index.js', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<IndexPage {...mockProps} />)
     expect(wrapper.find(UserBackgroundImageContainer).exists()).toBe(true)
+  })
+
+  it('shows the invite friends icon if  showDevelopmentOnlyDemoPages returns false', () => {
+    expect.assertions(2)
+    showDevelopmentOnlyDemoPages.mockReturnValue(false)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(InviteFriendsIconContainer).exists()).toBe(true)
+    expect(wrapper.find(MissionHubButton).exists()).toBe(false)
+  })
+
+  it('shows the missionHub button if  showDevelopmentOnlyDemoPages returns true', () => {
+    expect.assertions(2)
+    showDevelopmentOnlyDemoPages.mockReturnValue(true)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(MissionHubButton).exists()).toBe(true)
+    expect(wrapper.find(InviteFriendsIconContainer).exists()).toBe(false)
   })
 
   it('logs a tab count if the user is defined', () => {
