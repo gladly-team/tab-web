@@ -5,15 +5,6 @@ import ImpactCounter from './ImpactCounter'
 export default {
   title: 'Components/ImpactCounter',
   component: ImpactCounter,
-  parameters: {
-    progress: {
-      values: [
-        { name: 'full', value: 100 },
-        { name: 'half full', value: 50 },
-        { name: 'empty', value: 0 },
-      ],
-    },
-  },
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -25,8 +16,8 @@ standard.args = {
   progress: 50,
 }
 
-export const test1 = Template.bind({})
-test1.args = {
+export const halfFull = Template.bind({})
+halfFull.args = {
   includeNumber: true,
   number: 15,
   progress: 50,
