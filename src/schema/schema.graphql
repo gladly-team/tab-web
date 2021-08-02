@@ -523,6 +523,17 @@ type CreateInvitedUsersPayload {
   clientMutationId: String
 }
 
+input CreateNewMissionInput {
+  userId: String!
+  squadName: String!
+  clientMutationId: String
+}
+
+type CreateNewMissionPayload {
+  squadId: String
+  clientMutationId: String
+}
+
 input CreateNewUserInput {
   userId: String!
   email: String
@@ -531,11 +542,28 @@ input CreateNewUserInput {
   extensionInstallId: String
   extensionInstallTimeApprox: String
   v4BetaEnabled: Boolean
+  missionId: String
   clientMutationId: String
 }
 
 type CreateNewUserPayload {
   user: User
+  clientMutationId: String
+}
+
+input CreateSquadInviteInput {
+  inviterId: String!
+  invitedEmails: [String]!
+  inviterName: String
+  inviterMessage: String
+  clientMutationId: String
+}
+
+type CreateSquadInvitePayload {
+  successfulEmailAddresses: [successfulSquadEmailAddresses]
+  existingUserInvited: [successfulExistingUsers]
+  failedEmailAddresses: [failedSquadEmailAddresses]
+  existingUserRejected: [rejectedExistingUsers]
   clientMutationId: String
 }
 
@@ -595,6 +623,26 @@ The type of transformation we should use to resolve the object into a revenue va
 """
 enum EncodedRevenueValueTypeEnum {
   AMAZON_CPM
+}
+
+"""
+persistant awards calculated at end of mission
+"""
+type EndOfMissionAward {
+  """
+  users ID
+  """
+  user: String!
+
+  """
+  the string name of the particular award
+  """
+  awardType: String!
+
+  """
+  the numerical stat for the award, such as number of tabs
+  """
+  unit: Int!
 }
 
 """
@@ -713,6 +761,11 @@ enum ExperimentGroupVariousAdSizes {
 }
 
 type failedEmailAddresses {
+  email: String
+  error: String
+}
+
+type failedSquadEmailAddresses {
   email: String
   error: String
 }
@@ -849,10 +902,100 @@ type MergeIntoExistingUserPayload {
   clientMutationId: String
 }
 
+"""
+A goal that Tabbers complete with a group of friends
+"""
+type Mission {
+  """
+  Mission ID
+  """
+  missionId: String!
+
+  """
+  the current status of the current mission - pending, started, completed
+  """
+  status: missionStatus!
+
+  """
+  the name of the squad
+  """
+  squadName: String!
+
+  """
+  the number of tabs to complete mission
+  """
+  tabGoal: Int!
+
+  """
+  the sum of users' number of tabs towards mission
+  """
+  tabCount: Int!
+
+  """
+  if a user has acknowledged mission complete
+  """
+  acknowledgedMissionComplete: Boolean!
+
+  """
+  if a user has acknowledged mission started
+  """
+  acknowledgedMissionStarted: Boolean!
+
+  """
+  stats and state of each squad member
+  """
+  squadMembers: [SquadMemberInfo]!
+
+  """
+  the end of mission awards calculated when mission completes
+  """
+  endOfMissionAwards: [EndOfMissionAward]!
+}
+
+"""
+A connection to a list of items.
+"""
+type MissionConnection {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+
+  """
+  A list of edges.
+  """
+  edges: [MissionEdge]
+}
+
+"""
+An edge in a connection.
+"""
+type MissionEdge {
+  """
+  The item at the end of the edge
+  """
+  node: Mission
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
+}
+
+"""
+whether a usuer has accepted rejected or is pending invitation
+"""
+enum missionStatus {
+  pending
+  started
+  completed
+}
+
 type Mutation {
   logTab(input: LogTabInput!): LogTabPayload
   updateImpact(input: UpdateImpactInput!): UpdateImpactPayload
   createInvitedUsers(input: CreateInvitedUsersInput!): CreateInvitedUsersPayload
+  createSquadInvites(input: CreateSquadInviteInput!): CreateSquadInvitePayload
   logSearch(input: LogSearchInput!): LogSearchPayload
   logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
   logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
@@ -886,6 +1029,7 @@ type Mutation {
     input: SetUserActiveWidgetInput!
   ): SetUserActiveWidgetPayload
   createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
+  createNewMission(input: CreateNewMissionInput!): CreateNewMissionPayload
   setUsername(input: SetUsernameInput!): SetUsernamePayload
   setEmail(input: SetEmailInput!): SetEmailPayload
   updateUserExperimentGroups(
@@ -899,6 +1043,12 @@ type Mutation {
     input: SetHasViewedIntroFlowInput!
   ): SetHasViewedIntroFlowPayload
   deleteUser(input: DeleteUserInput!): DeleteUserPayload
+  squadInviteResponse(
+    input: SquadInviteResponseInput!
+  ): SquadInviteResponsePayload
+  updateMissionNotification(
+    input: UpdateMissionNotificationInput!
+  ): UpdateMissionNotificationPayload
 }
 
 """
@@ -964,6 +1114,10 @@ type Query {
 input ReferralData {
   referringUser: String
   referringChannel: String
+}
+
+type rejectedExistingUsers {
+  username: String
 }
 
 """
@@ -1092,7 +1246,72 @@ type SetV4BetaPayload {
   clientMutationId: String
 }
 
+"""
+whether a user has accepted rejected or is pending invitation
+"""
+enum squadAcceptedStatus {
+  pending
+  accepted
+  rejected
+}
+
+input SquadInviteResponseInput {
+  userId: String!
+  missionId: String!
+  accepted: Boolean!
+  clientMutationId: String
+}
+
+type SquadInviteResponsePayload {
+  success: Boolean!
+  clientMutationId: String
+}
+
+"""
+an individual's stats for a mission
+"""
+type SquadMemberInfo {
+  """
+  Users's username if they have joined TFAC
+  """
+  username: String
+
+  """
+  Users's invited email if they have not joined TFAC
+  """
+  invitedEmail: String
+  status: squadAcceptedStatus!
+
+  """
+  the longest tab streak in days so far
+  """
+  longestTabStreak: Int!
+
+  """
+  the current tab streak in days so far
+  """
+  currentTabStreak: Int!
+
+  """
+  the most tabs in a single day
+  """
+  missionMaxTabsDay: Int!
+
+  """
+  users tab contribution
+  """
+  tabs: Int!
+}
+
 type successfulEmailAddresses {
+  email: String
+}
+
+type successfulExistingUsers {
+  username: String
+}
+
+type successfulSquadEmailAddresses {
   email: String
 }
 
@@ -1108,6 +1327,17 @@ input UpdateImpactInput {
 
 type UpdateImpactPayload {
   userImpact: UserImpact
+  clientMutationId: String
+}
+
+input UpdateMissionNotificationInput {
+  userId: String!
+  missionId: String!
+  clientMutationId: String
+}
+
+type UpdateMissionNotificationPayload {
+  success: Boolean!
   clientMutationId: String
 }
 
@@ -1287,6 +1517,21 @@ type User implements Node {
   User's active widget id
   """
   activeWidget: String
+
+  """
+  the current active mission for a user
+  """
+  currentMission: Mission
+
+  """
+  gets all the past missions for a user
+  """
+  pastMissions(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): MissionConnection
 
   """
   User's background option
