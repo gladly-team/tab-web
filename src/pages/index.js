@@ -210,9 +210,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 10,
     pointerEvents: 'all', // needs to be clickable
   },
-  missionHub: {
-    marginRight: theme.spacing(2),
-  },
 }))
 
 if (isClientSide()) {
@@ -312,7 +309,6 @@ const Index = ({ data: initialData }) => {
       revalidateOnMount: true,
     }),
   })
-  console.log(data, 'data')
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
 
@@ -322,6 +318,7 @@ const Index = ({ data: initialData }) => {
   useEffect(() => {
     setAdUnits(getAdUnits())
   }, [])
+
   // Only render ads if we are on the client side.
   const [shouldRenderAds, setShouldRenderAds] = useState(false)
   useEffect(() => {
@@ -396,8 +393,6 @@ const Index = ({ data: initialData }) => {
       GAMAdUnitId,
       adSize,
     } = displayedAdInfo
-    console.log(context.user.id, 'what')
-    CreateNewMissionMutation(context.user.id, 'test')
 
     // Log the revenue from the ad.
     LogUserRevenueMutation({
