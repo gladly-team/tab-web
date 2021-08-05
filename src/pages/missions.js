@@ -2,8 +2,6 @@ import React, { useEffect, useState, useRef, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { makeStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
-import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
@@ -12,20 +10,14 @@ import SvgIcon from '@material-ui/core/SvgIcon'
 import { flowRight } from 'lodash/util'
 import Link from 'src/components/Link'
 import { withAuthUser, AuthAction, useAuthUser } from 'next-firebase-auth'
-import tabCMP from 'tab-cmp'
 import debounce from 'lodash/debounce'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import withRelay from 'src/utils/pageWrappers/withRelay'
 import useData from 'src/utils/hooks/useData'
-import SettingsPage from 'src/components/SettingsPage'
-import logout from 'src/utils/auth/logout'
-import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
-import { clearAllServiceWorkerCaches } from 'src/utils/caching'
-import { setWindowLocation } from 'src/utils/navigation'
-import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
+import { dashboardURL } from 'src/utils/urls'
 import { withSentry } from 'src/utils/pageWrappers/withSentry'
-import initializeCMP from 'src/utils/initializeCMP'
+import CurrentMissionContainer from 'src/components/missionComponents/currentMissionContainer'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -87,6 +79,7 @@ const getRelayQuery = ({ AuthUser }) => ({
   query: graphql`
     query missionsQuery($userId: String!) {
       user(userId: $userId) {
+        ...CurrentMissionContainer_user
         currentMission {
           squadName
           missionId
@@ -109,6 +102,8 @@ const getRelayQuery = ({ AuthUser }) => ({
 
 const Missions = ({ data: initialData }) => {
   const { data } = useData({ getRelayQuery, initialData })
+  const { user } = data || {}
+  console.log(user, 'user')
   const [value, setValue] = useState(0)
   const currentMissionSection = useRef(null)
   const pastMissionsSection = useRef(null)
@@ -185,13 +180,12 @@ const Missions = ({ data: initialData }) => {
       </div>
 
       <div className={classes.contentContainer}>
-        <Paper
+        <div
           ref={currentMissionSection}
-          elevation={1}
-          style={{ height: '800px', width: '400px' }}
+          style={{ display: 'flex', width: '100%' }}
         >
-          d
-        </Paper>
+          <CurrentMissionContainer user={user} />
+        </div>
         <Paper
           ref={pastMissionsSection}
           elevation={1}
