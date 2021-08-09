@@ -15,7 +15,10 @@
     "format:fix": "yarn run format --write",
     "lint": "eslint \"**/*.{js,jsx}\" --ignore-pattern \"next.config.*js\"",
     "relay": "relay-compiler --src ./src/ --artifactDirectory ./src/relay/__generated__ --exclude '**/__test__/**'  '**/__generated__/**' --schema ./src/schema/schema.graphql",
-    "find-unused": "echo \"This will find unused files. However, note that it ignores mocks, tests, and utils in the testHelpers directory.\n\" && next-unused"
+    "find-unused": "echo \"This will find unused files. However, note that it ignores mocks, tests, and utils in the testHelpers directory.\n\" && next-unused",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "chromatic": "npx chromatic --auto-accept-changes"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
@@ -51,11 +54,17 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
+    "@storybook/addon-actions": "^6.3.6",
+    "@storybook/addon-essentials": "^6.3.6",
+    "@storybook/addon-links": "^6.3.6",
+    "@storybook/react": "^6.3.6",
     "@testing-library/react-hooks": "^4.0.0",
     "babel-jest": "^26.6.3",
+    "babel-loader": "^8.2.2",
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-relay": "^10.1.2",
     "babel-plugin-transform-dynamic-import": "^2.1.0",
+    "chromatic": "^5.10.0-canary.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "eslint": "^7.17.0",

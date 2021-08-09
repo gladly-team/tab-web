@@ -44,7 +44,7 @@ export const achievementsURL = createPageURL('/achievements')
 export const authURL = createPageURL('/auth')
 export const betaOptInURL = createPageURL('/beta-opt-in')
 export const dashboardURL = createPageURL('/')
-
+export const missionHubURL = createPageURL('/missions')
 // For progressive web app.
 export const PWAManifestURL = withBasePath('/manifest.json')
 export const EXTERNAL_CONTACT_US_URL =
