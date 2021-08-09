@@ -11,6 +11,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import StarBorderIcon from '@material-ui/icons/StarBorder'
+import DoneIcon from '@material-ui/icons/Done'
 import Chip from '@material-ui/core/Chip'
 import Fade from '@material-ui/core/Fade'
 import Table from '@material-ui/core/Table'
@@ -179,6 +180,13 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: '.25em',
     },
   },
+  createSquadContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    maxWidth: '468px',
+    alignSelf: 'center',
+  },
 }))
 const customAlertUseStyles = makeStyles((theme) => ({
   wrapper: {
@@ -189,6 +197,7 @@ const customAlertUseStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.primary.background,
     display: 'flex',
     alignItems: 'center',
+    paddingLeft: theme.spacing(2),
   },
   text: {
     color: theme.palette.primary.main,
@@ -197,11 +206,11 @@ const customAlertUseStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
   },
 }))
-const CustomAlert = ({ text }) => {
+const CustomAlert = ({ text, done }) => {
   const cx = customAlertUseStyles()
   return (
     <div className={cx.wrapper}>
-      <StarBorderIcon color="primary" />
+      {done ? <DoneIcon color="primary" /> : <StarBorderIcon color="primary" />}
       <Typography classes={{ root: cx.text }}>{text}</Typography>
     </div>
   )
@@ -320,7 +329,7 @@ const CurrentMissionComponent = ({ user }) => {
         tabsToday,
         tabs,
         streak,
-        contribution: `${Math.round((tabs / tabCount) * 100)}%`,
+        contribution: `${Math.round((tabs / tabCount) * 100) || 0}%`,
       }
       tableData.push(pivotedMemberData)
       return tableData
@@ -448,52 +457,18 @@ const CurrentMissionComponent = ({ user }) => {
       </Button>
     </div>
   )
-  return (
-    <Paper elevation={1} className={cx.topContainer}>
+  const missionComplete = () => (
+    <div>
       <div>
-        <Typography classes={{ root: cx.titleFont }}>Your Squad</Typography>
-        <Accordion
-          elevation={0}
-          expanded={expanded === 'panel1'}
-          onChange={handleChange('panel1')}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-          >
-            <Typography className={cx.subtitleFont}>
-              A mission lets you work together with friends to help get a
-              shelter cat adopted! When you work together with your squad you
-              can make a larger impact, sooner. read more
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Typography className={cx.subtitleFont}>
-              Every tab you open supports cats in need. Squads enables you to
-              team up with friends and earn more treats together. Cats can get
-              adopted up to 3x faster with Squads! You can create your first
-              squad today, just start with a couple invites below!
-            </Typography>
-          </AccordionDetails>
-        </Accordion>
-      </div>
-      <hr className={cx.hr} />
-      <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
-        New Mission
-      </Typography>
-      {status && (
-        <div style={{ display: 'flex' }}>
-          <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
-            Status:{' '}
-          </Typography>
-          <Typography style={{ fontSize: '16px', marginLeft: '8px' }}>
-            {status}
-          </Typography>
+        <Typography style={{ fontSize: '20px', fontWeight: 'bold' }}>
+          Mission Complete
+        </Typography>
+        <div style={{ marginTop: '16px' }}>
+          <CustomAlert
+            done
+            text="Team up with your friends and help give a shelter cat a new home and family!"
+          />
         </div>
-      )}
-      <div style={{ marginTop: '16px' }}>
-        <CustomAlert text="Team up with your friends and help give a shelter cat a new home and family!" />
       </div>
       <div className={cx.explanationCardContainer}>
         <div className={cx.explanationCard}>
@@ -531,145 +506,244 @@ const CurrentMissionComponent = ({ user }) => {
         </div>
       </div>
       <hr className={cx.hr} />
-      {!squadMembers.length && (
-        <div className={cx.createSquadContainer}>
-          <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
-            Create Your squad now!
-          </Typography>
-          <TextField
-            fullWidth
-            value={squadName}
-            size="small"
-            label="Squad Name"
-            helperText="Create a name for your squad!"
-            variant="outlined"
-            onChange={(event) => setSquadName(event.target.value)}
-          />
-          <Button
-            className={cx.sendButton}
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={createSquad}
-            disabled={!(squadName.length > 3)}
-          >
-            next
-          </Button>
-        </div>
-      )}
-      {(squadMembers.length === 1 || (!squadMembers.length && missionId)) && (
-        <div className={cx.createSquadContainer}>
-          <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
-            Create Your squad now!
-          </Typography>
-          {renderSocialShare()}
-        </div>
-      )}
-      {squadMembers.length > 1 && (
-        <div className={cx.startedContainer}>
-          <div className={cx.progressBarContainer}>
-            <Typography>
-              {`${Math.floor((tabCount / tabGoal) * 100)}%`}
-            </Typography>
-            <LinearProgress
-              variant="determinate"
-              value={(tabCount / tabGoal) * 100}
-              classes={{ root: cx.progressBar }}
-            />
+    </div>
+  )
+  return (
+    <Paper elevation={1} className={cx.topContainer}>
+      {status === 'completed' ? (
+        missionComplete()
+      ) : (
+        <>
+          <div>
+            <Typography classes={{ root: cx.titleFont }}>Your Squad</Typography>
+            <Accordion
+              elevation={0}
+              expanded={expanded === 'panel1'}
+              onChange={handleChange('panel1')}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+              >
+                <Typography className={cx.subtitleFont}>
+                  A mission lets you work together with friends to help get a
+                  shelter cat adopted! When you work together with your squad
+                  you can make a larger impact, sooner. read more
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography className={cx.subtitleFont}>
+                  Every tab you open supports cats in need. Squads enables you
+                  to team up with friends and earn more treats together. Cats
+                  can get adopted up to 3x faster with Squads! You can create
+                  your first squad today, just start with a couple invites
+                  below!
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
           </div>
-          <Table className={cx.table}>
-            <TableHead>
-              <TableRow key="header">
-                <TableCell classes={{ head: cx.tableHead }}>
-                  Squad Mates
-                </TableCell>
-                <TableCell classes={{ head: cx.tableHead }} align="left">
-                  Tabs today
-                </TableCell>
-                <TableCell classes={{ head: cx.tableHead }} align="left">
-                  Tabs total
-                </TableCell>
-                <TableCell classes={{ head: cx.tableHead }} align="left">
-                  Streak
-                </TableCell>
-                <TableCell classes={{ head: cx.tableHead }} align="right">
-                  Contribution %
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {tableData.map(
-                ({
-                  userStatus,
-                  user: theUser,
-                  tabs,
-                  tabsToday,
-                  streak,
-                  contribution,
-                }) => (
-                  <TableRow key={theUser}>
-                    <TableCell
-                      classes={{
-                        root: userStatus !== 'accepted' && cx.tableDisabled,
-                      }}
-                      component="th"
-                      scope="row"
-                    >
-                      {theUser}
+          <hr className={cx.hr} />
+          <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
+            New Mission
+          </Typography>
+          {status && (
+            <div style={{ display: 'flex' }}>
+              <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                Status:{' '}
+              </Typography>
+              <Typography style={{ fontSize: '16px', marginLeft: '8px' }}>
+                {status}
+              </Typography>
+            </div>
+          )}
+          <div style={{ marginTop: '16px' }}>
+            <CustomAlert text="Team up with your friends and help give a shelter cat a new home and family!" />
+          </div>
+          <div className={cx.explanationCardContainer}>
+            <div className={cx.explanationCard}>
+              <img
+                src={squadsStep1}
+                alt="squad step 1"
+                height="180px"
+                width="250px"
+              />
+              <Typography align="center" className={cx.captionFont}>
+                1. Open new tabs with your squad
+              </Typography>
+            </div>
+            <div className={cx.explanationCard}>
+              <img
+                src={squadsStep2}
+                height="180px"
+                width="250px"
+                alt="squad step 1"
+              />
+              <Typography align="center" className={cx.captionFont}>
+                2. Raise enough money to get a shelter cat house trained
+              </Typography>
+            </div>
+            <div className={cx.explanationCard}>
+              <img
+                src={squadsStep3}
+                alt="squad step 1"
+                height="180px"
+                width="250px"
+              />
+              <Typography align="center" className={cx.captionFont}>
+                3. Trained house cats are much more likely to get adopted
+              </Typography>
+            </div>
+          </div>
+          <hr className={cx.hr} />
+          {!squadMembers.length && (
+            <div className={cx.createSquadContainer}>
+              <Typography
+                style={{
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  marginBottom: '16px',
+                }}
+              >
+                Create Your squad now!
+              </Typography>
+              <TextField
+                fullWidth
+                value={squadName}
+                size="small"
+                label="Squad Name"
+                helperText="Create a name for your squad!"
+                variant="outlined"
+                onChange={(event) => setSquadName(event.target.value)}
+              />
+              <Button
+                className={cx.sendButton}
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={createSquad}
+                disabled={!(squadName.length > 3)}
+              >
+                next
+              </Button>
+            </div>
+          )}
+          {(squadMembers.length === 1 ||
+            (!squadMembers.length && missionId)) && (
+            <div className={cx.createSquadContainer}>
+              <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
+                Create Your squad now!
+              </Typography>
+              {renderSocialShare()}
+            </div>
+          )}
+          {squadMembers.length > 1 && (
+            <div className={cx.startedContainer}>
+              <div className={cx.progressBarContainer}>
+                <Typography>
+                  {`${Math.floor((tabCount / tabGoal) * 100)}%`}
+                </Typography>
+                <LinearProgress
+                  variant="determinate"
+                  value={(tabCount / tabGoal) * 100}
+                  classes={{ root: cx.progressBar }}
+                />
+              </div>
+              <Table className={cx.table}>
+                <TableHead>
+                  <TableRow key="header">
+                    <TableCell classes={{ head: cx.tableHead }}>
+                      Squad Mates
                     </TableCell>
-                    <TableCell
-                      classes={{
-                        root: userStatus !== 'accepted' && cx.tableDisabled,
-                      }}
-                      align="left"
-                    >
-                      {tabsToday} tabs
+                    <TableCell classes={{ head: cx.tableHead }} align="left">
+                      Tabs today
                     </TableCell>
-                    <TableCell
-                      classes={{
-                        root: userStatus !== 'accepted' && cx.tableDisabled,
-                      }}
-                      align="left"
-                    >
-                      {tabs} tabs
+                    <TableCell classes={{ head: cx.tableHead }} align="left">
+                      Tabs total
                     </TableCell>
-                    <TableCell
-                      classes={{
-                        root: userStatus !== 'accepted' && cx.tableDisabled,
-                      }}
-                      align="left"
-                    >
-                      {streak} days
+                    <TableCell classes={{ head: cx.tableHead }} align="left">
+                      Streak
                     </TableCell>
-                    <TableCell
-                      classes={{
-                        root: userStatus !== 'accepted' && cx.tableDisabled,
-                      }}
-                      align="right"
-                    >
-                      {contribution}
+                    <TableCell classes={{ head: cx.tableHead }} align="right">
+                      Contribution %
                     </TableCell>
                   </TableRow>
-                )
-              )}
-            </TableBody>
-          </Table>
-          <div
-            className={clsx(
-              cx.addSquadMateButton,
-              isAddSquadMateOpen && cx.tableDisabled
-            )}
-            role="button"
-            onKeyPress={handleAddSquadMateClick}
-            onClick={handleAddSquadMateClick}
-            ref={addSquadMatesSection}
-            tabIndex={0}
-          >
-            <AddIcon fontSize="small" />
-            <Typography>Add Squad Mates</Typography>
-          </div>
-          {isAddSquadMateOpen && renderSocialShare()}
-        </div>
+                </TableHead>
+                <TableBody>
+                  {tableData.map(
+                    ({
+                      userStatus,
+                      user: theUser,
+                      tabs,
+                      tabsToday,
+                      streak,
+                      contribution,
+                    }) => (
+                      <TableRow key={theUser}>
+                        <TableCell
+                          classes={{
+                            root: userStatus !== 'accepted' && cx.tableDisabled,
+                          }}
+                          component="th"
+                          scope="row"
+                        >
+                          {theUser}
+                        </TableCell>
+                        <TableCell
+                          classes={{
+                            root: userStatus !== 'accepted' && cx.tableDisabled,
+                          }}
+                          align="left"
+                        >
+                          {tabsToday} tabs
+                        </TableCell>
+                        <TableCell
+                          classes={{
+                            root: userStatus !== 'accepted' && cx.tableDisabled,
+                          }}
+                          align="left"
+                        >
+                          {tabs} tabs
+                        </TableCell>
+                        <TableCell
+                          classes={{
+                            root: userStatus !== 'accepted' && cx.tableDisabled,
+                          }}
+                          align="left"
+                        >
+                          {streak} days
+                        </TableCell>
+                        <TableCell
+                          classes={{
+                            root: userStatus !== 'accepted' && cx.tableDisabled,
+                          }}
+                          align="right"
+                        >
+                          {contribution}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  )}
+                </TableBody>
+              </Table>
+              <div
+                className={clsx(
+                  cx.addSquadMateButton,
+                  isAddSquadMateOpen && cx.tableDisabled
+                )}
+                role="button"
+                onKeyPress={handleAddSquadMateClick}
+                onClick={handleAddSquadMateClick}
+                ref={addSquadMatesSection}
+                tabIndex={0}
+              >
+                <AddIcon fontSize="small" />
+                <Typography>Add Squad Mates</Typography>
+              </div>
+              {isAddSquadMateOpen && renderSocialShare()}
+            </div>
+          )}{' '}
+        </>
       )}
     </Paper>
   )
