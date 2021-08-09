@@ -39,3 +39,4 @@ sessions
 yalc.lock
 
 .vercel
+build-storybook.log

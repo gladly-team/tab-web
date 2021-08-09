@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.contrastText,
     borderColor: theme.palette.primary.contrastText,
     borderRadius: '20px',
+    marginRight: theme.spacing(2),
+    paddingTop: '7px',
+    paddingBottom: '7px',
   },
 }))
 
@@ -26,6 +29,9 @@ const MissionHubButton = ({ status }) => {
       break
     case 'completed':
       text = 'mission hub'
+      break
+    case 'unstarted':
+      text = 'create a squad'
       break
     default:
       text = 'create a squad'
@@ -53,7 +59,7 @@ MissionHubButton.propTypes = {
   /**
     the status of the current mission
   */
-  status: PropTypes.oneOf(['pending', 'started', 'completed', '']),
+  status: PropTypes.oneOf(['pending', 'started', 'completed', 'unstarted']),
 }
 MissionHubButton.defaultProps = {
   status: '',
