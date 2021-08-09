@@ -3,14 +3,25 @@ import callMutation from 'src/utils/mutations/callMutation'
 
 // currently not using any of the return data in the ui, but will be source of truth
 const mutation = graphql`
-  mutation CreateSquadInvitesMutation($input: CreateSquadInviteInput!) {
+  mutation CreateSquadInvitesMutation($input: CreateSquadInvitesInput!) {
     createSquadInvites(input: $input) {
-      successfulEmailAddresses {
-        email
-      }
-      failedEmailAddresses {
-        email
-        error
+      currentMission {
+        squadName
+        missionId
+        status
+        tabGoal
+        tabCount
+        squadMembers {
+          username
+          invitedEmail
+          status
+          tabs
+        }
+        endOfMissionAwards {
+          user
+          awardType
+          unit
+        }
       }
     }
   }

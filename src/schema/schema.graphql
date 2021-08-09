@@ -530,7 +530,10 @@ input CreateNewMissionInput {
 }
 
 type CreateNewMissionPayload {
-  squadId: String
+  """
+  the current active mission for a user
+  """
+  currentMission: Mission
   clientMutationId: String
 }
 
@@ -551,19 +554,19 @@ type CreateNewUserPayload {
   clientMutationId: String
 }
 
-input CreateSquadInviteInput {
+input CreateSquadInvitesInput {
   inviterId: String!
   invitedEmails: [String]!
-  inviterName: String
+  inviterName: String!
   inviterMessage: String
   clientMutationId: String
 }
 
-type CreateSquadInvitePayload {
-  successfulEmailAddresses: [successfulSquadEmailAddresses]
-  existingUserInvited: [successfulExistingUsers]
-  failedEmailAddresses: [failedSquadEmailAddresses]
-  existingUserRejected: [rejectedExistingUsers]
+type CreateSquadInvitesPayload {
+  """
+  the current active mission for a user
+  """
+  currentMission: Mission
   clientMutationId: String
 }
 
@@ -761,11 +764,6 @@ enum ExperimentGroupVariousAdSizes {
 }
 
 type failedEmailAddresses {
-  email: String
-  error: String
-}
-
-type failedSquadEmailAddresses {
   email: String
   error: String
 }
@@ -995,7 +993,7 @@ type Mutation {
   logTab(input: LogTabInput!): LogTabPayload
   updateImpact(input: UpdateImpactInput!): UpdateImpactPayload
   createInvitedUsers(input: CreateInvitedUsersInput!): CreateInvitedUsersPayload
-  createSquadInvites(input: CreateSquadInviteInput!): CreateSquadInvitePayload
+  createSquadInvites(input: CreateSquadInvitesInput!): CreateSquadInvitesPayload
   logSearch(input: LogSearchInput!): LogSearchPayload
   logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
   logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
@@ -1114,10 +1112,6 @@ type Query {
 input ReferralData {
   referringUser: String
   referringChannel: String
-}
-
-type rejectedExistingUsers {
-  username: String
 }
 
 """
@@ -1304,14 +1298,6 @@ type SquadMemberInfo {
 }
 
 type successfulEmailAddresses {
-  email: String
-}
-
-type successfulExistingUsers {
-  username: String
-}
-
-type successfulSquadEmailAddresses {
   email: String
 }
 

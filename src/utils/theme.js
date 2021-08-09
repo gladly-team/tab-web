@@ -19,6 +19,7 @@ const theme = createMuiTheme({
       purple1: '#9B51E0',
       backgroundGrey: '#E5E5E5',
       subtitleGrey: '#828282',
+      disabledGrey: '#BDBDBD',
     },
     // this is a custom theme palette color for the index page
     backgroundContrastText: {

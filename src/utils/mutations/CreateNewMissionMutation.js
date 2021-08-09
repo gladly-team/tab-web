@@ -5,7 +5,24 @@ import callMutation from 'src/utils/mutations/callMutation'
 const mutation = graphql`
   mutation CreateNewMissionMutation($input: CreateNewMissionInput!) {
     createNewMission(input: $input) {
-      squadId
+      currentMission {
+        squadName
+        missionId
+        status
+        tabGoal
+        tabCount
+        squadMembers {
+          username
+          invitedEmail
+          status
+          tabs
+        }
+        endOfMissionAwards {
+          user
+          awardType
+          unit
+        }
+      }
     }
   }
 `

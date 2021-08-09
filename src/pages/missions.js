@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   headerSection: {
-    width: '90%',
+    width: '91%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     background: theme.palette.colors.backgroundGrey,
     paddingBottom: theme.spacing(2),
+    zIndex: 10,
   },
   titleSection: {
     display: 'flex',
@@ -103,17 +104,22 @@ const getRelayQuery = ({ AuthUser }) => ({
 const Missions = ({ data: initialData }) => {
   const { data } = useData({ getRelayQuery, initialData })
   const { user } = data || {}
-  console.log(user, 'user')
   const [value, setValue] = useState(0)
   const currentMissionSection = useRef(null)
   const pastMissionsSection = useRef(null)
   const classes = useStyles()
   const handleOnScroll = () => {
-    // eslint-disable-next-line no-undef
-    if (window.pageYOffset > 800 && value === 0) {
-      setValue(1)
+    if (
       // eslint-disable-next-line no-undef
-    } else if (window.pageYOffset < 800 && value === 1) {
+      window.pageYOffset > pastMissionsSection.current.offsetTop - 180 &&
+      value === 0
+    ) {
+      setValue(1)
+    } else if (
+      // eslint-disable-next-line no-undef
+      window.pageYOffset < pastMissionsSection.current.offsetTop - 180 &&
+      value === 1
+    ) {
       setValue(0)
     }
   }
