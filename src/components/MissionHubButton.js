@@ -30,6 +30,9 @@ const MissionHubButton = ({ status }) => {
     case 'completed':
       text = 'mission hub'
       break
+    case 'unstarted':
+      text = 'create a squad'
+      break
     default:
       text = 'create a squad'
       break
@@ -56,7 +59,7 @@ MissionHubButton.propTypes = {
   /**
     the status of the current mission
   */
-  status: PropTypes.oneOf(['pending', 'started', 'completed', '']),
+  status: PropTypes.oneOf(['pending', 'started', 'completed', 'unstarted']),
 }
 MissionHubButton.defaultProps = {
   status: '',

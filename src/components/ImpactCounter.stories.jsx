@@ -7,7 +7,6 @@ export default {
   component: ImpactCounter,
 }
 
-// eslint-disable-next-line react/jsx-props-no-spreading
 const Template = (args) => <ImpactCounter {...args} />
 export const standard = Template.bind({})
 standard.args = {
@@ -16,9 +15,9 @@ standard.args = {
   progress: 50,
 }
 
-export const halfFull = Template.bind({})
-halfFull.args = {
+export const full = Template.bind({})
+full.args = {
   includeNumber: true,
   number: 15,
-  progress: 50,
+  progress: 100,
 }

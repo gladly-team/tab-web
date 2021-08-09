@@ -9,3 +9,6 @@ export const showMockAchievements = () =>
 
 export const showBackgroundImages = () =>
   process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_BACKGROUND_IMAGES === 'true'
+
+export const showDevelopmentOnlyMissionsFeature = () =>
+  process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE === 'true'

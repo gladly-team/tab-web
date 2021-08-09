@@ -8,7 +8,7 @@ import { act } from 'react-dom/test-utils'
 import {
   showMockAchievements,
   showBackgroundImages,
-  showDevelopmentOnlyDemoPages,
+  showDevelopmentOnlyMissionsFeature,
 } from 'src/utils/featureFlags'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import Achievement from 'src/components/Achievement'
@@ -293,9 +293,9 @@ describe('index.js', () => {
     expect(wrapper.find(UserBackgroundImageContainer).exists()).toBe(true)
   })
 
-  it('shows the invite friends icon if  showDevelopmentOnlyDemoPages returns false', () => {
+  it('shows the invite friends icon if  showDevelopmentOnlyMissionsFeature returns false', () => {
     expect.assertions(2)
-    showDevelopmentOnlyDemoPages.mockReturnValue(false)
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(false)
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     const wrapper = shallow(<IndexPage {...mockProps} />)
@@ -303,9 +303,9 @@ describe('index.js', () => {
     expect(wrapper.find(MissionHubButton).exists()).toBe(false)
   })
 
-  it('shows the missionHub button if  showDevelopmentOnlyDemoPages returns true', () => {
+  it('shows the missionHub button if  showDevelopmentOnlyMissionsFeature returns true', () => {
     expect.assertions(2)
-    showDevelopmentOnlyDemoPages.mockReturnValue(true)
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     const wrapper = shallow(<IndexPage {...mockProps} />)
