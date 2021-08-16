@@ -4,7 +4,7 @@ import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import {
   CAT_CHARITY,
   CAT_IMPACT_VISITS,
-  INTL_CAT_DAY_2021_NOTIFICATION,
+  INTL_CAT_DAY_END_2021_NOTIFICATION,
 } from 'src/utils/constants'
 import Notification from 'src/components/Notification'
 import ImpactCounter from 'src/components/ImpactCounter'
@@ -63,7 +63,10 @@ const UserImpact = ({ userImpact, user }) => {
     false
   )
   const [claimedReferralImpact, setClaimedReferralImpact] = useState(0)
-  const [IntlCatDayNotification, setIntlCatDayNotification] = useState(false)
+  const [
+    showIntlCatDayEndNotification,
+    setIntlCatDayEndNotification,
+  ] = useState(false)
   const confettiCanvasRef = useRef(null)
   const confettiFunc = () => {
     const myConfetti = confetti.create(confettiCanvasRef.current, {
@@ -107,13 +110,13 @@ const UserImpact = ({ userImpact, user }) => {
   }
   useEffect(() => {
     const internationalCatDay =
-      get(user, 'notifications[0].code', false) === 'intlCatDay2021'
+      get(user, 'notifications[0].code', false) === 'intlCatDayEnd2021'
     const hasDismissedCatDayNotification =
-      localStorageMgr.getItem(INTL_CAT_DAY_2021_NOTIFICATION) === 'true'
+      localStorageMgr.getItem(INTL_CAT_DAY_END_2021_NOTIFICATION) === 'true'
     if (internationalCatDay && !hasDismissedCatDayNotification) {
-      setIntlCatDayNotification(true)
+      setIntlCatDayEndNotification(true)
     } else {
-      setIntlCatDayNotification(false)
+      setIntlCatDayEndNotification(false)
     }
   }, [user])
   useEffect(() => {
@@ -160,8 +163,8 @@ const UserImpact = ({ userImpact, user }) => {
     setReferralRewardDialogOpen(false)
   }
   const dismissCatDayNotification = () => {
-    localStorageMgr.setItem(INTL_CAT_DAY_2021_NOTIFICATION, 'true')
-    setIntlCatDayNotification(false)
+    localStorageMgr.setItem(INTL_CAT_DAY_END_2021_NOTIFICATION, 'true')
+    setIntlCatDayEndNotification(false)
   }
   const classes = useStyles()
   return (
@@ -256,7 +259,7 @@ const UserImpact = ({ userImpact, user }) => {
           buttonOnClick={handleClaimReferralNotification}
         />
       )}
-      {IntlCatDayNotification && (
+      {showIntlCatDayEndNotification && (
         <Notification
           text={
             <div
@@ -266,41 +269,21 @@ const UserImpact = ({ userImpact, user }) => {
                 alignItems: 'space-between',
               }}
             >
-              <Typography variant="h6" align="center" gutterBottom>
-                Help us celebrate International Cat Day (Aug. 8)!
-              </Typography>
               <Typography variant="body2" gutterBottom>
-                Invite your friends to try Tab for Cats, and we will give an
-                extra dollar to{' '}
-                <Link
-                  target="_blank"
-                  to="https://greatergood.org/jackson-galaxy"
-                  className={classes.link}
-                >
-                  The Jackson Galaxy Project
-                </Link>{' '}
-                for every new user that joins August 3 - 10.
+                Thank you to everyone who purr-ticipated in our International
+                Cat Day celebration! Thanks to all of you, we were able to
+                donate an extra $614 to The Jackson Galaxy Project.
               </Typography>
               <Typography variant="body2">
-                Participate in our photo challenge for the chance to be featured
-                on Tab for Cats and win $100 for the charity of your choice.
-                Contest details can be found on{' '}
+                Need an extra dose of cuteness?{' '}
                 <Link
                   target="_blank"
-                  to="https://www.instagram.com/tabforacause"
+                  to="https://www.instagram.com/p/CSo9-_tHquS/"
                   className={classes.link}
                 >
-                  Instagram
+                  Check out our top 10 submissions
                 </Link>{' '}
-                and{' '}
-                <Link
-                  target="_blank"
-                  to="https://www.facebook.com/TabForACause"
-                  className={classes.link}
-                >
-                  Facebook
-                </Link>
-                .
+                from our #tabforcatsday photo challenge!
               </Typography>
             </div>
           }
