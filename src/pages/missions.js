@@ -132,6 +132,7 @@ const Missions = ({ data: initialData }) => {
       window.removeEventListener('scroll', debouncedHandleOnSchroll)
     }
   }, [value, debouncedHandleOnSchroll])
+
   const setChange = (event, newValue) => {
     // eslint-disable-next-line no-undef
     window.scrollTo({
@@ -143,6 +144,9 @@ const Missions = ({ data: initialData }) => {
       behavior: 'smooth',
     })
     setValue(newValue)
+  }
+  if (!data) {
+    return <FullPageLoader />
   }
   return (
     <div className={classes.pageContainer} data-test-id="missions-page">
@@ -208,7 +212,7 @@ Missions.propTypes = {
   }),
 }
 Missions.defaultProps = {
-  data: { user: {} },
+  data: null,
 }
 
 export const getServerSideProps = flowRight([
@@ -223,6 +227,7 @@ export const getServerSideProps = flowRight([
 export default flowRight([
   withAuthUser({
     whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+    LoaderComponent: FullPageLoader,
   }),
   withSentry,
   withRelay,
