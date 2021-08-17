@@ -8,6 +8,8 @@ export default createFragmentContainer(CurrentMission, {
       id
       currentMission {
         squadName
+        started
+        completed
         missionId
         status
         tabGoal

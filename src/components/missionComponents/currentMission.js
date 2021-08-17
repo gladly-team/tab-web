@@ -10,10 +10,7 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import StarBorderIcon from '@material-ui/icons/StarBorder'
-import DoneIcon from '@material-ui/icons/Done'
-import Chip from '@material-ui/core/Chip'
-import Fade from '@material-ui/core/Fade'
+
 import Table from '@material-ui/core/Table'
 import Button from '@material-ui/core/Button'
 import TableBody from '@material-ui/core/TableBody'
@@ -23,14 +20,11 @@ import TableRow from '@material-ui/core/TableRow'
 import squadsStep1 from 'src/assets/images/squadsStep1.png'
 import squadsStep2 from 'src/assets/images/squadsStep2.png'
 import squadsStep3 from 'src/assets/images/squadsStep3.png'
-import catsSent from 'src/assets/images/catsSent.png'
 import TextField from '@material-ui/core/TextField'
-import FileCopyIcon from '@material-ui/icons/FileCopy'
-import { getSquadsLink } from 'src/utils/urls'
-import InputAdornment from '@material-ui/core/InputAdornment'
-import IconButton from '@material-ui/core/IconButton'
-import CreateSquadInvitesMutation from 'src/utils/mutations/CreateSquadInvitesMutation'
 import CreateNewMissionMutation from 'src/utils/mutations/CreateNewMissionMutation'
+import CustomAlert from 'src/components/CustomAlert'
+import MissionSocialShare from 'src/components/missionComponents/MissionSocialShare'
+import MissionComplete from 'src/components/missionComponents/MissionComplete'
 
 const useStyles = makeStyles((theme) => ({
   topContainer: {
@@ -116,69 +110,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     cursor: 'pointer',
   },
-  copyIcon: {
-    color: theme.palette.text.secondary,
-  },
-  socialShare: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: theme.spacing(1),
-    justifyContent: 'space-evenly',
-    minWidth: '460px',
-  },
-  psuedoLabel: {
-    color: theme.palette.primary.main,
-    fontSize: '12px',
-    marginBottom: theme.spacing(1),
-  },
-  chipContainer: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    minHeight: '40px',
-    maxHeight: '90px',
-    overflowY: 'auto',
-  },
   sendButton: {
     marginTop: theme.spacing(2),
     height: theme.spacing(3),
     backgroundColor: theme.palette.colors.purple1,
-  },
-  sentBox: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '260px',
-    alignItems: 'center',
-    paddingTop: theme.spacing(4),
-  },
-  chip: {
-    margin: theme.spacing(0.5),
-    backgroundColor: theme.palette.primary.background,
-  },
-  chipDelete: {
-    color: theme.palette.primary.main,
-  },
-  customSeparator: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(1),
-    display: 'flex',
-    alignItems: 'center',
-    textAlign: 'center',
-    '&::before': {
-      content: '""',
-      flex: 1,
-      borderBottom: `2px solid rgba(0, 0, 0, 0.12)`,
-    },
-    '&::after': {
-      content: '""',
-      flex: 1,
-      borderBottom: `2px solid rgba(0, 0, 0, 0.12)`,
-    },
-    '&:not(:empty)::before': {
-      marginRight: '.25em',
-    },
-    '&:not(:empty)::after': {
-      marginLeft: '.25em',
-    },
   },
   createSquadContainer: {
     display: 'flex',
@@ -188,50 +123,15 @@ const useStyles = makeStyles((theme) => ({
     alignSelf: 'center',
   },
 }))
-const customAlertUseStyles = makeStyles((theme) => ({
-  wrapper: {
-    borderRadius: '4px',
-    minHeight: '32px',
-    border: `1px solid`,
-    borderColor: theme.palette.primary.main,
-    backgroundColor: theme.palette.primary.background,
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: theme.spacing(2),
-  },
-  text: {
-    color: theme.palette.primary.main,
-    fontWeight: 'bold',
-    fontSize: '14px',
-    marginLeft: theme.spacing(2),
-  },
-}))
-const CustomAlert = ({ text, done }) => {
-  const cx = customAlertUseStyles()
-  return (
-    <div className={cx.wrapper}>
-      {done ? <DoneIcon color="primary" /> : <StarBorderIcon color="primary" />}
-      <Typography classes={{ root: cx.text }}>{text}</Typography>
-    </div>
-  )
-}
+
 const CurrentMissionComponent = ({ user }) => {
   const cx = useStyles()
   const [expanded, setExpanded] = useState(false)
   const [isAddSquadMateOpen, setIsAddSquadMateOpen] = useState(false)
   const [squadName, setSquadName] = useState('')
-  const [emailInput, setEmailInputChange] = useState('')
-  const [isValidEmail, setIsValidEmail] = useState(true)
-  const [validEmails, setValidEmails] = useState([])
-  const [name, setName] = useState('')
-  const [personalMessage, setPersonalMessage] = useState('')
-  const [personalMessageError, setPersonalMessageError] = useState(false)
-  const [createSquadButton, setCreateSquadButton] = useState('next')
-  const [sendingState, setSendingState] = useState('Send Invite')
   const [currentMission, setCurrentMission] = useState(
     (user || {}).currentMission || {}
   )
-  console.log(currentMission)
   useEffect(() => {
     if (user) {
       setCurrentMission(user.currentMission)
@@ -244,8 +144,9 @@ const CurrentMissionComponent = ({ user }) => {
   }
   const handleAddSquadMateClick = () => {
     setIsAddSquadMateOpen(!isAddSquadMateOpen)
-    // eslint-disable-next-line no-undef
+
     if (isAddSquadMateOpen === false) {
+      // eslint-disable-next-line no-undef
       window.scrollTo({
         left: 0,
         top: addSquadMatesSection.current.offsetTop - 216,
@@ -253,64 +154,19 @@ const CurrentMissionComponent = ({ user }) => {
       })
     }
   }
-  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-
-  const addEmail = () => {
-    const isValid = validateEmail(emailInput)
-    if (isValid) {
-      setValidEmails((prevState) => prevState.concat([emailInput]))
-      setEmailInputChange('')
-    } else {
-      setIsValidEmail(false)
-    }
-  }
-  const emailInputOnChange = (event) => {
-    setEmailInputChange(event.target.value)
-    if (!isValidEmail) {
-      setIsValidEmail(validateEmail(event.target.value))
-    }
-  }
-  const sendEmailInvites = async () => {
-    setSendingState('sending...')
-    const {
-      createSquadInvites: { currentMission: newCurrentMission },
-    } = await CreateSquadInvitesMutation(id, validEmails, name, personalMessage)
-    setSendingState('invitations sent! ✅')
-    setValidEmails([])
-    setTimeout(() => {
-      setSendingState('Send Invite')
-      setPersonalMessage('')
-      setName('')
-      setCurrentMission(newCurrentMission)
-    }, 2500)
-  }
   const createSquad = async () => {
     const {
       createNewMission: { currentMission: newCurrentMission },
     } = await CreateNewMissionMutation(id, squadName)
     setCurrentMission(newCurrentMission)
   }
-  const onEmailBlur = () => (emailInput !== '' ? addEmail() : null)
-  const onEmailEnterKey = (e) => (e.key === 'Enter' ? addEmail() : null)
-  const deleteEmail = (email) => {
-    const filteredEmails = validEmails.filter((item) => item !== email)
-    setValidEmails(filteredEmails)
-  }
-  const personalMessageValidateAndSet = (e) => {
-    setPersonalMessage(e.target.value)
-    if (e.target.value.length > 160) {
-      setPersonalMessageError(true)
-    } else if (personalMessageError) {
-      setPersonalMessageError(false)
-    }
-  }
-
   const { tabCount = 0, tabGoal = 1000, missionId, squadMembers = [], status } =
     currentMission || {}
-  const referralUrl = getSquadsLink(username, missionId)
-  const textFieldRef = useRef(null)
-  console.log(currentMission, 'current missions')
-  const createTableData = (squadMembers) =>
+  const onEmailsSent = (newMissionData) => {
+    setCurrentMission(newMissionData)
+    setIsAddSquadMateOpen(false)
+  }
+  const createTableData = () =>
     squadMembers.reduce((tableData, member) => {
       const {
         status: userStatus,
@@ -334,184 +190,13 @@ const CurrentMissionComponent = ({ user }) => {
       tableData.push(pivotedMemberData)
       return tableData
     }, [])
-  const highlightReferralUrl = () => {
-    textFieldRef.current.select()
-    try {
-      // eslint-disable-next-line no-undef
-      document.execCommand('copy')
-    } catch (e) {}
-  }
-  const tableData = createTableData(squadMembers)
-  const renderSocialShare = () => (
-    <div className={cx.socialShare}>
-      {' '}
-      <TextField
-        id="refer-friend-input"
-        inputRef={textFieldRef}
-        value={referralUrl}
-        label="Send a link"
-        focused
-        onClick={highlightReferralUrl}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={highlightReferralUrl}>
-                <FileCopyIcon className={cx.copyIcon} />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <div className={cx.customSeparator}>
-        <Typography>or</Typography>
-      </div>
-      {sendingState !== 'invitations sent! ✅' ? (
-        <>
-          <Typography className={cx.psuedoLabel}>
-            Send email invites.
-          </Typography>
-          <TextField
-            fullWidth
-            value={name}
-            size="small"
-            label="Your name"
-            helperText="Let your friend know who's inviting them."
-            variant="outlined"
-            onChange={(event) => setName(event.target.value)}
-          />
-          <TextField
-            style={{ marginTop: '8px' }}
-            fullWidth
-            size="small"
-            disabled={validEmails.length >= 20}
-            error={!isValidEmail}
-            id="recipientsInput"
-            value={emailInput}
-            label="Recipients"
-            helperText={
-              // eslint-disable-next-line no-nested-ternary
-              !isValidEmail
-                ? 'Oops.  It looks like this email address is incorrect!'
-                : validEmails.length >= 20
-                ? 'You can send 20 emails at a time.'
-                : "Add your friend's email."
-            }
-            variant="outlined"
-            onChange={emailInputOnChange}
-            onBlur={onEmailBlur}
-            onKeyDown={onEmailEnterKey}
-          />
-          <div className={cx.chipContainer}>
-            {validEmails.map((item) => (
-              <Fade in key={item}>
-                <Chip
-                  size="small"
-                  classes={{
-                    deleteIconSmall: cx.chipDelete,
-                    root: cx.chip,
-                  }}
-                  label={item}
-                  key={item}
-                  onDelete={() => deleteEmail(item)}
-                />
-              </Fade>
-            ))}
-          </div>
-          <TextField
-            style={{ marginTop: '12px' }}
-            fullWidth
-            size="small"
-            value={personalMessage}
-            label="Message"
-            multiline
-            rows={2}
-            helperText={
-              personalMessageError
-                ? 'The max length of the personal message is 160 characters.'
-                : 'Let your friend know why they should join.'
-            }
-            variant="outlined"
-            error={personalMessageError}
-            onChange={personalMessageValidateAndSet}
-          />
-        </>
-      ) : (
-        <Fade in>
-          <div className={cx.sentBox}>
-            <img src={catsSent} height="120px" width="240px" alt="cats2" />
-            <Typography color="primary" variant="h4">
-              Thanks {name}! Your invites were sent.
-            </Typography>
-          </div>
-        </Fade>
-      )}
-      <Button
-        className={cx.sendButton}
-        fullWidth
-        variant="contained"
-        color="primary"
-        onClick={sendEmailInvites}
-        disabled={!(validEmails.length && name.length) || personalMessageError}
-      >
-        {sendingState}
-      </Button>
-    </div>
-  )
-  const missionComplete = () => (
-    <div>
-      <div>
-        <Typography style={{ fontSize: '20px', fontWeight: 'bold' }}>
-          Mission Complete
-        </Typography>
-        <div style={{ marginTop: '16px' }}>
-          <CustomAlert
-            done
-            text="Team up with your friends and help give a shelter cat a new home and family!"
-          />
-        </div>
-      </div>
-      <div className={cx.explanationCardContainer}>
-        <div className={cx.explanationCard}>
-          <img
-            src={squadsStep1}
-            alt="squad step 1"
-            height="180px"
-            width="250px"
-          />
-          <Typography align="center" className={cx.captionFont}>
-            1. Open new tabs with your squad
-          </Typography>
-        </div>
-        <div className={cx.explanationCard}>
-          <img
-            src={squadsStep2}
-            height="180px"
-            width="250px"
-            alt="squad step 1"
-          />
-          <Typography align="center" className={cx.captionFont}>
-            2. Raise enough money to get a shelter cat house trained
-          </Typography>
-        </div>
-        <div className={cx.explanationCard}>
-          <img
-            src={squadsStep3}
-            alt="squad step 1"
-            height="180px"
-            width="250px"
-          />
-          <Typography align="center" className={cx.captionFont}>
-            3. Trained house cats are much more likely to get adopted
-          </Typography>
-        </div>
-      </div>
-      <hr className={cx.hr} />
-    </div>
-  )
+
+  const tableData = createTableData()
+
   return (
     <Paper elevation={1} className={cx.topContainer}>
       {status === 'completed' ? (
-        missionComplete()
+        <MissionComplete mission={currentMission} user={user} />
       ) : (
         <>
           <div>
@@ -634,7 +319,11 @@ const CurrentMissionComponent = ({ user }) => {
               <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
                 Create Your squad now!
               </Typography>
-              {renderSocialShare()}
+              <MissionSocialShare
+                user={{ username, id }}
+                emailSentCallback={onEmailsSent}
+                missionId={currentMission.id}
+              />
             </div>
           )}
           {squadMembers.length > 1 && (
@@ -740,7 +429,13 @@ const CurrentMissionComponent = ({ user }) => {
                 <AddIcon fontSize="small" />
                 <Typography>Add Squad Mates</Typography>
               </div>
-              {isAddSquadMateOpen && renderSocialShare()}
+              {isAddSquadMateOpen && (
+                <MissionSocialShare
+                  user={{ username, id }}
+                  emailSentCallback={onEmailsSent}
+                  missionId={currentMission.id}
+                />
+              )}
             </div>
           )}{' '}
         </>
@@ -753,8 +448,11 @@ CurrentMissionComponent.propTypes = {
   /**
     the status of the current mission
   */
+  user: PropTypes.shape({
+    currentMission: PropTypes.any,
+  }),
 }
 CurrentMissionComponent.defaultProps = {
-  status: '',
+  user: {},
 }
 export default CurrentMissionComponent

@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
-import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles'
 import StarBorderIcon from '@material-ui/icons/StarBorder'
 import DoneIcon from '@material-ui/icons/Done'
@@ -22,6 +21,7 @@ const customAlertUseStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
     fontSize: '14px',
     marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
   },
 }))
 const CustomAlert = ({ text, icon }) => {
