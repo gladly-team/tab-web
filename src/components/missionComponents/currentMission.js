@@ -23,8 +23,8 @@ import squadsStep3 from 'src/assets/images/squadsStep3.png'
 import TextField from '@material-ui/core/TextField'
 import CreateNewMissionMutation from 'src/utils/mutations/CreateNewMissionMutation'
 import CustomAlert from 'src/components/CustomAlert'
-import MissionSocialShare from 'src/components/missionComponents/MissionSocialShare'
-import MissionComplete from 'src/components/missionComponents/MissionComplete'
+import MissionSocialShare from 'src/components/MissionComponents/MissionSocialShare'
+import MissionComplete from 'src/components/MissionComponents/MissionComplete'
 
 const useStyles = makeStyles((theme) => ({
   topContainer: {
