@@ -106,7 +106,6 @@ const MissionComplete = ({ mission, user }) => {
     (item) => item.username === user.username
   )[0]
 
-  console.log(endOfMissionAwards, 'mission complete')
   return (
     <div className={cx.topContainer}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -220,6 +219,7 @@ const MissionComplete = ({ mission, user }) => {
               awardType={awardType}
               user={userAgain}
               stat={unit}
+              key={awardType}
             />
           ))}
         </div>

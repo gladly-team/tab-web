@@ -125,6 +125,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const CurrentMissionComponent = ({ user }) => {
+  // console.log(JSON.stringify(user.currentMission))
   const cx = useStyles()
   const [expanded, setExpanded] = useState(false)
   const [isAddSquadMateOpen, setIsAddSquadMateOpen] = useState(false)
@@ -144,7 +145,6 @@ const CurrentMissionComponent = ({ user }) => {
   }
   const handleAddSquadMateClick = () => {
     setIsAddSquadMateOpen(!isAddSquadMateOpen)
-
     if (isAddSquadMateOpen === false) {
       // eslint-disable-next-line no-undef
       window.scrollTo({
@@ -425,6 +425,7 @@ const CurrentMissionComponent = ({ user }) => {
                 onClick={handleAddSquadMateClick}
                 ref={addSquadMatesSection}
                 tabIndex={0}
+                data-test-id="addSquadMateButton"
               >
                 <AddIcon fontSize="small" />
                 <Typography>Add Squad Mates</Typography>

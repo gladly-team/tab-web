@@ -92,7 +92,7 @@ AcheivementBadge.propTypes = {
   /**
          the core text in standard font with overflow 
         */
-  stat: PropTypes.string.isRequired,
+  stat: PropTypes.number.isRequired,
 
   /**
          the core text in standard font with overflow 
