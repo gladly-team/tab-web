@@ -450,6 +450,7 @@ CurrentMissionComponent.propTypes = {
     the status of the current mission
   */
   user: PropTypes.shape({
+    // eslint-disable-next-line react/forbid-prop-types
     currentMission: PropTypes.any,
   }),
 }
