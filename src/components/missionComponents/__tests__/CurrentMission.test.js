@@ -1,26 +1,18 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { mount } from 'enzyme'
 import Button from '@material-ui/core/Button'
 
 // import Typography from '@material-ui/core/Typography'
-import Notification from 'src/components/Notification'
-import ImpactDialog from 'src/components/ImpactDialog'
-import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import preloadAll from 'jest-next-dynamic'
-import confetti from 'canvas-confetti'
 import { act } from 'react-dom/test-utils'
-import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
-import Dialog from '@material-ui/core/Dialog'
-import localStorageMgr from 'src/utils/localstorage-mgr'
 import { ThemeProvider } from '@material-ui/core/styles'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import Tab from '@material-ui/core/Tab'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Table from '@material-ui/core/Table'
 import theme from 'src/utils/theme'
 import CreateNewMissionMutation from 'src/utils/mutations/CreateNewMissionMutation'
-import MissionSocialShare from '../MissionSocialShare'
+import MissionSocialShare from 'src/components/MissionComponents/MissionSocialShare'
 import TableRow from '@material-ui/core/TableRow'
 import MissionComplete from 'src/components/MissionComponents/MissionComplete'
 
@@ -137,22 +129,6 @@ const mockPropsMissionCompleted = {
     },
   },
 }
-const getMockProps = (userImpactOverrides) => ({
-  userImpact: {
-    visitsUntilNextImpact: 3,
-    pendingUserReferralImpact: 0,
-    pendingUserReferralCount: 0,
-    userImpactMetric: 2,
-    confirmedImpact: true,
-    hasClaimedLatestReward: false,
-    ...userImpactOverrides,
-  },
-  user: {
-    id: 'someId',
-    username: 'someUsername',
-    notifications: [],
-  },
-})
 beforeEach(async () => {
   jest.clearAllMocks()
   await preloadAll()

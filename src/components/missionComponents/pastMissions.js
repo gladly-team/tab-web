@@ -20,9 +20,6 @@ const Accordion = withStyles({
     width: '100%',
     borderBottom: '1px solid rgba(0, 0, 0, .12)',
     boxShadow: 'none',
-    // '&:not(:last-child)': {
-    //   borderBottom: 0,
-    // },
     '&:before': {
       display: 'none',
     },
@@ -137,7 +134,11 @@ const PastMissionsComponent = ({
       })
     return <>{awardsForUser}</>
   }
-  console.log(edges, currentMission, 'what i got in past missions')
+  console.log(
+    JSON.stringify(edges),
+    JSON.stringify(currentMission),
+    'what i got in past missions'
+  )
   return (
     <Paper elevation={1} className={cx.topContainer}>
       <Typography classes={{ root: cx.titleFont }}>Past Missions</Typography>
@@ -171,11 +172,12 @@ const PastMissionsComponent = ({
         <div className={cx.noMissionsContainer}>
           {edges
             // .sort((a, b) => a.node.completed - b.node.completed)
-            .map(({ node }) => (
+            .map(({ node, index }) => (
               <Accordion
+                key={node.missionId}
                 square
-                expanded={expanded === 'panel1'}
-                onChange={handleChange('panel1')}
+                expanded={expanded === `panel${index}`}
+                onChange={handleChange(`panel${index}`)}
               >
                 <AccordionSummary
                   aria-controls="panel1d-content"
@@ -207,7 +209,9 @@ const PastMissionsComponent = ({
                     </>
                   ))} */}
                   {node.squadMembers.map((user) => (
-                    <Typography>{user.username}</Typography>
+                    <Typography key={user.username + user.invitedEmail}>
+                      {user.username}
+                    </Typography>
                   ))}
                 </AccordionSummary>
                 <AccordionDetails>
