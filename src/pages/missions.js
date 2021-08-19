@@ -23,8 +23,8 @@ import FullPageLoader from 'src/components/FullPageLoader'
 import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
 import { dashboardURL } from 'src/utils/urls'
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
-import CurrentMissionContainer from 'src/components/MissionComponents/CurrentMissionContainer'
-import PastMissionsContainer from 'src/components/MissionComponents/PastMissionsContainer'
+import CurrentMissionContainer from 'src/components/missionComponents/CurrentMissionContainer'
+import PastMissionsContainer from 'src/components/missionComponents/PastMissionsContainer'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {

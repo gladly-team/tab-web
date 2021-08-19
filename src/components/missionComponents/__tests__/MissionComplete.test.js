@@ -66,7 +66,7 @@ beforeEach(async () => {
 
 describe('Mission Complete Presentational Component', () => {
   it('renders without error', () => {
-    const MissionComplete = require('src/components/MissionComponents/MissionComplete')
+    const MissionComplete = require('src/components/missionComponents/MissionComplete')
       .default
     const mockProps = mockPropsMission
     expect(() => {
@@ -79,7 +79,7 @@ describe('Mission Complete Presentational Component', () => {
   })
 
   it('renders the acheivement badges for each award', () => {
-    const MissionComplete = require('src/components/MissionComponents/MissionComplete')
+    const MissionComplete = require('src/components/missionComponents/MissionComplete')
       .default
     const mockProps = mockPropsMission
     const wrapper = mount(

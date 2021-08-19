@@ -8,7 +8,7 @@ import MuiAccordion from '@material-ui/core/Accordion'
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import MissionComplete from 'src/components/MissionComponents/MissionComplete'
+import MissionComplete from 'src/components/missionComponents/MissionComplete'
 import clsx from 'clsx'
 import moment from 'moment'
 
