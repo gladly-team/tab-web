@@ -540,6 +540,11 @@ type failedEmailAddresses {
   error: String
 }
 
+type failedSquadEmailAddresses {
+  email: String
+  error: String
+}
+
 input LogEmailVerifiedMutationInput {
   userId: String!
   clientMutationId: String
@@ -963,6 +968,14 @@ type successfulEmailAddresses {
   email: String
 }
 
+type successfulExistingUsers {
+  username: String
+}
+
+type successfulSquadEmailAddresses {
+  email: String
+}
+
 input UpdateImpactInput {
   userId: String!
   charityId: String!
@@ -981,6 +994,7 @@ type UpdateImpactPayload {
 input UpdateMissionNotificationInput {
   userId: String!
   missionId: String!
+  action: String!
   clientMutationId: String
 }
 

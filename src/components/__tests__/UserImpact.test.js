@@ -12,7 +12,7 @@ import { act } from 'react-dom/test-utils'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import Dialog from '@material-ui/core/Dialog'
 import localStorageMgr from 'src/utils/localstorage-mgr'
-import { INTL_CAT_DAY_2021_NOTIFICATION } from 'src/utils/constants'
+import { INTL_CAT_DAY_END_2021_NOTIFICATION } from 'src/utils/constants'
 
 jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('@material-ui/core/Typography')
@@ -310,7 +310,7 @@ describe('UserImpact component', () => {
     expect(confetti.create).toHaveBeenCalledTimes(0)
   })
 
-  it('does not render international cat day notification if it is not international cat day', () => {
+  it('does not render international cat day end notification if it is not enabled', () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = getMockProps()
     const wrapper = shallow(<UserImpact {...mockProps} />)
@@ -318,7 +318,7 @@ describe('UserImpact component', () => {
     expect(notification.exists()).not.toBe(true)
   })
 
-  it('does not render international cat day notification if it is international cat day but user has already dismissed', () => {
+  it('does not render international cat day end notification if it is enabled but user has already dismissed', () => {
     const UserImpact = require('src/components/UserImpact').default
     localStorageMgr.getItem.mockReturnValue('true')
     const mockProps = getMockProps()
@@ -327,14 +327,14 @@ describe('UserImpact component', () => {
     expect(notification.exists()).not.toBe(true)
   })
 
-  it('does render international cat day notification if user has not dismissed and it is intl cat day', async () => {
+  it('does render international cat day end notification if user has not dismissed and it is enabled', async () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = {
       ...getMockProps(),
       user: {
         id: 'someId',
         username: 'someUsername',
-        notifications: [{ code: 'intlCatDay2021' }],
+        notifications: [{ code: 'intlCatDayEnd2021' }],
       },
     }
     localStorageMgr.getItem.mockReturnValue(undefined)
@@ -343,7 +343,7 @@ describe('UserImpact component', () => {
     expect(notification.exists()).toBe(true)
   })
 
-  it('hides international cat day notification if it ends after initial render (this avoids "+1" problem of page loads after campaign end)', async () => {
+  it('hides international cat day end notification if it ends after initial render (this avoids "+1" problem of page loads after campaign end)', async () => {
     expect.assertions(2)
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = {
@@ -351,7 +351,7 @@ describe('UserImpact component', () => {
       user: {
         id: 'someId',
         username: 'someUsername',
-        notifications: [{ code: 'intlCatDay2021' }],
+        notifications: [{ code: 'intlCatDayEnd2021' }],
       },
     }
     localStorageMgr.getItem.mockReturnValue(undefined)
@@ -371,14 +371,14 @@ describe('UserImpact component', () => {
     expect(wrapper.find(Notification).at(1).exists()).toBe(false)
   })
 
-  it('dismissing intl cat notification updates local storage and dismisses notification', async () => {
+  it('dismissing intl cat day end notification updates local storage and dismisses notification', async () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = {
       ...getMockProps(),
       user: {
         id: 'someId',
         username: 'someUsername',
-        notifications: [{ code: 'intlCatDay2021' }],
+        notifications: [{ code: 'intlCatDayEnd2021' }],
       },
     }
     localStorageMgr.getItem.mockReturnValue(undefined)
@@ -391,7 +391,7 @@ describe('UserImpact component', () => {
     })
     expect(notification.exists()).toBe(true)
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
-      INTL_CAT_DAY_2021_NOTIFICATION,
+      INTL_CAT_DAY_END_2021_NOTIFICATION,
       'true'
     )
   })
