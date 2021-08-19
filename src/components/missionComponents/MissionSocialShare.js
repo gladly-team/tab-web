@@ -127,6 +127,8 @@ const MissionSocialShare = ({ emailSentCallback, missionId, user }) => {
         setName('')
         emailSentCallback(newCurrentMission)
       }, 2500)
+
+      // eslint-disable-next-line no-empty
     } catch (e) {}
   }
   const referralUrl = getSquadsLink(username, missionId)

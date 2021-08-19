@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
 }))
-const MissionComplete = ({ mission, user }) => {
+const MissionComplete = ({ mission }) => {
   const {
     tabCount = 0,
     tabGoal = 1000,
@@ -102,9 +102,10 @@ const MissionComplete = ({ mission, user }) => {
   const teamTabsPerDay = tabGoal / daysToComplete
   const teamRateOverTypicalUser =
     Math.round((teamTabsPerDay / AVERAGE_USER_TABS_DAY) * 10) / 10
-  const userStats = squadMembers.filter(
-    (item) => item.username === user.username
-  )[0]
+
+  //   const userStats = squadMembers.filter(
+  //   (item) => item.username === user.username
+  // )[0]
 
   return (
     <div className={cx.topContainer}>
@@ -229,6 +230,7 @@ const MissionComplete = ({ mission, user }) => {
   )
 }
 MissionComplete.displayName = 'MissionComplete'
+
 MissionComplete.propTypes = {
   /**
     the username and user id nested in a user object
@@ -239,20 +241,32 @@ MissionComplete.propTypes = {
   }).isRequired,
 
   /**
-    the mission id to put in the referral link and email
+    the mission to show
   */
   mission: PropTypes.shape({
+    squadName: PropTypes.string,
+    started: PropTypes.string,
+    completed: PropTypes.string,
+    missionId: PropTypes.string,
     status: PropTypes.string,
-  }),
-
-  /**
-    callback to be invoked when CreateSquadInvitesMutation returns
-  */
-  emailSentCallback: PropTypes.func,
-}
-MissionComplete.defaultProps = {
-  missionId: '',
-  emailSentCallback: () => {},
+    tabGoal: PropTypes.number,
+    tabCount: PropTypes.number,
+    squadMembers: PropTypes.arrayOf(
+      PropTypes.shape({
+        username: PropTypes.string,
+        invitedEmail: PropTypes.string,
+        status: PropTypes.string,
+        tabs: PropTypes.number,
+      })
+    ),
+    endOfMissionAwards: PropTypes.arrayOf(
+      PropTypes.shape({
+        user: PropTypes.string,
+        awardType: PropTypes.string,
+        unit: PropTypes.string,
+      })
+    ),
+  }).isRequired,
 }
 
 export default MissionComplete

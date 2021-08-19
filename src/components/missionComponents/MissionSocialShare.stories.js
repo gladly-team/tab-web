@@ -8,7 +8,7 @@ export default {
 
 const Template = (args) => (
   <div style={{ maxWidth: '468px', margin: '20px' }}>
-    // eslint-disable-next-line react/jsx-props-no-spreading
+    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
     <MissionSocialShare {...args} />
   </div>
 )

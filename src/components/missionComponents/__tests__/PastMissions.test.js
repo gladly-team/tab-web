@@ -1,23 +1,15 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import Button from '@material-ui/core/Button'
 
 // import Typography from '@material-ui/core/Typography'
 import preloadAll from 'jest-next-dynamic'
 import { act } from 'react-dom/test-utils'
 import { ThemeProvider } from '@material-ui/core/styles'
 import NoCompletedMissions from 'src/assets/images/noCompletedMissions.svg'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import MuiAccordion from '@material-ui/core/Accordion'
-import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
-import Table from '@material-ui/core/Table'
 import theme from 'src/utils/theme'
-import CreateNewMissionMutation from 'src/utils/mutations/CreateNewMissionMutation'
-import MissionSocialShare from 'src/components/MissionComponents/MissionSocialShare'
-import TableRow from '@material-ui/core/TableRow'
-import MissionComplete from 'src/components/MissionComponents/MissionComplete'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+
 jest.mock('src/utils/mutations/CreateNewMissionMutation', () => jest.fn())
 jest.mock('src/components/InviteFriends', () => () => <div />)
 jest.mock('src/components/MissionComponents/MissionComplete', () => () => (
@@ -160,7 +152,7 @@ beforeEach(async () => {
 
 describe('Past Missions component', () => {
   it('renders without error', () => {
-    const PastMissions = require('src/components/MissionComponents/PastMissions')
+    const PastMissions = require('src/components/missionComponents/PastMissions')
       .default
     const mockProps = mockPropsNoPastMissions
     expect(() => {
@@ -174,7 +166,7 @@ describe('Past Missions component', () => {
 
   it('shows no past missions background if user has no past missions', () => {
     expect.assertions(1)
-    const PastMissions = require('src/components/MissionComponents/PastMissions')
+    const PastMissions = require('src/components/missionComponents/PastMissions')
       .default
     const mockProps = mockPropsNoPastMissions
     const wrapper = mount(
@@ -189,7 +181,7 @@ describe('Past Missions component', () => {
   })
 
   it('renders completed missions without error', () => {
-    const PastMissions = require('src/components/MissionComponents/PastMissions')
+    const PastMissions = require('src/components/missionComponents/PastMissions')
       .default
     const mockProps = mockPropsWithPastMissions
     expect(() => {
@@ -203,7 +195,7 @@ describe('Past Missions component', () => {
 
   it('clicking on a completed mission shows mission details', async () => {
     expect.assertions(2)
-    const PastMissions = require('src/components/MissionComponents/PastMissions')
+    const PastMissions = require('src/components/missionComponents/PastMissions')
       .default
     const mockProps = mockPropsWithPastMissions
     const wrapper = mount(
@@ -219,150 +211,4 @@ describe('Past Missions component', () => {
     wrapper.update()
     expect(wrapper.find(MuiAccordion).at(1).prop('expanded')).toBe(true)
   })
-  //   it('renders the new mission view when a user is not in a mission', () => {
-  //     expect.assertions(2)
-  //     const PastMissions = require('src/components/MissionComponents/PastMissions')
-  //       .default
-  //     const mockProps = mockPropsNoMission
-  //   const wrapper = mount(
-  //     <ThemeProvider theme={theme}>
-  //       <PastMissions {...mockProps} />
-  //     </ThemeProvider>
-  //   )
-  //     const status = wrapper
-  //       .find(Typography)
-  //       .filterWhere((elem) => elem.text() === 'Status: ')
-  //     expect(status.length).toEqual(0)
-  //     const createSquadText = wrapper
-  //       .find(Typography)
-  //       .filterWhere((elem) => elem.text() === 'Create Your squad now!')
-  //     expect(createSquadText.length).toEqual(1)
-  //   })
-
-  //   it('validates the squad name when creating a squad', () => {
-  //     expect.assertions(2)
-  //     const CurrentMission = require('src/components/MissionComponents/CurrentMission')
-  //       .default
-  //     const mockProps = mockPropsNoMission
-  //     const wrapper = mount(
-  //       <ThemeProvider theme={theme}>
-  //         <CurrentMission {...mockProps} />
-  //       </ThemeProvider>
-  //     )
-  //     const squadNameInput = wrapper.find(TextField)
-  //     squadNameInput.find('input').simulate('change', { target: { value: 'ab' } })
-  //     wrapper.update()
-  //     expect(wrapper.find(Button).prop('disabled')).toEqual(true)
-  //     squadNameInput
-  //       .find('input')
-  //       .simulate('change', { target: { value: 'abcd' } })
-  //     wrapper.update()
-  //     expect(wrapper.find(Button).prop('disabled')).toEqual(false)
-  //   })
-
-  //   it('creates a squad and returns the id when a user enters a squad name and submits', async () => {
-  //     expect.assertions(3)
-  //     const CurrentMission = require('src/components/MissionComponents/CurrentMission')
-  //       .default
-  //     CreateNewMissionMutation.mockReturnValue({
-  //       createNewMission: { currentMission: '123' },
-  //     })
-  //     const mockProps = mockPropsNoMission
-  //     const wrapper = mount(
-  //       <ThemeProvider theme={theme}>
-  //         <CurrentMission {...mockProps} />
-  //       </ThemeProvider>
-  //     )
-  //     const squadNameInput = wrapper.find(TextField)
-  //     squadNameInput
-  //       .find('input')
-  //       .simulate('change', { target: { value: 'abcd' } })
-  //     wrapper.update()
-  //     expect(wrapper.find(Button).prop('disabled')).toEqual(false)
-  //     await act(async () => {
-  //       wrapper.find(Button).simulate('click')
-  //     })
-  //     expect(wrapper.find(MissionSocialShare)).toBeTruthy()
-  //     expect(CreateNewMissionMutation).toHaveBeenCalledWith(
-  //       'VXNlcjpjTDVLY0ZLSGQ5ZkVVNUM5VnN0ajNnNEpBYzcz',
-  //       'abcd'
-  //     )
-  //   })
-
-  //   it('loads the email invite if a user has created a mission but hasnt invited anyone', async () => {
-  //     expect.assertions(1)
-  //     const CurrentMission = require('src/components/MissionComponents/CurrentMission')
-  //       .default
-  //     CreateNewMissionMutation.mockReturnValue({
-  //       createNewMission: { currentMission: '123' },
-  //     })
-  //     const mockProps = mockPropsNoInvites
-  //     const wrapper = mount(
-  //       <ThemeProvider theme={theme}>
-  //         <CurrentMission {...mockProps} />
-  //       </ThemeProvider>
-  //     )
-  //     expect(wrapper.find(MissionSocialShare).exists()).toBe(true)
-  //   })
-
-  //   it('loads a progress bar if the mission is in progress', async () => {
-  //     expect.assertions(2)
-  //     const CurrentMission = require('src/components/MissionComponents/CurrentMission')
-  //       .default
-  //     const mockProps = mockPropsMissionInProgress
-  //     const wrapper = mount(
-  //       <ThemeProvider theme={theme}>
-  //         <CurrentMission {...mockProps} />
-  //       </ThemeProvider>
-  //     )
-  //     expect(wrapper.find(MissionSocialShare).exists()).toBe(false)
-  //     expect(wrapper.find(LinearProgress).exists()).toBe(true)
-  //   })
-
-  //   it('loads a table if the mission is in progress and has a row for every user plus title row', async () => {
-  //     expect.assertions(3)
-  //     const CurrentMission = require('src/components/MissionComponents/CurrentMission')
-  //       .default
-  //     const mockProps = mockPropsMissionInProgress
-  //     const wrapper = mount(
-  //       <ThemeProvider theme={theme}>
-  //         <CurrentMission {...mockProps} />
-  //       </ThemeProvider>
-  //     )
-  //     expect(wrapper.find(MissionSocialShare).exists()).toBe(false)
-  //     expect(wrapper.find(Table).exists()).toBe(true)
-  //     expect(wrapper.find(TableRow)).toHaveLength(5)
-  //   })
-
-  //   it('the add squad mate button is present for in progress missions and expands out to the mission invite component', async () => {
-  //     expect.assertions(2)
-  //     const CurrentMission = require('src/components/MissionComponents/CurrentMission')
-  //       .default
-  //     const mockProps = mockPropsMissionInProgress
-  //     const wrapper = mount(
-  //       <ThemeProvider theme={theme}>
-  //         <CurrentMission {...mockProps} />
-  //       </ThemeProvider>
-  //     )
-  //     expect(wrapper.find(MissionSocialShare).exists()).toBe(false)
-  //     await act(async () => {
-  //       wrapper.find('[data-test-id="addSquadMateButton"]').simulate('click')
-  //     })
-  //     wrapper.update()
-  //     expect(wrapper.find(MissionSocialShare).exists()).toBe(true)
-  //   })
-
-  //   it('when a mission is complete, the mission complete component is rendered', async () => {
-  //     expect.assertions(2)
-  //     const CurrentMission = require('src/components/MissionComponents/CurrentMission')
-  //       .default
-  //     const mockProps = mockPropsPastMissionsd
-  //     const wrapper = mount(
-  //       <ThemeProvider theme={theme}>
-  //         <CurrentMission {...mockProps} />
-  //       </ThemeProvider>
-  //     )
-  //     expect(wrapper.find(MissionSocialShare).exists()).toBe(false)
-  //     expect(wrapper.find(PastMissions).exists()).toBe(true)
-  //   })
 })

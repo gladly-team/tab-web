@@ -45,7 +45,6 @@ import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntroFlowMutation'
-import CreateNewMissionMutation from 'src/utils/mutations/CreateNewMissionMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,

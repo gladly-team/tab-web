@@ -6,10 +6,8 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
 import { act } from 'react-dom/test-utils'
-import SocialShare from 'src/components/SocialShare'
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from 'src/utils/theme'
-import IconButton from '@material-ui/core/IconButton'
 import Fade from '@material-ui/core/Fade'
 
 jest.mock('src/utils/mutations/CreateSquadInvitesMutation')

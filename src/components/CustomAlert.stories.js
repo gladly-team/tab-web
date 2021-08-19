@@ -7,6 +7,7 @@ export default {
   component: CustomAlert,
 }
 
+// eslint-disable-next-line react/jsx-props-no-spreading
 const Template = (args) => <CustomAlert {...args} />
 export const star = Template.bind({})
 star.args = {

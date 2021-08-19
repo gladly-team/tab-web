@@ -1,15 +1,9 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import Button from '@material-ui/core/Button'
 
 // import Typography from '@material-ui/core/Typography'
 import preloadAll from 'jest-next-dynamic'
-import { act } from 'react-dom/test-utils'
 import { ThemeProvider } from '@material-ui/core/styles'
-import LinearProgress from '@material-ui/core/LinearProgress'
-import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
-import Table from '@material-ui/core/Table'
 import theme from 'src/utils/theme'
 import AcheivementBadge from 'src/components/AcheivementBadge'
 

@@ -16,6 +16,7 @@ export default {
     },
   },
 }
+
 // data: PropTypes.shape({
 //     user: PropTypes.shape({
 //       email: PropTypes.string,

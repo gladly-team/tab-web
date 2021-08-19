@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -107,6 +107,7 @@ const PastMissionsComponent = ({
   const handleChange = (panel) => {
     setExpanded(expanded === panel ? false : panel)
   }
+
   // const getIcons = (userId, endOfMissionAwards) => {
   //   console.log(rest, endOfMissionAwards, 'what')
   //   const awardsForUser = endOfMissionAwards
@@ -162,6 +163,7 @@ const PastMissionsComponent = ({
       {edges.length > 0 && (
         <div className={cx.noMissionsContainer}>
           {edges
+
             // .sort((a, b) => a.node.completed - b.node.completed)
             .map(({ node }, index) => (
               <Accordion
@@ -219,15 +221,64 @@ const PastMissionsComponent = ({
 PastMissionsComponent.displayName = 'PastMissionsComponent'
 PastMissionsComponent.propTypes = {
   /**
-    the status of the current mission
+    the user object
   */
   user: PropTypes.shape({
+    username: PropTypes.string,
+    id: PropTypes.string,
     pastMissions: PropTypes.shape({
-      edges: PropTypes.arrayOf(PropTypes.any),
+      edges: PropTypes.arrayOf(
+        PropTypes.shape({
+          squadName: PropTypes.string,
+          started: PropTypes.string,
+          completed: PropTypes.string,
+          missionId: PropTypes.string,
+          status: PropTypes.string,
+          tabGoal: PropTypes.number,
+          tabCount: PropTypes.number,
+          squadMembers: PropTypes.arrayOf(
+            PropTypes.shape({
+              username: PropTypes.string,
+              invitedEmail: PropTypes.string,
+              status: PropTypes.string,
+              tabs: PropTypes.number,
+            })
+          ),
+          endOfMissionAwards: PropTypes.arrayOf(
+            PropTypes.shape({
+              user: PropTypes.string,
+              awardType: PropTypes.string,
+              unit: PropTypes.string,
+            })
+          ),
+        })
+      ),
+    }),
+    currentMission: PropTypes.shape({
+      squadName: PropTypes.string,
+      started: PropTypes.string,
+      completed: PropTypes.string,
+      missionId: PropTypes.string,
+      status: PropTypes.string,
+      tabGoal: PropTypes.number,
+      tabCount: PropTypes.number,
+      squadMembers: PropTypes.arrayOf(
+        PropTypes.shape({
+          username: PropTypes.string,
+          invitedEmail: PropTypes.string,
+          status: PropTypes.string,
+          tabs: PropTypes.number,
+        })
+      ),
+      endOfMissionAwards: PropTypes.arrayOf(
+        PropTypes.shape({
+          user: PropTypes.string,
+          awardType: PropTypes.string,
+          unit: PropTypes.string,
+        })
+      ),
     }),
   }).isRequired,
 }
-PastMissionsComponent.defaultProps = {
-  status: '',
-}
+
 export default PastMissionsComponent
