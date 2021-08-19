@@ -17,7 +17,7 @@ import CreateNewMissionMutation from 'src/utils/mutations/CreateNewMissionMutati
 import MissionSocialShare from 'src/components/MissionComponents/MissionSocialShare'
 import TableRow from '@material-ui/core/TableRow'
 import MissionComplete from 'src/components/MissionComponents/MissionComplete'
-
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 jest.mock('src/utils/mutations/CreateNewMissionMutation', () => jest.fn())
 jest.mock('src/components/InviteFriends', () => () => <div />)
 jest.mock('src/components/MissionComponents/MissionComplete', () => () => (
@@ -211,9 +211,13 @@ describe('Past Missions component', () => {
         <PastMissions {...mockProps} />
       </ThemeProvider>
     )
-    expect(wrapper.find(MissionComplete).exists()).toBe(false)
-    wrapper.find(MuiAccordion).simulate('change')
-    expect(wrapper.find(MissionComplete).exists()).toBe(true)
+    expect(wrapper.find(MuiAccordion).at(1).prop('expanded')).toBe(false)
+    await act(async () => {
+      wrapper.find(ExpandMoreIcon).at(1).simulate('click')
+    })
+
+    wrapper.update()
+    expect(wrapper.find(MuiAccordion).at(1).prop('expanded')).toBe(true)
   })
   //   it('renders the new mission view when a user is not in a mission', () => {
   //     expect.assertions(2)

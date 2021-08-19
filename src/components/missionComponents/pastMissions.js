@@ -104,8 +104,8 @@ const PastMissionsComponent = ({
   const cx = useStyles()
   const [expanded, setExpanded] = useState('')
 
-  const handleChange = (panel) => (event, newExpanded) => {
-    setExpanded(newExpanded ? panel : false)
+  const handleChange = (panel) => {
+    setExpanded(expanded === panel ? false : panel)
   }
   // const getIcons = (userId, endOfMissionAwards) => {
   //   console.log(rest, endOfMissionAwards, 'what')
@@ -130,11 +130,6 @@ const PastMissionsComponent = ({
   //     })
   //   return <>{awardsForUser}</>
   // }
-  console.log(
-    JSON.stringify(edges),
-    JSON.stringify(currentMission),
-    'what i got in past missions'
-  )
   return (
     <Paper elevation={1} className={cx.topContainer}>
       <Typography classes={{ root: cx.titleFont }}>Past Missions</Typography>
@@ -168,12 +163,12 @@ const PastMissionsComponent = ({
         <div className={cx.noMissionsContainer}>
           {edges
             // .sort((a, b) => a.node.completed - b.node.completed)
-            .map(({ node, index }) => (
+            .map(({ node }, index) => (
               <Accordion
                 key={node.missionId}
                 square
                 expanded={expanded === `panel${index}`}
-                onChange={handleChange(`panel${index}`)}
+                onChange={() => handleChange(`panel${index}`)}
               >
                 <AccordionSummary
                   aria-controls="panel1d-content"

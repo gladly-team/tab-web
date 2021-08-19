@@ -87,7 +87,11 @@ AcheivementBadge.propTypes = {
   /**
          The award type
         */
-  awardType: PropTypes.string.isRequired,
+  awardType: PropTypes.oneOf([
+    'All-Star Fur Ball',
+    'Hot Paws',
+    'Consistent Kitty',
+  ]).isRequired,
 
   /**
          the core text in standard font with overflow 

@@ -363,6 +363,10 @@ describe('EmailInviteDialog component', () => {
     wrapper.update()
     emailInput.find('input').simulate('blur')
     wrapper.update()
+    const nameInput = wrapper.find(TextField).at(1)
+    nameInput.find('input').simulate('change', { target: { value: 'yolo' } })
+    nameInput.find('input').simulate('blur')
+    wrapper.update()
     wrapper.find(Button).simulate('click')
     wrapper.update()
     await act(async () => {
@@ -372,6 +376,38 @@ describe('EmailInviteDialog component', () => {
     })
     expect(wrapper.find(TextField).at(2).prop('value')).toBe('')
   })
+})
+it('fires the callback when emails are sent', async () => {
+  const MissionSocialShare = require('src/components/MissionComponents/MissionSocialShare')
+    .default
+  const mockProps = getMockProps()
+  CreateSquadInvitesMutation.mockReturnValue({
+    createSquadInvites: { currentMission: { squadId: 'someSquadId' } },
+  })
+  const wrapper = mount(
+    <ThemeProvider theme={theme}>
+      <MissionSocialShare {...mockProps} />
+    </ThemeProvider>
+  )
+  const emailInput = wrapper.find(TextField).at(2)
+  emailInput
+    .find('input')
+    .simulate('change', { target: { value: 'testdsf@gmail.com' } })
+  wrapper.update()
+  emailInput.find('input').simulate('blur')
+  const nameInput = wrapper.find(TextField).at(1)
+  nameInput.find('input').simulate('change', { target: { value: 'yolo' } })
+  nameInput.find('input').simulate('blur')
+  wrapper.update()
+  wrapper.update()
+  wrapper.find(Button).simulate('click')
+  wrapper.update()
+  await act(async () => {
+    await flushAllPromises()
+    await new Promise((r) => setTimeout(r, 2500))
+    wrapper.update()
+  })
+  expect(mockProps.emailSentCallback).toHaveBeenCalled()
 })
 describe('social share component', () => {
   it('shows the correct link', async () => {
