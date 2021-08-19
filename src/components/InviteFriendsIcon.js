@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import GroupAddIcon from '@material-ui/icons/GroupAdd'
 import { get } from 'lodash/object'
-import InviteFriends from 'src/components/InviteFriends'
 import EmailInviteDialog from 'src/components/EmailInviteDialog'
 import Dialog from '@material-ui/core/Dialog'
 
