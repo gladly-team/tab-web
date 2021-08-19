@@ -88,12 +88,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 const MissionComplete = ({ mission }) => {
   const {
-    tabCount = 0,
-    tabGoal = 1000,
-    squadMembers = [],
+    tabCount,
+    tabGoal,
+    squadMembers,
     started,
     completed,
-    endOfMissionAwards = [],
+    endOfMissionAwards,
   } = mission || {}
   const cx = useStyles()
   const daysToComplete = moment

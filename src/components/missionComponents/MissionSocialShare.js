@@ -289,10 +289,9 @@ MissionSocialShare.propTypes = {
   /**
     callback to be invoked when CreateSquadInvitesMutation returns
   */
-  emailSentCallback: PropTypes.func,
+  emailSentCallback: PropTypes.func.isRequired,
 }
 MissionSocialShare.defaultProps = {
   missionId: '',
-  emailSentCallback: () => {},
 }
 export default MissionSocialShare
