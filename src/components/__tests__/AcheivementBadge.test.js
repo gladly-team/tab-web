@@ -2,6 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from 'src/utils/theme'
+import Typography from '@material-ui/core/Typography'
 
 const mockProps = {
   stat: 20,

@@ -1,8 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import Button from '@material-ui/core/Button'
-
-// import Typography from '@material-ui/core/Typography'
 import preloadAll from 'jest-next-dynamic'
 import { act } from 'react-dom/test-utils'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -15,6 +13,7 @@ import CreateNewMissionMutation from 'src/utils/mutations/CreateNewMissionMutati
 import MissionSocialShare from 'src/components/missionComponents/MissionSocialShare'
 import TableRow from '@material-ui/core/TableRow'
 import MissionComplete from 'src/components/missionComponents/MissionComplete'
+import CurrentMission from 'src/components/missionComponents/CurrentMission'
 
 jest.mock('src/utils/mutations/CreateNewMissionMutation', () => jest.fn())
 jest.mock('src/components/InviteFriends', () => () => <div />)
@@ -136,8 +135,6 @@ beforeEach(async () => {
 
 describe('Current Mission component', () => {
   it('renders without error', () => {
-    const CurrentMission = require('src/components/missionComponents/CurrentMission')
-      .default
     const mockProps = mockPropsNoMission
     expect(() => {
       mount(
@@ -149,8 +146,6 @@ describe('Current Mission component', () => {
   })
   it('renders the new mission view when a user is not in a mission', () => {
     expect.assertions(2)
-    const CurrentMission = require('src/components/missionComponents/CurrentMission')
-      .default
     const mockProps = mockPropsNoMission
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -169,8 +164,6 @@ describe('Current Mission component', () => {
 
   it('validates the squad name when creating a squad', () => {
     expect.assertions(2)
-    const CurrentMission = require('src/components/missionComponents/CurrentMission')
-      .default
     const mockProps = mockPropsNoMission
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -190,8 +183,6 @@ describe('Current Mission component', () => {
 
   it('creates a squad and returns the id when a user enters a squad name and submits', async () => {
     expect.assertions(3)
-    const CurrentMission = require('src/components/missionComponents/CurrentMission')
-      .default
     CreateNewMissionMutation.mockReturnValue({
       createNewMission: { currentMission: '123' },
     })
@@ -219,8 +210,6 @@ describe('Current Mission component', () => {
 
   it('loads the email invite if a user has created a mission but hasnt invited anyone', async () => {
     expect.assertions(1)
-    const CurrentMission = require('src/components/missionComponents/CurrentMission')
-      .default
     CreateNewMissionMutation.mockReturnValue({
       createNewMission: { currentMission: '123' },
     })
@@ -235,8 +224,6 @@ describe('Current Mission component', () => {
 
   it('loads a progress bar if the mission is in progress', async () => {
     expect.assertions(2)
-    const CurrentMission = require('src/components/missionComponents/CurrentMission')
-      .default
     const mockProps = mockPropsMissionInProgress
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -249,8 +236,6 @@ describe('Current Mission component', () => {
 
   it('loads a table if the mission is in progress and has a row for every user plus title row', async () => {
     expect.assertions(3)
-    const CurrentMission = require('src/components/missionComponents/CurrentMission')
-      .default
     const mockProps = mockPropsMissionInProgress
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -264,8 +249,6 @@ describe('Current Mission component', () => {
 
   it('the add squad mate button is present for in progress missions and expands out to the mission invite component', async () => {
     expect.assertions(2)
-    const CurrentMission = require('src/components/missionComponents/CurrentMission')
-      .default
     const mockProps = mockPropsMissionInProgress
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -282,8 +265,6 @@ describe('Current Mission component', () => {
 
   it('when a mission is complete, the mission complete component is rendered', async () => {
     expect.assertions(2)
-    const CurrentMission = require('src/components/missionComponents/CurrentMission')
-      .default
     const mockProps = mockPropsMissionCompleted
     const wrapper = mount(
       <ThemeProvider theme={theme}>
