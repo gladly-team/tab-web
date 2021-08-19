@@ -9,9 +9,6 @@ import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import MissionComplete from 'src/components/MissionComponents/MissionComplete'
-import allStar from 'src/assets/images/allStar.svg'
-import consistentKitty from 'src/assets/images/consistentKitty.svg'
-import hotPaws from 'src/assets/images/hotPaws.svg'
 import clsx from 'clsx'
 import moment from 'moment'
 
@@ -103,37 +100,36 @@ const PastMissionsComponent = ({
     username,
     id,
   },
-  ...rest
 }) => {
   const cx = useStyles()
-  const [expanded, setExpanded] = React.useState('')
+  const [expanded, setExpanded] = useState('')
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false)
   }
-  const getIcons = (userId, endOfMissionAwards) => {
-    console.log(rest, endOfMissionAwards, 'what')
-    const awardsForUser = endOfMissionAwards
-      .filter((award) => award.user === userId)
-      .map(({ awardType }) => {
-        let awardImage
-        switch (awardType) {
-          case 'Hot Paws':
-            awardImage = hotPaws
-            break
-          case 'Consistent Kitty':
-            awardImage = consistentKitty
-            break
-          case 'All-Star Fur Ball':
-            awardImage = allStar
-            break
-          default:
-            break
-        }
-        return <img src={awardImage} alt={awardType} width="16px" />
-      })
-    return <>{awardsForUser}</>
-  }
+  // const getIcons = (userId, endOfMissionAwards) => {
+  //   console.log(rest, endOfMissionAwards, 'what')
+  //   const awardsForUser = endOfMissionAwards
+  //     .filter((award) => award.user === userId)
+  //     .map(({ awardType }) => {
+  //       let awardImage
+  //       switch (awardType) {
+  //         case 'Hot Paws':
+  //           awardImage = hotPaws
+  //           break
+  //         case 'Consistent Kitty':
+  //           awardImage = consistentKitty
+  //           break
+  //         case 'All-Star Fur Ball':
+  //           awardImage = allStar
+  //           break
+  //         default:
+  //           break
+  //       }
+  //       return <img src={awardImage} alt={awardType} width="16px" />
+  //     })
+  //   return <>{awardsForUser}</>
+  // }
   console.log(
     JSON.stringify(edges),
     JSON.stringify(currentMission),

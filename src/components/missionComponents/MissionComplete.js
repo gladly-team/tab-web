@@ -1,7 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-import clsx from 'clsx'
 import Typography from '@material-ui/core/Typography'
 import CustomAlert from 'src/components/CustomAlert'
 import trophyCat from 'src/assets/images/trophycat.svg'
@@ -9,6 +8,7 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import PersonalAcheivementCard from 'src/components/PersonalAcheivementCard'
 import AcheivementBadge from 'src/components/AcheivementBadge'
 import moment from 'moment'
+
 const AVERAGE_USER_TABS_DAY = 12
 const useStyles = makeStyles((theme) => ({
   topContainer: {

@@ -8,6 +8,7 @@ import { act } from 'react-dom/test-utils'
 import { ThemeProvider } from '@material-ui/core/styles'
 import NoCompletedMissions from 'src/assets/images/noCompletedMissions.svg'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import MuiAccordion from '@material-ui/core/Accordion'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
 import Table from '@material-ui/core/Table'
@@ -200,17 +201,20 @@ describe('Past Missions component', () => {
     }).not.toThrow()
   })
 
-  //   it('clicking on a completed mission shows mission details', () => {
-  //     const PastMissions = require('src/components/MissionComponents/PastMissions')
-  //       .default
-  //     const mockProps = mockPropsWithPastMissions
-  //     const wrapper = mount(
-  //         <ThemeProvider theme={theme}>
-  //           <PastMissions {...mockProps} />
-  //         </ThemeProvider>
-  //       )
-  //       const
-  //   })
+  it('clicking on a completed mission shows mission details', async () => {
+    expect.assertions(2)
+    const PastMissions = require('src/components/MissionComponents/PastMissions')
+      .default
+    const mockProps = mockPropsWithPastMissions
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <PastMissions {...mockProps} />
+      </ThemeProvider>
+    )
+    expect(wrapper.find(MissionComplete).exists()).toBe(false)
+    wrapper.find(MuiAccordion).simulate('change')
+    expect(wrapper.find(MissionComplete).exists()).toBe(true)
+  })
   //   it('renders the new mission view when a user is not in a mission', () => {
   //     expect.assertions(2)
   //     const PastMissions = require('src/components/MissionComponents/PastMissions')
