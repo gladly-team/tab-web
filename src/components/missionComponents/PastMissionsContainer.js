@@ -1,5 +1,5 @@
 import { createFragmentContainer, graphql } from 'react-relay'
-import PastMissions from 'src/components/MissionComponents/PastMissions'
+import PastMissions from 'src/components/missionComponents/PastMissions'
 
 export default createFragmentContainer(PastMissions, {
   user: graphql`

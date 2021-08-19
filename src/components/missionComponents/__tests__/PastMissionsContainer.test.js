@@ -8,10 +8,10 @@ afterEach(() => {
 describe('UserBackgroundImage container', () => {
   it('wraps the correct component', () => {
     const { createFragmentContainer } = require('react-relay')
-    const UserBackgroundImage = require('src/components/MissionComponents/PastMissions')
+    const UserBackgroundImage = require('src/components/missionComponents/PastMissions')
       .default
     // eslint-disable-next-line no-unused-expressions
-    require('src/components/MissionComponents/PastMissionsContainer').default
+    require('src/components/missionComponents/PastMissionsContainer').default
     expect(createFragmentContainer).toHaveBeenCalledWith(
       UserBackgroundImage,
       expect.any(Object)
