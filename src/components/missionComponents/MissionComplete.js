@@ -263,7 +263,7 @@ MissionComplete.propTypes = {
       PropTypes.shape({
         user: PropTypes.string,
         awardType: PropTypes.string,
-        unit: PropTypes.string,
+        unit: PropTypes.number,
       })
     ),
   }).isRequired,

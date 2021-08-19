@@ -12,7 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 jest.mock('src/utils/mutations/CreateNewMissionMutation', () => jest.fn())
 jest.mock('src/components/InviteFriends', () => () => <div />)
-jest.mock('src/components/MissionComponents/MissionComplete', () => () => (
+jest.mock('src/components/missionComponents/MissionComplete', () => () => (
   <div />
 ))
 jest.mock('src/utils/caching')
