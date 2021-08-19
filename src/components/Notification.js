@@ -14,28 +14,52 @@ const useStylesNotification = makeStyles(() => ({
     flexDirection: 'column',
     alignItems: 'flex-end',
   },
-  button: {
-    maxWidth: '78px',
+  buttons: {
+    flexDirection: 'row',
+  },
+  secondaryButton: {
+    marginRight: '8px',
   },
 }))
-const Notification = ({ buttonOnClick, text, buttonText, includeButton }) => {
+const Notification = ({
+  buttonOnClick,
+  text,
+  buttonText,
+  includeButton,
+  includeSecondaryButton,
+  secondaryButtonText,
+  secondaryButtonOnClick,
+  open,
+}) => {
   const classes = useStylesNotification()
-  return (
+  return open ? (
     <Paper className={classes.root}>
       {text}
-      {includeButton ? (
-        <Button
-          className={classes.button}
-          size="small"
-          variant="contained"
-          color="primary"
-          onClick={buttonOnClick}
-        >
-          {buttonText}
-        </Button>
-      ) : null}
+      <div className="buttons">
+        {includeSecondaryButton ? (
+          <Button
+            className={classes.secondaryButton}
+            size="small"
+            variant="outlined"
+            color="primary"
+            onClick={secondaryButtonOnClick}
+          >
+            {secondaryButtonText}
+          </Button>
+        ) : null}
+        {includeButton ? (
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={buttonOnClick}
+          >
+            {buttonText}
+          </Button>
+        ) : null}
+      </div>
     </Paper>
-  )
+  ) : null
 }
 Notification.displayName = 'Notification'
 Notification.propTypes = {
@@ -43,8 +67,16 @@ Notification.propTypes = {
   text: PropTypes.element.isRequired,
   buttonText: PropTypes.string.isRequired,
   includeButton: PropTypes.bool,
+  includeSecondaryButton: PropTypes.bool,
+  secondaryButtonText: PropTypes.string,
+  secondaryButtonOnClick: PropTypes.func,
+  open: PropTypes.bool,
 }
 Notification.defaultProps = {
   includeButton: true,
+  includeSecondaryButton: false,
+  secondaryButtonText: '',
+  secondaryButtonOnClick: () => {},
+  open: true,
 }
 export default Notification

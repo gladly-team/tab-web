@@ -19,6 +19,7 @@ import Dialog from '@material-ui/core/Dialog'
 import { get } from 'lodash/object'
 import localStorageMgr from 'src/utils/localstorage-mgr'
 import Link from 'src/components/Link'
+import MissionNotification from 'src/components/MissionNotification'
 
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
@@ -49,6 +50,7 @@ const UserImpact = ({ userImpact, user }) => {
     pendingUserReferralImpact,
     pendingUserReferralCount,
   } = userImpact
+  const { currentMission, pendingMissionInvites } = user
   const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
 
@@ -291,6 +293,11 @@ const UserImpact = ({ userImpact, user }) => {
           buttonOnClick={dismissCatDayNotification}
         />
       )}
+      <MissionNotification
+        userId={userId}
+        pendingMissionInvites={pendingMissionInvites}
+        currentMission={currentMission}
+      />
     </div>
   )
 }
@@ -310,6 +317,15 @@ UserImpact.propTypes = {
     id: PropTypes.string.isRequired,
     notifications: PropTypes.arrayOf(
       PropTypes.shape({ code: PropTypes.string })
+    ),
+    currentMission: PropTypes.shape({
+      missionId: PropTypes.string,
+    }),
+    pendingMissionInvites: PropTypes.arrayOf(
+      PropTypes.shape({
+        invitingUser: PropTypes.string,
+        missionId: PropTypes.string,
+      })
     ),
   }).isRequired,
 }
