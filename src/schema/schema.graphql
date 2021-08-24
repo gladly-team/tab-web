@@ -540,9 +540,13 @@ type failedEmailAddresses {
   error: String
 }
 
-type failedSquadEmailAddresses {
-  email: String
-  error: String
+"""inviting user"""
+type InvitingUser {
+  """inviting user user id"""
+  userId: String!
+
+  """the name entered in invite"""
+  name: String!
 }
 
 input LogEmailVerifiedMutationInput {
@@ -719,7 +723,7 @@ type MissionEdge {
   cursor: String!
 }
 
-"""whether a usuer has accepted rejected or is pending invitation"""
+"""whether a user has accepted rejected or is pending invitation"""
 enum missionStatus {
   pending
   started
@@ -785,6 +789,13 @@ type PageInfo {
 
   """When paginating forwards, the cursor to continue."""
   endCursor: String
+}
+
+"""pending mission invites for user"""
+type PendingMissionInvite {
+  """the mission id of the squad invite"""
+  missionId: String!
+  invitingUser: InvitingUser
 }
 
 type Query {
@@ -960,19 +971,14 @@ type SquadMemberInfo {
   """the most tabs in a single day"""
   missionMaxTabsDay: Int!
 
+  """the current tabs today"""
+  missionCurrentTabsDay: Int
+
   """users tab contribution"""
   tabs: Int!
 }
 
 type successfulEmailAddresses {
-  email: String
-}
-
-type successfulExistingUsers {
-  username: String
-}
-
-type successfulSquadEmailAddresses {
   email: String
 }
 
@@ -1162,6 +1168,7 @@ type User implements Node {
 
   """Actions the user has taken during experiments"""
   experimentActions: ExperimentActionsOutput
+  pendingMissionInvites: [PendingMissionInvite]!
 }
 
 """a user's charity specific impact"""

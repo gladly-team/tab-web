@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
 }))
-const MissionComplete = ({ mission }) => {
+const MissionComplete = ({ mission, user }) => {
   const {
     tabCount,
     tabGoal,
@@ -102,11 +102,9 @@ const MissionComplete = ({ mission }) => {
   const teamTabsPerDay = tabGoal / daysToComplete
   const teamRateOverTypicalUser =
     Math.round((teamTabsPerDay / AVERAGE_USER_TABS_DAY) * 10) / 10
-
-  //   const userStats = squadMembers.filter(
-  //   (item) => item.username === user.username
-  // )[0]
-
+  const userStats = squadMembers.filter(
+    (item) => item.username === user.username
+  )[0]
   return (
     <div className={cx.topContainer}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -174,28 +172,16 @@ const MissionComplete = ({ mission }) => {
             text={`Your team helped get a cat adopted ${teamRateOverTypicalUser} faster than a typical user`}
           />
           <PersonalAcheivementCard
-            title={`${squadMembers.length} Squad Mates`}
-            text="You completed your mission"
+            title={`${userStats.longestTabStreak} days`}
+            text={`You had a streak of ${userStats.longestTabStreak} days of tabbing!`}
           />
           <PersonalAcheivementCard
-            title={`${squadMembers.length} Squad Mates`}
-            text="You completed your mission"
+            title={`${userStats.tabs} tabs`}
+            text="How many tabs you opened throughout the mission"
           />
           <PersonalAcheivementCard
-            title={`${squadMembers.length} Squad Mates`}
-            text="You completed your mission"
-          />
-          <PersonalAcheivementCard
-            title={`${squadMembers.length} Squad Mates`}
-            text="You completed your mission"
-          />
-          <PersonalAcheivementCard
-            title={`${squadMembers.length} Squad Mates`}
-            text="You completed your mission"
-          />
-          <PersonalAcheivementCard
-            title={`${squadMembers.length} Squad Mates`}
-            text="You completed your mission"
+            title={`${userStats.missionMaxTabsDay} tabs`}
+            text="The most tabs you opened in a single day"
           />
         </div>
       </div>

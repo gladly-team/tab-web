@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
 import AddIcon from '@material-ui/icons/Add'
 import Typography from '@material-ui/core/Typography'
-import Accordion from '@material-ui/core/Accordion'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import AccordionDetails from '@material-ui/core/AccordionDetails'
-import AccordionSummary from '@material-ui/core/AccordionSummary'
+import MuiAccordion from '@material-ui/core/Accordion'
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
+import MuiAccordionDetails from '@material-ui/core/AccordionDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import Table from '@material-ui/core/Table'
@@ -26,6 +26,46 @@ import CustomAlert from 'src/components/CustomAlert'
 import MissionSocialShare from 'src/components/missionComponents/MissionSocialShare'
 import MissionComplete from 'src/components/missionComponents/MissionComplete'
 
+const Accordion = withStyles({
+  root: {
+    width: '100%',
+    borderBottom: 'none',
+    boxShadow: 'none',
+    '&:before': {
+      display: 'none',
+    },
+    '&$expanded': {
+      margin: 'auto',
+    },
+  },
+  expanded: {},
+})(MuiAccordion)
+
+const AccordionSummary = withStyles({
+  root: {
+    padding: '0px',
+    borderBottom: 'none',
+    marginBottom: -1,
+    minHeight: 56,
+    '&$expanded': {
+      minHeight: 56,
+    },
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    '&$expanded': {
+      margin: '12px 0',
+    },
+  },
+  expanded: {},
+})(MuiAccordionSummary)
+
+const AccordionDetails = withStyles((theme) => ({
+  root: {
+    padding: theme.spacing(0),
+  },
+}))(MuiAccordionDetails)
 const useStyles = makeStyles((theme) => ({
   topContainer: {
     width: '100%',
@@ -125,7 +165,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const CurrentMissionComponent = ({ user }) => {
-  // console.log(JSON.stringify(user.currentMission))
   const cx = useStyles()
   const [expanded, setExpanded] = useState(false)
   const [isAddSquadMateOpen, setIsAddSquadMateOpen] = useState(false)
@@ -173,8 +212,8 @@ const CurrentMissionComponent = ({ user }) => {
         invitedEmail,
         username: squadUserName,
         tabs = 0,
-        streak = 0,
-        tabsToday = 0,
+        currentTabStreak = 0,
+        missionCurrentTabsDay = 0,
       } = member
       const pivotedMemberData = {
         userStatus,
@@ -182,9 +221,9 @@ const CurrentMissionComponent = ({ user }) => {
           userStatus === 'accepted'
             ? squadUserName
             : `${invitedEmail || squadUserName} (awaiting response)`,
-        tabsToday,
+        tabsToday: missionCurrentTabsDay || 0,
         tabs,
-        streak,
+        streak: currentTabStreak || 0,
         contribution: `${Math.round((tabs / tabCount) * 100) || 0}%`,
       }
       tableData.push(pivotedMemberData)
@@ -192,7 +231,6 @@ const CurrentMissionComponent = ({ user }) => {
     }, [])
 
   const tableData = createTableData()
-
   return (
     <Paper elevation={1} className={cx.topContainer}>
       {status === 'completed' ? (
@@ -214,7 +252,7 @@ const CurrentMissionComponent = ({ user }) => {
                 <Typography className={cx.subtitleFont}>
                   A mission lets you work together with friends to help get a
                   shelter cat adopted! When you work together with your squad
-                  you can make a larger impact, sooner. read more
+                  you can make a larger impact, sooner.
                 </Typography>
               </AccordionSummary>
               <AccordionDetails>

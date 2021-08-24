@@ -22,18 +22,27 @@ const mockPropsMission = {
         invitedEmail: null,
         status: 'accepted',
         tabs: 234,
+        longestTabStreak: 10,
+        missionMaxTabsDay: 10,
+        currentTabStreak: 10,
       },
       {
         username: null,
         invitedEmail: 'alec+897234@tabforacause.org',
         status: 'pending',
         tabs: 0,
+        longestTabStreak: 10,
+        missionMaxTabsDay: 10,
+        currentTabStreak: 10,
       },
       {
         username: null,
         invitedEmail: 'alec+1s@tabforacause.org',
         status: 'pending',
         tabs: 0,
+        longestTabStreak: 10,
+        missionMaxTabsDay: 10,
+        currentTabStreak: 10,
       },
     ],
     endOfMissionAwards: [
@@ -50,7 +59,7 @@ const mockPropsMission = {
       },
     ],
   },
-  user: { username: 'test' },
+  user: { username: 'alec' },
 }
 
 beforeEach(async () => {

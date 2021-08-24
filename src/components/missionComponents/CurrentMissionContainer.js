@@ -19,6 +19,10 @@ export default createFragmentContainer(CurrentMission, {
           invitedEmail
           status
           tabs
+          longestTabStreak
+          currentTabStreak
+          missionMaxTabsDay
+          missionCurrentTabsDay
         }
         endOfMissionAwards {
           user
