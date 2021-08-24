@@ -27,6 +27,7 @@ import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
 
 import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
+import SquadCounter from 'src/components/SquadCounter'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -271,15 +272,10 @@ const getRelayQuery = async ({ AuthUser }) => {
           id
           hasViewedIntroFlow
           currentMission {
-            squadName
+            status
+            tabGoal
+            tabCount
             missionId
-          }
-          pastMissions {
-            edges {
-              node {
-                squadName
-              }
-            }
           }
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
@@ -328,6 +324,9 @@ const Index = ({ data: initialData }) => {
     }
   }, [])
   const { app, user, userImpact } = data || {}
+  const { currentMission } = user || {}
+  const { status: missionStatus = 'not started', tabCount, tabGoal } =
+    currentMission || {}
   const userGlobalId = get(user, 'id')
   const globalTabCount = get(user, 'tabs')
   const [tabId] = useState(uuid())
@@ -342,12 +341,14 @@ const Index = ({ data: initialData }) => {
   useEffect(() => {
     if (userGlobalId && tabId) {
       LogTabMutation(userGlobalId, tabId)
-      UpdateImpactMutation(userGlobalId, CAT_CHARITY, {
-        logImpact: true,
-      })
+      if (missionStatus === 'not started' || missionStatus === 'pending') {
+        UpdateImpactMutation(userGlobalId, CAT_CHARITY, {
+          logImpact: true,
+        })
+      }
       newTabView()
     }
-  }, [userGlobalId, tabId])
+  }, [userGlobalId, tabId, missionStatus])
 
   // log reddit and fbook event if first visit
   useEffect(() => {
@@ -459,14 +460,21 @@ const Index = ({ data: initialData }) => {
               </Link>
               <div className={classes.userMenuContainer}>
                 {showDevelopmentOnlyMissionsFeatureFlag ? (
-                  <MissionHubButton status="pending" />
+                  <MissionHubButton status={missionStatus} />
                 ) : (
                   <InviteFriendsIconContainer user={user} />
+                )}
+                {(missionStatus === 'started' ||
+                  missionStatus === 'completed') && (
+                  <SquadCounter
+                    progress={Math.round((tabCount / tabGoal) * 100)}
+                  />
                 )}
                 <UserImpactContainer
                   userId={userGlobalId}
                   userImpact={userImpact}
                   user={user}
+                  status={missionStatus}
                 />
                 <div className={classes.moneyRaisedContainer}>
                   <Typography

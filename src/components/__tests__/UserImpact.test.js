@@ -43,6 +43,7 @@ const getMockProps = (userImpactOverrides) => ({
     username: 'someUsername',
     notifications: [],
   },
+  status: 'not started',
 })
 beforeEach(async () => {
   jest.clearAllMocks()

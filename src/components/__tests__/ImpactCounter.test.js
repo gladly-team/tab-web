@@ -68,6 +68,17 @@ describe('ImpactCounter component', () => {
     )
   })
 
+  it('disables the button when disabled prop is passed in', () => {
+    const ImpactCounter = require('src/components/ImpactCounter').default
+    const mockProps = {
+      ...getMockProps(),
+      progress: 0,
+      disabled: true,
+    }
+    const wrapper = shallow(<ImpactCounter {...mockProps} />)
+    expect(wrapper.find(Button).prop('disabled')).toEqual(true)
+  })
+
   it('displays the popup when clicked on', () => {
     const ImpactCounter = require('src/components/ImpactCounter').default
     const defaultMockProps = getMockProps()

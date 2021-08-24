@@ -21,3 +21,11 @@ full.args = {
   number: 15,
   progress: 100,
 }
+
+export const disabled = Template.bind({})
+full.args = {
+  includeNumber: true,
+  number: 15,
+  progress: 100,
+  disabled: true,
+}
