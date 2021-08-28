@@ -377,9 +377,15 @@ input CreateSquadInvitesInput {
 
 type CreateSquadInvitesPayload {
   successfulEmailAddresses: [successfulSquadEmailAddresses]
-  existingUserInvited: [successfulExistingUsers]
+
+  """a list of invited emails for existing users"""
+  existingUserInvited: [String]
   failedEmailAddresses: [failedSquadEmailAddresses]
-  existingUserRejected: [rejectedExistingUsers]
+
+  """
+  a list of invited emails for existing users rejected bc they are already in a mission
+  """
+  existingUserRejected: [String]
   clientMutationId: String
 }
 
@@ -544,6 +550,15 @@ type failedEmailAddresses {
 type failedSquadEmailAddresses {
   email: String
   error: String
+}
+
+"""inviting user"""
+type InvitingUser {
+  """inviting user user id"""
+  userId: String!
+
+  """the name entered in invite"""
+  name: String!
 }
 
 input LogEmailVerifiedMutationInput {
@@ -714,7 +729,7 @@ type MissionEdge {
   cursor: String!
 }
 
-"""whether a usuer has accepted rejected or is pending invitation"""
+"""whether a user has accepted rejected or is pending invitation"""
 enum missionStatus {
   pending
   started
@@ -753,6 +768,7 @@ type Mutation {
   deleteUser(input: DeleteUserInput!): DeleteUserPayload
   squadInviteResponse(input: SquadInviteResponseInput!): SquadInviteResponsePayload
   updateMissionNotification(input: UpdateMissionNotificationInput!): UpdateMissionNotificationPayload
+  setHasSeenSquads(input: SetHasSeenSquadsInput!): SetHasSeenSquadsPayload
 }
 
 """An object with an ID"""
@@ -782,6 +798,13 @@ type PageInfo {
   endCursor: String
 }
 
+"""pending mission invites for user"""
+type PendingMissionInvite {
+  """the mission id of the squad invite"""
+  missionId: String!
+  invitingUser: InvitingUser
+}
+
 type Query {
   """Fetches an object given its ID"""
   node(
@@ -796,10 +819,6 @@ type Query {
 input ReferralData {
   referringUser: String
   referringChannel: String
-}
-
-type rejectedExistingUsers {
-  username: String
 }
 
 """Info about any rate-limiting for VC earned from search queries"""
@@ -830,6 +849,16 @@ input SetEmailInput {
 type SetEmailPayload {
   user: User
   errors: [CustomError]
+  clientMutationId: String
+}
+
+input SetHasSeenSquadsInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type SetHasSeenSquadsPayload {
+  user: User
   clientMutationId: String
 }
 
@@ -965,10 +994,6 @@ type SquadMemberInfo {
 
 type successfulEmailAddresses {
   email: String
-}
-
-type successfulExistingUsers {
-  username: String
 }
 
 type successfulSquadEmailAddresses {
@@ -1161,6 +1186,10 @@ type User implements Node {
 
   """Actions the user has taken during experiments"""
   experimentActions: ExperimentActionsOutput
+  pendingMissionInvites: [PendingMissionInvite]!
+
+  """Whether this user has seen any notification of the squads feature"""
+  hasSeenSquads: Boolean
 }
 
 """a user's charity specific impact"""
