@@ -20,7 +20,7 @@ export default createFragmentContainer(UserImpact, {
         code
       }
       currentMission {
-        acknowledgedMissionCompleted
+        acknowledgedMissionComplete
         acknowledgedMissionStarted
       }
     }
