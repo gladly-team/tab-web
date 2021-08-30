@@ -15,6 +15,8 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
       - run: yarn
+      - name: set up relay files
+        run: yarn run relay
         #👇 Adds Chromatic as a step in the workflow
       - uses: chromaui/action@v1
         # Options required for Chromatic's GitHub Action
