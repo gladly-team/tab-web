@@ -947,7 +947,7 @@ type Mission {
   """
   if a user has acknowledged mission complete
   """
-  acknowledgedMissionCompleted: Boolean!
+  acknowledgedMissionComplete: Boolean!
 
   """
   if a user has acknowledged mission started
