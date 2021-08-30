@@ -325,8 +325,12 @@ const Index = ({ data: initialData }) => {
   }, [])
   const { app, user, userImpact } = data || {}
   const { currentMission } = user || {}
-  const { status: missionStatus = 'not started', tabCount, tabGoal } =
-    currentMission || {}
+  const {
+    status: missionStatus = 'not started',
+    tabCount,
+    tabGoal,
+    missionId,
+  } = currentMission || {}
   const userGlobalId = get(user, 'id')
   const globalTabCount = get(user, 'tabs')
   const [tabId] = useState(uuid())
@@ -446,7 +450,10 @@ const Index = ({ data: initialData }) => {
           >
             <Logo style={{ height: 40 }} includeText />
           </div>
-          <OnboardingFlow onComplete={onCompletedOnboarding} />
+          <OnboardingFlow
+            onComplete={onCompletedOnboarding}
+            showMissionSlide={!!missionId}
+          />
         </div>
       ) : (
         <>

@@ -52,86 +52,84 @@ export const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const onboardingStepContents = (classes) => [
-  {
-    imageSrc: onboarding1,
-    title: 'Your tabs are doing great things',
-    children: (
-      <div>
-        <Typography
-          variant="body2"
-          align="center"
-          className={classes.childrenTypography}
-        >
-          Now, every tab you open supports cats in need.
-        </Typography>
-        <Typography
-          variant="body2"
-          align="center"
-          className={classes.childrenTypography}
-        >
-          Tabbers like you are supporting critical nonprofit work all around the
-          world. Thank you!
-        </Typography>
-      </div>
-    ),
-  },
-  {
-    imageSrc: onboarding2,
-    title: 'Make a difference right meow',
-    children: (
-      <div>
-        <Typography
-          variant="body2"
-          align="center"
-          className={classes.childrenTypography}
-        >
-          Your tabs support initiatives that help shelter cats get adopted,
-          including initiatives that{' '}
-          <Link
-            target="_blank"
-            to="https://greatergood.org/jackson-galaxy"
-            className={classes.link}
-          >
-            use treats in positive reinforcement training.
-          </Link>
-        </Typography>
-        <Typography
-          variant="body2"
-          align="center"
-          className={classes.childrenTypography}
-        >
-          In the first week, most people will raise enough to give a treat to 8
-          shelter cats!
-        </Typography>
-      </div>
-    ),
-  },
-  {
-    imageSrc: onboarding3,
-    title: "It doesn't cost you a thing",
-    children: (
-      <Typography
-        variant="body2"
-        align="center"
-        className={classes.childrenTypography}
-      >
-        Ads on the new tab page raise money that we give to nonprofits. Most ads
-        aren't good - but these ones are :)
-      </Typography>
-    ),
-  },
-]
-
-const OnboardingFlow = (props) => {
+const OnboardingFlow = ({ onComplete, showMissionSlide }) => {
   const classes = useStyles()
   const [onboardingStep, setOnboardingStep] = useState(0)
-  const onboardingStepContentsWithStyle = onboardingStepContents(classes)
-  const onboardingStepInfo = onboardingStepContentsWithStyle[onboardingStep]
-  const { onComplete } = props
+
+  const onboardingStepContents = [
+    {
+      imageSrc: onboarding1,
+      title: 'Your tabs are doing great things',
+      children: (
+        <div>
+          <Typography
+            variant="body2"
+            align="center"
+            className={classes.childrenTypography}
+          >
+            Now, every tab you open supports cats in need.
+          </Typography>
+          <Typography
+            variant="body2"
+            align="center"
+            className={classes.childrenTypography}
+          >
+            Tabbers like you are supporting critical nonprofit work all around
+            the world. Thank you!
+          </Typography>
+        </div>
+      ),
+    },
+    {
+      imageSrc: onboarding2,
+      title: 'Make a difference right meow',
+      children: (
+        <div>
+          <Typography
+            variant="body2"
+            align="center"
+            className={classes.childrenTypography}
+          >
+            Your tabs support initiatives that help shelter cats get adopted,
+            including initiatives that{' '}
+            <Link
+              target="_blank"
+              to="https://greatergood.org/jackson-galaxy"
+              className={classes.link}
+            >
+              use treats in positive reinforcement training.
+            </Link>
+          </Typography>
+          <Typography
+            variant="body2"
+            align="center"
+            className={classes.childrenTypography}
+          >
+            In the first week, most people will raise enough to give a treat to
+            8 shelter cats!
+          </Typography>
+        </div>
+      ),
+    },
+    {
+      imageSrc: onboarding3,
+      title: "It doesn't cost you a thing",
+      children: (
+        <Typography
+          variant="body2"
+          align="center"
+          className={classes.childrenTypography}
+        >
+          Ads on the new tab page raise money that we give to nonprofits. Most
+          ads aren't good - but these ones are :)
+        </Typography>
+      ),
+    },
+  ]
+  const onboardingStepInfo = onboardingStepContents[onboardingStep]
 
   const onNext = () => {
-    if (onboardingStep < onboardingStepContentsWithStyle.length - 1) {
+    if (onboardingStep < onboardingStepContents.length - 1) {
       setOnboardingStep(onboardingStep + 1)
     } else {
       onComplete()
