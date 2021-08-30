@@ -8,6 +8,8 @@ export default createFragmentContainer(CurrentMission, {
       id
       currentMission {
         squadName
+        started
+        completed
         missionId
         status
         tabGoal
@@ -17,6 +19,10 @@ export default createFragmentContainer(CurrentMission, {
           invitedEmail
           status
           tabs
+          longestTabStreak
+          currentTabStreak
+          missionMaxTabsDay
+          missionCurrentTabsDay
         }
         endOfMissionAwards {
           user

@@ -2,22 +2,29 @@ import React, { useEffect, useState, useRef, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { makeStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
 import IconButton from '@material-ui/core/IconButton'
+import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
 import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import { flowRight } from 'lodash/util'
 import Link from 'src/components/Link'
-import { withAuthUser, AuthAction, useAuthUser } from 'next-firebase-auth'
+import {
+  withAuthUser,
+  AuthAction,
+  withAuthUserTokenSSR,
+} from 'next-firebase-auth'
 import debounce from 'lodash/debounce'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import withRelay from 'src/utils/pageWrappers/withRelay'
 import useData from 'src/utils/hooks/useData'
+import FullPageLoader from 'src/components/FullPageLoader'
+import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
 import { dashboardURL } from 'src/utils/urls'
-import { withSentry } from 'src/utils/pageWrappers/withSentry'
-import CurrentMissionContainer from 'src/components/missionComponents/currentMissionContainer'
+import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
+import CurrentMissionContainer from 'src/components/missionComponents/CurrentMissionContainer'
+import PastMissionsContainer from 'src/components/missionComponents/PastMissionsContainer'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -81,17 +88,7 @@ const getRelayQuery = ({ AuthUser }) => ({
     query missionsQuery($userId: String!) {
       user(userId: $userId) {
         ...CurrentMissionContainer_user
-        currentMission {
-          squadName
-          missionId
-        }
-        pastMissions {
-          edges {
-            node {
-              squadName
-            }
-          }
-        }
+        ...PastMissionsContainer_user
         id
       }
     }
@@ -126,18 +123,16 @@ const Missions = ({ data: initialData }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedHandleOnSchroll = useMemo(() => debounce(handleOnScroll, 200))
   useEffect(() => {
-    // subscribe event
     // eslint-disable-next-line no-undef
     window.addEventListener('scroll', debouncedHandleOnSchroll, {
       passive: true,
     })
     return () => {
-      // unsubscribe event
       // eslint-disable-next-line no-undef
       window.removeEventListener('scroll', debouncedHandleOnSchroll)
     }
   }, [value, debouncedHandleOnSchroll])
-  const AuthUser = useAuthUser()
+
   const setChange = (event, newValue) => {
     // eslint-disable-next-line no-undef
     window.scrollTo({
@@ -149,6 +144,9 @@ const Missions = ({ data: initialData }) => {
       behavior: 'smooth',
     })
     setValue(newValue)
+  }
+  if (!data) {
+    return <FullPageLoader />
   }
   return (
     <div className={classes.pageContainer} data-test-id="missions-page">
@@ -192,22 +190,13 @@ const Missions = ({ data: initialData }) => {
         >
           <CurrentMissionContainer user={user} />
         </div>
-        <Paper
+        <div
           ref={pastMissionsSection}
-          elevation={1}
-          style={{
-            height: '800px',
-            width: '400px',
-            marginBottom: '1400px',
-            marginTop: '100px',
-          }}
+          style={{ width: '100%', marginTop: '16px' }}
         >
-          a
-        </Paper>
+          <PastMissionsContainer user={user} />
+        </div>
       </div>
-      {/* Squads topNav*/}
-      {/* Squads current Mission*/}
-      {/* past missions */}
     </div>
   )
 }
@@ -223,12 +212,22 @@ Missions.propTypes = {
   }),
 }
 Missions.defaultProps = {
-  data: undefined,
+  data: null,
 }
 
+export const getServerSideProps = flowRight([
+  logUncaughtErrors,
+  withAuthUserTokenSSR({
+    whenUnauthed: AuthAction.SHOW_LOADER,
+    LoaderComponent: FullPageLoader,
+  }),
+  withSentrySSR,
+  withDataSSR(getRelayQuery),
+])()
 export default flowRight([
   withAuthUser({
     whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+    LoaderComponent: FullPageLoader,
   }),
   withSentry,
   withRelay,

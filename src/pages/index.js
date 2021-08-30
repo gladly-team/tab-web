@@ -25,7 +25,7 @@ import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
 import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
 
-// import MissionHubButton from 'src/components/MissionHubButton'
+import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 
 // material components
@@ -45,7 +45,6 @@ import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntroFlowMutation'
-import CreateNewMissionMutation from 'src/utils/mutations/CreateNewMissionMutation'
 import { getHostname, getCurrentURL } from 'src/utils/navigation'
 import {
   getAdUnits,
@@ -58,6 +57,7 @@ import { accountURL, achievementsURL, surveyLink } from 'src/utils/urls'
 import {
   showMockAchievements,
   showBackgroundImages,
+  showDevelopmentOnlyMissionsFeature,
 } from 'src/utils/featureFlags'
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
@@ -311,6 +311,7 @@ const Index = ({ data: initialData }) => {
   })
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
+  const showDevelopmentOnlyMissionsFeatureFlag = showDevelopmentOnlyMissionsFeature()
 
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
@@ -457,11 +458,11 @@ const Index = ({ data: initialData }) => {
                 <Button className={classes.feedbackLink}>FEEDBACK</Button>
               </Link>
               <div className={classes.userMenuContainer}>
-                {/* <MissionHubButton
-                  status="pending"
-                  className={classes.missionHub}
-                /> */}
-                <InviteFriendsIconContainer user={user} />
+                {showDevelopmentOnlyMissionsFeatureFlag ? (
+                  <MissionHubButton status="pending" />
+                ) : (
+                  <InviteFriendsIconContainer user={user} />
+                )}
                 <UserImpactContainer
                   userId={userGlobalId}
                   userImpact={userImpact}

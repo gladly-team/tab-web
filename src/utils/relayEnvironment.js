@@ -74,7 +74,8 @@ const createFetchQuery = ({ getIdToken }) => {
     const token = await getIdToken()
     const body = JSON.stringify({
       query: operation.text, // GraphQL text from input
-      variables})
+      variables,
+    })
     const response = await fetch(relayEndpoint, {
       method: 'POST',
       headers: {
@@ -97,7 +98,11 @@ const createFetchQuery = ({ getIdToken }) => {
 
     // If the response is not a 200, throw.
     if (!response.ok) {
-      throw new Error(`Bad GraphQL response. ${JSON.stringify(responseJSON)}. Query Body: ${body}`)
+      throw new Error(
+        `Bad GraphQL response. ${JSON.stringify(
+          responseJSON
+        )}. Query Body: ${body}`
+      )
     }
 
     // If there are any errors returned from GraphQL, log them and throw.

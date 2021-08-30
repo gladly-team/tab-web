@@ -51,6 +51,15 @@ module.exports = {
         'react/jsx-props-no-spreading': 0,
       },
     },
+    {
+      files: ['**/*.stories.jsx'],
+      extends: ['airbnb', 'prettier'],
+      plugins: ['prettier', 'react-hooks'],
+      rules: {
+        'global-require': 0,
+        'react/jsx-props-no-spreading': 0,
+      },
+    },
   ],
   parserOptions: {
     ecmaVersion: 2021,

@@ -1,7 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import Button from '@material-ui/core/Button'
-import Link from 'src/components/Link'
 
 jest.mock('src/components/Link')
 const getMockProps = (status) => ({
@@ -25,7 +24,7 @@ describe('MissionHubButton component', () => {
 
   it('renders the correct text when no missions', () => {
     const MissionHubButton = require('src/components/MissionHubButton').default
-    const wrapper = mount(<MissionHubButton {...getMockProps('')} />)
+    const wrapper = mount(<MissionHubButton {...getMockProps('unstarted')} />)
     const missionButton = wrapper.find(Button)
     expect(missionButton.text()).toBe('create a squad')
   })

@@ -16,7 +16,6 @@ export default {
   },
 }
 
-// eslint-disable-next-line react/jsx-props-no-spreading
 const Template = (args) => <MissionHubButton {...args} />
 export const notStarted = Template.bind({})
 notStarted.args = {
