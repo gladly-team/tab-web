@@ -18,7 +18,7 @@
     "find-unused": "echo \"This will find unused files. However, note that it ignores mocks, tests, and utils in the testHelpers directory.\n\" && next-unused",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "chromatic": "npx chromatic --auto-accept-changes"
+    "chromatic": "dotenv-extended --defaults=./.env --path=./.env.local npx chromatic --auto-accept-changes"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
