@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
   },
 }))
-const UserImpact = ({ userImpact, user }) => {
+const UserImpact = ({ userImpact, user, status }) => {
   const {
     confirmedImpact,
     hasClaimedLatestReward,
@@ -179,6 +179,7 @@ const UserImpact = ({ userImpact, user }) => {
         />
       ) : null}
       <ImpactCounter
+        disabled={status === 'started' || status === 'completed'}
         includeNumber
         className={classes.impactCounter}
         number={userImpactMetric}
@@ -312,6 +313,7 @@ UserImpact.propTypes = {
       PropTypes.shape({ code: PropTypes.string })
     ),
   }).isRequired,
+  status: PropTypes.string.isRequired,
 }
 
 UserImpact.defaultProps = {}
