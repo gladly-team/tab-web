@@ -19,6 +19,10 @@ export default createFragmentContainer(UserImpact, {
       notifications {
         code
       }
+      currentMission {
+        acknowledgedMissionComplete
+        acknowledgedMissionStarted
+      }
     }
   `,
 })
