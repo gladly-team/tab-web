@@ -13,6 +13,7 @@ import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import Dialog from '@material-ui/core/Dialog'
 import localStorageMgr from 'src/utils/localstorage-mgr'
 import { INTL_CAT_DAY_END_2021_NOTIFICATION } from 'src/utils/constants'
+import MissionNotification from 'src/components/MissionNotification'
 
 jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('@material-ui/core/Typography')
@@ -394,6 +395,45 @@ describe('UserImpact component', () => {
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       INTL_CAT_DAY_END_2021_NOTIFICATION,
       'true'
+    )
+  })
+
+  it('does render MissionNotification with correct props', async () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = {
+      ...getMockProps(),
+      user: {
+        id: 'someId',
+        username: 'someUsername',
+        notifications: [],
+        currentMission: {
+          missionId: 'missionId',
+          status: 'pending',
+          squadName: 'brick squad',
+          tabGoal: 1000,
+          tabCount: 250,
+          acknowledgedMissionComplete: false,
+          acknowledgedMissionStarted: false,
+          squadMembers: [],
+          endOfMissionAwards: [],
+        },
+        pendingMissionInvites: [
+          {
+            invitingUser: 'jed',
+            missionId: '12345',
+          },
+        ],
+      },
+    }
+    const wrapper = shallow(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(MissionNotification).first()
+
+    expect(notification.prop('userId')).toEqual(mockProps.user.id)
+    expect(notification.prop('currentMission')).toEqual(
+      mockProps.user.currentMission
+    )
+    expect(notification.prop('pendingMissionInvites')).toEqual(
+      mockProps.user.pendingMissionInvites
     )
   })
 })
