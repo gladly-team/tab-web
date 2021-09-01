@@ -5,17 +5,16 @@ import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
-import onboarding1 from 'src/assets/onboarding/onboarding1.png'
-import onboarding2 from 'src/assets/onboarding/onboarding2.png'
-import onboarding3 from 'src/assets/onboarding/onboarding3.png'
+import onboarding1 from 'src/assets/onboarding/cattabs.svg'
+import onboarding2 from 'src/assets/onboarding/squadcat.svg'
+import onboarding3 from 'src/assets/onboarding/adcat.svg'
 import PropTypes from 'prop-types'
 import Link from 'src/components/Link'
 
 export const useStyles = makeStyles((theme) => ({
   card: {
     display: 'flex',
-    width: '400px',
-    height: '460px',
+    maxWidth: '500px',
     overflow: 'auto',
     boxShadow: 'none',
     backgroundColor: grey,
@@ -23,7 +22,6 @@ export const useStyles = makeStyles((theme) => ({
   cardContent: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
     alignItems: 'center',
     overflow: 'auto',
   },
@@ -37,7 +35,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   childrenTypography: {
     display: 'inline-block',
-    width: '100%',
+    width: '96%',
     margin: '6px',
   },
   cardButton: {
@@ -75,14 +73,23 @@ const OnboardingFlow = ({ onComplete, showMissionSlide }) => {
             className={classes.childrenTypography}
           >
             Tabbers like you are supporting critical nonprofit work all around
-            the world. Thank you!
+            the world. Your tabs support initiatives that help shelter cats get
+            adopted, including initiatives that{' '}
+            <Link
+              target="_blank"
+              to="https://greatergood.org/jackson-galaxy"
+              className={classes.link}
+            >
+              use treats in positive reinforcement training.
+            </Link>{' '}
+            Thank you!
           </Typography>
         </div>
       ),
     },
     {
       imageSrc: onboarding2,
-      title: 'Make a difference right meow',
+      title: 'Help more cats with Squads',
       children: (
         <div>
           <Typography
@@ -90,23 +97,17 @@ const OnboardingFlow = ({ onComplete, showMissionSlide }) => {
             align="center"
             className={classes.childrenTypography}
           >
-            Your tabs support initiatives that help shelter cats get adopted,
-            including initiatives that{' '}
-            <Link
-              target="_blank"
-              to="https://greatergood.org/jackson-galaxy"
-              className={classes.link}
-            >
-              use treats in positive reinforcement training.
-            </Link>
+            Cats can get adopted up to 3x faster when you join a Squads!
           </Typography>
           <Typography
             variant="body2"
             align="center"
             className={classes.childrenTypography}
           >
-            In the first week, most people will raise enough to give a treat to
-            8 shelter cats!
+            You and your friends can team up to help pay for a shelter cat’s
+            house training. Training a cat is the best way to help it find a
+            permanent home and it enriches the cat’s day to day life while in
+            the shelter.
           </Typography>
         </div>
       ),
@@ -129,7 +130,9 @@ const OnboardingFlow = ({ onComplete, showMissionSlide }) => {
   const onboardingStepInfo = onboardingStepContents[onboardingStep]
 
   const onNext = () => {
-    if (onboardingStep < onboardingStepContents.length - 1) {
+    if (onboardingStep === 0 && !showMissionSlide) {
+      setOnboardingStep(2)
+    } else if (onboardingStep < onboardingStepContents.length - 1) {
       setOnboardingStep(onboardingStep + 1)
     } else {
       onComplete()
@@ -165,6 +168,7 @@ export default OnboardingFlow
 OnboardingFlow.displayName = 'OnboardingFlow'
 OnboardingFlow.propTypes = {
   onComplete: PropTypes.func,
+  showMissionSlide: PropTypes.bool.isRequired,
 }
 OnboardingFlow.defaultProps = {
   onComplete: () => {},
