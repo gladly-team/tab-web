@@ -1,16 +1,18 @@
 import React, { useRef, useState } from 'react'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
-import PetsIcon from '@material-ui/icons/Pets'
+import SquadIcon from 'src/assets/icons/SquadIcon'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import DashboardPopover from 'src/components/DashboardPopover'
 import Button from '@material-ui/core/Button'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    width: 'fit-content',
+    marginRight: theme.spacing(2),
+    background: 'white',
+    height: '40px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -22,14 +24,15 @@ const useStyles = makeStyles(() => ({
       background: 'white',
     },
   },
-  petsIcon: {
+  squadsIcon: {
     position: 'relative',
-    marginLeft: '-32px',
+    marginLeft: theme.spacing(2),
     marginRight: '8px',
   },
-  counter: {
-    marginRight: '14px',
-    marginLeft: '14px',
+  progressBar: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(2),
+    width: '30px',
   },
   popoverText: {
     padding: 12,
@@ -38,33 +41,30 @@ const useStyles = makeStyles(() => ({
   popover: { marginTop: 10 },
 }))
 
-const ImpactCounter = (props) => {
+const SquadCounter = (props) => {
   const classes = useStyles()
 
-  const { includeNumber, number, progress, className, disabled } = props
+  const { progress, className } = props
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const counterRef = useRef(undefined)
 
   return (
-    <div onMouseEnter={disabled ? () => setIsPopoverOpen(true) : undefined}>
+    <div>
       <Button
-        disabled={disabled}
         disableElevation
         className={clsx(classes.root, className)}
-        ref={counterRef}
         onClick={() => setIsPopoverOpen(true)}
+        ref={counterRef}
       >
-        {includeNumber && (
-          <Typography className={classes.counter} variant="h5">
-            {number}
-          </Typography>
-        )}
-        <CircularProgress
-          color={disabled ? 'inherit' : 'primary'}
+        <SquadIcon className={classes.squadsIcon} viewBox="0 0 22 22" />
+        <Typography className={classes.counter} variant="h5">
+          {Math.floor(progress)}%
+        </Typography>
+        <LinearProgress
           variant="determinate"
-          value={progress === 0 ? 1 : progress}
+          value={progress}
+          classes={{ root: classes.progressBar }}
         />
-        <PetsIcon className={classes.petsIcon} />
       </Button>
       <DashboardPopover
         open={isPopoverOpen}
@@ -78,19 +78,19 @@ const ImpactCounter = (props) => {
           <Typography
             variant="body1"
             className={classes.dropdownText}
-            gutterBottom
             style={{ fontWeight: 'bold' }}
+            gutterBottom
           >
-            {disabled ? 'Your treats are still here' : 'Your pawsitive impact!'}
+            Your pawsitive impact!
           </Typography>
           <Typography
             variant="body2"
             className={classes.dropdownText}
             gutterBottom
           >
-            {disabled
-              ? 'Don’t worry, we’ve still got your treats! We just paused them while you and your squad complete your new mission.'
-              : 'This shows how many treats your tabs can provide to help shelter cats get adopted. Every tab you open helps. Keep it up!'}
+            {`Your squad completed ${Math.round(
+              progress
+            )}% of the goal to give a cat a training session! This helps them get adopted more quickly.`}
           </Typography>
         </div>
       </DashboardPopover>
@@ -98,34 +98,16 @@ const ImpactCounter = (props) => {
   )
 }
 
-ImpactCounter.propTypes = {
+SquadCounter.propTypes = {
   /**
-   Checks if the number of treats should be included
-  */
-  includeNumber: PropTypes.bool,
-
-  /**
-   whether impact counter is greyed out or not
-  */
-  disabled: PropTypes.bool,
-
-  /**
-   The amount of treats a person has earned
-  */
-  number: PropTypes.number,
-
-  /**
-   The progress to next treat as a number between 0 and 100 
+   The progress bar as a number between 0 and 100 
   */
   progress: PropTypes.number.isRequired,
   className: PropTypes.string,
 }
 
-ImpactCounter.defaultProps = {
-  includeNumber: false,
-  disabled: false,
-  number: 0,
+SquadCounter.defaultProps = {
   className: '',
 }
 
-export default ImpactCounter
+export default SquadCounter

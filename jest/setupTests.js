@@ -62,3 +62,4 @@ const mockLocalStorage = (() => {
 Object.defineProperty(global, 'localStorage', {
   value: mockLocalStorage,
 })
+global.scrollTo = jest.fn()

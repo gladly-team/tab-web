@@ -65,4 +65,8 @@ export const getReferralUrl = (username) => {
     : baseURL
   return referralUrl
 }
+export const getSquadsLink = (username, squadId) =>
+  `${baseURL}?u=${encodeURIComponent(username)}&m=${encodeURIComponent(
+    squadId
+  )}`
 export const surveyLink = 'https://forms.gle/WKNUZSamJQvT12b5A'

@@ -27,6 +27,7 @@ import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
 
 import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
+import SquadCounter from 'src/components/SquadCounter'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -270,6 +271,12 @@ const getRelayQuery = async ({ AuthUser }) => {
           vcCurrent
           id
           hasViewedIntroFlow
+          currentMission {
+            status
+            tabGoal
+            tabCount
+            missionId
+          }
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
           ...InviteFriendsIconContainer_user
@@ -317,6 +324,9 @@ const Index = ({ data: initialData }) => {
     }
   }, [])
   const { app, user, userImpact } = data || {}
+  const { currentMission } = user || {}
+  const { status: missionStatus = 'not started', tabCount, tabGoal } =
+    currentMission || {}
   const userGlobalId = get(user, 'id')
   const globalTabCount = get(user, 'tabs')
   const [tabId] = useState(uuid())
@@ -331,12 +341,19 @@ const Index = ({ data: initialData }) => {
   useEffect(() => {
     if (userGlobalId && tabId) {
       LogTabMutation(userGlobalId, tabId)
-      UpdateImpactMutation(userGlobalId, CAT_CHARITY, {
-        logImpact: true,
-      })
+
+      // this might seem confusing.  Right now we handle logging mission impact in the log tab mutation
+      // but we use update impact to update v4 impact if a user is not in a mission
+      // in the future we should handle both mission impact and individual v4 impact
+      // inside the update impact mutation
+      if (missionStatus === 'not started' || missionStatus === 'pending') {
+        UpdateImpactMutation(userGlobalId, CAT_CHARITY, {
+          logImpact: true,
+        })
+      }
       newTabView()
     }
-  }, [userGlobalId, tabId])
+  }, [userGlobalId, tabId, missionStatus])
 
   // log reddit and fbook event if first visit
   useEffect(() => {
@@ -448,14 +465,23 @@ const Index = ({ data: initialData }) => {
               </Link>
               <div className={classes.userMenuContainer}>
                 {showDevelopmentOnlyMissionsFeatureFlag ? (
-                  <MissionHubButton status="pending" />
+                  <MissionHubButton status={missionStatus} />
                 ) : (
                   <InviteFriendsIconContainer user={user} />
+                )}
+                {(missionStatus === 'started' ||
+                  missionStatus === 'completed') && (
+                  <SquadCounter
+                    progress={Math.floor((tabCount / tabGoal) * 100)}
+                  />
                 )}
                 <UserImpactContainer
                   userId={userGlobalId}
                   userImpact={userImpact}
                   user={user}
+                  disabled={
+                    missionStatus === 'started' || missionStatus === 'completed'
+                  }
                 />
                 <div className={classes.moneyRaisedContainer}>
                   <Typography

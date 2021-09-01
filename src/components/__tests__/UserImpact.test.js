@@ -43,6 +43,7 @@ const getMockProps = (userImpactOverrides) => ({
     username: 'someUsername',
     notifications: [],
   },
+  disabled: false,
 })
 beforeEach(async () => {
   jest.clearAllMocks()
@@ -303,7 +304,7 @@ describe('UserImpact component', () => {
     expect(confetti.create).toHaveBeenCalledTimes(1)
   })
 
-  it('does notlaunch the confetti if a user is not at 100% progress', async () => {
+  it('does not launch the confetti if a user is not at 100% progress', async () => {
     const UserImpact = require('src/components/UserImpact').default
     const mockProps = getMockProps({ visitsUntilNextImpact: 12 })
     mount(<UserImpact {...mockProps} />)

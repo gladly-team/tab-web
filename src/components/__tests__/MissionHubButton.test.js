@@ -24,7 +24,7 @@ describe('MissionHubButton component', () => {
 
   it('renders the correct text when no missions', () => {
     const MissionHubButton = require('src/components/MissionHubButton').default
-    const wrapper = mount(<MissionHubButton {...getMockProps('unstarted')} />)
+    const wrapper = mount(<MissionHubButton {...getMockProps('not started')} />)
     const missionButton = wrapper.find(Button)
     expect(missionButton.text()).toBe('create a squad')
   })
