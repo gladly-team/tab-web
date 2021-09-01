@@ -27,7 +27,7 @@ Tests for our pages are in the `src/__tests__` directory. Currently, Next.js doe
 
 ### Authentication
 
-We use Firebase JS SDK authentication as the source of truth for user authentication. When the Firebase auth state changes, we call an endpoint to set client-side cookies that Next.js uses for server-side rendering. We do not store any session state on the server side.
+We use Firebase JS SDK authentication as the source of truth for user authentication, using [`next-firebase-auth`](https://github.com/gladly-team/next-firebase-auth). When the Firebase auth state changes, we call an endpoint to set client-side cookies that Next.js uses for server-side rendering. We do not store any session state on the server side.
 
 Our app needs cookies set to `SameSite=None` because it may load in an iframe in the context of a browser extension new tab page.
 
