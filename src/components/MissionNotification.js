@@ -21,7 +21,12 @@ const useStyles = makeStyles(() => ({
 
 const MissionNotification = ({
   userId,
-  currentMission,
+  currentMission: {
+    status,
+    acknowledgedMissionComplete,
+    acknowledgedMissionStarted: acknowledgedMissionStart,
+    missionId: currentMissionId,
+  },
   pendingMissionInvites,
 }) => {
   const [open, setOpen] = useState(true)
@@ -47,14 +52,11 @@ const MissionNotification = ({
   }
 
   const classes = useStyles()
-
   let display = null
-  if (currentMission && !currentMission.acknowledgedMissionStarted) {
+  if (status !== 'pending' && !acknowledgedMissionStart) {
     display = DISPLAY_MISSION_STARTED
-  } else if (currentMission && !currentMission.acknowledgedMissionComplete) {
-    if (currentMission.status === 'completed') {
-      display = DISPLAY_MISSION_COMPLETED
-    }
+  } else if (status !== 'completed' && acknowledgedMissionComplete) {
+    display = DISPLAY_MISSION_COMPLETED
   } else if (pendingMissionInvites && pendingMissionInvites.length > 0) {
     display = DISPLAY_MISSION_INVITE
   }
@@ -71,8 +73,8 @@ const MissionNotification = ({
                 You got a Squad Invite!
               </Typography>
               <Typography variant="body2" gutterBottom>
-                {invite.invitingUser} sent you an invite to join their Squad!
-                Would you like to join them?
+                {invite.invitingUser.name} sent you an invite to join their
+                Squad! Would you like to join them?
               </Typography>
               <Typography variant="body2" gutterBottom>
                 With Squads, you and your friends raise money together to give a
@@ -105,8 +107,7 @@ const MissionNotification = ({
             </div>
           }
           buttonText="View Details"
-          buttonOnClick={() =>
-            acknowledgedMissionStarted(currentMission.missionId)}
+          buttonOnClick={() => acknowledgedMissionStarted(currentMissionId)}
         />
       )
     case DISPLAY_MISSION_COMPLETED:
@@ -126,8 +127,7 @@ const MissionNotification = ({
             </div>
           }
           buttonText="View Details"
-          buttonOnClick={() =>
-            acknowledgedMissionCompleted(currentMission.missionId)}
+          buttonOnClick={() => acknowledgedMissionCompleted(currentMissionId)}
         />
       )
     default:
