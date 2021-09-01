@@ -40,3 +40,4 @@ yalc.lock
 
 .vercel
 build-storybook.log
+.build-storybook.log
