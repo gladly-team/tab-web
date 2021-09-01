@@ -13,6 +13,7 @@ import { getSquadsLink } from 'src/utils/urls'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import CreateSquadInvitesMutation from 'src/utils/mutations/CreateSquadInvitesMutation'
+import logger from 'src/utils/logger'
 
 const useStyles = makeStyles((theme) => ({
   copyIcon: {
@@ -127,9 +128,9 @@ const MissionSocialShare = ({ emailSentCallback, missionId, user }) => {
         setName('')
         emailSentCallback(newCurrentMission)
       }, 2500)
-
-      // eslint-disable-next-line no-empty
-    } catch (e) {}
+    } catch (e) {
+      logger.error(e)
+    }
   }
   const referralUrl = getSquadsLink(username, missionId)
   const textFieldRef = useRef(null)
@@ -152,6 +153,8 @@ const MissionSocialShare = ({ emailSentCallback, missionId, user }) => {
     try {
       // eslint-disable-next-line no-undef
       document.execCommand('copy')
+
+      // "execCommand isn't supported by all browsers, but we're fine with it failing silently."
       // eslint-disable-next-line no-empty
     } catch (e) {}
   }

@@ -341,6 +341,11 @@ const Index = ({ data: initialData }) => {
   useEffect(() => {
     if (userGlobalId && tabId) {
       LogTabMutation(userGlobalId, tabId)
+
+      // this might seem confusing.  Right now we handle logging mission impact in the log tab mutation
+      // but we use update impact to update v4 impact if a user is not in a mission
+      // in the future we should handle both mission impact and individual v4 impact
+      // inside the update impact mutation
       if (missionStatus === 'not started' || missionStatus === 'pending') {
         UpdateImpactMutation(userGlobalId, CAT_CHARITY, {
           logImpact: true,
@@ -467,14 +472,16 @@ const Index = ({ data: initialData }) => {
                 {(missionStatus === 'started' ||
                   missionStatus === 'completed') && (
                   <SquadCounter
-                    progress={Math.round((tabCount / tabGoal) * 100)}
+                    progress={Math.floor((tabCount / tabGoal) * 100)}
                   />
                 )}
                 <UserImpactContainer
                   userId={userGlobalId}
                   userImpact={userImpact}
                   user={user}
-                  status={missionStatus}
+                  disabled={
+                    missionStatus === 'started' || missionStatus === 'completed'
+                  }
                 />
                 <div className={classes.moneyRaisedContainer}>
                   <Typography

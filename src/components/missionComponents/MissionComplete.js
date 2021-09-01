@@ -121,7 +121,7 @@ const MissionComplete = ({ mission, user }) => {
           <Typography className={cx.verticalSpacing}>
             With the help of{' '}
             <span style={{ fontWeight: 'bold' }}>
-              {squadMembers.length} others
+              {squadMembers.length} other{squadMembers.length === 1 ? '' : 's'}
             </span>
             , you got a cat a training session faster than the average
             individual tabber! That means more space at the shelter for other

@@ -11,6 +11,7 @@ import theme from 'src/utils/theme'
 import Fade from '@material-ui/core/Fade'
 
 jest.mock('src/utils/mutations/CreateSquadInvitesMutation')
+jest.mock('src/utils/logger')
 const getMockProps = () => ({
   user: {
     username: 'someUsername',

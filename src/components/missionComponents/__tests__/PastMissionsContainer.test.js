@@ -5,15 +5,15 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('UserBackgroundImage container', () => {
+describe('PastMissions container', () => {
   it('wraps the correct component', () => {
     const { createFragmentContainer } = require('react-relay')
-    const UserBackgroundImage = require('src/components/missionComponents/PastMissions')
+    const PastMissions = require('src/components/missionComponents/PastMissions')
       .default
     // eslint-disable-next-line no-unused-expressions
     require('src/components/missionComponents/PastMissionsContainer').default
     expect(createFragmentContainer).toHaveBeenCalledWith(
-      UserBackgroundImage,
+      PastMissions,
       expect.any(Object)
     )
   })
