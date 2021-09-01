@@ -20,6 +20,7 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
   // Before fetching data, wait for the AuthUser to initialize
   // if it's not not already available.
   const AuthUser = useAuthUser()
+  console.log(AuthUser)
   if (!AuthUser) {
     throw new Error(
       'The `useData` HOC should be wrapped in the `withAuthUser` HOC.'
@@ -77,6 +78,8 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
     }
   )
 
+  console.log(data)
+  console.log(error)
   return {
     data,
     error,
