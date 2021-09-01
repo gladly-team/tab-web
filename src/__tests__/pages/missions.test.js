@@ -77,7 +77,7 @@ describe('missions.js', () => {
     }).not.toThrow()
   })
 
-  it('renders a loading component (instead of the new tab page) if no initial data is provided', () => {
+  it('renders a loading component (instead of the mission page) if no initial data is provided', () => {
     expect.assertions(2)
     const MissionsPage = require('src/pages/missions').default
     const mockProps = {} // no initial data
@@ -91,7 +91,7 @@ describe('missions.js', () => {
     expect(wrapper.find('[data-test-id="missions-page"]').exists()).toBe(false)
   })
 
-  it('renders the new tab page (and stops showing a loader) after we fetch data', () => {
+  it('renders the mission page (and stops showing a loader) after we fetch data', () => {
     expect.assertions(2)
     const MissionsPage = require('src/pages/missions').default
     const mockProps = {} // no initial data
