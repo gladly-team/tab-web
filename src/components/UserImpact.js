@@ -61,7 +61,7 @@ const UserImpact = ({ userImpact, user, disabled }) => {
   const showSquadsIntroNotification =
     showDevelopmentOnlyMissionsFeature() &&
     !hasSeenSquads &&
-    userImpactMetric > 2
+    userImpactMetric >= 2
   const referralRewardNotificationOpen =
     pendingUserReferralImpact > 0 && pendingUserReferralCount > 0
   const prevVisitsUntilNextImpact = usePrevious(visitsUntilNextImpact)

@@ -99,6 +99,18 @@ describe('Notification component', () => {
     clickButton.simulate('click')
     expect(secondaryButtonOnClick).toHaveBeenCalled()
   })
+  it('calls secondaryButtonOnClick default value when second button is clicked', () => {
+    const Notification = require('src/components/Notification').default
+    const mockProps = {
+      ...getMockProps(),
+      includeSecondaryButton: true,
+      secondaryButtonText: 'secondButton',
+    }
+    const wrapper = shallow(<Notification {...mockProps} />)
+    expect(wrapper.find(Button).length).toBe(2)
+    const clickButton = wrapper.find(Button).first()
+    expect(() => clickButton.simulate('click')).not.toThrow()
+  })
 
   it('renders null if not open', () => {
     const Notification = require('src/components/Notification').default

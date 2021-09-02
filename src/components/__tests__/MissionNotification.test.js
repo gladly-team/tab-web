@@ -8,6 +8,7 @@ import Notification from '../Notification'
 import SquadInviteResponseMutation from '../../utils/mutations/SquadInviteResponseMutation'
 import UpdateMissionNotificationMutation from '../../utils/mutations/UpdateMissionNotificationMutation'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
+import IconButton from '@material-ui/core/IconButton'
 
 jest.mock('src/utils/mutations/SquadInviteResponseMutation')
 jest.mock('src/utils/mutations/UpdateMissionNotificationMutation')
@@ -136,7 +137,7 @@ describe('MissionNotification component', () => {
       .default
     const mockProps = getMockProps()
     const wrapper = mount(<MissionNotification {...mockProps} />)
-    let notification = wrapper.find(Notification).first()
+    const notification = wrapper.find(Notification).first()
 
     const clickButton = notification.find(Button).first()
     clickButton.simulate('click')
@@ -146,6 +147,21 @@ describe('MissionNotification component', () => {
       MISSION_STARTED
     )
     expect(goTo).toHaveBeenCalledWith(missionHubURL)
+  })
+  it('dismissing acknowledge mission started calls mutation and closes notification and does not redirect', () => {
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
+    const mockProps = getMockProps()
+    const wrapper = mount(<MissionNotification {...mockProps} />)
+    const closeButton = wrapper.find(IconButton).first()
+    closeButton.simulate('click')
+    wrapper.update()
+    expect(UpdateMissionNotificationMutation).toHaveBeenCalledWith(
+      mockProps.userId,
+      mockProps.currentMission.missionId,
+      MISSION_STARTED
+    )
+    expect(goTo).not.toHaveBeenCalledWith(missionHubURL)
   })
 
   it('displays acknowledge mission completed notification if applicable', () => {
@@ -192,7 +208,7 @@ describe('MissionNotification component', () => {
     }
 
     const wrapper = mount(<MissionNotification {...mockProps} />)
-    let notification = wrapper.find(Notification).first()
+    const notification = wrapper.find(Notification).first()
 
     const clickButton = notification.find(Button).first()
     clickButton.simulate('click')
@@ -202,6 +218,35 @@ describe('MissionNotification component', () => {
       MISSION_COMPLETE
     )
     expect(goTo).toHaveBeenCalledWith(missionHubURL)
+  })
+
+  it('dismissing acknowledge mission complete calls mutation and closes notification and does not redirect', () => {
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
+    const mockProps = {
+      ...getMockProps(),
+      currentMission: {
+        missionId: 'missionId',
+        status: 'completed',
+        squadName: 'brick squad',
+        tabGoal: 1000,
+        tabCount: 1000,
+        acknowledgedMissionComplete: false,
+        acknowledgedMissionStarted: true,
+        squadMembers: [],
+        endOfMissionAwards: [],
+      },
+    }
+    const wrapper = mount(<MissionNotification {...mockProps} />)
+    const closeButton = wrapper.find(IconButton).first()
+    closeButton.simulate('click')
+    wrapper.update()
+    expect(UpdateMissionNotificationMutation).toHaveBeenCalledWith(
+      mockProps.userId,
+      mockProps.currentMission.missionId,
+      MISSION_COMPLETE
+    )
+    expect(goTo).not.toHaveBeenCalledWith(missionHubURL)
   })
 
   it('displays nothing if in mission', () => {

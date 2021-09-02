@@ -112,13 +112,13 @@ const Missions = ({ data: initialData }) => {
       debounce(() => {
         if (
           // eslint-disable-next-line no-undef
-          window.pageYOffset > pastMissionsSection.current.offsetTop - 180 &&
+          window.pageYOffset > pastMissionsSection.current.offsetTop - 260 &&
           scrollIndex === 0
         ) {
           setScrollIndex(1)
         } else if (
           // eslint-disable-next-line no-undef
-          window.pageYOffset < pastMissionsSection.current.offsetTop - 180 &&
+          window.pageYOffset < pastMissionsSection.current.offsetTop - 260 &&
           scrollIndex === 1
         ) {
           setScrollIndex(0)

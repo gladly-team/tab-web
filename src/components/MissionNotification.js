@@ -145,6 +145,15 @@ const MissionNotification = ({
             acknowledgedMissionCompleted(currentMissionId)
             setOpen(false)
           }}
+          includeClose
+          onClose={() => {
+            UpdateMissionNotificationMutation(
+              userId,
+              currentMissionId,
+              MISSION_COMPLETE
+            )
+            setOpen(false)
+          }}
         />
       )
     default:
