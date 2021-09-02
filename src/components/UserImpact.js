@@ -6,6 +6,7 @@ import {
   CAT_IMPACT_VISITS,
   INTL_CAT_DAY_END_2021_NOTIFICATION,
 } from 'src/utils/constants'
+import { showDevelopmentOnlyMissionsFeature } from 'src/utils/featureFlags'
 import Notification from 'src/components/Notification'
 import ImpactCounter from 'src/components/ImpactCounter'
 import { Typography } from '@material-ui/core'
@@ -50,10 +51,13 @@ const UserImpact = ({ userImpact, user, disabled }) => {
     pendingUserReferralImpact,
     pendingUserReferralCount,
   } = userImpact
-  const { currentMission, pendingMissionInvites } = user
+  const { currentMission, pendingMissionInvites, hasSeenSquads } = user
   const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
-
+  const showSquadsIntroNotification =
+    showDevelopmentOnlyMissionsFeature() &&
+    !hasSeenSquads &&
+    userImpactMetric > 2
   const referralRewardNotificationOpen =
     pendingUserReferralImpact > 0 && pendingUserReferralCount > 0
   const prevVisitsUntilNextImpact = usePrevious(visitsUntilNextImpact)
@@ -294,6 +298,38 @@ const UserImpact = ({ userImpact, user, disabled }) => {
           buttonOnClick={dismissCatDayNotification}
         />
       )}
+      {showSquadsIntroNotification && (
+        <Notification
+          text={
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'space-between',
+              }}
+            >
+              <Typography variant="body2" gutterBottom>
+                Thank you to everyone who purr-ticipated in our International
+                Cat Day celebration! Thanks to all of you, we were able to
+                donate an extra $614 to The Jackson Galaxy Project.
+              </Typography>
+              <Typography variant="body2">
+                Need an extra dose of cuteness?{' '}
+                <Link
+                  target="_blank"
+                  to="https://www.instagram.com/p/CSo9-_tHquS/"
+                  className={classes.link}
+                >
+                  Check out our top 10 submissions
+                </Link>{' '}
+                from our #tabforcatsday photo challenge!
+              </Typography>
+            </div>
+          }
+          buttonText="Ok!"
+          buttonOnClick={dismissCatDayNotification}
+        />
+      )}
       <MissionNotification
         userId={userId}
         pendingMissionInvites={pendingMissionInvites}
@@ -329,6 +365,7 @@ UserImpact.propTypes = {
       })
     ),
   }).isRequired,
+  hasSeenSquads: PropTypes.bool,
   disabled: PropTypes.bool.isRequired,
 }
 

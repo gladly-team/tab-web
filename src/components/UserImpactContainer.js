@@ -32,6 +32,7 @@ export default createFragmentContainer(UserImpact, {
           name
         }
       }
+      hasSeenSquads
     }
   `,
 })
