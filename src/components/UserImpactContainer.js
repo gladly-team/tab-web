@@ -28,7 +28,6 @@ export default createFragmentContainer(UserImpact, {
       pendingMissionInvites {
         missionId
         invitingUser {
-          userId
           name
         }
       }

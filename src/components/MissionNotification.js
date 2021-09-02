@@ -21,19 +21,20 @@ const useStyles = makeStyles(() => ({
 
 const MissionNotification = ({
   userId,
-  currentMission: {
+  currentMission,
+  pendingMissionInvites,
+}) => {
+  const {
     status,
     acknowledgedMissionComplete,
     acknowledgedMissionStarted: acknowledgedMissionStart,
     missionId: currentMissionId,
-  },
-  pendingMissionInvites,
-}) => {
+  } = currentMission || {}
   const [open, setOpen] = useState(true)
 
-  const acceptSquadInvite = (missionId) => {
-    SquadInviteResponseMutation(userId, missionId, true)
-    setOpen(false)
+  const acceptSquadInvite = async (missionId) => {
+    await SquadInviteResponseMutation(userId, missionId, true)
+    goTo(missionHubURL)
   }
 
   const rejectSquadInvite = (missionId) => {
@@ -53,9 +54,10 @@ const MissionNotification = ({
 
   const classes = useStyles()
   let display = null
-  if (status !== 'pending' && !acknowledgedMissionStart) {
+  console.log(status, acknowledgedMissionComplete, acknowledgedMissionStart)
+  if (status === 'started' && !acknowledgedMissionStart) {
     display = DISPLAY_MISSION_STARTED
-  } else if (status !== 'completed' && acknowledgedMissionComplete) {
+  } else if (status === 'completed' && !acknowledgedMissionComplete) {
     display = DISPLAY_MISSION_COMPLETED
   } else if (pendingMissionInvites && pendingMissionInvites.length > 0) {
     display = DISPLAY_MISSION_INVITE
@@ -108,6 +110,15 @@ const MissionNotification = ({
           }
           buttonText="View Details"
           buttonOnClick={() => acknowledgedMissionStarted(currentMissionId)}
+          includeClose
+          onClose={() => {
+            UpdateMissionNotificationMutation(
+              userId,
+              currentMissionId,
+              MISSION_STARTED
+            )
+            setOpen(false)
+          }}
         />
       )
     case DISPLAY_MISSION_COMPLETED:
@@ -127,7 +138,10 @@ const MissionNotification = ({
             </div>
           }
           buttonText="View Details"
-          buttonOnClick={() => acknowledgedMissionCompleted(currentMissionId)}
+          buttonOnClick={() => {
+            acknowledgedMissionCompleted(currentMissionId)
+            setOpen(false)
+          }}
         />
       )
     default:
@@ -147,7 +161,7 @@ MissionNotification.propTypes = {
   pendingMissionInvites: PropTypes.arrayOf(
     PropTypes.shape({
       missionId: PropTypes.string,
-      invitingUser: PropTypes.string,
+      invitingUser: PropTypes.shape({ name: PropTypes.string }),
     })
   ),
 }

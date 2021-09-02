@@ -25,6 +25,7 @@ import { dashboardURL } from 'src/utils/urls'
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import CurrentMissionContainer from 'src/components/missionComponents/CurrentMissionContainer'
 import PastMissionsContainer from 'src/components/missionComponents/PastMissionsContainer'
+import SetHasSeenSquadsMutation from 'src/utils/mutations/SetHasSeenSquadsMutation'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -136,6 +137,12 @@ const Missions = ({ data: initialData }) => {
     }
   }, [scrollIndex, debouncedHandleOnSchroll])
 
+  // set that user has visited the squads page
+  useEffect(() => {
+    if (user.id && !user.hasSeenSquads) {
+      SetHasSeenSquadsMutation(user.id)
+    }
+  }, [user])
   const setChange = (event, newValue) => {
     // eslint-disable-next-line no-undef
     window.scrollTo({
@@ -206,6 +213,7 @@ Missions.propTypes = {
       email: PropTypes.string,
       id: PropTypes.string,
       username: PropTypes.string,
+      hasSeenSquads: PropTypes.bool,
     }),
   }),
 }

@@ -229,7 +229,6 @@ const CurrentMissionComponent = ({ user }) => {
       tableData.push(pivotedMemberData)
       return tableData
     }, [])
-
   const tableData = createTableData()
   return (
     <Paper elevation={1} className={cx.topContainer}>
@@ -360,7 +359,7 @@ const CurrentMissionComponent = ({ user }) => {
               <MissionSocialShare
                 user={{ username, id }}
                 emailSentCallback={onEmailsSent}
-                missionId={currentMission.id}
+                missionId={currentMission.missionId}
               />
             </div>
           )}
@@ -472,7 +471,7 @@ const CurrentMissionComponent = ({ user }) => {
                 <MissionSocialShare
                   user={{ username, id }}
                   emailSentCallback={onEmailsSent}
-                  missionId={currentMission.id}
+                  missionId={currentMission.missionId}
                 />
               )}
             </div>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
+import SetHasSeenSquadsMutation from 'src/utils/mutations/SetHasSeenSquadsMutation'
 import {
   CAT_CHARITY,
   CAT_IMPACT_VISITS,
@@ -21,6 +23,7 @@ import { get } from 'lodash/object'
 import localStorageMgr from 'src/utils/localstorage-mgr'
 import Link from 'src/components/Link'
 import MissionNotification from 'src/components/MissionNotification'
+import { missionHubURL } from 'src/utils/urls'
 
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
@@ -29,6 +32,7 @@ const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
 const useStyles = makeStyles((theme) => ({
   impactCounter: { backgroundColor: '#fff', marginRight: '15px' },
   rootModal: { zIndex: '10000000 !important', borderRadius: '5px' },
+  bold: { fontWeight: 'bold' },
   canvas: {
     position: 'absolute',
     top: 0,
@@ -73,6 +77,7 @@ const UserImpact = ({ userImpact, user, disabled }) => {
     showIntlCatDayEndNotification,
     setIntlCatDayEndNotification,
   ] = useState(false)
+  const router = useRouter()
   const confettiCanvasRef = useRef(null)
   const confettiFunc = () => {
     const myConfetti = confetti.create(confettiCanvasRef.current, {
@@ -171,6 +176,14 @@ const UserImpact = ({ userImpact, user, disabled }) => {
   const dismissCatDayNotification = () => {
     localStorageMgr.setItem(INTL_CAT_DAY_END_2021_NOTIFICATION, 'true')
     setIntlCatDayEndNotification(false)
+  }
+  const handleIntroducingSquads = (e) => {
+    e.preventDefault()
+    router.push(missionHubURL)
+    SetHasSeenSquadsMutation(userId)
+  }
+  const handleIntroducingSquadsClose = () => {
+    SetHasSeenSquadsMutation(userId)
   }
   const classes = useStyles()
   return (
@@ -301,33 +314,21 @@ const UserImpact = ({ userImpact, user, disabled }) => {
       {showSquadsIntroNotification && (
         <Notification
           text={
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'space-between',
-              }}
-            >
-              <Typography variant="body2" gutterBottom>
-                Thank you to everyone who purr-ticipated in our International
-                Cat Day celebration! Thanks to all of you, we were able to
-                donate an extra $614 to The Jackson Galaxy Project.
+            <div>
+              <Typography variant="body2" className={classes.bold} gutterBottom>
+                Introducing Squads!
               </Typography>
-              <Typography variant="body2">
-                Need an extra dose of cuteness?{' '}
-                <Link
-                  target="_blank"
-                  to="https://www.instagram.com/p/CSo9-_tHquS/"
-                  className={classes.link}
-                >
-                  Check out our top 10 submissions
-                </Link>{' '}
-                from our #tabforcatsday photo challenge!
+              <Typography variant="body2" gutterBottom>
+                Start a mission with your friends and work together to help get
+                a shelter cat adopted! When you work together with your squad
+                you can make a larger impact, sooner.
               </Typography>
             </div>
           }
-          buttonText="Ok!"
-          buttonOnClick={dismissCatDayNotification}
+          buttonText="Create A Squad"
+          buttonOnClick={handleIntroducingSquads}
+          onClose={handleIntroducingSquadsClose}
+          includeClose
         />
       )}
       <MissionNotification
@@ -360,12 +361,12 @@ UserImpact.propTypes = {
     }),
     pendingMissionInvites: PropTypes.arrayOf(
       PropTypes.shape({
-        invitingUser: PropTypes.string,
+        invitingUser: PropTypes.shape({ name: PropTypes.string }),
         missionId: PropTypes.string,
       })
     ),
+    hasSeenSquads: PropTypes.bool,
   }).isRequired,
-  hasSeenSquads: PropTypes.bool,
   disabled: PropTypes.bool.isRequired,
 }
 
