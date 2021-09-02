@@ -1,64 +1,60 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { onboardingStepContents } from 'src/components/OnboardingFlow'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import onboarding1 from 'src/assets/onboarding/cattabs.svg'
+import onboarding2 from 'src/assets/onboarding/squadcat.svg'
+import onboarding3 from 'src/assets/onboarding/adcat.svg'
 
 describe('OnboardingFlow component', () => {
   it('renders without error', () => {
     const OnboardingFlow = require('src/components/OnboardingFlow').default
     expect(() => {
-      shallow(<OnboardingFlow />)
+      shallow(<OnboardingFlow showMissionSlide={false} />)
     }).not.toThrow()
   })
 
   it('starting flow displays first onboarding card', () => {
     const OnboardingFlow = require('src/components/OnboardingFlow').default
-    const wrapper = shallow(<OnboardingFlow />)
-    const onboardingStep = onboardingStepContents({})[0]
-    const shallowItem = shallow(onboardingStep.children)
+    const wrapper = shallow(<OnboardingFlow showMissionSlide={false} />)
 
-    expect(wrapper.find('img').first().prop('src')).toEqual(
-      onboardingStep.imageSrc
-    )
+    expect(wrapper.find('img').first().prop('src')).toEqual(onboarding1)
     expect(wrapper.find(Typography).find({ variant: 'h5' }).text()).toEqual(
-      onboardingStep.title
+      'Your tabs are doing great things'
     )
-    const { length } = wrapper.find(Typography).find({ variant: 'body2' })
-    for (let i = 0; i < length; i += 1) {
-      expect(
-        wrapper.find(Typography).find({ variant: 'body2' }).get(i).props
-          .children
-      ).toEqual(
-        shallowItem.find(Typography).find({ variant: 'body2' }).get(i).props
-          .children
-      )
-    }
+    expect(
+      wrapper.find(Typography).find({ variant: 'body2' }).get(0).props.children
+    ).toEqual('Now, every tab you open supports cats in need.')
   })
 
-  it('component iterates through all onboarding cards', () => {
+  it('component shows mission slide if show Missions slide is enabled', () => {
     const OnboardingFlow = require('src/components/OnboardingFlow').default
-    const wrapper = shallow(<OnboardingFlow />)
-    const onboardingSteps = onboardingStepContents({})
+    const wrapper = shallow(<OnboardingFlow showMissionSlide />)
+    wrapper.find(Button).first().simulate('click')
+    expect(wrapper.find('img').first().prop('src')).toEqual(onboarding2)
+    expect(
+      wrapper.find(Typography).find({ variant: 'h5' }).at(0).text()
+    ).toEqual('Help more cats with Squads')
+  })
 
-    for (let i = 1; i < onboardingSteps.length; i += 1) {
-      wrapper.find(Button).first().simulate('click')
-      expect(wrapper.find('img').first().prop('src')).toEqual(
-        onboardingSteps[i].imageSrc
-      )
-      expect(wrapper.find(Typography).find({ variant: 'h5' }).text()).toEqual(
-        onboardingSteps[i].title
-      )
-    }
+  it('component does not show mission slide if show Missions slide is disabled', () => {
+    const OnboardingFlow = require('src/components/OnboardingFlow').default
+    const wrapper = shallow(<OnboardingFlow showMissionSlide={false} />)
+    wrapper.find(Button).first().simulate('click')
+    expect(wrapper.find('img').first().prop('src')).toEqual(onboarding3)
+    expect(
+      wrapper.find(Typography).find({ variant: 'h5' }).at(0).text()
+    ).toEqual("It doesn't cost you a thing")
   })
 
   it('component calls onComplete on after iterating through all steps', () => {
     const OnboardingFlow = require('src/components/OnboardingFlow').default
     const onCompleteFn = jest.fn()
-    const wrapper = shallow(<OnboardingFlow onComplete={onCompleteFn} />)
-    const onboardingSteps = onboardingStepContents({})
+    const wrapper = shallow(
+      <OnboardingFlow onComplete={onCompleteFn} showMissionSlide />
+    )
 
-    for (let i = 1; i < onboardingSteps.length; i += 1) {
+    for (let i = 1; i < 3; i += 1) {
       wrapper.find(Button).first().simulate('click')
       expect(onCompleteFn).not.toHaveBeenCalled()
     }

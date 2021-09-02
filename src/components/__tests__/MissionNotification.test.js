@@ -2,15 +2,16 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { Button, Typography } from '@material-ui/core'
 import { MISSION_STARTED, MISSION_COMPLETE } from 'src/utils/constants'
+import { goTo } from 'src/utils/navigation'
+import { missionHubURL } from 'src/utils/urls'
 import Notification from '../Notification'
 import SquadInviteResponseMutation from '../../utils/mutations/SquadInviteResponseMutation'
 import UpdateMissionNotificationMutation from '../../utils/mutations/UpdateMissionNotificationMutation'
-import { goTo } from 'src/utils/navigation'
-import { missionHubURL } from 'src/utils/urls'
+import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 
 jest.mock('src/utils/mutations/SquadInviteResponseMutation')
 jest.mock('src/utils/mutations/UpdateMissionNotificationMutation')
-jest.mock('src/utils/navigation')
+jest.mock('src/utils/navigation', () => ({ goTo: jest.fn() }))
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -20,7 +21,7 @@ const getMockProps = () => ({
   userId: 'abcdefghijklmno',
   currentMission: {
     missionId: 'missionId',
-    status: 'pending',
+    status: 'started',
     squadName: 'brick squad',
     tabGoal: 1000,
     tabCount: 250,
@@ -31,7 +32,7 @@ const getMockProps = () => ({
   },
   pendingMissionInvites: [
     {
-      invitingUser: 'jed',
+      invitingUser: { name: 'jed' },
       missionId: '12345',
     },
   ],
@@ -76,7 +77,7 @@ describe('MissionNotification component', () => {
     )
   })
 
-  it('calls accept invite if user clicks respective button, and closes notification', () => {
+  it('calls accept invite if user clicks respective button, and redirects to mission hub', async () => {
     const MissionNotification = require('src/components/MissionNotification')
       .default
     const mockProps = {
@@ -84,7 +85,7 @@ describe('MissionNotification component', () => {
       currentMission: null,
     }
     const wrapper = mount(<MissionNotification {...mockProps} />)
-    let notification = wrapper.find(Notification).first()
+    const notification = wrapper.find(Notification).first()
     const acceptButton = notification.find(Button).last()
     const pendingInvite = mockProps.pendingMissionInvites[0]
     acceptButton.simulate('click')
@@ -93,8 +94,9 @@ describe('MissionNotification component', () => {
       pendingInvite.missionId,
       true
     )
-    notification = wrapper.find(Notification).first()
-    expect(notification.prop('open')).toEqual(false)
+    await flushAllPromises()
+    wrapper.update()
+    expect(goTo).toHaveBeenCalled()
   })
 
   it('calls reject invite if user clicks respective button, and closes notification', () => {

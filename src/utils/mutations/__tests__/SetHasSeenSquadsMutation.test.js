@@ -16,9 +16,7 @@ describe('SetHasSeenSquadsMutation', () => {
     expect.assertions(1)
     const SetHasSeenSquadsMutation = require('src/utils/mutations/SetHasSeenSquadsMutation')
       .default
-    await SetHasSeenSquadsMutation({
-      userId: 'some-user-id',
-    })
+    await SetHasSeenSquadsMutation('some-user-id')
     expect(callMutation).toHaveBeenCalledWith({
       mutation: expect.any(Object),
       variables: {
@@ -34,9 +32,7 @@ describe('SetHasSeenSquadsMutation', () => {
     const SetHasSeenSquadsMutation = require('src/utils/mutations/SetHasSeenSquadsMutation')
       .default
     callMutation.mockResolvedValue({ hi: 'there' })
-    const response = await SetHasSeenSquadsMutation({
-      userId: 'some-user-id',
-    })
+    const response = await SetHasSeenSquadsMutation('some-user-id')
     expect(response).toEqual({ hi: 'there' })
   })
 })

@@ -139,7 +139,7 @@ const Missions = ({ data: initialData }) => {
 
   // set that user has visited the squads page
   useEffect(() => {
-    if (user.id && !user.hasSeenSquads) {
+    if (user && user.id && !user.hasSeenSquads) {
       SetHasSeenSquadsMutation(user.id)
     }
   }, [user])

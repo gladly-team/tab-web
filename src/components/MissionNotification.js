@@ -54,12 +54,15 @@ const MissionNotification = ({
 
   const classes = useStyles()
   let display = null
-  console.log(status, acknowledgedMissionComplete, acknowledgedMissionStart)
   if (status === 'started' && !acknowledgedMissionStart) {
     display = DISPLAY_MISSION_STARTED
   } else if (status === 'completed' && !acknowledgedMissionComplete) {
     display = DISPLAY_MISSION_COMPLETED
-  } else if (pendingMissionInvites && pendingMissionInvites.length > 0) {
+  } else if (
+    status !== 'pending' &&
+    pendingMissionInvites &&
+    pendingMissionInvites.length > 0
+  ) {
     display = DISPLAY_MISSION_INVITE
   }
 

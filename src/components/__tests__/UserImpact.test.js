@@ -419,7 +419,7 @@ describe('UserImpact component', () => {
         },
         pendingMissionInvites: [
           {
-            invitingUser: 'jed',
+            invitingUser: { name: 'jed' },
             missionId: '12345',
           },
         ],
