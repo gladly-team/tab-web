@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
+import SetHasSeenSquadsMutation from 'src/utils/mutations/SetHasSeenSquadsMutation'
 import {
   CAT_CHARITY,
   CAT_IMPACT_VISITS,
   INTL_CAT_DAY_END_2021_NOTIFICATION,
 } from 'src/utils/constants'
+import { showDevelopmentOnlyMissionsFeature } from 'src/utils/featureFlags'
 import Notification from 'src/components/Notification'
 import ImpactCounter from 'src/components/ImpactCounter'
 import { Typography } from '@material-ui/core'
@@ -19,6 +22,8 @@ import Dialog from '@material-ui/core/Dialog'
 import { get } from 'lodash/object'
 import localStorageMgr from 'src/utils/localstorage-mgr'
 import Link from 'src/components/Link'
+import MissionNotification from 'src/components/MissionNotification'
+import { missionHubURL } from 'src/utils/urls'
 
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
@@ -27,6 +32,7 @@ const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
 const useStyles = makeStyles((theme) => ({
   impactCounter: { backgroundColor: '#fff', marginRight: '15px' },
   rootModal: { zIndex: '10000000 !important', borderRadius: '5px' },
+  bold: { fontWeight: 'bold' },
   canvas: {
     position: 'absolute',
     top: 0,
@@ -49,9 +55,13 @@ const UserImpact = ({ userImpact, user, disabled }) => {
     pendingUserReferralImpact,
     pendingUserReferralCount,
   } = userImpact
+  const { currentMission, pendingMissionInvites, hasSeenSquads } = user
   const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
-
+  const showSquadsIntroNotification =
+    showDevelopmentOnlyMissionsFeature() &&
+    !hasSeenSquads &&
+    userImpactMetric >= 2
   const referralRewardNotificationOpen =
     pendingUserReferralImpact > 0 && pendingUserReferralCount > 0
   const prevVisitsUntilNextImpact = usePrevious(visitsUntilNextImpact)
@@ -67,6 +77,7 @@ const UserImpact = ({ userImpact, user, disabled }) => {
     showIntlCatDayEndNotification,
     setIntlCatDayEndNotification,
   ] = useState(false)
+  const router = useRouter()
   const confettiCanvasRef = useRef(null)
   const confettiFunc = () => {
     const myConfetti = confetti.create(confettiCanvasRef.current, {
@@ -165,6 +176,14 @@ const UserImpact = ({ userImpact, user, disabled }) => {
   const dismissCatDayNotification = () => {
     localStorageMgr.setItem(INTL_CAT_DAY_END_2021_NOTIFICATION, 'true')
     setIntlCatDayEndNotification(false)
+  }
+  const handleIntroducingSquads = (e) => {
+    e.preventDefault()
+    router.push(missionHubURL)
+    SetHasSeenSquadsMutation(userId)
+  }
+  const handleIntroducingSquadsClose = () => {
+    SetHasSeenSquadsMutation(userId)
   }
   const classes = useStyles()
   return (
@@ -292,6 +311,31 @@ const UserImpact = ({ userImpact, user, disabled }) => {
           buttonOnClick={dismissCatDayNotification}
         />
       )}
+      {showSquadsIntroNotification && (
+        <Notification
+          text={
+            <div>
+              <Typography variant="body2" className={classes.bold} gutterBottom>
+                Introducing Squads!
+              </Typography>
+              <Typography variant="body2" gutterBottom>
+                Start a mission with your friends and work together to help get
+                a shelter cat adopted! When you work together with your squad
+                you can make a larger impact, sooner.
+              </Typography>
+            </div>
+          }
+          buttonText="Create A Squad"
+          buttonOnClick={handleIntroducingSquads}
+          onClose={handleIntroducingSquadsClose}
+          includeClose
+        />
+      )}
+      <MissionNotification
+        userId={userId}
+        pendingMissionInvites={pendingMissionInvites}
+        currentMission={currentMission}
+      />
     </div>
   )
 }
@@ -312,6 +356,16 @@ UserImpact.propTypes = {
     notifications: PropTypes.arrayOf(
       PropTypes.shape({ code: PropTypes.string })
     ),
+    currentMission: PropTypes.shape({
+      missionId: PropTypes.string,
+    }),
+    pendingMissionInvites: PropTypes.arrayOf(
+      PropTypes.shape({
+        invitingUser: PropTypes.shape({ name: PropTypes.string }),
+        missionId: PropTypes.string,
+      })
+    ),
+    hasSeenSquads: PropTypes.bool,
   }).isRequired,
   disabled: PropTypes.bool.isRequired,
 }

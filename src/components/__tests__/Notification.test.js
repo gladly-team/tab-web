@@ -58,4 +58,67 @@ describe('Notification component', () => {
     )
     expect(wrapper.find(Button).length).toBe(0)
   })
+
+  it('does not render a second button if includeSecondaryButton is set to false/unset', () => {
+    const Notification = require('src/components/Notification').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<Notification {...mockProps} />)
+
+    // Renders only the first button
+    expect(wrapper.find(Button).length).toBe(1)
+  })
+
+  it('does render a second button if includeSecondaryButton is set to true', () => {
+    const Notification = require('src/components/Notification').default
+    const secondaryButtonOnClick = jest.fn()
+    const mockProps = {
+      ...getMockProps(),
+      includeSecondaryButton: true,
+      secondaryButtonOnClick,
+      secondaryButtonText: 'secondButton',
+    }
+    const wrapper = shallow(<Notification {...mockProps} />)
+    expect(wrapper.find(Button).length).toBe(2)
+    const clickButton = wrapper.find(Button).first()
+    expect(clickButton.text()).toEqual('secondButton')
+  })
+
+  it('calls secondaryButtonOnClick prop when second button is clicked', () => {
+    const Notification = require('src/components/Notification').default
+    const secondaryButtonOnClick = jest.fn()
+    const mockProps = {
+      ...getMockProps(),
+      includeSecondaryButton: true,
+      secondaryButtonOnClick,
+      secondaryButtonText: 'secondButton',
+    }
+    const wrapper = shallow(<Notification {...mockProps} />)
+    expect(wrapper.find(Button).length).toBe(2)
+    const clickButton = wrapper.find(Button).first()
+    expect(secondaryButtonOnClick).not.toHaveBeenCalled()
+    clickButton.simulate('click')
+    expect(secondaryButtonOnClick).toHaveBeenCalled()
+  })
+  it('calls secondaryButtonOnClick default value when second button is clicked', () => {
+    const Notification = require('src/components/Notification').default
+    const mockProps = {
+      ...getMockProps(),
+      includeSecondaryButton: true,
+      secondaryButtonText: 'secondButton',
+    }
+    const wrapper = shallow(<Notification {...mockProps} />)
+    expect(wrapper.find(Button).length).toBe(2)
+    const clickButton = wrapper.find(Button).first()
+    expect(() => clickButton.simulate('click')).not.toThrow()
+  })
+
+  it('renders null if not open', () => {
+    const Notification = require('src/components/Notification').default
+    const mockProps = {
+      ...getMockProps(),
+      open: false,
+    }
+    const wrapper = shallow(<Notification {...mockProps} />)
+    expect(wrapper.type()).toEqual(null)
+  })
 })

@@ -5,17 +5,16 @@ import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
-import onboarding1 from 'src/assets/onboarding/onboarding1.png'
-import onboarding2 from 'src/assets/onboarding/onboarding2.png'
-import onboarding3 from 'src/assets/onboarding/onboarding3.png'
+import onboarding1 from 'src/assets/onboarding/cattabs.svg'
+import onboarding2 from 'src/assets/onboarding/squadcat.svg'
+import onboarding3 from 'src/assets/onboarding/adcat.svg'
 import PropTypes from 'prop-types'
 import Link from 'src/components/Link'
 
 export const useStyles = makeStyles((theme) => ({
   card: {
     display: 'flex',
-    width: '400px',
-    height: '460px',
+    maxWidth: '500px',
     overflow: 'auto',
     boxShadow: 'none',
     backgroundColor: grey,
@@ -23,7 +22,6 @@ export const useStyles = makeStyles((theme) => ({
   cardContent: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
     alignItems: 'center',
     overflow: 'auto',
   },
@@ -37,7 +35,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   childrenTypography: {
     display: 'inline-block',
-    width: '100%',
+    width: '96%',
     margin: '6px',
   },
   cardButton: {
@@ -52,86 +50,89 @@ export const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export const onboardingStepContents = (classes) => [
-  {
-    imageSrc: onboarding1,
-    title: 'Your tabs are doing great things',
-    children: (
-      <div>
-        <Typography
-          variant="body2"
-          align="center"
-          className={classes.childrenTypography}
-        >
-          Now, every tab you open supports cats in need.
-        </Typography>
-        <Typography
-          variant="body2"
-          align="center"
-          className={classes.childrenTypography}
-        >
-          Tabbers like you are supporting critical nonprofit work all around the
-          world. Thank you!
-        </Typography>
-      </div>
-    ),
-  },
-  {
-    imageSrc: onboarding2,
-    title: 'Make a difference right meow',
-    children: (
-      <div>
-        <Typography
-          variant="body2"
-          align="center"
-          className={classes.childrenTypography}
-        >
-          Your tabs support initiatives that help shelter cats get adopted,
-          including initiatives that{' '}
-          <Link
-            target="_blank"
-            to="https://greatergood.org/jackson-galaxy"
-            className={classes.link}
-          >
-            use treats in positive reinforcement training.
-          </Link>
-        </Typography>
-        <Typography
-          variant="body2"
-          align="center"
-          className={classes.childrenTypography}
-        >
-          In the first week, most people will raise enough to give a treat to 8
-          shelter cats!
-        </Typography>
-      </div>
-    ),
-  },
-  {
-    imageSrc: onboarding3,
-    title: "It doesn't cost you a thing",
-    children: (
-      <Typography
-        variant="body2"
-        align="center"
-        className={classes.childrenTypography}
-      >
-        Ads on the new tab page raise money that we give to nonprofits. Most ads
-        aren't good - but these ones are :)
-      </Typography>
-    ),
-  },
-]
-
-const OnboardingFlow = (props) => {
+const OnboardingFlow = ({ onComplete, showMissionSlide }) => {
   const classes = useStyles()
   const [onboardingStep, setOnboardingStep] = useState(0)
-  const onboardingStepContentsWithStyle = onboardingStepContents(classes)
-  const onboardingStepInfo = onboardingStepContentsWithStyle[onboardingStep]
-  const { onComplete } = props
+
+  const onboardingStepContents = [
+    {
+      imageSrc: onboarding1,
+      title: 'Your tabs are doing great things',
+      children: (
+        <div>
+          <Typography
+            variant="body2"
+            align="center"
+            className={classes.childrenTypography}
+          >
+            Now, every tab you open supports cats in need.
+          </Typography>
+          <Typography
+            variant="body2"
+            align="center"
+            className={classes.childrenTypography}
+          >
+            Tabbers like you are supporting critical nonprofit work all around
+            the world. Your tabs support initiatives that help shelter cats get
+            adopted, including initiatives that{' '}
+            <Link
+              target="_blank"
+              to="https://greatergood.org/jackson-galaxy"
+              className={classes.link}
+            >
+              use treats in positive reinforcement training.
+            </Link>{' '}
+            Thank you!
+          </Typography>
+        </div>
+      ),
+    },
+    {
+      imageSrc: onboarding2,
+      title: 'Help more cats with Squads',
+      children: (
+        <div>
+          <Typography
+            variant="body2"
+            align="center"
+            className={classes.childrenTypography}
+          >
+            Cats can get adopted up to 3x faster when you join a Squads!
+          </Typography>
+          <Typography
+            variant="body2"
+            align="center"
+            className={classes.childrenTypography}
+          >
+            You and your friends can team up to help pay for a shelter cat’s
+            house training. Training a cat is the best way to help it find a
+            permanent home and it enriches the cat’s day to day life while in
+            the shelter.
+          </Typography>
+        </div>
+      ),
+    },
+    {
+      imageSrc: onboarding3,
+      title: "It doesn't cost you a thing",
+      children: (
+        <Typography
+          variant="body2"
+          align="center"
+          className={classes.childrenTypography}
+        >
+          Ads on the new tab page raise money that we give to nonprofits. Most
+          ads aren't good - but these ones are :)
+        </Typography>
+      ),
+    },
+  ]
+  const onboardingStepInfo = onboardingStepContents[onboardingStep]
 
   const onNext = () => {
-    if (onboardingStep < onboardingStepContentsWithStyle.length - 1) {
+    if (onboardingStep === 0 && !showMissionSlide) {
+      setOnboardingStep(2)
+    } else if (onboardingStep < onboardingStepContents.length - 1) {
       setOnboardingStep(onboardingStep + 1)
     } else {
       onComplete()
@@ -167,6 +168,7 @@ export default OnboardingFlow
 OnboardingFlow.displayName = 'OnboardingFlow'
 OnboardingFlow.propTypes = {
   onComplete: PropTypes.func,
+  showMissionSlide: PropTypes.bool.isRequired,
 }
 OnboardingFlow.defaultProps = {
   onComplete: () => {},

@@ -4,7 +4,24 @@ import callMutation from 'src/utils/mutations/callMutation'
 const mutation = graphql`
   mutation SquadInviteResponseMutation($input: SquadInviteResponseInput!) {
     squadInviteResponse(input: $input) {
-      success
+      currentMission {
+        squadName
+        missionId
+        status
+        tabGoal
+        tabCount
+        squadMembers {
+          username
+          invitedEmail
+          status
+          tabs
+        }
+        endOfMissionAwards {
+          user
+          awardType
+          unit
+        }
+      }
     }
   }
 `

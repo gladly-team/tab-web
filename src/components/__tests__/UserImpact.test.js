@@ -13,7 +13,17 @@ import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import Dialog from '@material-ui/core/Dialog'
 import localStorageMgr from 'src/utils/localstorage-mgr'
 import { INTL_CAT_DAY_END_2021_NOTIFICATION } from 'src/utils/constants'
+import MissionNotification from 'src/components/MissionNotification'
+import { showDevelopmentOnlyMissionsFeature } from 'src/utils/featureFlags'
+import { useRouter } from 'next/router'
+import SetHasSeenSquadsMutation from 'src/utils/mutations/SetHasSeenSquadsMutation'
+import IconButton from '@material-ui/core/IconButton'
 
+jest.mock('next/router')
+jest.mock('src/utils/featureFlags', () => ({
+  showDevelopmentOnlyMissionsFeature: jest.fn(),
+}))
+jest.mock('src/utils/mutations/SetHasSeenSquadsMutation')
 jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('@material-ui/core/Typography')
 jest.mock('src/components/SocialShare', () => () => <div />)
@@ -28,7 +38,7 @@ jest.mock('src/utils/localstorage-mgr', () => ({
   setItem: jest.fn(),
 }))
 
-const getMockProps = (userImpactOverrides) => ({
+const getMockProps = (userImpactOverrides, userOverrides) => ({
   userImpact: {
     visitsUntilNextImpact: 3,
     pendingUserReferralImpact: 0,
@@ -42,6 +52,7 @@ const getMockProps = (userImpactOverrides) => ({
     id: 'someId',
     username: 'someUsername',
     notifications: [],
+    ...userOverrides,
   },
   disabled: false,
 })
@@ -394,6 +405,127 @@ describe('UserImpact component', () => {
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       INTL_CAT_DAY_END_2021_NOTIFICATION,
       'true'
+    )
+  })
+
+  it('does not render squadsIntro notification if feature flag is disabled', () => {
+    const UserImpact = require('src/components/UserImpact').default
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(false)
+    const mockProps = getMockProps({}, { hasSeenSquads: false })
+    const wrapper = shallow(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(Notification).at(1)
+    expect(notification.exists()).not.toBe(true)
+  })
+
+  it('does render squadsIntro notification if feature flag is enabled and user hasnt seen squads', () => {
+    const UserImpact = require('src/components/UserImpact').default
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
+    const mockProps = getMockProps(
+      { userImpactMetric: 3, hasClaimedLatestReward: true },
+      { hasSeenSquads: false }
+    )
+    const wrapper = shallow(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(Notification)
+    expect(notification.exists()).toBe(true)
+  })
+
+  it('does not render squadsIntro notification if feature flag is enabled and user has seen squads', () => {
+    const UserImpact = require('src/components/UserImpact').default
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
+    const mockProps = getMockProps(
+      { userImpactMetric: 3, hasClaimedLatestReward: true },
+      { hasSeenSquads: true }
+    )
+    const wrapper = shallow(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(Notification)
+    expect(notification.exists()).toBe(false)
+  })
+
+  it('does not render squadsIntro notification if feature flag is enabled and user has not seen squads but has not reached two impact', () => {
+    const UserImpact = require('src/components/UserImpact').default
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
+    const mockProps = getMockProps(
+      { userImpactMetric: 1, hasClaimedLatestReward: true },
+      { hasSeenSquads: false }
+    )
+    const wrapper = shallow(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(Notification)
+    expect(notification.exists()).toBe(false)
+  })
+
+  it('clicking squadsIntro notification cta updates hasSeenSquads and navigates to missions page', async () => {
+    expect.assertions(2)
+    const UserImpact = require('src/components/UserImpact').default
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
+    const mockProps = getMockProps(
+      { userImpactMetric: 3, hasClaimedLatestReward: true },
+      { hasSeenSquads: false }
+    )
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(Notification)
+    notification.find(Button).simulate('click')
+    await act(async () => {
+      wrapper.update()
+      flushAllPromises()
+    })
+    expect(SetHasSeenSquadsMutation).toHaveBeenCalledWith('someId')
+    expect(useRouter).toHaveBeenCalled()
+  })
+
+  it('clicking squadsIntro notification close icon updates hasSeenSquads', async () => {
+    expect.assertions(1)
+    const UserImpact = require('src/components/UserImpact').default
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
+    const mockProps = getMockProps(
+      { userImpactMetric: 3, hasClaimedLatestReward: true },
+      { hasSeenSquads: false }
+    )
+    const wrapper = mount(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(Notification)
+    notification.find(IconButton).simulate('click')
+    await act(async () => {
+      wrapper.update()
+      flushAllPromises()
+    })
+    expect(SetHasSeenSquadsMutation).toHaveBeenCalledWith('someId')
+  })
+
+  it('does render MissionNotification with correct props', async () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = {
+      ...getMockProps(),
+      user: {
+        id: 'someId',
+        username: 'someUsername',
+        notifications: [],
+        currentMission: {
+          missionId: 'missionId',
+          status: 'pending',
+          squadName: 'brick squad',
+          tabGoal: 1000,
+          tabCount: 250,
+          acknowledgedMissionComplete: false,
+          acknowledgedMissionStarted: false,
+          squadMembers: [],
+          endOfMissionAwards: [],
+        },
+        pendingMissionInvites: [
+          {
+            invitingUser: { name: 'jed' },
+            missionId: '12345',
+          },
+        ],
+      },
+    }
+    const wrapper = shallow(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(MissionNotification).first()
+
+    expect(notification.prop('userId')).toEqual(mockProps.user.id)
+    expect(notification.prop('currentMission')).toEqual(
+      mockProps.user.currentMission
+    )
+    expect(notification.prop('pendingMissionInvites')).toEqual(
+      mockProps.user.pendingMissionInvites
     )
   })
 })

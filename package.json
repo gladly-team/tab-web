@@ -89,7 +89,7 @@
     "next-unused": "^0.0.3",
     "prettier": "^2.2.1",
     "relay-compiler": "^10.1.2",
-    "tab-e2e": "^1.0.4",
+    "tab-e2e": "^1.1.0",
     "vercel": "^21.3.3"
   },
   "next-unused": {

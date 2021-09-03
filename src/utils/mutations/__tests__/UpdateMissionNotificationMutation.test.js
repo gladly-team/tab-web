@@ -23,6 +23,7 @@ describe('UpdateMissionNotificationMutation', () => {
         input: {
           userId: 'some-user-id',
           missionId: 'some-tab-id',
+          action: true,
         },
       },
     })

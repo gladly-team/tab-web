@@ -11,13 +11,14 @@ const mutation = graphql`
   }
 `
 
-const UpdateMissionNotificationMutation = (userId, missionId) =>
+const UpdateMissionNotificationMutation = (userId, missionId, action) =>
   callMutation({
     mutation,
     variables: {
       input: {
         userId,
         missionId,
+        action,
       },
     },
   })

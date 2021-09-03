@@ -22,7 +22,16 @@ export default createFragmentContainer(UserImpact, {
       currentMission {
         acknowledgedMissionComplete
         acknowledgedMissionStarted
+        status
+        missionId
       }
+      pendingMissionInvites {
+        missionId
+        invitingUser {
+          name
+        }
+      }
+      hasSeenSquads
     }
   `,
 })
