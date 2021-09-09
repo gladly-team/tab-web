@@ -30,6 +30,12 @@ export default createFragmentContainer(CurrentMission, {
           unit
         }
       }
+      pendingMissionInvites {
+        missionId
+        invitingUser {
+          name
+        }
+      }
     }
   `,
 })

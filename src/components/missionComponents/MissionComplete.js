@@ -1,12 +1,14 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import PropTypes, { shape } from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import CustomAlert from 'src/components/CustomAlert'
+import Button from '@material-ui/core/Button'
 import trophyCat from 'src/assets/images/trophycat.svg'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import PersonalAcheivementCard from 'src/components/PersonalAcheivementCard'
 import AcheivementBadge from 'src/components/AcheivementBadge'
+import CreateNewMissionMutation from 'src/utils/mutations/CreateNewMissionMutation'
 import moment from 'moment'
 
 const AVERAGE_USER_TABS_DAY = 12
@@ -86,7 +88,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
   },
 }))
-const MissionComplete = ({ mission, user }) => {
+const MissionComplete = ({
+  mission,
+  user: { username, pendingMissionInvites = [] },
+  showRestart,
+}) => {
   const {
     tabCount,
     tabGoal,
@@ -102,9 +108,10 @@ const MissionComplete = ({ mission, user }) => {
   const teamTabsPerDay = tabGoal / daysToComplete
   const teamRateOverTypicalUser =
     Math.round((teamTabsPerDay / AVERAGE_USER_TABS_DAY) * 10) / 10
-  const userStats = squadMembers.filter(
-    (item) => item.username === user.username
-  )[0]
+  const userStats = squadMembers.filter((item) => item.username === username)[0]
+  const restartMission = async () => {
+    const newMissionId = await CreateNewMissionMutation()
+  }
   return (
     <div className={cx.topContainer}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -212,6 +219,14 @@ const MissionComplete = ({ mission, user }) => {
         </div>
       </div>
       <hr className={cx.hr} />
+      <div>
+        {showRestart && pendingMissionInvites.length === 0 && (
+          <Button onClick={restartMission} variant="contained" color="primary">
+            RESTART MISSION
+          </Button>
+        )}
+        {showRestart && pendingMissionInvites.length > 0 && <CustomAlert />}
+      </div>
     </div>
   )
 }
@@ -224,6 +239,9 @@ MissionComplete.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string,
     id: PropTypes.string,
+    pendingMissionInvites: PropTypes.arrayOf(
+      PropTypes.shape({ missionId: PropTypes.string, name: PropTypes.string })
+    ),
   }).isRequired,
 
   /**
@@ -253,6 +271,11 @@ MissionComplete.propTypes = {
       })
     ),
   }).isRequired,
+
+  /**
+    whether to give the user the option to restart or rejoin missions
+  */
+  showRestart: PropTypes.bool,
 }
 
 export default MissionComplete

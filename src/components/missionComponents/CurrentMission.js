@@ -22,6 +22,7 @@ import squadsStep2 from 'src/assets/images/squadsStep2.png'
 import squadsStep3 from 'src/assets/images/squadsStep3.png'
 import TextField from '@material-ui/core/TextField'
 import CreateNewMissionMutation from 'src/utils/mutations/CreateNewMissionMutation'
+import SetHasSeenCompletedMissionMutation from 'src/utils/mutations/SetHasSeenCompletedMissionMutation'
 import CustomAlert from 'src/components/CustomAlert'
 import MissionSocialShare from 'src/components/missionComponents/MissionSocialShare'
 import MissionComplete from 'src/components/missionComponents/MissionComplete'
@@ -201,6 +202,12 @@ const CurrentMissionComponent = ({ user }) => {
   }
   const { tabCount = 0, tabGoal = 1000, missionId, squadMembers = [], status } =
     currentMission || {}
+
+  useEffect(() => {
+    if (status === 'completed') {
+      SetHasSeenCompletedMissionMutation(id, missionId)
+    }
+  }, [status, id, missionId])
   const onEmailsSent = (newMissionData) => {
     setCurrentMission(newMissionData)
     setIsAddSquadMateOpen(false)
