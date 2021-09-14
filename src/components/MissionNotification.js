@@ -4,10 +4,11 @@ import Notification from 'src/components/Notification'
 import { Typography } from '@material-ui/core'
 import SquadInviteResponseMutation from 'src/utils/mutations/SquadInviteResponseMutation'
 import UpdateMissionNotificationMutation from 'src/utils/mutations/UpdateMissionNotificationMutation'
-import { MISSION_STARTED, MISSION_COMPLETE } from 'src/utils/constants'
+import { MISSION_STARTED } from 'src/utils/constants'
 import { makeStyles } from '@material-ui/core/styles'
 import { goTo } from 'src/utils/navigation'
 import { missionHubURL } from 'src/utils/urls'
+import SetHasSeenCompletedMissionMutation from 'src/utils/mutations/SetHasSeenCompletedMissionMutation'
 
 const DISPLAY_MISSION_STARTED = 'mission_started'
 const DISPLAY_MISSION_COMPLETED = 'mission_completed'
@@ -44,11 +45,6 @@ const MissionNotification = ({
 
   const acknowledgedMissionStarted = (missionId) => {
     UpdateMissionNotificationMutation(userId, missionId, MISSION_STARTED)
-    goTo(missionHubURL)
-  }
-
-  const acknowledgedMissionCompleted = (missionId) => {
-    UpdateMissionNotificationMutation(userId, missionId, MISSION_COMPLETE)
     goTo(missionHubURL)
   }
 
@@ -142,16 +138,13 @@ const MissionNotification = ({
           }
           buttonText="View Details"
           buttonOnClick={() => {
-            acknowledgedMissionCompleted(currentMissionId)
-            setOpen(false)
+            // if acknowledged go to mission hub where completed mission is shown then set as viewed after
+            goTo(missionHubURL)
           }}
           includeClose
           onClose={() => {
-            UpdateMissionNotificationMutation(
-              userId,
-              currentMissionId,
-              MISSION_COMPLETE
-            )
+            // if dismissed, move completed mission to past missions
+            SetHasSeenCompletedMissionMutation(userId, currentMissionId)
             setOpen(false)
           }}
         />

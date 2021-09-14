@@ -26,6 +26,8 @@ import SetHasSeenCompletedMissionMutation from 'src/utils/mutations/SetHasSeenCo
 import CustomAlert from 'src/components/CustomAlert'
 import MissionSocialShare from 'src/components/missionComponents/MissionSocialShare'
 import MissionComplete from 'src/components/missionComponents/MissionComplete'
+import RestartMissionMutation from 'src/utils/mutations/RestartMissionMutation'
+import usePrevious from 'src/utils/hooks/usePrevious'
 
 const Accordion = withStyles({
   root: {
@@ -202,12 +204,18 @@ const CurrentMissionComponent = ({ user }) => {
   }
   const { tabCount = 0, tabGoal = 1000, missionId, squadMembers = [], status } =
     currentMission || {}
-
+  const prevMissionId = usePrevious(missionId)
   useEffect(() => {
     if (status === 'completed') {
       SetHasSeenCompletedMissionMutation(id, missionId)
     }
   }, [status, id, missionId])
+  const restartMission = async () => {
+    const {
+      restartMission: { currentMission: newCurrentMission },
+    } = await RestartMissionMutation(id, prevMissionId)
+    setCurrentMission(newCurrentMission)
+  }
   const onEmailsSent = (newMissionData) => {
     setCurrentMission(newMissionData)
     setIsAddSquadMateOpen(false)
@@ -240,7 +248,12 @@ const CurrentMissionComponent = ({ user }) => {
   return (
     <Paper elevation={1} className={cx.topContainer}>
       {status === 'completed' ? (
-        <MissionComplete mission={currentMission} user={user} />
+        <MissionComplete
+          mission={currentMission}
+          user={user}
+          restartMission={restartMission}
+          showRestart
+        />
       ) : (
         <>
           <div>
