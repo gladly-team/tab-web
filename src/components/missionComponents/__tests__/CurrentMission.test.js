@@ -166,7 +166,7 @@ describe('Current Mission component', () => {
     expect(status.length).toEqual(0)
     const createSquadText = wrapper
       .find(Typography)
-      .filterWhere((elem) => elem.text() === 'Create Your squad now!')
+      .filterWhere((elem) => elem.text() === 'Create your squad now!')
     expect(createSquadText.length).toEqual(1)
   })
 
