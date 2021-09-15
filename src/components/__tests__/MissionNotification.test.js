@@ -1,4 +1,7 @@
 import React from 'react'
+import SetHasSeenCompletedMissionMutation from 'src/utils/mutations/SetHasSeenCompletedMissionMutation'
+import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
+import IconButton from '@material-ui/core/IconButton'
 import { mount, shallow } from 'enzyme'
 import { Button, Typography } from '@material-ui/core'
 import { MISSION_STARTED, MISSION_COMPLETE } from 'src/utils/constants'
@@ -7,9 +10,8 @@ import { missionHubURL } from 'src/utils/urls'
 import Notification from '../Notification'
 import SquadInviteResponseMutation from '../../utils/mutations/SquadInviteResponseMutation'
 import UpdateMissionNotificationMutation from '../../utils/mutations/UpdateMissionNotificationMutation'
-import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
-import IconButton from '@material-ui/core/IconButton'
 
+jest.mock('src/utils/mutations/SetHasSeenCompletedMissionMutation')
 jest.mock('src/utils/mutations/SquadInviteResponseMutation')
 jest.mock('src/utils/mutations/UpdateMissionNotificationMutation')
 jest.mock('src/utils/navigation', () => ({ goTo: jest.fn() }))
@@ -71,7 +73,7 @@ describe('MissionNotification component', () => {
     const wrapper = mount(<MissionNotification {...mockProps} />)
     const notification = wrapper.find(Notification).first()
     expect(notification.find(Typography).first().text()).toEqual(
-      'You got a Squad Invite!'
+      'You got a squad invite!'
     )
     expect(notification.find(Typography).at(1).text()).toContain(
       'jed sent you an invite'
@@ -189,7 +191,7 @@ describe('MissionNotification component', () => {
     )
   })
 
-  it('click acknowledge mission completed calls mutation and closes notification', () => {
+  it('click acknowledge mission completed navigates to page', () => {
     const MissionNotification = require('src/components/MissionNotification')
       .default
     const mockProps = {
@@ -212,11 +214,6 @@ describe('MissionNotification component', () => {
 
     const clickButton = notification.find(Button).first()
     clickButton.simulate('click')
-    expect(UpdateMissionNotificationMutation).toHaveBeenCalledWith(
-      mockProps.userId,
-      mockProps.currentMission.missionId,
-      MISSION_COMPLETE
-    )
     expect(goTo).toHaveBeenCalledWith(missionHubURL)
   })
 
@@ -241,10 +238,9 @@ describe('MissionNotification component', () => {
     const closeButton = wrapper.find(IconButton).first()
     closeButton.simulate('click')
     wrapper.update()
-    expect(UpdateMissionNotificationMutation).toHaveBeenCalledWith(
+    expect(SetHasSeenCompletedMissionMutation).toHaveBeenCalledWith(
       mockProps.userId,
-      mockProps.currentMission.missionId,
-      MISSION_COMPLETE
+      mockProps.currentMission.missionId
     )
     expect(goTo).not.toHaveBeenCalledWith(missionHubURL)
   })

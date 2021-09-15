@@ -1,11 +1,12 @@
 import React from 'react'
 import { mount } from 'enzyme'
-
+import Button from '@material-ui/core/Button'
 // import Typography from '@material-ui/core/Typography'
 import preloadAll from 'jest-next-dynamic'
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from 'src/utils/theme'
 import AcheivementBadge from 'src/components/AcheivementBadge'
+import CustomAlert from 'src/components/missionComponents/MissionAlert'
 
 const mockPropsMission = {
   mission: {
@@ -92,4 +93,47 @@ describe('Mission Complete Presentational Component', () => {
     )
     expect(wrapper.find(AcheivementBadge).length).toBe(3)
   })
+
+  it('renders a mission invite alert mission', () => {
+    const MissionComplete = require('src/components/missionComponents/MissionComplete')
+      .default
+    const mockProps = {
+      ...mockPropsMission,
+      ...{
+        user: {
+          username: 'alec',
+          id: '123',
+          pendingMissionInvites: [
+            { missionId: 'missionId', invitingUser: { name: 'kevin' } },
+          ],
+        },
+      },
+    }
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <MissionComplete {...mockProps} showRestart />
+      </ThemeProvider>
+    )
+    expect(wrapper.find(CustomAlert).length).toBe(2)
+  })
+})
+
+it('renders a restart mission button when there is no pending mission and showRestart is enabled', () => {
+  const MissionComplete = require('src/components/missionComponents/MissionComplete')
+    .default
+  const mockProps = {
+    ...mockPropsMission,
+    ...{
+      user: {
+        username: 'alec',
+        id: '123',
+      },
+    },
+  }
+  const wrapper = mount(
+    <ThemeProvider theme={theme}>
+      <MissionComplete {...mockProps} showRestart />
+    </ThemeProvider>
+  )
+  expect(wrapper.find(Button).text()).toBe('RESTART MISSION')
 })
