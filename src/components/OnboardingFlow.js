@@ -89,7 +89,7 @@ const OnboardingFlow = ({ onComplete, showMissionSlide }) => {
     },
     {
       imageSrc: onboarding2,
-      title: 'Help more cats with Squads',
+      title: 'Help more cats with squads',
       children: (
         <div>
           <Typography
@@ -97,17 +97,17 @@ const OnboardingFlow = ({ onComplete, showMissionSlide }) => {
             align="center"
             className={classes.childrenTypography}
           >
-            Cats can get adopted up to 3x faster when you join a Squads!
+            Cats can get adopted up to 3x faster when you join a squad!
           </Typography>
           <Typography
             variant="body2"
             align="center"
             className={classes.childrenTypography}
           >
-            You and your friends can team up to help pay for a shelter cat’s
-            house training. Training a cat is the best way to help it find a
-            permanent home and it enriches the cat’s day to day life while in
-            the shelter.
+            Team up with your friends to help pay for a shelter cat's house
+            training. Training a cat is the best way to help it find a permanent
+            home, and it enriches the cat's day to day life while in the
+            shelter.
           </Typography>
         </div>
       ),
@@ -121,8 +121,8 @@ const OnboardingFlow = ({ onComplete, showMissionSlide }) => {
           align="center"
           className={classes.childrenTypography}
         >
-          Ads on the new tab page raise money that we give to nonprofits. Most
-          ads aren't good - but these ones are :)
+          We display a couple of small ads at the bottom of your screen and
+          redistribute that money to charity. No fees or hidden costs!
         </Typography>
       ),
     },

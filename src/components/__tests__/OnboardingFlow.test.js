@@ -34,7 +34,7 @@ describe('OnboardingFlow component', () => {
     expect(wrapper.find('img').first().prop('src')).toEqual(onboarding2)
     expect(
       wrapper.find(Typography).find({ variant: 'h5' }).at(0).text()
-    ).toEqual('Help more cats with Squads')
+    ).toEqual('Help more cats with squads')
   })
 
   it('component does not show mission slide if show Missions slide is disabled', () => {

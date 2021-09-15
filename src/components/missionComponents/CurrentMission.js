@@ -23,7 +23,7 @@ import squadsStep3 from 'src/assets/images/squadsStep3.png'
 import TextField from '@material-ui/core/TextField'
 import CreateNewMissionMutation from 'src/utils/mutations/CreateNewMissionMutation'
 import SetHasSeenCompletedMissionMutation from 'src/utils/mutations/SetHasSeenCompletedMissionMutation'
-import CustomAlert from 'src/components/CustomAlert'
+import CustomAlert from 'src/components/missionComponents/MissionAlert'
 import MissionSocialShare from 'src/components/missionComponents/MissionSocialShare'
 import MissionComplete from 'src/components/missionComponents/MissionComplete'
 import RestartMissionMutation from 'src/utils/mutations/RestartMissionMutation'
@@ -278,7 +278,7 @@ const CurrentMissionComponent = ({ user }) => {
                 <Typography className={cx.subtitleFont}>
                   Every tab you open supports cats in need. Squads enables you
                   to team up with friends and earn more treats together. Cats
-                  can get adopted up to 3x faster with Squads! You can create
+                  can get adopted up to 3x faster with squads! You can create
                   your first squad today, just start with a couple invites
                   below!
                 </Typography>
@@ -347,7 +347,7 @@ const CurrentMissionComponent = ({ user }) => {
                   marginBottom: '16px',
                 }}
               >
-                Create Your squad now!
+                Create your squad now!
               </Typography>
               <TextField
                 fullWidth

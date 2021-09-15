@@ -71,14 +71,14 @@ const MissionNotification = ({
           text={
             <div>
               <Typography variant="body2" className={classes.bold} gutterBottom>
-                You got a Squad Invite!
+                You got a squad invite!
               </Typography>
               <Typography variant="body2" gutterBottom>
                 {invite.invitingUser.name} sent you an invite to join their
-                Squad! Would you like to join them?
+                squad! Would you like to join them?
               </Typography>
               <Typography variant="body2" gutterBottom>
-                With Squads, you and your friends raise money together to give a
+                With squads, you and your friends raise money together to give a
                 training session to a shelter cat. This helps them get adopted
                 more quickly!
               </Typography>
@@ -130,7 +130,7 @@ const MissionNotification = ({
                 Mission Completed!
               </Typography>
               <Typography variant="body2" gutterBottom>
-                Your Squad has completed it’s mission! Together you’ve raised
+                Your squad has completed it’s mission! Together you’ve raised
                 enough to give a shelter cat a full training session, helping
                 them get adopted sooner!
               </Typography>

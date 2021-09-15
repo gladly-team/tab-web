@@ -73,7 +73,7 @@ describe('MissionNotification component', () => {
     const wrapper = mount(<MissionNotification {...mockProps} />)
     const notification = wrapper.find(Notification).first()
     expect(notification.find(Typography).first().text()).toEqual(
-      'You got a Squad Invite!'
+      'You got a squad Invite!'
     )
     expect(notification.find(Typography).at(1).text()).toContain(
       'jed sent you an invite'

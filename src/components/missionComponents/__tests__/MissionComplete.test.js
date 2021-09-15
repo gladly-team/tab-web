@@ -6,7 +6,7 @@ import preloadAll from 'jest-next-dynamic'
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from 'src/utils/theme'
 import AcheivementBadge from 'src/components/AcheivementBadge'
-import CustomAlert from 'src/components/CustomAlert'
+import CustomAlert from 'src/components/missionComponents/MissionAlert'
 
 const mockPropsMission = {
   mission: {

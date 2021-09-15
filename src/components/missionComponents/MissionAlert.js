@@ -5,11 +5,11 @@ import StarBorderIcon from '@material-ui/icons/StarBorder'
 import DoneIcon from '@material-ui/icons/Done'
 import Typography from '@material-ui/core/Typography'
 import MailOutlineIcon from '@material-ui/icons/MailOutline'
-import SquadInviteResponseMutation from 'src/utils/mutations/SquadInviteResponseMutation'
 import { goTo } from 'src/utils/navigation'
 import { missionHubURL } from 'src/utils/urls'
 import Button from '@material-ui/core/Button'
 import clsx from 'clsx'
+import SquadInviteResponseMutation from '../../utils/mutations/SquadInviteResponseMutation'
 
 const customAlertUseStyles = makeStyles((theme) => ({
   wrapper: {
