@@ -27,7 +27,6 @@ import CustomAlert from 'src/components/missionComponents/MissionAlert'
 import MissionSocialShare from 'src/components/missionComponents/MissionSocialShare'
 import MissionComplete from 'src/components/missionComponents/MissionComplete'
 import RestartMissionMutation from 'src/utils/mutations/RestartMissionMutation'
-import usePrevious from 'src/utils/hooks/usePrevious'
 
 const Accordion = withStyles({
   root: {
@@ -204,16 +203,17 @@ const CurrentMissionComponent = ({ user }) => {
   }
   const { tabCount = 0, tabGoal = 1000, missionId, squadMembers = [], status } =
     currentMission || {}
-  const prevMissionId = usePrevious(missionId)
+  const [previousMissionId, setPreviousMissionId] = useState(missionId)
   useEffect(() => {
     if (status === 'completed') {
+      setPreviousMissionId(missionId)
       SetHasSeenCompletedMissionMutation(id, missionId)
     }
   }, [status, id, missionId])
   const restartMission = async () => {
     const {
       restartMission: { currentMission: newCurrentMission },
-    } = await RestartMissionMutation(id, prevMissionId)
+    } = await RestartMissionMutation(id, previousMissionId)
     setCurrentMission(newCurrentMission)
   }
   const onEmailsSent = (newMissionData) => {
