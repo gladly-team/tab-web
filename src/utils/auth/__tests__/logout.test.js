@@ -1,10 +1,11 @@
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import logger from 'src/utils/logger'
-
+import localStorageMgr from 'src/utils/localstorage-mgr'
+import { STORAGE_KEY_USERNAME } from 'src/utils/constants'
 jest.mock('src/utils/caching')
 jest.mock('src/utils/logger')
-
+jest.mock('src/utils/localstorage-mgr', () => ({ removeItem: jest.fn() }))
 afterEach(() => {
   jest.clearAllMocks()
 })
@@ -19,6 +20,16 @@ describe('logout.js', () => {
   })
 
   it('calls clearAllServiceWorkerCaches', async () => {
+    expect.assertions(1)
+    const mockAuthUser = getMockAuthUser()
+    const logout = require('src/utils/auth/logout').default
+    await logout(mockAuthUser)
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      STORAGE_KEY_USERNAME
+    )
+  })
+
+  it('calls local storage remove item', async () => {
     expect.assertions(1)
     const mockAuthUser = getMockAuthUser()
     const logout = require('src/utils/auth/logout').default
