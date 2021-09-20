@@ -6,3 +6,4 @@ export const INTL_CAT_DAY_END_2021_NOTIFICATION =
 // Squad Invite Constants
 export const MISSION_COMPLETE = 'mission_complete'
 export const MISSION_STARTED = 'mission_started'
+export const STORAGE_KEY_USERNAME = 'tab.user.username'
