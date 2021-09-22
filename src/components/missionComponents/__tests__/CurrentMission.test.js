@@ -299,7 +299,10 @@ describe('Current Mission component', () => {
       restartButton.simulate('click')
     })
     expect(wrapper.find(MissionSocialShare).exists()).toBe(false)
-    expect(RestartMissionMutation).toHaveBeenCalled()
+    expect(RestartMissionMutation).toHaveBeenCalledWith(
+      'VXNlcjpjTDVLY0ZLSGQ5ZkVVNUM5VnN0ajNnNEpBYzcz',
+      '123456789'
+    )
   })
 
   it('when a mission is complete,someone has restarted a mission, clicking accept invite joins restarted mission', async () => {
