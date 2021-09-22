@@ -14,8 +14,8 @@ afterEach(() => {
 describe('CreateInvitedUsersMutation', () => {
   it('calls callMutation with the expected arguments', async () => {
     expect.assertions(1)
-    const CreateInvitedUsersMutation = require('src/utils/mutations/CreateInvitedUsersMutation')
-      .default
+    const CreateInvitedUsersMutation =
+      require('src/utils/mutations/CreateInvitedUsersMutation').default
     await CreateInvitedUsersMutation(
       'some-user-id',
       ['bob@gmail.com'],
@@ -37,8 +37,8 @@ describe('CreateInvitedUsersMutation', () => {
 
   it('returns the callMutation response', async () => {
     expect.assertions(1)
-    const CreateInvitedUsersMutation = require('src/utils/mutations/CreateInvitedUsersMutation')
-      .default
+    const CreateInvitedUsersMutation =
+      require('src/utils/mutations/CreateInvitedUsersMutation').default
     callMutation.mockResolvedValue({
       successfulEmailAddresses: { email: ['bob@gmail.com'] },
       failedEmailAddresses: { email: [] },

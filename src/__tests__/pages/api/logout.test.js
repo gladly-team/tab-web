@@ -70,8 +70,8 @@ describe('API: logout', () => {
 describe('API: logout middleware', () => {
   it('uses `customHeaderRequired`', async () => {
     expect.assertions(1)
-    const customHeaderRequired = require('src/utils/middleware/customHeaderRequired')
-      .default
+    const customHeaderRequired =
+      require('src/utils/middleware/customHeaderRequired').default
     const logoutAPI = require('src/pages/api/logout').default
     await logoutAPI(getMockReq(), getMockRes())
     expect(customHeaderRequired).toHaveBeenCalled()

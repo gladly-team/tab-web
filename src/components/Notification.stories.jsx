@@ -31,8 +31,7 @@ basic.args = {
 
   buttonText: 'Hooray',
   buttonOnClick: () => {
-    // eslint-disable-next-line no-alert
-    // eslint-disable-next-line no-undef
+    // eslint-disable-next-line no-undef, no-alert
     window.alert('you clicked')
   },
   onClose: () => {},

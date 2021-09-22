@@ -307,7 +307,8 @@ const Index = ({ data: initialData }) => {
   })
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
-  const showDevelopmentOnlyMissionsFeatureFlag = showDevelopmentOnlyMissionsFeature()
+  const showDevelopmentOnlyMissionsFeatureFlag =
+    showDevelopmentOnlyMissionsFeature()
 
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
@@ -397,13 +398,8 @@ const Index = ({ data: initialData }) => {
       return
     }
 
-    const {
-      revenue,
-      encodedRevenue,
-      GAMAdvertiserId,
-      GAMAdUnitId,
-      adSize,
-    } = displayedAdInfo
+    const { revenue, encodedRevenue, GAMAdvertiserId, GAMAdUnitId, adSize } =
+      displayedAdInfo
 
     // Log the revenue from the ad.
     LogUserRevenueMutation({

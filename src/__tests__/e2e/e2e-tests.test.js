@@ -18,8 +18,9 @@ const tests = init({
 })
 
 describe('Tab: acceptance tests', () => {
-  tests.forEach(({ description, test, testTimeout }) =>
-    // eslint-disable-next-line jest/valid-title
+  tests.forEach(({ description, test, testTimeout }) => {
+    // We let the tab-e2e package make assertions.
+    // eslint-disable-next-line jest/valid-title, jest/expect-expect
     it(description, test, testTimeout)
-  )
+  })
 })

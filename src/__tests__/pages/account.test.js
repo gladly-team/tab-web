@@ -56,7 +56,7 @@ afterEach(() => {
 describe('account.js', () => {
   it('renders without error', () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     expect(() => {
       shallow(<AccountPage {...mockProps} />)
@@ -65,7 +65,7 @@ describe('account.js', () => {
 
   it('returns a SettingsPage component', () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     expect(wrapper.at(0).type()).toEqual(SettingsPage)
@@ -73,7 +73,7 @@ describe('account.js', () => {
 
   it('has an "Account" title', () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const content = wrapper.at(0).dive().find(Paper).first()
@@ -83,7 +83,7 @@ describe('account.js', () => {
 
   it('has a logout button', () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
     const logoutButton = wrapper.find(Button).first()
@@ -92,7 +92,7 @@ describe('account.js', () => {
 
   it('passes the expected initial data to `useData`', () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = {
       ...getMockProps(),
       data: { ...getMockProps().data, some: 'stuff' },
@@ -106,7 +106,7 @@ describe('account.js', () => {
 
   it('passes the expected getRelayQuery function to `useData`', async () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     shallow(<AccountPage {...mockProps} />)
     const useDataArg = useData.mock.calls[0][0]
@@ -121,7 +121,7 @@ describe('account.js', () => {
 
   it('displays the expected text on the logout button', () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
@@ -131,7 +131,7 @@ describe('account.js', () => {
 
   it('calls `logout` when clicking the logout button', async () => {
     expect.assertions(2)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockAuthUser = getMockAuthUser()
     useAuthUser.mockReturnValue(mockAuthUser)
     const mockProps = getMockProps()
@@ -146,7 +146,7 @@ describe('account.js', () => {
 
   it('disables the logout button after clicking', async () => {
     expect.assertions(2)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
@@ -159,7 +159,7 @@ describe('account.js', () => {
 
   it('changes the logout text after clicking', async () => {
     expect.assertions(2)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
@@ -172,7 +172,7 @@ describe('account.js', () => {
 
   it('displays a Divider after the title', () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
@@ -183,7 +183,7 @@ describe('account.js', () => {
 
   it("displays a pending value for the user's username when the fetch is still in progress", () => {
     expect.assertions(2)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     useData.mockReturnValue({ data: undefined })
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
@@ -195,7 +195,7 @@ describe('account.js', () => {
 
   it("displays the user's username when the data fetch is still complete", () => {
     expect.assertions(2)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     useData.mockReturnValue({ data: getMockDataResponse() })
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
@@ -207,7 +207,7 @@ describe('account.js', () => {
 
   it('displays a Divider after the username info', () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
@@ -218,7 +218,7 @@ describe('account.js', () => {
 
   it("displays a pending value for the user's email address when the fetch is still in progress", () => {
     expect.assertions(2)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     useData.mockReturnValue({ data: undefined })
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
@@ -230,7 +230,7 @@ describe('account.js', () => {
 
   it("displays the user's email address when the fetch is complete", () => {
     expect.assertions(2)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     useData.mockReturnValue({ data: getMockDataResponse() })
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
@@ -244,7 +244,7 @@ describe('account.js', () => {
 
   it('displays a Divider after the email address', () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
@@ -263,7 +263,7 @@ const getRevertButton = (wrapper) =>
 describe('account.js: button to revert to classic Tab for a Cause', () => {
   it('displays the "revert" button field in the advanced options section', () => {
     expect.assertions(2)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     const wrapper = mount(<AccountPage {...mockProps} />)
     const switchModeAccountItem = getRevertAccountItem(wrapper)
@@ -278,7 +278,7 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
   it('clicking the "revert" button calls the API endpoint as expected', async () => {
     expect.assertions(1)
     fetch.mockResolvedValue(getMockFetchResponse())
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = mount(<AccountPage {...mockProps} />)
@@ -298,7 +298,7 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
 
   it('clicking the "revert" button clears the service worker caches', async () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = mount(<AccountPage {...mockProps} />)
@@ -310,7 +310,7 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
 
   it('clicking the "revert" button unregisters the service worker', async () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = mount(<AccountPage {...mockProps} />)
@@ -322,7 +322,7 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
 
   it('clicking the "revert" button calls SetV4BetaMutation when the user is authenticated', async () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = mount(<AccountPage {...mockProps} />)
@@ -337,7 +337,7 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
 
   it('clicking the "revert" button does not call SetV4BetaMutation when the user is not authenticated', async () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({
       data: { ...getMockDataResponse(), user: undefined },
@@ -351,7 +351,7 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
 
   it('clicking the "revert" button navigates to the dashboard', async () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = mount(<AccountPage {...mockProps} />)
@@ -365,7 +365,7 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
 describe('account.js: CMP privacy management', () => {
   it('calls initializeCMP on mount', async () => {
     expect.assertions(1)
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     mount(<AccountPage {...mockProps} />)
     await flushAllPromises()
@@ -380,7 +380,7 @@ describe('account.js: CMP privacy management', () => {
     tabCMP.doesGDPRApply.mockResolvedValue(true)
     tabCMP.doesCCPAApply.mockResolvedValue(false)
 
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     const wrapper = mount(<AccountPage {...mockProps} />)
     await act(async () => {
@@ -403,7 +403,7 @@ describe('account.js: CMP privacy management', () => {
     tabCMP.doesGDPRApply.mockResolvedValue(true)
     tabCMP.doesCCPAApply.mockResolvedValue(false)
 
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     const wrapper = mount(<AccountPage {...mockProps} />)
     await act(async () => {
@@ -428,7 +428,7 @@ describe('account.js: CMP privacy management', () => {
     tabCMP.doesGDPRApply.mockResolvedValue(false)
     tabCMP.doesCCPAApply.mockResolvedValue(false)
 
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     const wrapper = mount(<AccountPage {...mockProps} />)
     await act(async () => {
@@ -448,7 +448,7 @@ describe('account.js: CMP privacy management', () => {
     tabCMP.doesCCPAApply.mockResolvedValue(true)
     tabCMP.doesGDPRApply.mockResolvedValue(false)
 
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     const wrapper = mount(<AccountPage {...mockProps} />)
     await act(async () => {
@@ -470,7 +470,7 @@ describe('account.js: CMP privacy management', () => {
     tabCMP.doesGDPRApply.mockResolvedValue(false)
     tabCMP.doesCCPAApply.mockResolvedValue(true)
 
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     const wrapper = mount(<AccountPage {...mockProps} />)
     await act(async () => {
@@ -495,7 +495,7 @@ describe('account.js: CMP privacy management', () => {
     tabCMP.doesCCPAApply.mockResolvedValue(false)
     tabCMP.doesGDPRApply.mockResolvedValue(false)
 
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     const wrapper = mount(<AccountPage {...mockProps} />)
     await act(async () => {

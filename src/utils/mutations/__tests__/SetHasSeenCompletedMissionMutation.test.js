@@ -14,8 +14,8 @@ afterEach(() => {
 describe('SetHasSeenCompletedMissionMutation', () => {
   it('calls callMutation with the expected arguments', async () => {
     expect.assertions(1)
-    const SetHasSeenCompletedMissionMutation = require('src/utils/mutations/SetHasSeenCompletedMissionMutation')
-      .default
+    const SetHasSeenCompletedMissionMutation =
+      require('src/utils/mutations/SetHasSeenCompletedMissionMutation').default
     await SetHasSeenCompletedMissionMutation('some-user-id')
     expect(callMutation).toHaveBeenCalledWith({
       mutation: expect.any(Object),
@@ -29,8 +29,8 @@ describe('SetHasSeenCompletedMissionMutation', () => {
 
   it('returns the callMutation response', async () => {
     expect.assertions(1)
-    const SetHasSeenCompletedMissionMutation = require('src/utils/mutations/SetHasSeenCompletedMissionMutation')
-      .default
+    const SetHasSeenCompletedMissionMutation =
+      require('src/utils/mutations/SetHasSeenCompletedMissionMutation').default
     callMutation.mockResolvedValue({ hi: 'there' })
     const response = await SetHasSeenCompletedMissionMutation('some-user-id')
     expect(response).toEqual({ hi: 'there' })

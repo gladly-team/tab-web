@@ -202,8 +202,13 @@ const CurrentMissionComponent = ({ user }) => {
     } = await CreateNewMissionMutation(id, squadName)
     setCurrentMission(newCurrentMission)
   }
-  const { tabCount = 0, tabGoal = 1000, missionId, squadMembers = [], status } =
-    currentMission || {}
+  const {
+    tabCount = 0,
+    tabGoal = 1000,
+    missionId,
+    squadMembers = [],
+    status,
+  } = currentMission || {}
   const prevMissionId = usePrevious(missionId)
   useEffect(() => {
     if (status === 'completed') {

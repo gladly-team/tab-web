@@ -14,8 +14,8 @@ afterEach(() => {
 describe('CreateInvitedUsersMutation', () => {
   it('calls callMutation with the expected arguments', async () => {
     expect.assertions(1)
-    const CreateSquadInvitesMutation = require('src/utils/mutations/CreateSquadInvitesMutation')
-      .default
+    const CreateSquadInvitesMutation =
+      require('src/utils/mutations/CreateSquadInvitesMutation').default
     await CreateSquadInvitesMutation(
       'some-user-id',
       ['bob@gmail.com'],
@@ -37,8 +37,8 @@ describe('CreateInvitedUsersMutation', () => {
 
   it('returns the callMutation response', async () => {
     expect.assertions(1)
-    const CreateSquadInvitesMutation = require('src/utils/mutations/CreateSquadInvitesMutation')
-      .default
+    const CreateSquadInvitesMutation =
+      require('src/utils/mutations/CreateSquadInvitesMutation').default
     callMutation.mockResolvedValue({
       currentMission: {
         squadName: 'TestSquad',
