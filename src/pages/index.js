@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
 import { AdComponent, fetchAds } from 'tab-ads'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { get } from 'lodash/object'
 import {
   withAuthUser,

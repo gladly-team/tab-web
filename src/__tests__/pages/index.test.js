@@ -18,7 +18,7 @@ import UserBackgroundImageContainer from 'src/components/UserBackgroundImageCont
 import useData from 'src/utils/hooks/useData'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import { AdComponent } from 'tab-ads'
 import { isClientSide } from 'src/utils/ssr'
@@ -27,7 +27,7 @@ import { accountCreated, newTabView } from 'src/utils/events'
 import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 
-jest.mock('uuid/v4')
+jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
 jest.mock('next-firebase-auth')
 jest.mock('tab-ads')
