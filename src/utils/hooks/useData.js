@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
-import { fetchQuery } from 'react-relay'
+
+// TODO: migrate to the new observable fetchQuery
+// https://github.com/facebook/relay/releases/tag/v11.0.0
+import { fetchQuery_DEPRECATED as fetchQuery } from 'react-relay'
 import { useAuthUser } from 'next-firebase-auth'
 import {
   getRelayEnvironment,
