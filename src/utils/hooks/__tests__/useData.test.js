@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react-hooks'
-import { fetchQuery } from 'react-relay'
+import { fetchQuery_DEPRECATED as fetchQuery } from 'react-relay'
 import { useAuthUser } from 'next-firebase-auth'
 import * as useSWR from 'swr'
 import useData from 'src/utils/hooks/useData'

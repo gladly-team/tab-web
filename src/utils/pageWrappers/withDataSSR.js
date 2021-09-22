@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash/lang'
-import { fetchQuery } from 'react-relay'
+import { fetchQuery_DEPRECATED as fetchQuery } from 'react-relay'
 import { initRelayEnvironment } from 'src/utils/relayEnvironment'
 
 // A wrapper for `getServerSideProps` that fetches data
