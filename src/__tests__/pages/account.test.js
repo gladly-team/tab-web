@@ -100,7 +100,7 @@ describe('account.js', () => {
     shallow(<AccountPage {...mockProps} />)
     const useDataArg = useData.mock.calls[0][0]
     expect(useDataArg).toMatchObject({
-      initialData: mockProps.data,
+      fallbackData: mockProps.data,
     })
   })
 

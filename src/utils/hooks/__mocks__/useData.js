@@ -1,4 +1,4 @@
-const useData = jest.fn(({ getRelayQuery, initialData }) => {
+const useData = jest.fn(({ getRelayQuery, fallbackData }) => {
   if (!getRelayQuery) {
     throw new Error(
       'Validation in mock: `useData` expects a value for "getRelayQuery.'
@@ -9,7 +9,7 @@ const useData = jest.fn(({ getRelayQuery, initialData }) => {
       'Validation in mock: `useData` expects a function for "getRelayQuery.'
     )
   }
-  return { data: initialData, error: undefined }
+  return { data: fallbackData, error: undefined }
 })
 
 export default useData

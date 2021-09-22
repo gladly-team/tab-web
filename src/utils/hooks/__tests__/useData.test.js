@@ -368,7 +368,7 @@ describe('useData', () => {
         getRelayQuery: mockGetRelayQuery,
 
         // Setting some additional SWR options.
-        initialData: { some: 'initial data' },
+        fallbackData: { some: 'initial data' },
         errorRetryCount: 2,
         revalidateOnMount: true,
       })
@@ -416,7 +416,7 @@ describe('useData', () => {
         getRelayQuery: mockGetRelayQuery,
 
         // Setting some additional SWR options.
-        initialData: { some: 'initial data' },
+        fallbackData: { some: 'initial data' },
         errorRetryCount: 2,
         revalidateOnMount: true,
       })
@@ -448,7 +448,7 @@ describe('useData', () => {
     ])
   })
 
-  it('passes initialData and additional options to `useSWR`', async () => {
+  it('passes fallbackData and additional options to `useSWR`', async () => {
     expect.assertions(1)
 
     // Spying on default exports:
@@ -467,7 +467,7 @@ describe('useData', () => {
         getRelayQuery: mockGetRelayQuery,
 
         // Setting some additional SWR options.
-        initialData: { some: 'initial data' },
+        fallbackData: { some: 'initial data' },
         errorRetryCount: 2,
         revalidateOnMount: true,
       })
@@ -475,7 +475,7 @@ describe('useData', () => {
     await act(async () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
       relayQueryPromiseResolver({
-        query: `passes initialData and additional options to useSWR`,
+        query: `passes fallbackData and additional options to useSWR`,
         variables: {
           some: 'thing',
         },
@@ -488,7 +488,7 @@ describe('useData', () => {
       expect.any(Function),
       expect.any(Function),
       {
-        initialData: { some: 'initial data' },
+        fallbackData: { some: 'initial data' },
         errorRetryCount: 2,
         revalidateOnMount: true,
       }

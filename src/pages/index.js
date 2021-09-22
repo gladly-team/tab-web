@@ -293,11 +293,11 @@ const getRelayQuery = async ({ AuthUser }) => {
   }
 }
 
-const Index = ({ data: initialData }) => {
+const Index = ({ data: fallbackData }) => {
   const classes = useStyles()
   const { data } = useData({
     getRelayQuery,
-    initialData,
+    fallbackData,
 
     // If we are using the service worker (serving a cached version
     // of the page HTML), fetch fresh data on mount.

@@ -121,8 +121,8 @@ const getRelayQuery = ({ AuthUser }) => {
   }
 }
 
-const Account = ({ data: initialData }) => {
-  const { data } = useData({ getRelayQuery, initialData })
+const Account = ({ data: fallbackData }) => {
+  const { data } = useData({ getRelayQuery, fallbackData })
   const fetchInProgress = !data
   const { user } = data || {}
   const { id: userId, email, username } = user || {}
