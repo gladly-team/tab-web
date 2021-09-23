@@ -5639,7 +5639,7 @@ chownr@^2.0.0:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-2.0.0.tgz#15bfbe53d2eab4cf70f18a8cd68ebe5b3cb1dece"
   integrity sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==
 
-chromatic@^5.10.0-canary.0:
+chromatic@^5.10.1:
   version "5.10.1"
   resolved "https://registry.yarnpkg.com/chromatic/-/chromatic-5.10.1.tgz#24df7393ce7373fd65346c979351576cb93e6808"
   integrity sha512-A+etILovO5wyuYs77K6VPq2vDXVbGUeYP4wNyRs/RFXToayE9EwoaUJKC7SqnE/05JWSjYENt98THYDVK/iEmQ==
