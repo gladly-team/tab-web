@@ -18,7 +18,7 @@
     "find-unused": "echo \"This will find unused files. However, note that it ignores mocks, tests, and utils in the testHelpers directory.\n\" && next-unused",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "chromatic": "dotenv-extended --defaults=./.env --path=./.env.local npx chromatic --auto-accept-changes"
+    "chromatic": "dotenv-extended --defaults=./.env --path=./.env.local chromatic --auto-accept-changes"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",
@@ -46,7 +46,6 @@
     "react-firebaseui": "^4.1.0",
     "react-relay": "^10.1.2",
     "react-share": "^4.4.0",
-    "react-storybooks-relay-container": "^1.2.2",
     "react-transition-group": "^4.4.1",
     "relay-runtime": "^10.1.2",
     "swr": "^0.4.0",
@@ -69,7 +68,7 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-relay": "^10.1.2",
     "babel-plugin-transform-dynamic-import": "^2.1.0",
-    "chromatic": "^5.10.0-canary.0",
+    "chromatic": "^5.10.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "eslint": "^7.17.0",
