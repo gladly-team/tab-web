@@ -14,8 +14,8 @@ afterEach(() => {
 describe('SetHasViewedIntroFlowMutation', () => {
   it('calls callMutation with the expected arguments', async () => {
     expect.assertions(1)
-    const SetHasViewedIntroFlowMutation = require('src/utils/mutations/SetHasViewedIntroFlowMutation')
-      .default
+    const SetHasViewedIntroFlowMutation =
+      require('src/utils/mutations/SetHasViewedIntroFlowMutation').default
     await SetHasViewedIntroFlowMutation({
       enabled: true,
       userId: 'some-user-id',
@@ -33,8 +33,8 @@ describe('SetHasViewedIntroFlowMutation', () => {
 
   it('returns the callMutation response', async () => {
     expect.assertions(1)
-    const SetHasViewedIntroFlowMutation = require('src/utils/mutations/SetHasViewedIntroFlowMutation')
-      .default
+    const SetHasViewedIntroFlowMutation =
+      require('src/utils/mutations/SetHasViewedIntroFlowMutation').default
     callMutation.mockResolvedValue({ hi: 'there' })
     const response = await SetHasViewedIntroFlowMutation({
       enabled: true,

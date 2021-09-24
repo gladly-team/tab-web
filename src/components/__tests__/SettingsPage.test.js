@@ -25,7 +25,7 @@ beforeEach(() => {
 describe('SettingsPage component', () => {
   it('renders without error', () => {
     expect.assertions(1)
-    const SettingsPage = require('src/components/SettingsPage.js').default
+    const SettingsPage = require('src/components/SettingsPage').default
     const mockProps = getMockProps()
     expect(() => {
       shallow(<SettingsPage {...mockProps} />)
@@ -34,7 +34,7 @@ describe('SettingsPage component', () => {
 
   it('includes a logo in the app bar toolbar', () => {
     expect.assertions(3)
-    const SettingsPage = require('src/components/SettingsPage.js').default
+    const SettingsPage = require('src/components/SettingsPage').default
     const mockProps = getMockProps()
     const wrapper = shallow(<SettingsPage {...mockProps} />)
     const toolbar = wrapper.find(AppBar).find(Toolbar).first()
@@ -46,7 +46,7 @@ describe('SettingsPage component', () => {
 
   it('includes a close button in the app bar toolbar which links to the dashboard', () => {
     expect.assertions(3)
-    const SettingsPage = require('src/components/SettingsPage.js').default
+    const SettingsPage = require('src/components/SettingsPage').default
     const mockProps = getMockProps()
     const wrapper = shallow(<SettingsPage {...mockProps} />)
     const toolbar = wrapper.find(AppBar).find(Toolbar).first()
@@ -60,7 +60,7 @@ describe('SettingsPage component', () => {
 
   it('includes the "Your Profile" subheader in the sidebar list', () => {
     expect.assertions(1)
-    const SettingsPage = require('src/components/SettingsPage.js').default
+    const SettingsPage = require('src/components/SettingsPage').default
     const mockProps = getMockProps()
     const wrapper = shallow(<SettingsPage {...mockProps} />)
     const sidebarList = wrapper.find(List).first()
@@ -74,7 +74,7 @@ describe('SettingsPage component', () => {
 
     showMockAchievements.mockReturnValue(true) // enabled
 
-    const SettingsPage = require('src/components/SettingsPage.js').default
+    const SettingsPage = require('src/components/SettingsPage').default
     const mockProps = getMockProps()
     const wrapper = shallow(<SettingsPage {...mockProps} />)
     const sidebarList = wrapper.find(List).first()
@@ -92,7 +92,7 @@ describe('SettingsPage component', () => {
 
     showMockAchievements.mockReturnValue(false) // not enabled
 
-    const SettingsPage = require('src/components/SettingsPage.js').default
+    const SettingsPage = require('src/components/SettingsPage').default
     const mockProps = getMockProps()
     const wrapper = shallow(<SettingsPage {...mockProps} />)
     const sidebarList = wrapper.find(List).first()
@@ -106,7 +106,7 @@ describe('SettingsPage component', () => {
   it('includes the account link in the sidebar list', () => {
     expect.assertions(3)
 
-    const SettingsPage = require('src/components/SettingsPage.js').default
+    const SettingsPage = require('src/components/SettingsPage').default
     const mockProps = getMockProps()
     const wrapper = shallow(<SettingsPage {...mockProps} />)
     const sidebarList = wrapper.find(List).first()
@@ -121,7 +121,7 @@ describe('SettingsPage component', () => {
 
   it('renders children in the main content container', () => {
     expect.assertions(1)
-    const SettingsPage = require('src/components/SettingsPage.js').default
+    const SettingsPage = require('src/components/SettingsPage').default
     const mockProps = {
       ...getMockProps(),
       children: (

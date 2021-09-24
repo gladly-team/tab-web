@@ -20,7 +20,7 @@ afterEach(() => {
 describe('_error.js: render', () => {
   it('renders without error', () => {
     expect.assertions(1)
-    const ErrorPage = require('src/pages/_error.js').default
+    const ErrorPage = require('src/pages/_error').default
     const mockProps = getMockProps()
     expect(() => {
       shallow(<ErrorPage {...mockProps} />)
@@ -29,7 +29,7 @@ describe('_error.js: render', () => {
 
   it('returns the ErrorPageComponent', () => {
     expect.assertions(1)
-    const ErrorPage = require('src/pages/_error.js').default
+    const ErrorPage = require('src/pages/_error').default
     const wrapper = shallow(<ErrorPage />)
     expect(wrapper.at(0).type()).toEqual(ErrorPageComponent)
   })
@@ -39,7 +39,7 @@ describe('_error.js: getInitialProps', () => {
   it('returns the status code when called server-side', async () => {
     expect.assertions(1)
     const otherMockErr = new Error('Another error.')
-    const ErrorPage = require('src/pages/_error.js').default
+    const ErrorPage = require('src/pages/_error').default
     const initialProps = await ErrorPage.getInitialProps({
       res: { ...getMockRes(), statusCode: 403 },
       err: otherMockErr,
@@ -54,7 +54,7 @@ describe('_error.js: getInitialProps', () => {
     expect.assertions(1)
     const otherMockErr = new Error('Another error.')
     otherMockErr.statusCode = 500
-    const ErrorPage = require('src/pages/_error.js').default
+    const ErrorPage = require('src/pages/_error').default
     const initialProps = await ErrorPage.getInitialProps({
       res: undefined, // not server-side
       err: otherMockErr,
@@ -67,7 +67,7 @@ describe('_error.js: getInitialProps', () => {
 
   it('returns a 404 status code when called client-side with no error', async () => {
     expect.assertions(1)
-    const ErrorPage = require('src/pages/_error.js').default
+    const ErrorPage = require('src/pages/_error').default
     const initialProps = await ErrorPage.getInitialProps({
       res: undefined, // not server-side
       err: undefined, // no provided error

@@ -1,6 +1,5 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import DashboardPopover from 'src/components/DashboardPopover'
 import Button from '@material-ui/core/Button'

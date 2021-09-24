@@ -18,7 +18,7 @@ import UserBackgroundImageContainer from 'src/components/UserBackgroundImageCont
 import useData from 'src/utils/hooks/useData'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import { AdComponent } from 'tab-ads'
 import { isClientSide } from 'src/utils/ssr'
@@ -27,7 +27,7 @@ import { accountCreated, newTabView } from 'src/utils/events'
 import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 
-jest.mock('uuid/v4')
+jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
 jest.mock('next-firebase-auth')
 jest.mock('tab-ads')
@@ -57,8 +57,9 @@ jest.mock('src/utils/hooks/useData')
 jest.mock('src/components/FullPageLoader')
 jest.mock('src/components/UserBackgroundImageContainer')
 jest.mock('src/utils/pageWrappers/withDataSSR')
-jest.mock('src/components/NewTabThemeWrapperHOC', () => (component) =>
-  component
+jest.mock(
+  'src/components/NewTabThemeWrapperHOC',
+  () => (component) => component
 )
 jest.mock('src/utils/pageWrappers/withSentry')
 jest.mock('src/utils/mutations/LogTabMutation')
@@ -162,7 +163,7 @@ describe('index.js', () => {
     shallow(<IndexPage {...mockProps} />)
     const useDataArg = useData.mock.calls[0][0]
     expect(useDataArg).toMatchObject({
-      initialData: mockProps.data,
+      fallbackData: mockProps.data,
     })
   })
 

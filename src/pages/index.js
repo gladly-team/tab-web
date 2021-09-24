@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
 import { AdComponent, fetchAds } from 'tab-ads'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { get } from 'lodash/object'
 import {
   withAuthUser,
@@ -293,11 +293,11 @@ const getRelayQuery = async ({ AuthUser }) => {
   }
 }
 
-const Index = ({ data: initialData }) => {
+const Index = ({ data: fallbackData }) => {
   const classes = useStyles()
   const { data } = useData({
     getRelayQuery,
-    initialData,
+    fallbackData,
 
     // If we are using the service worker (serving a cached version
     // of the page HTML), fetch fresh data on mount.
@@ -307,7 +307,8 @@ const Index = ({ data: initialData }) => {
   })
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
-  const showDevelopmentOnlyMissionsFeatureFlag = showDevelopmentOnlyMissionsFeature()
+  const showDevelopmentOnlyMissionsFeatureFlag =
+    showDevelopmentOnlyMissionsFeature()
 
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
@@ -397,13 +398,8 @@ const Index = ({ data: initialData }) => {
       return
     }
 
-    const {
-      revenue,
-      encodedRevenue,
-      GAMAdvertiserId,
-      GAMAdUnitId,
-      adSize,
-    } = displayedAdInfo
+    const { revenue, encodedRevenue, GAMAdvertiserId, GAMAdUnitId, adSize } =
+      displayedAdInfo
 
     // Log the revenue from the ad.
     LogUserRevenueMutation({

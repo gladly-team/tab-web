@@ -3,6 +3,7 @@ import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import logger from 'src/utils/logger'
 import localStorageMgr from 'src/utils/localstorage-mgr'
 import { STORAGE_KEY_USERNAME } from 'src/utils/constants'
+
 jest.mock('src/utils/caching')
 jest.mock('src/utils/logger')
 jest.mock('src/utils/localstorage-mgr', () => ({ removeItem: jest.fn() }))

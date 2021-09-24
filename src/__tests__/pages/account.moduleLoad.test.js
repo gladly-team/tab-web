@@ -21,7 +21,7 @@ describe('account.js: HOC', () => {
   it('calls `withAuthUser`, with a render/redirect-if-unauthed strategy', () => {
     expect.assertions(1)
     const { withAuthUser, AuthAction } = require('next-firebase-auth')
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     shallow(<AccountPage {...mockProps} />)
     expect(withAuthUser).toHaveBeenCalledWith({
@@ -32,7 +32,7 @@ describe('account.js: HOC', () => {
   it('calls `withRelay`', () => {
     expect.assertions(1)
     const withRelay = require('src/utils/pageWrappers/withRelay').default
-    const AccountPage = require('src/pages/account.js').default
+    const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     shallow(<AccountPage {...mockProps} />)
     expect(withRelay).toHaveBeenCalled()
@@ -42,7 +42,7 @@ describe('account.js: HOC', () => {
 describe('account.js: getServerSideProps', () => {
   it('does not define getServerSideProps', () => {
     expect.assertions(1)
-    const { getServerSideProps } = require('src/pages/account.js')
+    const { getServerSideProps } = require('src/pages/account')
     expect(getServerSideProps).toBeUndefined()
   })
 })
