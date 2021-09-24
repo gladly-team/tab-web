@@ -2,11 +2,10 @@ import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import logger from 'src/utils/logger'
 import localStorageMgr from 'src/utils/localstorage-mgr'
-import { STORAGE_KEY_USERNAME } from 'src/utils/constants'
 
 jest.mock('src/utils/caching')
 jest.mock('src/utils/logger')
-jest.mock('src/utils/localstorage-mgr', () => ({ removeItem: jest.fn() }))
+jest.mock('src/utils/localstorage-mgr')
 afterEach(() => {
   jest.clearAllMocks()
 })
@@ -14,23 +13,23 @@ afterEach(() => {
 describe('logout.js', () => {
   it('calls AuthUser.signOut', async () => {
     expect.assertions(1)
+    clearAllServiceWorkerCaches.mockResolvedValueOnce()
     const mockAuthUser = getMockAuthUser()
     const logout = require('src/utils/auth/logout').default
     await logout(mockAuthUser)
     expect(mockAuthUser.signOut).toHaveBeenCalled()
   })
 
-  it('calls clearAllServiceWorkerCaches', async () => {
+  it('clears local storage', async () => {
     expect.assertions(1)
+    clearAllServiceWorkerCaches.mockResolvedValueOnce()
     const mockAuthUser = getMockAuthUser()
     const logout = require('src/utils/auth/logout').default
     await logout(mockAuthUser)
-    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
-      STORAGE_KEY_USERNAME
-    )
+    expect(localStorageMgr.clear).toHaveBeenCalled()
   })
 
-  it('calls local storage remove item', async () => {
+  it('calls clearAllServiceWorkerCaches', async () => {
     expect.assertions(1)
     const mockAuthUser = getMockAuthUser()
     const logout = require('src/utils/auth/logout').default
@@ -52,6 +51,7 @@ describe('logout.js', () => {
 
   it('resolves to `true` on success', async () => {
     expect.assertions(1)
+    clearAllServiceWorkerCaches.mockResolvedValueOnce()
     const mockAuthUser = getMockAuthUser()
     const logout = require('src/utils/auth/logout').default
     const result = await logout(mockAuthUser)

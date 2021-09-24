@@ -1,15 +1,17 @@
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import logger from 'src/utils/logger'
 import localStorageMgr from 'src/utils/localstorage-mgr'
-import { STORAGE_KEY_USERNAME } from 'src/utils/constants'
 
 const logout = async (AuthUser) => {
   try {
-    await AuthUser.signOut()
-
-    // Clear the cache so it does not contain any authed content.
+    // Clear the cache and local data so it does not contain any
+    // authed content.
     await clearAllServiceWorkerCaches()
-    await localStorageMgr.removeItem(STORAGE_KEY_USERNAME)
+    localStorageMgr.clear()
+
+    // Do the above first, because signing out will trigger a redirect
+    // to the auth page via next-firebase-auth.
+    await AuthUser.signOut()
     return true
   } catch (e) {
     logger.error(e)
