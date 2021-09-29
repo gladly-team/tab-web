@@ -68,7 +68,7 @@
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-relay": "^10.1.2",
     "babel-plugin-transform-dynamic-import": "^2.1.0",
-    "chromatic": "^5.10.1",
+    "chromatic": "5.10.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "eslint": "^7.17.0",
