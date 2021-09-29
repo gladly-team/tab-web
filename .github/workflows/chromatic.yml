@@ -15,7 +15,12 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
       - run: yarn
-      - run: dotenv-extended --defaults=./.env --path=./.env.development NODE_ENV=development yarn run relay && next build
+      - name: Dotenv Action
+        id: dotenv
+        uses: falti/dotenv-action@v0.2.7
+        with:
+          path: ../../.env.development
+      - run: ${{ steps.dotenv.outputs.version }} yarn run relay && next build
         #👇 Adds Chromatic as a step in the workflow
       - uses: chromaui/action@v1
         # Options required for Chromatic's GitHub Action
