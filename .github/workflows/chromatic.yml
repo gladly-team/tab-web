@@ -19,7 +19,7 @@ jobs:
         id: dotenv
         uses: falti/dotenv-action@v0.2.7
         with:
-          path: ../.env.development
+          path: ./.env.development
       - run: ${{ steps.dotenv.outputs.version }} yarn run relay && next build
         #👇 Adds Chromatic as a step in the workflow
       - uses: chromaui/action@v1
