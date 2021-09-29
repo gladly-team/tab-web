@@ -89,8 +89,8 @@ describe('API: beta-opt-in', () => {
 describe('API: beta-opt-in middleware', () => {
   it('uses `onlyPostRequests`', async () => {
     expect.assertions(1)
-    const onlyPostRequests = require('src/utils/middleware/onlyPostRequests')
-      .default
+    const onlyPostRequests =
+      require('src/utils/middleware/onlyPostRequests').default
     const betaOptInAPI = require('src/pages/api/beta-opt-in').default
     await betaOptInAPI(getMockReq(), getMockRes())
     expect(onlyPostRequests).toHaveBeenCalled()
@@ -106,8 +106,8 @@ describe('API: beta-opt-in middleware', () => {
 
   it('uses `customHeaderRequired`', async () => {
     expect.assertions(1)
-    const customHeaderRequired = require('src/utils/middleware/customHeaderRequired')
-      .default
+    const customHeaderRequired =
+      require('src/utils/middleware/customHeaderRequired').default
     const betaOptInAPI = require('src/pages/api/beta-opt-in').default
     await betaOptInAPI(getMockReq(), getMockRes())
     expect(customHeaderRequired).toHaveBeenCalled()

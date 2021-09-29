@@ -96,13 +96,15 @@ describe('withRelay', () => {
     await actions(wrapper, () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
     })
-    const env1 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env1 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     await actions(wrapper, () => {
       wrapper.setProps({}) // force re-render
     })
-    const env2 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env2 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     expect(env1).toEqual(env2)
   })
 
@@ -120,16 +122,18 @@ describe('withRelay', () => {
     await actions(wrapper, () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
     })
-    const env1 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env1 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
 
     // Cause AuthUser to update to trigger the Relay environment
     // to initialize again, but keep the AuthUser ID/data the same.
     await actions(wrapper, () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
     })
-    const env2 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env2 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     expect(env1).not.toEqual(env2)
   })
 
@@ -144,8 +148,9 @@ describe('withRelay', () => {
     await actions(wrapper, () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
     })
-    const env1 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env1 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     await actions(wrapper, () => {
       useAuthUser.mockReturnValue({
         ...getMockAuthUser(),
@@ -153,8 +158,9 @@ describe('withRelay', () => {
         email: null,
       })
     })
-    const env2 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env2 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     expect(env1.getNetwork()).not.toEqual(env2.getNetwork())
   })
 
@@ -198,16 +204,18 @@ describe('withRelay', () => {
         clientInitialized: false,
       })
     })
-    const env1 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env1 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     await actions(wrapper, () => {
       useAuthUser.mockReturnValue({
         ...getMockAuthUser(),
         clientInitialized: true,
       })
     })
-    const env2 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env2 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     expect(env1.getNetwork()).not.toEqual(env2.getNetwork())
   })
 
@@ -230,16 +238,18 @@ describe('withRelay', () => {
         clientInitialized: false,
       })
     })
-    const env1 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env1 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     await actions(wrapper, () => {
       useAuthUser.mockReturnValue({
         ...getMockAuthUser(),
         clientInitialized: true,
       })
     })
-    const env2 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env2 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     expect(env1.getStore()).toEqual(env2.getStore())
   })
 
@@ -254,13 +264,15 @@ describe('withRelay', () => {
     await actions(wrapper, () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
     })
-    const env1 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env1 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     await actions(wrapper, () => {
       wrapper.setProps({}) // force re-render
     })
-    const env2 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env2 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     expect(env1.getStore()).toEqual(env2.getStore())
   })
 
@@ -275,8 +287,9 @@ describe('withRelay', () => {
     await actions(wrapper, () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
     })
-    const env1 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env1 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     await actions(wrapper, () => {
       useAuthUser.mockReturnValue({
         ...getMockAuthUser(),
@@ -284,8 +297,9 @@ describe('withRelay', () => {
         email: null,
       })
     })
-    const env2 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env2 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
 
     expect(env1.getStore()).not.toEqual(env2.getStore())
   })
@@ -310,13 +324,15 @@ describe('withRelay', () => {
         email: null,
       })
     })
-    const env1 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env1 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     await actions(wrapper, () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
     })
-    const env2 = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const env2 = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
     expect(env1.getStore()).toEqual(env2.getStore())
   })
 
@@ -356,8 +372,9 @@ describe('withRelay', () => {
       <MockCompWithRelay initialRecords={mockInitialRecords} />
     )
     await actions(wrapper)
-    const relayEnv = wrapper.find(ReactRelayContext.Provider).prop('value')
-      .environment
+    const relayEnv = wrapper
+      .find(ReactRelayContext.Provider)
+      .prop('value').environment
 
     // Just a mock API from relayEnvironment.js.
     // eslint-disable-next-line no-underscore-dangle

@@ -23,7 +23,7 @@ const getMockProps = () => ({})
 describe('auth.js', () => {
   it('renders without error', () => {
     expect.assertions(1)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/pages/auth').default
     const mockProps = getMockProps()
     expect(() => {
       shallow(<AuthPage {...mockProps} />)
@@ -32,7 +32,7 @@ describe('auth.js', () => {
 
   it('includes the logo', async () => {
     expect.assertions(1)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/pages/auth').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AuthPage {...mockProps} />)
     expect(wrapper.find(Logo).exists()).toBe(true)
@@ -40,7 +40,7 @@ describe('auth.js', () => {
 
   it('includes the expected quote', async () => {
     expect.assertions(1)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/pages/auth').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AuthPage {...mockProps} />)
     expect(wrapper.find(Typography).first().text()).toEqual(
@@ -50,7 +50,7 @@ describe('auth.js', () => {
 
   it('includes the expected quote attribution', async () => {
     expect.assertions(1)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/pages/auth').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AuthPage {...mockProps} />)
     expect(wrapper.find(Typography).at(1).text()).toEqual('- USA Today')
@@ -58,7 +58,7 @@ describe('auth.js', () => {
 
   it('includes the FirebaseAuth component', async () => {
     expect.assertions(1)
-    const AuthPage = require('src/pages/auth.js').default
+    const AuthPage = require('src/pages/auth').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AuthPage {...mockProps} />)
     expect(wrapper.find(FirebaseAuth).exists()).toBe(true)

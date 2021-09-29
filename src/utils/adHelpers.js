@@ -56,11 +56,8 @@ export const getAdUnits = () => {
   } else {
     numberOfAdsToShow = DEFAULT_NUMBER_OF_ADS
   }
-  const {
-    leaderboard,
-    rectangleAdPrimary,
-    rectangleAdSecondary,
-  } = getAvailableAdUnits()
+  const { leaderboard, rectangleAdPrimary, rectangleAdSecondary } =
+    getAvailableAdUnits()
   return {
     ...(numberOfAdsToShow > 0 && { leaderboard }),
     ...(numberOfAdsToShow > 1 && { rectangleAdPrimary }),

@@ -99,8 +99,8 @@ const getRelayQuery = ({ AuthUser }) => ({
   },
 })
 
-const Missions = ({ data: initialData }) => {
-  const { data } = useData({ getRelayQuery, initialData })
+const Missions = ({ data: fallbackData }) => {
+  const { data } = useData({ getRelayQuery, fallbackData })
   const { user } = data || {}
   const [scrollIndex, setScrollIndex] = useState(0)
   const currentMissionSection = useRef(null)

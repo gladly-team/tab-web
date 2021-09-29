@@ -14,8 +14,8 @@ afterEach(() => {
 describe('SetV4BetaMutation', () => {
   it('calls callMutation with the expected arguments', async () => {
     expect.assertions(1)
-    const SetV4BetaMutation = require('src/utils/mutations/SetV4BetaMutation')
-      .default
+    const SetV4BetaMutation =
+      require('src/utils/mutations/SetV4BetaMutation').default
     await SetV4BetaMutation({
       enabled: true,
       userId: 'some-user-id',
@@ -33,8 +33,8 @@ describe('SetV4BetaMutation', () => {
 
   it('returns the callMutation response', async () => {
     expect.assertions(1)
-    const SetV4BetaMutation = require('src/utils/mutations/SetV4BetaMutation')
-      .default
+    const SetV4BetaMutation =
+      require('src/utils/mutations/SetV4BetaMutation').default
     callMutation.mockResolvedValue({ hi: 'there' })
     const response = await SetV4BetaMutation({
       enabled: true,
