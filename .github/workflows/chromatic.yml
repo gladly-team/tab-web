@@ -15,6 +15,7 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
       - run: yarn
+      - run: yarn run build
       - name: set up relay files
         run: yarn run relay
         #👇 Adds Chromatic as a step in the workflow

@@ -41,6 +41,4 @@ yalc.lock
 .vercel
 
 # Storybook & Chromatic
-build-storybook.log
-.build-storybook.log
 storybook-static
