@@ -35,7 +35,6 @@ import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
-import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -54,7 +53,7 @@ import {
   isGAMDevEnvironment,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
-import { accountURL, achievementsURL, surveyLink } from 'src/utils/urls'
+import { accountURL, achievementsURL } from 'src/utils/urls'
 import {
   showMockAchievements,
   showBackgroundImages,
@@ -80,12 +79,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'auto',
-  },
-  feedbackLink: {
-    position: 'absolute',
-    left: '18px',
-    top: '16px',
-    color: get(theme, 'palette.backgroundContrastText.main'),
   },
   fullContainer: {
     position: 'absolute',
@@ -463,9 +456,6 @@ const Index = ({ data: fallbackData }) => {
           ) : null}
           <div className={classes.fullContainer}>
             <div className={classes.topContainer}>
-              <Link to={surveyLink}>
-                <Button className={classes.feedbackLink}>FEEDBACK</Button>
-              </Link>
               <div className={classes.userMenuContainer}>
                 {showDevelopmentOnlyMissionsFeatureFlag ? (
                   <MissionHubButton status={missionStatus} />
