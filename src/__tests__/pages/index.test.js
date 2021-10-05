@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme'
 import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
-import { accountURL, surveyLink } from 'src/utils/urls'
+import { accountURL } from 'src/utils/urls'
 import { act } from 'react-dom/test-utils'
 import {
   showMockAchievements,
