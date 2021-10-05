@@ -236,17 +236,6 @@ describe('index.js', () => {
     expect(settingsLink.childAt(0).childAt(0).type()).toEqual(SettingsIcon)
   })
 
-  it('shows a feedback link and links to the survey url', () => {
-    expect.assertions(1)
-    const IndexPage = require('src/pages/index').default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<IndexPage {...mockProps} />)
-    const settingsLink = wrapper
-      .find(Link)
-      .filterWhere((el) => el.prop('to') === surveyLink)
-    expect(settingsLink.childAt(0).exists()).toBe(true)
-  })
-
   it('does not show the achievements content if showMockAchievements returns false', () => {
     expect.assertions(1)
     showMockAchievements.mockReturnValue(false)
