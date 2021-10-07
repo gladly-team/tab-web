@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import CustomAlert from 'src/components/CustomAlert'
+import CustomAlert from 'src/components/missionComponents/MissionAlert'
+import Button from '@material-ui/core/Button'
 import trophyCat from 'src/assets/images/trophycat.svg'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import PersonalAcheivementCard from 'src/components/PersonalAcheivementCard'
@@ -85,8 +86,19 @@ const useStyles = makeStyles((theme) => ({
     width: '50%',
     justifyContent: 'space-between',
   },
+  restartContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: theme.spacing(2),
+  },
 }))
-const MissionComplete = ({ mission, user }) => {
+const MissionComplete = ({
+  mission,
+  user: { username, pendingMissionInvites = [], id },
+  showRestart,
+  restartMission,
+}) => {
   const {
     tabCount,
     tabGoal,
@@ -102,9 +114,7 @@ const MissionComplete = ({ mission, user }) => {
   const teamTabsPerDay = tabGoal / daysToComplete
   const teamRateOverTypicalUser =
     Math.round((teamTabsPerDay / AVERAGE_USER_TABS_DAY) * 10) / 10
-  const userStats = squadMembers.filter(
-    (item) => item.username === user.username
-  )[0]
+  const userStats = squadMembers.filter((item) => item.username === username)[0]
   return (
     <div className={cx.topContainer}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -123,9 +133,9 @@ const MissionComplete = ({ mission, user }) => {
             <span style={{ fontWeight: 'bold' }}>
               {squadMembers.length} other{squadMembers.length === 1 ? '' : 's'}
             </span>
-            , you got a cat a training session faster than the average
-            individual tabber! That means more space at the shelter for other
-            homeless kittens, even sooner!
+            , you helped house train a cat faster than the average individual
+            tabber! That means more space at the shelter for other homeless
+            kittens, even sooner!
           </Typography>
           <Typography className={cx.verticalSpacing}>
             The staff - and the cats - at The Jackson Galaxy Project thank you!
@@ -169,7 +179,7 @@ const MissionComplete = ({ mission, user }) => {
           />
           <PersonalAcheivementCard
             title={`${teamRateOverTypicalUser}x faster`}
-            text={`Your team helped get a cat adopted ${teamRateOverTypicalUser} faster than a typical user`}
+            text={`Your team helped get a cat adopted ${teamRateOverTypicalUser}x faster than a typical user`}
           />
           <PersonalAcheivementCard
             title={`${userStats.longestTabStreak} days`}
@@ -212,6 +222,21 @@ const MissionComplete = ({ mission, user }) => {
         </div>
       </div>
       <hr className={cx.hr} />
+      <div className={cx.restartContainer}>
+        {showRestart && pendingMissionInvites.length === 0 && (
+          <Button onClick={restartMission} variant="contained" color="primary">
+            RESTART MISSION
+          </Button>
+        )}
+        {showRestart && pendingMissionInvites.length > 0 && (
+          <CustomAlert
+            text={`your friend ${pendingMissionInvites[0].invitingUser.name} invited you to join their squad!`}
+            missionId={pendingMissionInvites[0].missionId}
+            id={id}
+            icon="message"
+          />
+        )}
+      </div>
     </div>
   )
 }
@@ -224,6 +249,12 @@ MissionComplete.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string,
     id: PropTypes.string,
+    pendingMissionInvites: PropTypes.arrayOf(
+      PropTypes.shape({
+        missionId: PropTypes.string,
+        invitingUser: PropTypes.shape({ name: PropTypes.string }),
+      })
+    ),
   }).isRequired,
 
   /**
@@ -253,6 +284,19 @@ MissionComplete.propTypes = {
       })
     ),
   }).isRequired,
-}
 
+  /**
+    function that restarts the completed missions
+   */
+  restartMission: PropTypes.func,
+
+  /**
+    whether to give the user the option to restart or rejoin missions
+  */
+  showRestart: PropTypes.bool,
+}
+MissionComplete.defaultProps = {
+  showRestart: false,
+  restartMission: null,
+}
 export default MissionComplete

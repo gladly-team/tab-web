@@ -1,9 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import {
-  createMuiTheme,
-  ThemeProvider,
-  useTheme,
-} from '@material-ui/core/styles'
+import { createTheme, ThemeProvider, useTheme } from '@material-ui/core/styles'
 import React, { useState, useMemo } from 'react'
 import { extendTheme } from 'src/utils/theme'
 import BackgroundImageActiveTheme from 'src/utils/styles/backgroundImageActiveTheme'
@@ -15,7 +11,7 @@ const NewTabThemeWrapper = (Component) =>
     const defaultTheme = useTheme()
     const theme = useMemo(
       () =>
-        createMuiTheme(
+        createTheme(
           extendTheme(
             defaultTheme,
             enableBackgroundImages === true ? BackgroundImageActiveTheme : {}

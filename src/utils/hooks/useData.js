@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
-import { fetchQuery } from 'react-relay'
+
+// TODO: migrate to the new observable fetchQuery:
+// https://github.com/facebook/relay/releases/tag/v11.0.0
+// Unclear if SWR has observable/subscribe support.
+import { fetchQuery_DEPRECATED as fetchQuery } from 'react-relay'
 import { useAuthUser } from 'next-firebase-auth'
 import {
   getRelayEnvironment,
@@ -16,7 +20,7 @@ const fetcher = async (query, variables) => {
   return fetchQuery(environment, JSON.parse(query), JSON.parse(variables))
 }
 
-const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
+const useData = ({ getRelayQuery, fallbackData, ...SWROptions }) => {
   // Before fetching data, wait for the AuthUser to initialize
   // if it's not not already available.
   const AuthUser = useAuthUser()
@@ -72,7 +76,7 @@ const useData = ({ getRelayQuery, initialData, ...SWROptions }) => {
         : [JSON.stringify(relayQuery), JSON.stringify(relayVariables)],
     fetcher,
     {
-      initialData,
+      fallbackData,
       ...SWROptions,
     }
   )

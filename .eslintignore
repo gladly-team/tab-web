@@ -1,8 +1,11 @@
 node_modules
+.git
 coverage
 build
 .next
 .serverless
+.vercel
+storybook-static
 
 # We ignore next.config.*js in the NPM lint script because
 # linting the config breaks Vercel builds.

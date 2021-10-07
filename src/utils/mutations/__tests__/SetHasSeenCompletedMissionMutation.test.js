@@ -11,20 +11,16 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('SetHasViewedIntroFlowMutation', () => {
+describe('SetHasSeenCompletedMissionMutation', () => {
   it('calls callMutation with the expected arguments', async () => {
     expect.assertions(1)
-    const SetHasViewedIntroFlowMutation =
-      require('src/utils/mutations/SetHasViewedIntroFlowMutation').default
-    await SetHasViewedIntroFlowMutation({
-      enabled: true,
-      userId: 'some-user-id',
-    })
+    const SetHasSeenCompletedMissionMutation =
+      require('src/utils/mutations/SetHasSeenCompletedMissionMutation').default
+    await SetHasSeenCompletedMissionMutation('some-user-id')
     expect(callMutation).toHaveBeenCalledWith({
       mutation: expect.any(Object),
       variables: {
         input: {
-          enabled: true,
           userId: 'some-user-id',
         },
       },
@@ -33,13 +29,10 @@ describe('SetHasViewedIntroFlowMutation', () => {
 
   it('returns the callMutation response', async () => {
     expect.assertions(1)
-    const SetHasViewedIntroFlowMutation =
-      require('src/utils/mutations/SetHasViewedIntroFlowMutation').default
+    const SetHasSeenCompletedMissionMutation =
+      require('src/utils/mutations/SetHasSeenCompletedMissionMutation').default
     callMutation.mockResolvedValue({ hi: 'there' })
-    const response = await SetHasViewedIntroFlowMutation({
-      enabled: true,
-      userId: 'some-user-id',
-    })
+    const response = await SetHasSeenCompletedMissionMutation('some-user-id')
     expect(response).toEqual({ hi: 'there' })
   })
 })

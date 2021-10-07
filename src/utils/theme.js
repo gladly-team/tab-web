@@ -1,7 +1,7 @@
-import { createMuiTheme } from '@material-ui/core/styles'
+import { createTheme } from '@material-ui/core/styles'
 import { merge } from 'lodash/object'
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: '#9d4ba3',
@@ -40,4 +40,4 @@ const theme = createMuiTheme({
 export default theme
 
 export const extendTheme = (primaryTheme, extendedTheme) =>
-  createMuiTheme(merge({}, primaryTheme, extendedTheme))
+  createTheme(merge({}, primaryTheme, extendedTheme))

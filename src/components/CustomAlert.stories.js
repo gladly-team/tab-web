@@ -1,6 +1,6 @@
 import React from 'react'
 
-import CustomAlert from './CustomAlert'
+import CustomAlert from './missionComponents/MissionAlert'
 
 export default {
   title: 'Components/CustomAlert',

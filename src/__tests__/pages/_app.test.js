@@ -36,7 +36,7 @@ describe('_app.js', () => {
 
   it('renders without error', () => {
     expect.assertions(1)
-    const App = require('src/pages/_app.js').default
+    const App = require('src/pages/_app').default
     const mockProps = getMockProps()
     expect(() => {
       mount(<App {...mockProps} />)
@@ -46,7 +46,7 @@ describe('_app.js', () => {
   it('registers the service worker if process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === "true"', () => {
     expect.assertions(1)
     process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'true'
-    const App = require('src/pages/_app.js').default
+    const App = require('src/pages/_app').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
     expect(register).toHaveBeenCalledWith('/newtab/service-worker.js')
@@ -55,7 +55,7 @@ describe('_app.js', () => {
   it('unregisters the service worker if process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED === "false"', () => {
     expect.assertions(1)
     process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
-    const App = require('src/pages/_app.js').default
+    const App = require('src/pages/_app').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
     expect(unregister).toHaveBeenCalled()
@@ -64,7 +64,7 @@ describe('_app.js', () => {
   it('unregisters the service worker if process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED is undefined', () => {
     expect.assertions(1)
     delete process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED
-    const App = require('src/pages/_app.js').default
+    const App = require('src/pages/_app').default
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
     expect(unregister).toHaveBeenCalled()

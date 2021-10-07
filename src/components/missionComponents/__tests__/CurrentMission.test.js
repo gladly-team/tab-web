@@ -1,4 +1,5 @@
 import React from 'react'
+import merge from 'lodash/merge'
 import { mount } from 'enzyme'
 import Button from '@material-ui/core/Button'
 import preloadAll from 'jest-next-dynamic'
@@ -14,13 +15,20 @@ import MissionSocialShare from 'src/components/missionComponents/MissionSocialSh
 import TableRow from '@material-ui/core/TableRow'
 import MissionComplete from 'src/components/missionComponents/MissionComplete'
 import CurrentMission from 'src/components/missionComponents/CurrentMission'
+import RestartMissionMutation from 'src/utils/mutations/RestartMissionMutation'
+import SquadInviteResponseMutation from 'src/utils/mutations/SquadInviteResponseMutation'
 
+jest.mock('src/utils/mutations/SquadInviteResponseMutation', () => jest.fn())
+jest.mock('src/utils/mutations/RestartMissionMutation', () => jest.fn())
 jest.mock('src/utils/mutations/CreateNewMissionMutation', () => jest.fn())
 jest.mock('src/components/InviteFriends', () => () => <div />)
 jest.mock('src/utils/caching')
 jest.mock('src/utils/localstorage-mgr', () => ({
   getItem: jest.fn(),
   setItem: jest.fn(),
+}))
+jest.mock('src/utils/navigation', () => ({
+  goTo: jest.fn(),
 }))
 
 const mockPropsNoMission = {
@@ -158,7 +166,7 @@ describe('Current Mission component', () => {
     expect(status.length).toEqual(0)
     const createSquadText = wrapper
       .find(Typography)
-      .filterWhere((elem) => elem.text() === 'Create Your squad now!')
+      .filterWhere((elem) => elem.text() === 'Create your squad now!')
     expect(createSquadText.length).toEqual(1)
   })
 
@@ -273,5 +281,85 @@ describe('Current Mission component', () => {
     )
     expect(wrapper.find(MissionSocialShare).exists()).toBe(false)
     expect(wrapper.find(MissionComplete).exists()).toBe(true)
+  })
+
+  it('when a mission is complete, and no one has restarted a mission, clicking restart mission calls restartMissionMutation', async () => {
+    expect.assertions(2)
+    const mockProps = mockPropsMissionCompleted
+    RestartMissionMutation.mockReturnValue({
+      restartMission: { currentMission: {} },
+    })
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <CurrentMission {...mockProps} />
+      </ThemeProvider>
+    )
+    const restartButton = wrapper.find(Button)
+    await act(async () => {
+      restartButton.simulate('click')
+    })
+    expect(wrapper.find(MissionSocialShare).exists()).toBe(false)
+    expect(RestartMissionMutation).toHaveBeenCalledWith(
+      'VXNlcjpjTDVLY0ZLSGQ5ZkVVNUM5VnN0ajNnNEpBYzcz',
+      '123456789'
+    )
+  })
+
+  it('when a mission is complete,someone has restarted a mission, clicking accept invite joins restarted mission', async () => {
+    expect.assertions(2)
+    const mockProps = merge(mockPropsMissionCompleted, {
+      user: {
+        pendingMissionInvites: [
+          { missionId: 'missionId', invitingUser: { name: 'kevin' } },
+        ],
+      },
+    })
+    RestartMissionMutation.mockReturnValue({
+      restartMission: { currentMission: {} },
+    })
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <CurrentMission {...mockProps} />
+      </ThemeProvider>
+    )
+    const acceptButton = wrapper.find(Button).at(1)
+    await act(async () => {
+      acceptButton.simulate('click')
+    })
+    expect(wrapper.find(MissionSocialShare).exists()).toBe(false)
+    expect(SquadInviteResponseMutation).toHaveBeenCalledWith(
+      'VXNlcjpjTDVLY0ZLSGQ5ZkVVNUM5VnN0ajNnNEpBYzcz',
+      'missionId',
+      true
+    )
+  })
+
+  it('when a mission is complete,someone has restarted a mission, clicking reject invite rejects invited mission', async () => {
+    expect.assertions(2)
+    const mockProps = merge(mockPropsMissionCompleted, {
+      user: {
+        pendingMissionInvites: [
+          { missionId: 'missionId', invitingUser: { name: 'kevin' } },
+        ],
+      },
+    })
+    RestartMissionMutation.mockReturnValue({
+      restartMission: { currentMission: {} },
+    })
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <CurrentMission {...mockProps} />
+      </ThemeProvider>
+    )
+    const acceptButton = wrapper.find(Button).at(0)
+    await act(async () => {
+      acceptButton.simulate('click')
+    })
+    expect(wrapper.find(MissionSocialShare).exists()).toBe(false)
+    expect(SquadInviteResponseMutation).toHaveBeenCalledWith(
+      'VXNlcjpjTDVLY0ZLSGQ5ZkVVNUM5VnN0ajNnNEpBYzcz',
+      'missionId',
+      false
+    )
   })
 })

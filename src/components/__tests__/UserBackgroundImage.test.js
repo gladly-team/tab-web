@@ -34,8 +34,8 @@ afterEach(() => {
 
 describe('UserBackgroundImage component', () => {
   it('renders without error', () => {
-    const UserBackgroundImage = require('src/components/UserBackgroundImage')
-      .default
+    const UserBackgroundImage =
+      require('src/components/UserBackgroundImage').default
     const mockProps = getMockProps()
     expect(() => {
       mount(<UserBackgroundImage {...mockProps} />)
@@ -43,8 +43,8 @@ describe('UserBackgroundImage component', () => {
   })
 
   it('renders without error without background image info', () => {
-    const UserBackgroundImage = require('src/components/UserBackgroundImage')
-      .default
+    const UserBackgroundImage =
+      require('src/components/UserBackgroundImage').default
     const mockProps = {
       ...getMockProps(),
       user: {
@@ -56,8 +56,8 @@ describe('UserBackgroundImage component', () => {
   })
 
   it('loads a new background image when the date is not today', async () => {
-    const UserBackgroundImage = require('src/components/UserBackgroundImage')
-      .default
+    const UserBackgroundImage =
+      require('src/components/UserBackgroundImage').default
     const mockProps = {
       ...getMockProps(),
       user: {
@@ -76,8 +76,8 @@ describe('UserBackgroundImage component', () => {
   })
 
   it('passes the userID into the setBackgroundDailyImageMutation', async () => {
-    const UserBackgroundImage = require('src/components/UserBackgroundImage')
-      .default
+    const UserBackgroundImage =
+      require('src/components/UserBackgroundImage').default
     const mockProps = {
       ...getMockProps(),
       user: {
@@ -96,8 +96,8 @@ describe('UserBackgroundImage component', () => {
   })
 
   it('does not load a new background image when the date is today', async () => {
-    const UserBackgroundImage = require('src/components/UserBackgroundImage')
-      .default
+    const UserBackgroundImage =
+      require('src/components/UserBackgroundImage').default
     const mockProps = {
       ...getMockProps(),
       user: {
@@ -116,8 +116,8 @@ describe('UserBackgroundImage component', () => {
   })
 
   it('loads a new background image if background Image props are missing', async () => {
-    const UserBackgroundImage = require('src/components/UserBackgroundImage')
-      .default
+    const UserBackgroundImage =
+      require('src/components/UserBackgroundImage').default
     const mockProps = {
       ...getMockProps(),
       user: {
@@ -133,8 +133,8 @@ describe('UserBackgroundImage component', () => {
   })
 
   it('loads a new background image if background Image timestamp is nil', async () => {
-    const UserBackgroundImage = require('src/components/UserBackgroundImage')
-      .default
+    const UserBackgroundImage =
+      require('src/components/UserBackgroundImage').default
     const mockProps = {
       ...getMockProps(),
       user: {
@@ -153,8 +153,8 @@ describe('UserBackgroundImage component', () => {
   })
 
   it('updates the background image when the new image onLoad completes', async () => {
-    const UserBackgroundImage = require('src/components/UserBackgroundImage')
-      .default
+    const UserBackgroundImage =
+      require('src/components/UserBackgroundImage').default
     const mockProps = {
       ...getMockProps(),
       user: {
@@ -184,8 +184,8 @@ describe('UserBackgroundImage component', () => {
   })
 
   it('does not create an error if the first image doesnt load from cache', async () => {
-    const UserBackgroundImage = require('src/components/UserBackgroundImage')
-      .default
+    const UserBackgroundImage =
+      require('src/components/UserBackgroundImage').default
     const mockProps = {
       ...getMockProps(),
       user: {

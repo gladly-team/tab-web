@@ -27,28 +27,28 @@ afterEach(() => {
   jest.resetModules()
 })
 
-describe('_app.js: Sentry', () => {
+describe('_app: Sentry', () => {
   it('calls to initialize Sentry', () => {
     expect.assertions(1)
     const initSentry = require('src/utils/initSentry').default
 
     // eslint-disable-next-line no-unused-expressions
-    require('src/pages/_app.js').default
+    require('src/pages/_app').default
     expect(initSentry).toHaveBeenCalled()
   })
 })
 
-describe('_app.js: initializes auth', () => {
+describe('_app: initializes auth', () => {
   it('initializes authentication on module load', () => {
     expect.assertions(1)
     const initAuth = require('src/utils/auth/initAuth').default
     // eslint-disable-next-line no-unused-expressions
-    require('src/pages/_app.js').default
+    require('src/pages/_app').default
     expect(initAuth).toHaveBeenCalledTimes(1)
   })
 })
 
-describe('_app.js: tab-cmp', () => {
+describe('_app: tab-cmp', () => {
   it('initializes the CMP when on the client side', () => {
     expect.assertions(1)
     const { isClientSide } = require('src/utils/ssr')
@@ -57,7 +57,7 @@ describe('_app.js: tab-cmp', () => {
     const initializeCMP = require('src/utils/initializeCMP').default
 
     // eslint-disable-next-line no-unused-expressions
-    require('src/pages/_app.js').default
+    require('src/pages/_app').default
     jest.runAllTimers()
     expect(initializeCMP).toHaveBeenCalled()
   })
@@ -70,18 +70,18 @@ describe('_app.js: tab-cmp', () => {
     const initializeCMP = require('src/utils/initializeCMP').default
 
     // eslint-disable-next-line no-unused-expressions
-    require('src/pages/_app.js').default
+    require('src/pages/_app').default
     jest.runAllTimers()
     expect(initializeCMP).not.toHaveBeenCalled()
   })
 })
 
-describe('_app.js: router overrides', () => {
+describe('_app: router overrides', () => {
   it('sets a callback to the "routeChangeStart" router event', () => {
     expect.assertions(1)
     const Router = require('next/router')
     // eslint-disable-next-line no-unused-expressions
-    require('src/pages/_app.js').default
+    require('src/pages/_app').default
     expect(Router.events.on).toHaveBeenCalledWith(
       'routeChangeStart',
       expect.any(Function)
@@ -93,7 +93,7 @@ describe('_app.js: router overrides', () => {
     const Router = require('next/router')
     const { setWindowLocation } = require('src/utils/navigation')
     // eslint-disable-next-line no-unused-expressions
-    require('src/pages/_app.js').default
+    require('src/pages/_app').default
     const routeChangeStartCallback = Router.events.on.mock.calls[0][1]
     expect(() => {
       routeChangeStartCallback('/newtab/auth/')
@@ -108,7 +108,7 @@ describe('_app.js: router overrides', () => {
     const Router = require('next/router')
     const { setWindowLocation } = require('src/utils/navigation')
     // eslint-disable-next-line no-unused-expressions
-    require('src/pages/_app.js').default
+    require('src/pages/_app').default
     const routeChangeStartCallback = Router.events.on.mock.calls[0][1]
     expect(() => {
       routeChangeStartCallback('/newtab/auth/some/page/here/')
@@ -126,7 +126,7 @@ describe('_app.js: router overrides', () => {
     const Router = require('next/router')
     const { setWindowLocation } = require('src/utils/navigation')
     // eslint-disable-next-line no-unused-expressions
-    require('src/pages/_app.js').default
+    require('src/pages/_app').default
     const routeChangeStartCallback = Router.events.on.mock.calls[0][1]
     expect(() => {
       routeChangeStartCallback('/newtab/account/')

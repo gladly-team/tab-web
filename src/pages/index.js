@@ -7,7 +7,7 @@ import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
 import { AdComponent, fetchAds } from 'tab-ads'
-import uuid from 'uuid/v4'
+import { v4 as uuid } from 'uuid'
 import { get } from 'lodash/object'
 import {
   withAuthUser,
@@ -35,7 +35,6 @@ import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
-import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -54,7 +53,7 @@ import {
   isGAMDevEnvironment,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
-import { accountURL, achievementsURL, surveyLink } from 'src/utils/urls'
+import { accountURL, achievementsURL } from 'src/utils/urls'
 import {
   showMockAchievements,
   showBackgroundImages,
@@ -80,12 +79,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'auto',
-  },
-  feedbackLink: {
-    position: 'absolute',
-    left: '18px',
-    top: '16px',
-    color: get(theme, 'palette.backgroundContrastText.main'),
   },
   fullContainer: {
     position: 'absolute',
@@ -294,11 +287,11 @@ const getRelayQuery = async ({ AuthUser }) => {
   }
 }
 
-const Index = ({ data: initialData }) => {
+const Index = ({ data: fallbackData }) => {
   const classes = useStyles()
   const { data } = useData({
     getRelayQuery,
-    initialData,
+    fallbackData,
 
     // If we are using the service worker (serving a cached version
     // of the page HTML), fetch fresh data on mount.
@@ -397,13 +390,8 @@ const Index = ({ data: initialData }) => {
       return
     }
 
-    const {
-      revenue,
-      encodedRevenue,
-      GAMAdvertiserId,
-      GAMAdUnitId,
-      adSize,
-    } = displayedAdInfo
+    const { revenue, encodedRevenue, GAMAdvertiserId, GAMAdUnitId, adSize } =
+      displayedAdInfo
 
     // Log the revenue from the ad.
     LogUserRevenueMutation({
@@ -441,9 +429,8 @@ const Index = ({ data: initialData }) => {
     setJustFinishedIntroFlow(true)
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
-  const showDevelopmentOnlyMissionsFeatureFlag = showDevelopmentOnlyMissionsFeature(
-    email
-  )
+  const showDevelopmentOnlyMissionsFeatureFlag =
+    showDevelopmentOnlyMissionsFeature(email)
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {showIntro ? (
@@ -470,9 +457,6 @@ const Index = ({ data: initialData }) => {
           ) : null}
           <div className={classes.fullContainer}>
             <div className={classes.topContainer}>
-              <Link to={surveyLink}>
-                <Button className={classes.feedbackLink}>FEEDBACK</Button>
-              </Link>
               <div className={classes.userMenuContainer}>
                 {showDevelopmentOnlyMissionsFeatureFlag ? (
                   <MissionHubButton status={missionStatus} />
