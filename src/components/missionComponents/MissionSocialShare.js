@@ -56,8 +56,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
   },
   customSeparator: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(2),
     display: 'flex',
     alignItems: 'center',
     textAlign: 'center',
@@ -177,7 +177,7 @@ const MissionSocialShare = ({ emailSentCallback, missionId, user }) => {
         }}
       />
       <div className={cx.customSeparator}>
-        <Typography>or</Typography>
+        <Typography variant="h6">or</Typography>
       </div>
       {sendingState !== 'invitations sent! ✅' ? (
         <>

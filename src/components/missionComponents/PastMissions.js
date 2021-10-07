@@ -158,10 +158,11 @@ const PastMissionsComponent = ({
         </div>
       )}
       {edges.length > 0 && (
-        <div className={cx.noMissionsContainer}>
-          {edges
-
-            // .sort((a, b) => a.node.completed - b.node.completed)
+        <div>
+          {[...edges]
+            .sort((a, b) =>
+              moment(a.node.completed).isBefore(b.node.completed) ? 1 : -1
+            )
             .map(({ node }, index) => (
               <Accordion
                 key={node.missionId}
@@ -194,12 +195,16 @@ const PastMissionsComponent = ({
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
                     {node.squadMembers
                       .filter((user) => !!user.username)
-                      .map((user) => (
+                      .map((user, idx) => (
                         <Typography
                           style={{ marginRight: '8px' }}
                           key={user.username + user.invitedEmail}
                         >
                           {user.username}
+                          {idx <
+                            node.squadMembers.filter((usr) => !!usr.username)
+                              .length -
+                              1 && ','}
                         </Typography>
                       ))}
                   </div>

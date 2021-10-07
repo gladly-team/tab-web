@@ -276,7 +276,8 @@ const CurrentMissionComponent = ({ user }) => {
               >
                 <Typography className={cx.subtitleFont} variant="body1">
                   Create a squad with friends to help get a shelter cat adopted
-                  sooner.
+                  sooner.{' '}
+                  <span style={{ textDecoration: 'underline' }}>More Info</span>
                 </Typography>
                 <Typography variant="body2"> </Typography>
               </AccordionSummary>
