@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     height: '150px',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
     textAlign: 'center',
   },
@@ -22,11 +22,7 @@ const PersonalAcheivementCard = ({ className, title, text }) => {
   const cx = useStyles()
   return (
     <div className={clsx(cx.container, className)}>
-      <Typography
-        style={{ fontWeight: 'bold', fontSize: '24px', lineHeight: '28px' }}
-      >
-        {title}
-      </Typography>
+      <Typography variant="h5">{title}</Typography>
       <Typography>{text}</Typography>
     </div>
   )

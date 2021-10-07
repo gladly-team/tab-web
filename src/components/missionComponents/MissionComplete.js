@@ -9,6 +9,7 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import PersonalAcheivementCard from 'src/components/PersonalAcheivementCard'
 import AcheivementBadge from 'src/components/AcheivementBadge'
 import moment from 'moment'
+import clsx from 'clsx'
 
 const AVERAGE_USER_TABS_DAY = 12
 const useStyles = makeStyles((theme) => ({
@@ -32,6 +33,8 @@ const useStyles = makeStyles((theme) => ({
   hr: {
     marginLeft: 0,
     marginRight: 0,
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(4),
     borderColor: 'rgba(0, 0, 0, 0.12)',
     width: '100%',
   },
@@ -56,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(2),
     width: '100%',
     marginTop: theme.spacing(2),
   },
@@ -98,6 +101,7 @@ const MissionComplete = ({
   user: { username, pendingMissionInvites = [], id },
   showRestart,
   restartMission,
+  className,
 }) => {
   const {
     tabCount,
@@ -116,15 +120,13 @@ const MissionComplete = ({
     Math.round((teamTabsPerDay / AVERAGE_USER_TABS_DAY) * 10) / 10
   const userStats = squadMembers.filter((item) => item.username === username)[0]
   return (
-    <div className={cx.topContainer}>
+    <div className={clsx(cx.topContainer, className)}>
       <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div className={cx.titleLeft}>
-          <Typography style={{ fontSize: '20px', fontWeight: 'bold' }}>
-            Mission Complete
-          </Typography>
+          <Typography variant="h5">Mission Complete</Typography>
           <div className={cx.verticalSpacing}>
             <CustomAlert
-              done
+              icon="done"
               text="Team up with your friends and help give a shelter cat a new home and family!"
             />
           </div>
@@ -133,9 +135,9 @@ const MissionComplete = ({
             <span style={{ fontWeight: 'bold' }}>
               {squadMembers.length} other{squadMembers.length === 1 ? '' : 's'}
             </span>
-            , you helped house train a cat faster than the average individual
-            tabber! That means more space at the shelter for other homeless
-            kittens, even sooner!
+            , you helped house train a cat faster than you could have alone!
+            That means more space at the shelter for other homeless kittens,
+            even sooner.
           </Typography>
           <Typography className={cx.verticalSpacing}>
             The staff - and the cats - at The Jackson Galaxy Project thank you!
@@ -162,9 +164,7 @@ const MissionComplete = ({
       </div>
       <hr className={cx.hr} />
       <div>
-        <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
-          What you accomplished:
-        </Typography>
+        <Typography variant="h6">What you accomplished:</Typography>
         <Typography>Look at the impact you made in your squad</Typography>
         <div
           style={{
@@ -179,7 +179,7 @@ const MissionComplete = ({
           />
           <PersonalAcheivementCard
             title={`${teamRateOverTypicalUser}x faster`}
-            text={`Your team helped get a cat adopted ${teamRateOverTypicalUser}x faster than a typical user`}
+            text={`Your team hit the tab goal ${teamRateOverTypicalUser}x faster than a typical user`}
           />
           <PersonalAcheivementCard
             title={`${userStats.longestTabStreak} days`}
@@ -195,14 +195,9 @@ const MissionComplete = ({
           />
         </div>
       </div>
-      <hr
-        className={cx.hr}
-        style={{ marginTop: '16px', marginBottom: '16px' }}
-      />
+      <hr className={cx.hr} />
       <div>
-        <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
-          Team Awards:
-        </Typography>
+        <Typography variant="h6">Team Awards:</Typography>
         <Typography>Check out the top performers in your squad!</Typography>
         <div
           style={{
@@ -294,9 +289,15 @@ MissionComplete.propTypes = {
     whether to give the user the option to restart or rejoin missions
   */
   showRestart: PropTypes.bool,
+
+  /**
+    top container class name override
+  */
+  className: PropTypes.string,
 }
 MissionComplete.defaultProps = {
   showRestart: false,
   restartMission: null,
+  className: '',
 }
 export default MissionComplete

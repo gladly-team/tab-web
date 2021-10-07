@@ -9,7 +9,6 @@ import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
 import MuiAccordionDetails from '@material-ui/core/AccordionDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import MissionComplete from 'src/components/missionComponents/MissionComplete'
-import clsx from 'clsx'
 import moment from 'moment'
 
 const Accordion = withStyles({
@@ -70,12 +69,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     marginTop: theme.spacing(4),
   },
-  titleFont: {
-    fontSize: '20px',
-    fontWeight: 'bold',
+  missionContainer: {
+    paddingTop: theme.spacing(4),
   },
   subtitleFont: {
-    fontSize: '16px',
     color: theme.palette.colors.subtitleGrey,
   },
   hr: {
@@ -91,7 +88,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
   },
-  accordianFont: { fontWeight: 'bold', fontSize: '14px' },
 }))
 const PastMissionsComponent = ({
   user: {
@@ -133,13 +129,13 @@ const PastMissionsComponent = ({
   // }
   return (
     <Paper elevation={1} className={cx.topContainer}>
-      <Typography classes={{ root: cx.titleFont }}>Past Missions</Typography>
-      <Typography className={cx.subtitleFont}>
+      <Typography variant="h5">Past Missions</Typography>
+      <Typography variant="subtitle1" className={cx.subtitleFont}>
         {`${edges.length} Missions Completed. ${
           currentMission ? 1 : 0
         } Ongoing.`}
       </Typography>
-      <Typography className={cx.subtitleFont}>
+      <Typography variant="subtitle1" className={cx.subtitleFont}>
         Find your past missions and squads here after you complete them.
       </Typography>
       <hr className={cx.hr} />
@@ -152,6 +148,7 @@ const PastMissionsComponent = ({
             height="180px"
           />
           <Typography
+            variant="subtitle1"
             className={cx.subtitleFont}
             style={{ maxWidth: '464px', textAlign: 'center' }}
           >
@@ -161,10 +158,11 @@ const PastMissionsComponent = ({
         </div>
       )}
       {edges.length > 0 && (
-        <div className={cx.noMissionsContainer}>
-          {edges
-
-            // .sort((a, b) => a.node.completed - b.node.completed)
+        <div>
+          {[...edges]
+            .sort((a, b) =>
+              moment(a.node.completed).isBefore(b.node.completed) ? 1 : -1
+            )
             .map(({ node }, index) => (
               <Accordion
                 key={node.missionId}
@@ -177,21 +175,14 @@ const PastMissionsComponent = ({
                   id="panel1d-header"
                   expandIcon={<ExpandMoreIcon />}
                 >
-                  <Typography
-                    className={cx.subtitleFont}
-                    style={{ fontSize: '12px' }}
-                  >
+                  <Typography className={cx.subtitleFont} variant="caption">
                     {`${moment().diff(
                       moment(node.completed),
                       'days'
                     )} days ago`}
                   </Typography>
-                  <Typography className={cx.accordianFont}>
-                    {node.squadName}
-                  </Typography>
-                  <Typography
-                    className={clsx(cx.accordianFont, cx.purpleColor)}
-                  >
+                  <Typography variant="h6">{node.squadName}</Typography>
+                  <Typography variant="h6" className={cx.purpleColor}>
                     1 training session for a shelter cat
                   </Typography>
                   {/* {node.squadMembers.map((user) => (
@@ -201,14 +192,29 @@ const PastMissionsComponent = ({
                       <Typography>,</Typography>
                     </>
                   ))} */}
-                  {node.squadMembers.map((user) => (
-                    <Typography key={user.username + user.invitedEmail}>
-                      {user.username}
-                    </Typography>
-                  ))}
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    {node.squadMembers
+                      .filter((user) => !!user.username)
+                      .map((user, idx) => (
+                        <Typography
+                          style={{ marginRight: '8px' }}
+                          key={user.username + user.invitedEmail}
+                        >
+                          {user.username}
+                          {idx <
+                            node.squadMembers.filter((usr) => !!usr.username)
+                              .length -
+                              1 && ','}
+                        </Typography>
+                      ))}
+                  </div>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <MissionComplete mission={node} user={{ username, id }} />
+                  <MissionComplete
+                    className={cx.missionContainer}
+                    mission={node}
+                    user={{ username, id }}
+                  />
                 </AccordionDetails>
               </Accordion>
             ))}

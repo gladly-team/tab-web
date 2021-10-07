@@ -19,6 +19,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     boxShadow: '0px 2px 4px grey',
     borderRadius: '30px',
+    paddingRight: theme.spacing(2.5),
+    paddingLeft: theme.spacing(2.5),
     padding: '0px',
     '&:hover': {
       background: 'white',
@@ -26,12 +28,12 @@ const useStyles = makeStyles((theme) => ({
   },
   squadsIcon: {
     position: 'relative',
-    marginLeft: theme.spacing(2),
-    marginRight: '8px',
+    marginRight: theme.spacing(1.5),
+    height: '20px',
+    width: '20px',
   },
   progressBar: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(1.5),
     width: '30px',
   },
   popoverText: {
@@ -56,7 +58,7 @@ const SquadCounter = (props) => {
         onClick={() => setIsPopoverOpen(true)}
         ref={counterRef}
       >
-        <SquadIcon className={classes.squadsIcon} viewBox="0 0 22 22" />
+        <SquadIcon className={classes.squadsIcon} viewBox="0 0 20 20" />
         <Typography className={classes.counter} variant="h5">
           {Math.floor(progress)}%
         </Typography>
