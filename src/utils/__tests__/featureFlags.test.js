@@ -23,6 +23,42 @@ describe('feature flag: showDevelopmentOnlyDemoPages', () => {
   })
 })
 
+describe('feature flag: showDevelopmentOnlyMissionsFeature', () => {
+  it('returns false when the env var is undefined', () => {
+    delete process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE
+    const {
+      showDevelopmentOnlyMissionsFeature,
+    } = require('src/utils/featureFlags')
+    expect(showDevelopmentOnlyMissionsFeature()).toBe(false)
+  })
+
+  it('returns false when the env var is "false"', () => {
+    process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE = 'false'
+    const {
+      showDevelopmentOnlyMissionsFeature,
+    } = require('src/utils/featureFlags')
+    expect(showDevelopmentOnlyMissionsFeature()).toBe(false)
+  })
+
+  it('returns true when the env var is "true"', () => {
+    process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE = 'true'
+    const {
+      showDevelopmentOnlyMissionsFeature,
+    } = require('src/utils/featureFlags')
+    expect(showDevelopmentOnlyMissionsFeature()).toBe(true)
+  })
+
+  it('returns true when the user email is an internal member even if the env var is false"', () => {
+    process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE = 'false'
+    const {
+      showDevelopmentOnlyMissionsFeature,
+    } = require('src/utils/featureFlags')
+    expect(showDevelopmentOnlyMissionsFeature('alec@tabforacause.org')).toBe(
+      true
+    )
+  })
+})
+
 describe('feature flag: showMockAchievements', () => {
   it('returns false when the env var is undefined', () => {
     delete process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MOCK_ACHIEVEMENTS

@@ -55,11 +55,11 @@ const UserImpact = ({ userImpact, user, disabled }) => {
     pendingUserReferralImpact,
     pendingUserReferralCount,
   } = userImpact
-  const { currentMission, pendingMissionInvites, hasSeenSquads } = user
+  const { currentMission, pendingMissionInvites, hasSeenSquads, email } = user
   const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
   const showSquadsIntroNotification =
-    showDevelopmentOnlyMissionsFeature() &&
+    showDevelopmentOnlyMissionsFeature(email) &&
     !hasSeenSquads &&
     userImpactMetric >= 2
   const referralRewardNotificationOpen =
@@ -363,6 +363,7 @@ UserImpact.propTypes = {
       })
     ),
     hasSeenSquads: PropTypes.bool,
+    email: PropTypes.string,
   }).isRequired,
   disabled: PropTypes.bool.isRequired,
 }

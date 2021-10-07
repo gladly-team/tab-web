@@ -260,6 +260,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           ...MoneyRaisedContainer_app
         }
         user(userId: $userId) {
+          email
           tabs
           vcCurrent
           id
@@ -300,8 +301,6 @@ const Index = ({ data: fallbackData }) => {
   })
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
-  const showDevelopmentOnlyMissionsFeatureFlag =
-    showDevelopmentOnlyMissionsFeature()
 
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
@@ -318,7 +317,7 @@ const Index = ({ data: fallbackData }) => {
     }
   }, [])
   const { app, user, userImpact } = data || {}
-  const { currentMission } = user || {}
+  const { currentMission, email } = user || {}
   const {
     status: missionStatus = 'not started',
     tabCount,
@@ -430,6 +429,8 @@ const Index = ({ data: fallbackData }) => {
     setJustFinishedIntroFlow(true)
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
+  const showDevelopmentOnlyMissionsFeatureFlag =
+    showDevelopmentOnlyMissionsFeature(email)
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {showIntro ? (
