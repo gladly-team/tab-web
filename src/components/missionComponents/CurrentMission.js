@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
-import AddIcon from '@material-ui/icons/Add'
 import Typography from '@material-ui/core/Typography'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import MuiAccordion from '@material-ui/core/Accordion'
@@ -28,6 +27,10 @@ import MissionSocialShare from 'src/components/missionComponents/MissionSocialSh
 import MissionComplete from 'src/components/missionComponents/MissionComplete'
 import RestartMissionMutation from 'src/utils/mutations/RestartMissionMutation'
 
+const statusMap = {
+  pending: 'Awaiting Squadmates',
+  started: 'Mission Started',
+}
 const Accordion = withStyles({
   root: {
     width: '100%',
@@ -73,14 +76,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    padding: theme.spacing(2),
-  },
-  titleFont: {
-    fontSize: '20px',
-    fontWeight: 'bold',
+    padding: theme.spacing(3),
   },
   subtitleFont: {
-    fontSize: '16px',
     color: theme.palette.colors.subtitleGrey,
   },
   hr: {
@@ -88,6 +86,8 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 0,
     borderColor: 'rgba(0, 0, 0, 0.12)',
     width: '100%',
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(4),
   },
   alertIcon: { flexDirection: 'column', justifyContent: 'center' },
   alertRoot: {
@@ -118,7 +118,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   captionFont: {
-    fontSize: '12px',
     color: theme.palette.colors.subtitleGrey,
   },
   progressBar: {
@@ -153,9 +152,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer',
   },
   sendButton: {
-    marginTop: theme.spacing(2),
-    height: theme.spacing(3),
-    backgroundColor: theme.palette.colors.purple1,
+    marginTop: theme.spacing(12),
   },
   createSquadContainer: {
     display: 'flex',
@@ -163,6 +160,10 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     maxWidth: '468px',
     alignSelf: 'center',
+  },
+  accordianSummaryChildren: {
+    display: 'flex',
+    flexDirection: 'column',
   },
 }))
 
@@ -262,7 +263,7 @@ const CurrentMissionComponent = ({ user }) => {
       ) : (
         <>
           <div>
-            <Typography classes={{ root: cx.titleFont }}>Your Squad</Typography>
+            <Typography variant="h5">Your Squad</Typography>
             <Accordion
               elevation={0}
               expanded={expanded === 'panel1'}
@@ -273,34 +274,33 @@ const CurrentMissionComponent = ({ user }) => {
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
               >
-                <Typography className={cx.subtitleFont}>
-                  A mission lets you work together with friends to help get a
-                  shelter cat adopted! When you work together with your squad
-                  you can make a larger impact, sooner.
+                <Typography className={cx.subtitleFont} variant="body1">
+                  Create a squad with friends to help get a shelter cat adopted
+                  sooner.
                 </Typography>
+                <Typography variant="body2"> </Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography className={cx.subtitleFont}>
-                  Every tab you open supports cats in need. Squads enables you
-                  to team up with friends and earn more treats together. Cats
-                  can get adopted up to 3x faster with squads! You can create
-                  your first squad today, just start with a couple invites
-                  below!
-                </Typography>
+                <div className={cx.accordianSummaryChildren}>
+                  <Typography className={cx.subtitleFont} variant="body1">
+                    Your squad will be tasked with a mission: to give a shelter
+                    cat a training session, helping it get adopted sooner. Every
+                    tab your squad opens will bring you closer to accomplishing
+                    your mission.
+                  </Typography>
+                </div>
               </AccordionDetails>
             </Accordion>
           </div>
           <hr className={cx.hr} />
-          <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
-            New Mission
+          <Typography variant="h5">
+            {status === 'started' ? 'Your Mission' : 'New Mission'}
           </Typography>
           {status && (
-            <div style={{ display: 'flex' }}>
-              <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
-                Status:{' '}
-              </Typography>
-              <Typography style={{ fontSize: '16px', marginLeft: '8px' }}>
-                {status}
+            <div style={{ display: 'flex', alignItems: 'baseline' }}>
+              <Typography variant="h6">Status: </Typography>
+              <Typography style={{ marginLeft: '8px' }} variant="subtitle1">
+                {statusMap[status]}
               </Typography>
             </div>
           )}
@@ -315,7 +315,11 @@ const CurrentMissionComponent = ({ user }) => {
                 height="180px"
                 width="250px"
               />
-              <Typography align="center" className={cx.captionFont}>
+              <Typography
+                align="center"
+                variant="caption"
+                className={cx.captionFont}
+              >
                 1. Open new tabs with your squad
               </Typography>
             </div>
@@ -326,7 +330,11 @@ const CurrentMissionComponent = ({ user }) => {
                 width="250px"
                 alt="squad step 1"
               />
-              <Typography align="center" className={cx.captionFont}>
+              <Typography
+                align="center"
+                variant="caption"
+                className={cx.captionFont}
+              >
                 2. Raise enough money to get a shelter cat house trained
               </Typography>
             </div>
@@ -337,7 +345,11 @@ const CurrentMissionComponent = ({ user }) => {
                 height="180px"
                 width="250px"
               />
-              <Typography align="center" className={cx.captionFont}>
+              <Typography
+                align="center"
+                variant="caption"
+                className={cx.captionFont}
+              >
                 3. Trained house cats are much more likely to get adopted
               </Typography>
             </div>
@@ -347,10 +359,9 @@ const CurrentMissionComponent = ({ user }) => {
             <div className={cx.createSquadContainer}>
               <Typography
                 style={{
-                  fontSize: '16px',
-                  fontWeight: 'bold',
                   marginBottom: '16px',
                 }}
+                variant="h6"
               >
                 Create your squad now!
               </Typography>
@@ -378,9 +389,7 @@ const CurrentMissionComponent = ({ user }) => {
           {(squadMembers.length === 1 ||
             (!squadMembers.length && missionId)) && (
             <div className={cx.createSquadContainer}>
-              <Typography style={{ fontSize: '16px', fontWeight: 'bold' }}>
-                Create Your squad now!
-              </Typography>
+              <Typography variant="h6">Create Your squad now!</Typography>
               <MissionSocialShare
                 user={{ username, id }}
                 emailSentCallback={onEmailsSent}
@@ -482,15 +491,18 @@ const CurrentMissionComponent = ({ user }) => {
                   cx.addSquadMateButton,
                   isAddSquadMateOpen && cx.tableDisabled
                 )}
-                role="button"
-                onKeyPress={handleAddSquadMateClick}
-                onClick={handleAddSquadMateClick}
-                ref={addSquadMatesSection}
-                tabIndex={0}
-                data-test-id="addSquadMateButton"
               >
-                <AddIcon fontSize="small" />
-                <Typography>Add Squad Mates</Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  data-test-id="addSquadMateButton"
+                  onKeyPress={handleAddSquadMateClick}
+                  onClick={handleAddSquadMateClick}
+                  ref={addSquadMatesSection}
+                  tabIndex={0}
+                >
+                  Add Squad Mates
+                </Button>
               </div>
               {isAddSquadMateOpen && (
                 <MissionSocialShare

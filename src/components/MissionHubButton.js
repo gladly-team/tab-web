@@ -14,6 +14,13 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     paddingTop: '7px',
     paddingBottom: '7px',
+    paddingRight: theme.spacing(2.5),
+    paddingLeft: theme.spacing(2.5),
+  },
+  icon: {
+    marginRight: theme.spacing(2),
+    height: '20px',
+    width: '20px',
   },
 }))
 
@@ -40,7 +47,7 @@ const MissionHubButton = ({ status }) => {
   return (
     <Link to={missionHubURL}>
       <Button variant="outlined" className={cx.buttonContainer}>
-        <SquadIcon />
+        <SquadIcon viewBox="0 0 20 20" classes={{ root: cx.icon }} />
         {text}
       </Button>
     </Link>

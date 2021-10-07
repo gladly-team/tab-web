@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     width: '88%',
-    maxWidth: '1280px',
+    maxWidth: '1276px',
     marginTop: '162px',
     alignItems: 'center',
   },
@@ -60,10 +60,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     width: '100%',
     justifyContent: 'space-between',
-  },
-  titleFont: {
-    fontSize: '24px',
-    fontWeight: 'bold',
   },
   title: {
     display: 'flex',
@@ -164,11 +160,10 @@ const Missions = ({ data: fallbackData }) => {
         <div className={classes.titleSection}>
           <div className={classes.title}>
             <SquadIcon
-              style={{ marginTop: '2px', marginRight: '8px', color: '#9d4ba3' }}
+              viewBox="0 0 20 20"
+              style={{ marginRight: '8px', color: '#9d4ba3' }}
             />
-            <Typography classes={{ root: classes.titleFont }}>
-              Squads
-            </Typography>
+            <Typography variant="h4">Squads</Typography>
           </div>
           <Link to={dashboardURL} className={classes.menuItem}>
             <IconButton>

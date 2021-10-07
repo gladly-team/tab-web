@@ -1,5 +1,6 @@
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from 'src/utils/theme'
+import CssBaseline from '@material-ui/core/CssBaseline'
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
@@ -13,7 +14,9 @@ export const parameters = {
 export const decorators = [
   (Story) => (
     <ThemeProvider theme={theme}>
-      <Story />
+      <CssBaseline>
+        <Story />
+      </CssBaseline>
     </ThemeProvider>
   ),
 ]

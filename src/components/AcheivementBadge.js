@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '140px',
   },
   subtitleFont: {
-    fontSize: '12px',
     color: theme.palette.colors.subtitleGrey,
   },
   titleFont: {
@@ -69,10 +68,14 @@ const AcheivementBadge = ({ awardType, user, stat, className }) => {
         alt="consistent kitty"
       />
       <div className={cx.textContainer}>
-        <Typography className={cx.subtitleFont}>{subtitle}</Typography>
-        <Typography className={cx.titleFont}>{awardType}</Typography>
+        <Typography variant="subtitle1" className={cx.subtitleFont}>
+          {subtitle}
+        </Typography>
+        <Typography variant="h5">{awardType}</Typography>
+        <Typography variant="h6" className={cx.userNameFont}>
+          {user}
+        </Typography>
         <Typography>{`${stat} ${unit}`}</Typography>
-        <Typography className={cx.userNameFont}>{user}</Typography>
       </div>
     </div>
   )

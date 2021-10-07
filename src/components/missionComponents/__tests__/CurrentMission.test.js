@@ -265,7 +265,7 @@ describe('Current Mission component', () => {
     )
     expect(wrapper.find(MissionSocialShare).exists()).toBe(false)
     await act(async () => {
-      wrapper.find('[data-test-id="addSquadMateButton"]').simulate('click')
+      wrapper.find(Button).simulate('click')
     })
     wrapper.update()
     expect(wrapper.find(MissionSocialShare).exists()).toBe(true)

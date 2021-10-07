@@ -40,8 +40,6 @@ const useStyles = makeStyles((theme) => ({
   },
   sendButton: {
     marginTop: theme.spacing(2),
-    height: theme.spacing(3),
-    backgroundColor: theme.palette.colors.purple1,
   },
   sentBox: {
     display: 'flex',

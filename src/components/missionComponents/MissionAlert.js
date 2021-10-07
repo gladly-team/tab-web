@@ -27,10 +27,10 @@ const customAlertUseStyles = makeStyles((theme) => ({
   },
   text: {
     color: theme.palette.primary.main,
-    fontWeight: 'bold',
-    fontSize: '14px',
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
   },
   buttonContainer: { margin: theme.spacing(3), marginLeft: 'auto' },
 }))
@@ -49,7 +49,9 @@ const CustomAlert = ({ text, icon, missionId, id }) => {
       {icon === 'done' && <DoneIcon color="primary" />}
       {icon === 'star' && <StarBorderIcon color="primary" />}
       {icon === 'message' && <MailOutlineIcon color="primary" />}
-      <Typography classes={{ root: cx.text }}>{text}</Typography>
+      <Typography variant="subtitle2" classes={{ root: cx.text }}>
+        {text}
+      </Typography>
       {missionId && (
         <div className={cx.buttonContainer}>
           <Button
