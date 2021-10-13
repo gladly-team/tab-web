@@ -16054,17 +16054,17 @@ symbol.prototype.description@^1.0.0:
     has-symbols "^1.0.2"
     object.getownpropertydescriptors "^2.1.2"
 
-tab-ads@^1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.3.tgz#c578dc9135752eb08e3c10e87b065d97954701a4"
-  integrity sha512-B8ciOEQI/EOGTNSST58uI+YVTwIVUFZmZfQyJcnPSqAvla6hP8jXWFVpJJIqFjPSKfqsczi3D+77DuuzUWsrQg==
+tab-ads@^1.1.4-alpha.0:
+  version "1.1.4-alpha.0"
+  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.4-alpha.0.tgz#a1d9c86989249534eb4bc5de76eac55a2d03558b"
+  integrity sha512-UQvCUoar6z4bcI5g534GdCTj3UqovTIW+RbDm+A4OrMC6rqhFD0wLYU7naAQAzgyhK7egfcCoZ+xSTc6DUQT1A==
   dependencies:
     lodash "^4.17.21"
 
-tab-cmp@^0.13.0:
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.13.0.tgz"
-  integrity sha512-+U8Z1XAOmWwZ0aymjvHj0tKp+k0ojoqnRjD+v7d1l7NvHSVGlT6GByQQnMTrhLHdugb9HpVVvpGb9MmddbC1tg==
+tab-cmp@^0.14.0-alpha.0:
+  version "0.14.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.14.0-alpha.0.tgz#e9c18da810daba33551c81312b8c5803d41bbe84"
+  integrity sha512-K9FPaavJ0Mkalln/8eYYhQ1EFK7gdjxMEre+jMA5IFMREi9QhjihdEor5DjddF1p3pMtSUyK+FmgD7XP0RW3Zw==
 
 tab-e2e@^2.0.1:
   version "2.0.1"
