@@ -128,6 +128,13 @@ const MissionSocialShare = ({ emailSentCallback, missionId, user }) => {
       }, 2500)
     } catch (e) {
       logger.error(e)
+      setSendingState('Invites failed to send')
+      setTimeout(() => {
+        setSendingState('Send Invite')
+        setPersonalMessage('')
+        setName('')
+        setValidEmails([])
+      }, 2500)
     }
   }
   const referralUrl = getSquadsLink(username, missionId)
