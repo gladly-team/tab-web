@@ -135,9 +135,6 @@ const PastMissionsComponent = ({
           currentMission ? 1 : 0
         } Ongoing.`}
       </Typography>
-      <Typography variant="subtitle1" className={cx.subtitleFont}>
-        Find your past missions and squads here after you complete them.
-      </Typography>
       <hr className={cx.hr} />
       {edges.length === 0 && (
         <div className={cx.noMissionsContainer}>
@@ -152,8 +149,7 @@ const PastMissionsComponent = ({
             className={cx.subtitleFont}
             style={{ maxWidth: '464px', textAlign: 'center' }}
           >
-            You don’t have any past missions yet! Your mission info will appear
-            here once you create a squad, and complete your first mission.
+            No missions completed yet.
           </Typography>
         </div>
       )}

@@ -300,7 +300,7 @@ const CurrentMissionComponent = ({ user }) => {
           {status && (
             <div style={{ display: 'flex', alignItems: 'baseline' }}>
               <Typography variant="h6">Status: </Typography>
-              <Typography style={{ marginLeft: '8px' }} variant="subtitle1">
+              <Typography style={{ marginLeft: '8px' }} variant="h6">
                 {statusMap[status]}
               </Typography>
             </div>
@@ -336,7 +336,7 @@ const CurrentMissionComponent = ({ user }) => {
                 variant="caption"
                 className={cx.captionFont}
               >
-                2. Raise enough money to get a shelter cat house trained
+                2. Raise enough to provide a training session for a shelter cat
               </Typography>
             </div>
             <div className={cx.explanationCard}>
@@ -351,7 +351,8 @@ const CurrentMissionComponent = ({ user }) => {
                 variant="caption"
                 className={cx.captionFont}
               >
-                3. Trained house cats are much more likely to get adopted
+                3. Shelter cats that receive training are much more likely to be
+                adopted
               </Typography>
             </div>
           </div>
@@ -456,7 +457,7 @@ const CurrentMissionComponent = ({ user }) => {
                           }}
                           align="left"
                         >
-                          {tabsToday} tabs
+                          {tabsToday} {tabsToday === 1 ? 'tab' : 'tabs'}
                         </TableCell>
                         <TableCell
                           classes={{
@@ -464,7 +465,7 @@ const CurrentMissionComponent = ({ user }) => {
                           }}
                           align="left"
                         >
-                          {tabs} tabs
+                          {tabs} {tabs === 1 ? 'tab' : 'tabs'}
                         </TableCell>
                         <TableCell
                           classes={{
@@ -472,7 +473,7 @@ const CurrentMissionComponent = ({ user }) => {
                           }}
                           align="left"
                         >
-                          {streak} days
+                          {streak} {streak === 1 ? 'day' : 'days'}
                         </TableCell>
                         <TableCell
                           classes={{

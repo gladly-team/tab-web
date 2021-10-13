@@ -3,26 +3,20 @@ import PropTypes from 'prop-types'
 import { graphql } from 'react-relay'
 import { makeStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
-import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
+import { withSentry } from 'src/utils/pageWrappers/withSentry'
 import CloseIcon from '@material-ui/icons/Close'
 import Typography from '@material-ui/core/Typography'
 import SquadIcon from 'src/assets/icons/SquadIcon'
 import { flowRight } from 'lodash/util'
 import Link from 'src/components/Link'
-import {
-  withAuthUser,
-  AuthAction,
-  withAuthUserTokenSSR,
-} from 'next-firebase-auth'
+import { withAuthUser, AuthAction } from 'next-firebase-auth'
 import debounce from 'lodash/debounce'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import withRelay from 'src/utils/pageWrappers/withRelay'
 import useData from 'src/utils/hooks/useData'
 import FullPageLoader from 'src/components/FullPageLoader'
-import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
 import { dashboardURL } from 'src/utils/urls'
-import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import CurrentMissionContainer from 'src/components/missionComponents/CurrentMissionContainer'
 import PastMissionsContainer from 'src/components/missionComponents/PastMissionsContainer'
 import SetHasSeenSquadsMutation from 'src/utils/mutations/SetHasSeenSquadsMutation'
@@ -108,13 +102,13 @@ const Missions = ({ data: fallbackData }) => {
       debounce(() => {
         if (
           // eslint-disable-next-line no-undef
-          window.pageYOffset > pastMissionsSection.current.offsetTop - 260 &&
+          window.pageYOffset > pastMissionsSection.current.offsetTop - 650 &&
           scrollIndex === 0
         ) {
           setScrollIndex(1)
         } else if (
           // eslint-disable-next-line no-undef
-          window.pageYOffset < pastMissionsSection.current.offsetTop - 260 &&
+          window.pageYOffset < pastMissionsSection.current.offsetTop - 650 &&
           scrollIndex === 1
         ) {
           setScrollIndex(0)
@@ -216,15 +210,6 @@ Missions.defaultProps = {
   data: null,
 }
 
-export const getServerSideProps = flowRight([
-  logUncaughtErrors,
-  withAuthUserTokenSSR({
-    whenUnauthed: AuthAction.SHOW_LOADER,
-    LoaderComponent: FullPageLoader,
-  }),
-  withSentrySSR,
-  withDataSSR(getRelayQuery),
-])()
 export default flowRight([
   withAuthUser({
     whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,

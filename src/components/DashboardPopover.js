@@ -15,10 +15,11 @@ const useStyles = makeStyles(() => ({
   },
 }))
 const DashboardPopover = (props) => {
-  const { anchorEl, onClose, open, className, children } = props
+  const { anchorEl, onClose, open, className, children, styleOverride } = props
   const classes = useStyles()
   return (
     <Popover
+      style={styleOverride}
       open={open}
       anchorEl={anchorEl}
       onClose={onClose}
@@ -44,6 +45,8 @@ DashboardPopover.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,
   className: PropTypes.string,
+  // eslint-disable-next-line react/forbid-prop-types
+  styleOverride: PropTypes.object,
 }
 
 DashboardPopover.defaultProps = {
@@ -52,6 +55,7 @@ DashboardPopover.defaultProps = {
   onClose: undefined,
   className: 'default',
   children: undefined,
+  styleOverride: undefined,
 }
 
 export default DashboardPopover

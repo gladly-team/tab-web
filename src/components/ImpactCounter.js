@@ -35,6 +35,10 @@ const useStyles = makeStyles(() => ({
     padding: 12,
     width: 220,
   },
+  disabled: {
+    color: 'rgba(0, 0, 0, 0.26)',
+    cursor: 'default',
+  },
   popover: { marginTop: 10 },
 }))
 
@@ -46,12 +50,14 @@ const ImpactCounter = (props) => {
   const counterRef = useRef(undefined)
 
   return (
-    <div onMouseEnter={disabled ? () => setIsPopoverOpen(true) : undefined}>
+    <>
       <Button
-        disabled={disabled}
-        disableElevation
-        className={clsx(classes.root, className)}
         ref={counterRef}
+        onMouseEnter={disabled ? () => setIsPopoverOpen(true) : undefined}
+        onMouseLeave={disabled ? () => setIsPopoverOpen(false) : undefined}
+        disableElevation
+        disableRipple={!!disabled}
+        className={clsx(classes.root, className, disabled && classes.disabled)}
         onClick={() => setIsPopoverOpen(true)}
       >
         {includeNumber && (
@@ -67,6 +73,7 @@ const ImpactCounter = (props) => {
         <PetsIcon className={classes.petsIcon} />
       </Button>
       <DashboardPopover
+        styleOverride={disabled ? { pointerEvents: 'none' } : undefined}
         open={isPopoverOpen}
         anchorEl={counterRef.current}
         onClose={() => {
@@ -94,7 +101,7 @@ const ImpactCounter = (props) => {
           </Typography>
         </div>
       </DashboardPopover>
-    </div>
+    </>
   )
 }
 
