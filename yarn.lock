@@ -16062,9 +16062,9 @@ tab-ads@^1.1.4-alpha.0:
     lodash "^4.17.21"
 
 tab-cmp@^0.14.0-alpha.0:
-  version "0.14.0-alpha.0"
-  resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.14.0-alpha.0.tgz#e9c18da810daba33551c81312b8c5803d41bbe84"
-  integrity sha512-K9FPaavJ0Mkalln/8eYYhQ1EFK7gdjxMEre+jMA5IFMREi9QhjihdEor5DjddF1p3pMtSUyK+FmgD7XP0RW3Zw==
+  version "0.14.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/tab-cmp/-/tab-cmp-0.14.0-alpha.1.tgz#e66598ab2069b96cf1bc0e93518b0c8624ec70f3"
+  integrity sha512-zH0B+nNuCWCy1CeQX/T/AvgDAgASwaag1gYw+ijR1W9p2+COsiQ47hOORjElOdCmp0+o+ZyD7YKIij3GpShKUg==
 
 tab-e2e@^2.0.1:
   version "2.0.1"
