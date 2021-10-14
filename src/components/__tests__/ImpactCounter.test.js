@@ -76,7 +76,7 @@ describe('ImpactCounter component', () => {
       disabled: true,
     }
     const wrapper = shallow(<ImpactCounter {...mockProps} />)
-    expect(wrapper.find(Button).prop('disabled')).toEqual(true)
+    expect(wrapper.find(Button).prop('disableRipple')).toEqual(true)
   })
 
   it('displays the popup when clicked on', () => {
