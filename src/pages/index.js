@@ -24,7 +24,7 @@ import UserBackgroundImageContainer from 'src/components/UserBackgroundImageCont
 import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
 import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
-
+import useCustomTheme from 'src/utils/hooks/useCustomTheme'
 import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 import SquadCounter from 'src/components/SquadCounter'
@@ -288,7 +288,6 @@ const getRelayQuery = async ({ AuthUser }) => {
 }
 
 const Index = ({ data: fallbackData }) => {
-  const classes = useStyles()
   const { data } = useData({
     getRelayQuery,
     fallbackData,
@@ -327,7 +326,8 @@ const Index = ({ data: fallbackData }) => {
   const userGlobalId = get(user, 'id')
   const globalTabCount = get(user, 'tabs')
   const [tabId] = useState(uuid())
-
+  const ThemeWrapper = useCustomTheme(user.causeId)
+  const classes = useStyles()
   // this is a temporary workaround as the latest updates to the
   // relay store do not push into this component, so we are manually
   // toggling state and a rerender when we successfully fire the
@@ -432,175 +432,178 @@ const Index = ({ data: fallbackData }) => {
   const showDevelopmentOnlyMissionsFeatureFlag =
     showDevelopmentOnlyMissionsFeature(email)
   return (
-    <div className={classes.pageContainer} data-test-id="new-tab-page">
-      {showIntro ? (
-        <div className={classes.OnboardingFlow}>
-          <div
-            style={{
-              padding: '20px 40px',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-            }}
-          >
-            <Logo style={{ height: 40 }} includeText />
+    <ThemeWrapper>
+      <div className={classes.pageContainer} data-test-id="new-tab-page">
+        {showIntro ? (
+          <div className={classes.OnboardingFlow}>
+            <div
+              style={{
+                padding: '20px 40px',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+              }}
+            >
+              <Logo style={{ height: 40 }} includeText />
+            </div>
+            <OnboardingFlow
+              onComplete={onCompletedOnboarding}
+              showMissionSlide={!!missionId}
+            />
           </div>
-          <OnboardingFlow
-            onComplete={onCompletedOnboarding}
-            showMissionSlide={!!missionId}
-          />
-        </div>
-      ) : (
-        <>
-          {enableBackgroundImages ? (
-            <UserBackgroundImageContainer user={user} />
-          ) : null}
-          <div className={classes.fullContainer}>
-            <div className={classes.topContainer}>
-              <div className={classes.userMenuContainer}>
-                {showDevelopmentOnlyMissionsFeatureFlag ? (
-                  <MissionHubButton status={missionStatus} />
-                ) : (
-                  <InviteFriendsIconContainer user={user} />
-                )}
-                {(missionStatus === 'started' ||
-                  missionStatus === 'completed') && (
-                  <SquadCounter
-                    progress={Math.floor((tabCount / tabGoal) * 100)}
+        ) : (
+          <>
+            {enableBackgroundImages ? (
+              <UserBackgroundImageContainer user={user} />
+            ) : null}
+            <div className={classes.fullContainer}>
+              <div className={classes.topContainer}>
+                <div className={classes.userMenuContainer}>
+                  {showDevelopmentOnlyMissionsFeatureFlag ? (
+                    <MissionHubButton status={missionStatus} />
+                  ) : (
+                    <InviteFriendsIconContainer user={user} />
+                  )}
+                  {(missionStatus === 'started' ||
+                    missionStatus === 'completed') && (
+                    <SquadCounter
+                      progress={Math.floor((tabCount / tabGoal) * 100)}
+                    />
+                  )}
+                  <UserImpactContainer
+                    userId={userGlobalId}
+                    userImpact={userImpact}
+                    user={user}
+                    disabled={
+                      missionStatus === 'started' ||
+                      missionStatus === 'completed'
+                    }
                   />
-                )}
-                <UserImpactContainer
-                  userId={userGlobalId}
-                  userImpact={userImpact}
-                  user={user}
-                  disabled={
-                    missionStatus === 'started' || missionStatus === 'completed'
-                  }
-                />
-                <div className={classes.moneyRaisedContainer}>
-                  <Typography
-                    variant="h5"
-                    className={clsx(classes.userMenuItem)}
-                  >
-                    <MoneyRaisedContainer app={app} />
-                  </Typography>
-                </div>
-                <div className={classes.settingsIconContainer}>
-                  <Link to={accountURL}>
-                    <IconButton>
-                      <SettingsIcon
-                        className={clsx(
-                          classes.userMenuItem,
-                          classes.settingsIcon
-                        )}
-                      />
-                    </IconButton>
-                  </Link>
+                  <div className={classes.moneyRaisedContainer}>
+                    <Typography
+                      variant="h5"
+                      className={clsx(classes.userMenuItem)}
+                    >
+                      <MoneyRaisedContainer app={app} />
+                    </Typography>
+                  </div>
+                  <div className={classes.settingsIconContainer}>
+                    <Link to={accountURL}>
+                      <IconButton>
+                        <SettingsIcon
+                          className={clsx(
+                            classes.userMenuItem,
+                            classes.settingsIcon
+                          )}
+                        />
+                      </IconButton>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-            {showAchievements ? (
-              <Link
-                to={achievementsURL}
-                className={classes.achievementsContainer}
-                data-test-id="achievements"
-              >
-                <Achievement
-                  className={classes.achievement}
-                  impactText="Plant 1 tree"
-                  status="inProgress"
-                  taskText="Open tabs 5 days in a row"
-                  deadlineTime={dayjs().add(3, 'days').toISOString()}
-                  progress={{
-                    currentNumber: 2,
-                    targetNumber: 5,
-                    visualizationType: 'checkmarks',
-                  }}
-                />
-                <Achievement
-                  badgeClassName={classes.achievementBadge}
-                  badgeOnly
-                  impactText="Plant 1 tree"
-                  status="failure"
-                  taskText="Recruit 1 friend"
-                  completedTime={dayjs().subtract(2, 'days').toISOString()}
-                  deadlineTime={dayjs().subtract(2, 'days').toISOString()}
-                />
-                <Achievement
-                  badgeClassName={classes.achievementBadge}
-                  badgeOnly
-                  impactText="Plant 1 tree"
-                  status="success"
-                  taskText="Open 100 tabs"
-                  completedTime={dayjs().subtract(5, 'days').toISOString()}
-                  deadlineTime={dayjs().subtract(5, 'days').toISOString()}
-                />
-                <div /> {/* take up a spacing unit */}
-                <div className={classes.timelineBar} />
-              </Link>
-            ) : null}
-          </div>
-          <div className={classes.centerContainer}>
-            <div className={classes.searchBarContainer}>
-              <Logo
-                includeText
-                color={enableBackgroundImages ? 'white' : null}
-                className={classes.logo}
-              />
-              <SearchInput className={classes.searchBar} />
-            </div>
-          </div>
-          <div className={classes.adsContainer}>
-            <div className={classes.adsContainerRectangles}>
-              {adUnits.rectangleAdSecondary && shouldRenderAds ? (
-                <AdComponent
-                  adId={adUnits.rectangleAdSecondary.adId}
-                  onAdDisplayed={(displayedAdInfo) => {
-                    onAdDisplayed(displayedAdInfo, adContext)
-                  }}
-                  onError={onAdError}
-                  style={{
-                    display: 'flex',
-                    minWidth: 300,
-                    overflow: 'visible',
-                  }}
-                />
-              ) : null}
-              {adUnits.rectangleAdPrimary && shouldRenderAds ? (
-                <AdComponent
-                  adId={adUnits.rectangleAdPrimary.adId}
-                  onAdDisplayed={(displayedAdInfo) => {
-                    onAdDisplayed(displayedAdInfo, adContext)
-                  }}
-                  onError={onAdError}
-                  style={{
-                    display: 'flex',
-                    minWidth: 300,
-                    overflow: 'visible',
-                    marginTop: 10,
-                  }}
-                />
+              {showAchievements ? (
+                <Link
+                  to={achievementsURL}
+                  className={classes.achievementsContainer}
+                  data-test-id="achievements"
+                >
+                  <Achievement
+                    className={classes.achievement}
+                    impactText="Plant 1 tree"
+                    status="inProgress"
+                    taskText="Open tabs 5 days in a row"
+                    deadlineTime={dayjs().add(3, 'days').toISOString()}
+                    progress={{
+                      currentNumber: 2,
+                      targetNumber: 5,
+                      visualizationType: 'checkmarks',
+                    }}
+                  />
+                  <Achievement
+                    badgeClassName={classes.achievementBadge}
+                    badgeOnly
+                    impactText="Plant 1 tree"
+                    status="failure"
+                    taskText="Recruit 1 friend"
+                    completedTime={dayjs().subtract(2, 'days').toISOString()}
+                    deadlineTime={dayjs().subtract(2, 'days').toISOString()}
+                  />
+                  <Achievement
+                    badgeClassName={classes.achievementBadge}
+                    badgeOnly
+                    impactText="Plant 1 tree"
+                    status="success"
+                    taskText="Open 100 tabs"
+                    completedTime={dayjs().subtract(5, 'days').toISOString()}
+                    deadlineTime={dayjs().subtract(5, 'days').toISOString()}
+                  />
+                  <div /> {/* take up a spacing unit */}
+                  <div className={classes.timelineBar} />
+                </Link>
               ) : null}
             </div>
-            {adUnits.leaderboard && shouldRenderAds ? (
-              <div className={classes.adContainerLeaderboard}>
-                <AdComponent
-                  adId={adUnits.leaderboard.adId}
-                  onAdDisplayed={(displayedAdInfo) => {
-                    onAdDisplayed(displayedAdInfo, adContext)
-                  }}
-                  onError={onAdError}
-                  style={{
-                    overflow: 'visible',
-                    minWidth: 728,
-                  }}
+            <div className={classes.centerContainer}>
+              <div className={classes.searchBarContainer}>
+                <Logo
+                  includeText
+                  color={enableBackgroundImages ? 'white' : null}
+                  className={classes.logo}
                 />
+                <SearchInput className={classes.searchBar} />
               </div>
-            ) : null}
-          </div>
-        </>
-      )}
-    </div>
+            </div>
+            <div className={classes.adsContainer}>
+              <div className={classes.adsContainerRectangles}>
+                {adUnits.rectangleAdSecondary && shouldRenderAds ? (
+                  <AdComponent
+                    adId={adUnits.rectangleAdSecondary.adId}
+                    onAdDisplayed={(displayedAdInfo) => {
+                      onAdDisplayed(displayedAdInfo, adContext)
+                    }}
+                    onError={onAdError}
+                    style={{
+                      display: 'flex',
+                      minWidth: 300,
+                      overflow: 'visible',
+                    }}
+                  />
+                ) : null}
+                {adUnits.rectangleAdPrimary && shouldRenderAds ? (
+                  <AdComponent
+                    adId={adUnits.rectangleAdPrimary.adId}
+                    onAdDisplayed={(displayedAdInfo) => {
+                      onAdDisplayed(displayedAdInfo, adContext)
+                    }}
+                    onError={onAdError}
+                    style={{
+                      display: 'flex',
+                      minWidth: 300,
+                      overflow: 'visible',
+                      marginTop: 10,
+                    }}
+                  />
+                ) : null}
+              </div>
+              {adUnits.leaderboard && shouldRenderAds ? (
+                <div className={classes.adContainerLeaderboard}>
+                  <AdComponent
+                    adId={adUnits.leaderboard.adId}
+                    onAdDisplayed={(displayedAdInfo) => {
+                      onAdDisplayed(displayedAdInfo, adContext)
+                    }}
+                    onError={onAdError}
+                    style={{
+                      overflow: 'visible',
+                      minWidth: 728,
+                    }}
+                  />
+                </div>
+              ) : null}
+            </div>
+          </>
+        )}
+      </div>
+    </ThemeWrapper>
   )
 }
 
@@ -643,5 +646,5 @@ export default flowRight([
   }),
   withSentry,
   withRelay,
-  NewTabThemeWrapperHOC,
+  // NewTabThemeWrapperHOC,
 ])(Index)
