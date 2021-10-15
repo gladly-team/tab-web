@@ -7,3 +7,4 @@ export const INTL_CAT_DAY_END_2021_NOTIFICATION =
 export const MISSION_COMPLETE = 'mission_complete'
 export const MISSION_STARTED = 'mission_started'
 export const STORAGE_KEY_USERNAME = 'tab.user.username'
+export const TAB_FOR_TEAMSEAS_CAUSE_ID = 'c04b544f-5e6b-4e10-b783-05834e5d087d'

@@ -1,5 +1,6 @@
 import { createTheme } from '@material-ui/core/styles'
 import { merge } from 'lodash/object'
+import { TAB_FOR_TEAMSEAS_CAUSE_ID } from 'src/utils/constants'
 
 const theme = createTheme({
   palette: {
@@ -25,7 +26,7 @@ const theme = createTheme({
 
     // this is a custom theme palette color for the index page
     backgroundContrastText: {
-      main: 'rgba(0, 0, 0, 0.80)',
+      main: '#fff',
     },
   },
   typography: {
@@ -39,5 +40,26 @@ const theme = createTheme({
 
 export default theme
 
+const seasTheme = createTheme({
+  primary: {
+    main: '#5094FB',
+    contrastText: '#fff',
+    background: 'rgba(157, 75, 163, 0.08)',
+  },
+  secondary: {
+    main: '#29BEBA',
+    contrastText: '#fff',
+  },
+})
+
 export const extendTheme = (primaryTheme, extendedTheme) =>
   createTheme(merge({}, primaryTheme, extendedTheme))
+
+export const themeMapper = (causeId) => {
+  switch (causeId) {
+    case TAB_FOR_TEAMSEAS_CAUSE_ID:
+      return extendTheme(theme, seasTheme)
+    default:
+      return theme
+  }
+}

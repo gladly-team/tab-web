@@ -26,6 +26,7 @@ import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import CurrentMissionContainer from 'src/components/missionComponents/CurrentMissionContainer'
 import PastMissionsContainer from 'src/components/missionComponents/PastMissionsContainer'
 import SetHasSeenSquadsMutation from 'src/utils/mutations/SetHasSeenSquadsMutation'
+import { useThemeContext } from 'src/utils/hooks/useThemeContext'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -98,11 +99,17 @@ const getRelayQuery = ({ AuthUser }) => ({
 const Missions = ({ data: fallbackData }) => {
   const { data } = useData({ getRelayQuery, fallbackData })
   const { user } = data || {}
+  const { causeId } = user || {}
   const [scrollIndex, setScrollIndex] = useState(0)
   const currentMissionSection = useRef(null)
   const pastMissionsSection = useRef(null)
   const classes = useStyles()
 
+  // sets the theme based on cause - need to do in each page incase user refreshes
+  const { setTheme } = useThemeContext()
+  useEffect(() => {
+    setTheme(causeId)
+  }, [setTheme, causeId])
   const debouncedHandleOnSchroll = useMemo(
     () =>
       debounce(() => {
