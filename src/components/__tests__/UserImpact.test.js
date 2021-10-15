@@ -63,7 +63,7 @@ beforeEach(async () => {
 
 describe('UserImpact component', () => {
   it('renders without error', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps()
     expect(() => {
       shallow(<UserImpact {...mockProps} />)
@@ -71,7 +71,7 @@ describe('UserImpact component', () => {
   })
 
   it('renders an impact award notification if user hasnt claimed the most recent reward', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps()
     const wrapper = shallow(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification)
@@ -79,7 +79,7 @@ describe('UserImpact component', () => {
   })
 
   it('does not render an impact award notification if user has claimed the most recent reward', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({ hasClaimedLatestReward: true })
     const wrapper = shallow(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(0)
@@ -87,7 +87,7 @@ describe('UserImpact component', () => {
   })
 
   it('does not render an impact award notification if user has not yet confirmed', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({ confirmedImpact: false })
     const wrapper = shallow(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(0)
@@ -95,7 +95,7 @@ describe('UserImpact component', () => {
   })
 
   it('renders a reward dialog if user clicks "hooray" in notification', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps()
     const wrapper = mount(<UserImpact {...mockProps} />)
     expect(wrapper.find(Dialog).at(3).props().open).toBe(false)
@@ -105,7 +105,7 @@ describe('UserImpact component', () => {
   })
 
   it('dismisses the share dialog if dialog onclose is triggered', async () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps()
     const wrapper = mount(<UserImpact {...mockProps} />)
     expect(wrapper.find(Dialog).at(3).props().open).toBe(false)
@@ -119,7 +119,7 @@ describe('UserImpact component', () => {
   })
 
   it('dismisses reward dialog and fires off correct updateImpact mutation', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps()
     const wrapper = mount(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(0)
@@ -132,21 +132,21 @@ describe('UserImpact component', () => {
   })
 
   it('shows confirm impact dialog if user has not confirmed', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({ confirmedImpact: false })
     const wrapper = mount(<UserImpact {...mockProps} />)
     expect(wrapper.find(ImpactDialog).at(0).props().open).toBe(true)
   })
 
   it('does not show confirm impact dialog if user has confirmed', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps()
     const wrapper = mount(<UserImpact {...mockProps} />)
     expect(wrapper.find(ImpactDialog).at(0).props().open).toBe(false)
   })
 
   it('dismisses the confirm Impact dialog fires off correct updateImpact mutation', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({ confirmedImpact: false })
     const wrapper = mount(<UserImpact {...mockProps} />)
     const confirmDialogue = wrapper.find(ImpactDialog).at(0)
@@ -161,7 +161,7 @@ describe('UserImpact component', () => {
   })
 
   it('dismisses the confirm Impact dialog fires off correct updateImpact mutation when the user has been refered', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({
       confirmedImpact: false,
       pendingUserReferralImpact: 5,
@@ -183,7 +183,7 @@ describe('UserImpact component', () => {
   })
 
   it('confirming Impact dialog shows walkMe', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({ confirmedImpact: false })
     const wrapper = mount(<UserImpact {...mockProps} />)
     const confirmDialogue = wrapper.find(ImpactDialog).at(0)
@@ -193,7 +193,7 @@ describe('UserImpact component', () => {
   })
 
   it('confirming Impact dialog shows referral walkMe if user has been referred', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({
       confirmedImpact: false,
       pendingUserReferralImpact: 5,
@@ -206,7 +206,7 @@ describe('UserImpact component', () => {
   })
 
   it('closing walkMe calls setAlertDialogOpen', async () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({ confirmedImpact: false })
     const wrapper = mount(<UserImpact {...mockProps} />)
     const confirmDialogue = wrapper.find(ImpactDialog).at(0)
@@ -216,7 +216,7 @@ describe('UserImpact component', () => {
   })
 
   it('closing referral walkMe calls setNewlyReferredDialogOpen', async () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({
       confirmedImpact: false,
       pendingUserReferralImpact: 5,
@@ -229,7 +229,7 @@ describe('UserImpact component', () => {
   })
 
   it('does not render a referral award notification if user has no pending referrals', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps()
     const wrapper = shallow(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(1)
@@ -237,7 +237,7 @@ describe('UserImpact component', () => {
   })
 
   it('does render referral award notification if user has pending referral impact', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({
       pendingUserReferralImpact: 10,
       pendingUserReferralCount: 1,
@@ -248,7 +248,7 @@ describe('UserImpact component', () => {
   })
 
   it('renders referral reward dialog correctly', async () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({
       pendingUserReferralImpact: 10,
       pendingUserReferralCount: 1,
@@ -261,7 +261,7 @@ describe('UserImpact component', () => {
   })
 
   it('fires off correct updateImpact mutation when use claims impact on referral notification', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({
       pendingUserReferralImpact: 10,
       pendingUserReferralCount: 1,
@@ -277,7 +277,7 @@ describe('UserImpact component', () => {
   })
 
   it('dismisses referral reward dialog', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({
       pendingUserReferralImpact: 10,
       pendingUserReferralCount: 1,
@@ -291,21 +291,21 @@ describe('UserImpact component', () => {
   })
 
   it('renders the confetti canvas if a user hits 100 percent on the progress bar', async () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({ visitsUntilNextImpact: 14 })
     const wrapper = mount(<UserImpact {...mockProps} />)
     expect(wrapper.find('canvas').length).toBe(1)
   })
 
   it('does not render the confetti canvas if a user isnt at 100 percent', async () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({ visitsUntilNextImpact: 2 })
     const wrapper = mount(<UserImpact {...mockProps} />)
     expect(wrapper.find('canvas').length).toBe(0)
   })
 
   it('launches confetti if a user hits 100 percent on the progress bar and only fires once', async () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({ visitsUntilNextImpact: 1 })
     const wrapper = mount(<UserImpact {...mockProps} />)
     wrapper.setProps(getMockProps({ visitsUntilNextImpact: 14 }))
@@ -316,14 +316,14 @@ describe('UserImpact component', () => {
   })
 
   it('does not launch the confetti if a user is not at 100% progress', async () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps({ visitsUntilNextImpact: 12 })
     mount(<UserImpact {...mockProps} />)
     expect(confetti.create).toHaveBeenCalledTimes(0)
   })
 
   it('does not render international cat day end notification if it is not enabled', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = getMockProps()
     const wrapper = shallow(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(1)
@@ -331,7 +331,7 @@ describe('UserImpact component', () => {
   })
 
   it('does not render international cat day end notification if it is enabled but user has already dismissed', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     localStorageMgr.getItem.mockReturnValue('true')
     const mockProps = getMockProps()
     const wrapper = shallow(<UserImpact {...mockProps} />)
@@ -340,7 +340,7 @@ describe('UserImpact component', () => {
   })
 
   it('does render international cat day end notification if user has not dismissed and it is enabled', async () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = {
       ...getMockProps(),
       user: {
@@ -357,7 +357,7 @@ describe('UserImpact component', () => {
 
   it('hides international cat day end notification if it ends after initial render (this avoids "+1" problem of page loads after campaign end)', async () => {
     expect.assertions(2)
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = {
       ...getMockProps(),
       user: {
@@ -384,7 +384,7 @@ describe('UserImpact component', () => {
   })
 
   it('dismissing intl cat day end notification updates local storage and dismisses notification', async () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = {
       ...getMockProps(),
       user: {
@@ -409,7 +409,7 @@ describe('UserImpact component', () => {
   })
 
   it('does not render squadsIntro notification if feature flag is disabled', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     showDevelopmentOnlyMissionsFeature.mockReturnValue(false)
     const mockProps = getMockProps({}, { hasSeenSquads: false })
     const wrapper = shallow(<UserImpact {...mockProps} />)
@@ -418,7 +418,7 @@ describe('UserImpact component', () => {
   })
 
   it('does render squadsIntro notification if feature flag is enabled and user hasnt seen squads', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
     const mockProps = getMockProps(
       { userImpactMetric: 3, hasClaimedLatestReward: true },
@@ -430,7 +430,7 @@ describe('UserImpact component', () => {
   })
 
   it('does not render squadsIntro notification if feature flag is enabled and user has seen squads', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
     const mockProps = getMockProps(
       { userImpactMetric: 3, hasClaimedLatestReward: true },
@@ -442,7 +442,7 @@ describe('UserImpact component', () => {
   })
 
   it('does not render squadsIntro notification if feature flag is enabled and user has not seen squads but has not reached two impact', () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
     const mockProps = getMockProps(
       { userImpactMetric: 1, hasClaimedLatestReward: true },
@@ -455,7 +455,7 @@ describe('UserImpact component', () => {
 
   it('clicking squadsIntro notification cta updates hasSeenSquads and navigates to missions page', async () => {
     expect.assertions(2)
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
     const mockProps = getMockProps(
       { userImpactMetric: 3, hasClaimedLatestReward: true },
@@ -474,7 +474,7 @@ describe('UserImpact component', () => {
 
   it('clicking squadsIntro notification close icon updates hasSeenSquads', async () => {
     expect.assertions(1)
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
     const mockProps = getMockProps(
       { userImpactMetric: 3, hasClaimedLatestReward: true },
@@ -491,7 +491,7 @@ describe('UserImpact component', () => {
   })
 
   it('does render MissionNotification with correct props', async () => {
-    const UserImpact = require('src/components/UserImpact').default
+    const UserImpact = require('src/components/UserImpactCats').default
     const mockProps = {
       ...getMockProps(),
       user: {
