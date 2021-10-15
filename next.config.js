@@ -19,6 +19,7 @@ const prodCloudFrontRegex = 'https://tab.gladly.io/newtab/.*'
 const cachingRegex = new RegExp(
   `${url}${basePath}.*|${devAssetsRegex}|${prodAssetsRegex}|${devCloudFrontRegex}|${prodCloudFrontRegex}`
 )
+
 // Use the SentryWebpack plugin to upload the source maps during build.
 const SentryWebpackPlugin = require('@sentry/webpack-plugin')
 
@@ -40,14 +41,10 @@ const nextConfig = {
         source: '/service-worker.js',
         destination: '/_next/static/service-worker.js',
       },
-      // Keeping this logic in vercel.json for now. Next.js 9.5
-      // requires an absolute destination URL when basePath is
-      // false, which is more trouble than it's worth.
-      // {
-      //   source: '/v4/:route(.*)',
-      //   destination: '/newtab/:route',
-      //   basePath: false,
-      // },
+
+      // Note: the vercel.json redirect from /v4/(.*) to /newtab/$1 is
+      // deprecated. Instead, we're accessing the v4 API via
+      // /newtab/api/, which we added as a CloudFront cache behavior.
     ]
   },
 
@@ -142,19 +139,23 @@ const nextConfig = {
 
     return config
   },
+
   // Modify our service worker manifest.
   transformManifest: (manifest) => ['/'].concat(manifest), // add the homepage to the cache
   // Let us manually register the service worker.
   // https://github.com/hanford/next-offline#runtime-registration
   dontAutoRegisterSw: true,
+
   // Whether to enable the service worker in development. Note this may not work
   // if we don't have a custom _error.js file:
   // https://github.com/hanford/next-offline/issues/190#issuecomment-535278921
   generateInDevMode: false,
+
   // The base path from which to serve the service worker. This affects the
   // default scope.
   // https://developers.google.com/web/ilt/pwa/introduction-to-service-worker#registration_and_scope
   registerSwPrefix: '/newtab',
+
   // Limit the service worker to this app's base path.
   scope: '/newtab/',
   workboxOpts: {
@@ -162,6 +163,7 @@ const nextConfig = {
     cleanupOutdatedCaches: true,
     clientsClaim: true,
     skipWaiting: true,
+
     // Cache strategies for different resources:
     // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#using_strategies
     runtimeCaching: [
@@ -192,11 +194,13 @@ const nextConfig = {
         // "network only" strategy, this should be the same as not defining
         // any caching at all, so we're just being explicit here.
         // https://regex101.com/r/2ttcQE/2
-        urlPattern: /^http[s]?:\/\/(?:[^/\s]+\/)(?:(api\/|graphql(?:\/)?$|newtab\/api\/|newtab\/graphql(?:\/)?$))/,
+        urlPattern:
+          /^http[s]?:\/\/(?:[^/\s]+\/)(?:(api\/|graphql(?:\/)?$|newtab\/api\/|newtab\/graphql(?:\/)?$))/,
         handler: 'NetworkOnly',
       },
     ],
   },
+
   // Automatically inline all images under this size.
   inlineImageLimit: 16384,
 }
