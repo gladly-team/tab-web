@@ -1,4 +1,4 @@
-/* globals document */
+/* globals document, window */
 /* eslint react/jsx-props-no-spreading: 0 */
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
