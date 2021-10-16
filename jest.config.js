@@ -23,7 +23,9 @@ module.exports = {
       '<rootDir>/jest/mediaFileTransformer.js',
   },
   transformIgnorePatterns: [
-    '/node_modules/',
+    // Transform unified, which uses exports:
+    // https://github.com/unifiedjs/unified
+    '/node_modules/?!(unified)',
     '/.yalc/',
     '^.+\\.module\\.(css|sass|scss)$',
   ],
