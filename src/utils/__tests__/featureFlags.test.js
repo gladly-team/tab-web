@@ -24,13 +24,6 @@ describe('feature flag: showDevelopmentOnlyDemoPages', () => {
 })
 
 describe('feature flag: showDevelopmentOnlyMissionsFeature', () => {
-  it('returns false', () => {
-    const {
-      showDevelopmentOnlyMissionsFeature,
-    } = require('src/utils/featureFlags')
-    expect(showDevelopmentOnlyMissionsFeature()).toBe(false)
-  })
-
   it('returns false when the env var is undefined', () => {
     delete process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE
     const {
