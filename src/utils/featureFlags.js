@@ -10,9 +10,12 @@ export const showMockAchievements = () =>
 export const showBackgroundImages = () =>
   process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_BACKGROUND_IMAGES === 'true'
 
-export const showDevelopmentOnlyMissionsFeature = (email = '') => {
-  if (email.includes('@tabforacause.org') || email.includes('@gladly.io')) {
-    return true
-  }
-  return process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE === 'true'
-}
+export const showDevelopmentOnlyMissionsFeature = () => false
+
+// export const showDevelopmentOnlyMissionsFeature = (email = '') => {
+// TODO: revisit
+// if (email.includes('@tabforacause.org') || email.includes('@gladly.io')) {
+//   return true
+// }
+// return process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE === 'true'
+// }

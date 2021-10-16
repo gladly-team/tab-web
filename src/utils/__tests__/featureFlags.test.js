@@ -24,7 +24,16 @@ describe('feature flag: showDevelopmentOnlyDemoPages', () => {
 })
 
 describe('feature flag: showDevelopmentOnlyMissionsFeature', () => {
-  it('returns false when the env var is undefined', () => {
+  it('returns false', () => {
+    const {
+      showDevelopmentOnlyMissionsFeature,
+    } = require('src/utils/featureFlags')
+    expect(showDevelopmentOnlyMissionsFeature()).toBe(false)
+  })
+
+  // Disabled for now. Will revisit squads soon.
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('returns false when the env var is undefined', () => {
     delete process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE
     const {
       showDevelopmentOnlyMissionsFeature,
@@ -32,7 +41,9 @@ describe('feature flag: showDevelopmentOnlyMissionsFeature', () => {
     expect(showDevelopmentOnlyMissionsFeature()).toBe(false)
   })
 
-  it('returns false when the env var is "false"', () => {
+  // Disabled for now. Will revisit squads soon.
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('returns false when the env var is "false"', () => {
     process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE = 'false'
     const {
       showDevelopmentOnlyMissionsFeature,
@@ -40,7 +51,9 @@ describe('feature flag: showDevelopmentOnlyMissionsFeature', () => {
     expect(showDevelopmentOnlyMissionsFeature()).toBe(false)
   })
 
-  it('returns true when the env var is "true"', () => {
+  // Disabled for now. Will revisit squads soon.
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('returns true when the env var is "true"', () => {
     process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE = 'true'
     const {
       showDevelopmentOnlyMissionsFeature,
@@ -48,7 +61,9 @@ describe('feature flag: showDevelopmentOnlyMissionsFeature', () => {
     expect(showDevelopmentOnlyMissionsFeature()).toBe(true)
   })
 
-  it('returns true when the user email is an internal member even if the env var is false"', () => {
+  // Disabled for now. Will revisit squads soon.
+  // eslint-disable-next-line jest/no-disabled-tests
+  it.skip('returns true when the user email is an internal member even if the env var is false"', () => {
     process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE = 'false'
     const {
       showDevelopmentOnlyMissionsFeature,
