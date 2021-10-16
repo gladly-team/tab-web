@@ -31,9 +31,7 @@ describe('feature flag: showDevelopmentOnlyMissionsFeature', () => {
     expect(showDevelopmentOnlyMissionsFeature()).toBe(false)
   })
 
-  // Disabled for now. Will revisit squads soon.
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('returns false when the env var is undefined', () => {
+  it('returns false when the env var is undefined', () => {
     delete process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE
     const {
       showDevelopmentOnlyMissionsFeature,
@@ -41,9 +39,7 @@ describe('feature flag: showDevelopmentOnlyMissionsFeature', () => {
     expect(showDevelopmentOnlyMissionsFeature()).toBe(false)
   })
 
-  // Disabled for now. Will revisit squads soon.
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('returns false when the env var is "false"', () => {
+  it('returns false when the env var is "false"', () => {
     process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE = 'false'
     const {
       showDevelopmentOnlyMissionsFeature,
@@ -51,9 +47,7 @@ describe('feature flag: showDevelopmentOnlyMissionsFeature', () => {
     expect(showDevelopmentOnlyMissionsFeature()).toBe(false)
   })
 
-  // Disabled for now. Will revisit squads soon.
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('returns true when the env var is "true"', () => {
+  it('returns true when the env var is "true"', () => {
     process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE = 'true'
     const {
       showDevelopmentOnlyMissionsFeature,
