@@ -1,6 +1,6 @@
 import React from 'react'
 
-import testInputA from 'src/utils/testHelpers/testInputA.md'
+import testInputA from 'src/utils/testHelpers/testMarkdown-A.md'
 import Markdown from './Markdown'
 
 export default {
