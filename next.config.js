@@ -24,6 +24,10 @@ const cachingRegex = new RegExp(
 const SentryWebpackPlugin = require('@sentry/webpack-plugin')
 
 const nextConfig = {
+  future: {
+    webpack5: true,
+  },
+
   // For routing, we need:
   // * the app to live on the /newtab base path.
   // * to enforce a trailing slash on pages. This ensures a functional
