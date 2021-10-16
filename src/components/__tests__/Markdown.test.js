@@ -1,3 +1,5 @@
+import fs from 'fs'
+import path from 'path'
 import React from 'react'
 import { mount } from 'enzyme'
 
@@ -16,5 +18,32 @@ describe('Markdown component', () => {
     expect(() => {
       mount(<Markdown {...mockProps} />)
     }).not.toThrow()
+  })
+
+  it('renders markdown as expected', async () => {
+    expect.assertions(1)
+    const Markdown = require('src/components/Markdown').default
+
+    const inputFilePath = path.join(
+      __dirname,
+      '../../',
+      'utils/testHelpers/testMarkdown-A.md'
+    )
+    const testMarkdown = await fs.promises.readFile(inputFilePath)
+    const mockProps = {
+      ...getMockProps(),
+      children: testMarkdown,
+    }
+    const wrapper = mount(<Markdown {...mockProps} />)
+    const expectedHTMLFilePath = path.join(
+      __dirname,
+      '../../',
+      'utils/testHelpers/testHTML-A.html'
+    )
+    const expectedOutput = await fs.promises.readFile(
+      expectedHTMLFilePath,
+      'utf-8'
+    )
+    expect(wrapper.html()).toEqual(expectedOutput)
   })
 })
