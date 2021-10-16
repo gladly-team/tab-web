@@ -25,7 +25,7 @@ const SentryWebpackPlugin = require('@sentry/webpack-plugin')
 
 const nextConfig = {
   future: {
-    webpack5: true,
+    webpack5: false,
   },
 
   // For routing, we need:
