@@ -1,4 +1,4 @@
-/* globals document */
+/* globals document, window */
 /* eslint react/jsx-props-no-spreading: 0 */
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
@@ -15,6 +15,7 @@ import initSentry from 'src/utils/initSentry'
 import ErrorBoundary from 'src/components/ErrorBoundary'
 import initializeCMP from 'src/utils/initializeCMP'
 import { setWindowLocation } from 'src/utils/navigation'
+import isOurHost from 'src/utils/isOurHost'
 import 'src/utils/styles/globalStyles.css'
 
 initAuth()
@@ -22,6 +23,7 @@ initAuth()
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_app.js
 initSentry()
 
+// @workaround/separate-auth-app
 // We use Tab Legacy for authentication logic, so we should override
 // any routing to the auth page to force a hard navigation rather
 // than navigating within this app.
@@ -31,15 +33,20 @@ initSentry()
 // https://github.com/vercel/next.js/discussions/12348#discussioncomment-8089
 // https://github.com/vercel/next.js/issues/2476
 Router.events.on('routeChangeStart', (route) => {
-  const isAuthPage = route.includes('/newtab/auth/')
-  if (isAuthPage) {
-    // Cancel routeChange event by erroring. See:
-    // https://github.com/zeit/next.js/issues/2476
-    Router.events.emit('routeChangeError')
-    setWindowLocation(route, { addBasePath: false })
-    throw new Error(
-      `routeChange aborted. This error can be safely ignored. See: https://github.com/zeit/next.js/issues/2476.`
-    )
+  // Only redirect if running on our domain, which is when
+  // the auth app will exist. Otherwise, this will redirect
+  // in an infinite loop.
+  if (isClientSide() && isOurHost(window.location.hostname)) {
+    const isAuthPage = route.includes('/newtab/auth/')
+    if (isAuthPage) {
+      // Cancel routeChange event by erroring. See:
+      // https://github.com/zeit/next.js/issues/2476
+      Router.events.emit('routeChangeError')
+      setWindowLocation(route, { addBasePath: false })
+      throw new Error(
+        `routeChange aborted. This error can be safely ignored. See: https://github.com/zeit/next.js/issues/2476.`
+      )
+    }
   }
 })
 
