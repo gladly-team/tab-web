@@ -23,6 +23,7 @@ initAuth()
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/pages/_app.js
 initSentry()
 
+// @workaround/separate-auth-app
 // We use Tab Legacy for authentication logic, so we should override
 // any routing to the auth page to force a hard navigation rather
 // than navigating within this app.

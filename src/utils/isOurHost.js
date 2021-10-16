@@ -1,3 +1,4 @@
+// @workaround/separate-auth-app
 const HOSTS = [
   'test-tab2017.gladly.io',
   'dev-tab2017.gladly.io',
