@@ -17,6 +17,8 @@ const processor = unified()
   .use(rehypeSanitize, schema)
   .use(rehypeReact, { createElement: React.createElement })
 
+// TODO: map to MUI components
+
 const Markdown = ({ children }) => {
   const elems = useMemo(
     () => processor.processSync(children).result,
