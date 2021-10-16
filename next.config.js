@@ -46,14 +46,9 @@ const nextConfig = {
         destination: '/_next/static/service-worker.js',
       },
 
-      // Keeping this logic in vercel.json for now. Next.js 9.5
-      // requires an absolute destination URL when basePath is
-      // false, which is more trouble than it's worth.
-      // {
-      //   source: '/v4/:route(.*)',
-      //   destination: '/newtab/:route',
-      //   basePath: false,
-      // },
+      // Note: the vercel.json redirect from /v4/(.*) to /newtab/$1 is
+      // deprecated. Instead, we're accessing the v4 API via
+      // /newtab/api/, which we added as a CloudFront cache behavior.
     ]
   },
 

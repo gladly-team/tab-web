@@ -1,4 +1,4 @@
-import setWindowLocation from 'src/utils/testHelpers/setWindowLocation'
+import mockWindowLocation from 'src/utils/testHelpers/mockWindowLocation'
 
 beforeAll(() => {
   process.env.REACT_APP_WEBSITE_PROTOCOL = 'https'
@@ -12,7 +12,7 @@ afterEach(() => {
 describe('isURLForDifferentApp', () => {
   it('[absolute URL] is *not* a different app when the URL is absolute with the same domain and a "newtab" path', () => {
     const { isURLForDifferentApp } = require('src/utils/navigationUtils')
-    setWindowLocation({
+    mockWindowLocation({
       host: 'example.com',
       hostname: 'example.com',
       href: 'https://example.com/newtab/path/',
@@ -27,7 +27,7 @@ describe('isURLForDifferentApp', () => {
 
   it('[absolute URL] is a different app when the URL is absolute with a different domain', () => {
     const { isURLForDifferentApp } = require('src/utils/navigationUtils')
-    setWindowLocation({
+    mockWindowLocation({
       host: 'example.com',
       hostname: 'example.com',
       href: 'https://example.com/newtab/path/',
@@ -42,7 +42,7 @@ describe('isURLForDifferentApp', () => {
 
   it('[absolute URL] is a different app when the URL is absolute and on the same domain but with a non-"newtab" app subpath', () => {
     const { isURLForDifferentApp } = require('src/utils/navigationUtils')
-    setWindowLocation({
+    mockWindowLocation({
       host: 'example.com',
       hostname: 'example.com',
       href: 'https://example.com/newtab/path/',
@@ -59,7 +59,7 @@ describe('isURLForDifferentApp', () => {
 
   it('[relative URL] is *not* a different app if the URL is exactly the same with a "newtab" subpath', () => {
     const { isURLForDifferentApp } = require('src/utils/navigationUtils')
-    setWindowLocation({
+    mockWindowLocation({
       host: 'example.com',
       hostname: 'example.com',
       href: 'https://example.com/newtab/path/',
@@ -74,7 +74,7 @@ describe('isURLForDifferentApp', () => {
 
   it('[relative URL] is *not* a different app if the URL has a "newtab" subpath', () => {
     const { isURLForDifferentApp } = require('src/utils/navigationUtils')
-    setWindowLocation({
+    mockWindowLocation({
       host: 'example.com',
       hostname: 'example.com',
       href: 'https://example.com/newtab/thing/',
