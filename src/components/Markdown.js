@@ -2,7 +2,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { unified } from 'unified'
+
+// Pinned to v9 because of transpiling issues (see next.config.js for info)
+import unified from 'unified'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'

@@ -1,25 +1,27 @@
 const withOffline = require('next-offline')
 const withImages = require('next-images')
 
+// Next.js might support imports by default soon. Until then, it
+// proved annoying to whitelist every module that needs transpiling,
+// so we've locked `unified` to an older version.
+// https://github.com/vercel/next.js/issues/9607#issuecomment-944156493
+// ---
 // Transpile some dependencies.
 // https://github.com/vercel/next.js/issues/25454#issuecomment-903513941
 // https://github.com/vercel/next.js/issues/9607
 // Adding all of `unified`'s dependencies:
 // https://github.com/unifiedjs/unified/blob/main/package.json#L48
 const withTM = require('next-transpile-modules')([
-  'unified',
-
-  // unified's dependencies
-  '@types/unist',
-  'bail',
-  'extend',
-  'is-buffer',
-  'is-plain-obj',
-  'trough',
-  'vfile',
-
-  // others
-  'unist-util-stringify-position',
+  //   'unified',
+  //
+  //   // unified's dependencies
+  //   '@types/unist',
+  //   'bail',
+  //   'extend',
+  //   'is-buffer',
+  //   'is-plain-obj',
+  //   'trough',
+  //   'vfile',
 ])
 
 // Sentry error logging. See:
