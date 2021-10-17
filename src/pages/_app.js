@@ -107,12 +107,16 @@ const MyApp = (props) => {
   const [theme, setTheme] = useState(createTheme(defaultTheme))
 
   //  make updater function in theme context referentially stable
-  const updater = useCallback((causeId) => setTheme(themeMapper(causeId)), [])
+  const setThemeState = useCallback(
+    ({ primaryColor, secondayColor }) =>
+      setTheme(themeMapper({ primaryColor, secondayColor })),
+    []
+  )
 
   //  optimizer
-  const memoizedValue = useMemo(
-    () => ({ theme, setTheme: updater }),
-    [theme, updater]
+  const optimizedThemeContextValue = useMemo(
+    () => ({ theme, setTheme: setThemeState }),
+    [theme, setThemeState]
   )
 
   return (
@@ -125,7 +129,7 @@ const MyApp = (props) => {
         />
       </Head>
       <ThemeProvider theme={theme}>
-        <ThemeContext.Provider value={memoizedValue}>
+        <ThemeContext.Provider value={optimizedThemeContextValue}>
           <CssBaseline />
           <ErrorBoundary>
             <Component {...pageProps} />

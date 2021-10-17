@@ -23,7 +23,7 @@ import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
-import { useThemeContext } from 'src/utils/hooks/useThemeContext'
+import useTheme from 'src/utils/hooks/useThemeContext'
 import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 import SquadCounter from 'src/components/SquadCounter'
@@ -314,8 +314,9 @@ const Index = ({ data: fallbackData }) => {
       setShouldRenderAds(true)
     }
   }, [])
-  const { app, user, userImpact } = data || {}
-  const { currentMission, email, causeId } = user || {}
+  const { app, user, userImpact, cause } = data || {}
+  const { currentMission, email } = user || {}
+  const { primaryColor, secondayColor } = cause || {}
   const {
     status: missionStatus = 'not started',
     tabCount,
@@ -327,10 +328,10 @@ const Index = ({ data: fallbackData }) => {
   const [tabId] = useState(uuid())
 
   // sets the theme based on cause
-  const { setTheme } = useThemeContext()
+  const { setTheme } = useTheme()
   useEffect(() => {
-    setTheme(causeId)
-  }, [setTheme, causeId])
+    setTheme({ primaryColor, secondayColor })
+  }, [setTheme, primaryColor, secondayColor])
   const classes = useStyles()
 
   // this is a temporary workaround as the latest updates to the
