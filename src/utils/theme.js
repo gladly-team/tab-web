@@ -2,15 +2,17 @@ import { createTheme } from '@material-ui/core/styles'
 
 // const seasPrimaryColor = '#5094FB'
 // const seasSecondayColor = '#29BEBA'
+const defaultPrimaryColor = '#9d4ba3'
+const defaultSecondaryColor = '#4a90e2'
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#9d4ba3',
+      main: defaultPrimaryColor,
       contrastText: '#fff',
       background: 'rgba(157, 75, 163, 0.08)',
     },
     secondary: {
-      main: '#4a90e2',
+      main: defaultSecondaryColor,
       contrastText: '#fff',
     },
     text: {
@@ -44,12 +46,12 @@ const customTheme = ({ primaryColor, secondayColor }) =>
   createTheme({
     palette: {
       primary: {
-        main: primaryColor,
+        main: primaryColor || defaultPrimaryColor,
         contrastText: '#fff',
         background: 'rgba(157, 75, 163, 0.08)',
       },
       secondary: {
-        main: secondayColor,
+        main: secondayColor || defaultSecondaryColor,
         contrastText: '#fff',
       },
     },
