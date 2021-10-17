@@ -2,6 +2,9 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { register, unregister } from 'next-offline/runtime'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
+import useTheme from 'src/utils/hooks/useThemeContext'
+import { act } from 'react-dom/test-utils'
+import PropTypes from 'prop-types'
 
 jest.mock('next/router')
 jest.mock('next-offline/runtime')
@@ -68,5 +71,35 @@ describe('_app.js', () => {
     const mockProps = getMockProps()
     mount(<App {...mockProps} />)
     expect(unregister).toHaveBeenCalled()
+  })
+
+  it('sets the default theme value in the theme context and updates theme with hook', () => {
+    expect.assertions(2)
+    const App = require('src/pages/_app').default
+    let setThemeFunction
+    // eslint-disable-next-line no-unused-vars
+    const ThemeInProp = ({ theme }) => <div />
+    ThemeInProp.propTypes = {
+      // eslint-disable-next-line react/forbid-prop-types
+      theme: PropTypes.any.isRequired,
+    }
+    const ThemedComponent = () => {
+      const { theme, setTheme } = useTheme()
+      setThemeFunction = setTheme
+      return <ThemeInProp theme={theme} />
+    }
+
+    const mockProps = getMockProps()
+    const wrapper = mount(<App {...mockProps} Component={ThemedComponent} />)
+    expect(
+      wrapper.find(ThemeInProp).prop('theme').palette.primary.main
+    ).toEqual('#9d4ba3')
+    act(() => {
+      setThemeFunction({ primaryColor: '#fff', secondayColor: '#fff' })
+    })
+    wrapper.update()
+    expect(
+      wrapper.find(ThemeInProp).prop('theme').palette.primary.main
+    ).toEqual('#fff')
   })
 })

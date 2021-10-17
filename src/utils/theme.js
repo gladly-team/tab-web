@@ -1,4 +1,5 @@
 import { createTheme } from '@material-ui/core/styles'
+import { deepmerge } from '@material-ui/utils'
 
 // const seasPrimaryColor = '#5094FB'
 // const seasSecondayColor = '#29BEBA'
@@ -58,4 +59,4 @@ const customTheme = ({ primaryColor, secondayColor }) =>
   })
 
 export const themeMapper = ({ primaryColor, secondayColor }) =>
-  createTheme(theme, customTheme({ primaryColor, secondayColor }))
+  createTheme(deepmerge(theme, customTheme({ primaryColor, secondayColor })))

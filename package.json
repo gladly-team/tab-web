@@ -23,6 +23,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/utils": "^4.11.2",
     "@sentry/browser": "^6.13.3",
     "@sentry/node": "^6.13.3",
     "@sentry/webpack-plugin": "^1.18.1",

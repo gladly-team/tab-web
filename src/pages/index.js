@@ -314,9 +314,10 @@ const Index = ({ data: fallbackData }) => {
       setShouldRenderAds(true)
     }
   }, [])
-  const { app, user, userImpact, cause } = data || {}
-  const { currentMission, email } = user || {}
-  const { primaryColor, secondayColor } = cause || {}
+  const { app, user, userImpact } = data || {}
+  const { currentMission, email, cause } = user || {}
+  const { theme } = cause || {}
+  const { primaryColor, secondaryColor } = theme || {}
   const {
     status: missionStatus = 'not started',
     tabCount,
@@ -330,8 +331,8 @@ const Index = ({ data: fallbackData }) => {
   // sets the theme based on cause
   const { setTheme } = useTheme()
   useEffect(() => {
-    setTheme({ primaryColor, secondayColor })
-  }, [setTheme, primaryColor, secondayColor])
+    setTheme({ primaryColor, secondaryColor })
+  }, [setTheme, primaryColor, secondaryColor])
   const classes = useStyles()
 
   // this is a temporary workaround as the latest updates to the
