@@ -40,8 +40,6 @@ const processor = unified()
     },
   })
 
-// TODO: map to MUI components
-
 const Markdown = ({ children }) => {
   const elems = useMemo(
     () => processor.processSync(children).result,
