@@ -43,19 +43,18 @@ export default theme
 
 const customTheme = ({ primaryColor, secondayColor }) =>
   createTheme({
-    primary: {
-      main: primaryColor,
-      contrastText: '#fff',
-      background: 'rgba(157, 75, 163, 0.08)',
-    },
-    secondary: {
-      main: secondayColor,
-      contrastText: '#fff',
+    palette: {
+      primary: {
+        main: primaryColor,
+        contrastText: '#fff',
+        background: 'rgba(157, 75, 163, 0.08)',
+      },
+      secondary: {
+        main: secondayColor,
+        contrastText: '#fff',
+      },
     },
   })
 
-export const extendTheme = (primaryTheme, extendedTheme) =>
-  createTheme(merge({}, primaryTheme, extendedTheme))
-
 export const themeMapper = ({ primaryColor, secondayColor }) =>
-  extendTheme(theme, customTheme({ primaryColor, secondayColor }))
+  createTheme(theme, customTheme({ primaryColor, secondayColor }))
