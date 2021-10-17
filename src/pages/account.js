@@ -125,15 +125,16 @@ const getRelayQuery = ({ AuthUser }) => {
 const Account = ({ data: fallbackData }) => {
   const { data } = useData({ getRelayQuery, fallbackData })
   const fetchInProgress = !data
-  const { user } = data || {}
+  const { user, cause } = data || {}
   const { id: userId, email, username, causeId } = user || {}
+  const { primaryColor, secondayColor } = cause || {}
   const classes = useStyles()
 
   // sets the theme based on cause - need to do in each page incase user refreshes
   const { setTheme } = useTheme()
   useEffect(() => {
-    setTheme(causeId)
-  }, [setTheme, causeId])
+    setTheme({ primaryColor, secondayColor })
+  }, [setTheme, primaryColor, secondayColor])
   const AuthUser = useAuthUser()
 
   // Conditionally show privacy management buttons.
