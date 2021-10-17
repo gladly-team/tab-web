@@ -28,6 +28,7 @@ const cachingRegex = new RegExp(
 const SentryWebpackPlugin = require('@sentry/webpack-plugin')
 
 const nextConfig = {
+  webpack5: false,
   future: {
     webpack5: false,
   },
