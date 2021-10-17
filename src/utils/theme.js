@@ -44,12 +44,12 @@ const customTheme = ({ primaryColor, secondayColor }) =>
   createTheme({
     palette: {
       primary: {
-        main: primaryColor,
+        main: primaryColor || '#9d4ba3',
         contrastText: '#fff',
         background: 'rgba(157, 75, 163, 0.08)',
       },
       secondary: {
-        main: secondayColor,
+        main: secondayColor || '#4a90e2',
         contrastText: '#fff',
       },
     },
