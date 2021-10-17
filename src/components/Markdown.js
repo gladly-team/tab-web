@@ -28,7 +28,7 @@ const processor = unified()
       h2: (props) => <Typography {...props} variant="h4" gutterBottom />,
       h3: (props) => <Typography {...props} variant="h5" gutterBottom />,
       h4: (props) => <Typography {...props} variant="h6" gutterBottom />,
-      h5: (props) => <Typography {...props} variant="body1" />,
+      h5: (props) => <Typography {...props} variant="body1" gutterBottom />,
       h6: (props) => <Typography {...props} variant="caption" />,
       p: (props) => <Typography {...props} variant="body2" paragraph />,
 
