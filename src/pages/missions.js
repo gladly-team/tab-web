@@ -98,8 +98,8 @@ const getRelayQuery = ({ AuthUser }) => ({
 
 const Missions = ({ data: fallbackData }) => {
   const { data } = useData({ getRelayQuery, fallbackData })
-  const { user } = data || {}
-  const { causeId } = user || {}
+  const { user, cause } = data || {}
+  const { primaryColor, secondayColor } = cause || {}
   const [scrollIndex, setScrollIndex] = useState(0)
   const currentMissionSection = useRef(null)
   const pastMissionsSection = useRef(null)
@@ -108,8 +108,8 @@ const Missions = ({ data: fallbackData }) => {
   // sets the theme based on cause - need to do in each page incase user refreshes
   const { setTheme } = useTheme()
   useEffect(() => {
-    setTheme(causeId)
-  }, [setTheme, causeId])
+    setTheme({ primaryColor, secondayColor })
+  }, [setTheme, primaryColor, secondayColor])
   const debouncedHandleOnSchroll = useMemo(
     () =>
       debounce(() => {
