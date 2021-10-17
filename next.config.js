@@ -3,7 +3,8 @@ const withImages = require('next-images')
 
 // Next.js might support imports by default soon. Until then, it
 // proved annoying to whitelist every module that needs transpiling,
-// so we've locked unified and remark packages to older versions.
+// so we've locked the following pacakges to older versions:
+// unified, remark, remark-rehype, rehype-react, rehype-sanitize
 // https://github.com/vercel/next.js/issues/9607#issuecomment-944156493
 // ---
 // Transpile some dependencies.
