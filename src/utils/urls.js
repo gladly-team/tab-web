@@ -4,22 +4,13 @@ import { withBasePath } from 'src/utils/navigationUtils'
 try {
   ensureValuesAreDefined([
     process.env.NEXT_PUBLIC_URLS_BASE_PATH,
-    process.env.NEXT_PUBLIC_URLS_API_BASE_PATH,
     process.env.NEXT_PUBLIC_URLS_USE_TRAILING_SLASH,
   ])
 } catch (e) {
   throw new Error(
-    'Environment variables NEXT_PUBLIC_URLS_BASE_PATH, NEXT_PUBLIC_URLS_API_BASE_PATH, and NEXT_PUBLIC_URLS_USE_TRAILING_SLASH must be set.'
+    'Environment variables NEXT_PUBLIC_URLS_BASE_PATH and NEXT_PUBLIC_URLS_USE_TRAILING_SLASH must be set.'
   )
 }
-
-// In CloudFront, the /v4 base path routes to this Next.js
-// app. The /newtab base paths routes to the this app -OR-
-// the legacy static app, depending on cookie settings. Thus,
-// to call one of this app's API endpoints to set the cookie
-// that opts into this app, we need to use the /v4 endpoint.
-const NEXT_PUBLIC_URLS_API_BASE_PATH =
-  process.env.NEXT_PUBLIC_URLS_API_BASE_PATH || ''
 
 const useTrailingSlash =
   process.env.NEXT_PUBLIC_URLS_USE_TRAILING_SLASH === 'true'
@@ -31,7 +22,7 @@ const addTrailingSlashIfNeeded = (path) => {
 
 // For /api/* paths.
 const createAPIURL = (url) =>
-  addTrailingSlashIfNeeded(`${NEXT_PUBLIC_URLS_API_BASE_PATH}${url}`)
+  addTrailingSlashIfNeeded(`${process.env.NEXT_PUBLIC_URLS_BASE_PATH}${url}`)
 
 const createPageURL = (url) => addTrailingSlashIfNeeded(url)
 
