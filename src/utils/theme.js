@@ -1,5 +1,4 @@
 import { createTheme } from '@material-ui/core/styles'
-import { merge } from 'lodash/object'
 
 // const seasPrimaryColor = '#5094FB'
 // const seasSecondayColor = '#29BEBA'
