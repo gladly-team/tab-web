@@ -58,4 +58,16 @@ describe('Markdown component', () => {
       '<div><p class="MuiTypography-root MuiTypography-body2 MuiTypography-paragraph">hello!</p></div>'
     expect(wrapper.html()).toEqual(expectedHTML)
   })
+
+  it('does not render script tags', () => {
+    const Markdown = require('src/components/Markdown').default
+    const mockProps = {
+      ...getMockProps(),
+      children: '###### Here is some content <script>alert("uh oh")</script>',
+    }
+    const wrapper = mount(<Markdown {...mockProps} />)
+    const expectedHTML =
+      '<div><h6 class="MuiTypography-root MuiTypography-h6">Here is some content alert("uh oh")</h6></div>'
+    expect(wrapper.html()).toEqual(expectedHTML)
+  })
 })
