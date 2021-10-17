@@ -20,7 +20,7 @@ import { setWindowLocation } from 'src/utils/navigation'
 import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 import { withSentry } from 'src/utils/pageWrappers/withSentry'
 import initializeCMP from 'src/utils/initializeCMP'
-import { useThemeContext } from 'src/utils/hooks/useThemeContext'
+import useTheme from 'src/utils/hooks/useThemeContext'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -130,7 +130,7 @@ const Account = ({ data: fallbackData }) => {
   const classes = useStyles()
 
   // sets the theme based on cause - need to do in each page incase user refreshes
-  const { setTheme } = useThemeContext()
+  const { setTheme } = useTheme()
   useEffect(() => {
     setTheme(causeId)
   }, [setTheme, causeId])
