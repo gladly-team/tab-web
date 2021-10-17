@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import DashboardPopover from 'src/components/DashboardPopover'
 import Button from '@material-ui/core/Button'
+import Markdown from 'src/components/Markdown'
 
 const getMockProps = () => ({
   includeNumber: false,
@@ -103,5 +104,30 @@ describe('ImpactCounter component', () => {
     wrapper.find(DashboardPopover).prop('onClose')()
     wrapper.update()
     expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+  })
+
+  it('shows standard text in the popover when the ImpactCounter is not disabled', () => {
+    const ImpactCounter = require('src/components/ImpactCounter').default
+    const expectedStandardText =
+      '##### **Your pawsitive impact!**\n\nThis shows how many treats your tabs can provide to help shelter cats get adopted. Every tab you open helps. Keep it up!'
+    const defaultMockProps = getMockProps()
+    const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
+    expect(
+      wrapper.find(DashboardPopover).find(Markdown).prop('children')
+    ).toEqual(expectedStandardText)
+  })
+
+  it('shows mission text in the popover when the ImpactCounter is disabled', () => {
+    const ImpactCounter = require('src/components/ImpactCounter').default
+    const expectedStandardText =
+      '##### **Your treats are still here**\n\nDon’t worry, we’ve still got your treats! We just paused them while you and your squad complete your new mission.'
+    const defaultMockProps = {
+      ...getMockProps(),
+      disabled: true,
+    }
+    const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
+    expect(
+      wrapper.find(DashboardPopover).find(Markdown).prop('children')
+    ).toEqual(expectedStandardText)
   })
 })
