@@ -126,7 +126,7 @@ const Account = ({ data: fallbackData }) => {
   const { data } = useData({ getRelayQuery, fallbackData })
   const fetchInProgress = !data
   const { user, cause } = data || {}
-  const { id: userId, email, username, causeId } = user || {}
+  const { id: userId, email, username } = user || {}
   const { primaryColor, secondayColor } = cause || {}
   const classes = useStyles()
 
