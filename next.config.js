@@ -1,6 +1,10 @@
 const withOffline = require('next-offline')
 const withImages = require('next-images')
 
+// Transpile some other dependencies.
+// https://github.com/vercel/next.js/issues/25454
+const withTM = require('next-transpile-modules')(['unified'])
+
 // Sentry error logging. See:
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/next.config.js
 // Use the hidden-source-map option when you don't want the source maps to be
@@ -209,4 +213,4 @@ const nextConfig = {
   inlineImageLimit: 16384,
 }
 
-module.exports = withSourceMaps(withOffline(withImages(nextConfig)))
+module.exports = withSourceMaps(withOffline(withImages(withTM(nextConfig))))
