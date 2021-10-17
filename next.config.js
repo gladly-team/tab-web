@@ -8,6 +8,8 @@ const withImages = require('next-images')
 // https://github.com/unifiedjs/unified/blob/main/package.json#L48
 const withTM = require('next-transpile-modules')([
   'unified',
+
+  // unified's dependencies
   '@types/unist',
   'bail',
   'extend',
@@ -15,6 +17,9 @@ const withTM = require('next-transpile-modules')([
   'is-plain-obj',
   'trough',
   'vfile',
+
+  // others
+  'unist-util-stringify-position',
 ])
 
 // Sentry error logging. See:
