@@ -2,7 +2,7 @@ const withOffline = require('next-offline')
 const withImages = require('next-images')
 
 // Transpile some other dependencies.
-// https://github.com/vercel/next.js/issues/25454
+// https://github.com/vercel/next.js/issues/25454#issuecomment-903513941
 const withTM = require('next-transpile-modules')(['unified'])
 
 // Sentry error logging. See:
@@ -213,4 +213,6 @@ const nextConfig = {
   inlineImageLimit: 16384,
 }
 
-module.exports = withSourceMaps(withOffline(withImages(withTM(nextConfig))))
+// withTM should be outermost plugin.
+// https://github.com/martpie/next-transpile-modules
+module.exports = withTM(withSourceMaps(withOffline(withImages(nextConfig))))
