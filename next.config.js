@@ -3,7 +3,8 @@ const withImages = require('next-images')
 
 // Transpile some other dependencies.
 // https://github.com/vercel/next.js/issues/25454#issuecomment-903513941
-const withTM = require('next-transpile-modules')(['unified'])
+// https://github.com/vercel/next.js/issues/9607
+const withTM = require('next-transpile-modules')(['unified', 'bail'])
 
 // Sentry error logging. See:
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/next.config.js
