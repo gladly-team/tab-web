@@ -2,7 +2,7 @@ import { createTheme } from '@material-ui/core/styles'
 import { deepmerge } from '@material-ui/utils'
 
 // const seasPrimaryColor = '#5094FB'
-// const seasSecondayColor = '#29BEBA'
+// const seassecondaryColor = '#29BEBA'
 const defaultPrimaryColor = '#9d4ba3'
 const defaultSecondaryColor = '#4a90e2'
 const theme = createTheme({
@@ -43,7 +43,7 @@ const theme = createTheme({
 
 export default theme
 
-const customTheme = ({ primaryColor, secondayColor }) =>
+const customTheme = ({ primaryColor, secondaryColor }) =>
   createTheme({
     palette: {
       primary: {
@@ -52,11 +52,11 @@ const customTheme = ({ primaryColor, secondayColor }) =>
         background: 'rgba(157, 75, 163, 0.08)',
       },
       secondary: {
-        main: secondayColor || defaultSecondaryColor,
+        main: secondaryColor || defaultSecondaryColor,
         contrastText: '#fff',
       },
     },
   })
 
-export const themeMapper = ({ primaryColor, secondayColor }) =>
-  createTheme(deepmerge(theme, customTheme({ primaryColor, secondayColor })))
+export const themeMapper = ({ primaryColor, secondaryColor }) =>
+  createTheme(deepmerge(theme, customTheme({ primaryColor, secondaryColor })))

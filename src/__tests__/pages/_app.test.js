@@ -95,7 +95,7 @@ describe('_app.js', () => {
       wrapper.find(ThemeInProp).prop('theme').palette.primary.main
     ).toEqual('#9d4ba3')
     act(() => {
-      setThemeFunction({ primaryColor: '#fff', secondayColor: '#fff' })
+      setThemeFunction({ primaryColor: '#fff', secondaryColor: '#fff' })
     })
     wrapper.update()
     expect(

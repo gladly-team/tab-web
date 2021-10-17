@@ -108,8 +108,8 @@ const MyApp = (props) => {
 
   //  make updater function in theme context referentially stable
   const setThemeState = useCallback(
-    ({ primaryColor, secondayColor }) =>
-      setTheme(themeMapper({ primaryColor, secondayColor })),
+    ({ primaryColor, secondaryColor }) =>
+      setTheme(themeMapper({ primaryColor, secondaryColor })),
     []
   )
 
