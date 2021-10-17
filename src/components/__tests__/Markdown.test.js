@@ -63,11 +63,11 @@ describe('Markdown component', () => {
     const Markdown = require('src/components/Markdown').default
     const mockProps = {
       ...getMockProps(),
-      children: '###### Here is some content <script>alert("uh oh")</script>',
+      children: 'well well <script>alert("uh oh")</script>',
     }
     const wrapper = mount(<Markdown {...mockProps} />)
     const expectedHTML =
-      '<div><h6 class="MuiTypography-root MuiTypography-h6">Here is some content alert("uh oh")</h6></div>'
+      '<div><p class="MuiTypography-root MuiTypography-body2 MuiTypography-paragraph">well well alert("uh oh")</p></div>'
     expect(wrapper.html()).toEqual(expectedHTML)
   })
 })

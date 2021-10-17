@@ -21,12 +21,15 @@ const processor = unified()
   .use(rehypeReact, {
     createElement: React.createElement,
     components: {
-      h1: (props) => <Typography {...props} variant="h1" />,
-      h2: (props) => <Typography {...props} variant="h2" />,
-      h3: (props) => <Typography {...props} variant="h3" />,
-      h4: (props) => <Typography {...props} variant="h4" />,
-      h5: (props) => <Typography {...props} variant="h5" />,
-      h6: (props) => <Typography {...props} variant="h6" />,
+      // We make more use of smaller variants, so drop H1 and H2
+      // in favor of a body variant and caption.
+      // https://mui.com/components/typography/#component
+      h1: (props) => <Typography {...props} variant="h3" gutterBottom />,
+      h2: (props) => <Typography {...props} variant="h4" gutterBottom />,
+      h3: (props) => <Typography {...props} variant="h5" gutterBottom />,
+      h4: (props) => <Typography {...props} variant="h6" gutterBottom />,
+      h5: (props) => <Typography {...props} variant="body1" />,
+      h6: (props) => <Typography {...props} variant="caption" />,
       p: (props) => <Typography {...props} variant="body2" paragraph />,
 
       // Anchor will have content when rendered.

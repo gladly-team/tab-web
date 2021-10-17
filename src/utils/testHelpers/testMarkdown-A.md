@@ -1,16 +1,16 @@
-# This is an H1
+# Markdown h1 maps to Typography h3
 
-## And here's an H2.
+## Markdown h2 maps to Typography h4
 
-### I'm an H3.
+### Markdown h3 maps to Typography h5
 
-#### It's me, an H4!
+#### Markdown h4 maps to Typography h6
 
-##### Hola, soy H5.
+##### Markdown h5 maps to Typography body1
 
-###### Hey, H6 here.
+###### Markdown h6 maps to Typography caption
 
-Just a humble paragraph here, followed by...
+Our humble paragraph uses Typography body2. And here is...
 
 ... another paragraph!
 
