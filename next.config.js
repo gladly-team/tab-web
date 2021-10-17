@@ -1,10 +1,21 @@
 const withOffline = require('next-offline')
 const withImages = require('next-images')
 
-// Transpile some other dependencies.
+// Transpile some dependencies.
 // https://github.com/vercel/next.js/issues/25454#issuecomment-903513941
 // https://github.com/vercel/next.js/issues/9607
-const withTM = require('next-transpile-modules')(['unified', 'bail'])
+// Adding all of `unified`'s dependencies:
+// https://github.com/unifiedjs/unified/blob/main/package.json#L48
+const withTM = require('next-transpile-modules')([
+  'unified',
+  '@types/unist',
+  'bail',
+  'extend',
+  'is-buffer',
+  'is-plain-obj',
+  'trough',
+  'vfile',
+])
 
 // Sentry error logging. See:
 // https://github.com/vercel/next.js/blob/canary/examples/with-sentry-simple/next.config.js
