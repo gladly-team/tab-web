@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "go": " NODE_ENV=development vercel dev --listen 3001",
-    "dev": "echo \"Use the 'yarn go' command to develop locally.\"",
+    "go": "yarn run dev",
+    "dev": "NODE_ENV=development next dev --port 3001",
     "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start --port 3001",
     "test": "yarn run relay && yarn run lint && yarn run jest --testPathIgnorePatterns=e2e",
@@ -100,7 +100,6 @@
     "relay-compiler": "^12.0.0",
     "tab-e2e": "^2.0.1",
     "typescript": "^4.4.4",
-    "vercel": "^23.1.2",
     "webpack": "^4.19.1"
   },
   "next-unused": {
