@@ -46,4 +46,16 @@ describe('Markdown component', () => {
     )
     expect(wrapper.html()).toEqual(expectedOutput)
   })
+
+  it('renders plain text as a paragraph', () => {
+    const Markdown = require('src/components/Markdown').default
+    const mockProps = {
+      ...getMockProps(),
+      children: 'hello!',
+    }
+    const wrapper = mount(<Markdown {...mockProps} />)
+    const expectedHTML =
+      '<div><p class="MuiTypography-root MuiTypography-body2 MuiTypography-paragraph">hello!</p></div>'
+    expect(wrapper.html()).toEqual(expectedHTML)
+  })
 })
