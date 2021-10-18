@@ -52,7 +52,7 @@ module.exports = {
       },
     },
     {
-      files: ['**/*.stories.jsx'],
+      files: ['**/*.stories.{js,jsx}'],
       extends: ['airbnb', 'prettier'],
       plugins: ['prettier', 'react-hooks'],
       rules: {
