@@ -1,98 +1,178 @@
-"""Global app fields"""
+"""
+Global app fields
+"""
 type App implements Node {
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
   moneyRaised: Float
   dollarsPerDayRate: Float
   referralVcReward: Int
 
-  """All the widgets"""
-  widgets(after: String, first: Int, before: String, last: Int): WidgetConnection
+  """
+  All the widgets
+  """
+  widgets(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): WidgetConnection
 
-  """One of the charities"""
+  """
+  One of the charities
+  """
   charity(charityId: String!): Charity
 
-  """All the charities"""
-  charities(after: String, first: Int, before: String, last: Int, filters: CharitiesFilters): CharityConnection
+  """
+  All the charities
+  """
+  charities(
+    after: String
+    first: Int
+    before: String
+    last: Int
+    filters: CharitiesFilters
+  ): CharityConnection
 
-  """Get all the "legacy" (uncategorized) background Images"""
-  backgroundImages(after: String, first: Int, before: String, last: Int): BackgroundImageConnection
+  """
+  Get all the "legacy" (uncategorized) background Images
+  """
+  backgroundImages(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): BackgroundImageConnection
 
-  """Campaigns (or "charity spotlights") shown to users."""
+  """
+  Campaigns (or "charity spotlights") shown to users.
+  """
   campaign: Campaign
 }
 
-"""A background image"""
+"""
+A background image
+"""
 type BackgroundImage implements Node {
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
 
-  """the background image name"""
+  """
+  the background image name
+  """
   name: String
 
-  """The image filename"""
+  """
+  The image filename
+  """
   image: String
 
-  """The image file URL"""
+  """
+  The image file URL
+  """
   imageURL: String
 
-  """the category that the image falls into"""
+  """
+  the category that the image falls into
+  """
   category: String!
 
-  """The image thumbnail filename"""
+  """
+  The image thumbnail filename
+  """
   thumbnail: String
 
-  """The image thumbnail URL"""
+  """
+  The image thumbnail URL
+  """
   thumbnailURL: String
 
-  """ISO datetime string of when the background image was last set"""
+  """
+  ISO datetime string of when the background image was last set
+  """
   timestamp: String
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type BackgroundImageConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [BackgroundImageEdge]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type BackgroundImageEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: BackgroundImage
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""Campaigns (or "charity spotlights") shown to users."""
+"""
+Campaigns (or "charity spotlights") shown to users.
+"""
 type Campaign {
-  """The ID of the campaign"""
+  """
+  The ID of the campaign
+  """
   campaignId: String
 
-  """The charity that this campaign features"""
+  """
+  The charity that this campaign features
+  """
   charity: Charity
 
-  """The text content for the campaign"""
+  """
+  The text content for the campaign
+  """
   content: CampaignContent!
 
   """
   The text content for the campaign when it has finished (past the end time)
   """
-  endContent: CampaignContent @deprecated(reason: "The content returned by the server will automatically change when the campaign ends.")
+  endContent: CampaignContent
+    @deprecated(
+      reason: "The content returned by the server will automatically change when the campaign ends."
+    )
 
-  """Whether or not the campaign should currently show to users"""
+  """
+  Whether or not the campaign should currently show to users
+  """
   isLive: Boolean!
 
-  """Information on progress toward a target impact goal for the campaign"""
+  """
+  Information on progress toward a target impact goal for the campaign
+  """
   goal: CampaignGoal
 
-  """The number of new users who joined during this campaign."""
-  numNewUsers: Int @deprecated(reason: "Replaced by the generalized\"goal\" data.")
+  """
+  The number of new users who joined during this campaign.
+  """
+  numNewUsers: Int
+    @deprecated(reason: "Replaced by the generalized\"goal\" data.")
 
-  """Whether to show a countdown timer for when the campaign will end"""
+  """
+  Whether to show a countdown timer for when the campaign will end
+  """
   showCountdownTimer: Boolean!
 
   """
@@ -106,22 +186,34 @@ type Campaign {
   """
   showProgressBar: Boolean!
 
-  """Whether to show social sharing buttons"""
+  """
+  Whether to show social sharing buttons
+  """
   showSocialSharing: Boolean!
 
-  """Social sharing buttons"""
+  """
+  Social sharing buttons
+  """
   socialSharing: CampaignSocialSharing
 
-  """Theming/style for the campaign"""
+  """
+  Theming/style for the campaign
+  """
   theme: CampaignTheme
 
-  """The start and end times (in ISO timestamps) for the campaign"""
+  """
+  The start and end times (in ISO timestamps) for the campaign
+  """
   time: CampaignTime!
 }
 
-"""Text content for campaigns"""
+"""
+Text content for campaigns
+"""
 type CampaignContent {
-  """The campaign title, using markdown"""
+  """
+  The campaign title, using markdown
+  """
   titleMarkdown: String!
 
   """
@@ -135,7 +227,9 @@ type CampaignContent {
   descriptionMarkdownTwo: String
 }
 
-"""Information on progress toward a target impact goal for the campaign"""
+"""
+Information on progress toward a target impact goal for the campaign
+"""
 type CampaignGoal {
   """
   The goal number of whatever impact units the campaign is hoping to achieve
@@ -183,67 +277,109 @@ type CampaignGoal {
   showProgressBarEndText: Boolean!
 }
 
-"""Information on progress toward a target impact goal for the campaign"""
+"""
+Information on progress toward a target impact goal for the campaign
+"""
 type CampaignSocialSharing {
-  """The URL to share"""
+  """
+  The URL to share
+  """
   url: String!
 
-  """Props for the email social sharing button"""
+  """
+  Props for the email social sharing button
+  """
   EmailShareButtonProps: CampaignSocialSharingEmailProps
 
-  """Props for the Facebook social sharing button"""
+  """
+  Props for the Facebook social sharing button
+  """
   FacebookShareButtonProps: CampaignSocialSharingFacebookProps
 
-  """Props for the Reddit social sharing button"""
+  """
+  Props for the Reddit social sharing button
+  """
   RedditShareButtonProps: CampaignSocialSharingRedditProps
 
-  """Props for the Tumblr social sharing button"""
+  """
+  Props for the Tumblr social sharing button
+  """
   TumblrShareButtonProps: CampaignSocialSharingTumblrProps
 
-  """Props for the Twitter social sharing button"""
+  """
+  Props for the Twitter social sharing button
+  """
   TwitterShareButtonProps: CampaignSocialSharingTwitterProps
 }
 
-"""Props for the email social sharing button"""
+"""
+Props for the email social sharing button
+"""
 type CampaignSocialSharingEmailProps {
-  """The email subject"""
+  """
+  The email subject
+  """
   subject: String!
 
-  """The email body"""
+  """
+  The email body
+  """
   body: String!
 }
 
-"""Props for the Facebook social sharing button"""
+"""
+Props for the Facebook social sharing button
+"""
 type CampaignSocialSharingFacebookProps {
-  """The text to share to Facebook"""
+  """
+  The text to share to Facebook
+  """
   quote: String!
 }
 
-"""Props for the Reddit social sharing button"""
+"""
+Props for the Reddit social sharing button
+"""
 type CampaignSocialSharingRedditProps {
-  """The text to share to Reddit"""
+  """
+  The text to share to Reddit
+  """
   title: String!
 }
 
-"""Props for the Tumblr social sharing button"""
+"""
+Props for the Tumblr social sharing button
+"""
 type CampaignSocialSharingTumblrProps {
-  """The Tumblr title"""
+  """
+  The Tumblr title
+  """
   title: String!
 
-  """The Tumblr caption"""
+  """
+  The Tumblr caption
+  """
   caption: String!
 }
 
-"""Props for the Twitter social sharing button"""
+"""
+Props for the Twitter social sharing button
+"""
 type CampaignSocialSharingTwitterProps {
-  """The text to share to Twitter"""
+  """
+  The text to share to Twitter
+  """
   title: String!
 
-  """A list of Twitter handles that relate to the post"""
+  """
+  A list of Twitter handles that relate to the post
+  """
   related: [String]!
 }
 
-"""Theming/styling for the campaign"""
+"""
+Theming/styling for the campaign
+"""
 type CampaignTheme {
   """
   The goal number of whatever impact units the campaign is hoping to achieve
@@ -251,77 +387,225 @@ type CampaignTheme {
   color: CampaignThemeColor
 }
 
-"""Color theming for the campaign"""
+"""
+Color theming for the campaign
+"""
 type CampaignThemeColor {
-  """The primary color for the theme"""
+  """
+  The primary color for the theme
+  """
   main: String!
 
-  """The lighter color for the theme"""
+  """
+  The lighter color for the theme
+  """
   light: String!
 }
 
-"""The start and end times (in ISO timestamps) for the campaign"""
+"""
+The start and end times (in ISO timestamps) for the campaign
+"""
 type CampaignTime {
-  """The start time of the campaign as an ISO timestamp"""
+  """
+  The start time of the campaign as an ISO timestamp
+  """
   start: String!
 
-  """The end time of the campaign as an ISO timestamp"""
+  """
+  The end time of the campaign as an ISO timestamp
+  """
   end: String!
 }
 
-"""Fields on which to filter the list of charities."""
+"""
+all cause specific data and ui content
+"""
+type Cause implements Node {
+  """
+  The ID of an object
+  """
+  id: ID!
+
+  """
+  URL path for the landing page belonging to this cause
+  """
+  landingPagePath: String!
+
+  """
+  number of visits required for each impact unit (e.g. 14 for cat charity)
+  """
+  impactVisits: Int!
+
+  """
+  the impact object on cause model
+  """
+  impact: CauseSpecificImpactUI!
+
+  """
+  the theme object on cause model
+  """
+  theme: CauseTheming!
+
+  """
+  the sharing object on cause model
+  """
+  sharing: SharingUICopy!
+
+  """
+  the onboarding object on cause model
+  """
+  onboarding: OnboardingUICopy!
+}
+
+"""
+cause specific UI content around impact
+"""
+type CauseSpecificImpactUI {
+  """
+  markdown string: copy for ImpactCounter for normal case
+  """
+  impactCounterText: String!
+
+  """
+  markdown string: title copy for referralReward UserImpact notification
+  """
+  referralRewardTitle: String!
+
+  """
+  markdown string: subtitle copy for referralReward UserImpact notification
+  """
+  referralRewardSubtitle: String!
+
+  """
+  markdown string: title for claimImpact notification in UserImpact
+  """
+  claimImpactTitle: String!
+
+  """
+  markdown string: subtitle for claimImpact notification in UserImpact
+  """
+  claimImpactSubtitle: String!
+
+  """
+  markdown string: title for the newly referred notification in UserImpact
+  """
+  newlyReferredTitle: String!
+
+  """
+  markdown string: copy for impact walkthrough notification in UserImpact
+  """
+  impactWalkthroughText: String!
+
+  """
+  markdown string: copy for confirm impact notification in UserImpact
+  """
+  confirmImpactText: String!
+}
+
+"""
+css properties for a specific cause
+"""
+type CauseTheming {
+  """
+  the primary color hex value
+  """
+  primaryColor: String!
+
+  """
+  the secondary color hex value
+  """
+  secondaryColor: String!
+}
+
+"""
+Fields on which to filter the list of charities.
+"""
 input CharitiesFilters {
   isPermanentPartner: Boolean
 }
 
-"""A charitable charity"""
+"""
+A charitable charity
+"""
 type Charity implements Node {
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
 
-  """the charity name"""
+  """
+  the charity name
+  """
   name: String
 
-  """the charity category"""
+  """
+  the charity category
+  """
   category: String
 
-  """the charity website"""
+  """
+  the charity website
+  """
   website: String
 
-  """the charity description"""
+  """
+  the charity description
+  """
   description: String
 
-  """the charity impact message"""
+  """
+  the charity impact message
+  """
   impact: String
 
-  """the charity logo image URI"""
+  """
+  the charity logo image URI
+  """
   logo: String
 
-  """the charity post-donation image URI"""
+  """
+  the charity post-donation image URI
+  """
   image: String
 
-  """An optional caption for the post-donation image"""
+  """
+  An optional caption for the post-donation image
+  """
   imageCaption: String
 
-  """The number of VC the charity has received in a given time period."""
+  """
+  The number of VC the charity has received in a given time period.
+  """
   vcReceived(startTime: String, endTime: String): Int
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type CharityConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [CharityEdge]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type CharityEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Charity
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
@@ -346,7 +630,9 @@ input CreateNewMissionInput {
 }
 
 type CreateNewMissionPayload {
-  """the current active mission for a user"""
+  """
+  the current active mission for a user
+  """
   currentMission: Mission
   clientMutationId: String
 }
@@ -377,17 +663,35 @@ input CreateSquadInvitesInput {
 }
 
 type CreateSquadInvitesPayload {
-  """the current active mission for a user"""
+  """
+  the current active mission for a user
+  """
   currentMission: Mission
   clientMutationId: String
 }
 
-"""For expected errors, such as during form validation"""
+input CreateVideoAdLogInput {
+  userId: String!
+  clientMutationId: String
+}
+
+type CreateVideoAdLogPayload {
+  VideoAdLog: VideoAdLog
+  clientMutationId: String
+}
+
+"""
+For expected errors, such as during form validation
+"""
 type CustomError {
-  """The error code"""
+  """
+  The error code
+  """
   code: String
 
-  """The error message"""
+  """
+  The error message
+  """
   message: String
 }
 
@@ -414,7 +718,9 @@ type DonateVcPayload {
   clientMutationId: String
 }
 
-"""An object representing a single revenue value"""
+"""
+An object representing a single revenue value
+"""
 input EncodedRevenueValue {
   encodingType: EncodedRevenueValueTypeEnum!
 
@@ -432,66 +738,90 @@ enum EncodedRevenueValueTypeEnum {
   AMAZON_CPM
 }
 
-"""persistant awards calculated at end of mission"""
+"""
+persistant awards calculated at end of mission
+"""
 type EndOfMissionAward {
-  """users ID"""
+  """
+  users ID
+  """
   user: String!
 
-  """the string name of the particular award"""
+  """
+  the string name of the particular award
+  """
   awardType: String!
 
-  """the numerical stat for the award, such as number of tabs"""
+  """
+  the numerical stat for the award, such as number of tabs
+  """
   unit: Int!
 }
 
-"""Action taken in response to the "referral notification" experiment."""
+"""
+Action taken in response to the "referral notification" experiment.
+"""
 enum ExperimentActionReferralNotification {
   NONE
   DISMISS
   CLICK
 }
 
-"""The actions a user may take in an experiment"""
+"""
+The actions a user may take in an experiment
+"""
 input ExperimentActions {
   searchIntro: ExperimentActionSearchIntro
   referralNotification: ExperimentActionReferralNotification
 }
 
-"""Action taken in response to the "search intro" experiment."""
+"""
+Action taken in response to the "search intro" experiment.
+"""
 enum ExperimentActionSearchIntro {
   NONE
   DISMISS
   CLICK
 }
 
-"""The actions a user has taken in an experiment"""
+"""
+The actions a user has taken in an experiment
+"""
 type ExperimentActionsOutput {
   searchIntro: ExperimentActionSearchIntro
   referralNotification: ExperimentActionReferralNotification
 }
 
-"""The test of showing an explanation of why there are ads"""
+"""
+The test of showing an explanation of why there are ads
+"""
 enum ExperimentGroupAdExplanation {
   NONE
   DEFAULT
   SHOW_EXPLANATION
 }
 
-"""The test of allowing anonymous user authentication"""
+"""
+The test of allowing anonymous user authentication
+"""
 enum ExperimentGroupAnonSignIn {
   NONE
   AUTHED_USER_ONLY
   ANONYMOUS_ALLOWED
 }
 
-"""The test of showing only one ad to new users"""
+"""
+The test of showing only one ad to new users
+"""
 enum ExperimentGroupOneAdForNewUsers {
   NONE
   DEFAULT
   ONE_AD_AT_FIRST
 }
 
-"""The test of showing a notification to ask users to recruit friends"""
+"""
+The test of showing a notification to ask users to recruit friends
+"""
 enum ExperimentGroupReferralNotification {
   NONE
   NO_NOTIFICATION
@@ -502,7 +832,9 @@ enum ExperimentGroupReferralNotification {
   COPY_E
 }
 
-"""The experimental groups to which the user is assigned"""
+"""
+The experimental groups to which the user is assigned
+"""
 input ExperimentGroups {
   anonSignIn: ExperimentGroupAnonSignIn
   variousAdSizes: ExperimentGroupVariousAdSizes
@@ -513,7 +845,9 @@ input ExperimentGroups {
   referralNotification: ExperimentGroupReferralNotification
 }
 
-"""The test of showing an introduction message to Search for a Cause"""
+"""
+The test of showing an introduction message to Search for a Cause
+"""
 enum ExperimentGroupSearchIntro {
   NONE
   NO_INTRO
@@ -521,14 +855,18 @@ enum ExperimentGroupSearchIntro {
   INTRO_HOMEPAGE
 }
 
-"""The test of enabling a third ad"""
+"""
+The test of enabling a third ad
+"""
 enum ExperimentGroupThirdAd {
   NONE
   TWO_ADS
   THREE_ADS
 }
 
-"""The test of enabling many different ad sizes"""
+"""
+The test of enabling many different ad sizes
+"""
 enum ExperimentGroupVariousAdSizes {
   NONE
   STANDARD
@@ -540,9 +878,13 @@ type failedEmailAddresses {
   error: String
 }
 
-"""inviting user"""
+"""
+inviting user
+"""
 type InvitingUser {
-  """the name entered in invite"""
+  """
+  the name entered in invite
+  """
   name: String!
 }
 
@@ -620,7 +962,9 @@ input LogUserRevenueInput {
   userId: String!
   revenue: Float
 
-  """A revenue value encoded because it is not available on the client side"""
+  """
+  A revenue value encoded because it is not available on the client side
+  """
   encodedRevenue: EncodedRevenueValue
   aggregationOperation: LogUserRevenueAggregationOperationEnum
   dfpAdvertiserId: String
@@ -636,21 +980,49 @@ type LogUserRevenuePayload {
   clientMutationId: String
 }
 
-"""Info about the user's day of most searches"""
+input LogVideoAdCompleteInput {
+  userId: String!
+  signatureArgumentString: String!
+  signature: String!
+  videoAdId: String!
+  truexAdId: String!
+  truexCreativeId: String!
+  clientMutationId: String
+}
+
+type LogVideoAdCompletePayload {
+  success: Boolean!
+  user: User!
+  clientMutationId: String
+}
+
+"""
+Info about the user's day of most searches
+"""
 type MaxSearchesDay {
-  """The day (datetime)the most searches occurred"""
+  """
+  The day (datetime)the most searches occurred
+  """
   date: String
 
-  """The number of searches made on that day"""
+  """
+  The number of searches made on that day
+  """
   numSearches: Int
 }
 
-"""Info about the user's day of most opened tabs"""
+"""
+Info about the user's day of most opened tabs
+"""
 type MaxTabsDay {
-  """The day the most tabs were opened"""
+  """
+  The day the most tabs were opened
+  """
   date: String
 
-  """The number of tabs opened on that day"""
+  """
+  The number of tabs opened on that day
+  """
   numTabs: Int
 }
 
@@ -664,9 +1036,13 @@ type MergeIntoExistingUserPayload {
   clientMutationId: String
 }
 
-"""A goal that Tabbers complete with a group of friends"""
+"""
+A goal that Tabbers complete with a group of friends
+"""
 type Mission {
-  """Mission ID"""
+  """
+  Mission ID
+  """
   missionId: String!
 
   """
@@ -674,53 +1050,85 @@ type Mission {
   """
   status: missionStatus!
 
-  """the name of the squad"""
+  """
+  the name of the squad
+  """
   squadName: String!
 
-  """the number of tabs to complete mission"""
+  """
+  the number of tabs to complete mission
+  """
   tabGoal: Int!
 
-  """the sum of users' number of tabs towards mission"""
+  """
+  the sum of users' number of tabs towards mission
+  """
   tabCount: Int!
 
-  """if a user has acknowledged mission complete"""
+  """
+  if a user has acknowledged mission complete
+  """
   acknowledgedMissionComplete: Boolean!
 
-  """if a user has acknowledged mission started"""
+  """
+  if a user has acknowledged mission started
+  """
   acknowledgedMissionStarted: Boolean!
 
-  """stats and state of each squad member"""
+  """
+  stats and state of each squad member
+  """
   squadMembers: [SquadMemberInfo]!
 
-  """the end of mission awards calculated when mission completes"""
+  """
+  the end of mission awards calculated when mission completes
+  """
   endOfMissionAwards: [EndOfMissionAward]!
 
-  """ISO datetime string of when the mission started"""
+  """
+  ISO datetime string of when the mission started
+  """
   started: String
 
-  """ISO datetime string of when the mission completed"""
+  """
+  ISO datetime string of when the mission completed
+  """
   completed: String
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type MissionConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [MissionEdge]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type MissionEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Mission
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""whether a user has accepted rejected or is pending invitation"""
+"""
+whether a user has accepted rejected or is pending invitation
+"""
 enum missionStatus {
   pending
   started
@@ -736,72 +1144,163 @@ type Mutation {
   logUserRevenue(input: LogUserRevenueInput!): LogUserRevenuePayload
   logUserDataConsent(input: LogUserDataConsentInput!): LogUserDataConsentPayload
   donateVc(input: DonateVcInput!): DonateVcPayload
-  mergeIntoExistingUser(input: MergeIntoExistingUserInput!): MergeIntoExistingUserPayload
-  logEmailVerified(input: LogEmailVerifiedMutationInput!): LogEmailVerifiedMutationPayload
-  logReferralLinkClick(input: LogReferralLinkClickInput!): LogReferralLinkClickPayload
+  mergeIntoExistingUser(
+    input: MergeIntoExistingUserInput!
+  ): MergeIntoExistingUserPayload
+  logEmailVerified(
+    input: LogEmailVerifiedMutationInput!
+  ): LogEmailVerifiedMutationPayload
+  logReferralLinkClick(
+    input: LogReferralLinkClickInput!
+  ): LogReferralLinkClickPayload
   setUserBkgImage(input: SetUserBkgImageInput!): SetUserBkgImagePayload
   setUserBkgColor(input: SetUserBkgColorInput!): SetUserBkgColorPayload
-  setUserBkgCustomImage(input: SetUserBkgCustomImageInput!): SetUserBkgCustomImagePayload
-  setUserBkgDailyImage(input: SetUserBkgDailyImageInput!): SetUserBkgDailyImagePayload
+  setUserBkgCustomImage(
+    input: SetUserBkgCustomImageInput!
+  ): SetUserBkgCustomImagePayload
+  setUserBkgDailyImage(
+    input: SetUserBkgDailyImageInput!
+  ): SetUserBkgDailyImagePayload
   updateWidgetData(input: UpdateWidgetDataInput!): UpdateWidgetDataPayload
-  updateWidgetVisibility(input: UpdateWidgetVisibilityInput!): UpdateWidgetVisibilityPayload
-  updateWidgetEnabled(input: UpdateWidgetEnabledInput!): UpdateWidgetEnabledPayload
+  updateWidgetVisibility(
+    input: UpdateWidgetVisibilityInput!
+  ): UpdateWidgetVisibilityPayload
+  updateWidgetEnabled(
+    input: UpdateWidgetEnabledInput!
+  ): UpdateWidgetEnabledPayload
   updateWidgetConfig(input: UpdateWidgetConfigInput!): UpdateWidgetConfigPayload
-  setUserActiveWidget(input: SetUserActiveWidgetInput!): SetUserActiveWidgetPayload
+  setUserActiveWidget(
+    input: SetUserActiveWidgetInput!
+  ): SetUserActiveWidgetPayload
   createNewUser(input: CreateNewUserInput!): CreateNewUserPayload
   createNewMission(input: CreateNewMissionInput!): CreateNewMissionPayload
   setUsername(input: SetUsernameInput!): SetUsernamePayload
   setEmail(input: SetEmailInput!): SetEmailPayload
-  updateUserExperimentGroups(input: UpdateUserExperimentGroupsInput!): UpdateUserExperimentGroupsPayload
-  logUserExperimentActions(input: LogUserExperimentActionsInput!): LogUserExperimentActionsPayload
+  updateUserExperimentGroups(
+    input: UpdateUserExperimentGroupsInput!
+  ): UpdateUserExperimentGroupsPayload
+  logUserExperimentActions(
+    input: LogUserExperimentActionsInput!
+  ): LogUserExperimentActionsPayload
   setV4Beta(input: SetV4BetaInput!): SetV4BetaPayload
-  setHasViewedIntroFlow(input: SetHasViewedIntroFlowInput!): SetHasViewedIntroFlowPayload
+  setHasViewedIntroFlow(
+    input: SetHasViewedIntroFlowInput!
+  ): SetHasViewedIntroFlowPayload
   deleteUser(input: DeleteUserInput!): DeleteUserPayload
-  squadInviteResponse(input: SquadInviteResponseInput!): SquadInviteResponsePayload
-  updateMissionNotification(input: UpdateMissionNotificationInput!): UpdateMissionNotificationPayload
+  squadInviteResponse(
+    input: SquadInviteResponseInput!
+  ): SquadInviteResponsePayload
+  updateMissionNotification(
+    input: UpdateMissionNotificationInput!
+  ): UpdateMissionNotificationPayload
   setHasSeenSquads(input: SetHasSeenSquadsInput!): SetHasSeenSquadsPayload
-  setHasSeenCompletedMission(input: SetHasSeenCompletedMissionInput!): SetHasSeenCompletedMissionPayload
+  setHasSeenCompletedMission(
+    input: SetHasSeenCompletedMissionInput!
+  ): SetHasSeenCompletedMissionPayload
   restartMission(input: RestartMissionInput!): RestartMissionPayload
+  createVideoAdLog(input: CreateVideoAdLogInput!): CreateVideoAdLogPayload
+  logVideoAdComplete(input: LogVideoAdCompleteInput!): LogVideoAdCompletePayload
 }
 
-"""An object with an ID"""
+"""
+An object with an ID
+"""
 interface Node {
-  """The id of the object."""
+  """
+  The id of the object.
+  """
   id: ID!
 }
 
-"""user notifications to show on v4"""
+"""
+user notifications to show on v4
+"""
 type notifications {
-  """the kind of notification it is"""
+  """
+  the kind of notification it is
+  """
   code: String
 }
 
-"""Information about pagination in a connection."""
+"""
+cause specific UI content around onboarding
+"""
+type OnboardingUICopy {
+  """
+  the steps array in onboarding
+  """
+  steps: [onboardingUIStep]!
+
+  """
+  markdown string shown when prompting the user to open their first tab, currently info about cat treats
+  """
+  firstTabIntroDescription: String!
+}
+
+"""
+ui content for each onboarding step
+"""
+type onboardingUIStep {
+  """
+  markdown title for onboarding step
+  """
+  title: String!
+
+  """
+  markdown subtitle for onboarding step
+  """
+  subtitle: String!
+
+  """
+  name of image to show
+  """
+  imgName: String!
+}
+
+"""
+Information about pagination in a connection.
+"""
 type PageInfo {
-  """When paginating forwards, are there more items?"""
+  """
+  When paginating forwards, are there more items?
+  """
   hasNextPage: Boolean!
 
-  """When paginating backwards, are there more items?"""
+  """
+  When paginating backwards, are there more items?
+  """
   hasPreviousPage: Boolean!
 
-  """When paginating backwards, the cursor to continue."""
+  """
+  When paginating backwards, the cursor to continue.
+  """
   startCursor: String
 
-  """When paginating forwards, the cursor to continue."""
+  """
+  When paginating forwards, the cursor to continue.
+  """
   endCursor: String
 }
 
-"""pending mission invites for user"""
+"""
+pending mission invites for user
+"""
 type PendingMissionInvite {
-  """the mission id of the squad invite"""
+  """
+  the mission id of the squad invite
+  """
   missionId: String!
   invitingUser: InvitingUser
 }
 
 type Query {
-  """Fetches an object given its ID"""
+  """
+  Fetches an object given its ID
+  """
   node(
-    """The ID of an object"""
+    """
+    The ID of an object
+    """
     id: ID!
   ): Node
   app: App
@@ -821,12 +1320,16 @@ input RestartMissionInput {
 }
 
 type RestartMissionPayload {
-  """the current active mission for a user"""
+  """
+  the current active mission for a user
+  """
   currentMission: Mission
   clientMutationId: String
 }
 
-"""Info about any rate-limiting for VC earned from search queries"""
+"""
+Info about any rate-limiting for VC earned from search queries
+"""
 type SearchRateLimit {
   """
   Whether we are currently rate-limiting the user's VC earned from searches
@@ -834,11 +1337,15 @@ type SearchRateLimit {
   limitReached: Boolean
   reason: SearchRateLimitReason
 
-  """Whether we should present the user with a CAPTCHA"""
+  """
+  Whether we should present the user with a CAPTCHA
+  """
   checkIfHuman: Boolean
 }
 
-"""Why we are rate-limiting the user's VC earned from searches"""
+"""
+Why we are rate-limiting the user's VC earned from searches
+"""
 enum SearchRateLimitReason {
   NONE
   ONE_MINUTE_MAX
@@ -967,7 +1474,54 @@ type SetV4BetaPayload {
   clientMutationId: String
 }
 
-"""whether a user has accepted rejected or is pending invitation"""
+"""
+cause specific UI content around sharing
+"""
+type SharingUICopy {
+  """
+  markdown for modal title
+  """
+  title: String!
+
+  """
+  markdown for modal subtitle
+  """
+  subtitle: String!
+
+  """
+  value to use for img switch statement on frontend, probably ‘cats’ or ‘seas’
+  """
+  imgCategory: String!
+
+  """
+  copy for reddit button
+  """
+  redditButtonTitle: String!
+
+  """
+  copy for facebook button
+  """
+  facebookButtonTitle: String!
+
+  """
+  copy for twitter button
+  """
+  twitterButtonTitle: String!
+
+  """
+  copy for tumblr button
+  """
+  tumblrTitle: String!
+
+  """
+  copy for tumblr caption
+  """
+  tumblrCaption: String!
+}
+
+"""
+whether a user has accepted rejected or is pending invitation
+"""
 enum squadAcceptedStatus {
   pending
   accepted
@@ -982,33 +1536,51 @@ input SquadInviteResponseInput {
 }
 
 type SquadInviteResponsePayload {
-  """the current active mission for a user"""
+  """
+  the current active mission for a user
+  """
   currentMission: Mission
   clientMutationId: String
 }
 
-"""an individual's stats for a mission"""
+"""
+an individual's stats for a mission
+"""
 type SquadMemberInfo {
-  """Users's username if they have joined TFAC"""
+  """
+  Users's username if they have joined TFAC
+  """
   username: String
 
-  """Users's invited email if they have not joined TFAC"""
+  """
+  Users's invited email if they have not joined TFAC
+  """
   invitedEmail: String
   status: squadAcceptedStatus!
 
-  """the longest tab streak in days so far"""
+  """
+  the longest tab streak in days so far
+  """
   longestTabStreak: Int!
 
-  """the current tab streak in days so far"""
+  """
+  the current tab streak in days so far
+  """
   currentTabStreak: Int!
 
-  """the most tabs in a single day"""
+  """
+  the most tabs in a single day
+  """
   missionMaxTabsDay: Int!
 
-  """the current tabs today"""
+  """
+  the current tabs today
+  """
   missionCurrentTabsDay: Int!
 
-  """users tab contribution"""
+  """
+  users tab contribution
+  """
   tabs: Int!
 }
 
@@ -1102,82 +1674,167 @@ type UpdateWidgetVisibilityPayload {
   clientMutationId: String
 }
 
-"""A person who uses our app"""
+"""
+A person who uses our app
+"""
 type User implements Node {
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
 
-  """Users's username"""
+  """
+  Users's username
+  """
   userId: String
 
-  """Users's background image"""
+  """
+  Users's background image
+  """
   backgroundImage: BackgroundImage
 
-  """Users's username"""
+  """
+  Users's username
+  """
   username: String
 
-  """User's email"""
+  """
+  User's email
+  """
   email: String
 
-  """ISO datetime string of when the user joined"""
+  """
+  a unique user ID sent to video ad partner truex
+  """
+  truexId: String!
+
+  """
+  cause type for the user
+  """
+  cause: Cause
+
+  """
+  whether a user has completed 3 video ads in the last 24 hours
+  """
+  videoAdEligible: Boolean
+
+  """
+  ISO datetime string of when the user joined
+  """
   joined: String
   justCreated: Boolean
 
-  """User's current VC"""
+  """
+  User's current VC
+  """
   vcCurrent: Int
 
-  """User's all time VC"""
+  """
+  User's all time VC
+  """
   vcAllTime: Int
 
-  """User's all time tab count"""
+  """
+  User's all time tab count
+  """
   tabs: Int
 
-  """User's tab count for today"""
+  """
+  User's tab count for today
+  """
   tabsToday: Int
 
-  """Info about the user's day of most opened tabs"""
+  """
+  Info about the user's day of most opened tabs
+  """
   maxTabsDay: MaxTabsDay
 
-  """User's vc"""
+  """
+  User's vc
+  """
   level: Int
 
-  """If true, serve the new Tab V4 app."""
+  """
+  If true, serve the new Tab V4 app.
+  """
   v4BetaEnabled: Boolean
 
-  """if true, user has viewed intro flow in v4"""
+  """
+  if true, user has viewed intro flow in v4
+  """
   hasViewedIntroFlow: Boolean!
 
-  """Remaing hearts until next level."""
+  """
+  Remaing hearts until next level.
+  """
   heartsUntilNextLevel: Int
 
-  """User's total vc donated"""
+  """
+  User's total vc donated
+  """
   vcDonatedAllTime: Int
 
-  """People recruited by this user"""
-  recruits(after: String, first: Int, before: String, last: Int, startTime: String, endTime: String): UserRecruitsConnection
+  """
+  People recruited by this user
+  """
+  recruits(
+    after: String
+    first: Int
+    before: String
+    last: Int
+    startTime: String
+    endTime: String
+  ): UserRecruitsConnection
 
-  """The number of users this user has recruited"""
+  """
+  The number of users this user has recruited
+  """
   numUsersRecruited: Int
 
-  """User widgets"""
-  widgets(after: String, first: Int, before: String, last: Int, enabled: Boolean): WidgetConnection
+  """
+  User widgets
+  """
+  widgets(
+    after: String
+    first: Int
+    before: String
+    last: Int
+    enabled: Boolean
+  ): WidgetConnection
 
-  """User's active widget id"""
+  """
+  User's active widget id
+  """
   activeWidget: String
 
-  """the current active mission for a user"""
+  """
+  the current active mission for a user
+  """
   currentMission: Mission
 
-  """gets all the past missions for a user"""
-  pastMissions(after: String, first: Int, before: String, last: Int): MissionConnection
+  """
+  gets all the past missions for a user
+  """
+  pastMissions(
+    after: String
+    first: Int
+    before: String
+    last: Int
+  ): MissionConnection
 
-  """User's background option"""
+  """
+  User's background option
+  """
   backgroundOption: String
 
-  """User's background custom image"""
+  """
+  User's background custom image
+  """
   customImage: String
 
-  """User's background color"""
+  """
+  User's background color
+  """
   backgroundColor: String
 
   """
@@ -1185,135 +1842,231 @@ type User implements Node {
   """
   mergedIntoExistingUser: Boolean
 
-  """User's all time search count"""
+  """
+  User's all time search count
+  """
   searches: Int
 
-  """notifications for the v4 user to see"""
+  """
+  notifications for the v4 user to see
+  """
   notifications: [notifications]!
 
-  """User's search count for today"""
+  """
+  User's search count for today
+  """
   searchesToday: Int
 
-  """Info about any search query rate-limiting"""
+  """
+  Info about any search query rate-limiting
+  """
   searchRateLimit: SearchRateLimit
 
-  """Info about the user's day of most searches"""
+  """
+  Info about the user's day of most searches
+  """
   maxSearchesDay: MaxSearchesDay
 
-  """Actions the user has taken during experiments"""
+  """
+  Actions the user has taken during experiments
+  """
   experimentActions: ExperimentActionsOutput
   pendingMissionInvites: [PendingMissionInvite]!
 
-  """whether a v4 user has been introduced to squads in the ui"""
+  """
+  whether a v4 user has been introduced to squads in the ui
+  """
   hasSeenSquads: Boolean!
 }
 
-"""a user's charity specific impact"""
+"""
+a user's charity specific impact
+"""
 type UserImpact {
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
   userId: String!
   charityId: String!
 
-  """a users impact for a specific charity"""
+  """
+  a users impact for a specific charity
+  """
   userImpactMetric: Float!
 
-  """a users pending impact based on referrals"""
+  """
+  a users pending impact based on referrals
+  """
   pendingUserReferralImpact: Float!
 
-  """pending user referral count"""
+  """
+  pending user referral count
+  """
   pendingUserReferralCount: Float!
 
-  """visits remaining until next recorded impact"""
+  """
+  visits remaining until next recorded impact
+  """
   visitsUntilNextImpact: Float!
 
-  """enables a user to start accruing impact"""
+  """
+  enables a user to start accruing impact
+  """
   confirmedImpact: Boolean!
 
-  """flag that indicates if user has celebrated latest impact"""
+  """
+  flag that indicates if user has celebrated latest impact
+  """
   hasClaimedLatestReward: Boolean!
 }
 
-"""Info about a user recruited by a referring user"""
+"""
+Info about a user recruited by a referring user
+"""
 type UserRecruits {
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
 
-  """ISO datetime string of when the recruited user joined"""
+  """
+  ISO datetime string of when the recruited user joined
+  """
   recruitedAt: String
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type UserRecruitsConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [UserRecruitsEdge]
 
-  """The count of users recruited (signed up)"""
+  """
+  The count of users recruited (signed up)
+  """
   totalRecruits: Int
 
-  """The count of users recruited who remained active for one day or more"""
+  """
+  The count of users recruited who remained active for one day or more
+  """
   recruitsActiveForAtLeastOneDay: Int
 
-  """The count of users recruited who have opened one tab or more"""
+  """
+  The count of users recruited who have opened one tab or more
+  """
   recruitsWithAtLeastOneTab: Int
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type UserRecruitsEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: UserRecruits
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }
 
-"""App widget"""
+"""
+Video Ad Log type
+"""
+type VideoAdLog implements Node {
+  """
+  The ID of an object
+  """
+  id: ID!
+}
+
+"""
+App widget
+"""
 type Widget implements Node {
-  """The ID of an object"""
+  """
+  The ID of an object
+  """
   id: ID!
 
-  """Widget display name"""
+  """
+  Widget display name
+  """
   name: String
 
-  """Widget type"""
+  """
+  Widget type
+  """
   type: String
 
-  """Widget icon"""
+  """
+  Widget icon
+  """
   icon: String
 
-  """The Widget enabled state"""
+  """
+  The Widget enabled state
+  """
   enabled: Boolean
 
-  """The Widget visible state"""
+  """
+  The Widget visible state
+  """
   visible: Boolean
 
-  """Widget data."""
+  """
+  Widget data.
+  """
   data: String
 
-  """Widget user specific configuration."""
+  """
+  Widget user specific configuration.
+  """
   config: String
 
-  """Widget general configuration."""
+  """
+  Widget general configuration.
+  """
   settings: String
 }
 
-"""A connection to a list of items."""
+"""
+A connection to a list of items.
+"""
 type WidgetConnection {
-  """Information to aid in pagination."""
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 
-  """A list of edges."""
+  """
+  A list of edges.
+  """
   edges: [WidgetEdge]
 }
 
-"""An edge in a connection."""
+"""
+An edge in a connection.
+"""
 type WidgetEdge {
-  """The item at the end of the edge"""
+  """
+  The item at the end of the edge
+  """
   node: Widget
 
-  """A cursor for use in pagination"""
+  """
+  A cursor for use in pagination
+  """
   cursor: String!
 }

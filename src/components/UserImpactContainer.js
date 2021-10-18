@@ -32,8 +32,25 @@ export default createFragmentContainer(UserImpactSwitchComponent, {
           name
         }
       }
+      cause {
+        landingPagePath
+        impactVisits
+        theme {
+          primaryColor
+          secondaryColor
+        }
+        impact {
+          impactCounterText
+          referralRewardTitle
+          referralRewardSubtitle
+          claimImpactTitle
+          claimImpactSubtitle
+          newlyReferredTitle
+          impactWalkthroughText
+          confirmImpactText
+        }
+      }
       hasSeenSquads
-      charityId
     }
   `,
 })

@@ -55,13 +55,8 @@ const UserImpact = ({ userImpact, user, disabled }) => {
     pendingUserReferralImpact,
     pendingUserReferralCount,
   } = userImpact
-  const { currentMission, pendingMissionInvites, hasSeenSquads, email } = user
   const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
-  const showSquadsIntroNotification =
-    showDevelopmentOnlyMissionsFeature(email) &&
-    !hasSeenSquads &&
-    userImpactMetric >= 2
   const referralRewardNotificationOpen =
     pendingUserReferralImpact > 0 && pendingUserReferralCount > 0
   const prevVisitsUntilNextImpact = usePrevious(visitsUntilNextImpact)
@@ -72,9 +67,6 @@ const UserImpact = ({ userImpact, user, disabled }) => {
   const [referralRewardDialogOpen, setReferralRewardDialogOpen] =
     useState(false)
   const [claimedReferralImpact, setClaimedReferralImpact] = useState(0)
-  const [showIntlCatDayEndNotification, setIntlCatDayEndNotification] =
-    useState(false)
-  const router = useRouter()
   const confettiCanvasRef = useRef(null)
   const confettiFunc = () => {
     const myConfetti = confetti.create(confettiCanvasRef.current, {
@@ -117,17 +109,6 @@ const UserImpact = ({ userImpact, user, disabled }) => {
     })
   }
   useEffect(() => {
-    const internationalCatDay =
-      get(user, 'notifications[0].code', false) === 'intlCatDayEnd2021'
-    const hasDismissedCatDayNotification =
-      localStorageMgr.getItem(INTL_CAT_DAY_END_2021_NOTIFICATION) === 'true'
-    if (internationalCatDay && !hasDismissedCatDayNotification) {
-      setIntlCatDayEndNotification(true)
-    } else {
-      setIntlCatDayEndNotification(false)
-    }
-  }, [user])
-  useEffect(() => {
     if (
       visitsUntilNextImpact === CAT_IMPACT_VISITS &&
       prevVisitsUntilNextImpact === 1
@@ -169,18 +150,6 @@ const UserImpact = ({ userImpact, user, disabled }) => {
   }
   const handleReferralRewardDialogClose = async () => {
     setReferralRewardDialogOpen(false)
-  }
-  const dismissCatDayNotification = () => {
-    localStorageMgr.setItem(INTL_CAT_DAY_END_2021_NOTIFICATION, 'true')
-    setIntlCatDayEndNotification(false)
-  }
-  const handleIntroducingSquads = (e) => {
-    e.preventDefault()
-    router.push(missionHubURL)
-    SetHasSeenSquadsMutation(userId)
-  }
-  const handleIntroducingSquadsClose = () => {
-    SetHasSeenSquadsMutation(userId)
   }
   const classes = useStyles()
   return (
@@ -276,63 +245,6 @@ const UserImpact = ({ userImpact, user, disabled }) => {
           buttonOnClick={handleClaimReferralNotification}
         />
       )}
-      {showIntlCatDayEndNotification && (
-        <Notification
-          text={
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'space-between',
-              }}
-            >
-              <Typography variant="body2" gutterBottom>
-                Thank you to everyone who purr-ticipated in our International
-                Cat Day celebration! Thanks to all of you, we were able to
-                donate an extra $614 to The Jackson Galaxy Project.
-              </Typography>
-              <Typography variant="body2">
-                Need an extra dose of cuteness?{' '}
-                <Link
-                  target="_blank"
-                  to="https://www.instagram.com/p/CSo9-_tHquS/"
-                  className={classes.link}
-                >
-                  Check out our top 10 submissions
-                </Link>{' '}
-                from our #tabforcatsday photo challenge!
-              </Typography>
-            </div>
-          }
-          buttonText="Ok!"
-          buttonOnClick={dismissCatDayNotification}
-        />
-      )}
-      {showSquadsIntroNotification && (
-        <Notification
-          text={
-            <div>
-              <Typography variant="body2" className={classes.bold} gutterBottom>
-                Introducing Squads!
-              </Typography>
-              <Typography variant="body2" gutterBottom>
-                Start a mission with your friends and work together to help get
-                a shelter cat adopted! When you work together with your squad
-                you can make a larger impact, sooner.
-              </Typography>
-            </div>
-          }
-          buttonText="Create A Squad"
-          buttonOnClick={handleIntroducingSquads}
-          onClose={handleIntroducingSquadsClose}
-          includeClose
-        />
-      )}
-      <MissionNotification
-        userId={userId}
-        pendingMissionInvites={pendingMissionInvites}
-        currentMission={currentMission}
-      />
     </div>
   )
 }
