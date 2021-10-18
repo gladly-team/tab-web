@@ -1,14 +1,14 @@
 /* globals document, window */
 /* eslint react/jsx-props-no-spreading: 0 */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import Router from 'next/router'
 import { register, unregister } from 'next-offline/runtime'
-import { ThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider, createTheme } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { isClientSide } from 'src/utils/ssr'
-import theme from 'src/utils/theme'
+import defaultTheme, { themeMapper } from 'src/utils/theme'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import initAuth from 'src/utils/auth/initAuth'
 import initSentry from 'src/utils/initSentry'
@@ -17,6 +17,7 @@ import initializeCMP from 'src/utils/initializeCMP'
 import { setWindowLocation } from 'src/utils/navigation'
 import isOurHost from 'src/utils/isOurHost'
 import 'src/utils/styles/globalStyles.css'
+import { ThemeContext } from 'src/utils/hooks/useThemeContext'
 
 initAuth()
 
@@ -103,6 +104,20 @@ const MyApp = (props) => {
       jssStyles.parentElement.removeChild(jssStyles)
     }
   }, [])
+  const [theme, setTheme] = useState(createTheme(defaultTheme))
+
+  //  make updater function in theme context referentially stable
+  const setThemeState = useCallback(
+    ({ primaryColor, secondaryColor }) =>
+      setTheme(themeMapper({ primaryColor, secondaryColor })),
+    []
+  )
+
+  //  optimizer
+  const optimizedThemeContextValue = useMemo(
+    () => ({ theme, setTheme: setThemeState }),
+    [theme, setThemeState]
+  )
 
   return (
     <>
@@ -114,10 +129,12 @@ const MyApp = (props) => {
         />
       </Head>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <ErrorBoundary>
-          <Component {...pageProps} />
-        </ErrorBoundary>
+        <ThemeContext.Provider value={optimizedThemeContextValue}>
+          <CssBaseline />
+          <ErrorBoundary>
+            <Component {...pageProps} />
+          </ErrorBoundary>
+        </ThemeContext.Provider>
       </ThemeProvider>
     </>
   )

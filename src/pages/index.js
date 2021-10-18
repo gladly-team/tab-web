@@ -23,8 +23,7 @@ import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
-import NewTabThemeWrapperHOC from 'src/components/NewTabThemeWrapperHOC'
-
+import useTheme from 'src/utils/hooks/useThemeContext'
 import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 import SquadCounter from 'src/components/SquadCounter'
@@ -288,7 +287,6 @@ const getRelayQuery = async ({ AuthUser }) => {
 }
 
 const Index = ({ data: fallbackData }) => {
-  const classes = useStyles()
   const { data } = useData({
     getRelayQuery,
     fallbackData,
@@ -317,7 +315,9 @@ const Index = ({ data: fallbackData }) => {
     }
   }, [])
   const { app, user, userImpact } = data || {}
-  const { currentMission, email } = user || {}
+  const { currentMission, email, cause } = user || {}
+  const { theme } = cause || {}
+  const { primaryColor, secondaryColor } = theme || {}
   const {
     status: missionStatus = 'not started',
     tabCount,
@@ -327,6 +327,13 @@ const Index = ({ data: fallbackData }) => {
   const userGlobalId = get(user, 'id')
   const globalTabCount = get(user, 'tabs')
   const [tabId] = useState(uuid())
+
+  // sets the theme based on cause
+  const { setTheme } = useTheme()
+  useEffect(() => {
+    setTheme({ primaryColor, secondaryColor })
+  }, [setTheme, primaryColor, secondaryColor])
+  const classes = useStyles()
 
   // this is a temporary workaround as the latest updates to the
   // relay store do not push into this component, so we are manually
@@ -648,5 +655,4 @@ export default flowRight([
   }),
   withSentry,
   withRelay,
-  NewTabThemeWrapperHOC,
 ])(Index)
