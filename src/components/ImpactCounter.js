@@ -7,8 +7,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import DashboardPopover from 'src/components/DashboardPopover'
 import Button from '@material-ui/core/Button'
+import Markdown from 'src/components/Markdown'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: 'fit-content',
     display: 'flex',
@@ -32,8 +33,13 @@ const useStyles = makeStyles(() => ({
     marginLeft: '14px',
   },
   popoverText: {
-    padding: 12,
-    width: 220,
+    paddingTop: theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+
+    // Paragraph content has built-in bottom gutter.
+    paddingBottom: theme.spacing(0),
+    width: 230,
   },
   popover: { marginTop: 10 },
 }))
@@ -44,6 +50,16 @@ const ImpactCounter = (props) => {
   const { includeNumber, number, progress, className, disabled } = props
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const counterRef = useRef(undefined)
+
+  // TODO: use content from API
+  const dropdownMarkdownRegular =
+    '##### **Your pawsitive impact!**\n\nThis shows how many treats your tabs can provide to help shelter cats get adopted. Every tab you open helps. Keep it up!'
+  const dropdownMarkdownWhenInMission =
+    '##### **Your treats are still here**\n\nDon’t worry, we’ve still got your treats! We just paused them while you and your squad complete your new mission.'
+
+  const dropdownMarkdown = disabled
+    ? dropdownMarkdownWhenInMission
+    : dropdownMarkdownRegular
 
   return (
     <div onMouseEnter={disabled ? () => setIsPopoverOpen(true) : undefined}>
@@ -75,23 +91,7 @@ const ImpactCounter = (props) => {
         className={classes.popover}
       >
         <div className={classes.popoverText}>
-          <Typography
-            variant="body1"
-            className={classes.dropdownText}
-            gutterBottom
-            style={{ fontWeight: 'bold' }}
-          >
-            {disabled ? 'Your treats are still here' : 'Your pawsitive impact!'}
-          </Typography>
-          <Typography
-            variant="body2"
-            className={classes.dropdownText}
-            gutterBottom
-          >
-            {disabled
-              ? 'Don’t worry, we’ve still got your treats! We just paused them while you and your squad complete your new mission.'
-              : 'This shows how many treats your tabs can provide to help shelter cats get adopted. Every tab you open helps. Keep it up!'}
-          </Typography>
+          <Markdown>{dropdownMarkdown}</Markdown>
         </div>
       </DashboardPopover>
     </div>
