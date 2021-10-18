@@ -77,9 +77,11 @@ describe('_app: tab-cmp', () => {
 })
 
 describe('_app: router overrides', () => {
-  it('sets a callback to the "routeChangeStart" router event', () => {
+  test('it sets a callback to the "routeChangeStart" router event', () => {
     expect.assertions(1)
     const Router = require('next/router')
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(true)
     // eslint-disable-next-line no-unused-expressions
     require('src/pages/_app').default
     expect(Router.events.on).toHaveBeenCalledWith(
@@ -88,9 +90,23 @@ describe('_app: router overrides', () => {
     )
   })
 
-  it('the "routeChangeStart" event calls setWindowLocation and throws when calling the base auth URL', () => {
+  test('when on our domain, the "routeChangeStart" event calls setWindowLocation and throws when calling the base auth URL', () => {
     expect.assertions(2)
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(true)
     const Router = require('next/router')
+    const mockWindowLocation =
+      require('src/utils/testHelpers/mockWindowLocation').default
+    mockWindowLocation({
+      host: 'test-tab2017.gladly.io',
+      hostname: 'test-tab2017.gladly.io',
+      href: 'https://test-tab2017.gladly.io/newtab/path/',
+      origin: 'https://test-tab2017.gladly.io',
+      pathname: '/newtab/path/',
+      port: '',
+      protocol: 'https:',
+      search: '',
+    })
     const { setWindowLocation } = require('src/utils/navigation')
     // eslint-disable-next-line no-unused-expressions
     require('src/pages/_app').default
@@ -103,9 +119,23 @@ describe('_app: router overrides', () => {
     })
   })
 
-  it('the "routeChangeStart" event calls setWindowLocation and throws when calling some other auth URL', () => {
+  test('when on our domain, the "routeChangeStart" event calls setWindowLocation and throws when calling some other auth URL', () => {
     expect.assertions(2)
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(true)
     const Router = require('next/router')
+    const mockWindowLocation =
+      require('src/utils/testHelpers/mockWindowLocation').default
+    mockWindowLocation({
+      host: 'test-tab2017.gladly.io',
+      hostname: 'test-tab2017.gladly.io',
+      href: 'https://test-tab2017.gladly.io/newtab/path/',
+      origin: 'https://test-tab2017.gladly.io',
+      pathname: '/newtab/path/',
+      port: '',
+      protocol: 'https:',
+      search: '',
+    })
     const { setWindowLocation } = require('src/utils/navigation')
     // eslint-disable-next-line no-unused-expressions
     require('src/pages/_app').default
@@ -121,9 +151,84 @@ describe('_app: router overrides', () => {
     )
   })
 
-  it('the "routeChangeStart" event does *not* call setWindowLocation or throws when calling some non-auth URL', () => {
+  test('when *not* on our domain, the "routeChangeStart" event does not call setWindowLocation or throws when calling the base auth URL', () => {
+    expect.assertions(2)
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(true)
+    const Router = require('next/router')
+    const mockWindowLocation =
+      require('src/utils/testHelpers/mockWindowLocation').default
+    mockWindowLocation({
+      host: 'example.com',
+      hostname: 'example.com',
+      href: 'https://example.com/newtab/path/',
+      origin: 'https://example.com',
+      pathname: '/newtab/path/',
+      port: '',
+      protocol: 'https:',
+      search: '',
+    })
+    const { setWindowLocation } = require('src/utils/navigation')
+    // eslint-disable-next-line no-unused-expressions
+    require('src/pages/_app').default
+    const routeChangeStartCallback = Router.events.on.mock.calls[0][1]
+    expect(() => {
+      routeChangeStartCallback('/newtab/auth/')
+    }).not.toThrow('routeChange aborted. This error can be safely ignored.')
+    expect(setWindowLocation).not.toHaveBeenCalledWith('/newtab/auth/', {
+      addBasePath: false,
+    })
+  })
+
+  test('when *not* on our domain, the "routeChangeStart" event does notn call setWindowLocation or throw when calling some other auth URL', () => {
+    expect.assertions(2)
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(true)
+    const Router = require('next/router')
+    const mockWindowLocation =
+      require('src/utils/testHelpers/mockWindowLocation').default
+    mockWindowLocation({
+      host: 'example.com',
+      hostname: 'example.com',
+      href: 'https://example.com/newtab/path/',
+      origin: 'https://example.com',
+      pathname: '/newtab/path/',
+      port: '',
+      protocol: 'https:',
+      search: '',
+    })
+    const { setWindowLocation } = require('src/utils/navigation')
+    // eslint-disable-next-line no-unused-expressions
+    require('src/pages/_app').default
+    const routeChangeStartCallback = Router.events.on.mock.calls[0][1]
+    expect(() => {
+      routeChangeStartCallback('/newtab/auth/some/page/here/')
+    }).not.toThrow('routeChange aborted. This error can be safely ignored.')
+    expect(setWindowLocation).not.toHaveBeenCalledWith(
+      '/newtab/auth/some/page/here/',
+      {
+        addBasePath: false,
+      }
+    )
+  })
+
+  test('when on our domain, the "routeChangeStart" event does *not* call setWindowLocation or throws when calling some non-auth URL', () => {
     expect.assertions(2)
     const Router = require('next/router')
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(true)
+    const mockWindowLocation =
+      require('src/utils/testHelpers/mockWindowLocation').default
+    mockWindowLocation({
+      host: 'test-tab2017.gladly.io',
+      hostname: 'test-tab2017.gladly.io',
+      href: 'https://test-tab2017.gladly.io/newtab/path/',
+      origin: 'https://test-tab2017.gladly.io',
+      pathname: '/newtab/path/',
+      port: '',
+      protocol: 'https:',
+      search: '',
+    })
     const { setWindowLocation } = require('src/utils/navigation')
     // eslint-disable-next-line no-unused-expressions
     require('src/pages/_app').default
@@ -132,5 +237,34 @@ describe('_app: router overrides', () => {
       routeChangeStartCallback('/newtab/account/')
     }).not.toThrow()
     expect(setWindowLocation).not.toHaveBeenCalled()
+  })
+
+  test('when server-side, the "routeChangeStart" event does nothing when on an auth URL', () => {
+    expect.assertions(2)
+    const { isClientSide } = require('src/utils/ssr')
+    isClientSide.mockReturnValue(false) // server-side
+    const Router = require('next/router')
+    const mockWindowLocation =
+      require('src/utils/testHelpers/mockWindowLocation').default
+    mockWindowLocation({
+      host: 'test-tab2017.gladly.io',
+      hostname: 'test-tab2017.gladly.io',
+      href: 'https://test-tab2017.gladly.io/newtab/path/',
+      origin: 'https://test-tab2017.gladly.io',
+      pathname: '/newtab/path/',
+      port: '',
+      protocol: 'https:',
+      search: '',
+    })
+    const { setWindowLocation } = require('src/utils/navigation')
+    // eslint-disable-next-line no-unused-expressions
+    require('src/pages/_app').default
+    const routeChangeStartCallback = Router.events.on.mock.calls[0][1]
+    expect(() => {
+      routeChangeStartCallback('/newtab/auth/')
+    }).not.toThrow('routeChange aborted. This error can be safely ignored.')
+    expect(setWindowLocation).not.toHaveBeenCalledWith('/newtab/auth/', {
+      addBasePath: false,
+    })
   })
 })
