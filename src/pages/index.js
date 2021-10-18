@@ -374,6 +374,9 @@ const Index = ({ data: fallbackData }) => {
     return <FullPageLoader />
   }
 
+  // Determine if we should show mission content.
+  const missionsFeatureEnabled = showDevelopmentOnlyMissionsFeature(email)
+
   // Data to provide the onAdDisplayed callback
   const adContext = {
     user,
@@ -436,8 +439,7 @@ const Index = ({ data: fallbackData }) => {
     setJustFinishedIntroFlow(true)
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
-  const showDevelopmentOnlyMissionsFeatureFlag =
-    showDevelopmentOnlyMissionsFeature(email)
+
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {showIntro ? (
@@ -465,23 +467,26 @@ const Index = ({ data: fallbackData }) => {
           <div className={classes.fullContainer}>
             <div className={classes.topContainer}>
               <div className={classes.userMenuContainer}>
-                {showDevelopmentOnlyMissionsFeatureFlag ? (
+                {missionsFeatureEnabled ? (
                   <MissionHubButton status={missionStatus} />
                 ) : (
                   <InviteFriendsIconContainer user={user} />
                 )}
-                {(missionStatus === 'started' ||
-                  missionStatus === 'completed') && (
+                {missionsFeatureEnabled &&
+                (missionStatus === 'started' ||
+                  missionStatus === 'completed') ? (
                   <SquadCounter
                     progress={Math.floor((tabCount / tabGoal) * 100)}
                   />
-                )}
+                ) : null}
                 <UserImpactContainer
                   userId={userGlobalId}
                   userImpact={userImpact}
                   user={user}
                   disabled={
-                    missionStatus === 'started' || missionStatus === 'completed'
+                    missionsFeatureEnabled &&
+                    (missionStatus === 'started' ||
+                      missionStatus === 'completed')
                   }
                 />
                 <div className={classes.moneyRaisedContainer}>

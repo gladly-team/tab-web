@@ -22,8 +22,8 @@ full.args = {
   progress: 100,
 }
 
-export const disabled = Template.bind({})
-full.args = {
+export const inMissionAndDisabled = Template.bind({})
+inMissionAndDisabled.args = {
   includeNumber: true,
   number: 15,
   progress: 100,

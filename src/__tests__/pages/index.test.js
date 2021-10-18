@@ -26,6 +26,8 @@ import { getAdUnits } from 'src/utils/adHelpers'
 import { accountCreated, newTabView } from 'src/utils/events'
 import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
+import SquadCounter from 'src/components/SquadCounter'
+import UserImpactContainer from 'src/components/UserImpactContainer'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -62,6 +64,8 @@ jest.mock('src/utils/mutations/LogTabMutation')
 jest.mock('src/utils/mutations/UpdateImpactMutation')
 jest.mock('src/utils/mutations/LogUserRevenueMutation')
 jest.mock('src/utils/caching')
+jest.mock('src/components/SquadCounter')
+jest.mock('src/components/UserImpactContainer')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
@@ -95,6 +99,7 @@ const getMockProps = () => ({
       vcCurrent: 78,
       id: 'asdf',
       hasViewedIntroFlow: true,
+      currentMission: undefined,
     },
     userImpact: {
       userId: 'asdf',
@@ -106,6 +111,13 @@ const getMockProps = () => ({
       hasClaimedLatestReward: true,
     },
   },
+})
+
+const getMockCurrentMission = () => ({
+  status: 'started',
+  tabGoal: 100,
+  tabCount: 6,
+  missionId: 'abc-123',
 })
 
 beforeEach(() => {
@@ -279,7 +291,7 @@ describe('index.js', () => {
     expect(wrapper.find(UserBackgroundImageContainer).exists()).toBe(true)
   })
 
-  it('shows the invite friends icon if  showDevelopmentOnlyMissionsFeature returns false', () => {
+  it('shows the invite friends icon if showDevelopmentOnlyMissionsFeature returns false', () => {
     expect.assertions(2)
     showDevelopmentOnlyMissionsFeature.mockReturnValue(false)
     const IndexPage = require('src/pages/index').default
@@ -289,7 +301,7 @@ describe('index.js', () => {
     expect(wrapper.find(MissionHubButton).exists()).toBe(false)
   })
 
-  it('shows the missionHub button if  showDevelopmentOnlyMissionsFeature returns true', () => {
+  it('shows the missionHub button if showDevelopmentOnlyMissionsFeature returns true', () => {
     expect.assertions(2)
     showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
     const IndexPage = require('src/pages/index').default
@@ -297,6 +309,98 @@ describe('index.js', () => {
     const wrapper = shallow(<IndexPage {...mockProps} />)
     expect(wrapper.find(MissionHubButton).exists()).toBe(true)
     expect(wrapper.find(InviteFriendsIconContainer).exists()).toBe(false)
+  })
+
+  it('shows the SquadCounter when in a mission if showDevelopmentOnlyMissionsFeature is true', () => {
+    expect.assertions(1)
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          id: 'another-id',
+          currentMission: {
+            ...getMockCurrentMission(),
+          },
+        },
+      },
+    }
+    useData.mockReturnValue(mockProps)
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(SquadCounter).exists()).toBe(true)
+  })
+
+  it('disables the impact counter when in a mission if showDevelopmentOnlyMissionsFeature is true', () => {
+    expect.assertions(1)
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          id: 'another-id',
+          currentMission: {
+            ...getMockCurrentMission(),
+          },
+        },
+      },
+    }
+    useData.mockReturnValue(mockProps)
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(UserImpactContainer).prop('disabled')).toBe(true)
+  })
+
+  it('does *not* show the SquadCounter, even when in a mission, if showDevelopmentOnlyMissionsFeature is false', () => {
+    expect.assertions(1)
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(false)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          id: 'another-id',
+          currentMission: {
+            ...getMockCurrentMission(),
+          },
+        },
+      },
+    }
+    useData.mockReturnValue(mockProps)
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(SquadCounter).exists()).toBe(false)
+  })
+
+  it('does *not* disable the impact counter when in a mission, if showDevelopmentOnlyMissionsFeature is false', () => {
+    expect.assertions(1)
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(false)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          id: 'another-id',
+          currentMission: {
+            ...getMockCurrentMission(),
+          },
+        },
+      },
+    }
+    useData.mockReturnValue(mockProps)
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(UserImpactContainer).prop('disabled')).toBe(false)
   })
 
   it('logs a tab count if the user is defined', () => {
