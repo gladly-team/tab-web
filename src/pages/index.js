@@ -263,6 +263,14 @@ const getRelayQuery = async ({ AuthUser }) => {
           tabs
           vcCurrent
           id
+          cause {
+            landingPagePath
+            impactVisits
+            theme {
+              primaryColor
+              secondaryColor
+            }
+          }
           hasViewedIntroFlow
           currentMission {
             status

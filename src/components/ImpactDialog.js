@@ -9,6 +9,7 @@ import MuiDialogContent from '@material-ui/core/DialogContent'
 import MuiDialogActions from '@material-ui/core/DialogActions'
 import Typography from '@material-ui/core/Typography'
 import ImpactCounter from 'src/components/ImpactCounter'
+import Link from 'src/components/Link'
 import RandomGif from 'src/components/RandomGif'
 import InviteFriends from 'src/components/InviteFriends'
 import { isPlural } from 'src/utils/formatting'
@@ -23,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
   InviteFriends: { marginRight: '15px' },
   justify: { textAlign: 'justify' },
   typographySpacing: { paddingTop: '15px' },
+  link: { color: theme.palette.primary.main },
   centerImage: { display: 'flex', justifyContent: 'center' },
   shareContainer: {
     display: 'flex',
@@ -62,13 +64,12 @@ const ImpactDialog = ({
             >
               Each time you open a tab, you'll be helping shelter cats get
               adopted by{' '}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href="https://greatergood.org/jackson-galaxy"
+              <Link
+                to="https://greatergood.org/jackson-galaxy"
+                className={classes.link}
               >
                 providing treats to be used in positive reinforcement training
-              </a>
+              </Link>
               . Ready to get started?
             </Typography>
           </MuiDialogContent>

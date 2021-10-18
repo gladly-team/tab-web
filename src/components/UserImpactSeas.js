@@ -1,13 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
-import SetHasSeenSquadsMutation from 'src/utils/mutations/SetHasSeenSquadsMutation'
-import {
-  CAT_CHARITY,
-  CAT_IMPACT_VISITS,
-  INTL_CAT_DAY_END_2021_NOTIFICATION,
-} from 'src/utils/constants'
 import { showDevelopmentOnlyMissionsFeature } from 'src/utils/featureFlags'
 import Notification from 'src/components/Notification'
 import ImpactCounter from 'src/components/ImpactCounter'
@@ -22,9 +15,7 @@ import Dialog from '@material-ui/core/Dialog'
 import { get } from 'lodash/object'
 import localStorageMgr from 'src/utils/localstorage-mgr'
 import Link from 'src/components/Link'
-import MissionNotification from 'src/components/MissionNotification'
-import { missionHubURL } from 'src/utils/urls'
-
+import { TAB_FOR_TEAMSEAS_CAUSE_ID } from 'src/utils/constants'
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
 })
@@ -55,6 +46,7 @@ const UserImpact = ({ userImpact, user, disabled }) => {
     pendingUserReferralImpact,
     pendingUserReferralCount,
   } = userImpact
+  const { impactVisits } = cause
   const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
   const referralRewardNotificationOpen =
@@ -110,12 +102,12 @@ const UserImpact = ({ userImpact, user, disabled }) => {
   }
   useEffect(() => {
     if (
-      visitsUntilNextImpact === CAT_IMPACT_VISITS &&
+      visitsUntilNextImpact === impactVisits &&
       prevVisitsUntilNextImpact === 1
     ) {
       confettiFunc()
     }
-  }, [visitsUntilNextImpact, prevVisitsUntilNextImpact])
+  }, [impactVisits, visitsUntilNextImpact, prevVisitsUntilNextImpact])
   const handleConfirmDialogClose = async () => {
     setConfirmDialogOpen(false)
     if (pendingUserReferralImpact) {
@@ -123,7 +115,7 @@ const UserImpact = ({ userImpact, user, disabled }) => {
     } else {
       setAlertDialogOpen(true)
     }
-    await UpdateImpactMutation(userId, CAT_CHARITY, {
+    await UpdateImpactMutation(userId, TAB_FOR_TEAMSEAS_CAUSE_ID, {
       confirmImpact: true,
       claimPendingUserReferralImpact: pendingUserReferralImpact
         ? true
@@ -137,14 +129,16 @@ const UserImpact = ({ userImpact, user, disabled }) => {
   const handleAlertDialogClose = () => setAlertDialogOpen(false)
   const handleClaimReward = async () => {
     setRewardDialogOpen(true)
-    await UpdateImpactMutation(userId, CAT_CHARITY, { claimLatestReward: true })
+    await UpdateImpactMutation(userId, TAB_FOR_TEAMSEAS_CAUSE_ID, {
+      claimLatestReward: true,
+    })
   }
   const handleRewardDialogClose = () => setRewardDialogOpen(false)
 
   const handleClaimReferralNotification = () => {
     setClaimedReferralImpact(pendingUserReferralImpact)
     setReferralRewardDialogOpen(true)
-    UpdateImpactMutation(userId, CAT_CHARITY, {
+    UpdateImpactMutation(userId, TAB_FOR_TEAMSEAS_CAUSE_ID, {
       claimPendingUserReferralImpact: true,
     })
   }
@@ -154,7 +148,7 @@ const UserImpact = ({ userImpact, user, disabled }) => {
   const classes = useStyles()
   return (
     <div>
-      {visitsUntilNextImpact === CAT_IMPACT_VISITS ? (
+      {visitsUntilNextImpact === impactVisits ? (
         <canvas
           id="confettiCanvas"
           width="400"
@@ -168,13 +162,14 @@ const UserImpact = ({ userImpact, user, disabled }) => {
         includeNumber
         className={classes.impactCounter}
         number={userImpactMetric}
+        icon="jellyfish"
         progress={
           // eslint-disable-next-line prettier/prettier
 
           // if user achieves a new milestone show the progress bar as full
-          visitsUntilNextImpact === CAT_IMPACT_VISITS
+          visitsUntilNextImpact === impactVisits
             ? 100
-            : (1 - visitsUntilNextImpact / CAT_IMPACT_VISITS) * 100
+            : (1 - visitsUntilNextImpact / impactVisits) * 100
         }
       />
       <ImpactDialog
