@@ -50,83 +50,30 @@ export const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const OnboardingFlow = ({ onComplete, showMissionSlide }) => {
+const getImageAssetFromName = (causeId, imgName) => {
+  return onboarding1
+}
+
+const OnboardingFlow = ({ causeId, onboardingFields, onComplete, showMissionSlide }) => {
+  const { steps } = onboardingFields
   const classes = useStyles()
   const [onboardingStep, setOnboardingStep] = useState(0)
 
-  const onboardingStepContents = [
-    {
-      imageSrc: onboarding1,
-      title: 'Your tabs are doing great things',
-      children: (
-        <div>
-          <Typography
-            variant="body2"
-            align="center"
-            className={classes.childrenTypography}
-          >
-            Now, every tab you open supports cats in need.
-          </Typography>
-          <Typography
-            variant="body2"
-            align="center"
-            className={classes.childrenTypography}
-          >
-            Tabbers like you are supporting critical nonprofit work all around
-            the world. Your tabs support initiatives that help shelter cats get
-            adopted, including initiatives that{' '}
-            <Link
-              target="_blank"
-              to="https://greatergood.org/jackson-galaxy"
-              className={classes.link}
-            >
-              use treats in positive reinforcement training.
-            </Link>{' '}
-            Thank you!
-          </Typography>
-        </div>
-      ),
-    },
-    {
-      imageSrc: onboarding2,
-      title: 'Help more cats with squads',
-      children: (
-        <div>
-          <Typography
-            variant="body2"
-            align="center"
-            className={classes.childrenTypography}
-          >
-            Cats can get adopted up to 3x faster when you join a squad!
-          </Typography>
-          <Typography
-            variant="body2"
-            align="center"
-            className={classes.childrenTypography}
-          >
-            Team up with your friends to help pay for a shelter cat's house
-            training. Training a cat is the best way to help it find a permanent
-            home, and it enriches the cat's day to day life while in the
-            shelter.
-          </Typography>
-        </div>
-      ),
-    },
-    {
-      imageSrc: onboarding3,
-      title: "It doesn't cost you a thing",
+  const onboardingStepContents = steps.map(
+    (step) => ({
+      imageSrc: getImageAssetFromName(causeId, step),
+      title: step.title,
       children: (
         <Typography
-          variant="body2"
-          align="center"
-          className={classes.childrenTypography}
-        >
-          We display a couple of small ads at the bottom of your screen and
-          redistribute that money to charity. No fees or hidden costs!
-        </Typography>
-      ),
-    },
-  ]
+            variant="body2"
+            align="center"
+            className={classes.childrenTypography}
+          >
+            {step.subtitle}
+          </Typography>
+      )
+    })
+  )
   const onboardingStepInfo = onboardingStepContents[onboardingStep]
 
   const onNext = () => {
@@ -142,7 +89,7 @@ const OnboardingFlow = ({ onComplete, showMissionSlide }) => {
     <Card className={classes.card}>
       <CardContent className={classes.cardContent}>
         <img
-          alt="cute cat"
+          alt="onboarding image"
           className={classes.onboardingImage}
           src={onboardingStepInfo.imageSrc}
         />

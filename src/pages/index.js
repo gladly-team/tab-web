@@ -271,6 +271,9 @@ const getRelayQuery = async ({ AuthUser }) => {
             tabCount
             missionId
           }
+          cause {
+            onboarding
+          }
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
           ...InviteFriendsIconContainer_user
@@ -448,6 +451,8 @@ const Index = ({ data: fallbackData }) => {
             <Logo style={{ height: 40 }} includeText />
           </div>
           <OnboardingFlow
+            causeId={cause.causeId}
+            onboardingFields={cause.onboarding}
             onComplete={onCompletedOnboarding}
             showMissionSlide={!!missionId}
           />
