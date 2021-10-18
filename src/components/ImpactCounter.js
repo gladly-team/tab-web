@@ -3,6 +3,8 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import PetsIcon from '@material-ui/icons/Pets'
+import SvgIcon from '@material-ui/core/SvgIcon'
+import { mdiJellyfishOutline } from '@mdi/js'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import DashboardPopover from 'src/components/DashboardPopover'
@@ -80,7 +82,15 @@ const ImpactCounter = (props) => {
           variant="determinate"
           value={progress === 0 ? 1 : progress}
         />
-        <PetsIcon className={classes.petsIcon} />
+        {/* <PetsIcon className={classes.petsIcon} /> */}
+        <SvgIcon className={classes.petsIcon}>
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d={mdiJellyfishOutline}
+            fill="inherit"
+          />
+        </SvgIcon>
       </Button>
       <DashboardPopover
         open={isPopoverOpen}
@@ -119,6 +129,11 @@ ImpactCounter.propTypes = {
   */
   progress: PropTypes.number.isRequired,
   className: PropTypes.string,
+
+  /**
+   * The Icon related to the cause
+   */
+  icon: PropTypes.oneOf('jellyfish', 'paw'),
 }
 
 ImpactCounter.defaultProps = {
@@ -126,6 +141,7 @@ ImpactCounter.defaultProps = {
   disabled: false,
   number: 0,
   className: '',
+  icon: 'paw',
 }
 
 export default ImpactCounter
