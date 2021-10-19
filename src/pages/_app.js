@@ -1,19 +1,17 @@
 /* globals document, window */
 /* eslint react/jsx-props-no-spreading: 0 */
-// import React, { useEffect, useState, useMemo } from 'react'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import Router from 'next/router'
 import { register, unregister } from 'next-offline/runtime'
 
-// import { get } from 'lodash/object'
+import { get } from 'lodash/object'
 import { ThemeProvider, createTheme } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { isClientSide } from 'src/utils/ssr'
 
-// import defaultTheme, { themeMapper } from 'src/utils/theme'
-import defaultTheme from 'src/utils/theme'
+import defaultTheme, { themeMapper } from 'src/utils/theme'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import initAuth from 'src/utils/auth/initAuth'
 import initSentry from 'src/utils/initSentry'
@@ -114,13 +112,17 @@ const MyApp = (props) => {
   const standardTheme = createTheme(defaultTheme)
 
   // Any theme property customizations set from within child components.
-  // const [themeModifications, setThemeModifications] = useState({})
+  const [themeModifications, setThemeModifications] = useState({})
+
+  // eslint-disable-next-line no-console
+  console.log('standardTheme', standardTheme)
+  // eslint-disable-next-line no-console
+  console.log('themeModifications', themeModifications)
 
   //  Provide a `setTheme` function via context.
   const customThemeContextVal = useMemo(
     () => ({
-      setTheme: () => {}, // noop for debugging
-      // setTheme: (themeMod) => setThemeModifications(themeMapper(themeMod)),
+      setTheme: (themeMod) => setThemeModifications(themeMapper(themeMod)),
     }),
     []
   )
@@ -135,12 +137,29 @@ const MyApp = (props) => {
         />
       </Head>
       <ThemeProvider theme={standardTheme}>
-        <ThemeContext.Provider value={customThemeContextVal}>
-          <CssBaseline />
-          <ErrorBoundary>
-            <Component {...pageProps} />
-          </ErrorBoundary>
-        </ThemeContext.Provider>
+        <ThemeProvider
+          theme={(outerTheme) => ({
+            ...outerTheme,
+            palette: {
+              ...outerTheme.palette,
+              primary: {
+                ...outerTheme.palette.primary,
+                ...get(themeModifications, 'palette.primary', {}),
+              },
+              secondary: {
+                ...outerTheme.palette.secondary,
+                ...get(themeModifications, 'palette.secondary', {}),
+              },
+            },
+          })}
+        >
+          <ThemeContext.Provider value={customThemeContextVal}>
+            <CssBaseline />
+            <ErrorBoundary>
+              <Component {...pageProps} />
+            </ErrorBoundary>
+          </ThemeContext.Provider>
+        </ThemeProvider>
       </ThemeProvider>
     </>
   )
