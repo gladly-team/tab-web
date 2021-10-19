@@ -137,11 +137,11 @@ const MyApp = (props) => {
               ...outerTheme.palette,
               primary: {
                 ...outerTheme.palette.primary,
-                ...get(themeModifications, 'palette.primary'),
+                ...get(themeModifications, 'palette.primary', {}),
               },
               secondary: {
                 ...outerTheme.palette.secondary,
-                ...get(themeModifications, 'palette.secondary'),
+                ...get(themeModifications, 'palette.secondary', {}),
               },
             },
           })}
