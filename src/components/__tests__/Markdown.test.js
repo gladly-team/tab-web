@@ -40,10 +40,11 @@ describe('Markdown component', () => {
       '../../',
       'utils/testHelpers/testHTML-A.html'
     )
-    const expectedOutput = await fs.promises.readFile(
+    let expectedOutput = await fs.promises.readFile(
       expectedHTMLFilePath,
       'utf-8'
     )
+    expectedOutput = expectedOutput.replace('target="_top"', 'target="_blank"')
     expect(wrapper.html()).toEqual(expectedOutput)
   })
 

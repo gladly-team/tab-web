@@ -4,33 +4,33 @@ import { LANDING_PAGE_PATH_SEAS } from 'src/utils/constants'
 import UserImpactCats from './UserImpactCats'
 import UserImpactSeas from './UserImpactSeas'
 
-const UserImpactSwitchComponent = ({ userImpact, user, disabled }) => {
+const UserImpactSwitchComponent = ({ user, disabled }) => {
   const { cause: { landingPagePath } = {} } = user
   switch (landingPagePath) {
     case LANDING_PAGE_PATH_SEAS: {
-      return <UserImpactSeas {...{ userImpact, user, disabled }} />
+      return <UserImpactSeas {...{ user, disabled }} />
     }
     default: {
-      return <UserImpactCats {...{ userImpact, user, disabled }} />
+      return <UserImpactCats {...{ user, disabled }} />
     }
   }
 }
 UserImpactSwitchComponent.displayName = 'UserImpactSwitchComponent'
 UserImpactSwitchComponent.propTypes = {
-  userImpact: PropTypes.shape({
-    visitsUntilNextImpact: PropTypes.number.isRequired,
-    pendingUserReferralImpact: PropTypes.number.isRequired,
-    pendingUserReferralCount: PropTypes.number.isRequired,
-    userImpactMetric: PropTypes.number.isRequired,
-    confirmedImpact: PropTypes.bool.isRequired,
-    hasClaimedLatestReward: PropTypes.bool.isRequired,
-  }).isRequired,
   user: PropTypes.shape({
     username: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     notifications: PropTypes.arrayOf(
       PropTypes.shape({ code: PropTypes.string })
     ),
+    userImpact: PropTypes.shape({
+      visitsUntilNextImpact: PropTypes.number.isRequired,
+      pendingUserReferralImpact: PropTypes.number.isRequired,
+      pendingUserReferralCount: PropTypes.number.isRequired,
+      userImpactMetric: PropTypes.number.isRequired,
+      confirmedImpact: PropTypes.bool.isRequired,
+      hasClaimedLatestReward: PropTypes.bool.isRequired,
+    }).isRequired,
     cause: PropTypes.shape({ landingPagePath: PropTypes.string }),
     currentMission: PropTypes.shape({
       missionId: PropTypes.string,

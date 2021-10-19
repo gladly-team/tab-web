@@ -46,7 +46,8 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
   },
 }))
-const UserImpact = ({ userImpact, user, disabled }) => {
+const UserImpact = ({ user, disabled }) => {
+  const { userImpact } = user
   const {
     confirmedImpact,
     hasClaimedLatestReward,
@@ -339,17 +340,17 @@ const UserImpact = ({ userImpact, user, disabled }) => {
 
 UserImpact.displayName = 'UserImpact'
 UserImpact.propTypes = {
-  userImpact: PropTypes.shape({
-    visitsUntilNextImpact: PropTypes.number.isRequired,
-    pendingUserReferralImpact: PropTypes.number.isRequired,
-    pendingUserReferralCount: PropTypes.number.isRequired,
-    userImpactMetric: PropTypes.number.isRequired,
-    confirmedImpact: PropTypes.bool.isRequired,
-    hasClaimedLatestReward: PropTypes.bool.isRequired,
-  }).isRequired,
   user: PropTypes.shape({
     username: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
+    userImpact: PropTypes.shape({
+      visitsUntilNextImpact: PropTypes.number.isRequired,
+      pendingUserReferralImpact: PropTypes.number.isRequired,
+      pendingUserReferralCount: PropTypes.number.isRequired,
+      userImpactMetric: PropTypes.number.isRequired,
+      confirmedImpact: PropTypes.bool.isRequired,
+      hasClaimedLatestReward: PropTypes.bool.isRequired,
+    }).isRequired,
     notifications: PropTypes.arrayOf(
       PropTypes.shape({ code: PropTypes.string })
     ),

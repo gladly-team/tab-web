@@ -36,7 +36,7 @@ const processor = unified()
 
       // Anchor will have content when rendered.
       // eslint-disable-next-line jsx-a11y/anchor-has-content
-      a: (props) => <a target="_top" {...props} />,
+      a: (props) => <a target="_blank" {...props} />,
     },
   })
 

@@ -2,16 +2,6 @@ import { createFragmentContainer, graphql } from 'react-relay'
 import UserImpactSwitchComponent from 'src/components/UserImpactSwitchComponent'
 
 export default createFragmentContainer(UserImpactSwitchComponent, {
-  userImpact: graphql`
-    fragment UserImpactContainer_userImpact on UserImpact {
-      visitsUntilNextImpact
-      pendingUserReferralImpact
-      userImpactMetric
-      confirmedImpact
-      hasClaimedLatestReward
-      pendingUserReferralCount
-    }
-  `,
   user: graphql`
     fragment UserImpactContainer_user on User {
       username
@@ -19,6 +9,14 @@ export default createFragmentContainer(UserImpactSwitchComponent, {
       email
       notifications {
         code
+      }
+      userImpact {
+        visitsUntilNextImpact
+        pendingUserReferralImpact
+        userImpactMetric
+        confirmedImpact
+        hasClaimedLatestReward
+        pendingUserReferralCount
       }
       currentMission {
         acknowledgedMissionComplete
@@ -41,13 +39,15 @@ export default createFragmentContainer(UserImpactSwitchComponent, {
         }
         impact {
           impactCounterText
+          claimImpactSubtitle
+          referralRewardNotification
+          impactIcon
+          walkMeGif
           referralRewardTitle
           referralRewardSubtitle
-          claimImpactTitle
-          claimImpactSubtitle
-          newlyReferredTitle
+          newlyReferredImpactWalkthroughText
           impactWalkthroughText
-          confirmImpactText
+          confirmImpactSubtitle
         }
       }
       hasSeenSquads

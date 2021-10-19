@@ -1,28 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
-import { showDevelopmentOnlyMissionsFeature } from 'src/utils/featureFlags'
 import Notification from 'src/components/Notification'
+import InviteFriends from 'src/components/InviteFriends'
 import ImpactCounter from 'src/components/ImpactCounter'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import dynamic from 'next/dynamic'
 import { isPlural } from 'src/utils/formatting'
 import confetti from 'canvas-confetti'
+import Button from '@material-ui/core/Button'
+import Markdown from 'src/components/Markdown'
 import usePrevious from 'src/utils/hooks/usePrevious'
 import EmailInviteDialog from 'src/components/EmailInviteDialog'
 import Dialog from '@material-ui/core/Dialog'
-import { get } from 'lodash/object'
-import localStorageMgr from 'src/utils/localstorage-mgr'
-import Link from 'src/components/Link'
+import MuiDialogTitle from '@material-ui/core/DialogTitle'
+import MuiDialogContent from '@material-ui/core/DialogContent'
+import MuiDialogActions from '@material-ui/core/DialogActions'
 import { TAB_FOR_TEAMSEAS_CAUSE_ID } from 'src/utils/constants'
-const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
+
+const DolphinGif = dynamic(() => import('src/components/DolphinGif'), {
   ssr: false,
 })
 
 const useStyles = makeStyles((theme) => ({
-  impactCounter: { backgroundColor: '#fff', marginRight: '15px' },
-  rootModal: { zIndex: '10000000 !important', borderRadius: '5px' },
+  impactCounter: { backgroundColor: '#fff', marginRight: theme.spacing(2) },
   bold: { fontWeight: 'bold' },
   canvas: {
     position: 'absolute',
@@ -31,13 +33,35 @@ const useStyles = makeStyles((theme) => ({
     zIndex: '90000',
     pointerEvents: 'none',
   },
-  link: {
-    display: 'inline',
-    color: theme.palette.primary.main,
-    textDecoration: 'none',
+  title: { textAlign: 'center' },
+  rootModal: {
+    zIndex: '10000000 !important',
+    borderRadius: theme.spacing(0.5),
+  },
+  walkMe: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  themedLink: {
+    '& a': {
+      color: theme.palette.primary.main,
+    },
+  },
+  InviteFriends: { marginRight: theme.spacing(2) },
+  centerImage: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginBottom: theme.spacing(3),
+  },
+  shareContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }))
-const UserImpact = ({ userImpact, user, disabled }) => {
+const UserImpact = ({ user, disabled }) => {
+  const { cause, userImpact } = user
   const {
     confirmedImpact,
     hasClaimedLatestReward,
@@ -46,7 +70,9 @@ const UserImpact = ({ userImpact, user, disabled }) => {
     pendingUserReferralImpact,
     pendingUserReferralCount,
   } = userImpact
-  const { impactVisits } = cause
+
+  const { impactVisits, impact } = cause
+
   const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
   const referralRewardNotificationOpen =
@@ -160,9 +186,10 @@ const UserImpact = ({ userImpact, user, disabled }) => {
       <ImpactCounter
         disabled={disabled}
         includeNumber
+        dropdownText={impact.impactCounterText}
         className={classes.impactCounter}
         number={userImpactMetric}
-        icon="jellyfish"
+        icon={impact.impactIcon}
         progress={
           // eslint-disable-next-line prettier/prettier
 
@@ -172,21 +199,77 @@ const UserImpact = ({ userImpact, user, disabled }) => {
             : (1 - visitsUntilNextImpact / impactVisits) * 100
         }
       />
-      <ImpactDialog
-        modalType="confirmImpact"
+      <Dialog
+        aria-labelledby="customized-dialog-title"
         open={confirmDialogOpen}
-        buttonOnClick={handleConfirmDialogClose}
-      />
-      <ImpactDialog
-        modalType="newlyReferredImpactWalkMe"
-        open={newlyReferredDialogOpen}
-        onClose={handleNewlyReferredDialogOpen}
-      />
-      <ImpactDialog
-        modalType="impactWalkMe"
+        className={classes.rootModal}
+      >
+        <MuiDialogTitle disableTypography className={classes.root}>
+          <Typography variant="h6" className={classes.title}>
+            Are you ready to turn your Tabs into a force for good?
+          </Typography>
+        </MuiDialogTitle>
+        <MuiDialogContent className={classes.themedLink}>
+          <div className={classes.centerImage}>
+            <DolphinGif />
+          </div>
+          <Markdown>{impact.confirmImpactSubtitle}</Markdown>
+        </MuiDialogContent>
+        <MuiDialogActions>
+          <Button
+            autoFocus
+            onClick={handleConfirmDialogClose}
+            variant="contained"
+            color="primary"
+          >
+            I'M READY!
+          </Button>
+        </MuiDialogActions>
+      </Dialog>
+      <Dialog
+        className={classes.rootModal}
         open={alertDialogOpen}
         onClose={handleAlertDialogClose}
-      />
+      >
+        <MuiDialogTitle disableTypography className={classes.root}>
+          <Typography variant="h6" className={classes.title}>
+            Open a new tab
+          </Typography>
+        </MuiDialogTitle>
+        <MuiDialogContent className={classes.walkMe}>
+          <Markdown>{impact.impactWalkthroughText}</Markdown>
+          <div className={classes.impactCounter}>
+            <ImpactCounter
+              includeNumber
+              icon={impact.impactIcon}
+              number={0}
+              progress={100}
+            />
+          </div>
+        </MuiDialogContent>
+      </Dialog>
+      <Dialog
+        className={classes.rootModal}
+        open={newlyReferredDialogOpen}
+        onClose={handleNewlyReferredDialogOpen}
+      >
+        <MuiDialogTitle disableTypography className={classes.root}>
+          <Typography variant="h6" className={classes.title}>
+            Open a new tab
+          </Typography>
+        </MuiDialogTitle>
+        <MuiDialogContent className={classes.walkMe}>
+          <Markdown>{impact.newlyReferredImpactWalkthroughText}</Markdown>
+          <div className={classes.impactCounter}>
+            <ImpactCounter
+              includeNumber
+              icon={impact.impactIcon}
+              number={5}
+              progress={100}
+            />
+          </div>
+        </MuiDialogContent>
+      </Dialog>
       <Dialog
         maxWidth="sm"
         classes={{ paperWidthSm: classes.customMaxWidthDialog }}
@@ -202,21 +285,46 @@ const UserImpact = ({ userImpact, user, disabled }) => {
           closeFunction={handleRewardDialogClose}
         />
       </Dialog>
-      <ImpactDialog
-        modalType="claimReferralReward"
-        open={referralRewardDialogOpen}
-        buttonOnClick={handleReferralRewardDialogClose}
-        referralImpact={claimedReferralImpact}
-        user={user}
-      />
+      <Dialog open={referralRewardDialogOpen} className={classes.rootModal}>
+        <MuiDialogTitle disableTypography className={classes.root}>
+          <Markdown>
+            {
+              // eslint-disable-next-line react/prop-types
+              impact.referralRewardTitle
+                // eslint-disable-next-line no-template-curly-in-string
+                .replace('${claimedReferralImpact}', claimedReferralImpact)
+                .replace(
+                  // eslint-disable-next-line no-template-curly-in-string
+                  '${isPlural(claimedReferralImpact)}',
+                  isPlural(claimedReferralImpact)
+                )
+            }
+          </Markdown>
+        </MuiDialogTitle>
+        <MuiDialogContent>
+          <div className={classes.centerImage}>
+            <DolphinGif />
+          </div>
+          <Markdown>{impact.referralRewardSubtitle}</Markdown>
+          <div className={classes.shareContainer}>
+            <div className={classes.InviteFriends}>
+              <InviteFriends user={user} />
+            </div>
+          </div>
+        </MuiDialogContent>
+        <MuiDialogActions>
+          <Button
+            autoFocus
+            onClick={handleReferralRewardDialogClose}
+            color="primary"
+          >
+            DONE
+          </Button>
+        </MuiDialogActions>
+      </Dialog>
       {showReward && (
         <Notification
-          text={
-            <Typography gutterBottom>
-              You did it! You just turned your tab into a treat for a cat. Keep
-              it up, and do good with every new tab!
-            </Typography>
-          }
+          text={<Markdown>{impact.claimImpactSubtitle}</Markdown>}
           buttonText="Hooray"
           buttonOnClick={handleClaimReward}
         />
@@ -224,17 +332,30 @@ const UserImpact = ({ userImpact, user, disabled }) => {
       {referralRewardNotificationOpen && (
         <Notification
           text={
-            <Typography>
-              Congrats! You recruited{' '}
-              <span style={{ fontWeight: 'bold' }}>
-                {`${pendingUserReferralCount} friend${isPlural(
-                  pendingUserReferralCount
-                )} `}
-              </span>
-              to help shelter cats just by opening tabs. To celebrate, we'll
-              give a treat to an extra {pendingUserReferralImpact} cat
-              {isPlural(pendingUserReferralImpact)}.
-            </Typography>
+            <div>
+              <Typography>
+                Congrats! You recruited{' '}
+                <span style={{ fontWeight: 'bold' }}>
+                  {`${pendingUserReferralCount} friend${isPlural(
+                    pendingUserReferralCount
+                  )} `}
+                </span>
+                to
+              </Typography>
+              <Markdown>
+                {impact.referralRewardNotification
+                  .replace(
+                    // eslint-disable-next-line no-template-curly-in-string
+                    '${pendingUserReferralImpact}',
+                    pendingUserReferralImpact
+                  )
+                  .replace(
+                    // eslint-disable-next-line no-template-curly-in-string
+                    '${isPlural(pendingUserReferralImpact)}',
+                    isPlural(pendingUserReferralImpact)
+                  )}
+              </Markdown>
+            </div>
           }
           buttonText="Claim"
           buttonOnClick={handleClaimReferralNotification}
@@ -246,20 +367,35 @@ const UserImpact = ({ userImpact, user, disabled }) => {
 
 UserImpact.displayName = 'UserImpact'
 UserImpact.propTypes = {
-  userImpact: PropTypes.shape({
-    visitsUntilNextImpact: PropTypes.number.isRequired,
-    pendingUserReferralImpact: PropTypes.number.isRequired,
-    pendingUserReferralCount: PropTypes.number.isRequired,
-    userImpactMetric: PropTypes.number.isRequired,
-    confirmedImpact: PropTypes.bool.isRequired,
-    hasClaimedLatestReward: PropTypes.bool.isRequired,
-  }).isRequired,
   user: PropTypes.shape({
     username: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
     notifications: PropTypes.arrayOf(
       PropTypes.shape({ code: PropTypes.string })
     ),
+    cause: PropTypes.shape({
+      impactVisits: PropTypes.number.isRequired,
+      impact: PropTypes.shape({
+        impactCounterText: PropTypes.string.isRequired,
+        claimImpactSubtitle: PropTypes.string.isRequired,
+        referralRewardNotification: PropTypes.string.isRequired,
+        impactIcon: PropTypes.string.isRequired,
+        walkMeGif: PropTypes.string.isRequired,
+        referralRewardTitle: PropTypes.string.isRequired,
+        referralRewardSubtitle: PropTypes.string.isRequired,
+        newlyReferredImpactWalkthroughText: PropTypes.string.isRequired,
+        impactWalkthroughText: PropTypes.string.isRequired,
+        confirmImpactSubtitle: PropTypes.string.isRequired,
+      }).isRequired,
+    }),
+    userImpact: PropTypes.shape({
+      visitsUntilNextImpact: PropTypes.number.isRequired,
+      pendingUserReferralImpact: PropTypes.number.isRequired,
+      pendingUserReferralCount: PropTypes.number.isRequired,
+      userImpactMetric: PropTypes.number.isRequired,
+      confirmedImpact: PropTypes.bool.isRequired,
+      hasClaimedLatestReward: PropTypes.bool.isRequired,
+    }).isRequired,
     currentMission: PropTypes.shape({
       missionId: PropTypes.string,
     }),

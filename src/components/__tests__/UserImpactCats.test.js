@@ -39,17 +39,17 @@ jest.mock('src/utils/localstorage-mgr', () => ({
 }))
 
 const getMockProps = (userImpactOverrides, userOverrides) => ({
-  userImpact: {
-    visitsUntilNextImpact: 3,
-    pendingUserReferralImpact: 0,
-    pendingUserReferralCount: 0,
-    userImpactMetric: 2,
-    confirmedImpact: true,
-    hasClaimedLatestReward: false,
-    ...userImpactOverrides,
-  },
   user: {
     id: 'someId',
+    userImpact: {
+      visitsUntilNextImpact: 3,
+      pendingUserReferralImpact: 0,
+      pendingUserReferralCount: 0,
+      userImpactMetric: 2,
+      confirmedImpact: true,
+      hasClaimedLatestReward: false,
+      ...userImpactOverrides,
+    },
     username: 'someUsername',
     notifications: [],
     ...userOverrides,
@@ -341,14 +341,14 @@ describe('UserImpact component', () => {
 
   it('does render international cat day end notification if user has not dismissed and it is enabled', async () => {
     const UserImpact = require('src/components/UserImpactCats').default
-    const mockProps = {
-      ...getMockProps(),
-      user: {
+    const mockProps = getMockProps(
+      {},
+      {
         id: 'someId',
         username: 'someUsername',
         notifications: [{ code: 'intlCatDayEnd2021' }],
-      },
-    }
+      }
+    )
     localStorageMgr.getItem.mockReturnValue(undefined)
     const wrapper = mount(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(1)
@@ -358,41 +358,42 @@ describe('UserImpact component', () => {
   it('hides international cat day end notification if it ends after initial render (this avoids "+1" problem of page loads after campaign end)', async () => {
     expect.assertions(2)
     const UserImpact = require('src/components/UserImpactCats').default
-    const mockProps = {
-      ...getMockProps(),
-      user: {
+    const mockProps = getMockProps(
+      {},
+      {
         id: 'someId',
         username: 'someUsername',
         notifications: [{ code: 'intlCatDayEnd2021' }],
-      },
-    }
+      }
+    )
     localStorageMgr.getItem.mockReturnValue(undefined)
     const wrapper = mount(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(1)
     expect(notification.exists()).toBe(true)
-
-    wrapper.setProps({
-      ...getMockProps(),
-      user: {
-        id: 'someId',
-        username: 'someUsername',
-        notifications: [], // ended
-      },
-    })
+    wrapper.setProps(
+      getMockProps(
+        {},
+        {
+          id: 'someId',
+          username: 'someUsername',
+          notifications: [],
+        }
+      )
+    )
     wrapper.update()
     expect(wrapper.find(Notification).at(1).exists()).toBe(false)
   })
 
   it('dismissing intl cat day end notification updates local storage and dismisses notification', async () => {
     const UserImpact = require('src/components/UserImpactCats').default
-    const mockProps = {
-      ...getMockProps(),
-      user: {
+    const mockProps = getMockProps(
+      {},
+      {
         id: 'someId',
         username: 'someUsername',
         notifications: [{ code: 'intlCatDayEnd2021' }],
-      },
-    }
+      }
+    )
     localStorageMgr.getItem.mockReturnValue(undefined)
     const wrapper = mount(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(1)
@@ -492,9 +493,9 @@ describe('UserImpact component', () => {
 
   it('does render MissionNotification with correct props', async () => {
     const UserImpact = require('src/components/UserImpactCats').default
-    const mockProps = {
-      ...getMockProps(),
-      user: {
+    const mockProps = getMockProps(
+      {},
+      {
         id: 'someId',
         username: 'someUsername',
         notifications: [],
@@ -515,8 +516,8 @@ describe('UserImpact component', () => {
             missionId: '12345',
           },
         ],
-      },
-    }
+      }
+    )
     const wrapper = shallow(<UserImpact {...mockProps} />)
     const notification = wrapper.find(MissionNotification).first()
 
