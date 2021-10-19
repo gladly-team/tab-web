@@ -1,5 +1,4 @@
 import { createTheme } from '@material-ui/core/styles'
-import merge from 'lodash/merge'
 
 // const seasPrimaryColor = '#5094FB'
 // const seassecondaryColor = '#29BEBA'
@@ -42,9 +41,9 @@ const defaultThemeObject = {
 }
 const theme = createTheme(defaultThemeObject)
 
-export default theme
-
-const customTheme = ({ primaryColor, secondaryColor }) => ({
+// Takes user-specific theme properties and creates a theme-like object
+// that can be merged with a theme to create a nested theme.
+export const themeMapper = ({ primaryColor, secondaryColor }) => ({
   palette: {
     primary: {
       main: primaryColor || defaultPrimaryColor,
@@ -58,7 +57,4 @@ const customTheme = ({ primaryColor, secondaryColor }) => ({
   },
 })
 
-export const themeMapper = ({ primaryColor, secondaryColor }) =>
-  createTheme(
-    merge(defaultThemeObject, customTheme({ primaryColor, secondaryColor }))
-  )
+export default theme
