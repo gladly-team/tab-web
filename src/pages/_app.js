@@ -115,7 +115,8 @@ const MyApp = (props) => {
   //  Provide a `setTheme` function via context.
   const customThemeContextVal = useMemo(
     () => ({
-      setTheme: (themeMod) => setThemeModifications(themeMapper(themeMod)),
+      setTheme: () => {}, // noop for debugging
+      // setTheme: (themeMod) => setThemeModifications(themeMapper(themeMod)),
     }),
     []
   )
@@ -130,29 +131,12 @@ const MyApp = (props) => {
         />
       </Head>
       <ThemeProvider theme={standardTheme}>
-        <ThemeProvider
-          theme={(outerTheme) => ({
-            ...outerTheme,
-            palette: {
-              ...outerTheme.palette,
-              primary: {
-                ...outerTheme.palette.primary,
-                ...get(themeModifications, 'palette.primary', {}),
-              },
-              secondary: {
-                ...outerTheme.palette.secondary,
-                ...get(themeModifications, 'palette.secondary', {}),
-              },
-            },
-          })}
-        >
-          <ThemeContext.Provider value={customThemeContextVal}>
-            <CssBaseline />
-            <ErrorBoundary>
-              <Component {...pageProps} />
-            </ErrorBoundary>
-          </ThemeContext.Provider>
-        </ThemeProvider>
+        <ThemeContext.Provider value={customThemeContextVal}>
+          <CssBaseline />
+          <ErrorBoundary>
+            <Component {...pageProps} />
+          </ErrorBoundary>
+        </ThemeContext.Provider>
       </ThemeProvider>
     </>
   )
