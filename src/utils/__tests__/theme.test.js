@@ -16,5 +16,6 @@ describe('Tests theme functions', () => {
       secondaryColor: '#29BEBA',
     })
     expect(customTheme.typography.fontSize).toEqual(14)
+    expect(customTheme.shape.borderRadius).toEqual(2)
   })
 })
