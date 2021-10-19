@@ -6,6 +6,16 @@ import onboarding1 from 'src/assets/onboarding/cattabs.svg'
 import onboarding2 from 'src/assets/onboarding/squadcat.svg'
 import onboarding3 from 'src/assets/onboarding/adcat.svg'
 
+const getMockProps = () => ({
+  onboardingFields: {
+    steps: [
+      imageSrc:
+      title:
+      children:
+    ]
+  }
+})
+
 describe('OnboardingFlow component', () => {
   it('renders without error', () => {
     const OnboardingFlow = require('src/components/OnboardingFlow').default

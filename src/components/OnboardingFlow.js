@@ -5,11 +5,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
-import onboarding1 from 'src/assets/onboarding/cattabs.svg'
-import onboarding2 from 'src/assets/onboarding/squadcat.svg'
-import onboarding3 from 'src/assets/onboarding/adcat.svg'
+import catTabs from 'src/assets/onboarding/cattabs.svg'
+import squadCat from 'src/assets/onboarding/squadcat.svg'
+import adCat from 'src/assets/onboarding/adcat.svg'
 import PropTypes from 'prop-types'
-import Link from 'src/components/Link'
 
 export const useStyles = makeStyles((theme) => ({
   card: {
@@ -50,18 +49,27 @@ export const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const getImageAssetFromName = (causeId, imgName) => {
-  return onboarding1
+const getImageAssetFromName = (imgName) => {
+  switch(imgName){
+    case "cattabs":
+      return catTabs
+    case "squadcat":
+      return squadCat
+    case "adcat":
+      return adCat
+    default:
+      return catTabs
+  }
 }
 
-const OnboardingFlow = ({ causeId, onboardingFields, onComplete, showMissionSlide }) => {
+const OnboardingFlow = ({ onboardingFields, onComplete, showMissionSlide }) => {
   const { steps } = onboardingFields
   const classes = useStyles()
   const [onboardingStep, setOnboardingStep] = useState(0)
 
   const onboardingStepContents = steps.map(
     (step) => ({
-      imageSrc: getImageAssetFromName(causeId, step),
+      imageSrc: getImageAssetFromName(step),
       title: step.title,
       children: (
         <Typography
@@ -76,6 +84,8 @@ const OnboardingFlow = ({ causeId, onboardingFields, onComplete, showMissionSlid
   )
   const onboardingStepInfo = onboardingStepContents[onboardingStep]
 
+  // TODO: Break out Squads Slide into it's own item on the OnboardingFlow model.
+  // For now we should hardcode it as #2.
   const onNext = () => {
     if (onboardingStep === 0 && !showMissionSlide) {
       setOnboardingStep(2)
@@ -85,6 +95,7 @@ const OnboardingFlow = ({ causeId, onboardingFields, onComplete, showMissionSlid
       onComplete()
     }
   }
+
   return (
     <Card className={classes.card}>
       <CardContent className={classes.cardContent}>
