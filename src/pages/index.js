@@ -40,6 +40,7 @@ import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
 import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
 import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
+
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
@@ -270,6 +271,15 @@ const getRelayQuery = async ({ AuthUser }) => {
             tabCount
             missionId
           }
+          cause {
+            onboarding {
+              steps {
+                title
+                subtitle
+                imgName
+              }
+            }
+          }
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
           ...InviteFriendsIconContainer_user
@@ -316,7 +326,7 @@ const Index = ({ data: fallbackData }) => {
   }, [])
   const { app, user, userImpact } = data || {}
   const { currentMission, email, cause } = user || {}
-  const { theme } = cause || {}
+  const { theme, onboarding } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
   const {
     status: missionStatus = 'not started',
@@ -439,7 +449,6 @@ const Index = ({ data: fallbackData }) => {
     setJustFinishedIntroFlow(true)
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
-
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {showIntro ? (
@@ -457,6 +466,7 @@ const Index = ({ data: fallbackData }) => {
           <OnboardingFlow
             onComplete={onCompletedOnboarding}
             showMissionSlide={!!missionId}
+            onboarding={onboarding}
           />
         </div>
       ) : (
