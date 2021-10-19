@@ -16,55 +16,56 @@ import { initRelayEnvironment } from 'src/utils/relayEnvironment'
  *     provide to the query.
  *
  */
-const withDataSSR =
-  (getRelayQuery) => (getServerSidePropsFunc) => async (ctx) => {
-    const { AuthUser } = ctx
+const withDataSSR = (getRelayQuery) => (getServerSidePropsFunc) => async (
+  ctx
+) => {
+  const { AuthUser } = ctx
 
-    // Create the Relay query. We pass the AuthUser so the caller
-    // can use the user info in the query, as needed.
-    const { query, variables } = await getRelayQuery({ AuthUser })
+  // Create the Relay query. We pass the AuthUser so the caller
+  // can use the user info in the query, as needed.
+  const { query, variables } = await getRelayQuery({ AuthUser })
 
-    // Create the Relay environment.
-    const environment = initRelayEnvironment({
-      getIdToken: AuthUser.getIdToken,
-    })
+  // Create the Relay environment.
+  const environment = initRelayEnvironment({
+    getIdToken: AuthUser.getIdToken,
+  })
 
-    // Fetch the Relay data.
-    let queryProps = {}
-    let initialRecords = {}
-    if (query) {
-      const queryPropsRaw = await fetchQuery(environment, query, variables)
+  // Fetch the Relay data.
+  let queryProps = {}
+  let initialRecords = {}
+  if (query) {
+    const queryPropsRaw = await fetchQuery(environment, query, variables)
 
-      // Workaround to remove `undefined` values, which Next.js
-      // cannot serialize:
-      // https://github.com/vercel/next.js/discussions/11209#discussioncomment-35915
-      queryProps = JSON.parse(JSON.stringify(queryPropsRaw))
-      initialRecords = environment.getStore().getSource().toJSON()
-    }
-
-    // Get composed props.
-    let composedProps = {}
-    if (getServerSidePropsFunc) {
-      composedProps = await getServerSidePropsFunc(ctx)
-    }
-
-    return {
-      ...composedProps,
-      props: {
-        ...composedProps.props,
-
-        // If we don't fetch data, it should be null so that SWR will
-        // fetch data on the client side (in `useData`).
-        data: isEmpty(queryProps)
-          ? null
-          : {
-              ...queryProps,
-            },
-
-        // The "initialRecords" prop is consumed by the `withRelay` HOC.
-        initialRecords,
-      },
-    }
+    // Workaround to remove `undefined` values, which Next.js
+    // cannot serialize:
+    // https://github.com/vercel/next.js/discussions/11209#discussioncomment-35915
+    queryProps = JSON.parse(JSON.stringify(queryPropsRaw))
+    initialRecords = environment.getStore().getSource().toJSON()
   }
+
+  // Get composed props.
+  let composedProps = {}
+  if (getServerSidePropsFunc) {
+    composedProps = await getServerSidePropsFunc(ctx)
+  }
+
+  return {
+    ...composedProps,
+    props: {
+      ...composedProps.props,
+
+      // If we don't fetch data, it should be null so that SWR will
+      // fetch data on the client side (in `useData`).
+      data: isEmpty(queryProps)
+        ? null
+        : {
+            ...queryProps,
+          },
+
+      // The "initialRecords" prop is consumed by the `withRelay` HOC.
+      initialRecords,
+    },
+  }
+}
 
 export default withDataSSR

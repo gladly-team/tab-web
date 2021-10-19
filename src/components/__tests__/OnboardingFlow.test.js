@@ -9,11 +9,24 @@ import onboarding3 from 'src/assets/onboarding/adcat.svg'
 const getMockProps = () => ({
   onboardingFields: {
     steps: [
-      imageSrc:
-      title:
-      children:
-    ]
-  }
+      {
+        imageSrc: 'cattabs',
+        title: 'Your tabs are doing great things',
+        children: 'Now, every tab you open supports cats in need.',
+      },
+      {
+        imageSrc: 'squadcat',
+        title: 'Help more cats with squads',
+        children: 'Cats can get adopted up to 3x faster when you join a squad!',
+      },
+      {
+        imageSrc: 'adcat',
+        title: "It doesn't cost you a thing",
+        children:
+          'We display a couple of small ads at the bottom of your screen and redistribute that money to charity. No fees or hidden costs!',
+      },
+    ],
+  },
 })
 
 describe('OnboardingFlow component', () => {

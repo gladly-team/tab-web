@@ -43,8 +43,8 @@ const getMockProps = () => ({
 
 describe('MissionNotification component', () => {
   it('renders without error', () => {
-    const MissionNotification =
-      require('src/components/MissionNotification').default
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
     const mockProps = getMockProps()
     expect(() => {
       shallow(<MissionNotification {...mockProps} />)
@@ -52,8 +52,8 @@ describe('MissionNotification component', () => {
   })
 
   it('displays nothing if empty inputs', () => {
-    const MissionNotification =
-      require('src/components/MissionNotification').default
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
     const mockProps = {
       ...getMockProps(),
       pendingMissionInvites: [],
@@ -64,8 +64,8 @@ describe('MissionNotification component', () => {
   })
 
   it('displays pending mission invite if no currentMission', () => {
-    const MissionNotification =
-      require('src/components/MissionNotification').default
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
     const mockProps = {
       ...getMockProps(),
       currentMission: null,
@@ -81,8 +81,8 @@ describe('MissionNotification component', () => {
   })
 
   it('calls accept invite if user clicks respective button, and redirects to mission hub', async () => {
-    const MissionNotification =
-      require('src/components/MissionNotification').default
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
     const mockProps = {
       ...getMockProps(),
       currentMission: null,
@@ -103,8 +103,8 @@ describe('MissionNotification component', () => {
   })
 
   it('calls reject invite if user clicks respective button, and closes notification', () => {
-    const MissionNotification =
-      require('src/components/MissionNotification').default
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
     const mockProps = {
       ...getMockProps(),
       currentMission: null,
@@ -124,8 +124,8 @@ describe('MissionNotification component', () => {
   })
 
   it('displays acknowledge mission started notification if applicable', () => {
-    const MissionNotification =
-      require('src/components/MissionNotification').default
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(<MissionNotification {...mockProps} />)
     const notification = wrapper.find(Notification).first()
@@ -135,8 +135,8 @@ describe('MissionNotification component', () => {
   })
 
   it('click acknowledge mission started calls mutation and closes notification', () => {
-    const MissionNotification =
-      require('src/components/MissionNotification').default
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(<MissionNotification {...mockProps} />)
     const notification = wrapper.find(Notification).first()
@@ -151,8 +151,8 @@ describe('MissionNotification component', () => {
     expect(goTo).toHaveBeenCalledWith(missionHubURL)
   })
   it('dismissing acknowledge mission started calls mutation and closes notification and does not redirect', () => {
-    const MissionNotification =
-      require('src/components/MissionNotification').default
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(<MissionNotification {...mockProps} />)
     const closeButton = wrapper.find(IconButton).first()
@@ -167,8 +167,8 @@ describe('MissionNotification component', () => {
   })
 
   it('displays acknowledge mission completed notification if applicable', () => {
-    const MissionNotification =
-      require('src/components/MissionNotification').default
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
     const mockProps = {
       ...getMockProps(),
       currentMission: {
@@ -192,8 +192,8 @@ describe('MissionNotification component', () => {
   })
 
   it('click acknowledge mission completed navigates to page', () => {
-    const MissionNotification =
-      require('src/components/MissionNotification').default
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
     const mockProps = {
       ...getMockProps(),
       currentMission: {
@@ -218,8 +218,8 @@ describe('MissionNotification component', () => {
   })
 
   it('dismissing acknowledge mission complete calls mutation and closes notification and does not redirect', () => {
-    const MissionNotification =
-      require('src/components/MissionNotification').default
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
     const mockProps = {
       ...getMockProps(),
       currentMission: {
@@ -246,8 +246,8 @@ describe('MissionNotification component', () => {
   })
 
   it('displays nothing if in mission', () => {
-    const MissionNotification =
-      require('src/components/MissionNotification').default
+    const MissionNotification = require('src/components/MissionNotification')
+      .default
     const mockProps = {
       ...getMockProps(),
       currentMission: {

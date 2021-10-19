@@ -95,8 +95,8 @@ describe('_app: router overrides', () => {
     const { isClientSide } = require('src/utils/ssr')
     isClientSide.mockReturnValue(true)
     const Router = require('next/router')
-    const mockWindowLocation =
-      require('src/utils/testHelpers/mockWindowLocation').default
+    const mockWindowLocation = require('src/utils/testHelpers/mockWindowLocation')
+      .default
     mockWindowLocation({
       host: 'test-tab2017.gladly.io',
       hostname: 'test-tab2017.gladly.io',
@@ -124,8 +124,8 @@ describe('_app: router overrides', () => {
     const { isClientSide } = require('src/utils/ssr')
     isClientSide.mockReturnValue(true)
     const Router = require('next/router')
-    const mockWindowLocation =
-      require('src/utils/testHelpers/mockWindowLocation').default
+    const mockWindowLocation = require('src/utils/testHelpers/mockWindowLocation')
+      .default
     mockWindowLocation({
       host: 'test-tab2017.gladly.io',
       hostname: 'test-tab2017.gladly.io',
@@ -156,8 +156,8 @@ describe('_app: router overrides', () => {
     const { isClientSide } = require('src/utils/ssr')
     isClientSide.mockReturnValue(true)
     const Router = require('next/router')
-    const mockWindowLocation =
-      require('src/utils/testHelpers/mockWindowLocation').default
+    const mockWindowLocation = require('src/utils/testHelpers/mockWindowLocation')
+      .default
     mockWindowLocation({
       host: 'example.com',
       hostname: 'example.com',
@@ -185,8 +185,8 @@ describe('_app: router overrides', () => {
     const { isClientSide } = require('src/utils/ssr')
     isClientSide.mockReturnValue(true)
     const Router = require('next/router')
-    const mockWindowLocation =
-      require('src/utils/testHelpers/mockWindowLocation').default
+    const mockWindowLocation = require('src/utils/testHelpers/mockWindowLocation')
+      .default
     mockWindowLocation({
       host: 'example.com',
       hostname: 'example.com',
@@ -217,8 +217,8 @@ describe('_app: router overrides', () => {
     const Router = require('next/router')
     const { isClientSide } = require('src/utils/ssr')
     isClientSide.mockReturnValue(true)
-    const mockWindowLocation =
-      require('src/utils/testHelpers/mockWindowLocation').default
+    const mockWindowLocation = require('src/utils/testHelpers/mockWindowLocation')
+      .default
     mockWindowLocation({
       host: 'test-tab2017.gladly.io',
       hostname: 'test-tab2017.gladly.io',
@@ -244,8 +244,8 @@ describe('_app: router overrides', () => {
     const { isClientSide } = require('src/utils/ssr')
     isClientSide.mockReturnValue(false) // server-side
     const Router = require('next/router')
-    const mockWindowLocation =
-      require('src/utils/testHelpers/mockWindowLocation').default
+    const mockWindowLocation = require('src/utils/testHelpers/mockWindowLocation')
+      .default
     mockWindowLocation({
       host: 'test-tab2017.gladly.io',
       hostname: 'test-tab2017.gladly.io',

@@ -341,8 +341,10 @@ const Achievement = (props) => {
     text: inviteFriendsButtonText = 'Invite Friends',
   } = inviteFriendsButton
   const { show: showShareButton, text: shareButtonText = 'Share' } = shareButton
-  const { show: showNextGoalButton, text: nextGoalButtonText = 'Next Goal' } =
-    nextGoalButton
+  const {
+    show: showNextGoalButton,
+    text: nextGoalButtonText = 'Next Goal',
+  } = nextGoalButton
   const hasButton =
     showInviteFriendsButton || showShareButton || showNextGoalButton
 

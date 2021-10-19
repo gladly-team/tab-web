@@ -13,8 +13,8 @@ const getMockProps = () => ({
 
 describe('InviteFriendsIcon component', () => {
   it('renders without error', () => {
-    const InviteFriendsIcon =
-      require('src/components/InviteFriendsIcon').default
+    const InviteFriendsIcon = require('src/components/InviteFriendsIcon')
+      .default
     const mockProps = getMockProps()
     expect(() => {
       mount(<InviteFriendsIcon {...mockProps} />)
@@ -22,8 +22,8 @@ describe('InviteFriendsIcon component', () => {
   })
 
   it('displays the dialog when clicked on', () => {
-    const InviteFriendsIcon =
-      require('src/components/InviteFriendsIcon').default
+    const InviteFriendsIcon = require('src/components/InviteFriendsIcon')
+      .default
     const defaultMockProps = getMockProps()
 
     const wrapper = shallow(<InviteFriendsIcon {...defaultMockProps} />)
@@ -34,8 +34,8 @@ describe('InviteFriendsIcon component', () => {
   })
 
   it('popover onClose sets isPopoverOpen to false', () => {
-    const InviteFriendsIcon =
-      require('src/components/InviteFriendsIcon').default
+    const InviteFriendsIcon = require('src/components/InviteFriendsIcon')
+      .default
     const defaultMockProps = getMockProps()
 
     const wrapper = shallow(<InviteFriendsIcon {...defaultMockProps} />)

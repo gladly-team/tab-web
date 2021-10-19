@@ -50,12 +50,12 @@ export const useStyles = makeStyles((theme) => ({
 }))
 
 const getImageAssetFromName = (imgName) => {
-  switch(imgName){
-    case "cattabs":
+  switch (imgName) {
+    case 'cattabs':
       return catTabs
-    case "squadcat":
+    case 'squadcat':
       return squadCat
-    case "adcat":
+    case 'adcat':
       return adCat
     default:
       return catTabs
@@ -67,21 +67,19 @@ const OnboardingFlow = ({ onboardingFields, onComplete, showMissionSlide }) => {
   const classes = useStyles()
   const [onboardingStep, setOnboardingStep] = useState(0)
 
-  const onboardingStepContents = steps.map(
-    (step) => ({
-      imageSrc: getImageAssetFromName(step),
-      title: step.title,
-      children: (
-        <Typography
-            variant="body2"
-            align="center"
-            className={classes.childrenTypography}
-          >
-            {step.subtitle}
-          </Typography>
-      )
-    })
-  )
+  const onboardingStepContents = steps.map((step) => ({
+    imageSrc: getImageAssetFromName(step),
+    title: step.title,
+    children: (
+      <Typography
+        variant="body2"
+        align="center"
+        className={classes.childrenTypography}
+      >
+        {step.subtitle}
+      </Typography>
+    ),
+  }))
   const onboardingStepInfo = onboardingStepContents[onboardingStep]
 
   // TODO: Break out Squads Slide into it's own item on the OnboardingFlow model.

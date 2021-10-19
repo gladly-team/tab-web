@@ -21,8 +21,8 @@ afterEach(() => {
 describe('LogUserRevenueMutation', () => {
   it('calls commitMutation with expected values', async () => {
     expect.assertions(1)
-    const LogUserRevenueMutation =
-      require('src/utils/mutations/LogUserRevenueMutation').default
+    const LogUserRevenueMutation = require('src/utils/mutations/LogUserRevenueMutation')
+      .default
     const args = getMockInput()
     await LogUserRevenueMutation(args)
     expect(callMutation).toHaveBeenCalledWith({

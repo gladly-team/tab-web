@@ -14,8 +14,8 @@ afterEach(() => {
 describe('CreateNewMissionMutation', () => {
   it('calls callMutation with the expected arguments', async () => {
     expect.assertions(1)
-    const CreateNewMissionMutation =
-      require('src/utils/mutations/CreateNewMissionMutation').default
+    const CreateNewMissionMutation = require('src/utils/mutations/CreateNewMissionMutation')
+      .default
     await CreateNewMissionMutation('some-user-id', 'some-squad-id')
     expect(callMutation).toHaveBeenCalledWith({
       mutation: expect.any(Object),
@@ -30,8 +30,8 @@ describe('CreateNewMissionMutation', () => {
 
   it('returns the callMutation response', async () => {
     expect.assertions(1)
-    const CreateNewMissionMutation =
-      require('src/utils/mutations/CreateNewMissionMutation').default
+    const CreateNewMissionMutation = require('src/utils/mutations/CreateNewMissionMutation')
+      .default
     callMutation.mockResolvedValue({
       currentMission: {
         squadName: 'TestSquad',

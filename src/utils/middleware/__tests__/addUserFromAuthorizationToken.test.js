@@ -27,8 +27,8 @@ describe('addUserFromAuthorizationToken middleware', () => {
     }
     const mockRes = getMockRes()
     const mockHandler = jest.fn()
-    const addUserFromAuthorizationToken =
-      require('src/utils/middleware/addUserFromAuthorizationToken').default
+    const addUserFromAuthorizationToken = require('src/utils/middleware/addUserFromAuthorizationToken')
+      .default
     await addUserFromAuthorizationToken(mockHandler)(mockReq, mockRes)
     expect(mockHandler).toHaveBeenCalledWith(mockReq, mockRes)
   })
@@ -46,8 +46,8 @@ describe('addUserFromAuthorizationToken middleware', () => {
     }
     const mockRes = getMockRes()
     const mockHandler = jest.fn()
-    const addUserFromAuthorizationToken =
-      require('src/utils/middleware/addUserFromAuthorizationToken').default
+    const addUserFromAuthorizationToken = require('src/utils/middleware/addUserFromAuthorizationToken')
+      .default
     await addUserFromAuthorizationToken(mockHandler)(mockReq, mockRes)
     const modifiedReq = mockHandler.mock.calls[0][0]
     expect(modifiedReq.tab.AuthUser).toEqual(mockAuthUser)
@@ -64,8 +64,8 @@ describe('addUserFromAuthorizationToken middleware', () => {
     }
     const mockRes = getMockRes()
     const mockHandler = jest.fn()
-    const addUserFromAuthorizationToken =
-      require('src/utils/middleware/addUserFromAuthorizationToken').default
+    const addUserFromAuthorizationToken = require('src/utils/middleware/addUserFromAuthorizationToken')
+      .default
     await addUserFromAuthorizationToken(mockHandler)(mockReq, mockRes)
     expect(mockRes.status).toHaveBeenCalledWith(403)
     expect(mockRes.json).toHaveBeenCalledWith({
@@ -87,8 +87,8 @@ describe('addUserFromAuthorizationToken middleware', () => {
     }
     const mockRes = getMockRes()
     const mockHandler = jest.fn()
-    const addUserFromAuthorizationToken =
-      require('src/utils/middleware/addUserFromAuthorizationToken').default
+    const addUserFromAuthorizationToken = require('src/utils/middleware/addUserFromAuthorizationToken')
+      .default
     await addUserFromAuthorizationToken(mockHandler)(mockReq, mockRes)
     expect(mockRes.status).toHaveBeenCalledWith(403)
     expect(mockRes.json).toHaveBeenCalledWith({
@@ -113,8 +113,8 @@ describe('addUserFromAuthorizationToken middleware', () => {
     }
     const mockRes = getMockRes()
     const mockHandler = jest.fn()
-    const addUserFromAuthorizationToken =
-      require('src/utils/middleware/addUserFromAuthorizationToken').default
+    const addUserFromAuthorizationToken = require('src/utils/middleware/addUserFromAuthorizationToken')
+      .default
     await addUserFromAuthorizationToken(mockHandler)(mockReq, mockRes)
     expect(mockRes.status).toHaveBeenCalledWith(500)
     expect(mockRes.json).toHaveBeenCalledWith({

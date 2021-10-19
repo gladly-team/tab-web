@@ -20,8 +20,8 @@ describe('customHeaderRequired middleware', () => {
     }
     const mockRes = getMockRes()
     const mockHandler = jest.fn()
-    const customHeaderRequired =
-      require('src/utils/middleware/customHeaderRequired').default
+    const customHeaderRequired = require('src/utils/middleware/customHeaderRequired')
+      .default
     await customHeaderRequired(mockHandler)(mockReq, mockRes)
     expect(mockHandler).toHaveBeenCalledWith(mockReq, mockRes)
   })
@@ -33,8 +33,8 @@ describe('customHeaderRequired middleware', () => {
     }
     const mockRes = getMockRes()
     const mockHandler = jest.fn()
-    const customHeaderRequired =
-      require('src/utils/middleware/customHeaderRequired').default
+    const customHeaderRequired = require('src/utils/middleware/customHeaderRequired')
+      .default
     await customHeaderRequired(mockHandler)(mockReq, mockRes)
     expect(mockRes.status).toHaveBeenCalledWith(400)
     expect(mockRes.json).toHaveBeenCalledWith({

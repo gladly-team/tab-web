@@ -14,8 +14,8 @@ afterEach(() => {
 describe('SetBackgroundDailyImageMutation', () => {
   it('calls callMutation with the expected arguments', async () => {
     expect.assertions(1)
-    const SetBackgroundDailyImageMutation =
-      require('src/utils/mutations/SetBackgroundDailyImageMutation').default
+    const SetBackgroundDailyImageMutation = require('src/utils/mutations/SetBackgroundDailyImageMutation')
+      .default
     await SetBackgroundDailyImageMutation('some-user-id')
     expect(callMutation).toHaveBeenCalledWith({
       mutation: expect.any(Object),
@@ -30,8 +30,8 @@ describe('SetBackgroundDailyImageMutation', () => {
 
   it('returns the callMutation response', async () => {
     expect.assertions(1)
-    const SetBackgroundDailyImageMutation =
-      require('src/utils/mutations/SetBackgroundDailyImageMutation').default
+    const SetBackgroundDailyImageMutation = require('src/utils/mutations/SetBackgroundDailyImageMutation')
+      .default
     callMutation.mockResolvedValue({
       user: {
         id: 'some-id',

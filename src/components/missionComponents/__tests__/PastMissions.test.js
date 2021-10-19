@@ -152,8 +152,8 @@ beforeEach(async () => {
 
 describe('Past Missions component', () => {
   it('renders without error', () => {
-    const PastMissions =
-      require('src/components/missionComponents/PastMissions').default
+    const PastMissions = require('src/components/missionComponents/PastMissions')
+      .default
     const mockProps = mockPropsNoPastMissions
     expect(() => {
       mount(
@@ -166,8 +166,8 @@ describe('Past Missions component', () => {
 
   it('shows no past missions background if user has no past missions', () => {
     expect.assertions(1)
-    const PastMissions =
-      require('src/components/missionComponents/PastMissions').default
+    const PastMissions = require('src/components/missionComponents/PastMissions')
+      .default
     const mockProps = mockPropsNoPastMissions
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -181,8 +181,8 @@ describe('Past Missions component', () => {
   })
 
   it('renders completed missions without error', () => {
-    const PastMissions =
-      require('src/components/missionComponents/PastMissions').default
+    const PastMissions = require('src/components/missionComponents/PastMissions')
+      .default
     const mockProps = mockPropsWithPastMissions
     expect(() => {
       mount(
@@ -195,8 +195,8 @@ describe('Past Missions component', () => {
 
   it('clicking on a completed mission shows mission details', async () => {
     expect.assertions(2)
-    const PastMissions =
-      require('src/components/missionComponents/PastMissions').default
+    const PastMissions = require('src/components/missionComponents/PastMissions')
+      .default
     const mockProps = mockPropsWithPastMissions
     const wrapper = mount(
       <ThemeProvider theme={theme}>

@@ -28,9 +28,8 @@ jest.mock('src/utils/pageWrappers/withRelay')
 jest.mock('src/utils/hooks/useData')
 jest.mock('src/components/FullPageLoader', () => () => <div />)
 jest.mock('src/utils/pageWrappers/withDataSSR')
-jest.mock(
-  'src/components/NewTabThemeWrapperHOC',
-  () => (component) => component
+jest.mock('src/components/NewTabThemeWrapperHOC', () => (component) =>
+  component
 )
 jest.mock('src/utils/pageWrappers/withSentry')
 global.scrollTo = jest.fn()

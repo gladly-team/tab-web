@@ -41,10 +41,9 @@ const processor = unified()
   })
 
 const Markdown = ({ children }) => {
-  const elems = useMemo(
-    () => processor.processSync(children).result,
-    [children]
-  )
+  const elems = useMemo(() => processor.processSync(children).result, [
+    children,
+  ])
   return <>{elems}</>
 }
 

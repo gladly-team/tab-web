@@ -29,8 +29,8 @@ afterEach(() => {
 describe('achievement-component demo page', () => {
   it('renders without error', () => {
     expect.assertions(1)
-    const AchievementComponentDemoPage =
-      require('src/pages/demos/achievement-component').default
+    const AchievementComponentDemoPage = require('src/pages/demos/achievement-component')
+      .default
     const mockProps = getMockProps()
     expect(() => {
       shallow(<AchievementComponentDemoPage {...mockProps} />)
@@ -39,8 +39,8 @@ describe('achievement-component demo page', () => {
 
   it('includes the title', () => {
     expect.assertions(1)
-    const AchievementComponentDemoPage =
-      require('src/pages/demos/achievement-component').default
+    const AchievementComponentDemoPage = require('src/pages/demos/achievement-component')
+      .default
     const mockProps = getMockProps()
     const wrapper = shallow(<AchievementComponentDemoPage {...mockProps} />)
     expect(
@@ -55,8 +55,8 @@ describe('achievement-component demo page', () => {
 
   it('includes many Achievement components', () => {
     expect.assertions(1)
-    const AchievementComponentDemoPage =
-      require('src/pages/demos/achievement-component').default
+    const AchievementComponentDemoPage = require('src/pages/demos/achievement-component')
+      .default
     const mockProps = getMockProps()
     const wrapper = shallow(<AchievementComponentDemoPage {...mockProps} />)
     expect(wrapper.find(Achievement).length).toBeGreaterThan(10)

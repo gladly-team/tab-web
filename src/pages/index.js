@@ -396,8 +396,13 @@ const Index = ({ data: fallbackData }) => {
       return
     }
 
-    const { revenue, encodedRevenue, GAMAdvertiserId, GAMAdUnitId, adSize } =
-      displayedAdInfo
+    const {
+      revenue,
+      encodedRevenue,
+      GAMAdvertiserId,
+      GAMAdUnitId,
+      adSize,
+    } = displayedAdInfo
 
     // Log the revenue from the ad.
     LogUserRevenueMutation({
@@ -473,8 +478,8 @@ const Index = ({ data: fallbackData }) => {
                 (missionStatus === 'started' ||
                   missionStatus === 'completed') ? (
                   <SquadCounter
-                    progress={Math.floor((tabCount / tabGoal) * 100)}
-                  />
+                      progress={Math.floor((tabCount / tabGoal) * 100)}
+                    />
                 ) : null}
                 <UserImpactContainer
                   userId={userGlobalId}

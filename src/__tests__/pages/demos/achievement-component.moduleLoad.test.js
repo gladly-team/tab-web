@@ -26,8 +26,8 @@ describe('achievement-component.js: HOC', () => {
     const { showDevelopmentOnlyDemoPages } = require('src/utils/featureFlags')
     showDevelopmentOnlyDemoPages.mockReturnValue(false)
     const return404If = require('src/utils/pageWrappers/return404If').default
-    const AchievementComponentDemoPage =
-      require('src/pages/demos/achievement-component').default
+    const AchievementComponentDemoPage = require('src/pages/demos/achievement-component')
+      .default
     const mockProps = getMockProps()
     shallow(<AchievementComponentDemoPage {...mockProps} />)
     expect(return404If).toHaveBeenCalledWith(true)
@@ -38,8 +38,8 @@ describe('achievement-component.js: HOC', () => {
     const { showDevelopmentOnlyDemoPages } = require('src/utils/featureFlags')
     showDevelopmentOnlyDemoPages.mockReturnValue(true)
     const return404If = require('src/utils/pageWrappers/return404If').default
-    const AchievementComponentDemoPage =
-      require('src/pages/demos/achievement-component').default
+    const AchievementComponentDemoPage = require('src/pages/demos/achievement-component')
+      .default
     const mockProps = getMockProps()
     shallow(<AchievementComponentDemoPage {...mockProps} />)
     expect(return404If).toHaveBeenCalledWith(false)

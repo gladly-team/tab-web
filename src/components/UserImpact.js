@@ -69,11 +69,14 @@ const UserImpact = ({ userImpact, user, disabled }) => {
   const [newlyReferredDialogOpen, setNewlyReferredDialogOpen] = useState(false)
   const [alertDialogOpen, setAlertDialogOpen] = useState(false)
   const [rewardDialogOpen, setRewardDialogOpen] = useState(false)
-  const [referralRewardDialogOpen, setReferralRewardDialogOpen] =
-    useState(false)
+  const [referralRewardDialogOpen, setReferralRewardDialogOpen] = useState(
+    false
+  )
   const [claimedReferralImpact, setClaimedReferralImpact] = useState(0)
-  const [showIntlCatDayEndNotification, setIntlCatDayEndNotification] =
-    useState(false)
+  const [
+    showIntlCatDayEndNotification,
+    setIntlCatDayEndNotification,
+  ] = useState(false)
   const router = useRouter()
   const confettiCanvasRef = useRef(null)
   const confettiFunc = () => {

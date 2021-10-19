@@ -27,8 +27,8 @@ afterEach(() => {
 
 describe('EmailInviteDialog component', () => {
   it('renders without error', () => {
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     expect(() => {
       mount(
@@ -40,8 +40,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('the send email button is disabled by default', () => {
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
 
     const wrapper = mount(
@@ -54,8 +54,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('there is no default message', () => {
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
 
     const wrapper = mount(
@@ -68,8 +68,8 @@ describe('EmailInviteDialog component', () => {
 
   it('successfully adds a valid email', async () => {
     expect.assertions(3)
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -90,8 +90,8 @@ describe('EmailInviteDialog component', () => {
 
   it('shows an error if a user tries to add more than 20 emails', async () => {
     expect.assertions(2)
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -126,8 +126,8 @@ describe('EmailInviteDialog component', () => {
 
   it('successfully removes a valid email chip', async () => {
     expect.assertions(4)
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -155,8 +155,8 @@ describe('EmailInviteDialog component', () => {
 
   it('enables send button if there is atleast one valid email and a name', async () => {
     expect.assertions(2)
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -178,8 +178,8 @@ describe('EmailInviteDialog component', () => {
 
   it('shows an error message if user tries to add an invalid email', async () => {
     expect.assertions(3)
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -202,8 +202,8 @@ describe('EmailInviteDialog component', () => {
 
   it('removes the error message if user fixes an incorrect email', async () => {
     expect.assertions(4)
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -231,8 +231,8 @@ describe('EmailInviteDialog component', () => {
 
   it('calls the create invited users mutation with email, name and message', async () => {
     expect.assertions(1)
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -270,8 +270,8 @@ describe('EmailInviteDialog component', () => {
 
   it('shows an error and disables send button if message is too long', async () => {
     expect.assertions(3)
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -308,8 +308,8 @@ describe('EmailInviteDialog component', () => {
 
   it('removes error message and successfully sends email invites when message is shortened', async () => {
     expect.assertions(4)
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -363,8 +363,8 @@ describe('EmailInviteDialog component', () => {
 
   it('shows the successful send state when emails are successfully sent', async () => {
     expect.assertions(1)
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -392,8 +392,8 @@ describe('EmailInviteDialog component', () => {
 
   it('resets the send email state after emails have successfully sent', async () => {
     expect.assertions(1)
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -424,8 +424,8 @@ describe('EmailInviteDialog component', () => {
   it('shows the error message then resets when an invite fails', async () => {
     expect.assertions(3)
     CreateSquadInvitesMutation.mockRejectedValueOnce(new Error('Async error'))
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -461,8 +461,8 @@ describe('EmailInviteDialog component', () => {
 
 it('fires the callback when emails are sent', async () => {
   expect.assertions(1)
-  const MissionSocialShare =
-    require('src/components/missionComponents/MissionSocialShare').default
+  const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+    .default
   const mockProps = getMockProps()
   CreateSquadInvitesMutation.mockReturnValue({
     createSquadInvites: { currentMission: { squadId: 'someSquadId' } },
@@ -495,8 +495,8 @@ it('fires the callback when emails are sent', async () => {
 describe('social share component', () => {
   it('shows the correct link', async () => {
     expect.assertions(1)
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -509,8 +509,8 @@ describe('social share component', () => {
   })
 
   it('encodes the referral URL correctly when the username contains a space', () => {
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     mockProps.user.username = 'Bugs Bunny'
     const wrapper = mount(
@@ -524,8 +524,8 @@ describe('social share component', () => {
   })
 
   it('encodes the referral URL correctly when the username contains a plus sign', () => {
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     mockProps.user.username = 'my+username'
     const wrapper = mount(
@@ -539,8 +539,8 @@ describe('social share component', () => {
   })
 
   it('encodes the referral URL correctly when the username contains an emoji', () => {
-    const MissionSocialShare =
-      require('src/components/missionComponents/MissionSocialShare').default
+    const MissionSocialShare = require('src/components/missionComponents/MissionSocialShare')
+      .default
     const mockProps = getMockProps()
     mockProps.user.username = 'Stinky💩'
     const wrapper = mount(

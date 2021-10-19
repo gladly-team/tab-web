@@ -8,8 +8,8 @@ afterEach(() => {
 describe('PastMissions container', () => {
   it('wraps the correct component', () => {
     const { createFragmentContainer } = require('react-relay')
-    const PastMissions =
-      require('src/components/missionComponents/PastMissions').default
+    const PastMissions = require('src/components/missionComponents/PastMissions')
+      .default
     // eslint-disable-next-line no-unused-expressions
     require('src/components/missionComponents/PastMissionsContainer').default
     expect(createFragmentContainer).toHaveBeenCalledWith(

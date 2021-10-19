@@ -24,8 +24,8 @@ afterEach(() => {
 
 describe('EmailInviteDialog component', () => {
   it('renders without error', () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     expect(() => {
       mount(
@@ -37,8 +37,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('the send email button is disabled by default', () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
 
     const wrapper = mount(
@@ -51,8 +51,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('the close button calls the onclose function', () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
 
     const wrapper = mount(
@@ -66,8 +66,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('there is no default message', () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
 
     const wrapper = mount(
@@ -79,8 +79,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('successfully adds a valid email', async () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -100,8 +100,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('successfully removes a valid email chip', async () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -128,8 +128,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('enables send button if there is atleast one valid email and a name', async () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -150,8 +150,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('shows an error message if user tries to add an invalid email', async () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -173,8 +173,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('removes the error message if user fixes an incorrect email', async () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -201,8 +201,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('calls the create invited users mutation with email, name and message', async () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -239,8 +239,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('shows an error and disables send button if message is too long', async () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -276,8 +276,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('removes error message and successfully sends email invites when message is shortened', async () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -330,8 +330,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('shows the successful send state when emails are successfully sent', async () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -358,8 +358,8 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('resets the send email state after emails have successfully sent', async () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -385,8 +385,8 @@ describe('EmailInviteDialog component', () => {
 })
 describe('social share component', () => {
   it('shows social share when user clicks on subnav and has correct link', async () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>
@@ -404,8 +404,8 @@ describe('social share component', () => {
   })
 
   it('contains the correct referral URL, using tab.gladly.io by default', async () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     mockProps.username = 'bob'
     const wrapper = mount(
@@ -428,8 +428,8 @@ describe('social share component', () => {
   })
 
   it('encodes the referral URL correctly when the username contains a space', () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     mockProps.username = 'Bugs Bunny'
     const wrapper = mount(
@@ -448,8 +448,8 @@ describe('social share component', () => {
   })
 
   it('encodes the referral URL correctly when the username contains a plus sign', () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     mockProps.username = 'my+username'
     const wrapper = mount(
@@ -468,8 +468,8 @@ describe('social share component', () => {
   })
 
   it('encodes the referral URL correctly when the username contains an emoji', () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     mockProps.username = 'Stinky💩'
     const wrapper = mount(
@@ -488,8 +488,8 @@ describe('social share component', () => {
   })
 
   it('renders social share', () => {
-    const EmailInviteFriendsDialog =
-      require('src/components/EmailInviteDialog').default
+    const EmailInviteFriendsDialog = require('src/components/EmailInviteDialog')
+      .default
     const mockProps = getMockProps()
     const wrapper = mount(
       <ThemeProvider theme={theme}>

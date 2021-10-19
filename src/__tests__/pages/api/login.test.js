@@ -73,8 +73,8 @@ describe('API: login', () => {
 describe('API: login middleware', () => {
   it('uses `onlyPostRequests`', async () => {
     expect.assertions(1)
-    const onlyPostRequests =
-      require('src/utils/middleware/onlyPostRequests').default
+    const onlyPostRequests = require('src/utils/middleware/onlyPostRequests')
+      .default
     const loginAPI = require('src/pages/api/login').default
     await loginAPI(getMockReq(), getMockRes())
     expect(onlyPostRequests).toHaveBeenCalled()
@@ -82,8 +82,8 @@ describe('API: login middleware', () => {
 
   it('use `customHeaderRequired`', async () => {
     expect.assertions(1)
-    const customHeaderRequired =
-      require('src/utils/middleware/customHeaderRequired').default
+    const customHeaderRequired = require('src/utils/middleware/customHeaderRequired')
+      .default
     const loginAPI = require('src/pages/api/login').default
     await loginAPI(getMockReq(), getMockRes())
     expect(customHeaderRequired).toHaveBeenCalled()
@@ -91,8 +91,8 @@ describe('API: login middleware', () => {
 
   it('uses `addUserFromAuthorizationToken`', async () => {
     expect.assertions(1)
-    const addUserFromAuthorizationToken =
-      require('src/utils/middleware/addUserFromAuthorizationToken').default
+    const addUserFromAuthorizationToken = require('src/utils/middleware/addUserFromAuthorizationToken')
+      .default
     const loginAPI = require('src/pages/api/login').default
     await loginAPI(getMockReq(), getMockRes())
     expect(addUserFromAuthorizationToken).toHaveBeenCalled()
