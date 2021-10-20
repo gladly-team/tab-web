@@ -8,9 +8,17 @@ import { themeMapper } from 'src/utils/theme'
 
 const CustomThemeHOC = (Component) =>
   function ThemeComponent(props) {
+    // The user's data might have cause-specific theming.
+    const causeTheme = get(props, 'data.user.cause.theme', {})
+    const { primaryColor, secondaryColor } = causeTheme
+
+    // console.log('props', props)
+    // console.log('causeTheme', causeTheme)
+
     // Any theme property customizations set from within child components.
     // const [themeModifications, setThemeModifications] = useState({})
 
+    // Can probably remove this and rely only on HOC for now (?).
     // Provide a `setTheme` function via context.
     const customThemeContextVal = useMemo(
       () => ({
@@ -20,16 +28,13 @@ const CustomThemeHOC = (Component) =>
       []
     )
 
-    const primaryColorCustom = '#FF0000'
-    const secondaryColorCustom = ''
-
     const themeModifications = useMemo(
       () =>
         themeMapper({
-          primaryColor: primaryColorCustom,
-          secondaryColor: secondaryColorCustom,
+          primaryColor,
+          secondaryColor,
         }),
-      [primaryColorCustom, secondaryColorCustom]
+      [primaryColor, secondaryColor]
     )
 
     // eslint-disable-next-line no-console

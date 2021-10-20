@@ -272,6 +272,12 @@ const getRelayQuery = async ({ AuthUser }) => {
             tabCount
             missionId
           }
+          cause {
+            theme {
+              primaryColor
+              secondaryColor
+            }
+          }
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
           ...InviteFriendsIconContainer_user
@@ -317,7 +323,7 @@ const Index = ({ data: fallbackData }) => {
     }
   }, [])
   const { app, user, userImpact } = data || {}
-  const { currentMission, email, cause } = user || {}
+  const { currentMission, email } = user || {}
 
   // const { currentMission, email, cause } = user || {}
   // const { theme } = cause || {}
