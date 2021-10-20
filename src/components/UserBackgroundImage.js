@@ -116,6 +116,10 @@ const UserBackgroundImage = ({ user }) => {
   const previousImage = backgroundImages[0]
   const latestImage = backgroundImages[backgroundImages.length - 1]
   const classes = useStyles({ previousImage, latestImage })
+
+  // class name is not stable across SSR and rerenders
+  console.log('classes.wrapper', classes.wrapper)
+
   return (
     <div className={classes.wrapper}>
       <img

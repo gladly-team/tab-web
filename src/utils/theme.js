@@ -47,12 +47,9 @@ export const themeMapper = ({ primaryColor, secondaryColor }) => ({
   palette: {
     primary: {
       main: primaryColor || defaultPrimaryColor,
-      contrastText: '#fff',
-      background: 'rgba(157, 75, 163, 0.08)',
     },
     secondary: {
       main: secondaryColor || defaultSecondaryColor,
-      contrastText: '#fff',
     },
   },
 })
