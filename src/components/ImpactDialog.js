@@ -101,7 +101,13 @@ const ImpactDialog = ({
               top of the page:
             </Typography>
             <div className={classes.impactCounter}>
-              <ImpactCounter includeNumber number={0} progress={100} />
+              <ImpactCounter
+                includeNumber
+                number={0}
+                progress={100}
+                dropdownText=""
+                dropdownTextSquads=""
+              />
             </div>
           </MuiDialogContent>
         </>
@@ -123,7 +129,13 @@ const ImpactDialog = ({
               the page:
             </Typography>
             <div className={classes.impactCounter}>
-              <ImpactCounter includeNumber number={5} progress={100} />
+              <ImpactCounter
+                includeNumber
+                number={5}
+                progress={100}
+                dropdownText=""
+                dropdownTextSquads=""
+              />
             </div>
           </MuiDialogContent>
         </>

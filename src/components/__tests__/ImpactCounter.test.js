@@ -12,6 +12,8 @@ const getMockProps = () => ({
   includeNumber: false,
   number: 0,
   progress: 10,
+  dropdownText: '',
+  dropdownTextSquads: '',
 })
 
 describe('ImpactCounter component', () => {

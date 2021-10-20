@@ -140,12 +140,12 @@ ImpactCounter.propTypes = {
   /**
    * Text for the dropdown
    */
-  dropdownText: PropTypes.string,
+  dropdownText: PropTypes.string.isRequired,
 
   /**
    * Text for the dropdown when in a mission
    */
-  dropdownTextSquads: PropTypes.string,
+  dropdownTextSquads: PropTypes.string.isRequired,
 }
 
 ImpactCounter.defaultProps = {
@@ -154,8 +154,6 @@ ImpactCounter.defaultProps = {
   number: 0,
   className: '',
   icon: 'paw',
-  dropdownText: '',
-  dropdownTextSquads: '',
 }
 
 export default ImpactCounter
