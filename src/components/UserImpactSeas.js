@@ -293,11 +293,6 @@ const UserImpact = ({ user, disabled }) => {
               impact.referralRewardTitle
                 // eslint-disable-next-line no-template-curly-in-string
                 .replace('${claimedReferralImpact}', claimedReferralImpact)
-                .replace(
-                  // eslint-disable-next-line no-template-curly-in-string
-                  '${isPlural(claimedReferralImpact)}',
-                  isPlural(claimedReferralImpact)
-                )
             }
           </Markdown>
         </MuiDialogTitle>
