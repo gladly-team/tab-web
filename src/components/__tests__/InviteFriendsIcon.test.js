@@ -8,6 +8,9 @@ const getMockProps = () => ({
     username: 'someUsername',
     numUsersRecruited: 99999,
     id: 'someUserId',
+    cause: {
+      landingPagePath: '/cats/',
+    },
   },
 })
 

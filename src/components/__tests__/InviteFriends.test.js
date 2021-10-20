@@ -7,6 +7,9 @@ const getMockProps = () => ({
   baseURL: undefined,
   user: {
     username: 'bob',
+    cause: {
+      landingPagePath: '/cats/',
+    },
   },
 })
 
@@ -28,6 +31,17 @@ describe('Invite friend component', () => {
     const wrapper = mount(<InviteFriends {...mockProps} />)
     expect(wrapper.find(TextField).first().prop('value')).toBe(
       'https://tab.gladly.io/cats/?u=bob'
+    )
+  })
+
+  it('contains the correct referral URL, using tab.gladly.io by default and /teamseas/ landingPagePath', () => {
+    const InviteFriends = require('src/components/InviteFriends').default
+    const mockProps = getMockProps()
+    mockProps.user.username = 'bob'
+    mockProps.user.cause.landingPagePath = '/teamseas/'
+    const wrapper = mount(<InviteFriends {...mockProps} />)
+    expect(wrapper.find(TextField).first().prop('value')).toBe(
+      'https://tab.gladly.io/teamseas/?u=bob'
     )
   })
 

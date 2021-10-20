@@ -41,6 +41,9 @@ jest.mock('src/utils/localstorage-mgr', () => ({
 const getMockProps = (userImpactOverrides, userOverrides) => ({
   user: {
     id: 'someId',
+    cause: {
+      landingPagePath: '/cats/',
+    },
     userImpact: {
       visitsUntilNextImpact: 3,
       pendingUserReferralImpact: 0,

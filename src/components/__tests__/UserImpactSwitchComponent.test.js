@@ -17,6 +17,7 @@ const getMockProps = (userImpactOverrides, causeOverrides) => ({
     },
     cause: {
       impactVisits: 27,
+      landingPagePath: '/cats/',
       impact: {
         impactCounterText:
           "##### **Your #teamseas impact!**\n\nThis shows how many plastic bottles you've helped remove from the ocean. Every tab you open helps. Keep it up",

@@ -101,7 +101,12 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 }
 
-const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
+const EmailInviteFriendsDialog = ({
+  username,
+  userId,
+  landingPagePath,
+  closeFunction,
+}) => {
   const classes = useStyles()
   const [value, setValue] = React.useState(0)
   const [emailInput, setEmailInputChange] = useState('')
@@ -111,7 +116,7 @@ const EmailInviteFriendsDialog = ({ username, userId, closeFunction }) => {
   const [personalMessage, setPersonalMessage] = useState('')
   const [personalMessageError, setPersonalMessageError] = useState(false)
   const [sendingState, setSendingState] = useState('Send Invite')
-  const referralUrl = getReferralUrl(username)
+  const referralUrl = getReferralUrl(username, landingPagePath)
   const textFieldRef = React.createRef()
 
   const highlightReferralUrl = () => {
@@ -324,6 +329,7 @@ EmailInviteFriendsDialog.propTypes = {
   username: PropTypes.string.isRequired,
   userId: PropTypes.string.isRequired,
   closeFunction: PropTypes.func.isRequired,
+  landingPagePath: PropTypes.string.isRequired,
 }
 
 EmailInviteFriendsDialog.defaultProps = {}

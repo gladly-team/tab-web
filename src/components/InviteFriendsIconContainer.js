@@ -7,6 +7,9 @@ export default createFragmentContainer(InviteFriendsIcon, {
       numUsersRecruited
       username
       id
+      cause {
+        landingPagePath
+      }
     }
   `,
 })

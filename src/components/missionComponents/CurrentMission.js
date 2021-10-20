@@ -527,9 +527,12 @@ CurrentMissionComponent.propTypes = {
   user: PropTypes.shape({
     // eslint-disable-next-line react/forbid-prop-types
     currentMission: PropTypes.any,
+    cause: PropTypes.shape({
+      landingPagePath: PropTypes.string,
+    }),
   }),
 }
 CurrentMissionComponent.defaultProps = {
-  user: {},
+  user: { cause: { landingPagePath: '/cats/' } },
 }
 export default CurrentMissionComponent
