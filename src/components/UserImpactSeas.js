@@ -12,7 +12,7 @@ import confetti from 'canvas-confetti'
 import Button from '@material-ui/core/Button'
 import Markdown from 'src/components/Markdown'
 import usePrevious from 'src/utils/hooks/usePrevious'
-import EmailInviteDialog from 'src/components/EmailInviteDialog'
+import EmailInviteDialogContainer from 'src/components/EmailInviteDialogContainer'
 import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import MuiDialogContent from '@material-ui/core/DialogContent'
@@ -284,11 +284,12 @@ const UserImpact = ({ user, disabled }) => {
         open={rewardDialogOpen}
         className={classes.rootModal}
       >
-        <EmailInviteDialog
+        <EmailInviteDialogContainer
           username={user.username}
           userId={user.id}
           landingPagePath={landingPagePath}
           closeFunction={handleRewardDialogClose}
+          user={user}
         />
       </Dialog>
       <Dialog open={referralRewardDialogOpen} className={classes.rootModal}>

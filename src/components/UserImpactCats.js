@@ -17,13 +17,13 @@ import dynamic from 'next/dynamic'
 import { isPlural } from 'src/utils/formatting'
 import confetti from 'canvas-confetti'
 import usePrevious from 'src/utils/hooks/usePrevious'
-import EmailInviteDialog from 'src/components/EmailInviteDialog'
 import Dialog from '@material-ui/core/Dialog'
 import { get } from 'lodash/object'
 import localStorageMgr from 'src/utils/localstorage-mgr'
 import Link from 'src/components/Link'
 import MissionNotification from 'src/components/MissionNotification'
 import { missionHubURL } from 'src/utils/urls'
+import EmailInviteDialogContainer from './EmailInviteDialogContainer'
 
 const ImpactDialog = dynamic(() => import('src/components/ImpactDialog'), {
   ssr: false,
@@ -245,11 +245,12 @@ const UserImpact = ({ user, disabled }) => {
         open={rewardDialogOpen}
         className={classes.rootModal}
       >
-        <EmailInviteDialog
+        <EmailInviteDialogContainer
           username={user.username}
           userId={user.id}
           landingPagePath={landingPagePath}
           closeFunction={handleRewardDialogClose}
+          user={user}
         />
       </Dialog>
       <ImpactDialog
