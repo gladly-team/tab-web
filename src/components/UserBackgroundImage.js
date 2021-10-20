@@ -9,22 +9,20 @@ import { recachePage } from 'src/utils/caching'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import clsx from 'clsx'
 
+// Use a stable class name.
+// @workaround/mui-v5
+// MUI class names are not stable by default, and we're seeing
+// the class name change during rerender, causing the fade-in
+// animation run more than once; not great. MUI changes styling
+// in v5, so rather than debug and fix now, we'll defer until then.
+const wrapperClassName = 'bg-img-wrapper'
+
 dayjs.extend(isToday)
 const useStyles = makeStyles(() => ({
-  '@keyframes fadeIn': {
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-  },
   hiddenImage: {
     visibility: 'hidden',
     height: '1%',
     width: '1%',
-  },
-  wrapper: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    animation: '$fadeIn 0.5s ease',
   },
   backgroundImage: {
     boxShadow: 'rgba(0, 0, 0, 0.5) 0px 0px 120px inset',
@@ -117,11 +115,8 @@ const UserBackgroundImage = ({ user }) => {
   const latestImage = backgroundImages[backgroundImages.length - 1]
   const classes = useStyles({ previousImage, latestImage })
 
-  // class name is not stable across SSR and rerenders
-  console.log('classes.wrapper', classes.wrapper)
-
   return (
-    <div className={classes.wrapper}>
+    <div className={wrapperClassName}>
       <img
         src={latestImage.imageURL}
         alt="background"
