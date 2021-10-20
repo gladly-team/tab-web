@@ -118,6 +118,7 @@ const getRelayQuery = ({ AuthUser }) => {
               primaryColor
               secondaryColor
             }
+            landingPagePath
           }
         }
       }
@@ -133,7 +134,7 @@ const Account = ({ data: fallbackData }) => {
   const fetchInProgress = !data
   const { user } = data || {}
   const { id: userId, email, username, cause } = user || {}
-  const { theme } = cause || {}
+  const { theme, landingPagePath } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
   const classes = useStyles()
 
@@ -292,7 +293,9 @@ const Account = ({ data: fallbackData }) => {
         ) : null}
         <Divider />
         <AccountItem
-          name="Leave Tab for Cats"
+          name={`Leave Tab for ${
+            landingPagePath === '/teamseas/' ? '#TeamSeas' : 'Cats'
+          }`}
           actionButton={
             <div>
               <div>
@@ -315,9 +318,11 @@ const Account = ({ data: fallbackData }) => {
                 variant="caption"
                 className={classes.revertButtonText}
               >
-                Warning: This will remove your ability to support cats. It will
-                send you to classic Tab for a Cause, which has other (non-cat)
-                nonprofits you can support.
+                {`Warning: This will remove your ability to support ${
+                  landingPagePath === '/teamseas/' ? '#teamseas' : 'cats'
+                }. It will
+                send you to classic Tab for a Cause, which has other 
+                nonprofits you can support.`}
               </Typography>
             </div>
           }
@@ -335,6 +340,13 @@ Account.propTypes = {
       email: PropTypes.string,
       id: PropTypes.string,
       username: PropTypes.string,
+      cause: PropTypes.shape({
+        theme: PropTypes.shape({
+          primaryColor: PropTypes.string,
+          secondaryColor: PropTypes.string,
+        }),
+        landingPagePath: PropTypes.string,
+      }),
     }),
   }),
 }
