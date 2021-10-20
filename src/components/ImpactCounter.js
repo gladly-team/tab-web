@@ -140,12 +140,12 @@ ImpactCounter.propTypes = {
   /**
    * Text for the dropdown
    */
-  dropdownText: PropTypes.string,
+  dropdownText: PropTypes.string.isRequired,
 
   /**
    * Text for the dropdown when in a mission
    */
-  dropdownTextSquads: PropTypes.string,
+  dropdownTextSquads: PropTypes.string.isRequired,
 }
 
 ImpactCounter.defaultProps = {
@@ -154,10 +154,6 @@ ImpactCounter.defaultProps = {
   number: 0,
   className: '',
   icon: 'paw',
-  dropdownText:
-    '##### **Your pawsitive impact!**\n\nThis shows how many treats your tabs can provide to help shelter cats get adopted. Every tab you open helps. Keep it up!',
-  dropdownTextSquads:
-    '##### **Your treats are still here**\n\nDon’t worry, we’ve still got your treats! We just paused them while you and your squad complete your new mission.',
 }
 
 export default ImpactCounter

@@ -1,11 +1,11 @@
 import { createTheme } from '@material-ui/core/styles'
-import { deepmerge } from '@material-ui/utils'
+import merge from 'lodash/merge'
 
 // const seasPrimaryColor = '#5094FB'
 // const seassecondaryColor = '#29BEBA'
 const defaultPrimaryColor = '#9d4ba3'
 const defaultSecondaryColor = '#4a90e2'
-const theme = createTheme({
+const defaultThemeObject = {
   palette: {
     primary: {
       main: defaultPrimaryColor,
@@ -39,24 +39,26 @@ const theme = createTheme({
   shape: {
     borderRadius: 2,
   },
-})
+}
+const theme = createTheme(defaultThemeObject)
 
 export default theme
 
-const customTheme = ({ primaryColor, secondaryColor }) =>
-  createTheme({
-    palette: {
-      primary: {
-        main: primaryColor || defaultPrimaryColor,
-        contrastText: '#fff',
-        background: 'rgba(157, 75, 163, 0.08)',
-      },
-      secondary: {
-        main: secondaryColor || defaultSecondaryColor,
-        contrastText: '#fff',
-      },
+const customTheme = ({ primaryColor, secondaryColor }) => ({
+  palette: {
+    primary: {
+      main: primaryColor || defaultPrimaryColor,
+      contrastText: '#fff',
+      background: 'rgba(157, 75, 163, 0.08)',
     },
-  })
+    secondary: {
+      main: secondaryColor || defaultSecondaryColor,
+      contrastText: '#fff',
+    },
+  },
+})
 
 export const themeMapper = ({ primaryColor, secondaryColor }) =>
-  createTheme(deepmerge(theme, customTheme({ primaryColor, secondaryColor })))
+  createTheme(
+    merge(defaultThemeObject, customTheme({ primaryColor, secondaryColor }))
+  )

@@ -12,6 +12,8 @@ const getMockProps = () => ({
   includeNumber: false,
   number: 0,
   progress: 10,
+  dropdownText: '',
+  dropdownTextSquads: '',
 })
 
 describe('ImpactCounter component', () => {
@@ -112,7 +114,10 @@ describe('ImpactCounter component', () => {
     const ImpactCounter = require('src/components/ImpactCounter').default
     const expectedStandardText =
       '##### **Your pawsitive impact!**\n\nThis shows how many treats your tabs can provide to help shelter cats get adopted. Every tab you open helps. Keep it up!'
-    const defaultMockProps = getMockProps()
+    const defaultMockProps = {
+      ...getMockProps(),
+      dropdownText: expectedStandardText,
+    }
     const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
     expect(
       wrapper.find(DashboardPopover).find(Markdown).prop('children')
@@ -126,6 +131,7 @@ describe('ImpactCounter component', () => {
     const defaultMockProps = {
       ...getMockProps(),
       disabled: true,
+      dropdownTextSquads: expectedStandardText,
     }
     const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
     expect(

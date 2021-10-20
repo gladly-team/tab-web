@@ -187,6 +187,7 @@ const UserImpact = ({ user, disabled }) => {
         disabled={disabled}
         includeNumber
         dropdownText={impact.impactCounterText}
+        dropdownTextSquads=""
         className={classes.impactCounter}
         number={userImpactMetric}
         icon={impact.impactIcon}
@@ -240,6 +241,8 @@ const UserImpact = ({ user, disabled }) => {
           <Markdown>{impact.impactWalkthroughText}</Markdown>
           <div className={classes.impactCounter}>
             <ImpactCounter
+              dropdownText=""
+              dropdownTextSquads=""
               includeNumber
               icon={impact.impactIcon}
               number={0}
@@ -262,6 +265,8 @@ const UserImpact = ({ user, disabled }) => {
           <Markdown>{impact.newlyReferredImpactWalkthroughText}</Markdown>
           <div className={classes.impactCounter}>
             <ImpactCounter
+              dropdownText=""
+              dropdownTextSquads=""
               includeNumber
               icon={impact.impactIcon}
               number={5}
@@ -294,11 +299,6 @@ const UserImpact = ({ user, disabled }) => {
               impact.referralRewardTitle
                 // eslint-disable-next-line no-template-curly-in-string
                 .replace('${claimedReferralImpact}', claimedReferralImpact)
-                .replace(
-                  // eslint-disable-next-line no-template-curly-in-string
-                  '${isPlural(claimedReferralImpact)}',
-                  isPlural(claimedReferralImpact)
-                )
             }
           </Markdown>
         </MuiDialogTitle>
