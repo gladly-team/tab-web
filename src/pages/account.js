@@ -113,6 +113,12 @@ const getRelayQuery = ({ AuthUser }) => {
           email
           id
           username
+          cause {
+            theme {
+              primaryColor
+              secondaryColor
+            }
+          }
         }
       }
     `,

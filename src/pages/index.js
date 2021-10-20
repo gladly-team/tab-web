@@ -254,7 +254,7 @@ const getRelayQuery = async ({ AuthUser }) => {
   }
   return {
     query: graphql`
-      query pagesIndexQuery($userId: String!, $charityId: String!) {
+      query pagesIndexQuery($userId: String!) {
         app {
           ...MoneyRaisedContainer_app
         }
@@ -263,6 +263,14 @@ const getRelayQuery = async ({ AuthUser }) => {
           tabs
           vcCurrent
           id
+          cause {
+            landingPagePath
+            impactVisits
+            theme {
+              primaryColor
+              secondaryColor
+            }
+          }
           hasViewedIntroFlow
           currentMission {
             status
@@ -273,9 +281,6 @@ const getRelayQuery = async ({ AuthUser }) => {
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
           ...InviteFriendsIconContainer_user
-        }
-        userImpact(userId: $userId, charityId: $charityId) {
-          ...UserImpactContainer_userImpact
         }
       }
     `,

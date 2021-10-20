@@ -5,11 +5,15 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import DashboardPopover from 'src/components/DashboardPopover'
 import Button from '@material-ui/core/Button'
 import Markdown from 'src/components/Markdown'
+import SvgIcon from '@material-ui/core/SvgIcon'
+import PetsIcon from '@material-ui/icons/Pets'
 
 const getMockProps = () => ({
   includeNumber: false,
   number: 0,
   progress: 10,
+  dropdownText: '',
+  dropdownTextSquads: '',
 })
 
 describe('ImpactCounter component', () => {
@@ -110,7 +114,10 @@ describe('ImpactCounter component', () => {
     const ImpactCounter = require('src/components/ImpactCounter').default
     const expectedStandardText =
       '##### **Your pawsitive impact!**\n\nThis shows how many treats your tabs can provide to help shelter cats get adopted. Every tab you open helps. Keep it up!'
-    const defaultMockProps = getMockProps()
+    const defaultMockProps = {
+      ...getMockProps(),
+      dropdownText: expectedStandardText,
+    }
     const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
     expect(
       wrapper.find(DashboardPopover).find(Markdown).prop('children')
@@ -124,10 +131,47 @@ describe('ImpactCounter component', () => {
     const defaultMockProps = {
       ...getMockProps(),
       disabled: true,
+      dropdownTextSquads: expectedStandardText,
     }
     const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
     expect(
       wrapper.find(DashboardPopover).find(Markdown).prop('children')
     ).toEqual(expectedStandardText)
+  })
+
+  it('shows the jellyfish icon when jellyfish is passed into icon prop', () => {
+    const ImpactCounter = require('src/components/ImpactCounter').default
+    const defaultMockProps = {
+      ...getMockProps(),
+      disabled: true,
+      icon: 'jellyfish',
+    }
+    const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
+    expect(wrapper.find(SvgIcon).exists()).toEqual(true)
+    expect(wrapper.find(PetsIcon).exists()).toEqual(false)
+  })
+
+  it('shows the paws icon when nothing is passed into icon prop', () => {
+    const ImpactCounter = require('src/components/ImpactCounter').default
+    const defaultMockProps = {
+      ...getMockProps(),
+      disabled: true,
+    }
+    const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
+    expect(wrapper.find(PetsIcon).exists()).toEqual(true)
+    expect(wrapper.find(SvgIcon).exists()).toEqual(false)
+  })
+
+  it('shows the markdown passed in', () => {
+    const ImpactCounter = require('src/components/ImpactCounter').default
+    const defaultMockProps = {
+      ...getMockProps(),
+      disabled: false,
+      dropdownText: 'test1',
+    }
+    const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
+    expect(
+      wrapper.find(DashboardPopover).find(Markdown).prop('children')
+    ).toEqual('test1')
   })
 })
