@@ -9,7 +9,7 @@
     "start": "NODE_ENV=production next start --port 3001",
     "test": "yarn run relay && yarn run lint && yarn run jest --testPathIgnorePatterns=e2e",
     "test:e2e": "dotenv-extended --defaults=./.env --path=./.env.local yarn run jest e2e-tests.test.js",
-    "test:watch": "yarn run relay && jest --watch",
+    "test:watch": "yarn run test --watch",
     "test:coverage": "yarn run test --coverage",
     "format": "prettier \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:fix": "yarn run format --write",
