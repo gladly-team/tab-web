@@ -16,6 +16,7 @@ import ErrorBoundary from 'src/components/ErrorBoundary'
 import initializeCMP from 'src/utils/initializeCMP'
 import { setWindowLocation } from 'src/utils/navigation'
 import isOurHost from 'src/utils/isOurHost'
+import 'src/utils/styles/globalStyles.css'
 import { ThemeContext } from 'src/utils/hooks/useThemeContext'
 
 initAuth()

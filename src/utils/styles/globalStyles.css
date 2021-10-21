@@ -1,0 +1,10 @@
+@keyframes fadeIn {
+  0%   { opacity: 0 }
+  100% { opacity: 1 }
+}
+.bg-img-wrapper {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  animation: 0.5s ease fadeIn;
+}
