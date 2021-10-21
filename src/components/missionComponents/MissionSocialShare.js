@@ -88,8 +88,8 @@ const MissionSocialShare = ({ emailSentCallback, missionId, user }) => {
   const [personalMessage, setPersonalMessage] = useState('')
   const [personalMessageError, setPersonalMessageError] = useState(false)
   const [sendingState, setSendingState] = useState('Send Invite')
-  const { username, id } = user || {}
-
+  const { username, id, cause } = user || {}
+  const { landingPagePath } = cause || {}
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 
   const addEmail = () => {
@@ -137,7 +137,7 @@ const MissionSocialShare = ({ emailSentCallback, missionId, user }) => {
       }, 2500)
     }
   }
-  const referralUrl = getSquadsLink(username, missionId)
+  const referralUrl = getSquadsLink(username, missionId, landingPagePath)
   const textFieldRef = useRef(null)
   const onEmailBlur = () => (emailInput !== '' ? addEmail() : null)
   const onEmailEnterKey = (e) => (e.key === 'Enter' ? addEmail() : null)
@@ -287,6 +287,9 @@ MissionSocialShare.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string,
     id: PropTypes.string,
+    cause: PropTypes.shape({
+      landingPagePath: PropTypes.string,
+    }),
   }).isRequired,
 
   /**

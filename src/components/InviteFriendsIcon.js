@@ -32,7 +32,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const InviteFriendsIcon = ({ user: { username, id } }) => {
+const InviteFriendsIcon = ({
+  user: {
+    username,
+    id,
+    cause: { landingPagePath },
+  },
+}) => {
   const buttonRef = useRef(undefined)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const classes = useStyles()
@@ -58,6 +64,7 @@ const InviteFriendsIcon = ({ user: { username, id } }) => {
         <EmailInviteDialog
           username={username}
           userId={id}
+          landingPagePath={landingPagePath}
           closeFunction={closeDialog}
         />
       </Dialog>
@@ -70,6 +77,9 @@ InviteFriendsIcon.propTypes = {
     username: PropTypes.string,
     id: PropTypes.string,
     numUsersRecruited: PropTypes.number,
+    cause: PropTypes.shape({
+      landingPagePath: PropTypes.string.isRequired,
+    }).isRequired,
   }),
 }
 

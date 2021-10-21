@@ -49,15 +49,16 @@ export const externalNavigation = (url) => {
   // eslint-disable-next-line no-undef
   window.location = url
 }
-export const baseURL = 'https://tab.gladly.io/cats/'
-export const getReferralUrl = (username) => {
+export const constructBaseUrl = (landingPagePath) =>
+  `https://tab.gladly.io${landingPagePath || '/'}`
+export const getReferralUrl = (username, landingPagePath) => {
   const referralUrl = username
-    ? `${baseURL}?u=${encodeURIComponent(username)}`
-    : baseURL
+    ? `${constructBaseUrl(landingPagePath)}?u=${encodeURIComponent(username)}`
+    : constructBaseUrl(landingPagePath)
   return referralUrl
 }
-export const getSquadsLink = (username, squadId) =>
-  `${baseURL}?u=${encodeURIComponent(username)}&m=${encodeURIComponent(
-    squadId
-  )}`
+export const getSquadsLink = (username, squadId, landingPagePath) =>
+  `${constructBaseUrl(landingPagePath)}?u=${encodeURIComponent(
+    username
+  )}&m=${encodeURIComponent(squadId)}`
 export const surveyLink = 'https://forms.gle/WKNUZSamJQvT12b5A'

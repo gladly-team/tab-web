@@ -16,6 +16,9 @@ const getMockProps = () => ({
   user: {
     username: 'someUsername',
     id: 'someId',
+    cause: {
+      landingPagePath: '/cats/',
+    },
   },
   missionId: '123456789',
   emailSentCallback: jest.fn(),
@@ -505,6 +508,22 @@ describe('social share component', () => {
     )
     expect(wrapper.find(TextField).at(0).prop('value')).toBe(
       'https://tab.gladly.io/cats/?u=someUsername&m=123456789'
+    )
+  })
+
+  it('shows the correct link with /teamseas/ landingPagePath', async () => {
+    expect.assertions(1)
+    const MissionSocialShare =
+      require('src/components/missionComponents/MissionSocialShare').default
+    const mockProps = getMockProps()
+    mockProps.user.cause.landingPagePath = '/teamseas/'
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <MissionSocialShare {...mockProps} />
+      </ThemeProvider>
+    )
+    expect(wrapper.find(TextField).at(0).prop('value')).toBe(
+      'https://tab.gladly.io/teamseas/?u=someUsername&m=123456789'
     )
   })
 

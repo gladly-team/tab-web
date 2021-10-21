@@ -14,6 +14,7 @@ import IconButton from '@material-ui/core/IconButton'
 const getMockProps = () => ({
   username: 'someUsername',
   userId: 'someId',
+  landingPagePath: '/cats/',
   closeFunction: jest.fn(),
 })
 jest.mock('src/utils/mutations/CreateInvitedUsersMutation')
@@ -424,6 +425,31 @@ describe('social share component', () => {
     wrapper.update()
     expect(wrapper.find(TextField).at(3).prop('value')).toBe(
       'https://tab.gladly.io/cats/?u=bob'
+    )
+  })
+
+  it('contains the correct referral URL, using tab.gladly.io by default and /teamseas/ landing page path', async () => {
+    const EmailInviteFriendsDialog =
+      require('src/components/EmailInviteDialog').default
+    const mockProps = getMockProps()
+    mockProps.username = 'bob'
+    mockProps.landingPagePath = '/teamseas/'
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
+    const subNav = wrapper.findWhere(
+      (n) => n.prop('id') === 'simple-tabpanel-1'
+    )
+    subNav.simulate('click')
+    await act(async () => {
+      await flushAllPromises()
+      wrapper.update()
+    })
+    wrapper.update()
+    expect(wrapper.find(TextField).at(3).prop('value')).toBe(
+      'https://tab.gladly.io/teamseas/?u=bob'
     )
   })
 

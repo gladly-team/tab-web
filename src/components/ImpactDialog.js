@@ -165,7 +165,10 @@ const ImpactDialog = ({
             </Typography>
             <div className={classes.shareContainer}>
               <div className={classes.InviteFriends}>
-                <InviteFriends user={user} className={classes.InviteFriends} />
+                <InviteFriends
+                  user={{ ...user, cause: { landingPagePath: '/cats/' } }}
+                  className={classes.InviteFriends}
+                />
               </div>
             </div>
           </MuiDialogContent>
@@ -205,7 +208,9 @@ const ImpactDialog = ({
             </Typography>
             <div className={classes.shareContainer}>
               <div className={classes.InviteFriends}>
-                <InviteFriends user={user} />
+                <InviteFriends
+                  user={{ ...user, cause: { landingPagePath: '/cats/' } }}
+                />
               </div>
             </div>
           </MuiDialogContent>

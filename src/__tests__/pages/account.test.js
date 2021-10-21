@@ -31,11 +31,12 @@ jest.mock('src/utils/pageWrappers/withRelay')
 jest.mock('src/utils/hooks/useData')
 jest.mock('src/utils/pageWrappers/withSentry')
 
-const getMockDataResponse = () => ({
+const getMockDataResponse = (additionalFields) => ({
   user: {
     id: 'some-user-id',
     email: 'fakeEmail@example.com',
     username: 'IAmFake',
+    ...additionalFields,
   },
 })
 
@@ -269,6 +270,23 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
     const switchModeAccountItem = getRevertAccountItem(wrapper)
     expect(switchModeAccountItem.find(Typography).at(0).text()).toEqual(
       'Leave Tab for Cats'
+    )
+    expect(switchModeAccountItem.find(Button).first().text()).toEqual(
+      'Switch to Classic'
+    )
+  })
+
+  it('displays #teamseas content in "revert" button field in the advanced options section if landingPagePath is /teamseas/', () => {
+    expect.assertions(2)
+    const AccountPage = require('src/pages/account').default
+    const mockProps = getMockProps()
+    useData.mockReturnValue({
+      data: getMockDataResponse({ cause: { landingPagePath: '/teamseas/' } }),
+    })
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const switchModeAccountItem = getRevertAccountItem(wrapper)
+    expect(switchModeAccountItem.find(Typography).at(0).text()).toEqual(
+      'Leave Tab for #TeamSeas'
     )
     expect(switchModeAccountItem.find(Button).first().text()).toEqual(
       'Switch to Classic'

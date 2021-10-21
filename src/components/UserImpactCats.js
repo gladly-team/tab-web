@@ -56,7 +56,13 @@ const UserImpact = ({ user, disabled }) => {
     pendingUserReferralImpact,
     pendingUserReferralCount,
   } = userImpact
-  const { currentMission, pendingMissionInvites, hasSeenSquads, email } = user
+  const {
+    currentMission,
+    pendingMissionInvites,
+    hasSeenSquads,
+    email,
+    cause: { landingPagePath },
+  } = user
   const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
   const showSquadsIntroNotification =
@@ -242,6 +248,7 @@ const UserImpact = ({ user, disabled }) => {
         <EmailInviteDialog
           username={user.username}
           userId={user.id}
+          landingPagePath={landingPagePath}
           closeFunction={handleRewardDialogClose}
         />
       </Dialog>
@@ -349,6 +356,9 @@ UserImpact.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string.isRequired,
     id: PropTypes.string.isRequired,
+    cause: PropTypes.shape({
+      landingPagePath: PropTypes.string.isRequired,
+    }).isRequired,
     userImpact: PropTypes.shape({
       visitsUntilNextImpact: PropTypes.number.isRequired,
       pendingUserReferralImpact: PropTypes.number.isRequired,

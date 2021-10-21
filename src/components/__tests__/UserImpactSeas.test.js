@@ -43,6 +43,7 @@ const getMockProps = (userImpactOverrides, userOverrides) => ({
       ...userImpactOverrides,
     },
     cause: {
+      landingPagePath: '/seas/',
       impactVisits: 27,
       impact: {
         impactCounterText:

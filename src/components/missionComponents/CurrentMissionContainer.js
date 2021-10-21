@@ -6,6 +6,9 @@ export default createFragmentContainer(CurrentMission, {
     fragment CurrentMissionContainer_user on User {
       username
       id
+      cause {
+        landingPagePath
+      }
       currentMission {
         squadName
         started

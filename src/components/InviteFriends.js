@@ -20,9 +20,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const InviteFriends = ({ user: { username } }) => {
+const InviteFriends = ({
+  user: {
+    username,
+    cause: { landingPagePath },
+  },
+}) => {
   const classes = useStyles()
-  const referralUrl = getReferralUrl(username)
+  const referralUrl = getReferralUrl(username, landingPagePath)
   const textFieldRef = React.createRef()
 
   const highlightReferralUrl = () => {
@@ -56,11 +61,10 @@ const InviteFriends = ({ user: { username } }) => {
 InviteFriends.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string,
-  }),
-}
-
-InviteFriends.defaultProps = {
-  user: {},
+    cause: PropTypes.shape({
+      landingPagePath: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
 }
 
 export default InviteFriends

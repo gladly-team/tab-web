@@ -71,7 +71,7 @@ const UserImpact = ({ user, disabled }) => {
     pendingUserReferralCount,
   } = userImpact
 
-  const { impactVisits, impact } = cause
+  const { impactVisits, impact, landingPagePath } = cause
 
   const userId = user.id
   const showReward = confirmedImpact && !hasClaimedLatestReward
@@ -287,6 +287,7 @@ const UserImpact = ({ user, disabled }) => {
         <EmailInviteDialog
           username={user.username}
           userId={user.id}
+          landingPagePath={landingPagePath}
           closeFunction={handleRewardDialogClose}
         />
       </Dialog>
@@ -375,6 +376,7 @@ UserImpact.propTypes = {
     ),
     cause: PropTypes.shape({
       impactVisits: PropTypes.number.isRequired,
+      landingPagePath: PropTypes.string.isRequired,
       impact: PropTypes.shape({
         impactCounterText: PropTypes.string.isRequired,
         claimImpactSubtitle: PropTypes.string.isRequired,
