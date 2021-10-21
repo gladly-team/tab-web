@@ -42,6 +42,7 @@ import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
 import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
 import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
+
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
@@ -256,35 +257,41 @@ const getRelayQuery = async ({ AuthUser }) => {
   }
   return {
     query: graphql`
-      query pagesIndexQuery($userId: String!, $charityId: String!) {
+      query pagesIndexQuery($userId: String!) {
         app {
           ...MoneyRaisedContainer_app
         }
         user(userId: $userId) {
+          id
           email
+          hasViewedIntroFlow
           tabs
           vcCurrent
-          id
-          hasViewedIntroFlow
-          currentMission {
-            status
-            tabGoal
-            tabCount
-            missionId
-          }
           cause {
+            impactVisits
+            landingPagePath
+            onboarding {
+              steps {
+                title
+                subtitle
+                imgName
+              }
+            }
             # Theme data is required for CustomThemeHOC.
             theme {
               primaryColor
               secondaryColor
             }
           }
+          currentMission {
+            status
+            tabGoal
+            tabCount
+            missionId
+          }
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
           ...InviteFriendsIconContainer_user
-        }
-        userImpact(userId: $userId, charityId: $charityId) {
-          ...UserImpactContainer_userImpact
         }
       }
     `,
@@ -324,11 +331,12 @@ const Index = ({ data: fallbackData }) => {
     }
   }, [])
   const { app, user, userImpact } = data || {}
-  const { currentMission, email } = user || {}
+  const { currentMission, email, cause } = user || {}
+  const { onboarding } = cause || {}
 
-  // const { currentMission, email, cause } = user || {}
-  // const { theme } = cause || {}
+  // const { onboarding, theme } = cause || {}
   // const { primaryColor, secondaryColor } = theme || {}
+
   const {
     status: missionStatus = 'not started',
     tabCount,
@@ -451,7 +459,6 @@ const Index = ({ data: fallbackData }) => {
     setJustFinishedIntroFlow(true)
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
-
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {showIntro ? (
@@ -469,6 +476,7 @@ const Index = ({ data: fallbackData }) => {
           <OnboardingFlow
             onComplete={onCompletedOnboarding}
             showMissionSlide={!!missionId}
+            onboarding={onboarding}
           />
         </div>
       ) : (

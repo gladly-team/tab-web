@@ -100,6 +100,11 @@ const getMockProps = () => ({
       id: 'asdf',
       hasViewedIntroFlow: true,
       currentMission: undefined,
+      cause: {
+        onboarding: {
+          steps: [],
+        },
+      },
     },
     userImpact: {
       userId: 'asdf',
@@ -690,6 +695,11 @@ it('shows the intro flow if a user has not completed it', () => {
         confirmedImpact: true,
         hasClaimedLatestReward: true,
       },
+      cause: {
+        onboarding: {
+          steps: [],
+        },
+      },
     },
   }
   useData.mockReturnValue({
@@ -726,6 +736,11 @@ it('shows the homepage once a user completes the introflow', async () => {
         userImpactMetric: 3,
         confirmedImpact: true,
         hasClaimedLatestReward: true,
+      },
+      cause: {
+        onboarding: {
+          steps: [],
+        },
       },
     },
   }

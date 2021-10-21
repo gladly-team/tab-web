@@ -3,6 +3,8 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import PetsIcon from '@material-ui/icons/Pets'
+import SvgIcon from '@material-ui/core/SvgIcon'
+import { mdiJellyfish } from '@mdi/js'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import DashboardPopover from 'src/components/DashboardPopover'
@@ -47,20 +49,20 @@ const useStyles = makeStyles((theme) => ({
 const ImpactCounter = (props) => {
   const classes = useStyles()
 
-  const { includeNumber, number, progress, className, disabled } = props
+  const {
+    includeNumber,
+    number,
+    progress,
+    className,
+    disabled,
+    icon,
+    dropdownText,
+    dropdownTextSquads,
+  } = props
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const counterRef = useRef(undefined)
 
-  // TODO: use content from API
-  const dropdownMarkdownRegular =
-    '##### **Your pawsitive impact!**\n\nThis shows how many treats your tabs can provide to help shelter cats get adopted. Every tab you open helps. Keep it up!'
-  const dropdownMarkdownWhenInMission =
-    '##### **Your treats are still here**\n\nDon’t worry, we’ve still got your treats! We just paused them while you and your squad complete your new mission.'
-
-  const dropdownMarkdown = disabled
-    ? dropdownMarkdownWhenInMission
-    : dropdownMarkdownRegular
-
+  const dropdownMarkdown = !disabled ? dropdownText : dropdownTextSquads
   return (
     <div onMouseEnter={disabled ? () => setIsPopoverOpen(true) : undefined}>
       <Button
@@ -80,7 +82,17 @@ const ImpactCounter = (props) => {
           variant="determinate"
           value={progress === 0 ? 1 : progress}
         />
-        <PetsIcon className={classes.petsIcon} />
+        {icon === 'paw' && <PetsIcon className={classes.petsIcon} />}
+        {icon === 'jellyfish' && (
+          <SvgIcon className={classes.petsIcon}>
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d={mdiJellyfish}
+              fill="inherit"
+            />
+          </SvgIcon>
+        )}
       </Button>
       <DashboardPopover
         open={isPopoverOpen}
@@ -119,6 +131,21 @@ ImpactCounter.propTypes = {
   */
   progress: PropTypes.number.isRequired,
   className: PropTypes.string,
+
+  /**
+   * The Icon related to the cause
+   */
+  icon: PropTypes.oneOf(['jellyfish', 'paw']),
+
+  /**
+   * Text for the dropdown
+   */
+  dropdownText: PropTypes.string.isRequired,
+
+  /**
+   * Text for the dropdown when in a mission
+   */
+  dropdownTextSquads: PropTypes.string.isRequired,
 }
 
 ImpactCounter.defaultProps = {
@@ -126,6 +153,7 @@ ImpactCounter.defaultProps = {
   disabled: false,
   number: 0,
   className: '',
+  icon: 'paw',
 }
 
 export default ImpactCounter

@@ -32,6 +32,11 @@ const getMockProps = () => ({
     user: {
       tabs: 221,
       vcCurrent: 78,
+      cause: {
+        onboarding: {
+          steps: [],
+        },
+      },
     },
   },
 })
