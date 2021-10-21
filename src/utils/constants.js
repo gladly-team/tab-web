@@ -3,9 +3,12 @@ export const CAT_IMPACT_VISITS = 14
 export const INTL_CAT_DAY_END_2021_NOTIFICATION =
   'tab.user.hasSeenintlCatDayEnd2021Notification'
 export const LANDING_PAGE_PATH_SEAS = '/teamseas/'
+export const LANDING_PAGE_PATH_CATS = '/cats/'
 
 // Squad Invite Constants
 export const MISSION_COMPLETE = 'mission_complete'
 export const MISSION_STARTED = 'mission_started'
 export const STORAGE_KEY_USERNAME = 'tab.user.username'
-export const TAB_FOR_TEAMSEAS_CAUSE_ID = 'c04b544f-5e6b-4e10-b783-05834e5d087d'
+export const STORAGE_NEW_USER_CAUSE_ID = 'tab.newUser.causeId'
+export const STORAGE_CATS_CAUSE_ID = 'CA6A5C2uj'
+export const STORAGE_SEAS_CAUSE_ID = 'SGa6zohkY'

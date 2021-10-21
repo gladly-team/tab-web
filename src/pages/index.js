@@ -40,6 +40,7 @@ import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import withRelay from 'src/utils/pageWrappers/withRelay'
 import { withSentry, withSentrySSR } from 'src/utils/pageWrappers/withSentry'
 import logUncaughtErrors from 'src/utils/pageWrappers/logUncaughtErrors'
+import localStorageMgr from 'src/utils/localstorage-mgr'
 
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
@@ -62,7 +63,14 @@ import {
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
-import { CAT_CHARITY } from 'src/utils/constants'
+import {
+  CAT_CHARITY,
+  LANDING_PAGE_PATH_CATS,
+  LANDING_PAGE_PATH_SEAS,
+  STORAGE_NEW_USER_CAUSE_ID,
+  STORAGE_CATS_CAUSE_ID,
+  STORAGE_SEAS_CAUSE_ID,
+} from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
 
@@ -216,6 +224,7 @@ if (isClientSide()) {
         adUnits: Object.values(getAdUnits()),
         pageLevelKeyValues: {
           v4: 'true',
+          causeId: localStorageMgr.getCauseForGAM(),
           ...(setGAMDevKey && { dev: 'true' }),
         },
         auctionTimeout: 1000,
@@ -331,7 +340,7 @@ const Index = ({ data: fallbackData }) => {
   }, [])
   const { app, user, userImpact } = data || {}
   const { currentMission, email, cause } = user || {}
-  const { theme, onboarding } = cause || {}
+  const { theme, onboarding, landingPagePath } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
   const {
     status: missionStatus = 'not started',
@@ -355,6 +364,26 @@ const Index = ({ data: fallbackData }) => {
   // toggling state and a rerender when we successfully fire the
   // SetHasViewedIntroFlowMutation
   const [justFinishedIntroFlow, setJustFinishedIntroFlow] = useState(false)
+
+  // set the causeId in local storage for tab ads
+  useEffect(() => {
+    switch (landingPagePath) {
+      case LANDING_PAGE_PATH_SEAS:
+        localStorageMgr.setItem(
+          STORAGE_NEW_USER_CAUSE_ID,
+          STORAGE_SEAS_CAUSE_ID
+        )
+        break
+      case LANDING_PAGE_PATH_CATS:
+        localStorageMgr.setItem(
+          STORAGE_NEW_USER_CAUSE_ID,
+          STORAGE_CATS_CAUSE_ID
+        )
+        break
+      default:
+        break
+    }
+  }, [landingPagePath])
 
   // log tab count when user first visits
   useEffect(() => {
