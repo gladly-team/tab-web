@@ -27,6 +27,7 @@ import CurrentMissionContainer from 'src/components/missionComponents/CurrentMis
 import PastMissionsContainer from 'src/components/missionComponents/PastMissionsContainer'
 import SetHasSeenSquadsMutation from 'src/utils/mutations/SetHasSeenSquadsMutation'
 import useTheme from 'src/utils/hooks/useThemeContext'
+import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -85,9 +86,15 @@ const getRelayQuery = ({ AuthUser }) => ({
   query: graphql`
     query missionsQuery($userId: String!) {
       user(userId: $userId) {
+        id
+        cause {
+          theme {
+            primaryColor
+            secondaryColor
+          }
+        }
         ...CurrentMissionContainer_user
         ...PastMissionsContainer_user
-        id
       }
     }
   `,
@@ -106,11 +113,12 @@ const Missions = ({ data: fallbackData }) => {
   const pastMissionsSection = useRef(null)
   const classes = useStyles()
 
-  // sets the theme based on cause - need to do in each page incase user refreshes
+  // Set the theme based on cause.
   const { setTheme } = useTheme()
   useEffect(() => {
     setTheme({ primaryColor, secondaryColor })
   }, [setTheme, primaryColor, secondaryColor])
+
   const debouncedHandleOnSchroll = useMemo(
     () =>
       debounce(() => {
@@ -240,4 +248,5 @@ export default flowRight([
   }),
   withSentry,
   withRelay,
+  CustomThemeHOC,
 ])(Missions)
