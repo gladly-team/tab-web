@@ -1,13 +1,18 @@
-import { createTheme } from '@material-ui/core/styles'
+import { createTheme, alpha } from '@material-ui/core/styles'
 
 const TFAC_ORIGINAL_PURPLE = '#9d4ba3'
 const TFAC_ORIGINAL_BLUE = '#4a90e2'
+
+const createBackgroundColor = (hex) => alpha(hex, 0.08)
+
 const defaultThemeObject = {
   palette: {
     primary: {
       main: TFAC_ORIGINAL_PURPLE,
       contrastText: '#fff',
-      background: 'rgba(157, 75, 163, 0.08)',
+
+      // "background" is a custom prop
+      background: createBackgroundColor(TFAC_ORIGINAL_PURPLE),
     },
     secondary: {
       main: TFAC_ORIGINAL_BLUE,
@@ -53,6 +58,7 @@ export const themeMapper = ({ primaryColor, secondaryColor }) => ({
   palette: {
     primary: {
       main: primaryColor || TFAC_ORIGINAL_PURPLE,
+      background: createBackgroundColor(primaryColor || TFAC_ORIGINAL_PURPLE),
     },
     secondary: {
       main: secondaryColor || TFAC_ORIGINAL_BLUE,

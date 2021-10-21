@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useMemo } from 'react'
-import { ThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider, createTheme } from '@material-ui/core/styles'
 import { get } from 'lodash/object'
 import { ThemeContext } from 'src/utils/hooks/useThemeContext'
 import { themeMapper } from 'src/utils/theme'
@@ -51,20 +51,26 @@ const CustomThemeHOC = (Component) =>
 
     return (
       <ThemeProvider
-        theme={(outerTheme) => ({
-          ...outerTheme,
-          palette: {
-            ...outerTheme.palette,
-            primary: {
-              ...outerTheme.palette.primary,
-              ...get(themeModifications, 'palette.primary', {}),
+        theme={(outerTheme) =>
+          createTheme({
+            ...outerTheme,
+            palette: {
+              ...outerTheme.palette,
+              primary: {
+                // Explicitly leave off "dark" and "light" properties
+                // so that they're reset based on the custom "main" color.
+                main: outerTheme.palette.primary.main,
+                ...get(themeModifications, 'palette.primary', {}),
+              },
+              secondary: {
+                // Explicitly leave off "dark" and "light" properties
+                // so that they're reset based on the custom "main" color.
+                main: outerTheme.palette.secondary.main,
+                ...get(themeModifications, 'palette.secondary', {}),
+              },
             },
-            secondary: {
-              ...outerTheme.palette.secondary,
-              ...get(themeModifications, 'palette.secondary', {}),
-            },
-          },
-        })}
+          })
+        }
       >
         <ThemeContext.Provider value={customThemeContextVal}>
           <Component {...props} />
