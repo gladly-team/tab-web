@@ -138,7 +138,7 @@ const Account = ({ data: fallbackData }) => {
   const { primaryColor, secondaryColor } = theme || {}
   const classes = useStyles()
 
-  // sets the theme based on cause - need to do in each page incase user refreshes
+  // Set the theme based on cause.
   const { setTheme } = useTheme()
   useEffect(() => {
     setTheme({ primaryColor, secondaryColor })

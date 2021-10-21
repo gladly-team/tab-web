@@ -9,7 +9,10 @@ const CustomThemeHOC = (Component) =>
   function ThemeComponent(props) {
     // The user's data might have cause-specific theming.
     const causeTheme = get(props, 'data.user.cause.theme', {})
-    const { primaryColorFromData, secondaryColorFromData } = causeTheme
+    const {
+      primaryColor: primaryColorFromData,
+      secondaryColor: secondaryColorFromData,
+    } = causeTheme
 
     // Any theme property customizations set from within child components
     // via a `setCustomTheme` hook.
@@ -29,6 +32,7 @@ const CustomThemeHOC = (Component) =>
     // Customizations set by children take preference.
     const primaryColor = primaryColorFromChildren || primaryColorFromData
     const secondaryColor = secondaryColorFromChildren || secondaryColorFromData
+
     const themeModifications = useMemo(
       () =>
         themeMapper({
