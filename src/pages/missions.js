@@ -26,7 +26,7 @@ import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import CurrentMissionContainer from 'src/components/missionComponents/CurrentMissionContainer'
 import PastMissionsContainer from 'src/components/missionComponents/PastMissionsContainer'
 import SetHasSeenSquadsMutation from 'src/utils/mutations/SetHasSeenSquadsMutation'
-import useTheme from 'src/utils/hooks/useThemeContext'
+import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 
 const useStyles = makeStyles((theme) => ({
@@ -114,7 +114,7 @@ const Missions = ({ data: fallbackData }) => {
   const classes = useStyles()
 
   // Set the theme based on cause.
-  const { setTheme } = useTheme()
+  const setTheme = useCustomTheming()
   useEffect(() => {
     setTheme({ primaryColor, secondaryColor })
   }, [setTheme, primaryColor, secondaryColor])

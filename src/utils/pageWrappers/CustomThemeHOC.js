@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react'
 import { ThemeProvider, createTheme } from '@material-ui/core/styles'
 import { get } from 'lodash/object'
-import { ThemeContext } from 'src/utils/hooks/useThemeContext'
+import { CustomThemingContext } from 'src/utils/hooks/useCustomTheming'
 import { themeMapper } from 'src/utils/theme'
 import grey from '@material-ui/core/colors/grey'
 
@@ -19,9 +19,7 @@ const CustomThemeHOC = (Component) =>
     // via a `setCustomTheme` hook.
     const [themeModsFromChildren, setThemeModsFromChildren] = useState({})
     const customThemeContextVal = useMemo(
-      () => ({
-        setTheme: (themeMod) => setThemeModsFromChildren(themeMod),
-      }),
+      () => (themeMod) => setThemeModsFromChildren(themeMod),
       []
     )
     const primaryColorFromChildren = get(themeModsFromChildren, 'primaryColor')
@@ -72,9 +70,9 @@ const CustomThemeHOC = (Component) =>
           })
         }
       >
-        <ThemeContext.Provider value={customThemeContextVal}>
+        <CustomThemingContext.Provider value={customThemeContextVal}>
           <Component {...props} />
-        </ThemeContext.Provider>
+        </CustomThemingContext.Provider>
       </ThemeProvider>
     )
   }
