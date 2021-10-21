@@ -36,6 +36,14 @@ const defaultThemeObject = {
   shape: {
     borderRadius: 2,
   },
+  overrides: {
+    MuiAppBar: {
+      root: {
+        // Useful for when custom theming is set after load.
+        transition: 'background-color 300ms',
+      },
+    },
+  },
 }
 const theme = createTheme(defaultThemeObject)
 
