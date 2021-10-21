@@ -77,6 +77,9 @@ if (isClientSide()) {
   setTimeout(initCMP, 1500)
 }
 
+// The MUI theme prior to any user-level customization.
+const standardTheme = createTheme(defaultTheme)
+
 const MyApp = (props) => {
   const { Component, pageProps } = props
 
@@ -105,9 +108,6 @@ const MyApp = (props) => {
       jssStyles.parentElement.removeChild(jssStyles)
     }
   }, [])
-
-  // The theme prior to any user-level customization.
-  const standardTheme = createTheme(defaultTheme)
 
   return (
     <>
