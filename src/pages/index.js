@@ -273,6 +273,7 @@ const getRelayQuery = async ({ AuthUser }) => {
             missionId
           }
           cause {
+            # Theme data is required for CustomThemeHOC.
             theme {
               primaryColor
               secondaryColor
