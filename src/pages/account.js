@@ -21,6 +21,7 @@ import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 import { withSentry } from 'src/utils/pageWrappers/withSentry'
 import initializeCMP from 'src/utils/initializeCMP'
 import useTheme from 'src/utils/hooks/useThemeContext'
+import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -113,6 +114,12 @@ const getRelayQuery = ({ AuthUser }) => {
           email
           id
           username
+          cause {
+            theme {
+              primaryColor
+              secondaryColor
+            }
+          }
         }
       }
     `,
@@ -342,4 +349,5 @@ export default flowRight([
   }),
   withSentry,
   withRelay,
+  CustomThemeHOC,
 ])(Account)

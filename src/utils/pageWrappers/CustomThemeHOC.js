@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-// import React, { useState, useMemo } from 'react'
-import React, { useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
 import { get } from 'lodash/object'
 import { ThemeContext } from 'src/utils/hooks/useThemeContext'
@@ -10,24 +9,26 @@ const CustomThemeHOC = (Component) =>
   function ThemeComponent(props) {
     // The user's data might have cause-specific theming.
     const causeTheme = get(props, 'data.user.cause.theme', {})
-    const { primaryColor, secondaryColor } = causeTheme
+    const { primaryColorFromData, secondaryColorFromData } = causeTheme
 
-    // console.log('props', props)
-    // console.log('causeTheme', causeTheme)
-
-    // Any theme property customizations set from within child components.
-    // const [themeModifications, setThemeModifications] = useState({})
-
-    // Can probably remove this and rely only on HOC for now (?).
-    // Provide a `setTheme` function via context.
+    // Any theme property customizations set from within child components
+    // via a `setCustomTheme` hook.
+    const [themeModsFromChildren, setThemeModsFromChildren] = useState({})
     const customThemeContextVal = useMemo(
       () => ({
-        // setTheme: (themeMod) => setThemeModifications(themeMapper(themeMod)),
-        setTheme: () => {}, // noop
+        setTheme: (themeMod) => setThemeModsFromChildren(themeMod),
       }),
       []
     )
+    const primaryColorFromChildren = get(themeModsFromChildren, 'primaryColor')
+    const secondaryColorFromChildren = get(
+      themeModsFromChildren,
+      'secondaryColor'
+    )
 
+    // Customizations set by children take preference.
+    const primaryColor = primaryColorFromChildren || primaryColorFromData
+    const secondaryColor = secondaryColorFromChildren || secondaryColorFromData
     const themeModifications = useMemo(
       () =>
         themeMapper({
@@ -36,9 +37,6 @@ const CustomThemeHOC = (Component) =>
         }),
       [primaryColor, secondaryColor]
     )
-
-    // eslint-disable-next-line no-console
-    console.log('themeModifications', themeModifications)
 
     return (
       <ThemeProvider
