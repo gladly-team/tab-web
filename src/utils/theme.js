@@ -1,18 +1,16 @@
 import { createTheme } from '@material-ui/core/styles'
 
-// const seasPrimaryColor = '#5094FB'
-// const seassecondaryColor = '#29BEBA'
-const defaultPrimaryColor = '#9d4ba3'
-const defaultSecondaryColor = '#4a90e2'
+const TFAC_ORIGINAL_PURPLE = '#9d4ba3'
+const TFAC_ORIGINAL_BLUE = '#4a90e2'
 const defaultThemeObject = {
   palette: {
     primary: {
-      main: defaultPrimaryColor,
+      main: TFAC_ORIGINAL_PURPLE,
       contrastText: '#fff',
       background: 'rgba(157, 75, 163, 0.08)',
     },
     secondary: {
-      main: defaultSecondaryColor,
+      main: TFAC_ORIGINAL_BLUE,
       contrastText: '#fff',
     },
     text: {
@@ -46,10 +44,10 @@ const theme = createTheme(defaultThemeObject)
 export const themeMapper = ({ primaryColor, secondaryColor }) => ({
   palette: {
     primary: {
-      main: primaryColor || defaultPrimaryColor,
+      main: primaryColor || TFAC_ORIGINAL_PURPLE,
     },
     secondary: {
-      main: secondaryColor || defaultSecondaryColor,
+      main: secondaryColor || TFAC_ORIGINAL_BLUE,
     },
   },
 })

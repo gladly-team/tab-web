@@ -4,6 +4,7 @@ import { ThemeProvider } from '@material-ui/core/styles'
 import { get } from 'lodash/object'
 import { ThemeContext } from 'src/utils/hooks/useThemeContext'
 import { themeMapper } from 'src/utils/theme'
+import grey from '@material-ui/core/colors/grey'
 
 const CustomThemeHOC = (Component) =>
   function ThemeComponent(props) {
@@ -30,8 +31,14 @@ const CustomThemeHOC = (Component) =>
     )
 
     // Customizations set by children take preference.
-    const primaryColor = primaryColorFromChildren || primaryColorFromData
-    const secondaryColor = secondaryColorFromChildren || secondaryColorFromData
+    // When using this component, we expect custom theming to be set,
+    // either above via server-side data or via the `setCustomTheming`
+    // hook. So, default to neutral grey colors before the custom
+    // theming is set.
+    const primaryColor =
+      primaryColorFromChildren || primaryColorFromData || grey['500']
+    const secondaryColor =
+      secondaryColorFromChildren || secondaryColorFromData || grey['300']
 
     const themeModifications = useMemo(
       () =>
