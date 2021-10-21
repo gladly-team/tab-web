@@ -292,6 +292,7 @@ const Account = ({ data: fallbackData }) => {
           </>
         ) : null}
         <Divider />
+        {/* TODO: @workaround/tab-generalization */}
         <AccountItem
           name={`Leave Tab for ${
             landingPagePath === '/teamseas/' ? '#TeamSeas' : 'Cats'
@@ -318,6 +319,7 @@ const Account = ({ data: fallbackData }) => {
                 variant="caption"
                 className={classes.revertButtonText}
               >
+                {/* TODO: @workaround/tab-generalization */}
                 {`Warning: This will remove your ability to support ${
                   landingPagePath === '/teamseas/' ? '#teamseas' : 'cats'
                 }. It will

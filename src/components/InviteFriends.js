@@ -62,13 +62,9 @@ InviteFriends.propTypes = {
   user: PropTypes.shape({
     username: PropTypes.string,
     cause: PropTypes.shape({
-      landingPagePath: PropTypes.string,
+      landingPagePath: PropTypes.string.isRequired,
     }),
-  }),
-}
-
-InviteFriends.defaultProps = {
-  user: { cause: { landingPagePath: '/cats/' } },
+  }).isRequired,
 }
 
 export default InviteFriends

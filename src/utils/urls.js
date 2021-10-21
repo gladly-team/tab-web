@@ -50,7 +50,7 @@ export const externalNavigation = (url) => {
   window.location = url
 }
 export const constructBaseUrl = (landingPagePath) =>
-  `https://tab.gladly.io${landingPagePath}`
+  `https://tab.gladly.io${landingPagePath || '/'}`
 export const getReferralUrl = (username, landingPagePath) => {
   const referralUrl = username
     ? `${constructBaseUrl(landingPagePath)}?u=${encodeURIComponent(username)}`

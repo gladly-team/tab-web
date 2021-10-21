@@ -78,8 +78,8 @@ InviteFriendsIcon.propTypes = {
     id: PropTypes.string,
     numUsersRecruited: PropTypes.number,
     cause: PropTypes.shape({
-      landingPagePath: PropTypes.string,
-    }),
+      landingPagePath: PropTypes.string.isRequired,
+    }).isRequired,
   }),
 }
 
@@ -88,9 +88,6 @@ InviteFriendsIcon.defaultProps = {
     username: '',
     id: PropTypes.string,
     numUsersRecruited: 0,
-    cause: {
-      landingPagePath: '/cats/',
-    },
   },
 }
 
