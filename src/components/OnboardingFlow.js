@@ -4,12 +4,14 @@ import CardContent from '@material-ui/core/CardContent'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import grey from '@material-ui/core/colors/grey'
-import Typography from '@material-ui/core/Typography'
-import onboarding1 from 'src/assets/onboarding/cattabs.svg'
-import onboarding2 from 'src/assets/onboarding/squadcat.svg'
-import onboarding3 from 'src/assets/onboarding/adcat.svg'
+import catTabs from 'src/assets/onboarding/cattabs.svg'
+import squadCat from 'src/assets/onboarding/squadcat.svg'
+import adCat from 'src/assets/onboarding/adcat.svg'
+import seas1 from 'src/assets/onboarding/seas1.svg'
+import seas2 from 'src/assets/onboarding/seas2.svg'
+import seas3 from 'src/assets/onboarding/seas3.svg'
 import PropTypes from 'prop-types'
-import Link from 'src/components/Link'
+import Markdown from 'src/components/Markdown'
 
 export const useStyles = makeStyles((theme) => ({
   card: {
@@ -48,87 +50,44 @@ export const useStyles = makeStyles((theme) => ({
     color: theme.palette.primary.main,
     textDecoration: 'none',
   },
+  center: {
+    textAlign: 'center',
+  },
 }))
 
-const OnboardingFlow = ({ onComplete, showMissionSlide }) => {
+const getImageAssetFromName = (imgName) => {
+  switch (imgName) {
+    case 'cattabs':
+      return catTabs
+    case 'squadcat':
+      return squadCat
+    case 'adcat':
+      return adCat
+    case 'seas1':
+      return seas1
+    case 'seas2':
+      return seas2
+    case 'seas3':
+      return seas3
+    default:
+      return catTabs
+  }
+}
+
+const OnboardingFlow = ({ onboarding, onComplete, showMissionSlide }) => {
+  const { steps } = onboarding
   const classes = useStyles()
   const [onboardingStep, setOnboardingStep] = useState(0)
 
-  const onboardingStepContents = [
-    {
-      imageSrc: onboarding1,
-      title: 'Your tabs are doing great things',
-      children: (
-        <div>
-          <Typography
-            variant="body2"
-            align="center"
-            className={classes.childrenTypography}
-          >
-            Now, every tab you open supports cats in need.
-          </Typography>
-          <Typography
-            variant="body2"
-            align="center"
-            className={classes.childrenTypography}
-          >
-            Tabbers like you are supporting critical nonprofit work all around
-            the world. Your tabs support initiatives that help shelter cats get
-            adopted, including initiatives that{' '}
-            <Link
-              target="_blank"
-              to="https://greatergood.org/jackson-galaxy"
-              className={classes.link}
-            >
-              use treats in positive reinforcement training.
-            </Link>{' '}
-            Thank you!
-          </Typography>
-        </div>
-      ),
-    },
-    {
-      imageSrc: onboarding2,
-      title: 'Help more cats with squads',
-      children: (
-        <div>
-          <Typography
-            variant="body2"
-            align="center"
-            className={classes.childrenTypography}
-          >
-            Cats can get adopted up to 3x faster when you join a squad!
-          </Typography>
-          <Typography
-            variant="body2"
-            align="center"
-            className={classes.childrenTypography}
-          >
-            Team up with your friends to help pay for a shelter cat's house
-            training. Training a cat is the best way to help it find a permanent
-            home, and it enriches the cat's day to day life while in the
-            shelter.
-          </Typography>
-        </div>
-      ),
-    },
-    {
-      imageSrc: onboarding3,
-      title: "It doesn't cost you a thing",
-      children: (
-        <Typography
-          variant="body2"
-          align="center"
-          className={classes.childrenTypography}
-        >
-          We display a couple of small ads at the bottom of your screen and
-          redistribute that money to charity. No fees or hidden costs!
-        </Typography>
-      ),
-    },
-  ]
+  const onboardingStepContents = steps.map((step) => ({
+    imageSrc: getImageAssetFromName(step.imgName),
+    title: step.title,
+    subtitle: step.subtitle,
+  }))
   const onboardingStepInfo = onboardingStepContents[onboardingStep]
 
+  // TODO: Break out Squads Slide into it's own item on the OnboardingFlow model.
+  // For now we should hardcode it as #2.
   const onNext = () => {
     if (onboardingStep === 0 && !showMissionSlide) {
       setOnboardingStep(2)
@@ -138,18 +97,21 @@ const OnboardingFlow = ({ onComplete, showMissionSlide }) => {
       onComplete()
     }
   }
+
   return (
     <Card className={classes.card}>
       <CardContent className={classes.cardContent}>
         <img
-          alt="cute cat"
+          alt="onboarding"
           className={classes.onboardingImage}
           src={onboardingStepInfo.imageSrc}
         />
-        <Typography variant="h5" className={classes.cardTitle}>
-          {onboardingStepInfo.title}
-        </Typography>
-        {onboardingStepInfo.children}
+        <div className={classes.cardTitle}>
+          <Markdown>{onboardingStepInfo.title}</Markdown>
+        </div>
+        <div className={classes.center}>
+          <Markdown>{onboardingStepInfo.subtitle}</Markdown>
+        </div>
         <Button
           className={classes.cardButton}
           color="primary"
@@ -169,6 +131,15 @@ OnboardingFlow.displayName = 'OnboardingFlow'
 OnboardingFlow.propTypes = {
   onComplete: PropTypes.func,
   showMissionSlide: PropTypes.bool.isRequired,
+  onboarding: PropTypes.shape({
+    steps: PropTypes.arrayOf(
+      PropTypes.shape({
+        imgName: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        subtitle: PropTypes.string.isRequired,
+      })
+    ),
+  }).isRequired,
 }
 OnboardingFlow.defaultProps = {
   onComplete: () => {},
