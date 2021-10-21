@@ -63,7 +63,7 @@ InviteFriends.propTypes = {
     username: PropTypes.string,
     cause: PropTypes.shape({
       landingPagePath: PropTypes.string.isRequired,
-    }),
+    }).isRequired,
   }).isRequired,
 }
 
