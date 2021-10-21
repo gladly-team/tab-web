@@ -23,8 +23,6 @@ import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
-
-// import useTheme from 'src/utils/hooks/useThemeContext'
 import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 import SquadCounter from 'src/components/SquadCounter'
@@ -334,9 +332,6 @@ const Index = ({ data: fallbackData }) => {
   const { currentMission, email, cause } = user || {}
   const { onboarding } = cause || {}
 
-  // const { onboarding, theme } = cause || {}
-  // const { primaryColor, secondaryColor } = theme || {}
-
   const {
     status: missionStatus = 'not started',
     tabCount,
@@ -346,12 +341,6 @@ const Index = ({ data: fallbackData }) => {
   const userGlobalId = get(user, 'id')
   const globalTabCount = get(user, 'tabs')
   const [tabId] = useState(uuid())
-
-  // sets the theme based on cause
-  // const { setTheme } = useTheme()
-  // useEffect(() => {
-  //   setTheme({ primaryColor, secondaryColor })
-  // }, [setTheme, primaryColor, secondaryColor])
 
   const classes = useStyles()
 
