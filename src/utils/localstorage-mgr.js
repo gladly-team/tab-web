@@ -1,4 +1,5 @@
 /* global window */
+import { STORAGE_NEW_USER_CAUSE_ID } from './constants'
 
 export default {
   setItem: (key, value) => {
@@ -29,4 +30,6 @@ export default {
       // eslint-disable-next-line no-empty
     } catch (e) {}
   },
+  getCauseForGAM: () =>
+    window.localStorage.getItem(STORAGE_NEW_USER_CAUSE_ID) || 'unknown',
 }

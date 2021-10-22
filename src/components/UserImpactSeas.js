@@ -17,7 +17,7 @@ import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import MuiDialogActions from '@material-ui/core/DialogActions'
-import { TAB_FOR_TEAMSEAS_CAUSE_ID } from 'src/utils/constants'
+import { STORAGE_SEAS_CAUSE_ID } from 'src/utils/constants'
 
 const DolphinGif = dynamic(() => import('src/components/DolphinGif'), {
   ssr: false,
@@ -141,7 +141,7 @@ const UserImpact = ({ user, disabled }) => {
     } else {
       setAlertDialogOpen(true)
     }
-    await UpdateImpactMutation(userId, TAB_FOR_TEAMSEAS_CAUSE_ID, {
+    await UpdateImpactMutation(userId, STORAGE_SEAS_CAUSE_ID, {
       confirmImpact: true,
       claimPendingUserReferralImpact: pendingUserReferralImpact
         ? true
@@ -155,7 +155,7 @@ const UserImpact = ({ user, disabled }) => {
   const handleAlertDialogClose = () => setAlertDialogOpen(false)
   const handleClaimReward = async () => {
     setRewardDialogOpen(true)
-    await UpdateImpactMutation(userId, TAB_FOR_TEAMSEAS_CAUSE_ID, {
+    await UpdateImpactMutation(userId, STORAGE_SEAS_CAUSE_ID, {
       claimLatestReward: true,
     })
   }
@@ -164,7 +164,7 @@ const UserImpact = ({ user, disabled }) => {
   const handleClaimReferralNotification = () => {
     setClaimedReferralImpact(pendingUserReferralImpact)
     setReferralRewardDialogOpen(true)
-    UpdateImpactMutation(userId, TAB_FOR_TEAMSEAS_CAUSE_ID, {
+    UpdateImpactMutation(userId, STORAGE_SEAS_CAUSE_ID, {
       claimPendingUserReferralImpact: true,
     })
   }
