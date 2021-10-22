@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { accountURL } from 'src/utils/urls'
 import { act } from 'react-dom/test-utils'
+import { STORAGE_NEW_USER_CAUSE_ID } from 'src/utils/constants'
 import {
   showMockAchievements,
   showBackgroundImages,
@@ -13,6 +14,7 @@ import {
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import Achievement from 'src/components/Achievement'
 import FullPageLoader from 'src/components/FullPageLoader'
+import localStorageMgr from 'src/utils/localstorage-mgr'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import useData from 'src/utils/hooks/useData'
@@ -42,7 +44,9 @@ jest.mock('src/utils/ssr')
 jest.mock('src/utils/adHelpers', () => ({
   getAdUnits: jest.fn().mockReturnValue({}),
 }))
-
+jest.mock('src/utils/localstorage-mgr', () => ({
+  setItem: jest.fn(),
+}))
 jest.mock('src/utils/mutations/SetHasViewedIntroFlowMutation', () => () => {})
 jest.mock('src/components/OnboardingFlow', () => () => <div />)
 jest.mock('src/components/Logo')
@@ -101,6 +105,7 @@ const getMockProps = () => ({
       hasViewedIntroFlow: true,
       currentMission: undefined,
       cause: {
+        causeId: 'testSetMe',
         onboarding: {
           steps: [],
         },
@@ -674,95 +679,104 @@ describe('index.js', () => {
       adUnitCode: '/12345/SomeAdUnit',
     })
   })
-})
-
-it('shows the intro flow if a user has not completed it', () => {
-  const mockProps = {
-    data: {
-      app: {},
-      user: {
-        tabs: 221,
-        vcCurrent: 78,
-        id: 'asdf',
-        hasViewedIntroFlow: false,
-      },
-      userImpact: {
-        userId: 'asdf',
-        visitsUntilNextImpact: 2,
-        pendingUserReferralImpact: 10,
-        pendingUserReferralCount: 1,
-        userImpactMetric: 3,
-        confirmedImpact: true,
-        hasClaimedLatestReward: true,
-      },
-      cause: {
-        onboarding: {
-          steps: [],
+  it('shows the intro flow if a user has not completed it', () => {
+    const mockProps = {
+      data: {
+        app: {},
+        user: {
+          tabs: 221,
+          vcCurrent: 78,
+          id: 'asdf',
+          hasViewedIntroFlow: false,
+        },
+        userImpact: {
+          userId: 'asdf',
+          visitsUntilNextImpact: 2,
+          pendingUserReferralImpact: 10,
+          pendingUserReferralCount: 1,
+          userImpactMetric: 3,
+          confirmedImpact: true,
+          hasClaimedLatestReward: true,
+        },
+        cause: {
+          onboarding: {
+            steps: [],
+          },
         },
       },
-    },
-  }
-  useData.mockReturnValue({
-    data: {
-      ...getMockProps().data,
-      user: {
-        tabs: 221,
-        vcCurrent: 78,
-        id: 'asdf',
-        hasViewedIntroFlow: false,
-      },
-    },
-  })
-  const IndexPage = require('src/pages/index').default
-  const wrapper = mount(<IndexPage {...mockProps} />)
-  expect(wrapper.find(OnboardingFlow).exists()).toBe(true)
-})
-
-it('shows the homepage once a user completes the introflow', async () => {
-  const mockProps = {
-    data: {
-      app: {},
-      user: {
-        tabs: 221,
-        vcCurrent: 78,
-        id: 'asdf',
-        hasViewedIntroFlow: false,
-      },
-      userImpact: {
-        userId: 'asdf',
-        visitsUntilNextImpact: 2,
-        pendingUserReferralImpact: 10,
-        pendingUserReferralCount: 1,
-        userImpactMetric: 3,
-        confirmedImpact: true,
-        hasClaimedLatestReward: true,
-      },
-      cause: {
-        onboarding: {
-          steps: [],
+    }
+    useData.mockReturnValue({
+      data: {
+        ...getMockProps().data,
+        user: {
+          tabs: 221,
+          vcCurrent: 78,
+          id: 'asdf',
+          hasViewedIntroFlow: false,
         },
       },
-    },
-  }
-  useData.mockReturnValue({
-    data: {
-      ...getMockProps().data,
-      user: {
-        tabs: 221,
-        vcCurrent: 78,
-        id: 'asdf',
-        hasViewedIntroFlow: false,
+    })
+    const IndexPage = require('src/pages/index').default
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    expect(wrapper.find(OnboardingFlow).exists()).toBe(true)
+  })
+
+  it('shows the homepage once a user completes the introflow', async () => {
+    const mockProps = {
+      data: {
+        app: {},
+        user: {
+          tabs: 221,
+          vcCurrent: 78,
+          id: 'asdf',
+          hasViewedIntroFlow: false,
+        },
+        userImpact: {
+          userId: 'asdf',
+          visitsUntilNextImpact: 2,
+          pendingUserReferralImpact: 10,
+          pendingUserReferralCount: 1,
+          userImpactMetric: 3,
+          confirmedImpact: true,
+          hasClaimedLatestReward: true,
+        },
+        cause: {
+          onboarding: {
+            steps: [],
+          },
+        },
       },
-    },
+    }
+    useData.mockReturnValue({
+      data: {
+        ...getMockProps().data,
+        user: {
+          tabs: 221,
+          vcCurrent: 78,
+          id: 'asdf',
+          hasViewedIntroFlow: false,
+        },
+      },
+    })
+    const IndexPage = require('src/pages/index').default
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    expect(wrapper.find(OnboardingFlow).exists()).toBe(true)
+    const flow = wrapper.find(OnboardingFlow)
+    await act(async () => {
+      flow.props().onComplete()
+      await flushAllPromises()
+      wrapper.update()
+    })
+    expect(wrapper.find(OnboardingFlow).exists()).toBe(false)
   })
-  const IndexPage = require('src/pages/index').default
-  const wrapper = mount(<IndexPage {...mockProps} />)
-  expect(wrapper.find(OnboardingFlow).exists()).toBe(true)
-  const flow = wrapper.find(OnboardingFlow)
-  await act(async () => {
-    flow.props().onComplete()
-    await flushAllPromises()
-    wrapper.update()
+
+  it('sets the cause id for tab ads', () => {
+    const mockProps = getMockProps()
+    const IndexPage = require('src/pages/index').default
+    mount(<IndexPage {...mockProps} />)
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      STORAGE_NEW_USER_CAUSE_ID,
+      'testSetMe'
+    )
   })
-  expect(wrapper.find(OnboardingFlow).exists()).toBe(false)
 })

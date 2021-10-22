@@ -427,6 +427,11 @@ type Cause implements Node {
   id: ID!
 
   """
+  Cause's id
+  """
+  causeId: String!
+
+  """
   URL path for the landing page belonging to this cause
   """
   landingPagePath: String!
@@ -661,6 +666,7 @@ input CreateNewUserInput {
   extensionInstallTimeApprox: String
   v4BetaEnabled: Boolean
   missionId: String
+  causeId: String
   clientMutationId: String
 }
 
@@ -1709,7 +1715,7 @@ type User implements Node {
   backgroundImage: BackgroundImage
 
   """
-  A user's charity specific impact
+  A user's cause-specific impact for the cause they are currently supporting
   """
   userImpact: UserImpact
 
