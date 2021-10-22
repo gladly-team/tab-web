@@ -65,6 +65,7 @@ import useData from 'src/utils/hooks/useData'
 import { CAT_CHARITY } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
+import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -331,6 +332,15 @@ const Index = ({ data: fallbackData }) => {
   const { app, user, userImpact } = data || {}
   const { currentMission, email, cause } = user || {}
   const { onboarding } = cause || {}
+  const { theme } = cause || {}
+  const { primaryColor, secondaryColor } = theme || {}
+
+  // Set the theme based on cause.
+  const setTheme = useCustomTheming()
+  useEffect(
+    () => setTheme({ primaryColor, secondaryColor }),
+    [setTheme, primaryColor, secondaryColor]
+  )
 
   const {
     status: missionStatus = 'not started',
