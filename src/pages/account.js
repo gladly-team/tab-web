@@ -144,6 +144,7 @@ const Account = ({ data: fallbackData }) => {
   useEffect(() => {
     setTheme({ primaryColor, secondaryColor })
   }, [setTheme, primaryColor, secondaryColor])
+
   const AuthUser = useAuthUser()
 
   // Conditionally show privacy management buttons.

@@ -18,6 +18,7 @@ import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 import useData from 'src/utils/hooks/useData'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import initializeCMP from 'src/utils/initializeCMP'
+import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 
 jest.mock('next-offline/runtime')
 jest.mock('tab-cmp')
@@ -31,13 +32,20 @@ jest.mock('src/utils/pageWrappers/withRelay')
 jest.mock('src/utils/hooks/useData')
 jest.mock('src/utils/pageWrappers/withSentry')
 jest.mock('src/utils/pageWrappers/CustomThemeHOC')
+jest.mock('src/utils/hooks/useCustomTheming')
 
-const getMockDataResponse = (additionalFields) => ({
+const getMockDataResponse = () => ({
   user: {
     id: 'some-user-id',
     email: 'fakeEmail@example.com',
     username: 'IAmFake',
-    ...additionalFields,
+    cause: {
+      theme: {
+        primaryColor: '#FF0000',
+        secondaryColor: 'CCC',
+      },
+      landingPagePath: '/foo',
+    },
   },
 })
 
@@ -195,7 +203,7 @@ describe('account.js', () => {
     expect(accountItem.find(Typography).at(1).text()).toEqual('...')
   })
 
-  it("displays the user's username when the data fetch is still complete", () => {
+  it("displays the user's username when the data fetch is complete", () => {
     expect.assertions(2)
     const AccountPage = require('src/pages/account').default
     useData.mockReturnValue({ data: getMockDataResponse() })
@@ -281,8 +289,18 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
     expect.assertions(2)
     const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
+    const defaultMockData = getMockDataResponse()
     useData.mockReturnValue({
-      data: getMockDataResponse({ cause: { landingPagePath: '/teamseas/' } }),
+      data: {
+        ...defaultMockData,
+        user: {
+          ...defaultMockData.user,
+          cause: {
+            ...defaultMockData.user.cause,
+            landingPagePath: '/teamseas/',
+          },
+        },
+      },
     })
     const wrapper = mount(<AccountPage {...mockProps} />)
     const switchModeAccountItem = getRevertAccountItem(wrapper)
@@ -292,6 +310,33 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
     expect(switchModeAccountItem.find(Button).first().text()).toEqual(
       'Switch to Classic'
     )
+  })
+
+  it('sets the custom theme with cause.theme data', () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account').default
+    const mockProps = getMockProps()
+    const defaultMockData = getMockDataResponse()
+    useData.mockReturnValue({
+      data: {
+        ...defaultMockData,
+        user: {
+          ...defaultMockData.user,
+          cause: {
+            theme: {
+              primaryColor: '#00FF00',
+              secondaryColor: 'DEDEDE',
+            },
+          },
+        },
+      },
+    })
+    const setTheme = useCustomTheming()
+    mount(<AccountPage {...mockProps} />)
+    expect(setTheme).toHaveBeenCalledWith({
+      primaryColor: '#00FF00',
+      secondaryColor: 'DEDEDE',
+    })
   })
 
   it('clicking the "revert" button calls the API endpoint as expected', async () => {
