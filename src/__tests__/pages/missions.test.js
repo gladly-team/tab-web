@@ -14,7 +14,7 @@ jest.mock('next-firebase-auth')
 jest.mock('src/components/Link')
 jest.mock('src/utils/navigation')
 jest.mock('src/utils/ssr')
-
+jest.mock('src/utils/pageWrappers/CustomThemeHOC')
 jest.mock(
   'src/components/missionComponents/CurrentMissionContainer',
   () => () => <div style={{ height: '200px' }} />
@@ -29,6 +29,7 @@ jest.mock('src/utils/hooks/useData')
 jest.mock('src/components/FullPageLoader', () => () => <div />)
 jest.mock('src/utils/pageWrappers/withDataSSR')
 jest.mock('src/utils/pageWrappers/withSentry')
+
 global.scrollTo = jest.fn()
 const getMockProps = () => ({
   data: {
