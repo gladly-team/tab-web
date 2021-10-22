@@ -2,6 +2,8 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { register, unregister } from 'next-offline/runtime'
 import { isClientSide, isServerSide } from 'src/utils/ssr'
+import { createTheme, useTheme } from '@material-ui/core/styles'
+import defaultTheme from 'src/utils/theme'
 
 jest.mock('next/router')
 jest.mock('next-offline/runtime')
@@ -70,5 +72,19 @@ describe('_app.js', () => {
     expect(unregister).toHaveBeenCalled()
   })
 
-  // TODO: test that it provides the default MUI theme
+  it('provides the default MUI theme to children', () => {
+    const App = require('src/pages/_app').default
+    const standardTheme = createTheme(defaultTheme)
+    let themeInChild
+    const DummyComponent = () => {
+      themeInChild = useTheme()
+      return null
+    }
+    const mockProps = {
+      ...getMockProps(),
+      Component: DummyComponent,
+    }
+    mount(<App {...mockProps} />)
+    expect(themeInChild).toMatchObject(standardTheme)
+  })
 })
