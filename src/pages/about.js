@@ -12,11 +12,16 @@ import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import useData from 'src/utils/hooks/useData'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import SettingsPage from 'src/components/SettingsPage'
+import Markdown from 'src/components/Markdown'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
     width: '100%',
     margin: theme.spacing(2),
+    padding: theme.spacing(3),
+
+    // Compensate for markdown paragraph's margin-bottom
+    paddingBottom: theme.spacing(2),
   },
 }))
 
@@ -24,7 +29,7 @@ const getRelayQuery = ({ AuthUser }) => {
   const userId = AuthUser.id
   return {
     query: graphql`
-      query accountQuery($userId: String!) {
+      query aboutQuery($userId: String!) {
         user(userId: $userId) {
           cause {
             about
@@ -45,6 +50,7 @@ const getRelayQuery = ({ AuthUser }) => {
 const AboutPage = ({ data: fallbackData }) => {
   const { data } = useData({ getRelayQuery, fallbackData })
   const fetchInProgress = !data
+  const about = get(data, 'user.cause.about')
   const theme = get(data, 'user.cause.theme', {})
   const { primaryColor, secondaryColor } = theme
   const classes = useStyles()
@@ -57,9 +63,11 @@ const AboutPage = ({ data: fallbackData }) => {
 
   return (
     <SettingsPage>
-      <Paper elevation={1} className={classes.contentContainer}>
-        {fetchInProgress ? '...' : 'HI!'}
-      </Paper>
+      {fetchInProgress ? null : (
+        <Paper elevation={1} className={classes.contentContainer}>
+          <Markdown>{about}</Markdown>
+        </Paper>
+      )}
     </SettingsPage>
   )
 }

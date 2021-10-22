@@ -146,8 +146,10 @@ const SettingsPage = (props) => {
 
 SettingsPage.displayName = 'SettingsPage'
 SettingsPage.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 }
-SettingsPage.defaultProps = {}
+SettingsPage.defaultProps = {
+  children: null,
+}
 
 export default SettingsPage
