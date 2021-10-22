@@ -33,12 +33,6 @@ const useStyles = makeStyles((theme) => ({
   dialogContentRoot: {
     padding: theme.spacing(4),
   },
-  titleText: {
-    fontSize: '24px',
-    fontWeight: 700,
-    lineHeight: '2rem',
-    marginTop: theme.spacing(0.5),
-  },
   purpleColor: {
     color: theme.palette.text.primary,
   },
@@ -52,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
   sendButton: {
     marginTop: theme.spacing(2),
     height: theme.spacing(6),
-    backgroundColor: theme.palette.colors.purple1,
   },
   sentBox: {
     display: 'flex',
@@ -186,19 +179,13 @@ const EmailInviteFriendsDialog = ({
   const alt = imgCategory
   switch (imgCategory) {
     case 'seas':
+      afterShareImage = seasEmailInvite
       beforeShareImage = seasEmailInvite
       break
     case 'cats':
     default:
-      beforeShareImage = shareCats
-  }
-  switch (imgCategory) {
-    case 'seas':
-      afterShareImage = seasEmailInvite
-      break
-    case 'cats':
-    default:
       afterShareImage = catsSent
+      beforeShareImage = shareCats
   }
 
   return (
@@ -299,6 +286,7 @@ const EmailInviteFriendsDialog = ({
                   src={afterShareImage}
                   height="120px"
                   width="240px"
+                  color="secondary"
                   alt={`${alt}2`}
                 />
                 <Typography color="primary" variant="h4">
@@ -311,7 +299,7 @@ const EmailInviteFriendsDialog = ({
             className={classes.sendButton}
             fullWidth
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={sendEmailInvites}
             disabled={
               !(validEmails.length && name.length) || personalMessageError
