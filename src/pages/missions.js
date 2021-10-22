@@ -105,7 +105,8 @@ const getRelayQuery = ({ AuthUser }) => ({
 
 const Missions = ({ data: fallbackData }) => {
   const { data } = useData({ getRelayQuery, fallbackData })
-  const { user, cause } = data || {}
+  const { user } = data || {}
+  const { cause } = user || {}
   const { theme } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
   const [scrollIndex, setScrollIndex] = useState(0)
