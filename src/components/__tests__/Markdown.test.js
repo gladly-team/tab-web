@@ -3,6 +3,8 @@ import path from 'path'
 import React from 'react'
 import { mount } from 'enzyme'
 
+jest.mock('src/components/Link')
+
 const getMockProps = () => ({
   children: '# Hi there!',
 })
@@ -56,6 +58,21 @@ describe('Markdown component', () => {
     const wrapper = mount(<Markdown {...mockProps} />)
     const expectedHTML =
       '<div><p class="MuiTypography-root MuiTypography-body2 MuiTypography-paragraph">hello!</p></div>'
+    expect(wrapper.html()).toEqual(expectedHTML)
+  })
+
+  it('renders a link to expected html', () => {
+    const Markdown = require('src/components/Markdown').default
+    const mockProps = {
+      ...getMockProps(),
+      children: '[i am a link](https://example.com)',
+    }
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+    const wrapper = mount(<Markdown {...mockProps} />)
+
+    // Uses mock Link component
+    const expectedHTML =
+      '<div><p class="MuiTypography-root MuiTypography-body2 MuiTypography-paragraph"><a data-test-id="mock-link" target="_blank" href="https://example.com">i am a link</a></p></div>'
     expect(wrapper.html()).toEqual(expectedHTML)
   })
 
