@@ -1,19 +1,21 @@
-import { createTheme } from '@material-ui/core/styles'
-import merge from 'lodash/merge'
+import { createTheme, alpha } from '@material-ui/core/styles'
 
-// const seasPrimaryColor = '#5094FB'
-// const seassecondaryColor = '#29BEBA'
-const defaultPrimaryColor = '#9d4ba3'
-const defaultSecondaryColor = '#4a90e2'
+const TFAC_ORIGINAL_PURPLE = '#9d4ba3'
+const TFAC_ORIGINAL_BLUE = '#4a90e2'
+
+const createBackgroundColor = (hex) => alpha(hex, 0.08)
+
 const defaultThemeObject = {
   palette: {
     primary: {
-      main: defaultPrimaryColor,
+      main: TFAC_ORIGINAL_PURPLE,
       contrastText: '#fff',
-      background: 'rgba(157, 75, 163, 0.08)',
+
+      // "background" is a custom prop
+      background: createBackgroundColor(TFAC_ORIGINAL_PURPLE),
     },
     secondary: {
-      main: defaultSecondaryColor,
+      main: TFAC_ORIGINAL_BLUE,
       contrastText: '#fff',
     },
     text: {
@@ -39,26 +41,29 @@ const defaultThemeObject = {
   shape: {
     borderRadius: 2,
   },
+  overrides: {
+    MuiAppBar: {
+      root: {
+        // Useful for when custom theming is set after load.
+        transition: 'background-color 300ms',
+      },
+    },
+  },
 }
 const theme = createTheme(defaultThemeObject)
 
-export default theme
-
-const customTheme = ({ primaryColor, secondaryColor }) => ({
+// Takes user-specific theme properties and creates a theme-like object
+// that can be merged with a theme to create a nested theme.
+export const themeMapper = ({ primaryColor, secondaryColor }) => ({
   palette: {
     primary: {
-      main: primaryColor || defaultPrimaryColor,
-      contrastText: '#fff',
-      background: 'rgba(157, 75, 163, 0.08)',
+      main: primaryColor || TFAC_ORIGINAL_PURPLE,
+      background: createBackgroundColor(primaryColor || TFAC_ORIGINAL_PURPLE),
     },
     secondary: {
-      main: secondaryColor || defaultSecondaryColor,
-      contrastText: '#fff',
+      main: secondaryColor || TFAC_ORIGINAL_BLUE,
     },
   },
 })
 
-export const themeMapper = ({ primaryColor, secondaryColor }) =>
-  createTheme(
-    merge(defaultThemeObject, customTheme({ primaryColor, secondaryColor }))
-  )
+export default theme

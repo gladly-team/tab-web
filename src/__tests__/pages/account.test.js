@@ -30,6 +30,7 @@ jest.mock('src/utils/mutations/SetV4BetaMutation')
 jest.mock('src/utils/pageWrappers/withRelay')
 jest.mock('src/utils/hooks/useData')
 jest.mock('src/utils/pageWrappers/withSentry')
+jest.mock('src/utils/pageWrappers/CustomThemeHOC')
 
 const getMockDataResponse = (additionalFields) => ({
   user: {

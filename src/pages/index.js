@@ -23,10 +23,10 @@ import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import UserImpactContainer from 'src/components/UserImpactContainer'
 import SearchInput from 'src/components/SearchInput'
-import useTheme from 'src/utils/hooks/useThemeContext'
 import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 import SquadCounter from 'src/components/SquadCounter'
+import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -260,26 +260,14 @@ const getRelayQuery = async ({ AuthUser }) => {
           ...MoneyRaisedContainer_app
         }
         user(userId: $userId) {
+          id
           email
+          hasViewedIntroFlow
           tabs
           vcCurrent
-          id
           cause {
-            landingPagePath
             impactVisits
-            theme {
-              primaryColor
-              secondaryColor
-            }
-          }
-          hasViewedIntroFlow
-          currentMission {
-            status
-            tabGoal
-            tabCount
-            missionId
-          }
-          cause {
+            landingPagePath
             onboarding {
               steps {
                 title
@@ -287,6 +275,17 @@ const getRelayQuery = async ({ AuthUser }) => {
                 imgName
               }
             }
+            # Theme data is required for CustomThemeHOC.
+            theme {
+              primaryColor
+              secondaryColor
+            }
+          }
+          currentMission {
+            status
+            tabGoal
+            tabCount
+            missionId
           }
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
@@ -331,8 +330,8 @@ const Index = ({ data: fallbackData }) => {
   }, [])
   const { app, user, userImpact } = data || {}
   const { currentMission, email, cause } = user || {}
-  const { theme, onboarding } = cause || {}
-  const { primaryColor, secondaryColor } = theme || {}
+  const { onboarding } = cause || {}
+
   const {
     status: missionStatus = 'not started',
     tabCount,
@@ -343,11 +342,6 @@ const Index = ({ data: fallbackData }) => {
   const globalTabCount = get(user, 'tabs')
   const [tabId] = useState(uuid())
 
-  // sets the theme based on cause
-  const { setTheme } = useTheme()
-  useEffect(() => {
-    setTheme({ primaryColor, secondaryColor })
-  }, [setTheme, primaryColor, secondaryColor])
   const classes = useStyles()
 
   // this is a temporary workaround as the latest updates to the
@@ -670,4 +664,5 @@ export default flowRight([
   }),
   withSentry,
   withRelay,
+  CustomThemeHOC,
 ])(Index)
