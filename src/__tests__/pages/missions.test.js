@@ -9,12 +9,14 @@ import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import { ThemeProvider } from '@material-ui/core/styles'
 import Tab from '@material-ui/core/Tab'
 import theme from 'src/utils/theme'
+import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 
 jest.mock('next-firebase-auth')
 jest.mock('src/components/Link')
 jest.mock('src/utils/navigation')
 jest.mock('src/utils/ssr')
 jest.mock('src/utils/pageWrappers/CustomThemeHOC')
+jest.mock('src/utils/hooks/useCustomTheming')
 jest.mock(
   'src/components/missionComponents/CurrentMissionContainer',
   () => () => <div style={{ height: '200px' }} />
@@ -39,15 +41,12 @@ const getMockProps = () => ({
       vcCurrent: 78,
       id: 'asdf',
       hasViewedIntroFlow: true,
-    },
-    userImpact: {
-      userId: 'asdf',
-      visitsUntilNextImpact: 2,
-      pendingUserReferralImpact: 10,
-      pendingUserReferralCount: 1,
-      userImpactMetric: 3,
-      confirmedImpact: true,
-      hasClaimedLatestReward: true,
+      cause: {
+        theme: {
+          primaryColor: '#FF0000',
+          secondaryColor: '#DEDEDE',
+        },
+      },
     },
   },
 })
@@ -142,6 +141,41 @@ describe('missions.js', () => {
       variables: expect.any(Object),
     })
   })
+
+  it('sets the custom theme with cause.theme data', () => {
+    expect.assertions(1)
+    const MissionsPage = require('src/pages/missions').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          cause: {
+            ...defaultMockProps.data.user.cause,
+            theme: {
+              ...defaultMockProps.data.user.cause.theme,
+              primaryColor: '#00FF00',
+              secondaryColor: 'DEDEDE',
+            },
+          },
+        },
+      },
+    }
+    useData.mockReturnValue(mockProps)
+    const setTheme = useCustomTheming()
+    mount(
+      <ThemeProvider theme={theme}>
+        <MissionsPage {...mockProps} />
+      </ThemeProvider>
+    )
+    expect(setTheme).toHaveBeenCalledWith({
+      primaryColor: '#00FF00',
+      secondaryColor: 'DEDEDE',
+    })
+  })
+
   it('has a close button', () => {
     expect.assertions(1)
     const MissionsPage = require('src/pages/missions').default
