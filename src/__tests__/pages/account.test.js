@@ -323,7 +323,9 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
         user: {
           ...defaultMockData.user,
           cause: {
+            ...defaultMockData.user.cause,
             theme: {
+              ...defaultMockData.user.cause.theme,
               primaryColor: '#00FF00',
               secondaryColor: 'DEDEDE',
             },
