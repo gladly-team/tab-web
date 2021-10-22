@@ -7,7 +7,12 @@ import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
-import { accountURL, achievementsURL, dashboardURL } from 'src/utils/urls'
+import {
+  accountURL,
+  achievementsURL,
+  dashboardURL,
+  surveyLink,
+} from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
 
 jest.mock('src/components/Link')
@@ -87,7 +92,7 @@ describe('SettingsPage component', () => {
     expect(item.prop('to')).toEqual(achievementsURL)
   })
 
-  it('does not includes the achievements link in the sidebar list if the feature is not enabled', () => {
+  it('does not include the achievements link in the sidebar list if the feature is not enabled', () => {
     expect.assertions(1)
 
     showMockAchievements.mockReturnValue(false) // not enabled
@@ -136,5 +141,19 @@ describe('SettingsPage component', () => {
         .find('[data-test-id="settings-content"]')
         .contains(mockProps.children)
     ).toBe(true)
+  })
+
+  it('includes a feedback survey link', () => {
+    expect.assertions(2)
+    const SettingsPage = require('src/components/SettingsPage').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const sidebarList = wrapper.find(List).first()
+
+    const item = sidebarList.findWhere(
+      (elem) => elem.render().text() === 'Feedback'
+    )
+    expect(item.exists()).toBe(true)
+    expect(item.prop('to')).toEqual(surveyLink)
   })
 })

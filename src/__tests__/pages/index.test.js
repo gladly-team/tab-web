@@ -30,6 +30,7 @@ import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 import SquadCounter from 'src/components/SquadCounter'
 import UserImpactContainer from 'src/components/UserImpactContainer'
+import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -70,6 +71,8 @@ jest.mock('src/utils/mutations/LogUserRevenueMutation')
 jest.mock('src/utils/caching')
 jest.mock('src/components/SquadCounter')
 jest.mock('src/components/UserImpactContainer')
+jest.mock('src/utils/pageWrappers/CustomThemeHOC')
+jest.mock('src/utils/hooks/useCustomTheming')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
@@ -106,8 +109,14 @@ const getMockProps = () => ({
       currentMission: undefined,
       cause: {
         causeId: 'testSetMe',
+        impactVisits: 12,
+        landingPagePath: '/foo/',
         onboarding: {
           steps: [],
+        },
+        theme: {
+          primaryColor: '#FF0000',
+          secondaryColor: '#DEDEDE',
         },
       },
     },
@@ -229,6 +238,36 @@ describe('index.js', () => {
     shallow(<IndexPage {...mockProps} />)
     const useDataArg = useData.mock.calls[0][0]
     expect(useDataArg).not.toHaveProperty('revalidateOnMount')
+  })
+
+  it('sets the custom theme with cause.theme data', () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          cause: {
+            ...defaultMockProps.data.user.cause,
+            theme: {
+              ...defaultMockProps.data.user.cause.theme,
+              primaryColor: '#00FF00',
+              secondaryColor: 'DEDEDE',
+            },
+          },
+        },
+      },
+    }
+    useData.mockReturnValue(mockProps)
+    const setTheme = useCustomTheming()
+    mount(<IndexPage {...mockProps} />)
+    expect(setTheme).toHaveBeenCalledWith({
+      primaryColor: '#00FF00',
+      secondaryColor: 'DEDEDE',
+    })
   })
 
   it('includes a settings icon link to the account page', () => {

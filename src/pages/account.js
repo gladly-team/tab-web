@@ -20,7 +20,8 @@ import { setWindowLocation } from 'src/utils/navigation'
 import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
 import { withSentry } from 'src/utils/pageWrappers/withSentry'
 import initializeCMP from 'src/utils/initializeCMP'
-import useTheme from 'src/utils/hooks/useThemeContext'
+import useCustomTheming from 'src/utils/hooks/useCustomTheming'
+import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -138,11 +139,12 @@ const Account = ({ data: fallbackData }) => {
   const { primaryColor, secondaryColor } = theme || {}
   const classes = useStyles()
 
-  // sets the theme based on cause - need to do in each page incase user refreshes
-  const { setTheme } = useTheme()
+  // Set the theme based on cause.
+  const setTheme = useCustomTheming()
   useEffect(() => {
     setTheme({ primaryColor, secondaryColor })
   }, [setTheme, primaryColor, secondaryColor])
+
   const AuthUser = useAuthUser()
 
   // Conditionally show privacy management buttons.
@@ -362,4 +364,5 @@ export default flowRight([
   }),
   withSentry,
   withRelay,
+  CustomThemeHOC,
 ])(Account)

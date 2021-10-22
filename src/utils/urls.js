@@ -61,4 +61,4 @@ export const getSquadsLink = (username, squadId, landingPagePath) =>
   `${constructBaseUrl(landingPagePath)}?u=${encodeURIComponent(
     username
   )}&m=${encodeURIComponent(squadId)}`
-export const surveyLink = 'https://forms.gle/WKNUZSamJQvT12b5A'
+export const surveyLink = 'https://forms.gle/wT9qattFPBW9dZb57'

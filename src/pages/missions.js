@@ -26,7 +26,8 @@ import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
 import CurrentMissionContainer from 'src/components/missionComponents/CurrentMissionContainer'
 import PastMissionsContainer from 'src/components/missionComponents/PastMissionsContainer'
 import SetHasSeenSquadsMutation from 'src/utils/mutations/SetHasSeenSquadsMutation'
-import useTheme from 'src/utils/hooks/useThemeContext'
+import useCustomTheming from 'src/utils/hooks/useCustomTheming'
+import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -85,9 +86,15 @@ const getRelayQuery = ({ AuthUser }) => ({
   query: graphql`
     query missionsQuery($userId: String!) {
       user(userId: $userId) {
+        id
+        cause {
+          theme {
+            primaryColor
+            secondaryColor
+          }
+        }
         ...CurrentMissionContainer_user
         ...PastMissionsContainer_user
-        id
       }
     }
   `,
@@ -98,7 +105,8 @@ const getRelayQuery = ({ AuthUser }) => ({
 
 const Missions = ({ data: fallbackData }) => {
   const { data } = useData({ getRelayQuery, fallbackData })
-  const { user, cause } = data || {}
+  const { user } = data || {}
+  const { cause } = user || {}
   const { theme } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
   const [scrollIndex, setScrollIndex] = useState(0)
@@ -106,11 +114,12 @@ const Missions = ({ data: fallbackData }) => {
   const pastMissionsSection = useRef(null)
   const classes = useStyles()
 
-  // sets the theme based on cause - need to do in each page incase user refreshes
-  const { setTheme } = useTheme()
+  // Set the theme based on cause.
+  const setTheme = useCustomTheming()
   useEffect(() => {
     setTheme({ primaryColor, secondaryColor })
   }, [setTheme, primaryColor, secondaryColor])
+
   const debouncedHandleOnSchroll = useMemo(
     () =>
       debounce(() => {
@@ -240,4 +249,5 @@ export default flowRight([
   }),
   withSentry,
   withRelay,
+  CustomThemeHOC,
 ])(Missions)
