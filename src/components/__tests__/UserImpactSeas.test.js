@@ -10,6 +10,7 @@ import confetti from 'canvas-confetti'
 import { act } from 'react-dom/test-utils'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import Dialog from '@material-ui/core/Dialog'
+import { STORAGE_SEAS_CAUSE_ID } from 'src/utils/constants'
 
 jest.mock('next/router')
 jest.mock('src/utils/featureFlags', () => ({
@@ -144,7 +145,7 @@ describe('UserImpact component', () => {
     notification.find(Button).simulate('click')
     expect(UpdateImpactMutation).toHaveBeenCalledWith(
       'someId',
-      'c04b544f-5e6b-4e10-b783-05834e5d087d',
+      STORAGE_SEAS_CAUSE_ID,
       { claimLatestReward: true }
     )
   })
@@ -173,7 +174,7 @@ describe('UserImpact component', () => {
     expect(wrapper.find(Dialog).at(0).props().open).toBe(false)
     expect(UpdateImpactMutation).toHaveBeenCalledWith(
       'someId',
-      'c04b544f-5e6b-4e10-b783-05834e5d087d',
+      STORAGE_SEAS_CAUSE_ID,
       { confirmImpact: true }
     )
   })
@@ -191,7 +192,7 @@ describe('UserImpact component', () => {
     expect(wrapper.find(Dialog).at(0).props().open).toBe(false)
     expect(UpdateImpactMutation).toHaveBeenCalledWith(
       'someId',
-      'c04b544f-5e6b-4e10-b783-05834e5d087d',
+      STORAGE_SEAS_CAUSE_ID,
       {
         confirmImpact: true,
         claimPendingUserReferralImpact: true,
@@ -290,7 +291,7 @@ describe('UserImpact component', () => {
     notification.find(Button).simulate('click')
     expect(UpdateImpactMutation).toHaveBeenCalledWith(
       'someId',
-      'c04b544f-5e6b-4e10-b783-05834e5d087d',
+      STORAGE_SEAS_CAUSE_ID,
       { claimPendingUserReferralImpact: true }
     )
   })
