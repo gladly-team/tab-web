@@ -4,6 +4,7 @@ import useData from 'src/utils/hooks/useData'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import SettingsPage from 'src/components/SettingsPage'
+import Markdown from 'src/components/Markdown'
 
 jest.mock('src/components/SettingsPage')
 jest.mock('src/utils/pageWrappers/withRelay')
@@ -112,5 +113,26 @@ describe('about.js', () => {
       primaryColor: '#00FF00',
       secondaryColor: 'DEDEDE',
     })
+  })
+
+  it('does not render any child content when the fetch is still in progress', () => {
+    expect.assertions(1)
+    const AboutPage = require('src/pages/about').default
+    useData.mockReturnValue({ data: undefined })
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AboutPage {...mockProps} />)
+    expect(wrapper.find(SettingsPage).children().length).toEqual(0)
+  })
+
+  it('renders child content within a Markdown component when the fetch has completed', () => {
+    expect.assertions(2)
+    const AboutPage = require('src/pages/about').default
+    useData.mockReturnValue({ data: getMockDataResponse() })
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AboutPage {...mockProps} />)
+    expect(wrapper.find(SettingsPage).children().length).toBeGreaterThan(0)
+    expect(wrapper.find(Markdown).prop('children')).toEqual(
+      '### Something Here\n\nWith some other content.'
+    )
   })
 })
