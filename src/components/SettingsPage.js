@@ -8,8 +8,9 @@ import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
+import SvgIcon from '@material-ui/core/SvgIcon'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
 
-// import ListItemIcon from '@material-ui/core/ListItemIcon'
 // import ListSubheader from '@material-ui/core/ListSubheader'
 import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
@@ -24,8 +25,7 @@ import {
   surveyLink,
 } from 'src/utils/urls'
 import { Divider } from '@material-ui/core'
-
-// import { mdiOpenInNew } from '@mdi/js'
+import { mdiOpenInNew } from '@mdi/js'
 
 const sidebarWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +42,13 @@ const useStyles = makeStyles((theme) => ({
   list: {
     marginLeft: theme.spacing(1),
     marginTop: theme.spacing(1),
+  },
+  listItemIcon: {
+    justifyContent: 'flex-end',
+  },
+  listItemIconSVG: {
+    height: theme.typography.body1.fontSize,
+    width: theme.typography.body1.fontSize,
   },
   logo: {
     width: 40,
@@ -68,17 +75,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const OpenInNew = (props) => (
+  <SvgIcon {...props}>
+    <path d={mdiOpenInNew} />
+  </SvgIcon>
+)
+
 const SettingsMenuItem = (props) => {
-  const { children, to } = props
+  const { children, to, IconComponent, target } = props
   const router = useRouter()
 
   // TODO: fix trailing slash
   const isActive = router.pathname === to
-  console.log('isActive', isActive, router.pathname, to)
+
+  // console.log('isActive', isActive, router.pathname, to)
 
   const classes = useStyles({ isActive })
   return (
-    <Link to={to} className={classes.menuItem}>
+    <Link to={to} target={target} className={classes.menuItem}>
       <ListItem button>
         <ListItemText
           primary={children}
@@ -86,6 +100,11 @@ const SettingsMenuItem = (props) => {
             variant: 'body2',
           }}
         />
+        {IconComponent && (
+          <ListItemIcon className={classes.listItemIcon}>
+            <IconComponent className={classes.listItemIconSVG} />
+          </ListItemIcon>
+        )}
       </ListItem>
     </Link>
   )
@@ -94,9 +113,13 @@ const SettingsMenuItem = (props) => {
 SettingsMenuItem.propTypes = {
   children: PropTypes.node.isRequired,
   to: PropTypes.string.isRequired,
+  IconComponent: PropTypes.elementType,
+  target: PropTypes.string,
 }
-
-SettingsMenuItem.defaultProps = {}
+SettingsMenuItem.defaultProps = {
+  IconComponent: null,
+  target: undefined,
+}
 
 const SettingsPage = (props) => {
   const { children } = props
@@ -121,11 +144,27 @@ const SettingsPage = (props) => {
           <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
           <SettingsMenuItem to={aboutURL}>About the Cause</SettingsMenuItem>
           <Divider className={classes.divider} />
-          <SettingsMenuItem to={HELP_URL}>Help</SettingsMenuItem>
-          <SettingsMenuItem to={FINANCIALS_URL}>
+          <SettingsMenuItem
+            to={HELP_URL}
+            IconComponent={OpenInNew}
+            target="_blank"
+          >
+            Help
+          </SettingsMenuItem>
+          <SettingsMenuItem
+            to={FINANCIALS_URL}
+            IconComponent={OpenInNew}
+            target="_blank"
+          >
             Our Financials
           </SettingsMenuItem>
-          <SettingsMenuItem to={surveyLink}>Feedback</SettingsMenuItem>
+          <SettingsMenuItem
+            to={surveyLink}
+            IconComponent={OpenInNew}
+            target="_blank"
+          >
+            Feedback
+          </SettingsMenuItem>
         </List>
       </div>
       <div
