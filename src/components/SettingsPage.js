@@ -10,12 +10,13 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 
 // import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListSubheader from '@material-ui/core/ListSubheader'
+// import ListSubheader from '@material-ui/core/ListSubheader'
 import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import {
+  aboutURL,
   accountURL,
   dashboardURL,
   FINANCIALS_URL,
@@ -23,7 +24,8 @@ import {
   surveyLink,
 } from 'src/utils/urls'
 import { Divider } from '@material-ui/core'
-import { mdiOpenInNew } from '@mdi/js'
+
+// import { mdiOpenInNew } from '@mdi/js'
 
 const sidebarWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -39,10 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
   list: {
     marginLeft: theme.spacing(1),
-  },
-  listSubheader: {
-    fontSize: '0.75rem',
-    textTransform: 'uppercase',
+    marginTop: theme.spacing(1),
   },
   logo: {
     width: 40,
@@ -119,14 +118,9 @@ const SettingsPage = (props) => {
       </AppBar>
       <div className={classes.sidebarContentContainer}>
         <List className={classes.list}>
-          <ListSubheader disableSticky className={classes.listSubheader}>
-            Your Profile
-          </ListSubheader>
           <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
+          <SettingsMenuItem to={aboutURL}>About the Cause</SettingsMenuItem>
           <Divider className={classes.divider} />
-          <ListSubheader disableSticky className={classes.listSubheader}>
-            More Info
-          </ListSubheader>
           <SettingsMenuItem to={HELP_URL}>Help</SettingsMenuItem>
           <SettingsMenuItem to={FINANCIALS_URL}>
             Our Financials
