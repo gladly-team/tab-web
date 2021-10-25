@@ -9,9 +9,11 @@ MockSettingsPage.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
-  ]).isRequired,
+  ]),
 }
 
-MockSettingsPage.defaultProps = {}
+MockSettingsPage.defaultProps = {
+  children: null,
+}
 
 export default MockSettingsPage

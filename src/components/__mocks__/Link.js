@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const MockLink = ({ children }) => (
-  <div data-test-id="mock-link">
-    <a>{children}</a>
-  </div>
+const MockLink = ({ children, target, to }) => (
+  <a data-test-id="mock-link" target={target} href={to}>
+    {children}
+  </a>
 )
 
 MockLink.propTypes = {
@@ -12,8 +12,12 @@ MockLink.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,
   ]).isRequired,
+  target: PropTypes.string,
+  to: PropTypes.string.isRequired,
 }
 
-MockLink.defaultProps = {}
+MockLink.defaultProps = {
+  target: undefined,
+}
 
 export default MockLink

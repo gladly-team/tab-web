@@ -10,8 +10,27 @@ import remarkRehype from 'remark-rehype'
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize'
 import rehypeReact from 'rehype-react'
 import Typography from '@material-ui/core/Typography'
+import Link from 'src/components/Link'
+import { makeStyles } from '@material-ui/core/styles'
 
-const schema = defaultSchema
+const useStyles = makeStyles((theme) => ({
+  anchor: {
+    color: theme.palette.primary.main,
+    textDecoration: 'underline',
+  },
+}))
+
+const MarkdownLink = ({ href, ...otherProps }) => {
+  const cx = useStyles()
+  return (
+    <Link target="_blank" to={href} className={cx.anchor} {...otherProps} />
+  )
+}
+MarkdownLink.displayName = 'MarkdownLink'
+MarkdownLink.propTypes = {
+  href: PropTypes.string.isRequired,
+}
+MarkdownLink.defaultProps = {}
 
 // https://github.com/remarkjs/remark
 const processor = unified()
@@ -19,7 +38,7 @@ const processor = unified()
   .use(remarkRehype)
 
   // https://github.com/rehypejs/rehype-sanitize#use
-  .use(rehypeSanitize, schema)
+  .use(rehypeSanitize, defaultSchema)
   .use(rehypeReact, {
     createElement: React.createElement,
     components: {
@@ -33,10 +52,7 @@ const processor = unified()
       h5: (props) => <Typography {...props} variant="body1" gutterBottom />,
       h6: (props) => <Typography {...props} variant="caption" />,
       p: (props) => <Typography {...props} variant="body2" paragraph />,
-
-      // Anchor will have content when rendered.
-      // eslint-disable-next-line jsx-a11y/anchor-has-content
-      a: (props) => <a target="_blank" {...props} />,
+      a: MarkdownLink,
     },
   })
 
