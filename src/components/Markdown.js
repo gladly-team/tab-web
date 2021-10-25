@@ -28,11 +28,9 @@ const MarkdownLink = ({ href, ...otherProps }) => {
 }
 MarkdownLink.displayName = 'MarkdownLink'
 MarkdownLink.propTypes = {
-  href: PropTypes.string,
+  href: PropTypes.string.isRequired,
 }
-MarkdownLink.defaultProps = {
-  href: undefined,
-}
+MarkdownLink.defaultProps = {}
 
 // https://github.com/remarkjs/remark
 const processor = unified()
