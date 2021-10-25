@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { getReferralUrl } from 'src/utils/urls'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
-import SocialShare from 'src/components/SocialShare'
+import SocialShareContainer from './SocialShareContainer'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,12 +20,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const InviteFriends = ({
-  user: {
+const InviteFriends = ({ user }) => {
+  const {
     username,
     cause: { landingPagePath },
-  },
-}) => {
+  } = user
   const classes = useStyles()
   const referralUrl = getReferralUrl(username, landingPagePath)
   const textFieldRef = React.createRef()
@@ -53,7 +52,7 @@ const InviteFriends = ({
           ),
         }}
       />
-      <SocialShare url={referralUrl} iconSize={24} />
+      <SocialShareContainer url={referralUrl} iconSize={24} user={user} />
     </div>
   )
 }

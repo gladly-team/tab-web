@@ -294,6 +294,8 @@ const getRelayQuery = async ({ AuthUser }) => {
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
           ...InviteFriendsIconContainer_user
+          ...SocialShareContainer_user
+          ...EmailInviteDialogContainer_user
         }
       }
     `,
