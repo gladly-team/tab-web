@@ -1,5 +1,7 @@
 import mockWindowLocation from 'src/utils/testHelpers/mockWindowLocation'
 
+jest.mock('src/utils/ssr')
+
 beforeAll(() => {
   process.env.REACT_APP_WEBSITE_PROTOCOL = 'https'
 })
@@ -127,5 +129,60 @@ describe('withBasePath', () => {
     expect(withBasePath('https://example.com/my-url')).toEqual(
       'https://example.com/my-url'
     )
+  })
+})
+
+describe('areSameURLs', () => {
+  beforeEach(() => {
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+  })
+
+  it('works as expected', () => {
+    const { areSameURLs } = require('src/utils/navigationUtils')
+    mockWindowLocation({
+      host: 'example.com',
+      hostname: 'example.com',
+      href: 'https://example.com/newtab/path/',
+      origin: 'https://example.com',
+      pathname: '/newtab/path/',
+      port: '',
+      protocol: 'https:',
+      search: '',
+    })
+
+    // expect(areSameURLs('', '')).toBe(true)
+    expect(areSameURLs('/', '/')).toBe(true)
+
+    // expect(areSameURLs('/', '')).toBe(true)
+    expect(areSameURLs('/foo', '/foo/')).toBe(true)
+    expect(areSameURLs('/foo/', '/foo/')).toBe(true)
+    expect(areSameURLs('/foo/', '/blah/')).toBe(false) // different path
+    expect(areSameURLs('https://example.com/foo/', '/foo/')).toBe(true)
+    expect(areSameURLs('https://example.com/foo', '/foo/')).toBe(true)
+    expect(areSameURLs('https://example.com/foo/bar/', '/foo/bar')).toBe(true)
+
+    // Different domain
+    expect(areSameURLs('https://example2.com/foo/bar/', '/foo/bar')).toBe(false)
+  })
+
+  it('returns false when on the server side', () => {
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(true)
+    const { areSameURLs } = require('src/utils/navigationUtils')
+    mockWindowLocation({
+      host: 'example.com',
+      hostname: 'example.com',
+      href: 'https://example.com/newtab/path/',
+      origin: 'https://example.com',
+      pathname: '/newtab/path/',
+      port: '',
+      protocol: 'https:',
+      search: '',
+    })
+
+    // Server-side will always return false.
+    expect(areSameURLs('/', '/')).toBe(false)
+    expect(areSameURLs('/foo/', '/foo/')).toBe(false)
   })
 })

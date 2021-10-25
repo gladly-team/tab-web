@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles'
@@ -24,6 +24,7 @@ import {
 } from 'src/utils/urls'
 import { Divider } from '@material-ui/core'
 import { mdiOpenInNew } from '@mdi/js'
+import { areSameURLs } from 'src/utils/navigationUtils'
 
 const sidebarWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -89,10 +90,15 @@ const SettingsMenuItem = (props) => {
   const { children, to, IconComponent, target } = props
   const router = useRouter()
 
-  // TODO: fix trailing slash
-  const isActive = router.pathname === to
-
-  // console.log('isActive', isActive, router.pathname, to)
+  // We're using useEffect because `areSameURLs` may return
+  // a different value on the client side and we don't want
+  // a hydration mismatch. We can clean this up with a hook
+  // that manages client-side-specific rendering.
+  const [isMounted, setIsMounted] = useState(false)
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+  const isActive = areSameURLs(router.pathname, to) && isMounted
 
   const classes = useStyles({ isActive })
   return (
