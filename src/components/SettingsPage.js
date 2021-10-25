@@ -73,11 +73,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const OpenInNew = (props) => (
-  <SvgIcon {...props}>
+const OpenInNew = ({ className }) => (
+  <SvgIcon className={className}>
     <path d={mdiOpenInNew} />
   </SvgIcon>
 )
+OpenInNew.propTypes = {
+  className: PropTypes.string,
+}
+OpenInNew.defaultProps = {
+  className: undefined,
+}
 
 const SettingsMenuItem = (props) => {
   const { children, to, IconComponent, target } = props
