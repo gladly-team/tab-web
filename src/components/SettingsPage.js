@@ -23,6 +23,7 @@ import {
 } from 'src/utils/urls'
 import { showMockAchievements } from 'src/utils/featureFlags'
 import { Divider } from '@material-ui/core'
+import { mdiOpenInNew } from '@mdi/js'
 
 const sidebarWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -71,7 +72,11 @@ const useStyles = makeStyles((theme) => ({
 const SettingsMenuItem = (props) => {
   const { children, to } = props
   const router = useRouter()
+
+  // TODO: fix trailing slash
   const isActive = router.pathname === to
+  console.log('isActive', isActive, router.pathname, to)
+
   const classes = useStyles({ isActive })
   return (
     <Link to={to} className={classes.menuItem}>
@@ -117,6 +122,7 @@ const SettingsPage = (props) => {
           <ListSubheader disableSticky className={classes.listSubheader}>
             Your Profile
           </ListSubheader>
+          {/* TODO: remove unused page */}
           {showMockAchievements() ? (
             <SettingsMenuItem to={achievementsURL}>
               Achievements
