@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import GroupAddIcon from '@material-ui/icons/GroupAdd'
 import { get } from 'lodash/object'
-import EmailInviteDialog from 'src/components/EmailInviteDialog'
 import Dialog from '@material-ui/core/Dialog'
+import EmailInviteDialogContainer from './EmailInviteDialogContainer'
 
 const useStyles = makeStyles((theme) => ({
   copyIcon: {
@@ -32,13 +32,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const InviteFriendsIcon = ({
-  user: {
+const InviteFriendsIcon = ({ user }) => {
+  const {
     username,
     id,
     cause: { landingPagePath },
-  },
-}) => {
+  } = user
   const buttonRef = useRef(undefined)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const classes = useStyles()
@@ -61,11 +60,12 @@ const InviteFriendsIcon = ({
         open={isDialogOpen}
         className={classes.rootModal}
       >
-        <EmailInviteDialog
+        <EmailInviteDialogContainer
           username={username}
           userId={id}
           landingPagePath={landingPagePath}
           closeFunction={closeDialog}
+          user={user}
         />
       </Dialog>
     </>
