@@ -1988,6 +1988,17 @@
   dependencies:
     "@babel/runtime" "^7.4.4"
 
+"@material-ui/lab@^4.11.3-deprecations.1":
+  version "4.11.3-deprecations.1"
+  resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.11.3-deprecations.1.tgz#3a43f17be8fc18717be70da31c44a534a57c439c"
+  integrity sha512-mP53Wh3jKzPcZbvnY+hLWQmfEq8JmUP1SrR1r8S+jxMymC20/SLxMVVLb4h4pmZ0+ga232JegG0XypQ/r9I5TA==
+  dependencies:
+    "@babel/runtime" "^7.4.4"
+    "@material-ui/utils" "^4.11.2"
+    clsx "^1.0.4"
+    prop-types "^15.7.2"
+    react-is "^16.8.0 || ^17.0.0"
+
 "@material-ui/styles@^4.11.4":
   version "4.11.4"
   resolved "https://registry.yarnpkg.com/@material-ui/styles/-/styles-4.11.4.tgz#eb9dfccfcc2d208243d986457dff025497afa00d"

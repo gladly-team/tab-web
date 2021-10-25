@@ -19,6 +19,9 @@ import useData from 'src/utils/hooks/useData'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import initializeCMP from 'src/utils/initializeCMP'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
+import ToggleButton from '@material-ui/lab/ToggleButton'
+import SetUserCauseMutation from 'src/utils/mutations/SetUserCauseMutation'
+import { describe } from 'jest-circus'
 
 jest.mock('next-offline/runtime')
 jest.mock('tab-cmp')
@@ -33,7 +36,7 @@ jest.mock('src/utils/hooks/useData')
 jest.mock('src/utils/pageWrappers/withSentry')
 jest.mock('src/utils/pageWrappers/CustomThemeHOC')
 jest.mock('src/utils/hooks/useCustomTheming')
-
+jest.mock('src/utils/mutations/SetUserCauseMutation')
 const getMockDataResponse = () => ({
   user: {
     id: 'some-user-id',
@@ -265,7 +268,7 @@ describe('account.js', () => {
 })
 
 const getRevertAccountItem = (wrapper) =>
-  wrapper.find('[data-test-id="account-item"]').last()
+  wrapper.find('[data-test-id="revert-v4"]').last()
 
 const getRevertButton = (wrapper) =>
   getRevertAccountItem(wrapper).find(Button).last()
@@ -571,5 +574,90 @@ describe('account.js: CMP privacy management', () => {
 
     const privacyChoicesSection = wrapper.find('[data-test-id="data-privacy"]')
     expect(privacyChoicesSection.exists()).toBe(false)
+  })
+})
+
+describe('acount.js: toggle to switch cause', () => {
+  it('displays switch cause toggle for internal users', () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account').default
+    const mockProps = getMockProps()
+    const defaultMockData = getMockDataResponse()
+    useData.mockReturnValue({
+      data: {
+        ...defaultMockData,
+        user: {
+          ...defaultMockData.user,
+          email: 'test@tabforacause.org',
+          cause: {
+            ...defaultMockData.user.cause,
+            landingPagePath: '/teamseas/',
+          },
+        },
+      },
+    })
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const switchCause = wrapper.find('[data-test-id="switch-cause"]')
+    expect(switchCause.exists()).toBe(true)
+  })
+
+  it('does not display switch cause toggle for external users', () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account').default
+    const mockProps = getMockProps()
+    const defaultMockData = getMockDataResponse()
+    useData.mockReturnValue({
+      data: {
+        ...defaultMockData,
+        user: {
+          ...defaultMockData.user,
+          cause: {
+            ...defaultMockData.user.cause,
+            landingPagePath: '/teamseas/',
+          },
+        },
+      },
+    })
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const switchCause = wrapper.find('[data-test-id="switch-cause"]')
+    expect(switchCause.exists()).toBe(false)
+  })
+
+  it('toggling to other cause updates user cause', () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account').default
+    const mockProps = getMockProps()
+    const defaultMockData = getMockDataResponse()
+    SetUserCauseMutation.mockResolvedValue({
+      setUserCause: {
+        user: {
+          cause: {
+            theme: {
+              primaryColor: '#fff',
+              secondaryColor: '#fff',
+            },
+          },
+        },
+      },
+    })
+    useData.mockReturnValue({
+      data: {
+        ...defaultMockData,
+        user: {
+          ...defaultMockData.user,
+          email: 'test@tabforacause.org',
+          cause: {
+            ...defaultMockData.user.cause,
+            landingPagePath: '/teamseas/',
+          },
+        },
+      },
+    })
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    wrapper.find(ToggleButton).at(1).simulate('click')
+    expect(SetUserCauseMutation).toHaveBeenCalledWith({
+      causeId: 'SGa6zohkY',
+      userId: 'some-user-id',
+    })
   })
 })

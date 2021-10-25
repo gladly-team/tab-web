@@ -100,3 +100,16 @@ describe('feature flag: showBackgroundImages', () => {
     expect(showBackgroundImages()).toBe(true)
   })
 })
+describe('feature flag: showInternalOnly', () => {
+  it('returns false when the email is non internal', () => {
+    delete process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE
+    const { showInternalOnly } = require('src/utils/featureFlags')
+    expect(showInternalOnly('somerandomemail@gmail.com')).toBe(false)
+  })
+
+  it('returns true when the email is non internal', () => {
+    delete process.env.NEXT_PUBLIC_DEVELOPMENT_SHOW_MISSIONS_FEATURE
+    const { showInternalOnly } = require('src/utils/featureFlags')
+    expect(showInternalOnly('alec@tabforacause.org')).toBe(true)
+  })
+})
