@@ -8,6 +8,8 @@ import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
+
+// import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListSubheader from '@material-ui/core/ListSubheader'
 import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
@@ -15,13 +17,11 @@ import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import {
   accountURL,
-  achievementsURL,
   dashboardURL,
   FINANCIALS_URL,
   HELP_URL,
   surveyLink,
 } from 'src/utils/urls'
-import { showMockAchievements } from 'src/utils/featureFlags'
 import { Divider } from '@material-ui/core'
 import { mdiOpenInNew } from '@mdi/js'
 
@@ -122,12 +122,6 @@ const SettingsPage = (props) => {
           <ListSubheader disableSticky className={classes.listSubheader}>
             Your Profile
           </ListSubheader>
-          {/* TODO: remove unused page */}
-          {showMockAchievements() ? (
-            <SettingsMenuItem to={achievementsURL}>
-              Achievements
-            </SettingsMenuItem>
-          ) : null}
           <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
           <Divider className={classes.divider} />
           <ListSubheader disableSticky className={classes.listSubheader}>
