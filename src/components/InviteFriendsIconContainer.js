@@ -10,8 +10,6 @@ export default createFragmentContainer(InviteFriendsIcon, {
       cause {
         landingPagePath
       }
-      ...EmailInviteDialogContainer_user
-      ...SocialShareContainer_user
     }
   `,
 })

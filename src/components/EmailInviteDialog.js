@@ -9,19 +9,17 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
 import MuiDialogContent from '@material-ui/core/DialogContent'
+import SocialShare from 'src/components/SocialShare'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import CreateInvitedUsersMutation from 'src/utils/mutations/CreateInvitedUsersMutation'
 import shareCats from 'src/assets/images/shareCats.png'
 import catsSent from 'src/assets/images/catsSent.png'
-import seasEmailInvite from 'src/assets/images/seasEmailInvite.svg'
 import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
 import Fade from '@material-ui/core/Fade'
 import CloseIcon from '@material-ui/icons/Close'
 import logger from 'src/utils/logger'
-import Markdown from 'src/components/Markdown'
-import SocialShareContainer from './SocialShareContainer'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,6 +30,12 @@ const useStyles = makeStyles((theme) => ({
   },
   dialogContentRoot: {
     padding: theme.spacing(4),
+  },
+  titleText: {
+    fontSize: '24px',
+    fontWeight: 700,
+    lineHeight: '2rem',
+    marginTop: theme.spacing(0.5),
   },
   purpleColor: {
     color: theme.palette.text.primary,
@@ -46,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
   sendButton: {
     marginTop: theme.spacing(2),
     height: theme.spacing(6),
+    backgroundColor: theme.palette.colors.purple1,
   },
   sentBox: {
     display: 'flex',
@@ -101,11 +106,7 @@ const EmailInviteFriendsDialog = ({
   userId,
   landingPagePath,
   closeFunction,
-  user,
 }) => {
-  const { cause } = user
-  const { sharing } = cause
-  const { title, subtitle, imgCategory } = sharing
   const classes = useStyles()
   const [value, setValue] = React.useState(0)
   const [emailInput, setEmailInputChange] = useState('')
@@ -173,40 +174,24 @@ const EmailInviteFriendsDialog = ({
       setPersonalMessageError(false)
     }
   }
-
-  let beforeShareImage
-  let afterShareImage
-  const alt = imgCategory
-  switch (imgCategory) {
-    case 'seas':
-      afterShareImage = seasEmailInvite
-      beforeShareImage = seasEmailInvite
-      break
-    case 'cats':
-    default:
-      afterShareImage = catsSent
-      beforeShareImage = shareCats
-  }
-
   return (
     <div className={classes.root}>
       <MuiDialogContent classes={{ root: classes.dialogContentRoot }}>
         {/* MuiDialog modifies the padding on the 1st child and i cant override it so adding this style */}
-        <img
-          src={beforeShareImage}
-          alt={imgCategory}
-          style={{ marginTop: '12px' }}
-        />
+        <img src={shareCats} alt="cats" style={{ marginTop: '12px' }} />
         <IconButton
           onClick={closeFunction}
           style={{ position: 'absolute', right: '16px', top: '20px' }}
         >
           <CloseIcon />
         </IconButton>
-        <Markdown>{title}</Markdown>
-        <div style={{ marginBottom: '8px' }}>
-          <Markdown>{subtitle}</Markdown>
-        </div>
+        <Typography variant="h4" classes={{ h4: classes.titleText }}>
+          Share Tab for Cats with your friends
+        </Typography>
+        <Typography style={{ marginBottom: '8px' }}>
+          Save more cats! When a friend signs up, you'll each earn 5 additional
+          treats to help a shelter cat get adopted. 😺
+        </Typography>
         <Tabs value={value} onChange={setChange} indicatorColor="primary">
           <Tab label="Email" />
           <Tab label="Social Media" />
@@ -282,13 +267,7 @@ const EmailInviteFriendsDialog = ({
           ) : (
             <Fade in>
               <div className={classes.sentBox}>
-                <img
-                  src={afterShareImage}
-                  height="120px"
-                  width="240px"
-                  color="secondary"
-                  alt={`${alt}2`}
-                />
+                <img src={catsSent} height="120px" width="240px" alt="cats2" />
                 <Typography color="primary" variant="h4">
                   Thanks for sharing!
                 </Typography>
@@ -299,7 +278,7 @@ const EmailInviteFriendsDialog = ({
             className={classes.sendButton}
             fullWidth
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={sendEmailInvites}
             disabled={
               !(validEmails.length && name.length) || personalMessageError
@@ -337,11 +316,7 @@ const EmailInviteFriendsDialog = ({
               <Typography color="primary" variant="caption">
                 Share to social media
               </Typography>
-              <SocialShareContainer
-                url={referralUrl}
-                iconSize={60}
-                user={user}
-              />
+              <SocialShare url={referralUrl} iconSize={60} />
             </div>
           </div>
         </TabPanel>
@@ -355,19 +330,8 @@ EmailInviteFriendsDialog.propTypes = {
   userId: PropTypes.string.isRequired,
   closeFunction: PropTypes.func.isRequired,
   landingPagePath: PropTypes.string.isRequired,
-  user: PropTypes.shape({
-    cause: PropTypes.shape({
-      sharing: PropTypes.shape({
-        imgCategory: PropTypes.string,
-        title: PropTypes.string,
-        subtitle: PropTypes.string,
-      }),
-    }),
-  }),
 }
 
-EmailInviteFriendsDialog.defaultProps = {
-  user: {},
-}
+EmailInviteFriendsDialog.defaultProps = {}
 
 export default EmailInviteFriendsDialog

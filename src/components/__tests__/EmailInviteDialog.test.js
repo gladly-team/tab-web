@@ -10,57 +10,13 @@ import SocialShare from 'src/components/SocialShare'
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from 'src/utils/theme'
 import IconButton from '@material-ui/core/IconButton'
-import shareCats from 'src/assets/images/shareCats.png'
-import catsSent from 'src/assets/images/catsSent.png'
-import seasEmailInvite from 'src/assets/images/seasEmailInvite.svg'
 
 const getMockProps = () => ({
   username: 'someUsername',
   userId: 'someId',
   landingPagePath: '/cats/',
   closeFunction: jest.fn(),
-  user: {
-    cause: {
-      sharing: {
-        imgCategory: 'cats',
-        title: 'Share Tab for Cats with your friends',
-        subtitle:
-          "Save more cats! When a friend signs up, you'll each earn 5 additional treats to help a shelter cat get adopted. 😺",
-      },
-    },
-  },
 })
-
-const otherUsers = [
-  {
-    user: {
-      cause: {
-        sharing: {
-          imgCategory: 'cats',
-          title: 'Share Tab for Cats with your friends',
-          subtitle:
-            "Save more cats! When a friend signs up, you'll each earn 5 additional treats to help a shelter cat get adopted. 😺",
-        },
-      },
-    },
-    expectedImage: shareCats,
-    expectedAfterImage: catsSent,
-  },
-  {
-    user: {
-      cause: {
-        sharing: {
-          imgCategory: 'seas',
-          title: 'Seas',
-          subtitle: 'Seas',
-        },
-      },
-    },
-    expectedImage: seasEmailInvite,
-    expectedAfterImage: seasEmailInvite,
-  },
-]
-
 jest.mock('src/utils/mutations/CreateInvitedUsersMutation')
 
 afterEach(() => {
@@ -79,23 +35,6 @@ describe('EmailInviteDialog component', () => {
         </ThemeProvider>
       )
     }).not.toThrow()
-  })
-
-  it('displays correct image by default', () => {
-    otherUsers.forEach((testUser) => {
-      const EmailInviteFriendsDialog =
-        require('src/components/EmailInviteDialog').default
-      const mockProps = {
-        ...getMockProps(),
-        user: testUser.user,
-      }
-      const wrapper = mount(
-        <ThemeProvider theme={theme}>
-          <EmailInviteFriendsDialog {...mockProps} />
-        </ThemeProvider>
-      )
-      expect(wrapper.find('img').at(0).prop('src')).toBe(testUser.expectedImage)
-    })
   })
 
   it('the send email button is disabled by default', () => {
@@ -392,44 +331,31 @@ describe('EmailInviteDialog component', () => {
   })
 
   it('shows the successful send state when emails are successfully sent', async () => {
-    for (let i = 0; i < otherUsers.length; i += 1) {
-      const testUser = otherUsers[i]
-      const EmailInviteFriendsDialog =
-        require('src/components/EmailInviteDialog').default
-      const mockProps = {
-        ...getMockProps(),
-        user: testUser.user,
-      }
-      const wrapper = mount(
-        <ThemeProvider theme={theme}>
-          <EmailInviteFriendsDialog {...mockProps} />
-        </ThemeProvider>
-      )
-      const emailInput = wrapper.find(TextField).at(0)
-      emailInput
-        .find('input')
-        .simulate('change', { target: { value: 'testdsf@gmail.com' } })
+    const EmailInviteFriendsDialog =
+      require('src/components/EmailInviteDialog').default
+    const mockProps = getMockProps()
+    const wrapper = mount(
+      <ThemeProvider theme={theme}>
+        <EmailInviteFriendsDialog {...mockProps} />
+      </ThemeProvider>
+    )
+    const emailInput = wrapper.find(TextField).at(0)
+    emailInput
+      .find('input')
+      .simulate('change', { target: { value: 'testdsf@gmail.com' } })
+    wrapper.update()
+    emailInput.find('input').simulate('blur')
+    const nameInput = wrapper.find(TextField).at(1)
+    nameInput.find('input').simulate('change', { target: { value: 'yolo' } })
+    nameInput.find('input').simulate('blur')
+    wrapper.update()
+    wrapper.find(Button).simulate('click')
+    wrapper.update()
+    await act(async () => {
+      await flushAllPromises()
       wrapper.update()
-      emailInput.find('input').simulate('blur')
-      const nameInput = wrapper.find(TextField).at(1)
-      nameInput.find('input').simulate('change', { target: { value: 'yolo' } })
-      nameInput.find('input').simulate('blur')
-      wrapper.update()
-      wrapper.find(Button).simulate('click')
-      wrapper.update()
-      /* eslint-disable no-await-in-loop */
-      await act(async () => {
-        await flushAllPromises()
-        wrapper.update()
-      })
-      /* eslint-disable no-await-in-loop */
-      expect(wrapper.find('img').at(1).prop('alt')).toBe(
-        `${testUser.user.cause.sharing.imgCategory}2`
-      )
-      expect(wrapper.find('img').at(1).prop('src')).toBe(
-        testUser.expectedAfterImage
-      )
-    }
+    })
+    expect(wrapper.find('img').at(1).prop('alt')).toBe('cats2')
   })
 
   it('resets the send email state after emails have successfully sent', async () => {

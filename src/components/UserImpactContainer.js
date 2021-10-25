@@ -51,8 +51,6 @@ export default createFragmentContainer(UserImpactSwitchComponent, {
         }
       }
       hasSeenSquads
-      ...EmailInviteDialogContainer_user
-      ...SocialShareContainer_user
     }
   `,
 })
