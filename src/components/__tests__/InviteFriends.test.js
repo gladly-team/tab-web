@@ -9,7 +9,6 @@ const getMockProps = () => ({
     username: 'bob',
     cause: {
       landingPagePath: '/cats/',
-      sharing: {},
     },
   },
 })
