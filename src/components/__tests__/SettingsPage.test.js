@@ -7,13 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
-import {
-  accountURL,
-  achievementsURL,
-  dashboardURL,
-  surveyLink,
-} from 'src/utils/urls'
-import { showMockAchievements } from 'src/utils/featureFlags'
+import { aboutURL, accountURL, dashboardURL, surveyLink } from 'src/utils/urls'
 
 jest.mock('src/components/Link')
 jest.mock('src/components/Logo')
@@ -21,10 +15,6 @@ jest.mock('src/utils/featureFlags')
 
 const getMockProps = () => ({
   children: <div>I am a child</div>,
-})
-
-beforeEach(() => {
-  showMockAchievements.mockReturnValue(false)
 })
 
 describe('SettingsPage component', () => {
@@ -63,51 +53,6 @@ describe('SettingsPage component', () => {
     expect(link.childAt(0).childAt(0).type()).toEqual(CloseIcon)
   })
 
-  it('includes the "Your Profile" subheader in the sidebar list', () => {
-    expect.assertions(1)
-    const SettingsPage = require('src/components/SettingsPage').default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
-    const sidebarList = wrapper.find(List).first()
-
-    // First subheader.
-    expect(sidebarList.childAt(0).text()).toEqual('Your Profile')
-  })
-
-  it('includes the achievements link in the sidebar list if the feature is enabled', () => {
-    expect.assertions(3)
-
-    showMockAchievements.mockReturnValue(true) // enabled
-
-    const SettingsPage = require('src/components/SettingsPage').default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
-    const sidebarList = wrapper.find(List).first()
-
-    const item = sidebarList
-      .findWhere((elem) => elem.render().text() === 'Achievements')
-      .dive()
-    expect(item.exists()).toBe(true)
-    expect(item.type()).toEqual(Link)
-    expect(item.prop('to')).toEqual(achievementsURL)
-  })
-
-  it('does not include the achievements link in the sidebar list if the feature is not enabled', () => {
-    expect.assertions(1)
-
-    showMockAchievements.mockReturnValue(false) // not enabled
-
-    const SettingsPage = require('src/components/SettingsPage').default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<SettingsPage {...mockProps} />)
-    const sidebarList = wrapper.find(List).first()
-
-    const item = sidebarList.findWhere(
-      (elem) => elem.render().text() === 'Achievements'
-    )
-    expect(item.exists()).toBe(false)
-  })
-
   it('includes the account link in the sidebar list', () => {
     expect.assertions(3)
 
@@ -122,6 +67,22 @@ describe('SettingsPage component', () => {
     expect(item.exists()).toBe(true)
     expect(item.type()).toEqual(Link)
     expect(item.prop('to')).toEqual(accountURL)
+  })
+
+  it('includes the "about" link in the sidebar list', () => {
+    expect.assertions(3)
+
+    const SettingsPage = require('src/components/SettingsPage').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    const sidebarList = wrapper.find(List).first()
+
+    const item = sidebarList
+      .findWhere((elem) => elem.render().text() === 'About the Cause')
+      .dive()
+    expect(item.exists()).toBe(true)
+    expect(item.type()).toEqual(Link)
+    expect(item.prop('to')).toEqual(aboutURL)
   })
 
   it('renders children in the main content container', () => {

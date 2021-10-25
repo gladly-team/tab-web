@@ -31,6 +31,7 @@ export const apiLogout = createAPIURL('/api/logout')
 export const apiBetaOptIn = createAPIURL('/api/beta-opt-in')
 
 export const accountURL = createPageURL('/account')
+export const aboutURL = createPageURL('/about')
 export const achievementsURL = createPageURL('/achievements')
 export const authURL = createPageURL('/auth')
 export const betaOptInURL = createPageURL('/beta-opt-in')

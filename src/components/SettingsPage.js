@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useRouter } from 'next/router'
 import { makeStyles } from '@material-ui/core/styles'
@@ -8,21 +8,23 @@ import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
-import ListSubheader from '@material-ui/core/ListSubheader'
+import SvgIcon from '@material-ui/core/SvgIcon'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Toolbar from '@material-ui/core/Toolbar'
 import CloseIcon from '@material-ui/icons/Close'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import {
+  aboutURL,
   accountURL,
-  achievementsURL,
   dashboardURL,
   FINANCIALS_URL,
   HELP_URL,
   surveyLink,
 } from 'src/utils/urls'
-import { showMockAchievements } from 'src/utils/featureFlags'
 import { Divider } from '@material-ui/core'
+import { mdiOpenInNew } from '@mdi/js'
+import { areSameURLs } from 'src/utils/navigationUtils'
 
 const sidebarWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -38,10 +40,14 @@ const useStyles = makeStyles((theme) => ({
   },
   list: {
     marginLeft: theme.spacing(1),
+    marginTop: theme.spacing(1),
   },
-  listSubheader: {
-    fontSize: '0.75rem',
-    textTransform: 'uppercase',
+  listItemIcon: {
+    justifyContent: 'flex-end',
+  },
+  listItemIconSVG: {
+    height: theme.typography.body1.fontSize,
+    width: theme.typography.body1.fontSize,
   },
   logo: {
     width: 40,
@@ -68,13 +74,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const OpenInNew = ({ className }) => (
+  <SvgIcon className={className}>
+    <path d={mdiOpenInNew} />
+  </SvgIcon>
+)
+OpenInNew.propTypes = {
+  className: PropTypes.string,
+}
+OpenInNew.defaultProps = {
+  className: undefined,
+}
+
 const SettingsMenuItem = (props) => {
-  const { children, to } = props
+  const { children, to, IconComponent, target } = props
   const router = useRouter()
-  const isActive = router.pathname === to
+
+  // We're using useEffect because `areSameURLs` may return
+  // a different value on the client side and we don't want
+  // a hydration mismatch. We can clean this up with a hook
+  // that manages client-side-specific rendering.
+  const [isMounted, setIsMounted] = useState(false)
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+  const isActive = areSameURLs(router.pathname, to) && isMounted
+
   const classes = useStyles({ isActive })
   return (
-    <Link to={to} className={classes.menuItem}>
+    <Link to={to} target={target} className={classes.menuItem}>
       <ListItem button>
         <ListItemText
           primary={children}
@@ -82,6 +110,11 @@ const SettingsMenuItem = (props) => {
             variant: 'body2',
           }}
         />
+        {IconComponent && (
+          <ListItemIcon className={classes.listItemIcon}>
+            <IconComponent className={classes.listItemIconSVG} />
+          </ListItemIcon>
+        )}
       </ListItem>
     </Link>
   )
@@ -90,9 +123,13 @@ const SettingsMenuItem = (props) => {
 SettingsMenuItem.propTypes = {
   children: PropTypes.node.isRequired,
   to: PropTypes.string.isRequired,
+  IconComponent: PropTypes.elementType,
+  target: PropTypes.string,
 }
-
-SettingsMenuItem.defaultProps = {}
+SettingsMenuItem.defaultProps = {
+  IconComponent: null,
+  target: undefined,
+}
 
 const SettingsPage = (props) => {
   const { children } = props
@@ -114,24 +151,30 @@ const SettingsPage = (props) => {
       </AppBar>
       <div className={classes.sidebarContentContainer}>
         <List className={classes.list}>
-          <ListSubheader disableSticky className={classes.listSubheader}>
-            Your Profile
-          </ListSubheader>
-          {showMockAchievements() ? (
-            <SettingsMenuItem to={achievementsURL}>
-              Achievements
-            </SettingsMenuItem>
-          ) : null}
           <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
+          <SettingsMenuItem to={aboutURL}>About the Cause</SettingsMenuItem>
           <Divider className={classes.divider} />
-          <ListSubheader disableSticky className={classes.listSubheader}>
-            More Info
-          </ListSubheader>
-          <SettingsMenuItem to={HELP_URL}>Help</SettingsMenuItem>
-          <SettingsMenuItem to={FINANCIALS_URL}>
+          <SettingsMenuItem
+            to={HELP_URL}
+            IconComponent={OpenInNew}
+            target="_blank"
+          >
+            Help
+          </SettingsMenuItem>
+          <SettingsMenuItem
+            to={FINANCIALS_URL}
+            IconComponent={OpenInNew}
+            target="_blank"
+          >
             Our Financials
           </SettingsMenuItem>
-          <SettingsMenuItem to={surveyLink}>Feedback</SettingsMenuItem>
+          <SettingsMenuItem
+            to={surveyLink}
+            IconComponent={OpenInNew}
+            target="_blank"
+          >
+            Feedback
+          </SettingsMenuItem>
         </List>
       </div>
       <div
