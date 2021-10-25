@@ -31,20 +31,20 @@ const SocialShare = (props) => {
   const {
     EmailShareButtonProps,
     FacebookShareButtonProps,
-    RedditShareButtonProps,
-    TumblrShareButtonProps,
     TwitterShareButtonProps,
     url,
     iconSize,
+    user,
   } = props
-
   const classes = useStyles()
+  const { cause } = user
+  const { sharing } = cause || { sharing: {} }
   return (
     <div className={classes.root}>
-      {FacebookShareButtonProps.quote ? (
+      {sharing.facebookButtonTitle ? (
         <div className={classes.button}>
           <FacebookShareButton
-            quote={FacebookShareButtonProps.quote}
+            quote={sharing.facebookButtonTitle}
             hashtag={FacebookShareButtonProps.hashtag}
             url={url}
           >
@@ -52,10 +52,10 @@ const SocialShare = (props) => {
           </FacebookShareButton>
         </div>
       ) : null}
-      {TwitterShareButtonProps.title ? (
+      {sharing.twitterButtonTitle ? (
         <div className={classes.button}>
           <TwitterShareButton
-            title={TwitterShareButtonProps.title}
+            title={sharing.twitterButtonTitle}
             via={TwitterShareButtonProps.via}
             hashtags={TwitterShareButtonProps.hashtags}
             related={TwitterShareButtonProps.related}
@@ -65,18 +65,18 @@ const SocialShare = (props) => {
           </TwitterShareButton>
         </div>
       ) : null}
-      {RedditShareButtonProps.title ? (
+      {sharing.redditButtonTitle ? (
         <div className={classes.button}>
-          <RedditShareButton title={RedditShareButtonProps.title} url={url}>
+          <RedditShareButton title={sharing.redditButtonTitle} url={url}>
             <RedditIcon size={iconSize} round />
           </RedditShareButton>
         </div>
       ) : null}
-      {TumblrShareButtonProps.title ? (
+      {sharing.tumblrTitle ? (
         <div className={classes.button}>
           <TumblrShareButton
-            title={TumblrShareButtonProps.title}
-            caption={TumblrShareButtonProps.caption}
+            title={sharing.tumblrTitle}
+            caption={sharing.tumblrCaption}
             url={url}
           >
             <TumblrIcon size={iconSize} round />
@@ -110,42 +110,38 @@ SocialShare.propTypes = {
     quote: PropTypes.string,
     hashtag: PropTypes.string,
   }),
-  RedditShareButtonProps: PropTypes.shape({
-    title: PropTypes.string,
-  }),
-  TumblrShareButtonProps: PropTypes.shape({
-    title: PropTypes.string,
-    caption: PropTypes.string,
-  }),
   TwitterShareButtonProps: PropTypes.shape({
-    title: PropTypes.string,
     via: PropTypes.string,
     hashtags: PropTypes.arrayOf(PropTypes.string),
     related: PropTypes.arrayOf(PropTypes.string),
   }),
   url: PropTypes.string.isRequired,
   iconSize: PropTypes.number,
+  user: PropTypes.shape({
+    cause: PropTypes.shape({
+      sharing: PropTypes.shape({
+        facebookButtonTitle: PropTypes.string,
+        redditButtonTitle: PropTypes.string,
+        twitterButtonTitle: PropTypes.string,
+        tumblrTitle: PropTypes.string,
+        tumblrCaption: PropTypes.string,
+      }),
+    }),
+  }),
 }
 
 SocialShare.defaultProps = {
   EmailShareButtonProps: {},
-  TumblrShareButtonProps: {
-    title:
-      'Want to make a paw-sitive impact? Help give shelter cats a new chance for a forever home!',
-    caption:
-      'Every time I open a new tab I am able to give a treat to a cat for positive reinforcement training with Tab for a Cause’s latest project, Tab for a Cats! Download it for free with my link and give 10 treats right away!',
-  },
   TwitterShareButtonProps: {
-    title:
-      'I just found the purr-fect new way to help shelter cats get adopted! All I had to do was open a new browser tab (with super cute cat pictures!) on Tab for Cats! Check it out:',
-  },
-  RedditShareButtonProps: {
-    title:
-      'Looking for the purr-fect way to help shelter cats get adopted? Check out Tab for Cats!',
+    title: '',
   },
   FacebookShareButtonProps: {
-    quote:
-      'I just found, purr-haps, the most claw-ver browser extension ever! With Tab for a Cause’s latest project, Tab for Cats, I can give a cat a treat to a shelter cat for positive reinforcement training everytime I open a new tab. Check it out:',
+    quote: '',
+  },
+  user: {
+    cause: {
+      sharing: {},
+    },
   },
   iconSize: 32,
 }
