@@ -8,6 +8,7 @@ export default createFragmentContainer(EmailInviteDialog, {
         sharing {
           title
           subtitle
+          imgCategory
         }
       }
       ...SocialShareContainer_user
