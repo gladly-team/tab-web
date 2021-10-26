@@ -150,35 +150,15 @@ const Account = ({ data: fallbackData }) => {
   const { theme, landingPagePath, causeId } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
   const classes = useStyles()
-  const [currentCauseId, setCause] = useState(causeId)
 
   // Set the theme based on cause.
   const setTheme = useCustomTheming()
   useEffect(() => {
     setTheme({ primaryColor, secondaryColor })
   }, [setTheme, primaryColor, secondaryColor])
-  useEffect(() => {
-    setCause(causeId)
-  }, [causeId])
   const AuthUser = useAuthUser()
-  const switchCause = async (event, newCause) => {
-    setCause(newCause)
-    const {
-      setUserCause: {
-        user: {
-          cause: {
-            theme: {
-              primaryColor: newPrimaryColor,
-              secondaryColor: newSecondaryColor,
-            },
-          },
-        },
-      },
-    } = await SetUserCauseMutation({ causeId: newCause, userId })
-    setTheme({
-      primaryColor: newPrimaryColor,
-      secondaryColor: newSecondaryColor,
-    })
+  const switchCause = (event, newCause) => {
+    SetUserCauseMutation({ causeId: newCause, userId })
   }
 
   // Conditionally show privacy management buttons.
@@ -376,7 +356,7 @@ const Account = ({ data: fallbackData }) => {
               actionButton={
                 <ToggleButtonGroup
                   color="primary"
-                  value={currentCauseId}
+                  value={causeId}
                   exclusive
                   onChange={switchCause}
                 >
