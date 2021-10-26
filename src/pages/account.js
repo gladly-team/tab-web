@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { unregister } from 'next-offline/runtime'
 import { graphql } from 'react-relay'
@@ -150,6 +150,11 @@ const Account = ({ data: fallbackData }) => {
   const { theme, landingPagePath, causeId } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
   const classes = useStyles()
+
+  // currently storing causeId in state because of
+  // @workaround/relay-page-data-bug
+  // TODO: refactor to read and display causeId directly from
+  // relay store
   const [currentCauseId, setCause] = useState(causeId)
 
   // Set the theme based on cause.
@@ -161,25 +166,29 @@ const Account = ({ data: fallbackData }) => {
     setCause(causeId)
   }, [causeId])
   const AuthUser = useAuthUser()
-  const switchCause = async (event, newCause) => {
-    setCause(newCause)
-    const {
-      setUserCause: {
-        user: {
-          cause: {
-            theme: {
-              primaryColor: newPrimaryColor,
-              secondaryColor: newSecondaryColor,
+
+  const switchCause = useCallback(
+    async (_event, newCause) => {
+      setCause(newCause)
+      const {
+        setUserCause: {
+          user: {
+            cause: {
+              theme: {
+                primaryColor: newPrimaryColor,
+                secondaryColor: newSecondaryColor,
+              },
             },
           },
         },
-      },
-    } = await SetUserCauseMutation({ causeId: newCause, userId })
-    setTheme({
-      primaryColor: newPrimaryColor,
-      secondaryColor: newSecondaryColor,
-    })
-  }
+      } = await SetUserCauseMutation({ causeId: newCause, userId })
+      setTheme({
+        primaryColor: newPrimaryColor,
+        secondaryColor: newSecondaryColor,
+      })
+    },
+    [setCause, userId, setTheme]
+  )
 
   // Conditionally show privacy management buttons.
   const [doesGDPRApply, setDoesGDPRApply] = useState(false)
