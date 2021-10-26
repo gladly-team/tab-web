@@ -339,9 +339,13 @@ const Account = ({ data: fallbackData }) => {
         <Divider />
         {/* TODO: @workaround/tab-generalization */}
         <AccountItem
-          name={`Leave Tab for ${
-            landingPagePath === '/teamseas/' ? '#TeamSeas' : 'Cats'
-          }`}
+          name={
+            fetchInProgress
+              ? '...'
+              : `Leave Tab for ${
+                  landingPagePath === '/teamseas/' ? '#TeamSeas' : 'Cats'
+                }`
+          }
           actionButton={
             <div>
               <div>

@@ -479,7 +479,7 @@ const Index = ({ data: fallbackData }) => {
               left: 0,
             }}
           >
-            <Logo style={{ height: 40 }} includeText />
+            <Logo style={{ height: 40 }} includeText causeId={causeId} />
           </div>
           <OnboardingFlow
             onComplete={onCompletedOnboarding}

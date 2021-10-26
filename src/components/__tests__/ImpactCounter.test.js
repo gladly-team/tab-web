@@ -95,6 +95,16 @@ describe('ImpactCounter component', () => {
     expect(wrapper.find(DashboardPopover).prop('open')).toBe(true)
   })
 
+  it('does not display the popup when clicked on when disableDropDown is true', () => {
+    const ImpactCounter = require('src/components/ImpactCounter').default
+    const defaultMockProps = getMockProps()
+
+    const wrapper = shallow(
+      <ImpactCounter {...defaultMockProps} disableDropdown />
+    )
+    expect(wrapper.find(DashboardPopover).exists()).toBe(false)
+  })
+
   it('popover onClose sets isPopoverOpen to false', () => {
     const ImpactCounter = require('src/components/ImpactCounter').default
     const defaultMockProps = getMockProps()

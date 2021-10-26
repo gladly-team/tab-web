@@ -279,6 +279,31 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
     const mockProps = getMockProps()
     const wrapper = mount(<AccountPage {...mockProps} />)
     const switchModeAccountItem = getRevertAccountItem(wrapper)
+    expect(switchModeAccountItem.find(Typography).at(0).text()).toEqual('...')
+    expect(switchModeAccountItem.find(Button).first().text()).toEqual(
+      'Switch to Classic'
+    )
+  })
+
+  it('displays cats content in "revert" button field in the advanced options section if landingPagePath is /cats/', () => {
+    expect.assertions(2)
+    const AccountPage = require('src/pages/account').default
+    const mockProps = getMockProps()
+    const defaultMockData = getMockDataResponse()
+    useData.mockReturnValue({
+      data: {
+        ...defaultMockData,
+        user: {
+          ...defaultMockData.user,
+          cause: {
+            ...defaultMockData.user.cause,
+            landingPagePath: '/cats/',
+          },
+        },
+      },
+    })
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const switchModeAccountItem = getRevertAccountItem(wrapper)
     expect(switchModeAccountItem.find(Typography).at(0).text()).toEqual(
       'Leave Tab for Cats'
     )
