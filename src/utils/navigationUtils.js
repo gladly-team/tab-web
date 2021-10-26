@@ -1,3 +1,5 @@
+import { isServerSide } from 'src/utils/ssr'
+
 /* globals window */
 export const isAbsoluteURL = (url) =>
   !!(url.startsWith('http://') || url.startsWith('https://'))
@@ -29,4 +31,34 @@ export const isURLForDifferentApp = (newURL) => {
   const APP_SUBPATH = 'newtab'
   const newURLFirstSubpath = newURLObj.pathname.split('/')[1]
   return newURLFirstSubpath !== APP_SUBPATH
+}
+
+const addTrailingSlashIfNeeded = (path) => {
+  const hasTrailingSlash = path[path.length - 1] === '/'
+  return `${path}${!hasTrailingSlash ? '/' : ''}`
+}
+
+/**
+ * Determine whether two URLs are for the equivalent destination,
+ * ignoring absolute vs. relative or differences in trailing
+ * slashes. Always returns false server-side.
+ * @param {String} urlA - One URL or pathname to test
+ * @param {String} urlA - One URL or pathname to test
+ * @return {Boolean} Whether the URLs are equivalent
+ */
+export const areSameURLs = (urlA, urlB) => {
+  // Always return false on the server-side because we don't
+  // necessarily have acesss to the domain.
+  if (isServerSide()) {
+    return false
+  }
+  const urlAAbs = new URL(
+    addTrailingSlashIfNeeded(urlA),
+    window.location.origin
+  ).href
+  const urlBAbs = new URL(
+    addTrailingSlashIfNeeded(urlB),
+    window.location.origin
+  ).href
+  return urlAAbs === urlBAbs
 }
