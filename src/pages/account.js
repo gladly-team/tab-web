@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { unregister } from 'next-offline/runtime'
 import { graphql } from 'react-relay'
@@ -7,6 +7,8 @@ import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import ToggleButton from '@material-ui/lab/ToggleButton'
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import { flowRight } from 'lodash/util'
 import { withAuthUser, AuthAction, useAuthUser } from 'next-firebase-auth'
 import tabCMP from 'tab-cmp'
@@ -18,10 +20,19 @@ import { apiBetaOptIn, dashboardURL } from 'src/utils/urls'
 import { clearAllServiceWorkerCaches } from 'src/utils/caching'
 import { setWindowLocation } from 'src/utils/navigation'
 import SetV4BetaMutation from 'src/utils/mutations/SetV4BetaMutation'
+import SetUserCauseMutation from 'src/utils/mutations/SetUserCauseMutation'
 import { withSentry } from 'src/utils/pageWrappers/withSentry'
 import initializeCMP from 'src/utils/initializeCMP'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
+import PetsIcon from '@material-ui/icons/Pets'
+import SvgIcon from '@material-ui/core/SvgIcon'
+import { mdiJellyfish } from '@mdi/js'
+import { showInternalOnly } from 'src/utils/featureFlags'
+import {
+  STORAGE_CATS_CAUSE_ID,
+  STORAGE_SEAS_CAUSE_ID,
+} from '../utils/constants'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -115,6 +126,7 @@ const getRelayQuery = ({ AuthUser }) => {
           id
           username
           cause {
+            causeId
             theme {
               primaryColor
               secondaryColor
@@ -135,17 +147,48 @@ const Account = ({ data: fallbackData }) => {
   const fetchInProgress = !data
   const { user } = data || {}
   const { id: userId, email, username, cause } = user || {}
-  const { theme, landingPagePath } = cause || {}
+  const { theme, landingPagePath, causeId } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
   const classes = useStyles()
+
+  // currently storing causeId in state because of
+  // @workaround/relay-page-data-bug
+  // TODO: refactor to read and display causeId directly from
+  // relay store
+  const [currentCauseId, setCause] = useState(causeId)
 
   // Set the theme based on cause.
   const setTheme = useCustomTheming()
   useEffect(() => {
     setTheme({ primaryColor, secondaryColor })
   }, [setTheme, primaryColor, secondaryColor])
-
+  useEffect(() => {
+    setCause(causeId)
+  }, [causeId])
   const AuthUser = useAuthUser()
+
+  const switchCause = useCallback(
+    async (_event, newCause) => {
+      setCause(newCause)
+      const {
+        setUserCause: {
+          user: {
+            cause: {
+              theme: {
+                primaryColor: newPrimaryColor,
+                secondaryColor: newSecondaryColor,
+              },
+            },
+          },
+        },
+      } = await SetUserCauseMutation({ causeId: newCause, userId })
+      setTheme({
+        primaryColor: newPrimaryColor,
+        secondaryColor: newSecondaryColor,
+      })
+    },
+    [setCause, userId, setTheme]
+  )
 
   // Conditionally show privacy management buttons.
   const [doesGDPRApply, setDoesGDPRApply] = useState(false)
@@ -330,8 +373,41 @@ const Account = ({ data: fallbackData }) => {
               </Typography>
             </div>
           }
+          testId="revert-v4"
         />
         {/* Advanced Section of Profile Removed in commit associated with this comment */}
+        {/* TODO: @workaround/tab-generalization */}
+        {showInternalOnly(email) && (
+          <>
+            <Divider />
+            <AccountItem
+              name="Switch Cause"
+              actionButton={
+                <ToggleButtonGroup
+                  color="primary"
+                  value={currentCauseId}
+                  exclusive
+                  onChange={switchCause}
+                >
+                  <ToggleButton value={STORAGE_CATS_CAUSE_ID}>
+                    <PetsIcon />
+                  </ToggleButton>
+                  <ToggleButton value={STORAGE_SEAS_CAUSE_ID}>
+                    <SvgIcon>
+                      <path
+                        fillRule="evenodd"
+                        clipRule="evenodd"
+                        d={mdiJellyfish}
+                        fill="inherit"
+                      />
+                    </SvgIcon>
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              }
+              testId="switch-cause"
+            />
+          </>
+        )}
       </Paper>
     </SettingsPage>
   )
