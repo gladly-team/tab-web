@@ -21,7 +21,6 @@ import initializeCMP from 'src/utils/initializeCMP'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import SetUserCauseMutation from 'src/utils/mutations/SetUserCauseMutation'
-import { describe } from 'jest-circus'
 
 jest.mock('next-offline/runtime')
 jest.mock('tab-cmp')

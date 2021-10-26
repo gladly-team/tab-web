@@ -372,7 +372,7 @@ const Account = ({ data: fallbackData }) => {
           <>
             <Divider />
             <AccountItem
-              name={`Switch Cause`}
+              name="Switch Cause"
               actionButton={
                 <ToggleButtonGroup
                   color="primary"
