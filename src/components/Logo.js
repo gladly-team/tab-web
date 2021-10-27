@@ -8,6 +8,11 @@ import tabLogoWhite from 'src/assets/logos/logo-white.svg'
 import tabLogoGrey from 'src/assets/logos/logo-grey.svg'
 import tabLogoWithText from 'src/assets/logos/logo-with-text.svg'
 import tabLogoWithTextWhite from 'src/assets/logos/logo-with-text-white.svg'
+import tabLogoWithTextSeas from 'src/assets/logos/logo-with-text-teamseas.svg'
+import {
+  STORAGE_CATS_CAUSE_ID,
+  STORAGE_SEAS_CAUSE_ID,
+} from 'src/utils/constants'
 
 const useStyles = makeStyles(() => ({
   logoDefaults: {
@@ -17,10 +22,40 @@ const useStyles = makeStyles(() => ({
 }))
 
 const Logo = (props) => {
-  const { className, color, includeText, style, ...otherProps } = props
+  const { className, color, includeText, style, causeId, ...otherProps } = props
   const classes = useStyles()
   let logo
-  if (includeText) {
+
+  // TODO: eventually we'll key off of cause's theme color
+  // leaving it like this for now
+  if (causeId) {
+    switch (causeId) {
+      case STORAGE_SEAS_CAUSE_ID: {
+        if (includeText) {
+          logo = tabLogoWithTextSeas
+          break
+        }
+        logo = tabLogoDefault
+        break
+      }
+      case STORAGE_CATS_CAUSE_ID: {
+        if (includeText) {
+          logo = tabLogoWithText
+          break
+        }
+        logo = tabLogoDefault
+        break
+      }
+      default: {
+        if (includeText) {
+          logo = tabLogoWithText
+          break
+        }
+        logo = tabLogoDefault
+        break
+      }
+    }
+  } else if (includeText) {
     switch (color) {
       case 'white': {
         logo = tabLogoWithTextWhite
@@ -75,11 +110,13 @@ Logo.propTypes = {
   className: PropTypes.string,
   color: PropTypes.oneOf(['default', 'purple', 'white', 'grey']),
   includeText: PropTypes.bool,
+  causeId: PropTypes.string,
   style: PropTypes.object, // eslint-disable-line react/forbid-prop-types
 }
 
 Logo.defaultProps = {
   className: '',
+  causeId: null,
   color: 'default',
   includeText: false,
   style: {},

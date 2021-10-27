@@ -104,6 +104,7 @@ const ImpactDialog = ({
               <ImpactCounter
                 includeNumber
                 number={0}
+                disableDropdown
                 progress={100}
                 dropdownText=""
                 dropdownTextSquads=""
@@ -132,6 +133,7 @@ const ImpactDialog = ({
               <ImpactCounter
                 includeNumber
                 number={5}
+                disableDropdown
                 progress={100}
                 dropdownText=""
                 dropdownTextSquads=""

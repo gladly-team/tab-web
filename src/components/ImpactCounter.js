@@ -58,6 +58,7 @@ const ImpactCounter = (props) => {
     icon,
     dropdownText,
     dropdownTextSquads,
+    disableDropdown,
   } = props
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   const counterRef = useRef(undefined)
@@ -94,18 +95,20 @@ const ImpactCounter = (props) => {
           </SvgIcon>
         )}
       </Button>
-      <DashboardPopover
-        open={isPopoverOpen}
-        anchorEl={counterRef.current}
-        onClose={() => {
-          setIsPopoverOpen(false)
-        }}
-        className={classes.popover}
-      >
-        <div className={classes.popoverText}>
-          <Markdown>{dropdownMarkdown}</Markdown>
-        </div>
-      </DashboardPopover>
+      {!disableDropdown && (
+        <DashboardPopover
+          open={isPopoverOpen}
+          anchorEl={counterRef.current}
+          onClose={() => {
+            setIsPopoverOpen(false)
+          }}
+          className={classes.popover}
+        >
+          <div className={classes.popoverText}>
+            <Markdown>{dropdownMarkdown}</Markdown>
+          </div>
+        </DashboardPopover>
+      )}
     </div>
   )
 }
@@ -146,6 +149,11 @@ ImpactCounter.propTypes = {
    * Text for the dropdown when in a mission
    */
   dropdownTextSquads: PropTypes.string.isRequired,
+
+  /**
+   * disables the dropdown
+   */
+  disableDropdown: PropTypes.bool,
 }
 
 ImpactCounter.defaultProps = {
@@ -154,6 +162,7 @@ ImpactCounter.defaultProps = {
   number: 0,
   className: '',
   icon: 'paw',
+  disableDropdown: false,
 }
 
 export default ImpactCounter

@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: '10000000 !important',
     borderRadius: theme.spacing(0.5),
   },
+  center: { textAlign: 'center' },
   walkMe: {
     display: 'flex',
     flexDirection: 'column',
@@ -214,7 +215,9 @@ const UserImpact = ({ user, disabled }) => {
           <div className={classes.centerImage}>
             <DolphinGif />
           </div>
-          <Markdown>{impact.confirmImpactSubtitle}</Markdown>
+          <div className={classes.center}>
+            <Markdown>{impact.confirmImpactSubtitle}</Markdown>
+          </div>
         </MuiDialogContent>
         <MuiDialogActions>
           <Button
@@ -244,6 +247,7 @@ const UserImpact = ({ user, disabled }) => {
               dropdownText=""
               dropdownTextSquads=""
               includeNumber
+              disableDropdown
               icon={impact.impactIcon}
               number={0}
               progress={100}
@@ -266,6 +270,7 @@ const UserImpact = ({ user, disabled }) => {
           <div className={classes.impactCounter}>
             <ImpactCounter
               dropdownText=""
+              disableDropdown
               dropdownTextSquads=""
               includeNumber
               icon={impact.impactIcon}
