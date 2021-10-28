@@ -3,7 +3,6 @@ import { shallow, mount } from 'enzyme'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import { reload, externalNavigation } from 'src/utils/urls'
-import Link from 'src/components/Link'
 
 jest.mock('src/components/Link')
 jest.mock('src/utils/urls', () => ({
@@ -47,7 +46,7 @@ describe('ErrorPage component', () => {
     const ErrorPage = require('src/components/ErrorPage').default
     const wrapper = shallow(<ErrorPage />)
     const infoText = wrapper.find(Typography).at(1)
-    const link = infoText.find(Link)
+    const link = infoText.find('a')
     expect(link.dive().text()).toEqual('clearing your cookies')
     expect(link.prop('to')).toEqual('https://example.com/help/specific-thing/')
     expect(link.prop('target')).toEqual('_blank')

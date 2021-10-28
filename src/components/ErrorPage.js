@@ -2,7 +2,6 @@ import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Logo from 'src/components/Logo'
-import Link from 'src/components/Link'
 import {
   EXTERNAL_CONTACT_US_URL,
   EXTERNAL_CLEAR_COOKIES_HELP_PAGE,
@@ -48,13 +47,14 @@ const ErrorPage = () => (
         </Typography>
         <Typography variant="body1" style={{ margin: 10 }}>
           Please try{' '}
-          <Link
-            to={EXTERNAL_CLEAR_COOKIES_HELP_PAGE}
+          <a
+            href={EXTERNAL_CLEAR_COOKIES_HELP_PAGE}
             target="_blank"
-            style={{ textDecoration: 'underline' }}
+            rel="noreferrer"
+            style={{ textDecoration: 'underline', color: 'inherit' }}
           >
             clearing your cookies
-          </Link>{' '}
+          </a>{' '}
           or reloading, then contact us if the problem continues.
         </Typography>
         <div
