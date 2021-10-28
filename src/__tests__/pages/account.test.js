@@ -625,28 +625,6 @@ describe('acount.js: toggle to switch cause', () => {
     expect(switchCause.exists()).toBe(true)
   })
 
-  it('does not display switch cause toggle for external users', () => {
-    expect.assertions(1)
-    const AccountPage = require('src/pages/account').default
-    const mockProps = getMockProps()
-    const defaultMockData = getMockDataResponse()
-    useData.mockReturnValue({
-      data: {
-        ...defaultMockData,
-        user: {
-          ...defaultMockData.user,
-          cause: {
-            ...defaultMockData.user.cause,
-            landingPagePath: '/teamseas/',
-          },
-        },
-      },
-    })
-    const wrapper = mount(<AccountPage {...mockProps} />)
-    const switchCause = wrapper.find('[data-test-id="switch-cause"]')
-    expect(switchCause.exists()).toBe(false)
-  })
-
   it('toggling to other cause updates user cause', () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account').default
