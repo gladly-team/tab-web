@@ -28,7 +28,6 @@ import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import PetsIcon from '@material-ui/icons/Pets'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import { mdiJellyfish } from '@mdi/js'
-import { showInternalOnly } from 'src/utils/featureFlags'
 import {
   STORAGE_CATS_CAUSE_ID,
   STORAGE_SEAS_CAUSE_ID,
@@ -381,37 +380,33 @@ const Account = ({ data: fallbackData }) => {
         />
         {/* Advanced Section of Profile Removed in commit associated with this comment */}
         {/* TODO: @workaround/tab-generalization */}
-        {showInternalOnly(email) && (
-          <>
-            <Divider />
-            <AccountItem
-              name="Switch Cause"
-              actionButton={
-                <ToggleButtonGroup
-                  color="primary"
-                  value={currentCauseId}
-                  exclusive
-                  onChange={switchCause}
-                >
-                  <ToggleButton value={STORAGE_CATS_CAUSE_ID}>
-                    <PetsIcon />
-                  </ToggleButton>
-                  <ToggleButton value={STORAGE_SEAS_CAUSE_ID}>
-                    <SvgIcon>
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d={mdiJellyfish}
-                        fill="inherit"
-                      />
-                    </SvgIcon>
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              }
-              testId="switch-cause"
-            />
-          </>
-        )}
+        <Divider />
+        <AccountItem
+          name="Switch Cause"
+          actionButton={
+            <ToggleButtonGroup
+              color="primary"
+              value={currentCauseId}
+              exclusive
+              onChange={switchCause}
+            >
+              <ToggleButton value={STORAGE_CATS_CAUSE_ID}>
+                <PetsIcon />
+              </ToggleButton>
+              <ToggleButton value={STORAGE_SEAS_CAUSE_ID}>
+                <SvgIcon>
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d={mdiJellyfish}
+                    fill="inherit"
+                  />
+                </SvgIcon>
+              </ToggleButton>
+            </ToggleButtonGroup>
+          }
+          testId="switch-cause"
+        />
       </Paper>
     </SettingsPage>
   )
