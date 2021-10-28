@@ -16,6 +16,8 @@ jest.mock('../localstorage-mgr', () => ({
 beforeEach(() => {
   process.env.NEXT_PUBLIC_ADS_ENABLED = true
   process.env.NEXT_PUBLIC_ADS_USE_MOCK_ADS = false
+  MockDate.set(moment(mockNow))
+  jest.clearAllMocks()
 })
 
 afterEach(() => {
@@ -50,9 +52,6 @@ const mockNow = '2017-05-19T13:59:58.000Z'
 const adsEnabledEnv = process.env.REACT_APP_ADS_ENABLED
 
 beforeEach(() => {
-  MockDate.set(moment(mockNow))
-  jest.clearAllMocks()
-
   // Set a default "tabs opened today" value for tests.
 })
 
