@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const Link = (props) => {
-  const { children, className, target, to } = props
+  const { children, className, target, to, style } = props
   const classes = useStyles()
   const [destInternal, setDestInternal] = useState(true)
 
@@ -44,7 +44,11 @@ const Link = (props) => {
 
   return (
     <NextJsLink href={to}>
-      <a target={anchorTarget} className={clsx(classes.anchor, className)}>
+      <a
+        target={anchorTarget}
+        className={clsx(classes.anchor, className)}
+        style={style}
+      >
         {children}
       </a>
     </NextJsLink>
@@ -61,11 +65,16 @@ Link.propTypes = {
   className: PropTypes.string,
   to: PropTypes.string.isRequired,
   target: PropTypes.string,
+
+  // Allow object type for style.
+  // eslint-disable-next-line react/forbid-prop-types
+  style: PropTypes.object,
 }
 
 Link.defaultProps = {
   className: '',
   target: undefined,
+  style: {},
 }
 
 export default Link

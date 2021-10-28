@@ -42,6 +42,8 @@ export const missionHubURL = createPageURL('/missions')
 export const PWAManifestURL = withBasePath('/manifest.json')
 export const EXTERNAL_CONTACT_US_URL =
   'https://gladly.zendesk.com/hc/en-us/requests/new'
+export const EXTERNAL_CLEAR_COOKIES_HELP_PAGE =
+  'https://gladly.zendesk.com/hc/en-us/articles/360002317231-How-do-I-clear-my-cookies-and-site-data-for-Tab-for-a-Cause-'
 export const HELP_URL = 'https://tab.gladly.io/help/'
 export const FINANCIALS_URL = 'https://tab.gladly.io/financials/'
 // eslint-disable-next-line no-undef
