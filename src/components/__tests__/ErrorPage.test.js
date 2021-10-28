@@ -45,10 +45,11 @@ describe('ErrorPage component', () => {
     expect.assertions(3)
     const ErrorPage = require('src/components/ErrorPage').default
     const wrapper = shallow(<ErrorPage />)
-    const infoText = wrapper.find(Typography).at(1)
-    const link = infoText.find('a')
-    expect(link.dive().text()).toEqual('clearing your cookies')
-    expect(link.prop('to')).toEqual('https://example.com/help/specific-thing/')
+    const link = wrapper.find(Typography).at(1).find('a')
+    expect(link.text()).toEqual('clearing your cookies')
+    expect(link.prop('href')).toEqual(
+      'https://example.com/help/specific-thing/'
+    )
     expect(link.prop('target')).toEqual('_blank')
   })
 
