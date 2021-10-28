@@ -51,9 +51,6 @@ const hasUserOpenedTabToday = () => {
 
   // If the current date is the same as the most recent date a
   // tab was opened, it is not the first tab today.
-  console.log(
-    moment(tabCountDate).utc().format('LL') === moment().utc().format('LL')
-  )
   const hasOpenedTabToday =
     moment(tabCountDate).utc().format('LL') === moment().utc().format('LL')
   return hasOpenedTabToday
@@ -66,7 +63,6 @@ const hasUserOpenedTabToday = () => {
  */
 export const getTabsOpenedToday = () => {
   if (!hasUserOpenedTabToday()) {
-    console.log('false')
     return 0
   }
   return getTabsOpenedTodayFromStorage()

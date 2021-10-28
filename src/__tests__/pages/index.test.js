@@ -40,10 +40,10 @@ jest.mock('@material-ui/icons/Settings')
 jest.mock('src/components/Link')
 jest.mock('src/utils/navigation')
 jest.mock('src/utils/events')
-jest.mock('src/utils/adHelpers')
 jest.mock('src/utils/ssr')
 jest.mock('src/utils/adHelpers', () => ({
   getAdUnits: jest.fn().mockReturnValue({}),
+  incrementTabsOpenedToday: jest.fn(),
 }))
 jest.mock('src/utils/localstorage-mgr', () => ({
   setItem: jest.fn(),
