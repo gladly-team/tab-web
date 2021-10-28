@@ -2,15 +2,7 @@
 
 import React from 'react'
 import { mount, shallow } from 'enzyme'
-import Logo from 'src/components/Logo'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 import logger from 'src/utils/logger'
-import {
-  EXTERNAL_CONTACT_US_URL,
-  reload,
-  externalNavigation,
-} from 'src/utils/urls'
 import ErrorPage from 'src/components/ErrorPage'
 
 jest.mock('src/components/ErrorPage', () => () => (
