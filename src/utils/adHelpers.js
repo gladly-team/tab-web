@@ -5,6 +5,7 @@ import localStorageMgr from './localstorage-mgr'
 import {
   STORAGE_TABS_RECENT_DAY_COUNT,
   STORAGE_TABS_LAST_TAB_OPENED_DATE,
+  MAX_TABS_WITH_ADS,
 } from './constants'
 
 try {
@@ -50,6 +51,9 @@ const hasUserOpenedTabToday = () => {
 
   // If the current date is the same as the most recent date a
   // tab was opened, it is not the first tab today.
+  console.log(
+    moment(tabCountDate).utc().format('LL') === moment().utc().format('LL')
+  )
   const hasOpenedTabToday =
     moment(tabCountDate).utc().format('LL') === moment().utc().format('LL')
   return hasOpenedTabToday
@@ -62,6 +66,7 @@ const hasUserOpenedTabToday = () => {
  */
 export const getTabsOpenedToday = () => {
   if (!hasUserOpenedTabToday()) {
+    console.log('false')
     return 0
   }
   return getTabsOpenedTodayFromStorage()
@@ -79,7 +84,6 @@ const hasUserReachedMaxTabsToday = () => {
   // If the user has exceeded the daily tab maximum,
   // do not show ads.
   // https://github.com/gladly-team/tab/issues/202
-  const MAX_TABS_WITH_ADS = 3
   const tabsOpenedToday = getTabsOpenedToday()
   return tabsOpenedToday > MAX_TABS_WITH_ADS
 }
