@@ -66,6 +66,17 @@ describe('Link component', () => {
     expect(anchor.prop('className')).toContain('some-class-here')
   })
 
+  it('assigns the style prop to the anchor', () => {
+    const Link = require('src/components/Link').default
+    const mockProps = {
+      ...getMockProps(),
+      style: { fontSize: 88 },
+    }
+    const wrapper = shallow(<Link {...mockProps} />)
+    const anchor = wrapper.find('a').first()
+    expect(anchor.prop('style')).toMatchObject({ fontSize: 88 })
+  })
+
   it('has no target prop on anchor tag by default', () => {
     const Link = require('src/components/Link').default
 

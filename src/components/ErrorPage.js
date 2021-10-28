@@ -2,8 +2,10 @@ import React from 'react'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Logo from 'src/components/Logo'
+import Link from 'src/components/Link'
 import {
   EXTERNAL_CONTACT_US_URL,
+  EXTERNAL_CLEAR_COOKIES_HELP_PAGE,
   reload,
   externalNavigation,
 } from 'src/utils/urls'
@@ -42,11 +44,18 @@ const ErrorPage = () => (
         }}
       >
         <Typography variant="h6" style={{ margin: 10 }}>
-          Oops!
+          Oops! There was an error.
         </Typography>
         <Typography variant="body1" style={{ margin: 10 }}>
-          There was an error on the page. Please try reloading, or contact us if
-          the problem continues.
+          Please try{' '}
+          <Link
+            to={EXTERNAL_CLEAR_COOKIES_HELP_PAGE}
+            target="_blank"
+            style={{ textDecoration: 'underline' }}
+          >
+            clearing your cookies
+          </Link>{' '}
+          or reloading, then contact us if the problem continues.
         </Typography>
         <div
           style={{
