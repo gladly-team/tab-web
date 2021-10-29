@@ -52,6 +52,7 @@ import {
   areAdsEnabled,
   showMockAds,
   isGAMDevEnvironment,
+  incrementTabsOpenedToday,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import { accountURL, achievementsURL } from 'src/utils/urls'
@@ -373,6 +374,12 @@ const Index = ({ data: fallbackData }) => {
   useEffect(() => {
     if (userGlobalId && tabId) {
       LogTabMutation(userGlobalId, tabId)
+
+      // Update today's tab count in localStorage.
+      // This is useful when making rendering decisions before
+      // we fetch user data from the server (e.g., whether we
+      // should show ads or not).
+      incrementTabsOpenedToday()
 
       // this might seem confusing.  Right now we handle logging mission impact in the log tab mutation
       // but we use update impact to update v4 impact if a user is not in a mission
