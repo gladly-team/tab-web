@@ -3,7 +3,7 @@
 
 import React from 'react'
 import Enzyme from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17'
 
 // Fixes "Warning: useLayoutEffect does nothing on the server":
 // https://stackoverflow.com/a/58173551

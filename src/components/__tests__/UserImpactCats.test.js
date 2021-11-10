@@ -25,7 +25,7 @@ jest.mock('src/utils/featureFlags', () => ({
 }))
 jest.mock('src/utils/mutations/SetHasSeenSquadsMutation')
 jest.mock('src/utils/mutations/UpdateImpactMutation')
-jest.mock('@material-ui/core/Typography')
+jest.mock('@material-ui/core/Typography', () => () => <div />)
 jest.mock('src/components/SocialShare', () => () => <div />)
 jest.mock('src/components/EmailInviteDialog', () => () => <div />)
 jest.mock('src/components/InviteFriends', () => () => <div />)
