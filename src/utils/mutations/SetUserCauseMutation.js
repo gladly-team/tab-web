@@ -8,7 +8,7 @@ const mutation = graphql`
         id
         cause {
           causeId
-          landingPagePath
+          name
           # Theme data is required for CustomThemeHOC.
           theme {
             primaryColor

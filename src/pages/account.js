@@ -126,6 +126,7 @@ const getRelayQuery = ({ AuthUser }) => {
           username
           cause {
             causeId
+            name
             theme {
               primaryColor
               secondaryColor
@@ -146,24 +147,25 @@ const Account = ({ data: fallbackData }) => {
   const fetchInProgress = !data
   const { user } = data || {}
   const { id: userId, email, username, cause } = user || {}
-  const { theme, landingPagePath, causeId } = cause || {}
+  const { theme, causeId, name = '' } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
   const classes = useStyles()
 
-  // currently storing causeId in state because of
+  // currently storing causeId and name in state because of
   // @workaround/relay-page-data-bug
   // TODO: refactor to read and display causeId directly from
   // relay store
   const [currentCauseId, setCause] = useState(causeId)
+  const [currentCauseName, setCauseName] = useState(name)
 
   // Set the theme based on cause.
   const setTheme = useCustomTheming()
-  useEffect(() => {
-    setTheme({ primaryColor, secondaryColor })
-  }, [setTheme, primaryColor, secondaryColor])
-  useEffect(() => {
-    setCause(causeId)
-  }, [causeId])
+  useEffect(
+    () => setTheme({ primaryColor, secondaryColor }),
+    [setTheme, primaryColor, secondaryColor]
+  )
+  useEffect(() => setCause(causeId), [causeId])
+  useEffect(() => setCauseName(name), [name])
   const AuthUser = useAuthUser()
 
   const switchCause = useCallback(
@@ -173,6 +175,7 @@ const Account = ({ data: fallbackData }) => {
         setUserCause: {
           user: {
             cause: {
+              name: newName,
               theme: {
                 primaryColor: newPrimaryColor,
                 secondaryColor: newSecondaryColor,
@@ -181,6 +184,7 @@ const Account = ({ data: fallbackData }) => {
           },
         },
       } = await SetUserCauseMutation({ causeId: newCause, userId })
+      setCauseName(newName)
       setTheme({
         primaryColor: newPrimaryColor,
         secondaryColor: newSecondaryColor,
@@ -336,15 +340,8 @@ const Account = ({ data: fallbackData }) => {
           </>
         ) : null}
         <Divider />
-        {/* TODO: @workaround/tab-generalization */}
         <AccountItem
-          name={
-            fetchInProgress
-              ? '...'
-              : `Leave Tab for ${
-                  landingPagePath === '/teamseas/' ? '#TeamSeas' : 'Cats'
-                }`
-          }
+          name={fetchInProgress ? '...' : `Leave Tab for ${currentCauseName}`}
           actionButton={
             <div>
               <div>
@@ -367,10 +364,7 @@ const Account = ({ data: fallbackData }) => {
                 variant="caption"
                 className={classes.revertButtonText}
               >
-                {/* TODO: @workaround/tab-generalization */}
-                {`Warning: This will remove your ability to support ${
-                  landingPagePath === '/teamseas/' ? '#teamseas' : 'cats'
-                }. It will
+                {`Warning: This will remove your ability to support ${currentCauseName.toLowerCase()}. It will
                 send you to classic Tab for a Cause, which has other 
                 nonprofits you can support.`}
               </Typography>
@@ -424,7 +418,7 @@ Account.propTypes = {
           primaryColor: PropTypes.string,
           secondaryColor: PropTypes.string,
         }),
-        landingPagePath: PropTypes.string,
+        name: PropTypes.string,
       }),
     }),
   }),
