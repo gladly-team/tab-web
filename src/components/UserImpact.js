@@ -22,7 +22,9 @@ import { STORAGE_SEAS_CAUSE_ID } from 'src/utils/constants'
 const DolphinGif = dynamic(() => import('src/components/DolphinGif'), {
   ssr: false,
 })
-
+const CatsGif = dynamic(() => import('src/components/RandomGif'), {
+  ssr: false,
+})
 const useStyles = makeStyles((theme) => ({
   impactCounter: { backgroundColor: '#fff', marginRight: theme.spacing(2) },
   bold: { fontWeight: 'bold' },
@@ -213,7 +215,8 @@ const UserImpact = ({ user, disabled }) => {
         </MuiDialogTitle>
         <MuiDialogContent className={classes.themedLink}>
           <div className={classes.centerImage}>
-            <DolphinGif />
+            {/* TODO: @workaround/tab-generalization */}
+            {landingPagePath === '/cats/' ? <CatsGif /> : <DolphinGif />}
           </div>
           <div className={classes.center}>
             <Markdown>{impact.confirmImpactSubtitle}</Markdown>
@@ -303,14 +306,17 @@ const UserImpact = ({ user, disabled }) => {
             {
               // eslint-disable-next-line react/prop-types
               impact.referralRewardTitle
+
+                // adding \\ because of known prettier issue https://github.com/prettier/prettier/issues/6213
                 // eslint-disable-next-line no-template-curly-in-string
-                .replace('${claimedReferralImpact}', claimedReferralImpact)
+                .replace('\\${claimedReferralImpact}', claimedReferralImpact)
             }
           </Markdown>
         </MuiDialogTitle>
         <MuiDialogContent>
           <div className={classes.centerImage}>
-            <DolphinGif />
+            {/* TODO: @workaround/tab-generalization */}
+            {landingPagePath === '/cats/' ? <CatsGif /> : <DolphinGif />}
           </div>
           <Markdown>{impact.referralRewardSubtitle}</Markdown>
           <div className={classes.shareContainer}>
@@ -340,15 +346,6 @@ const UserImpact = ({ user, disabled }) => {
         <Notification
           text={
             <div>
-              <Typography>
-                Congrats! You recruited{' '}
-                <span style={{ fontWeight: 'bold' }}>
-                  {`${pendingUserReferralCount} friend${isPlural(
-                    pendingUserReferralCount
-                  )} `}
-                </span>
-                to
-              </Typography>
               <Markdown>
                 {impact.referralRewardNotification
                   .replace(
