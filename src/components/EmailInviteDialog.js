@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
 import { makeStyles } from '@material-ui/core/styles'
-import { getReferralUrl } from 'src/utils/urls'
+import { getReferralUrl, media } from 'src/utils/urls'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import IconButton from '@material-ui/core/IconButton'
 import Button from '@material-ui/core/Button'
@@ -12,15 +12,13 @@ import MuiDialogContent from '@material-ui/core/DialogContent'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import CreateInvitedUsersMutation from 'src/utils/mutations/CreateInvitedUsersMutation'
-import shareCats from 'src/assets/images/shareCats.png'
-import catsSent from 'src/assets/images/catsSent.png'
-import seasEmailInvite from 'src/assets/images/seasEmailInvite.svg'
 import Typography from '@material-ui/core/Typography'
 import Chip from '@material-ui/core/Chip'
 import Fade from '@material-ui/core/Fade'
 import CloseIcon from '@material-ui/icons/Close'
 import logger from 'src/utils/logger'
 import Markdown from 'src/components/Markdown'
+
 import SocialShareContainer from './SocialShareContainer'
 
 const useStyles = makeStyles((theme) => ({
@@ -105,7 +103,7 @@ const EmailInviteFriendsDialog = ({
 }) => {
   const { cause } = user
   const { sharing } = cause
-  const { title, subtitle, imgCategory } = sharing
+  const { title, subtitle, shareImage, sentImage } = sharing
   const classes = useStyles()
   const [value, setValue] = React.useState(0)
   const [emailInput, setEmailInputChange] = useState('')
@@ -174,27 +172,13 @@ const EmailInviteFriendsDialog = ({
     }
   }
 
-  let beforeShareImage
-  let afterShareImage
-  const alt = imgCategory
-  switch (imgCategory) {
-    case 'seas':
-      afterShareImage = seasEmailInvite
-      beforeShareImage = seasEmailInvite
-      break
-    case 'cats':
-    default:
-      afterShareImage = catsSent
-      beforeShareImage = shareCats
-  }
-
   return (
     <div className={classes.root}>
       <MuiDialogContent classes={{ root: classes.dialogContentRoot }}>
         {/* MuiDialog modifies the padding on the 1st child and i cant override it so adding this style */}
         <img
-          src={beforeShareImage}
-          alt={imgCategory}
+          src={media(shareImage)}
+          alt={shareImage}
           style={{ marginTop: '12px' }}
         />
         <IconButton
@@ -283,11 +267,11 @@ const EmailInviteFriendsDialog = ({
             <Fade in>
               <div className={classes.sentBox}>
                 <img
-                  src={afterShareImage}
+                  src={media(sentImage)}
                   height="120px"
                   width="240px"
                   color="secondary"
-                  alt={`${alt}2`}
+                  alt={sentImage}
                 />
                 <Typography color="primary" variant="h4">
                   Thanks for sharing!
@@ -358,7 +342,8 @@ EmailInviteFriendsDialog.propTypes = {
   user: PropTypes.shape({
     cause: PropTypes.shape({
       sharing: PropTypes.shape({
-        imgCategory: PropTypes.string,
+        shareImage: PropTypes.string,
+        sentImage: PropTypes.string,
         title: PropTypes.string,
         subtitle: PropTypes.string,
       }),

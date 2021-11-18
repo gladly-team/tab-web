@@ -2,29 +2,27 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import Markdown from 'src/components/Markdown'
 import Button from '@material-ui/core/Button'
-import catTabs from 'src/assets/onboarding/cattabs.svg'
-import squadCat from 'src/assets/onboarding/squadcat.svg'
-import adCat from 'src/assets/onboarding/adcat.svg'
-import seas1 from 'src/assets/onboarding/seas1.svg'
-import seas2 from 'src/assets/onboarding/seas2.svg'
-import seas3 from 'src/assets/onboarding/seas3.svg'
+import { media } from 'src/utils/urls'
 
+jest.mock('src/utils/constants', () => ({
+  MEDIA_ENDPOINT: 'https://dev-tab2017-media.gladly.io',
+}))
 const getMockProps = () => ({
   showMissionSlide: false,
   onboarding: {
     steps: [
       {
-        imgName: 'cattabs',
+        imgName: 'cats/cattabs.svg',
         title: 'Your tabs are doing great things',
         subtitle: 'Now, every tab you open supports cats in need.',
       },
       {
-        imgName: 'squadcat',
+        imgName: 'cats/squadcat.svg',
         title: 'Help more cats with squads',
         subtitle: 'Cats can get adopted up to 3x faster when you join a squad!',
       },
       {
-        imgName: 'adcat',
+        imgName: 'cats/adcat.svg',
         title: "It doesn't cost you a thing",
         subtitle:
           'We display a couple of small ads at the bottom of your screen and redistribute that money to charity. No fees or hidden costs!',
@@ -43,9 +41,12 @@ describe('OnboardingFlow component', () => {
 
   it('starting flow displays first onboarding card', () => {
     const OnboardingFlow = require('src/components/OnboardingFlow').default
-    const wrapper = shallow(<OnboardingFlow {...getMockProps()} />)
+    const props = getMockProps()
+    const wrapper = shallow(<OnboardingFlow {...props} />)
 
-    expect(wrapper.find('img').first().prop('src')).toEqual(catTabs)
+    expect(wrapper.find('img').first().prop('src')).toEqual(
+      media(props.onboarding.steps[0].imgName)
+    )
     expect(wrapper.find(Markdown).first().prop('children')).toContain(
       'Your tabs are doing great things'
     )
@@ -62,7 +63,9 @@ describe('OnboardingFlow component', () => {
     }
     const wrapper = shallow(<OnboardingFlow {...mockProps} />)
     wrapper.find(Button).first().simulate('click')
-    expect(wrapper.find('img').first().prop('src')).toEqual(squadCat)
+    expect(wrapper.find('img').first().prop('src')).toEqual(
+      media(mockProps.onboarding.steps[1].imgName)
+    )
     expect(wrapper.find(Markdown).first().prop('children')).toEqual(
       'Help more cats with squads'
     )
@@ -70,44 +73,15 @@ describe('OnboardingFlow component', () => {
 
   it('component does not show mission slide if show Missions slide is disabled', () => {
     const OnboardingFlow = require('src/components/OnboardingFlow').default
-    const wrapper = shallow(<OnboardingFlow {...getMockProps()} />)
+    const props = getMockProps()
+    const wrapper = shallow(<OnboardingFlow {...props} />)
     wrapper.find(Button).first().simulate('click')
-    expect(wrapper.find('img').first().prop('src')).toEqual(adCat)
+    expect(wrapper.find('img').first().prop('src')).toEqual(
+      media(props.onboarding.steps[2].imgName)
+    )
     expect(wrapper.find(Markdown).first().prop('children')).toEqual(
       "It doesn't cost you a thing"
     )
-  })
-
-  it('component shows correct images based on image name', () => {
-    const OnboardingFlow = require('src/components/OnboardingFlow').default
-    const stringToAssetMap = {
-      cattabs: catTabs,
-      squadcat: squadCat,
-      adcat: adCat,
-      seas1,
-      seas2,
-      seas3,
-      blahblah: catTabs,
-    }
-
-    Object.keys(stringToAssetMap).forEach((key) => {
-      const mockProps = {
-        ...getMockProps(),
-        onboarding: {
-          steps: [
-            {
-              imgName: key,
-              title: 'Your tabs are doing great things',
-              subtitle: 'Now, every tab you open supports cats in need.',
-            },
-          ],
-        },
-      }
-      const wrapper = shallow(<OnboardingFlow {...mockProps} />)
-      expect(wrapper.find('img').first().prop('src')).toEqual(
-        stringToAssetMap[key]
-      )
-    })
   })
 
   it('component calls onComplete on after iterating through all steps', () => {
@@ -119,7 +93,9 @@ describe('OnboardingFlow component', () => {
       showMissionSlide: true,
     }
     const wrapper = shallow(<OnboardingFlow {...mockProps} />)
-    expect(wrapper.find('img').first().prop('src')).toEqual(catTabs)
+    expect(wrapper.find('img').first().prop('src')).toEqual(
+      media(mockProps.onboarding.steps[0].imgName)
+    )
 
     for (let i = 1; i < 3; i += 1) {
       wrapper.find(Button).first().simulate('click')
