@@ -10,7 +10,6 @@ import confetti from 'canvas-confetti'
 import { act } from 'react-dom/test-utils'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import Dialog from '@material-ui/core/Dialog'
-import { STORAGE_SEAS_CAUSE_ID } from 'src/utils/constants'
 
 jest.mock('next/router')
 jest.mock('src/utils/featureFlags', () => ({
@@ -143,11 +142,9 @@ describe('UserImpact component', () => {
     const wrapper = mount(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(0)
     notification.find(Button).simulate('click')
-    expect(UpdateImpactMutation).toHaveBeenCalledWith(
-      'someId',
-      STORAGE_SEAS_CAUSE_ID,
-      { claimLatestReward: true }
-    )
+    expect(UpdateImpactMutation).toHaveBeenCalledWith('someId', {
+      claimLatestReward: true,
+    })
   })
 
   it('shows confirm impact dialog if user has not confirmed', () => {
@@ -172,11 +169,9 @@ describe('UserImpact component', () => {
     expect(wrapper.find(Dialog).at(0).props().open).toBe(true)
     confirmDialogue.find(Button).simulate('click')
     expect(wrapper.find(Dialog).at(0).props().open).toBe(false)
-    expect(UpdateImpactMutation).toHaveBeenCalledWith(
-      'someId',
-      STORAGE_SEAS_CAUSE_ID,
-      { confirmImpact: true }
-    )
+    expect(UpdateImpactMutation).toHaveBeenCalledWith('someId', {
+      confirmImpact: true,
+    })
   })
 
   it('dismisses the confirm Impact dialog fires off correct updateImpact mutation when the user has been refered', () => {
@@ -190,15 +185,11 @@ describe('UserImpact component', () => {
     expect(wrapper.find(Dialog).at(0).props().open).toBe(true)
     confirmDialogue.find(Button).simulate('click')
     expect(wrapper.find(Dialog).at(0).props().open).toBe(false)
-    expect(UpdateImpactMutation).toHaveBeenCalledWith(
-      'someId',
-      STORAGE_SEAS_CAUSE_ID,
-      {
-        confirmImpact: true,
-        claimPendingUserReferralImpact: true,
-        claimLatestReward: true,
-      }
-    )
+    expect(UpdateImpactMutation).toHaveBeenCalledWith('someId', {
+      confirmImpact: true,
+      claimPendingUserReferralImpact: true,
+      claimLatestReward: true,
+    })
   })
 
   it('confirming Impact dialog shows walkMe', () => {
@@ -289,11 +280,9 @@ describe('UserImpact component', () => {
     const wrapper = mount(<UserImpact {...mockProps} />)
     const notification = wrapper.find(Notification).at(1)
     notification.find(Button).simulate('click')
-    expect(UpdateImpactMutation).toHaveBeenCalledWith(
-      'someId',
-      STORAGE_SEAS_CAUSE_ID,
-      { claimPendingUserReferralImpact: true }
-    )
+    expect(UpdateImpactMutation).toHaveBeenCalledWith('someId', {
+      claimPendingUserReferralImpact: true,
+    })
   })
 
   it('dismisses referral reward dialog', () => {

@@ -1638,7 +1638,7 @@ type successfulEmailAddresses {
 
 input UpdateImpactInput {
   userId: String!
-  charityId: String!
+  charityId: String
   logImpact: Boolean
   claimPendingUserReferralImpact: Boolean
   confirmImpact: Boolean
