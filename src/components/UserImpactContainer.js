@@ -1,7 +1,7 @@
 import { createFragmentContainer, graphql } from 'react-relay'
-import UserImpactSeas from 'src/components/UserImpact'
+import UserImpact from 'src/components/UserImpact'
 
-export default createFragmentContainer(UserImpactSeas, {
+export default createFragmentContainer(UserImpact, {
   user: graphql`
     fragment UserImpactContainer_user on User {
       username
