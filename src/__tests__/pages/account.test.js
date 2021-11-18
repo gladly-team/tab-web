@@ -46,7 +46,7 @@ const getMockDataResponse = () => ({
         primaryColor: '#FF0000',
         secondaryColor: 'CCC',
       },
-      name: '/foo',
+      name: 'Cats',
     },
   },
 })

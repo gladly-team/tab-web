@@ -131,7 +131,6 @@ const getRelayQuery = ({ AuthUser }) => {
               primaryColor
               secondaryColor
             }
-            landingPagePath
           }
         }
       }
