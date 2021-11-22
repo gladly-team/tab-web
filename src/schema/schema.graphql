@@ -432,6 +432,11 @@ type Cause implements Node {
   about: String!
 
   """
+  String used to describe cause in account page
+  """
+  name: String!
+
+  """
   Cause's id
   """
   causeId: String!

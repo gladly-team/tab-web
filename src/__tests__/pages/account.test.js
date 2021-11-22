@@ -46,7 +46,7 @@ const getMockDataResponse = () => ({
         primaryColor: '#FF0000',
         secondaryColor: 'CCC',
       },
-      landingPagePath: '/foo',
+      name: 'Cats',
     },
   },
 })
@@ -285,7 +285,7 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
     )
   })
 
-  it('displays cats content in "revert" button field in the advanced options section if landingPagePath is /cats/', () => {
+  it('displays cats content in "revert" button field in the advanced options section if cause name  is cats', () => {
     expect.assertions(2)
     const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
@@ -297,7 +297,7 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
           ...defaultMockData.user,
           cause: {
             ...defaultMockData.user.cause,
-            landingPagePath: '/cats/',
+            name: 'Cats',
           },
         },
       },
@@ -312,7 +312,7 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
     )
   })
 
-  it('displays #teamseas content in "revert" button field in the advanced options section if landingPagePath is /teamseas/', () => {
+  it('displays #teamseas content in "revert" button field in the advanced options section if cause name is #TeamSeas', () => {
     expect.assertions(2)
     const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
@@ -324,7 +324,7 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
           ...defaultMockData.user,
           cause: {
             ...defaultMockData.user.cause,
-            landingPagePath: '/teamseas/',
+            name: '#TeamSeas',
           },
         },
       },
@@ -615,7 +615,7 @@ describe('acount.js: toggle to switch cause', () => {
           email: 'test@tabforacause.org',
           cause: {
             ...defaultMockData.user.cause,
-            landingPagePath: '/teamseas/',
+            name: '#TeamSeas',
           },
         },
       },
@@ -650,7 +650,7 @@ describe('acount.js: toggle to switch cause', () => {
           email: 'test@tabforacause.org',
           cause: {
             ...defaultMockData.user.cause,
-            landingPagePath: '/teamseas/',
+            name: '#TeamSeas',
           },
         },
       },
