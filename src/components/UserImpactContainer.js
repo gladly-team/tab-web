@@ -1,7 +1,7 @@
 import { createFragmentContainer, graphql } from 'react-relay'
-import UserImpactSwitchComponent from 'src/components/UserImpactSwitchComponent'
+import UserImpact from 'src/components/UserImpact'
 
-export default createFragmentContainer(UserImpactSwitchComponent, {
+export default createFragmentContainer(UserImpact, {
   user: graphql`
     fragment UserImpactContainer_user on User {
       username
