@@ -220,6 +220,7 @@ const Account = ({ data: fallbackData }) => {
     await logout(AuthUser)
   }
 
+  // empty comment
   // Switching to classic tab page.
   const [isRevertingToClassicTab, setIsRevertingToClassicTab] = useState(false)
   const setBetaOptIn = async (isOptedIn) => {
