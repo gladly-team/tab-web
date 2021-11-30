@@ -4,12 +4,7 @@ import CardContent from '@material-ui/core/CardContent'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import grey from '@material-ui/core/colors/grey'
-import catTabs from 'src/assets/onboarding/cattabs.svg'
-import squadCat from 'src/assets/onboarding/squadcat.svg'
-import adCat from 'src/assets/onboarding/adcat.svg'
-import seas1 from 'src/assets/onboarding/seas1.svg'
-import seas2 from 'src/assets/onboarding/seas2.svg'
-import seas3 from 'src/assets/onboarding/seas3.svg'
+import { media } from 'src/utils/urls'
 import PropTypes from 'prop-types'
 import Markdown from 'src/components/Markdown'
 
@@ -55,32 +50,13 @@ export const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const getImageAssetFromName = (imgName) => {
-  switch (imgName) {
-    case 'cattabs':
-      return catTabs
-    case 'squadcat':
-      return squadCat
-    case 'adcat':
-      return adCat
-    case 'seas1':
-      return seas1
-    case 'seas2':
-      return seas2
-    case 'seas3':
-      return seas3
-    default:
-      return catTabs
-  }
-}
-
 const OnboardingFlow = ({ onboarding, onComplete, showMissionSlide }) => {
   const { steps } = onboarding
   const classes = useStyles()
   const [onboardingStep, setOnboardingStep] = useState(0)
 
   const onboardingStepContents = steps.map((step) => ({
-    imageSrc: getImageAssetFromName(step.imgName),
+    imageSrc: media(step.imgName),
     title: step.title,
     subtitle: step.subtitle,
   }))

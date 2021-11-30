@@ -18,7 +18,6 @@ const mutation = graphql`
 
 const UpdateImpactMutation = (
   userId,
-  charityId,
   {
     logImpact,
     claimPendingUserReferralImpact,
@@ -31,7 +30,6 @@ const UpdateImpactMutation = (
     variables: {
       input: {
         userId,
-        charityId,
         logImpact,
         claimPendingUserReferralImpact,
         confirmImpact,

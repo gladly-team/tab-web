@@ -6,8 +6,8 @@ import InviteFriends from 'src/components/InviteFriends'
 import ImpactCounter from 'src/components/ImpactCounter'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import dynamic from 'next/dynamic'
 import { isPlural } from 'src/utils/formatting'
+import { media } from 'src/utils/urls'
 import confetti from 'canvas-confetti'
 import Button from '@material-ui/core/Button'
 import Markdown from 'src/components/Markdown'
@@ -17,14 +17,7 @@ import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import MuiDialogActions from '@material-ui/core/DialogActions'
-import { STORAGE_SEAS_CAUSE_ID } from 'src/utils/constants'
 
-const DolphinGif = dynamic(() => import('src/components/DolphinGif'), {
-  ssr: false,
-})
-const CatsGif = dynamic(() => import('src/components/RandomGif'), {
-  ssr: false,
-})
 const useStyles = makeStyles((theme) => ({
   impactCounter: { backgroundColor: '#fff', marginRight: theme.spacing(2) },
   bold: { fontWeight: 'bold' },
@@ -144,7 +137,7 @@ const UserImpact = ({ user, disabled }) => {
     } else {
       setAlertDialogOpen(true)
     }
-    await UpdateImpactMutation(userId, STORAGE_SEAS_CAUSE_ID, {
+    await UpdateImpactMutation(userId, {
       confirmImpact: true,
       claimPendingUserReferralImpact: pendingUserReferralImpact
         ? true
@@ -158,7 +151,7 @@ const UserImpact = ({ user, disabled }) => {
   const handleAlertDialogClose = () => setAlertDialogOpen(false)
   const handleClaimReward = async () => {
     setRewardDialogOpen(true)
-    await UpdateImpactMutation(userId, STORAGE_SEAS_CAUSE_ID, {
+    await UpdateImpactMutation(userId, {
       claimLatestReward: true,
     })
   }
@@ -167,7 +160,7 @@ const UserImpact = ({ user, disabled }) => {
   const handleClaimReferralNotification = () => {
     setClaimedReferralImpact(pendingUserReferralImpact)
     setReferralRewardDialogOpen(true)
-    UpdateImpactMutation(userId, STORAGE_SEAS_CAUSE_ID, {
+    UpdateImpactMutation(userId, {
       claimPendingUserReferralImpact: true,
     })
   }
@@ -215,8 +208,12 @@ const UserImpact = ({ user, disabled }) => {
         </MuiDialogTitle>
         <MuiDialogContent className={classes.themedLink}>
           <div className={classes.centerImage}>
-            {/* TODO: @workaround/tab-generalization */}
-            {landingPagePath === '/cats/' ? <CatsGif /> : <DolphinGif />}
+            <img
+              height="250"
+              src={media(impact.walkMeGif)}
+              alt={impact.walkMeGif}
+              loading="lazy"
+            />
           </div>
           <div className={classes.center}>
             <Markdown>{impact.confirmImpactSubtitle}</Markdown>
@@ -315,8 +312,12 @@ const UserImpact = ({ user, disabled }) => {
         </MuiDialogTitle>
         <MuiDialogContent>
           <div className={classes.centerImage}>
-            {/* TODO: @workaround/tab-generalization */}
-            {landingPagePath === '/cats/' ? <CatsGif /> : <DolphinGif />}
+            <img
+              height="250"
+              src={media(impact.walkMeGif)}
+              alt={impact.walkMeGif}
+              loading="lazy"
+            />
           </div>
           <Markdown>{impact.referralRewardSubtitle}</Markdown>
           <div className={classes.shareContainer}>

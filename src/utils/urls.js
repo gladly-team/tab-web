@@ -1,5 +1,6 @@
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import { withBasePath } from 'src/utils/navigationUtils'
+import { MEDIA_ENDPOINT } from 'src/utils/constants'
 
 try {
   ensureValuesAreDefined([
@@ -65,3 +66,5 @@ export const getSquadsLink = (username, squadId, landingPagePath) =>
     username
   )}&m=${encodeURIComponent(squadId)}`
 export const surveyLink = 'https://forms.gle/wT9qattFPBW9dZb57'
+
+export const media = (imgPath) => `${MEDIA_ENDPOINT}/img/cause/${imgPath}`

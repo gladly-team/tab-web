@@ -10,10 +10,11 @@ import SocialShare from 'src/components/SocialShare'
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from 'src/utils/theme'
 import IconButton from '@material-ui/core/IconButton'
-import shareCats from 'src/assets/images/shareCats.png'
-import catsSent from 'src/assets/images/catsSent.png'
-import seasEmailInvite from 'src/assets/images/seasEmailInvite.svg'
+import { media } from 'src/utils/urls'
 
+jest.mock('src/utils/constants', () => ({
+  MEDIA_ENDPOINT: 'https://dev-tab2017-media.gladly.io',
+}))
 const getMockProps = () => ({
   username: 'someUsername',
   userId: 'someId',
@@ -22,7 +23,8 @@ const getMockProps = () => ({
   user: {
     cause: {
       sharing: {
-        imgCategory: 'cats',
+        shareImage: 'cats/shareCats.png',
+        sentImage: 'cats/catsSent.png',
         title: 'Share Tab for Cats with your friends',
         subtitle:
           "Save more cats! When a friend signs up, you'll each earn 5 additional treats to help a shelter cat get adopted. 😺",
@@ -36,28 +38,30 @@ const otherUsers = [
     user: {
       cause: {
         sharing: {
-          imgCategory: 'cats',
+          shareImage: 'cats/shareCats.png',
+          sentImage: 'cats/catsSent.png',
           title: 'Share Tab for Cats with your friends',
           subtitle:
             "Save more cats! When a friend signs up, you'll each earn 5 additional treats to help a shelter cat get adopted. 😺",
         },
       },
     },
-    expectedImage: shareCats,
-    expectedAfterImage: catsSent,
+    expectedImage: 'cats/shareCats.png',
+    expectedAfterImage: 'cats/catsSent.png',
   },
   {
     user: {
       cause: {
         sharing: {
-          imgCategory: 'seas',
+          shareImage: 'seas/seasEmailInvite.svg',
+          sentImage: 'seas/seasEmailInvite.svg',
           title: 'Seas',
           subtitle: 'Seas',
         },
       },
     },
-    expectedImage: seasEmailInvite,
-    expectedAfterImage: seasEmailInvite,
+    expectedImage: 'seas/seasEmailInvite.svg',
+    expectedAfterImage: 'seas/seasEmailInvite.svg',
   },
 ]
 
@@ -94,7 +98,9 @@ describe('EmailInviteDialog component', () => {
           <EmailInviteFriendsDialog {...mockProps} />
         </ThemeProvider>
       )
-      expect(wrapper.find('img').at(0).prop('src')).toBe(testUser.expectedImage)
+      expect(wrapper.find('img').at(0).prop('src')).toBe(
+        media(testUser.expectedImage)
+      )
     })
   })
 
@@ -424,10 +430,10 @@ describe('EmailInviteDialog component', () => {
       })
       /* eslint-disable no-await-in-loop */
       expect(wrapper.find('img').at(1).prop('alt')).toBe(
-        `${testUser.user.cause.sharing.imgCategory}2`
+        `${testUser.user.cause.sharing.sentImage}`
       )
       expect(wrapper.find('img').at(1).prop('src')).toBe(
-        testUser.expectedAfterImage
+        media(testUser.expectedAfterImage)
       )
     }
   })

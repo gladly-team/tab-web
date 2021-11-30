@@ -386,7 +386,7 @@ const Index = ({ data: fallbackData }) => {
       // in the future we should handle both mission impact and individual v4 impact
       // inside the update impact mutation
       if (missionStatus === 'not started' || missionStatus === 'pending') {
-        UpdateImpactMutation(userGlobalId, CAT_CHARITY, {
+        UpdateImpactMutation(userGlobalId, {
           logImpact: true,
         })
       }

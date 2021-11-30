@@ -4,6 +4,7 @@ export const INTL_CAT_DAY_END_2021_NOTIFICATION =
   'tab.user.hasSeenintlCatDayEnd2021Notification'
 export const LANDING_PAGE_PATH_SEAS = '/teamseas/'
 export const LANDING_PAGE_PATH_CATS = '/cats/'
+export const MEDIA_ENDPOINT = process.env.NEXT_PUBLIC_MEDIA_ENDPOINT
 
 // Squad Invite Constants
 export const MISSION_COMPLETE = 'mission_complete'
