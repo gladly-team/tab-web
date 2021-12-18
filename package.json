@@ -40,7 +40,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "next": "^10.0.5",
-    "next-firebase-auth": "^0.13.3",
+    "next-firebase-auth": "0.14.0-alpha.1",
     "next-images": "^1.6.2",
     "next-offline": "^5.0.3",
     "next-transpile-modules": "^8.0.0",
