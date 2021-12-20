@@ -25,13 +25,7 @@ import { withSentry } from 'src/utils/pageWrappers/withSentry'
 import initializeCMP from 'src/utils/initializeCMP'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
-import PetsIcon from '@material-ui/icons/Pets'
-import SvgIcon from '@material-ui/core/SvgIcon'
-import { mdiJellyfish } from '@mdi/js'
-import {
-  STORAGE_CATS_CAUSE_ID,
-  STORAGE_SEAS_CAUSE_ID,
-} from '../utils/constants'
+import CauseIcon from 'src/components/CauseIcon'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -114,7 +108,6 @@ AccountItem.defaultProps = {
   value: null,
   testId: undefined,
 }
-
 const getRelayQuery = ({ AuthUser }) => {
   const userId = AuthUser.id
   return {
@@ -133,6 +126,20 @@ const getRelayQuery = ({ AuthUser }) => {
             }
           }
         }
+        app {
+          causes(first: 50) {
+            edges {
+              node {
+                causeId
+                name
+                theme {
+                  primaryColor
+                  secondaryColor
+                }
+              }
+            }
+          }
+        }
       }
     `,
     variables: {
@@ -144,7 +151,8 @@ const getRelayQuery = ({ AuthUser }) => {
 const Account = ({ data: fallbackData }) => {
   const { data } = useData({ getRelayQuery, fallbackData })
   const fetchInProgress = !data
-  const { user } = data || {}
+  const { user, app } = data || {}
+  const { causes: { edges: causeNodes = [] } = {} } = app || {}
   const { id: userId, email, username, cause } = user || {}
   const { theme, causeId, name = '' } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
@@ -169,25 +177,27 @@ const Account = ({ data: fallbackData }) => {
 
   const switchCause = useCallback(
     async (_event, newCause) => {
-      setCause(newCause)
-      const {
-        setUserCause: {
-          user: {
-            cause: {
-              name: newName,
-              theme: {
-                primaryColor: newPrimaryColor,
-                secondaryColor: newSecondaryColor,
+      if (newCause !== null) {
+        setCause(newCause)
+        const {
+          setUserCause: {
+            user: {
+              cause: {
+                name: newName,
+                theme: {
+                  primaryColor: newPrimaryColor,
+                  secondaryColor: newSecondaryColor,
+                },
               },
             },
           },
-        },
-      } = await SetUserCauseMutation({ causeId: newCause, userId })
-      setCauseName(newName)
-      setTheme({
-        primaryColor: newPrimaryColor,
-        secondaryColor: newSecondaryColor,
-      })
+        } = await SetUserCauseMutation({ causeId: newCause, userId })
+        setCauseName(newName)
+        setTheme({
+          primaryColor: newPrimaryColor,
+          secondaryColor: newSecondaryColor,
+        })
+      }
     },
     [setCause, userId, setTheme]
   )
@@ -383,19 +393,11 @@ const Account = ({ data: fallbackData }) => {
               exclusive
               onChange={switchCause}
             >
-              <ToggleButton value={STORAGE_CATS_CAUSE_ID}>
-                <PetsIcon />
-              </ToggleButton>
-              <ToggleButton value={STORAGE_SEAS_CAUSE_ID}>
-                <SvgIcon>
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d={mdiJellyfish}
-                    fill="inherit"
-                  />
-                </SvgIcon>
-              </ToggleButton>
+              {causeNodes.map(({ node: { causeId: causeIdGlobal } }) => (
+                <ToggleButton value={causeIdGlobal} key={causeIdGlobal}>
+                  <CauseIcon cause={causeIdGlobal} />
+                </ToggleButton>
+              ))}
             </ToggleButtonGroup>
           }
           testId="switch-cause"

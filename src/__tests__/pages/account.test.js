@@ -49,6 +49,14 @@ const getMockDataResponse = () => ({
       name: 'Cats',
     },
   },
+  app: {
+    causes: {
+      edges: [
+        { node: { causeId: 'CA6A5C2uj' } },
+        { node: { causeId: 'SGa6zohkY' } },
+      ],
+    },
+  },
 })
 
 const getMockProps = () => ({})
