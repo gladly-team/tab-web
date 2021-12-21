@@ -39,7 +39,13 @@ type App implements Node {
   """
   All the causes
   """
-  causes(after: String, first: Int, before: String, last: Int): CauseConnection
+  causes(
+    after: String
+    first: Int
+    before: String
+    last: Int
+    filters: CausesFilters
+  ): CauseConnection
 
   """
   Get all the "legacy" (uncategorized) background Images
@@ -442,6 +448,11 @@ type Cause implements Node {
   name: String!
 
   """
+  boolean if cause is available to select in ui
+  """
+  isAvailableToSelect: Boolean!
+
+  """
   Cause's id
   """
   causeId: String!
@@ -505,6 +516,13 @@ type CauseEdge {
   A cursor for use in pagination
   """
   cursor: String!
+}
+
+"""
+Fields on which to filter the list of charities.
+"""
+input CausesFilters {
+  isAvailableToSelect: Boolean
 }
 
 """
