@@ -127,10 +127,11 @@ const getRelayQuery = ({ AuthUser }) => {
           }
         }
         app {
-          causes(first: 50) {
+          causes(first: 50, filters: { isAvailableToSelect: true }) {
             edges {
               node {
                 causeId
+                isAvailableToSelect
                 name
                 theme {
                   primaryColor
