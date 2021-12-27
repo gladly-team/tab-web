@@ -3,6 +3,8 @@ import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 
 jest.mock('relay-runtime')
 jest.mock('src/utils/ssr')
+jest.mock('firebase/app')
+jest.mock('firebase/auth')
 
 beforeEach(() => {
   const { isServerSide } = require('src/utils/ssr')
@@ -233,7 +235,7 @@ describe('initRelayEnvironment', () => {
     expect(Store).toHaveBeenCalledTimes(2)
   })
 
-  it('provides the expected `fetch` function to Network.create when when the Relay environment was created with a getIdToken function', async () => {
+  it('[server-side] provides the expected `fetch` function to Network.create when the Relay environment was created with a getIdToken function', async () => {
     expect.assertions(1)
     const { initRelayEnvironment } = require('src/utils/relayEnvironment')
     fetch.mockResolvedValue(getMockFetchResponse())
@@ -252,7 +254,7 @@ describe('initRelayEnvironment', () => {
     })
   })
 
-  it('provides the expected `fetch` function to Network.create when the Relay environment was created without a getIdToken function', async () => {
+  it('[server-side] provides the expected `fetch` function to Network.create when the Relay environment was created without a getIdToken function', async () => {
     expect.assertions(1)
     const { initRelayEnvironment } = require('src/utils/relayEnvironment')
     fetch.mockResolvedValue(getMockFetchResponse())
@@ -262,6 +264,62 @@ describe('initRelayEnvironment', () => {
     await fetchFunc('someFakeQuery', { lookAt: 'this', thing: 123 })
     expect(fetch).toHaveBeenCalledWith('/mock-relay-endpoint/here/', {
       body: '{"variables":{"lookAt":"this","thing":123}}',
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'unauthenticated',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    })
+  })
+
+  // @workaround/expired-token-bug
+  it('[client-side] provides the expected `fetch` function when the Relay environment was created with the Firebase SDK user and token (authenticated)', async () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+
+    // Mock the Firebase (client-side) user is authed.
+    const firebaseApp = require('firebase/app').default
+    jest.spyOn(firebaseApp.auth(), 'currentUser', 'get').mockReturnValue({
+      getIdToken: jest.fn(async () => 'a-firebase-sdk-token'),
+    })
+
+    const { initRelayEnvironment } = require('src/utils/relayEnvironment')
+    fetch.mockResolvedValue(getMockFetchResponse())
+    initRelayEnvironment({ getIdToken: async () => 'some-fake-token' })
+    const { Network } = require('relay-runtime')
+    const fetchFunc = Network.create.mock.calls[0][0]
+    await fetchFunc('someFakeQuery', { myVar: 'here' })
+    expect(fetch).toHaveBeenCalledWith('/mock-relay-endpoint/here/', {
+      body: '{"variables":{"myVar":"here"}}',
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'a-firebase-sdk-token',
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    })
+  })
+
+  // @workaround/expired-token-bug
+  it('[client-side] provides the expected `fetch` function when the Relay environment was created with the Firebase SDK user and token (unauthenticated)', async () => {
+    expect.assertions(1)
+    const { isServerSide } = require('src/utils/ssr')
+    isServerSide.mockReturnValue(false)
+
+    // Mock the Firebase (client-side) user is *not* authed.
+    const firebaseApp = require('firebase/app').default
+    jest.spyOn(firebaseApp.auth(), 'currentUser', 'get').mockReturnValue(null)
+
+    const { initRelayEnvironment } = require('src/utils/relayEnvironment')
+    fetch.mockResolvedValue(getMockFetchResponse())
+    initRelayEnvironment({ getIdToken: async () => 'some-fake-token' })
+    const { Network } = require('relay-runtime')
+    const fetchFunc = Network.create.mock.calls[0][0]
+    await fetchFunc('someFakeQuery', { myVar: 'here' })
+    expect(fetch).toHaveBeenCalledWith('/mock-relay-endpoint/here/', {
+      body: '{"variables":{"myVar":"here"}}',
       headers: {
         Accept: 'application/json',
         Authorization: 'unauthenticated',

@@ -71,7 +71,24 @@ export const waitForAuthInitialized = async () =>
  */
 const createFetchQuery = ({ getIdToken }) => {
   const fetchQuery = async (operation, variables) => {
-    const token = await getIdToken()
+    // Debugging:
+    // https://gladlyteam.atlassian.net/browse/TFAC-306
+    // @workaround/expired-token-bug
+    // Try fetching a fresh user and token when client side.
+    let token
+    if (isServerSide()) {
+      token = await getIdToken()
+    } else {
+      // eslint-disable-next-line global-require
+      const firebase = require('firebase/app').default
+      // eslint-disable-next-line global-require
+      require('firebase/auth')
+      const { currentUser } = firebase.auth()
+      if (currentUser) {
+        token = await currentUser.getIdToken()
+      }
+    }
+
     const body = JSON.stringify({
       query: operation.text, // GraphQL text from input
       variables,
