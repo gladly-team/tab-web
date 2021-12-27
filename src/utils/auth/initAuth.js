@@ -36,10 +36,12 @@ const tokenChangedHandler = async (authUser) => {
     })
     if (!response.ok) {
       const responseJSON = await response.json()
-      throw new Error(
-        `Received ${
-          response.status
-        } response from login API endpoint: ${JSON.stringify(responseJSON)}`
+      logger.error(
+        new Error(
+          `Received ${
+            response.status
+          } response from login API endpoint: ${JSON.stringify(responseJSON)}`
+        )
       )
     }
   } else {
@@ -53,10 +55,12 @@ const tokenChangedHandler = async (authUser) => {
     })
     if (!response.ok) {
       const responseJSON = await response.json()
-      throw new Error(
-        `Received ${
-          response.status
-        } response from logout API endpoint: ${JSON.stringify(responseJSON)}`
+      logger.error(
+        new Error(
+          `Received ${
+            response.status
+          } response from logout API endpoint: ${JSON.stringify(responseJSON)}`
+        )
       )
     }
   }
@@ -89,12 +93,6 @@ const initAuth = () => {
       authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
       databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
       projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-    },
-    onLoginRequestError: (err) => {
-      logger.error(err)
-    },
-    onLogoutRequestError: (err) => {
-      logger.error(err)
     },
     onVerifyTokenError: (err) => {
       logger.error(err)
