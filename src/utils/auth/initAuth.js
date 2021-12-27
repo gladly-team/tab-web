@@ -2,6 +2,7 @@ import { init } from 'next-firebase-auth'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import { apiLogin, apiLogout, authURL, dashboardURL } from 'src/utils/urls'
 import { CUSTOM_HEADER_NAME } from 'src/utils/middleware/constants'
+import logger from 'src/utils/logger'
 
 try {
   ensureValuesAreDefined([
@@ -88,6 +89,18 @@ const initAuth = () => {
       authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
       databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
       projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    },
+    onLoginRequestError: (err) => {
+      logger.error(err)
+    },
+    onLogoutRequestError: (err) => {
+      logger.error(err)
+    },
+    onVerifyTokenError: (err) => {
+      logger.error(err)
+    },
+    onTokenRefreshError: (err) => {
+      logger.error(err)
     },
     cookies: {
       name: 'TabAuth',

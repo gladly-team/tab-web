@@ -5,6 +5,7 @@ import getMockFetchErrorResponse from 'src/utils/testHelpers/getMockFetchErrorRe
 import { CUSTOM_HEADER_NAME } from 'src/utils/middleware/constants'
 
 jest.mock('next-firebase-auth')
+jest.mock('src/utils/logger')
 
 beforeEach(() => {
   process.env.COOKIE_SECURE_SAME_SITE_NONE = 'true'
@@ -57,7 +58,7 @@ describe('initAuth.js', () => {
     expect(config).toHaveProperty('tokenChangedHandler')
   })
 
-  it('tokenChangedHandler calls login endpoint and sets custom header', async () => {
+  test('tokenChangedHandler calls login endpoint and sets custom header', async () => {
     expect.assertions(2)
     const { init: initNFA } = require('next-firebase-auth')
     const initAuth = require('src/utils/auth/initAuth').default
@@ -76,7 +77,7 @@ describe('initAuth.js', () => {
     })
   })
 
-  it('tokenChangedHandler throws if login endpoint call fails', async () => {
+  test('tokenChangedHandler throws if login endpoint call fails', async () => {
     expect.assertions(2)
     const { init: initNFA } = require('next-firebase-auth')
     const initAuth = require('src/utils/auth/initAuth').default
@@ -89,7 +90,7 @@ describe('initAuth.js', () => {
     ).rejects.toThrow()
   })
 
-  it('tokenChangedHandler calls logout endpoint and sets custom header', async () => {
+  test('tokenChangedHandler calls logout endpoint and sets custom header', async () => {
     expect.assertions(2)
     const { init: initNFA } = require('next-firebase-auth')
     const initAuth = require('src/utils/auth/initAuth').default
@@ -107,7 +108,7 @@ describe('initAuth.js', () => {
     })
   })
 
-  it('tokenChangedHandler throws if logout endpoint call fails', async () => {
+  test('tokenChangedHandler throws if logout endpoint call fails', async () => {
     expect.assertions(2)
     const { init: initNFA } = require('next-firebase-auth')
     const initAuth = require('src/utils/auth/initAuth').default
@@ -129,5 +130,53 @@ describe('initAuth.js', () => {
       sameSite: 'none',
       secure: true,
     })
+  })
+
+  test('onLoginRequestError calls logger.error', async () => {
+    expect.assertions(1)
+    const { init: initNFA } = require('next-firebase-auth')
+    const initAuth = require('src/utils/auth/initAuth').default
+    initAuth()
+    const logger = require('src/utils/logger').default
+    const config = initNFA.mock.calls[0][0]
+    const mockErr = new Error('foo')
+    config.onLoginRequestError(mockErr)
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+
+  test('onLogoutRequestError calls logger.error', async () => {
+    expect.assertions(1)
+    const { init: initNFA } = require('next-firebase-auth')
+    const initAuth = require('src/utils/auth/initAuth').default
+    initAuth()
+    const logger = require('src/utils/logger').default
+    const config = initNFA.mock.calls[0][0]
+    const mockErr = new Error('foo')
+    config.onLogoutRequestError(mockErr)
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+
+  test('onVerifyTokenError calls logger.error', async () => {
+    expect.assertions(1)
+    const { init: initNFA } = require('next-firebase-auth')
+    const initAuth = require('src/utils/auth/initAuth').default
+    initAuth()
+    const logger = require('src/utils/logger').default
+    const config = initNFA.mock.calls[0][0]
+    const mockErr = new Error('foo')
+    config.onVerifyTokenError(mockErr)
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
+  })
+
+  test('onTokenRefreshError calls logger.error', async () => {
+    expect.assertions(1)
+    const { init: initNFA } = require('next-firebase-auth')
+    const initAuth = require('src/utils/auth/initAuth').default
+    initAuth()
+    const logger = require('src/utils/logger').default
+    const config = initNFA.mock.calls[0][0]
+    const mockErr = new Error('foo')
+    config.onTokenRefreshError(mockErr)
+    expect(logger.error).toHaveBeenCalledWith(mockErr)
   })
 })
