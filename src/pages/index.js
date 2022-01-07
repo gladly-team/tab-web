@@ -55,7 +55,7 @@ import {
   incrementTabsOpenedToday,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
-import { accountURL, achievementsURL } from 'src/utils/urls'
+import { aboutURL, accountURL, achievementsURL } from 'src/utils/urls'
 import {
   showMockAchievements,
   showBackgroundImages,
@@ -68,6 +68,7 @@ import { CAT_CHARITY, STORAGE_NEW_USER_CAUSE_ID } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
+import InfoIcon from '@material-ui/icons/InfoOutlined'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -271,6 +272,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           vcCurrent
           cause {
             causeId
+            individualImpactEnabled
             impactVisits
             landingPagePath
             onboarding {
@@ -337,7 +339,7 @@ const Index = ({ data: fallbackData }) => {
   }, [])
   const { app, user, userImpact } = data || {}
   const { currentMission, email, cause } = user || {}
-  const { theme, onboarding, causeId } = cause || {}
+  const { theme, onboarding, causeId, individualImpactEnabled } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
 
   // Set the theme based on cause.
@@ -373,7 +375,9 @@ const Index = ({ data: fallbackData }) => {
   // log tab count when user first visits
   useEffect(() => {
     if (userGlobalId && tabId) {
-      LogTabMutation(userGlobalId, tabId)
+      if (individualImpactEnabled) {
+        LogTabMutation(userGlobalId, tabId)
+      }
 
       // Update today's tab count in localStorage.
       // This is useful when making rendering decisions before
@@ -381,18 +385,20 @@ const Index = ({ data: fallbackData }) => {
       // should show ads or not).
       incrementTabsOpenedToday()
 
-      // this might seem confusing.  Right now we handle logging mission impact in the log tab mutation
-      // but we use update impact to update v4 impact if a user is not in a mission
-      // in the future we should handle both mission impact and individual v4 impact
-      // inside the update impact mutation
-      if (missionStatus === 'not started' || missionStatus === 'pending') {
-        UpdateImpactMutation(userGlobalId, {
-          logImpact: true,
-        })
+      if (individualImpactEnabled) {
+        // this might seem confusing.  Right now we handle logging mission impact in the log tab mutation
+        // but we use update impact to update v4 impact if a user is not in a mission
+        // in the future we should handle both mission impact and individual v4 impact
+        // inside the update impact mutation
+        if (missionStatus === 'not started' || missionStatus === 'pending') {
+          UpdateImpactMutation(userGlobalId, {
+            logImpact: true,
+          })
+        }
       }
       newTabView()
     }
-  }, [userGlobalId, tabId, missionStatus])
+  }, [userGlobalId, tabId, missionStatus, individualImpactEnabled])
 
   // log reddit and fbook event if first visit
   useEffect(() => {
@@ -514,16 +520,29 @@ const Index = ({ data: fallbackData }) => {
                     progress={Math.floor((tabCount / tabGoal) * 100)}
                   />
                 ) : null}
-                <UserImpactContainer
-                  userId={userGlobalId}
-                  userImpact={userImpact}
-                  user={user}
-                  disabled={
-                    missionsFeatureEnabled &&
-                    (missionStatus === 'started' ||
-                      missionStatus === 'completed')
-                  }
-                />
+                {individualImpactEnabled ? (
+                  <UserImpactContainer
+                    userId={userGlobalId}
+                    userImpact={userImpact}
+                    user={user}
+                    disabled={
+                      missionsFeatureEnabled &&
+                      (missionStatus === 'started' ||
+                        missionStatus === 'completed')
+                    }
+                  />
+                ) : (
+                  <Link to={aboutURL}>
+                    <IconButton>
+                      <InfoIcon
+                        className={clsx(
+                          classes.userMenuItem,
+                          classes.settingsIcon
+                        )}
+                      />
+                    </IconButton>
+                  </Link>
+                )}
                 <div className={classes.moneyRaisedContainer}>
                   <Typography
                     variant="h5"
