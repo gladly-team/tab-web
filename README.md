@@ -58,3 +58,5 @@ In the future, we can consider adding session-based CSRF tokens for defense in d
 **GitHub Action runs unit tests and logs code coverage**
 
 - A GitHub Action runs tests and logs code coverage to [Codecov](https://codecov.io/gh/gladly-team/tab-web)
+
+reset qa
