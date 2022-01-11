@@ -111,6 +111,7 @@ const getMockProps = () => ({
         causeId: 'testSetMe',
         impactVisits: 12,
         landingPagePath: '/foo/',
+        individualImpactEnabled: true,
         onboarding: {
           steps: [],
         },
@@ -404,6 +405,38 @@ describe('index.js', () => {
     useData.mockReturnValue(mockProps)
     const wrapper = shallow(<IndexPage {...mockProps} />)
     expect(wrapper.find(UserImpactContainer).prop('disabled')).toBe(true)
+  })
+
+  it('does not include the UserImpactContainer if individualImpactEnabled false, displays info button instead', () => {
+    expect.assertions(1)
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          cause: {
+            causeId: 'testSetMe',
+            impactVisits: 12,
+            landingPagePath: '/foo/',
+            individualImpactEnabled: false,
+            onboarding: {
+              steps: [],
+            },
+            theme: {
+              primaryColor: '#FF0000',
+              secondaryColor: '#DEDEDE',
+            },
+          },
+        },
+      },
+    }
+    useData.mockReturnValue(mockProps)
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(UserImpactContainer)).toHaveLength(0)
   })
 
   it('does *not* show the SquadCounter, even when in a mission, if showDevelopmentOnlyMissionsFeature is false', () => {
