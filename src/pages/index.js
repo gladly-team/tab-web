@@ -375,9 +375,7 @@ const Index = ({ data: fallbackData }) => {
   // log tab count when user first visits
   useEffect(() => {
     if (userGlobalId && tabId) {
-      if (individualImpactEnabled) {
-        LogTabMutation(userGlobalId, tabId)
-      }
+      LogTabMutation(userGlobalId, tabId)
 
       // Update today's tab count in localStorage.
       // This is useful when making rendering decisions before
