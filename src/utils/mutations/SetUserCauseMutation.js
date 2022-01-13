@@ -9,6 +9,7 @@ const mutation = graphql`
         cause {
           causeId
           name
+          individualImpactEnabled
           # Theme data is required for CustomThemeHOC.
           theme {
             primaryColor
@@ -16,6 +17,10 @@ const mutation = graphql`
           }
         }
         ...UserBackgroundImageContainer_user
+        ...UserImpactContainer_user
+        ...InviteFriendsIconContainer_user
+        ...SocialShareContainer_user
+        ...EmailInviteDialogContainer_user
       }
     }
   }
