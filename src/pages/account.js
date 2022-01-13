@@ -396,19 +396,11 @@ const Account = ({ data: fallbackData }) => {
               exclusive
               onChange={switchCause}
             >
-              {causeNodes
-                .filter(({ node: { causeId: causeIdGlobal } }) => {
-                  // allow internal users to switch
-                  if (causeIdGlobal === STORAGE_BLACK_EQUITY_CAUSE_ID) {
-                    return showInternalOnly(email)
-                  }
-                  return true
-                })
-                .map(({ node: { causeId: causeIdGlobal } }) => (
-                  <ToggleButton value={causeIdGlobal} key={causeIdGlobal}>
-                    <CauseIcon cause={causeIdGlobal} />
-                  </ToggleButton>
-                ))}
+              {causeNodes.map(({ node: { causeId: causeIdGlobal } }) => (
+                <ToggleButton value={causeIdGlobal} key={causeIdGlobal}>
+                  <CauseIcon cause={causeIdGlobal} />
+                </ToggleButton>
+              ))}
             </ToggleButtonGroup>
           }
           testId="switch-cause"
