@@ -5,6 +5,7 @@ import PetsIcon from '@material-ui/icons/Pets'
 import {
   STORAGE_CATS_CAUSE_ID,
   STORAGE_SEAS_CAUSE_ID,
+  STORAGE_BLACK_EQUITY_CAUSE_ID,
 } from '../../utils/constants'
 
 const getMockProps = (cause = STORAGE_CATS_CAUSE_ID) => ({
@@ -44,5 +45,16 @@ describe('CauseIcon component', () => {
     const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
     expect(wrapper.find(PetsIcon).exists()).toEqual(true)
     expect(wrapper.find(SvgIcon).exists()).toEqual(false)
+  })
+
+  it('shows the handshake icon when black equity cause is passed into cause prop', () => {
+    const CauseIcon = require('src/components/CauseIcon').default
+    const defaultMockProps = { ...getMockProps(STORAGE_BLACK_EQUITY_CAUSE_ID) }
+    const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
+    expect(wrapper.find(PetsIcon).exists()).toEqual(false)
+    expect(wrapper.find(SvgIcon).exists()).toEqual(true)
+    expect(wrapper.find('[data-test-id="black-equity-icon"]').exists()).toEqual(
+      true
+    )
   })
 })
