@@ -12,7 +12,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
   },
   topLevel: {
-    marginRight: '11px',
+    paddingRight: theme.spacing(1),
+    paddingLeft: theme.spacing(1),
   },
   rootModal: { zIndex: '10000000 !important', borderRadius: '5px' },
   customMaxWidthDialog: { maxWidth: '512px' },
