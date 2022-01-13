@@ -26,8 +26,6 @@ import initializeCMP from 'src/utils/initializeCMP'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import CauseIcon from 'src/components/CauseIcon'
-import { showInternalOnly } from 'src/utils/featureFlags'
-import { STORAGE_BLACK_EQUITY_CAUSE_ID } from '../utils/constants'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
