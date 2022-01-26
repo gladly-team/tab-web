@@ -34,6 +34,7 @@ const Notification = ({
   open,
   onClose,
   includeClose,
+  buttons,
 }) => {
   const classes = useStylesNotification()
   return open ? (
@@ -47,29 +48,33 @@ const Notification = ({
         </IconButton>
       )}
       {text}
-      <div className="buttons">
-        {includeSecondaryButton ? (
-          <Button
-            className={classes.secondaryButton}
-            size="small"
-            variant="outlined"
-            color="primary"
-            onClick={secondaryButtonOnClick}
-          >
-            {secondaryButtonText}
-          </Button>
-        ) : null}
-        {includeButton ? (
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            onClick={buttonOnClick}
-          >
-            {buttonText}
-          </Button>
-        ) : null}
-      </div>
+      {buttons ? (
+        <div className="buttons">{buttons}</div>
+      ) : (
+        <div className="buttons">
+          {includeSecondaryButton ? (
+            <Button
+              className={classes.secondaryButton}
+              size="small"
+              variant="outlined"
+              color="primary"
+              onClick={secondaryButtonOnClick}
+            >
+              {secondaryButtonText}
+            </Button>
+          ) : null}
+          {includeButton ? (
+            <Button
+              size="small"
+              variant="contained"
+              color="primary"
+              onClick={buttonOnClick}
+            >
+              {buttonText}
+            </Button>
+          ) : null}
+        </div>
+      )}
     </Paper>
   ) : null
 }
@@ -78,7 +83,7 @@ Notification.propTypes = {
   /**
     Callback function that fires when user clicks main CTA button
   */
-  buttonOnClick: PropTypes.func.isRequired,
+  buttonOnClick: PropTypes.func,
 
   /**
     HTML element centered in middle of notification responsible for body of notification texxt
@@ -88,7 +93,7 @@ Notification.propTypes = {
   /**
     the label on main button
   */
-  buttonText: PropTypes.string.isRequired,
+  buttonText: PropTypes.string,
 
   /**
     manually remove having any cta button
@@ -111,6 +116,11 @@ Notification.propTypes = {
   secondaryButtonOnClick: PropTypes.func,
 
   /**
+    Buttons provided by client. Overrides button and secondaryButton
+  */
+  buttons: PropTypes.arrayOf(PropTypes.element),
+
+  /**
    boolean that literally shows or hides notification.  State of notification being opened is primarily controlled by parent component but can be used in some cases
    */
   open: PropTypes.bool,
@@ -126,6 +136,9 @@ Notification.propTypes = {
   onClose: PropTypes.func,
 }
 Notification.defaultProps = {
+  buttonText: '',
+  buttonOnClick: () => {},
+  buttons: null,
   includeButton: true,
   includeSecondaryButton: false,
   secondaryButtonText: '',

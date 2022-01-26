@@ -57,3 +57,49 @@ withCloseButton.args = {
   onClose: () => {},
   includeClose: true,
 }
+
+export const withSecondaryButton = Template.bind({})
+withSecondaryButton.args = {
+  text: (
+    <div style={{ width: '300px' }}>
+      <Typography variant="body2" style={{ fontWeight: 'bold' }} gutterBottom>
+        Introducing Squads!
+      </Typography>
+      <Typography variant="body2" gutterBottom>
+        Start a mission with your friends and work together to help get a
+        shelter cat adopted! When you work together with your squad you can make
+        a larger impact, sooner.
+      </Typography>
+    </div>
+  ),
+  buttonText: 'Create A Squad',
+  buttonOnClick: () => {},
+  includeSecondaryButton: true,
+  secondaryButtonText: 'No Thanks',
+  secondaryButtonOnClick: () => {},
+  onClose: () => {},
+  includeClose: true,
+}
+
+export const withCustomButton = Template.bind({})
+withCustomButton.args = {
+  text: (
+    <div style={{ width: '300px' }}>
+      <Typography variant="body2" style={{ fontWeight: 'bold' }} gutterBottom>
+        Introducing Squads!
+      </Typography>
+      <Typography variant="body2" gutterBottom>
+        Start a mission with your friends and work together to help get a
+        shelter cat adopted! When you work together with your squad you can make
+        a larger impact, sooner.
+      </Typography>
+    </div>
+  ),
+  buttonText: 'Create A Squad',
+  buttonOnClick: () => {},
+  includeSecondaryButton: true,
+  secondaryButtonText: 'No Thanks',
+  secondaryButtonOnClick: () => {},
+  onClose: () => {},
+  includeClose: true,
+}

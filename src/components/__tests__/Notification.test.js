@@ -112,6 +112,16 @@ describe('Notification component', () => {
     expect(() => clickButton.simulate('click')).not.toThrow()
   })
 
+  it('renders buttons instead of built-in buttons if specified', () => {
+    const Notification = require('src/components/Notification').default
+    const mockProps = {
+      ...getMockProps(),
+      buttons: [<Button>Other Test Button</Button>],
+    }
+    const wrapper = shallow(<Notification {...mockProps} />)
+    expect(wrapper.find(Button).first()).toEqual(mockProps.buttons[0])
+  })
+
   it('renders null if not open', () => {
     const Notification = require('src/components/Notification').default
     const mockProps = {
