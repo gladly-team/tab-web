@@ -1,6 +1,6 @@
 import React from 'react'
-
 import { Typography } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
 import Notification from './Notification'
 
 export default {
@@ -95,11 +95,7 @@ withCustomButton.args = {
       </Typography>
     </div>
   ),
-  buttonText: 'Create A Squad',
-  buttonOnClick: () => {},
-  includeSecondaryButton: true,
-  secondaryButtonText: 'No Thanks',
-  secondaryButtonOnClick: () => {},
+  buttons: [<Button key={1}>Test-Button</Button>],
   onClose: () => {},
   includeClose: true,
 }

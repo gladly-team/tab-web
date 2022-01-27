@@ -21,6 +21,15 @@ describe('Notification component', () => {
     }).not.toThrow()
   })
 
+  it('default buttonOnClick prop does nothing', () => {
+    const Notification = require('src/components/Notification').default
+    const mockProps = getMockProps()
+    delete mockProps.buttonOnClick
+    const wrapper = shallow(<Notification {...mockProps} />)
+    const clickButton = wrapper.find(Button).first()
+    expect(() => clickButton.simulate('click')).not.toThrow()
+  })
+
   it('calls buttonOnClick prop when button is clicked', () => {
     const Notification = require('src/components/Notification').default
     const mockProps = getMockProps()
@@ -99,6 +108,7 @@ describe('Notification component', () => {
     clickButton.simulate('click')
     expect(secondaryButtonOnClick).toHaveBeenCalled()
   })
+
   it('calls secondaryButtonOnClick default value when second button is clicked', () => {
     const Notification = require('src/components/Notification').default
     const mockProps = {
@@ -116,10 +126,16 @@ describe('Notification component', () => {
     const Notification = require('src/components/Notification').default
     const mockProps = {
       ...getMockProps(),
-      buttons: [<Button>Other Test Button</Button>],
+      includeSecondaryButton: true,
+      secondaryButtonText: 'secondButton',
+      buttons: [<Button key={1}>Other Test Button</Button>],
     }
     const wrapper = shallow(<Notification {...mockProps} />)
-    expect(wrapper.find(Button).first()).toEqual(mockProps.buttons[0])
+    const buttons = wrapper.find(Button)
+
+    // Assert only button is the one in the buttons key
+    expect(buttons).toHaveLength(1)
+    expect(buttons.first().text()).toEqual('Other Test Button')
   })
 
   it('renders null if not open', () => {
