@@ -34,6 +34,7 @@ import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
+import ImageIcon from '@material-ui/icons/Image'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -194,6 +195,37 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     pointerEvents: 'none', // don't block the main page
   },
+  photoIconButton: {
+    position: 'absolute',
+    display: 'flex',
+    zIndex: 1000,
+    height: theme.spacing(5),
+    alignItems: 'center',
+    bottom: theme.spacing(3),
+    left: theme.spacing(3),
+    '& .attributionText': {
+      display: 'none',
+    },
+    '&:hover .attributionText': {
+      display: 'flex',
+    },
+    '&:hover .photoIcon': {
+      color: '#fff',
+    },
+  },
+  photoIcon: {
+    color: '#919396',
+  },
+  attributionText: {
+    color: '#fff',
+    display: 'flex',
+    flexDirection: 'column',
+    marginLeft: theme.spacing(2),
+  },
+  collectionLink: {
+    fontWeight: 'bold',
+    textDecoration: 'underline',
+  },
   adsContainerRectangles: {
     display: 'flex',
     flexDirection: 'column',
@@ -294,6 +326,12 @@ const getRelayQuery = async ({ AuthUser }) => {
             tabCount
             missionId
           }
+          backgroundImage {
+            imageCollection {
+              collectionLink
+              collectionDescription
+            }
+          }
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
           ...InviteFriendsIconContainer_user
@@ -338,9 +376,11 @@ const Index = ({ data: fallbackData }) => {
     }
   }, [])
   const { app, user, userImpact } = data || {}
-  const { currentMission, email, cause } = user || {}
+  const { currentMission, email, cause, backgroundImage } = user || {}
   const { theme, onboarding, causeId, individualImpactEnabled } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
+  const { imageCollection } = backgroundImage || {}
+  const { collectionLink, collectionDescription } = imageCollection || {}
 
   // Set the theme based on cause.
   const setTheme = useCustomTheming()
@@ -614,6 +654,24 @@ const Index = ({ data: fallbackData }) => {
               <SearchInput className={classes.searchBar} />
             </div>
           </div>
+          {collectionLink && collectionDescription && (
+            <div className={classes.photoIconButton}>
+              <ImageIcon className={clsx('photoIcon', classes.photoIcon)} />
+              <div className={clsx('attributionText', classes.attributionText)}>
+                <Typography variant="caption">
+                  {collectionDescription}
+                </Typography>
+                <Link to={collectionLink}>
+                  <Typography
+                    variant="caption"
+                    className={classes.collectionLink}
+                  >
+                    View collection
+                  </Typography>
+                </Link>
+              </div>
+            </div>
+          )}
           <div className={classes.adsContainer}>
             <div className={classes.adsContainerRectangles}>
               {adUnits.rectangleAdSecondary && shouldRenderAds ? (

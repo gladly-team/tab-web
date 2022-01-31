@@ -16,6 +16,12 @@ const mutation = graphql`
             secondaryColor
           }
         }
+        backgroundImage {
+          imageCollection {
+            collectionLink
+            collectionDescription
+          }
+        }
         ...UserBackgroundImageContainer_user
         ...UserImpactContainer_user
         ...InviteFriendsIconContainer_user
