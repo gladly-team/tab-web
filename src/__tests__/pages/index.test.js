@@ -31,6 +31,7 @@ import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContaine
 import SquadCounter from 'src/components/SquadCounter'
 import UserImpactContainer from 'src/components/UserImpactContainer'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
+import ImageIcon from '@material-ui/icons/Image'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -437,6 +438,76 @@ describe('index.js', () => {
     useData.mockReturnValue(mockProps)
     const wrapper = shallow(<IndexPage {...mockProps} />)
     expect(wrapper.find(UserImpactContainer)).toHaveLength(0)
+  })
+
+  it('does not show image collection details if image collection is not defined', () => {
+    expect.assertions(1)
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          cause: {
+            causeId: 'testSetMe',
+            impactVisits: 12,
+            landingPagePath: '/foo/',
+            individualImpactEnabled: false,
+            onboarding: {
+              steps: [],
+            },
+            theme: {
+              primaryColor: '#FF0000',
+              secondaryColor: '#DEDEDE',
+            },
+          },
+        },
+      },
+    }
+    useData.mockReturnValue(mockProps)
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(ImageIcon).exists()).toBe(false)
+  })
+
+  it('does show image collection details if image collection data is defined', () => {
+    expect.assertions(1)
+    showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          cause: {
+            causeId: 'testSetMe',
+            impactVisits: 12,
+            landingPagePath: '/foo/',
+            individualImpactEnabled: false,
+            onboarding: {
+              steps: [],
+            },
+            theme: {
+              primaryColor: '#FF0000',
+              secondaryColor: '#DEDEDE',
+            },
+          },
+          backgroundImage: {
+            imageCollection: {
+              collectionLink: 'somelink',
+              collectionDescription: 'some description',
+            },
+          },
+        },
+      },
+    }
+    useData.mockReturnValue(mockProps)
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(ImageIcon).exists()).toBe(true)
   })
 
   it('does *not* show the SquadCounter, even when in a mission, if showDevelopmentOnlyMissionsFeature is false', () => {
