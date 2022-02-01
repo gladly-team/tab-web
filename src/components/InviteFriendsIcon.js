@@ -11,10 +11,6 @@ const useStyles = makeStyles((theme) => ({
   copyIcon: {
     color: theme.palette.text.secondary,
   },
-  topLevel: {
-    paddingRight: theme.spacing(1),
-    paddingLeft: theme.spacing(1),
-  },
   rootModal: { zIndex: '10000000 !important', borderRadius: '5px' },
   customMaxWidthDialog: { maxWidth: '512px' },
   friendsIcon: {
@@ -45,11 +41,7 @@ const InviteFriendsIcon = ({ user }) => {
   const closeDialog = () => setIsDialogOpen(false)
   return (
     <>
-      <IconButton
-        className={classes.topLevel}
-        ref={buttonRef}
-        onClick={() => setIsDialogOpen(true)}
-      >
+      <IconButton ref={buttonRef} onClick={() => setIsDialogOpen(true)}>
         <GroupAddIcon className={classes.friendsIcon} />
       </IconButton>
       <Dialog

@@ -110,7 +110,8 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(0),
   },
   settingsIconContainer: {
-    margin: theme.spacing(0.5),
+    marginTop: theme.spacing(0.5),
+    marginBottom: theme.spacing(0.5),
   },
   settingsIcon: {
     height: 20,

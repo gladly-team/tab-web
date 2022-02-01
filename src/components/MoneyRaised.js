@@ -15,6 +15,10 @@ const useStyles = makeStyles((theme) => ({
     padding: 12,
     width: 220,
   },
+  buttonSpacing: {
+    paddingLeft: theme.spacing(1.5),
+    paddingRight: theme.spacing(1.5),
+  },
 }))
 const MoneyRaised = (props) => {
   const {
@@ -43,7 +47,11 @@ const MoneyRaised = (props) => {
 
   return (
     <div>
-      <Button ref={spanRef} onClick={() => setIsPopoverOpen(true)}>
+      <Button
+        ref={spanRef}
+        onClick={() => setIsPopoverOpen(true)}
+        className={classes.buttonSpacing}
+      >
         <Typography variant="h5" className={classes.currencyText}>
           {currencyFormatUSD(currentMoneyRaised)}
         </Typography>
