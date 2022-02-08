@@ -128,7 +128,7 @@ describe('Notification component', () => {
       ...getMockProps(),
       includeSecondaryButton: true,
       secondaryButtonText: 'secondButton',
-      buttons: [<Button key={1}>Other Test Button</Button>],
+      buttons: <Button key={1}>Other Test Button</Button>,
     }
     const wrapper = shallow(<Notification {...mockProps} />)
     const buttons = wrapper.find(Button)

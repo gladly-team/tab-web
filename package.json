@@ -21,6 +21,7 @@
     "chromatic": "dotenv-extended --defaults=./.env --path=./.env.local chromatic --auto-accept-changes"
   },
   "dependencies": {
+    "@fontsource/poppins": "^4.5.0",
     "@material-ui/core": "^4.11.2",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.11.3-deprecations.1",
