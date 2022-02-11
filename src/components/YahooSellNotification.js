@@ -11,14 +11,14 @@ import Notification from './Notification'
 const useStyles = makeStyles((theme) => ({
   learnButton: {
     height: '30px',
-    fontWeight: '900',
+    fontWeight: '500',
     fontFamily: 'Poppins',
   },
   noThanksButton: {
     marginLeft: 'auto',
     borderRadius: '15px',
     height: '30px',
-    fontWeight: '900',
+    fontWeight: '5ayw00',
     fontFamily: 'Poppins',
   },
   switchToYahooButton: {
@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '900',
     fontFamily: 'Poppins',
     marginLeft: theme.spacing(1),
+    color: 'white',
   },
   title: {
     fontWeight: '700',
@@ -55,6 +56,7 @@ const YahooSellNotification = ({
     setOpen(false)
   }
   const onNoThanksClick = () => {
+    CreateSearchEnginePromptLogMutation(userId, 'Yahoo', false)
     onNoThanks()
     setOpen(false)
   }
