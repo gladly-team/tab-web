@@ -14,6 +14,7 @@ import {
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
+import { useGrowthBook } from '@growthbook/growthbook-react'
 
 // custom components
 import Achievement from 'src/components/Achievement'
@@ -61,6 +62,7 @@ import {
   showMockAchievements,
   showBackgroundImages,
   showDevelopmentOnlyMissionsFeature,
+  showInternalOnly,
 } from 'src/utils/featureFlags'
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
@@ -272,6 +274,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           hasViewedIntroFlow
           tabs
           vcCurrent
+          joined
           cause {
             causeId
             individualImpactEnabled
@@ -340,9 +343,22 @@ const Index = ({ data: fallbackData }) => {
     }
   }, [])
   const { app, user, userImpact } = data || {}
-  const { currentMission, email, cause } = user || {}
+  const { id: userId, currentMission, email, cause, joined } = user || {}
   const { theme, onboarding, causeId, individualImpactEnabled } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
+
+  const growthbook = useGrowthBook()
+
+  useEffect(() => {
+    growthbook.setAttributes({
+      userId,
+      env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
+      causeId,
+      v4BetaEnabled: true,
+      joined,
+      isTabTeamMember: showInternalOnly(email),
+    })
+  }, [causeId, email, growthbook, joined, userId])
 
   // Set the theme based on cause.
   const setTheme = useCustomTheming()
@@ -548,6 +564,9 @@ const Index = ({ data: fallbackData }) => {
                     variant="h5"
                     className={clsx(classes.userMenuItem)}
                   >
+                    {growthbook.feature('test-feature').value ? (
+                      <p>Welcome to our site!</p>
+                    ) : null}
                     <MoneyRaisedContainer app={app} />
                   </Typography>
                 </div>

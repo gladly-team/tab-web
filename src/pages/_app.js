@@ -22,6 +22,8 @@ import 'src/utils/styles/globalStyles.css'
 import '@fontsource/poppins/300.css'
 import '@fontsource/poppins/400.css'
 import '@fontsource/poppins/500.css'
+import { GrowthBook, GrowthBookProvider } from '@growthbook/growthbook-react'
+import features from 'src/features/features.json'
 
 initAuth()
 
@@ -83,6 +85,14 @@ if (isClientSide()) {
 // The MUI theme prior to any user-level customization.
 const standardTheme = createTheme(defaultTheme)
 
+// Context for designing GrowthBook features: https://docs.google.com/document/d/1ru-oO7-OWVM3ByYZseJBQ-Mu8_1LwcLUMNlHdpQ2JN4/edit#heading=h.5qxtlklvlhrs
+// When adding a new experiment, design it so that the weights of the experiment should be constant.
+// For example to design an experiment and modify experiment, we can:
+//  - Run an experiment over x% of traffic (e.g. a 50/50 exp over 10% of traffic)
+//  - Adjust the percentage of traffic the experiment is run over. This allows us to scale the total amount of traffic going to a particular bucket.
+const growthbook = new GrowthBook()
+growthbook.setFeatures(features)
+
 const MyApp = (props) => {
   const { Component, pageProps } = props
 
@@ -121,12 +131,14 @@ const MyApp = (props) => {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <ThemeProvider theme={standardTheme}>
-        <CssBaseline />
-        <ErrorBoundary>
-          <Component {...pageProps} />
-        </ErrorBoundary>
-      </ThemeProvider>
+      <GrowthBookProvider growthbook={growthbook}>
+        <ThemeProvider theme={standardTheme}>
+          <CssBaseline />
+          <ErrorBoundary>
+            <Component {...pageProps} />
+          </ErrorBoundary>
+        </ThemeProvider>
+      </GrowthBookProvider>
     </>
   )
 }

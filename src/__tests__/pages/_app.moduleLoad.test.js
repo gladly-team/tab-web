@@ -268,3 +268,19 @@ describe('_app: router overrides', () => {
     })
   })
 })
+
+describe('_app: GrowthBook', () => {
+  it('initializes app with Growthbook and calls it with features', () => {
+    expect.assertions(1)
+    const { GrowthBook } = require('@growthbook/growthbook-react')
+    const features = require('src/features/features.json')
+    const mockGrowthbook = {
+      setFeatures: jest.fn(),
+    }
+    GrowthBook.mockImplementation(() => mockGrowthbook)
+
+    // eslint-disable-next-line no-unused-expressions
+    require('src/pages/_app').default
+    expect(mockGrowthbook.setFeatures).toHaveBeenCalledWith(features)
+  })
+})
