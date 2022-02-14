@@ -25,6 +25,7 @@ import { withSentry } from 'src/utils/pageWrappers/withSentry'
 import initializeCMP from 'src/utils/initializeCMP'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
+import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 import CauseIcon from 'src/components/CauseIcon'
 
 const useStyles = makeStyles((theme) => ({
@@ -435,5 +436,6 @@ export default flowRight([
   }),
   withSentry,
   withRelay,
+  withGoogleAnalyticsProperties,
   CustomThemeHOC,
 ])(Account)

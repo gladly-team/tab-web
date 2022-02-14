@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper'
 import { withSentry } from 'src/utils/pageWrappers/withSentry'
 import withRelay from 'src/utils/pageWrappers/withRelay'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
+import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 import useData from 'src/utils/hooks/useData'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import SettingsPage from 'src/components/SettingsPage'
@@ -96,5 +97,6 @@ export default flowRight([
   }),
   withSentry,
   withRelay,
+  withGoogleAnalyticsProperties,
   CustomThemeHOC,
 ])(AboutPage)

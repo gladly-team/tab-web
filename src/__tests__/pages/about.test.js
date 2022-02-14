@@ -8,6 +8,7 @@ import Markdown from 'src/components/Markdown'
 
 jest.mock('src/components/SettingsPage')
 jest.mock('src/utils/pageWrappers/withRelay')
+jest.mock('src/utils/pageWrappers/withGoogleAnalyticsProperties')
 jest.mock('src/utils/hooks/useData')
 jest.mock('src/utils/pageWrappers/withSentry')
 jest.mock('src/utils/pageWrappers/CustomThemeHOC')

@@ -32,7 +32,7 @@ describe('withGoogleAnalyticsProperties HOC component', () => {
     })
   })
 
-  it('does not fail if AuthUser is undefined', () => {
+  it('does not call gtag or throw if AuthUser is undefined', () => {
     expect.assertions(2)
     useAuthUser.mockReturnValueOnce(undefined)
     const DummyComponent = (props) => <div {...props} />
@@ -40,7 +40,7 @@ describe('withGoogleAnalyticsProperties HOC component', () => {
       DummyComponent
     )
     const WrappedComponent = mount(<WrappedHOC />)
-    expect(gtag).toHaveBeenCalledWith('set', 'user_properties', {})
+    expect(gtag).not.toHaveBeenCalled()
     expect(() => WrappedComponent).not.toThrow()
   })
 
