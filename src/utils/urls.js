@@ -65,6 +65,7 @@ export const getSquadsLink = (username, squadId, landingPagePath) =>
   `${constructBaseUrl(landingPagePath)}?u=${encodeURIComponent(
     username
   )}&m=${encodeURIComponent(squadId)}`
-export const surveyLink = 'https://forms.gle/wT9qattFPBW9dZb57'
+export const surveyLink =
+  'https://docs.google.com/forms/d/e/1FAIpQLScS8RmMy1AvYHuBJPrNSnB9TOgG8Lq24ODh1RlODeIsw0U1MA/viewform?usp=sf_link'
 
 export const media = (imgPath) => `${MEDIA_ENDPOINT}/img/cause/${imgPath}`

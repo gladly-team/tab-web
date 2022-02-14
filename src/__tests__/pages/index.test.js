@@ -60,6 +60,7 @@ jest.mock('src/components/Achievement', () => () => (
   <div data-test-id="mock-achievement" />
 ))
 jest.mock('src/utils/pageWrappers/withRelay')
+jest.mock('src/utils/pageWrappers/withGoogleAnalyticsProperties')
 jest.mock('src/utils/hooks/useData')
 jest.mock('src/components/FullPageLoader')
 jest.mock('src/components/UserBackgroundImageContainer')

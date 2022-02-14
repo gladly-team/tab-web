@@ -21,8 +21,8 @@ import MuiDialogActions from '@material-ui/core/DialogActions'
 const useStyles = makeStyles((theme) => ({
   impactCounter: {
     backgroundColor: '#fff',
-    marginRight: theme.spacing(2),
-    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(1.5),
+    marginLeft: theme.spacing(1.5),
   },
   bold: { fontWeight: 'bold' },
   canvas: {
