@@ -3443,9 +3443,9 @@
     form-data "^3.0.0"
 
 "@types/node@*":
-  version "17.0.13"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.13.tgz#5ed7ed7c662948335fcad6c412bb42d99ea754e3"
-  integrity sha512-Y86MAxASe25hNzlDbsviXl8jQHb0RDvKt4c40ZJQ1Don0AAL0STLZSs4N+6gLEO55pedy7r2cLwS+ZDxPm/2Bw==
+  version "17.0.18"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.18.tgz#3b4fed5cfb58010e3a2be4b6e74615e4847f1074"
+  integrity sha512-eKj4f/BsN/qcculZiRSujogjvp5O/k4lOW5m35NopjZM/QwLOR075a8pJW5hD+Rtdm2DaCVPENS6KtSQnUD6BA==
 
 "@types/node@>=12.12.47", "@types/node@>=13.7.0":
   version "16.11.0"
@@ -5322,9 +5322,9 @@ chrome-trace-event@^1.0.2:
   integrity sha512-p3KULyQg4S7NIHixdwbGX+nFHkoBiA4YQmyWtjb8XngSKV124nJmRysgAeujbUVb15vh+RvFUfCPqU7rXk+hZg==
 
 chromedriver@^97.0.2:
-  version "97.0.2"
-  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-97.0.2.tgz#b6c26f6667ad40dc8cf08818878cc064787116fc"
-  integrity sha512-sOAfKCR3WsHvmKedZoWa+3tBVGdPtxq4zKxgKZCoJ2c924olBTW4Bnha6SHl93Yo7+QqsNn6ZpAC0ojhutacAg==
+  version "97.0.4"
+  resolved "https://registry.yarnpkg.com/chromedriver/-/chromedriver-97.0.4.tgz#69dbfae6194d32c64e34f88d60897835d86f7a99"
+  integrity sha512-mAOH1QSCaeYgniNOqceAzC8BVORQtWxsmgSOBuy8TV/CyyDTllLmKtNNORsxdqrDtefVlxRVQkEzYrlKiJsfFw==
   dependencies:
     "@testim/chrome-version" "^1.1.2"
     axios "^0.24.0"
@@ -7661,9 +7661,9 @@ flush-write-stream@^1.0.0:
     readable-stream "^2.3.6"
 
 follow-redirects@^1.14.4:
-  version "1.14.7"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.7.tgz#2004c02eb9436eee9a21446a6477debf17e81685"
-  integrity sha512-+hbxoLbFMbRKDwohX8GkTataGqO6Jb7jGwpAlwgy2bIz25XtRm7KEzJM76R1WiNT5SwZkX4Y75SwBolkpmE7iQ==
+  version "1.14.8"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.8.tgz#016996fb9a11a100566398b1c6839337d7bfa8fc"
+  integrity sha512-1x0S9UVJHsQprFcEC/qnNzBLcIxsjAV905f/UkQxbclCsoTWlacCNOpQa/anodLl2uaEKFhfWOvM2Qg77+15zA==
 
 for-in@^1.0.2:
   version "1.0.2"
@@ -10882,10 +10882,17 @@ minimalistic-crypto-utils@^1.0.1:
   resolved "https://registry.yarnpkg.com/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz#f6c00c1c0b082246e5c4d99dfb8c7c083b2b582a"
   integrity sha1-9sAMHAsIIkblxNmd+4x8CDsrWCo=
 
-minimatch@3.0.4, minimatch@^3.0.2, minimatch@^3.0.4:
+minimatch@3.0.4, minimatch@^3.0.2:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   integrity sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
+  dependencies:
+    brace-expansion "^1.1.7"
+
+minimatch@^3.0.4:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.1.tgz#879ad447200773912898b46cd516a7abbb5e50b0"
+  integrity sha512-reLxBcKUPNBnc/sVtAbxgRVFSegoGeLaSjmphNhcwcolhYLRgtJscn5mRl6YRZNQv40Y7P6JM2YhSIsbL9OB5A==
   dependencies:
     brace-expansion "^1.1.7"
 
@@ -14275,9 +14282,9 @@ tab-cmp@^0.14.0:
   integrity sha512-8u/kHNYbJpRacywKxqeNdIWke3qswXNf9JVDaBfou+sMiu3eYQ4HFdV37mMwIFMqDaZrcZYHlrlS/VNDM7B/lQ==
 
 tab-e2e@^2.0.8:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/tab-e2e/-/tab-e2e-2.1.0.tgz#48f41beb2f3a9e0c7ee08c19fb54c5532039e327"
-  integrity sha512-CPzW7WKaP7qsz/MlurReSm1LRMO5lsTbZSLAOCQU+w0wTYhOL3XOQRe0to374cJ58LJbhaaYkXixNGHRIZqOZw==
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/tab-e2e/-/tab-e2e-2.1.1.tgz#8e70978d3651669f37777364a99fff00066828a9"
+  integrity sha512-DzAFRzFSmrETjT7gU9F52hMK0ZNH2CV5nKbZkbhIL3wp9SOjdTMzNYCLG96loDuYUidY2QjK6BHsVCHUQjNAdA==
   dependencies:
     chromedriver "^97.0.2"
     mailosaur "^8.1.1"
@@ -15671,9 +15678,9 @@ write-file-atomic@^3.0.0:
     typedarray-to-buffer "^3.1.5"
 
 ws@>=7.4.6:
-  version "8.4.2"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.4.2.tgz#18e749868d8439f2268368829042894b6907aa0b"
-  integrity sha512-Kbk4Nxyq7/ZWqr/tarI9yIt/+iNNFOjBXEWgTb4ydaNHBNGgvf2QHbS9fdfsndfjFlFwEd4Al+mw83YkaD10ZA==
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-8.5.0.tgz#bfb4be96600757fe5382de12c670dab984a1ed4f"
+  integrity sha512-BWX0SWVgLPzYwF8lTzEy1egjhS4S4OEAHfsO8o65WOVsrnSRGaSiUaa9e0ggGlkMTtBlmOpEXiie9RUcBO86qg==
 
 ws@^7.4.6:
   version "7.5.5"
