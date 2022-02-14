@@ -2,9 +2,11 @@
 
 import fbq from 'src/utils/facebook-analytics'
 import rdt from 'src/utils/reddit-analytics'
+import gtag from 'src/utils/google-analytics'
 
 jest.mock('src/utils/facebook-analytics')
 jest.mock('src/utils/reddit-analytics')
+jest.mock('src/utils/google-analytics')
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -19,6 +21,7 @@ describe('logEvent', () => {
       content_name: 'AccountCreated',
     })
     expect(rdt).toHaveBeenCalledWith('track', 'SignUp')
+    expect(gtag).toHaveBeenCalledWith('event', 'sign_up')
   })
 
   test('new tab view event calls analytics as expected', () => {
@@ -29,5 +32,7 @@ describe('logEvent', () => {
     expect(fbq).toHaveBeenCalledWith('track', 'ViewContent', {
       content_name: 'Newtab',
     })
+    expect(rdt).not.toHaveBeenCalled()
+    expect(gtag).not.toHaveBeenCalled()
   })
 })

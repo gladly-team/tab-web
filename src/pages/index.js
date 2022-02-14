@@ -27,6 +27,7 @@ import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 import SquadCounter from 'src/components/SquadCounter'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
+import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -708,5 +709,6 @@ export default flowRight([
   }),
   withSentry,
   withRelay,
+  withGoogleAnalyticsProperties,
   CustomThemeHOC,
 ])(Index)
