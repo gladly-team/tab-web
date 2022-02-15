@@ -19,6 +19,9 @@ import initializeCMP from 'src/utils/initializeCMP'
 import { setWindowLocation } from 'src/utils/navigation'
 import isOurHost from 'src/utils/isOurHost'
 import 'src/utils/styles/globalStyles.css'
+import '@fontsource/poppins/300.css'
+import '@fontsource/poppins/400.css'
+import '@fontsource/poppins/500.css'
 
 initAuth()
 

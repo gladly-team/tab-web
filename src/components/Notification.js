@@ -19,6 +19,10 @@ const useStylesNotification = makeStyles(() => ({
   buttons: {
     flexDirection: 'row',
   },
+  buttonsProvided: {
+    flexDirection: 'row',
+    width: '100%',
+  },
   secondaryButton: {
     marginRight: '8px',
   },
@@ -49,9 +53,9 @@ const Notification = ({
       )}
       {text}
       {buttons ? (
-        <div className="buttons">{buttons}</div>
+        <div className={classes.buttonsProvided}>{buttons}</div>
       ) : (
-        <div className="buttons">
+        <div className={classes.buttons}>
           {includeSecondaryButton ? (
             <Button
               className={classes.secondaryButton}
@@ -88,7 +92,7 @@ Notification.propTypes = {
   /**
     HTML element centered in middle of notification responsible for body of notification texxt
   */
-  text: PropTypes.element.isRequired,
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
 
   /**
     the label on main button
@@ -118,7 +122,7 @@ Notification.propTypes = {
   /**
     Buttons provided by client. Overrides button and secondaryButton
   */
-  buttons: PropTypes.arrayOf(PropTypes.element),
+  buttons: PropTypes.element,
 
   /**
    boolean that literally shows or hides notification.  State of notification being opened is primarily controlled by parent component but can be used in some cases
