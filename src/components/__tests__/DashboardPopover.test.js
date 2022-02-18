@@ -47,4 +47,15 @@ describe('DashboardPopover', () => {
     wrapper.setProps({ onClose })
     expect(wrapper.find(Popover).prop('onClose')).toBe(onClose)
   })
+
+  it('passes the "popoverClasses" prop to Popover', () => {
+    const DashboardPopover = require('src/components/DashboardPopover').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<DashboardPopover {...mockProps} />)
+    const popoverClasses = {
+      test: 'blah',
+    }
+    wrapper.setProps({ popoverClasses })
+    expect(wrapper.find(Popover).prop('classes')).toBe(popoverClasses)
+  })
 })
