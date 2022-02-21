@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import PetsIcon from '@material-ui/icons/Pets'
 import SvgIcon from '@material-ui/core/SvgIcon'
-import { mdiJellyfish } from '@mdi/js'
+import { mdiJellyfish, mdiPineTree } from '@mdi/js'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import DashboardPopover from 'src/components/DashboardPopover'
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
       background: 'white',
     },
   },
-  petsIcon: {
+  impactIcon: {
     position: 'relative',
     marginLeft: '-32px',
     marginRight: '8px',
@@ -83,13 +83,23 @@ const ImpactCounter = (props) => {
           variant="determinate"
           value={progress === 0 ? 1 : progress}
         />
-        {icon === 'paw' && <PetsIcon className={classes.petsIcon} />}
+        {icon === 'paw' && <PetsIcon className={classes.impactIcon} />}
         {icon === 'jellyfish' && (
-          <SvgIcon className={classes.petsIcon}>
+          <SvgIcon className={classes.impactIcon}>
             <path
               fillRule="evenodd"
               clipRule="evenodd"
               d={mdiJellyfish}
+              fill="inherit"
+            />
+          </SvgIcon>
+        )}
+        {icon === 'pine-tree' && (
+          <SvgIcon className={classes.impactIcon}>
+            <path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d={mdiPineTree}
               fill="inherit"
             />
           </SvgIcon>
