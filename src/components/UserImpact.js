@@ -211,14 +211,16 @@ const UserImpact = ({ user, disabled }) => {
           </Typography>
         </MuiDialogTitle>
         <MuiDialogContent className={classes.themedLink}>
-          <div className={classes.centerImage}>
-            <img
-              height="250"
-              src={media(impact.walkMeGif)}
-              alt={impact.walkMeGif}
-              loading="lazy"
-            />
-          </div>
+          {impact.walkMeGif ? (
+            <div className={classes.centerImage}>
+              <img
+                height="250"
+                src={media(impact.walkMeGif)}
+                alt={impact.walkMeGif}
+                loading="lazy"
+              />
+            </div>
+          ) : null}
           <div className={classes.center}>
             <Markdown>{impact.confirmImpactSubtitle}</Markdown>
           </div>
@@ -311,18 +313,27 @@ const UserImpact = ({ user, disabled }) => {
                 // adding \\ because of known prettier issue https://github.com/prettier/prettier/issues/6213
                 // eslint-disable-next-line no-template-curly-in-string
                 .replace('\\${claimedReferralImpact}', claimedReferralImpact)
+
+                // adding \\ because of known prettier issue https://github.com/prettier/prettier/issues/6213
+                // eslint-disable-next-line no-template-curly-in-string
+                .replace(
+                  '\\${isPlural(claimedReferralImpact)}',
+                  isPlural(claimedReferralImpact)
+                )
             }
           </Markdown>
         </MuiDialogTitle>
         <MuiDialogContent>
-          <div className={classes.centerImage}>
-            <img
-              height="250"
-              src={media(impact.walkMeGif)}
-              alt={impact.walkMeGif}
-              loading="lazy"
-            />
-          </div>
+          {impact.walkMeGif ? (
+            <div className={classes.centerImage}>
+              <img
+                height="250"
+                src={media(impact.walkMeGif)}
+                alt={impact.walkMeGif}
+                loading="lazy"
+              />
+            </div>
+          ) : null}
           <Markdown>{impact.referralRewardSubtitle}</Markdown>
           <div className={classes.shareContainer}>
             <div className={classes.InviteFriends}>
