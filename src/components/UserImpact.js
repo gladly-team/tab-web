@@ -310,14 +310,17 @@ const UserImpact = ({ user, disabled }) => {
               // eslint-disable-next-line react/prop-types
               impact.referralRewardTitle
 
+                // Old formatting support:
                 // adding \\ because of known prettier issue https://github.com/prettier/prettier/issues/6213
                 // eslint-disable-next-line no-template-curly-in-string
                 .replace('\\${claimedReferralImpact}', claimedReferralImpact)
 
-                // adding \\ because of known prettier issue https://github.com/prettier/prettier/issues/6213
+                // Cleaner formatting, no preceding backslash:
                 // eslint-disable-next-line no-template-curly-in-string
+                .replace('${claimedReferralImpact}', claimedReferralImpact)
                 .replace(
-                  '\\${isPlural(claimedReferralImpact)}',
+                  // eslint-disable-next-line no-template-curly-in-string
+                  '${isPlural(claimedReferralImpact)}',
                   isPlural(claimedReferralImpact)
                 )
             }
