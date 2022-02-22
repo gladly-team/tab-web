@@ -148,7 +148,7 @@ ImpactCounter.propTypes = {
   /**
    * The Icon related to the cause
    */
-  icon: PropTypes.oneOf(['jellyfish', 'paw']),
+  icon: PropTypes.oneOf(['jellyfish', 'paw', 'pine-tree']),
 
   /**
    * Text for the dropdown

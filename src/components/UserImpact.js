@@ -404,7 +404,7 @@ UserImpact.propTypes = {
         claimImpactSubtitle: PropTypes.string.isRequired,
         referralRewardNotification: PropTypes.string.isRequired,
         impactIcon: PropTypes.string.isRequired,
-        walkMeGif: PropTypes.string.isRequired,
+        walkMeGif: PropTypes.string,
         referralRewardTitle: PropTypes.string.isRequired,
         referralRewardSubtitle: PropTypes.string.isRequired,
         newlyReferredImpactWalkthroughText: PropTypes.string.isRequired,
