@@ -134,6 +134,7 @@ const getRelayQuery = ({ AuthUser }) => {
                 causeId
                 isAvailableToSelect
                 name
+                icon
                 theme {
                   primaryColor
                   secondaryColor
@@ -395,9 +396,9 @@ const Account = ({ data: fallbackData }) => {
               exclusive
               onChange={switchCause}
             >
-              {causeNodes.map(({ node: { causeId: causeIdGlobal } }) => (
+              {causeNodes.map(({ node: { causeId: causeIdGlobal, icon } }) => (
                 <ToggleButton value={causeIdGlobal} key={causeIdGlobal}>
-                  <CauseIcon cause={causeIdGlobal} />
+                  <CauseIcon icon={icon} />
                 </ToggleButton>
               ))}
             </ToggleButtonGroup>

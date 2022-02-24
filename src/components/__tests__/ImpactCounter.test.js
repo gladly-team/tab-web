@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button'
 import Markdown from 'src/components/Markdown'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import PetsIcon from '@material-ui/icons/Pets'
+import CauseIcon from 'src/components/CauseIcon'
 
 const getMockProps = () => ({
   includeNumber: false,
@@ -149,7 +150,7 @@ describe('ImpactCounter component', () => {
     ).toEqual(expectedStandardText)
   })
 
-  it('shows the jellyfish icon when jellyfish is passed into icon prop', () => {
+  it('passes the icon name to CauseIcon', () => {
     const ImpactCounter = require('src/components/ImpactCounter').default
     const defaultMockProps = {
       ...getMockProps(),
@@ -157,19 +158,7 @@ describe('ImpactCounter component', () => {
       icon: 'jellyfish',
     }
     const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
-    expect(wrapper.find(SvgIcon).exists()).toEqual(true)
-    expect(wrapper.find(PetsIcon).exists()).toEqual(false)
-  })
-
-  it('shows the paws icon when nothing is passed into icon prop', () => {
-    const ImpactCounter = require('src/components/ImpactCounter').default
-    const defaultMockProps = {
-      ...getMockProps(),
-      disabled: true,
-    }
-    const wrapper = shallow(<ImpactCounter {...defaultMockProps} />)
-    expect(wrapper.find(PetsIcon).exists()).toEqual(true)
-    expect(wrapper.find(SvgIcon).exists()).toEqual(false)
+    expect(wrapper.find(CauseIcon).prop('icon')).toEqual('jellyfish')
   })
 
   it('shows the markdown passed in', () => {

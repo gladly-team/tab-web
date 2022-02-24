@@ -2,19 +2,24 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import PetsIcon from '@material-ui/icons/Pets'
 import SvgIcon from '@material-ui/core/SvgIcon'
-import { mdiJellyfish, mdiHandshake, mdiPineTree } from '@mdi/js'
-import {
-  STORAGE_CATS_CAUSE_ID,
-  STORAGE_SEAS_CAUSE_ID,
-  STORAGE_BLACK_EQUITY_CAUSE_ID,
-  STORAGE_TREES_CAUSE_ID,
-} from '../utils/constants'
+import { mdiJellyfish, mdiHandshake, mdiPineTree, mdiMedicalBag } from '@mdi/js'
 
-const CauseIcon = ({ cause }) => {
-  let icon
-  switch (cause) {
-    case STORAGE_SEAS_CAUSE_ID:
-      icon = (
+const PAW = 'paw'
+const JELLYFISH = 'jellyfish'
+const HANDSHAKE = 'handshake'
+const PINE_TREE = 'pine-tree'
+const MEDICAL_BAG = 'medical-bag'
+
+const iconOptions = [PAW, JELLYFISH, HANDSHAKE, PINE_TREE, MEDICAL_BAG]
+
+const CauseIcon = ({ icon, className }) => {
+  let iconComp
+  switch (icon) {
+    case PAW:
+      iconComp = <PetsIcon className={className} />
+      break
+    case JELLYFISH:
+      iconComp = (
         <SvgIcon>
           <path
             fillRule="evenodd"
@@ -25,12 +30,9 @@ const CauseIcon = ({ cause }) => {
         </SvgIcon>
       )
       break
-    case STORAGE_CATS_CAUSE_ID:
-      icon = <PetsIcon />
-      break
-    case STORAGE_BLACK_EQUITY_CAUSE_ID:
-      icon = (
-        <SvgIcon data-test-id="black-equity-icon">
+    case HANDSHAKE:
+      iconComp = (
+        <SvgIcon data-test-id="black-equity-icon" className={className}>
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -40,9 +42,9 @@ const CauseIcon = ({ cause }) => {
         </SvgIcon>
       )
       break
-    case STORAGE_TREES_CAUSE_ID:
-      icon = (
-        <SvgIcon>
+    case PINE_TREE:
+      iconComp = (
+        <SvgIcon className={className}>
           <path
             fillRule="evenodd"
             clipRule="evenodd"
@@ -52,15 +54,30 @@ const CauseIcon = ({ cause }) => {
         </SvgIcon>
       )
       break
+    case MEDICAL_BAG:
+      iconComp = (
+        <SvgIcon className={className}>
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d={mdiMedicalBag}
+            fill="inherit"
+          />
+        </SvgIcon>
+      )
+      break
     default:
-      icon = <PetsIcon />
+      iconComp = <PetsIcon className={className} />
       break
   }
-  return icon
+  return iconComp
 }
+
 CauseIcon.displayName = 'CauseIcon'
 
 CauseIcon.propTypes = {
-  cause: PropTypes.string.isRequired,
+  classNmae: PropTypes.string,
+  icon: PropTypes.oneOf(iconOptions).isRequired,
 }
+
 export default CauseIcon
