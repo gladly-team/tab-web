@@ -5,8 +5,6 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import DashboardPopover from 'src/components/DashboardPopover'
 import Button from '@material-ui/core/Button'
 import Markdown from 'src/components/Markdown'
-import SvgIcon from '@material-ui/core/SvgIcon'
-import PetsIcon from '@material-ui/icons/Pets'
 import CauseIcon from 'src/components/CauseIcon'
 
 const getMockProps = () => ({
