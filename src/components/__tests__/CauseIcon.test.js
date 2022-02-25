@@ -8,6 +8,7 @@ import {
   mdiPineTree,
   mdiMedicalBag,
   mdiFoodApple,
+  mdiWater,
 } from '@mdi/js'
 
 const getMockProps = () => ({
@@ -103,5 +104,17 @@ describe('CauseIcon component', () => {
     const svgIcon = wrapper.find(SvgIcon)
     const pathD = svgIcon.find('path').prop('d')
     expect(pathD).toEqual(mdiFoodApple)
+  })
+
+  it('returns the water icon', () => {
+    const CauseIcon = require('src/components/CauseIcon').default
+    const defaultMockProps = {
+      ...getMockProps(),
+      icon: 'water',
+    }
+    const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
+    const svgIcon = wrapper.find(SvgIcon)
+    const pathD = svgIcon.find('path').prop('d')
+    expect(pathD).toEqual(mdiWater)
   })
 })

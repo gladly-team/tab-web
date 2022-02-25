@@ -8,6 +8,7 @@ import {
   mdiPineTree,
   mdiMedicalBag,
   mdiFoodApple,
+  mdiWater,
 } from '@mdi/js'
 
 const PAW = 'paw'
@@ -16,6 +17,7 @@ const HANDSHAKE = 'handshake'
 const PINE_TREE = 'pine-tree'
 const MEDICAL_BAG = 'medical-bag'
 const FOOD_APPLE = 'food-apple'
+const WATER = 'water'
 
 const iconOptions = [
   PAW,
@@ -24,6 +26,7 @@ const iconOptions = [
   PINE_TREE,
   MEDICAL_BAG,
   FOOD_APPLE,
+  WATER,
 ]
 
 const CauseIcon = ({ icon, className }) => {
@@ -87,6 +90,18 @@ const CauseIcon = ({ icon, className }) => {
             fillRule="evenodd"
             clipRule="evenodd"
             d={mdiFoodApple}
+            fill="inherit"
+          />
+        </SvgIcon>
+      )
+      break
+    case WATER:
+      iconComp = (
+        <SvgIcon className={className}>
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d={mdiWater}
             fill="inherit"
           />
         </SvgIcon>
