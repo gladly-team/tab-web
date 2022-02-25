@@ -357,7 +357,7 @@ const UserImpact = ({ user, disabled }) => {
       {showReward && (
         <Notification
           text={<Markdown>{impact.claimImpactSubtitle}</Markdown>}
-          buttonText="Hooray"
+          buttonText="Hooray!"
           buttonOnClick={handleClaimReward}
         />
       )}

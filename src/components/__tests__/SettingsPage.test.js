@@ -46,8 +46,8 @@ describe('SettingsPage component', () => {
     const wrapper = shallow(<SettingsPage {...mockProps} />)
     const toolbar = wrapper.find(AppBar).find(Toolbar).first()
     const link = toolbar
-      .find(Link)
-      .filterWhere((elem) => elem.prop('to') === dashboardURL)
+      .find('a')
+      .filterWhere((elem) => elem.prop('href') === dashboardURL)
     expect(link.exists()).toBe(true)
     expect(link.childAt(0).type()).toEqual(IconButton)
     expect(link.childAt(0).childAt(0).type()).toEqual(CloseIcon)

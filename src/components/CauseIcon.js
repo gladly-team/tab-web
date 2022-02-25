@@ -20,7 +20,7 @@ const CauseIcon = ({ icon, className }) => {
       break
     case JELLYFISH:
       iconComp = (
-        <SvgIcon>
+        <SvgIcon className={className}>
           <path
             fillRule="evenodd"
             clipRule="evenodd"

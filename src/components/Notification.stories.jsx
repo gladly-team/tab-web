@@ -29,7 +29,7 @@ basic.args = {
     </div>
   ),
 
-  buttonText: 'Hooray',
+  buttonText: 'Hooray!',
   buttonOnClick: () => {
     // eslint-disable-next-line no-undef, no-alert
     window.alert('you clicked')
