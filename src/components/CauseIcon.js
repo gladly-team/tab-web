@@ -2,15 +2,29 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import PetsIcon from '@material-ui/icons/Pets'
 import SvgIcon from '@material-ui/core/SvgIcon'
-import { mdiJellyfish, mdiHandshake, mdiPineTree, mdiMedicalBag } from '@mdi/js'
+import {
+  mdiJellyfish,
+  mdiHandshake,
+  mdiPineTree,
+  mdiMedicalBag,
+  mdiFoodApple,
+} from '@mdi/js'
 
 const PAW = 'paw'
 const JELLYFISH = 'jellyfish'
 const HANDSHAKE = 'handshake'
 const PINE_TREE = 'pine-tree'
 const MEDICAL_BAG = 'medical-bag'
+const FOOD_APPLE = 'food-apple'
 
-const iconOptions = [PAW, JELLYFISH, HANDSHAKE, PINE_TREE, MEDICAL_BAG]
+const iconOptions = [
+  PAW,
+  JELLYFISH,
+  HANDSHAKE,
+  PINE_TREE,
+  MEDICAL_BAG,
+  FOOD_APPLE,
+]
 
 const CauseIcon = ({ icon, className }) => {
   let iconComp
@@ -61,6 +75,18 @@ const CauseIcon = ({ icon, className }) => {
             fillRule="evenodd"
             clipRule="evenodd"
             d={mdiMedicalBag}
+            fill="inherit"
+          />
+        </SvgIcon>
+      )
+      break
+    case FOOD_APPLE:
+      iconComp = (
+        <SvgIcon className={className}>
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d={mdiFoodApple}
             fill="inherit"
           />
         </SvgIcon>
