@@ -21,6 +21,8 @@ import initializeCMP from 'src/utils/initializeCMP'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import SetUserCauseMutation from 'src/utils/mutations/SetUserCauseMutation'
+import CauseIcon from 'src/components/CauseIcon'
+import Tooltip from '@material-ui/core/Tooltip'
 
 jest.mock('next-offline/runtime')
 jest.mock('tab-cmp')
@@ -37,7 +39,8 @@ jest.mock('src/utils/pageWrappers/withSentry')
 jest.mock('src/utils/pageWrappers/CustomThemeHOC')
 jest.mock('src/utils/hooks/useCustomTheming')
 jest.mock('src/utils/mutations/SetUserCauseMutation')
-jest.mock('src/components/CauseIcon', () => () => <div />)
+// eslint-disable-next-line react/prop-types
+jest.mock('src/components/CauseIcon', () => ({ icon }) => <div icon={icon} />)
 
 const getMockDataResponse = () => ({
   user: {
@@ -55,8 +58,22 @@ const getMockDataResponse = () => ({
   app: {
     causes: {
       edges: [
-        { node: { causeId: 'CA6A5C2uj' } },
-        { node: { causeId: 'SGa6zohkY' } },
+        {
+          node: {
+            causeId: 'CA6A5C2uj',
+            name: 'Cats',
+            icon: 'paw',
+            isAvailableToSelect: true,
+          },
+        },
+        {
+          node: {
+            causeId: 'SGa6zohkY',
+            name: '#TeamSeas',
+            icon: 'jellyfish',
+            isAvailableToSelect: true,
+          },
+        },
       ],
     },
   },
@@ -612,7 +629,7 @@ describe('account.js: CMP privacy management', () => {
   })
 })
 
-describe('acount.js: toggle to switch cause', () => {
+describe('account.js: toggle to switch cause', () => {
   it('displays switch cause toggle for internal users', () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account').default
@@ -672,5 +689,25 @@ describe('acount.js: toggle to switch cause', () => {
       causeId: 'SGa6zohkY',
       userId: 'some-user-id',
     })
+  })
+
+  it('renders icons and tooltips for the available causes', () => {
+    expect.assertions(5)
+    const AccountPage = require('src/pages/account').default
+    const mockProps = getMockProps()
+    const defaultMockData = getMockDataResponse()
+    useData.mockReturnValue({ data: defaultMockData })
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    expect(wrapper.find(ToggleButton).length).toEqual(2)
+    expect(
+      wrapper.find(ToggleButton).at(0).find(CauseIcon).prop('icon')
+    ).toEqual('paw')
+    expect(wrapper.find(Tooltip).at(0).prop('title')).toEqual('Tab for Cats')
+    expect(
+      wrapper.find(ToggleButton).at(1).find(CauseIcon).prop('icon')
+    ).toEqual('jellyfish')
+    expect(wrapper.find(Tooltip).at(1).prop('title')).toEqual(
+      'Tab for #TeamSeas'
+    )
   })
 })
