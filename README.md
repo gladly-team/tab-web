@@ -4,7 +4,7 @@
 
 🚨 **Work in progress** 🚨: see [gladly-team/tab](https://github.com/gladly-team/tab) for the production web app
 
-## Getting Started
+## Getting Started!
 
 1. `git clone git@github.com:gladly-team/tab-web.git`
 2. `cd tab-web`
