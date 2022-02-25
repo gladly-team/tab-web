@@ -3448,9 +3448,9 @@
     form-data "^3.0.0"
 
 "@types/node@*":
-  version "17.0.18"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.18.tgz#3b4fed5cfb58010e3a2be4b6e74615e4847f1074"
-  integrity sha512-eKj4f/BsN/qcculZiRSujogjvp5O/k4lOW5m35NopjZM/QwLOR075a8pJW5hD+Rtdm2DaCVPENS6KtSQnUD6BA==
+  version "17.0.21"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.21.tgz#864b987c0c68d07b4345845c3e63b75edd143644"
+  integrity sha512-DBZCJbhII3r90XbQxI8Y9IjjiiOGlZ0Hr32omXIZvwwZ7p4DMMXGrKXVyPfuoBOri9XNtL0UK69jYIBIsRX3QQ==
 
 "@types/node@>=12.12.47", "@types/node@>=13.7.0":
   version "16.11.0"
@@ -7666,9 +7666,9 @@ flush-write-stream@^1.0.0:
     readable-stream "^2.3.6"
 
 follow-redirects@^1.14.4:
-  version "1.14.8"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.8.tgz#016996fb9a11a100566398b1c6839337d7bfa8fc"
-  integrity sha512-1x0S9UVJHsQprFcEC/qnNzBLcIxsjAV905f/UkQxbclCsoTWlacCNOpQa/anodLl2uaEKFhfWOvM2Qg77+15zA==
+  version "1.14.9"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.9.tgz#dd4ea157de7bfaf9ea9b3fbd85aa16951f78d8d7"
+  integrity sha512-MQDfihBQYMcyy5dhRDJUHcw7lb2Pv/TuE6xP1vyraLukNDHKbDxDNaOE3NbCAdKQApno+GPRyo1YAp89yCjK4w==
 
 for-in@^1.0.2:
   version "1.0.2"
@@ -10895,9 +10895,9 @@ minimatch@3.0.4, minimatch@^3.0.2:
     brace-expansion "^1.1.7"
 
 minimatch@^3.0.4:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.1.tgz#879ad447200773912898b46cd516a7abbb5e50b0"
-  integrity sha512-reLxBcKUPNBnc/sVtAbxgRVFSegoGeLaSjmphNhcwcolhYLRgtJscn5mRl6YRZNQv40Y7P6JM2YhSIsbL9OB5A==
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.2.tgz#19cd194bfd3e428f049a70817c038d89ab4be35b"
+  integrity sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==
   dependencies:
     brace-expansion "^1.1.7"
 
@@ -14287,9 +14287,9 @@ tab-cmp@^0.14.0:
   integrity sha512-8u/kHNYbJpRacywKxqeNdIWke3qswXNf9JVDaBfou+sMiu3eYQ4HFdV37mMwIFMqDaZrcZYHlrlS/VNDM7B/lQ==
 
 tab-e2e@^2.0.8:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/tab-e2e/-/tab-e2e-2.1.1.tgz#8e70978d3651669f37777364a99fff00066828a9"
-  integrity sha512-DzAFRzFSmrETjT7gU9F52hMK0ZNH2CV5nKbZkbhIL3wp9SOjdTMzNYCLG96loDuYUidY2QjK6BHsVCHUQjNAdA==
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/tab-e2e/-/tab-e2e-2.1.2.tgz#5b2348a9de72eb711f0b3a451e0c7fef0f0d994e"
+  integrity sha512-pj9nnJnob3ffyze4rQwc70Ztj2+e0D78N7c3hOS8LVpaqKc7W4JGoC6CAZ4S38sJLGC4VREJMM7FL0HWJt1L9g==
   dependencies:
     chromedriver "^97.0.2"
     mailosaur "^8.1.1"
