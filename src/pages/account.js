@@ -399,7 +399,7 @@ const Account = ({ data: fallbackData }) => {
                 variant="caption"
                 className={classes.revertButtonText}
               >
-                {`Warning: This will remove your ability to support ${currentCauseName.toLowerCase()}. It will
+                {`Warning: This will remove your ability to support your current cause. It will
                 send you to classic Tab for a Cause, which has other 
                 nonprofits you can support.`}
               </Typography>
