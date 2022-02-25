@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { unregister } from 'next-offline/runtime'
 import { graphql } from 'react-relay'
@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
+import Tooltip from '@material-ui/core/Tooltip'
 import { flowRight } from 'lodash/util'
 import { withAuthUser, AuthAction, useAuthUser } from 'next-firebase-auth'
 import tabCMP from 'tab-cmp'
@@ -71,6 +72,11 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '1.16',
     color: 'rgba(0, 0, 0, 0.54)',
     maxWidth: '80%',
+  },
+  causeButtonContent: {
+    display: 'block',
+    width: '100%',
+    height: '100%',
   },
 }))
 
@@ -149,6 +155,23 @@ const getRelayQuery = ({ AuthUser }) => {
       userId,
     },
   }
+}
+
+// Wrap ToggleButton in a Tooltip. See:
+// https://github.com/mui/material-ui/issues/18091#issuecomment-1019191094
+const TooltipToggleButton = forwardRef(({ TooltipProps, ...props }, ref) => (
+  // eslint-disable-next-line react/jsx-no-comment-textnodes, react/jsx-props-no-spreading
+  <Tooltip {...TooltipProps}>
+    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+    <ToggleButton ref={ref} {...props} />
+  </Tooltip>
+))
+TooltipToggleButton.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  TooltipProps: PropTypes.object,
+}
+TooltipToggleButton.defaultProps = {
+  TooltipProps: {},
 }
 
 const Account = ({ data: fallbackData }) => {
@@ -396,11 +419,19 @@ const Account = ({ data: fallbackData }) => {
               exclusive
               onChange={switchCause}
             >
-              {causeNodes.map(({ node: { causeId: causeIdGlobal, icon } }) => (
-                <ToggleButton value={causeIdGlobal} key={causeIdGlobal}>
-                  <CauseIcon icon={icon} />
-                </ToggleButton>
-              ))}
+              {causeNodes.map(
+                ({
+                  node: { causeId: causeIdGlobal, icon, name: causeName },
+                }) => (
+                  <TooltipToggleButton
+                    key={causeIdGlobal}
+                    value={causeIdGlobal}
+                    TooltipProps={{ title: `Tab for ${causeName}` }}
+                  >
+                    <CauseIcon icon={icon} />
+                  </TooltipToggleButton>
+                )
+              )}
             </ToggleButtonGroup>
           }
           testId="switch-cause"
