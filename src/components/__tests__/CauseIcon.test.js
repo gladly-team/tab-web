@@ -2,7 +2,13 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import PetsIcon from '@material-ui/icons/Pets'
-import { mdiJellyfish, mdiHandshake, mdiPineTree, mdiMedicalBag } from '@mdi/js'
+import {
+  mdiJellyfish,
+  mdiHandshake,
+  mdiPineTree,
+  mdiMedicalBag,
+  mdiFoodApple,
+} from '@mdi/js'
 
 const getMockProps = () => ({
   icon: 'paw',
@@ -22,6 +28,18 @@ describe('CauseIcon component', () => {
     const defaultMockProps = {
       ...getMockProps(),
       icon: 'paw',
+    }
+    const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
+    expect(wrapper.find(PetsIcon).exists()).toEqual(true)
+  })
+
+  it('returns the paw icon when an unsupported icon name is passed', () => {
+    // Suppress expected error.
+    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+    const CauseIcon = require('src/components/CauseIcon').default
+    const defaultMockProps = {
+      ...getMockProps(),
+      icon: 'blah',
     }
     const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
     expect(wrapper.find(PetsIcon).exists()).toEqual(true)
@@ -75,15 +93,15 @@ describe('CauseIcon component', () => {
     expect(pathD).toEqual(mdiMedicalBag)
   })
 
-  it('returns the paw icon when an unsupported icon name is passed', () => {
-    // Suppress expected error.
-    jest.spyOn(console, 'error').mockImplementationOnce(() => {})
+  it('returns the apple icon', () => {
     const CauseIcon = require('src/components/CauseIcon').default
     const defaultMockProps = {
       ...getMockProps(),
-      icon: 'blah',
+      icon: 'food-apple',
     }
     const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
-    expect(wrapper.find(PetsIcon).exists()).toEqual(true)
+    const svgIcon = wrapper.find(SvgIcon)
+    const pathD = svgIcon.find('path').prop('d')
+    expect(pathD).toEqual(mdiFoodApple)
   })
 })
