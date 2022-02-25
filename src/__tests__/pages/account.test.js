@@ -37,6 +37,8 @@ jest.mock('src/utils/pageWrappers/withSentry')
 jest.mock('src/utils/pageWrappers/CustomThemeHOC')
 jest.mock('src/utils/hooks/useCustomTheming')
 jest.mock('src/utils/mutations/SetUserCauseMutation')
+jest.mock('src/components/CauseIcon', () => () => <div />)
+
 const getMockDataResponse = () => ({
   user: {
     id: 'some-user-id',
