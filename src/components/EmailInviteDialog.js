@@ -29,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   dialogContentRoot: {
+    display: 'flex',
+    flexDirection: 'column',
     padding: theme.spacing(4),
   },
   purpleColor: {
@@ -179,7 +181,7 @@ const EmailInviteFriendsDialog = ({
         <img
           src={media(shareImage)}
           alt={shareImage}
-          style={{ marginTop: '12px' }}
+          style={{ marginTop: '12px', marginBottom: 6 }}
         />
         <IconButton
           onClick={closeFunction}
