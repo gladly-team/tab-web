@@ -8,6 +8,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import { aboutURL, accountURL, dashboardURL, surveyLink } from 'src/utils/urls'
+import { withBasePath } from 'src/utils/navigationUtils'
 
 jest.mock('src/components/Link')
 jest.mock('src/components/Logo')
@@ -47,7 +48,7 @@ describe('SettingsPage component', () => {
     const toolbar = wrapper.find(AppBar).find(Toolbar).first()
     const link = toolbar
       .find('a')
-      .filterWhere((elem) => elem.prop('href') === dashboardURL)
+      .filterWhere((elem) => elem.prop('href') === withBasePath(dashboardURL))
     expect(link.exists()).toBe(true)
     expect(link.childAt(0).type()).toEqual(IconButton)
     expect(link.childAt(0).childAt(0).type()).toEqual(CloseIcon)
