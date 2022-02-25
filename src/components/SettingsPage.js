@@ -142,11 +142,20 @@ const SettingsPage = (props) => {
           <div className={classes.logoContainer}>
             <Logo color="white" className={classes.logo} />
           </div>
-          <Link to={dashboardURL} className={classes.menuItem}>
+          {/*
+          Swapped from Link to anchor to force a refresh of the new tab
+          page. Otherwise, Next's client-side nav in conjunction with our
+          cached page can load a stale component tree with fresh data,
+          causing potential errors (e.g., switching from a cause with an
+          impact counter to one without). It's possible we could refetch
+          the page or clear cache to avoid this. Possibly related:
+          https://stackoverflow.com/a/67852168/1332513
+         */}
+          <a href={dashboardURL} className={classes.menuItem}>
             <IconButton>
               <CloseIcon className={classes.closeIcon} />
             </IconButton>
-          </Link>
+          </a>
         </Toolbar>
       </AppBar>
       <div className={classes.sidebarContentContainer}>
