@@ -24,7 +24,7 @@ import {
 } from 'src/utils/urls'
 import { Divider } from '@material-ui/core'
 import { mdiOpenInNew } from '@mdi/js'
-import { areSameURLs } from 'src/utils/navigationUtils'
+import { areSameURLs, withBasePath } from 'src/utils/navigationUtils'
 
 const sidebarWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -151,7 +151,7 @@ const SettingsPage = (props) => {
           the page or clear cache to avoid this. Possibly related:
           https://stackoverflow.com/a/67852168/1332513
          */}
-          <a href={dashboardURL} className={classes.menuItem}>
+          <a href={withBasePath(dashboardURL)} className={classes.menuItem}>
             <IconButton>
               <CloseIcon className={classes.closeIcon} />
             </IconButton>
