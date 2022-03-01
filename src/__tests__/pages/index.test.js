@@ -10,6 +10,7 @@ import {
   showMockAchievements,
   showBackgroundImages,
   showDevelopmentOnlyMissionsFeature,
+  showInternalOnly,
 } from 'src/utils/featureFlags'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import Achievement from 'src/components/Achievement'
@@ -31,6 +32,7 @@ import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContaine
 import SquadCounter from 'src/components/SquadCounter'
 import UserImpactContainer from 'src/components/UserImpactContainer'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
+import { useGrowthBook } from '@growthbook/growthbook-react'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -74,6 +76,7 @@ jest.mock('src/components/SquadCounter')
 jest.mock('src/components/UserImpactContainer')
 jest.mock('src/utils/pageWrappers/CustomThemeHOC')
 jest.mock('src/utils/hooks/useCustomTheming')
+jest.mock('@growthbook/growthbook-react')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
@@ -851,5 +854,26 @@ describe('index.js', () => {
       STORAGE_NEW_USER_CAUSE_ID,
       'testSetMe'
     )
+  })
+
+  it('calls setFeatures on growthbook with correct values', async () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    const mockGrowthbook = {
+      feature: jest.fn().mockReturnValue({ value: true }),
+      setAttributes: jest.fn(),
+    }
+    useGrowthBook.mockReturnValue(mockGrowthbook)
+    mount(<IndexPage {...mockProps} />)
+
+    expect(mockGrowthbook.setAttributes).toHaveBeenCalledWith({
+      userId: mockProps.data.user.id,
+      env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
+      causeId: mockProps.data.user.cause.causeId,
+      v4BetaEnabled: true,
+      joined: mockProps.data.user.joined,
+      isTabTeamMember: showInternalOnly(mockProps.data.user.email),
+    })
   })
 })
