@@ -868,7 +868,7 @@ describe('index.js', () => {
     mount(<IndexPage {...mockProps} />)
 
     expect(mockGrowthbook.setAttributes).toHaveBeenCalledWith({
-      userId: mockProps.data.user.id,
+      id: mockProps.data.user.id,
       env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
       causeId: mockProps.data.user.cause.causeId,
       v4BetaEnabled: true,

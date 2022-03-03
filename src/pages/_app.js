@@ -24,6 +24,7 @@ import '@fontsource/poppins/400.css'
 import '@fontsource/poppins/500.css'
 import { GrowthBook, GrowthBookProvider } from '@growthbook/growthbook-react'
 import features from 'src/features/features.json'
+import { trackingCallback } from 'src/utils/growthbook'
 
 initAuth()
 
@@ -90,7 +91,9 @@ const standardTheme = createTheme(defaultTheme)
 // For example to design an experiment and modify experiment, we can:
 //  - Run an experiment over x% of traffic (e.g. a 50/50 exp over 10% of traffic)
 //  - Adjust the percentage of traffic the experiment is run over. This allows us to scale the total amount of traffic going to a particular bucket.
-const growthbook = new GrowthBook()
+const growthbook = new GrowthBook({
+  trackingCallback,
+})
 growthbook.setFeatures(features)
 
 const MyApp = (props) => {

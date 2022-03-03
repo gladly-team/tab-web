@@ -351,7 +351,7 @@ const Index = ({ data: fallbackData }) => {
 
   useEffect(() => {
     growthbook.setAttributes({
-      userId,
+      id: userId,
       env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
       causeId,
       v4BetaEnabled: true,

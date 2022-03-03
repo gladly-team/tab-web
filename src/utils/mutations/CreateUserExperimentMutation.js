@@ -4,16 +4,12 @@ import callMutation from 'src/utils/mutations/callMutation'
 const mutation = graphql`
   mutation CreateUserExperimentMutation($input: CreateUserExperimentInput!) {
     createUserExperiment(input: $input) {
-      UserExperiment {
-        userId
-        experimentId
-        variationId
-      }
+      success
     }
   }
 `
 
-const CreateUserExperimentMutation = ({ userId, experimentId, variationId }) =>
+const CreateUserExperimentMutation = (userId, experimentId, variationId) =>
   callMutation({
     mutation,
     variables: {

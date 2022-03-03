@@ -16,14 +16,18 @@ describe('CreateUserExperimentMutation', () => {
     expect.assertions(1)
     const CreateUserExperimentMutation =
       require('src/utils/mutations/CreateUserExperimentMutation').default
-    await CreateUserExperimentMutation('some-user-id', 'some-experiment-id', 'some-variation-id')
+    await CreateUserExperimentMutation(
+      'some-user-id',
+      'some-experiment-id',
+      'some-variation-id'
+    )
     expect(callMutation).toHaveBeenCalledWith({
       mutation: expect.any(Object),
       variables: {
         input: {
           userId: 'some-user-id',
           experimentId: 'some-experiment-id',
-          variationId: 'some-variationId'
+          variationId: 'some-variation-id',
         },
       },
     })
