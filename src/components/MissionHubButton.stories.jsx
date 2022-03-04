@@ -21,13 +21,28 @@ export const notStarted = Template.bind({})
 notStarted.args = {
   status: '',
 }
+notStarted.parameters = {
+  chromatic: {
+    disableSnapshot: true,
+  },
+}
 
 export const pending = Template.bind({})
 pending.args = {
   status: 'pending',
 }
+pending.parameters = {
+  chromatic: {
+    disableSnapshot: true,
+  },
+}
 
 export const started = Template.bind({})
 started.args = {
   status: 'started',
+}
+started.parameters = {
+  chromatic: {
+    disableSnapshot: true,
+  },
 }

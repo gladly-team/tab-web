@@ -13,8 +13,18 @@ export const standard = Template.bind({})
 standard.args = {
   progress: 50,
 }
+standard.parameters = {
+  chromatic: {
+    disableSnapshot: true,
+  },
+}
 
 export const full = Template.bind({})
 full.args = {
   progress: 100,
+}
+full.parameters = {
+  chromatic: {
+    disableSnapshot: true,
+  },
 }

@@ -170,6 +170,11 @@ noEmailInvitesYet.args = {
     },
   },
 }
+noEmailInvitesYet.parameters = {
+  chromatic: {
+    disableSnapshot: true,
+  },
+}
 
 export const pendingMission = Template.bind({})
 pendingMission.args = {
@@ -208,6 +213,11 @@ pendingMission.args = {
       ],
       endOfMissionAwards: [],
     },
+  },
+}
+pendingMission.parameters = {
+  chromatic: {
+    disableSnapshot: true,
   },
 }
 
@@ -278,6 +288,11 @@ inProgress.args = {
       ],
       endOfMissionAwards: [],
     },
+  },
+}
+inProgress.parameters = {
+  chromatic: {
+    disableSnapshot: true,
   },
 }
 
@@ -352,6 +367,11 @@ completed.args = {
         { user: 'alec', awardType: 'All-Star Fur Ball', unit: 258 },
       ],
     },
+  },
+}
+completed.parameters = {
+  chromatic: {
+    disableSnapshot: true,
   },
 }
 
@@ -429,5 +449,10 @@ completedWithInvite.args = {
         { user: 'alec', awardType: 'All-Star Fur Ball', unit: 258 },
       ],
     },
+  },
+}
+completedWithInvite.parameters = {
+  chromatic: {
+    disableSnapshot: true,
   },
 }
