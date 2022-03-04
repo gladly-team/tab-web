@@ -27,7 +27,7 @@ const customAlertUseStyles = makeStyles((theme) => ({
   },
   text: {
     color: theme.palette.primary.main,
-    marginLeft: theme.spacing(2),
+    marginLeft: theme.spacing(4),
     marginRight: theme.spacing(2),
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
