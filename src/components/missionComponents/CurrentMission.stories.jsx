@@ -140,6 +140,11 @@ notStarted.args = {
     currentMission: null,
   },
 }
+notStarted.parameters = {
+  chromatic: {
+    disableSnapshot: true,
+  },
+}
 
 export const noEmailInvitesYet = Template.bind({})
 noEmailInvitesYet.args = {
