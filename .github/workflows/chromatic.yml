@@ -17,5 +17,5 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          autoAcceptChanges: true
+          autoAcceptChanges: false
           exitOnceUploaded: true
