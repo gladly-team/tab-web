@@ -56,6 +56,11 @@ NoPastMissions.args = {
     },
   },
 }
+NoPastMissions.parameters = {
+  chromatic: {
+    disableSnapshot: true,
+  },
+}
 
 export const completedOngoing = Template.bind({})
 completedOngoing.args = {
@@ -203,5 +208,10 @@ completedOngoing.args = {
       ],
     },
     currentMission: { status: 'pending' },
+  },
+}
+completedOngoing.parameters = {
+  chromatic: {
+    disableSnapshot: true,
   },
 }

@@ -22,3 +22,8 @@ standard.args = {
   // eslint-disable-next-line no-console
   emailSentCallback: (data) => console.log(data),
 }
+standard.parameters = {
+  chromatic: {
+    disableSnapshot: true,
+  },
+}

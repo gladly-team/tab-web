@@ -1,27 +1,21 @@
-# Workflow name
 name: 'Chromatic Deployment'
-
-# Event for the workflow
 on: push
-
-# List of jobs
 jobs:
   test:
     runs-on: ubuntu-latest
-    # Job steps
     steps:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
-      - run: yarn
+      - name: Install dependencies
+        run: yarn
       - name: set up relay files
         run: yarn run relay
-        #👇 Adds Chromatic as a step in the workflow
       - uses: chromaui/action@v1
         # Options required for Chromatic's GitHub Action
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          autoAcceptChanges: true
+          autoAcceptChanges: false
           exitOnceUploaded: true
