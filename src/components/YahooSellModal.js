@@ -78,7 +78,7 @@ const YahooSellModal = ({ hardSell, userId, onAccept, onDecline }) => {
         </Typography>
         <Typography variant="body2">
           Increase your impact, and raise more money, with every search that you
-          make with Yahoo! It’s completely free.
+          make with Yahoo! It’s completely free :o
         </Typography>
         <div className={classes.buttons}>
           <Button
