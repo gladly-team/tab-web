@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
-import yahooSell from 'src/assets/images/yahooSell.png'
+import searchForACauseSell from 'src/assets/images/searchForACauseSell.png'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import Modal from '@material-ui/core/Modal'
@@ -47,18 +47,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const YahooSellModal = ({ hardSell, userId, onAccept, onDecline }) => {
+const SearchForACauseSellModal = ({
+  hardSell,
+  userId,
+  onAccept,
+  onDecline,
+}) => {
   const classes = useStyles()
   const [open, setOpen] = useState(true)
   const declineSearchOptIn = useCallback(() => {
-    CreateSearchEnginePromptLogMutation(userId, 'Yahoo', false)
+    CreateSearchEnginePromptLogMutation(userId, 'SearchForACause', false)
     onDecline()
     setOpen(false)
   }, [userId, onDecline])
   const acceptSearchOptIn = useCallback(() => {
     SetYahooSearchOptInMutation(userId, true)
-    SetUserSearchEngineMutation(userId, 'Yahoo')
-    CreateSearchEnginePromptLogMutation(userId, 'Yahoo', true)
+    SetUserSearchEngineMutation(userId, 'SearchForACause')
+    CreateSearchEnginePromptLogMutation(userId, 'SearchForACause', true)
     onAccept()
     setOpen(false)
   }, [userId, onAccept])
@@ -70,7 +75,12 @@ const YahooSellModal = ({ hardSell, userId, onAccept, onDecline }) => {
       }}
     >
       <div className={classes.popoverContent}>
-        <img src={yahooSell} alt="search engine" height="255px" width="355px" />
+        <img
+          src={searchForACauseSell}
+          alt="search engine"
+          height="255px"
+          width="355px"
+        />
         <Typography className={classes.title} variant="h6">
           {hardSell
             ? "You'll love having more impact."
@@ -78,7 +88,7 @@ const YahooSellModal = ({ hardSell, userId, onAccept, onDecline }) => {
         </Typography>
         <Typography variant="body2">
           Increase your impact, and raise more money, with every search that you
-          make with Yahoo! It’s completely free.
+          make with Search For A Cause! It’s completely free.
         </Typography>
         <div className={classes.buttons}>
           <Button
@@ -101,16 +111,16 @@ const YahooSellModal = ({ hardSell, userId, onAccept, onDecline }) => {
   )
 }
 
-YahooSellModal.propTypes = {
+SearchForACauseSellModal.propTypes = {
   hardSell: PropTypes.bool.isRequired,
   userId: PropTypes.string.isRequired,
   onAccept: PropTypes.func,
   onDecline: PropTypes.func,
 }
 
-YahooSellModal.defaultProps = {
+SearchForACauseSellModal.defaultProps = {
   onAccept: () => {},
   onDecline: () => {},
 }
 
-export default YahooSellModal
+export default SearchForACauseSellModal

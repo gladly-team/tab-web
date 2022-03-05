@@ -25,19 +25,21 @@ const getMockProps = () => ({
   anchorEl: document.createElement('button'),
 })
 
-describe('YahooSellModal component', () => {
+describe('SearchForACauseSellModal component', () => {
   it('renders without error', () => {
-    const YahooSellModal = require('src/components/YahooSellModal').default
+    const SearchForACauseSellModal =
+      require('src/components/SearchForACauseSellModal').default
     const mockProps = getMockProps()
     expect(() => {
-      shallow(<YahooSellModal {...mockProps} />)
+      shallow(<SearchForACauseSellModal {...mockProps} />)
     }).not.toThrow()
   })
 
   it('calls mutation, handler and closes on Accept', () => {
-    const YahooSellModal = require('src/components/YahooSellModal').default
+    const SearchForACauseSellModal =
+      require('src/components/SearchForACauseSellModal').default
     const mockProps = getMockProps()
-    const wrapper = mount(<YahooSellModal {...mockProps} />)
+    const wrapper = mount(<SearchForACauseSellModal {...mockProps} />)
     expect(wrapper.find(Modal).first().prop('open')).toEqual(true)
     const acceptButton = wrapper.find(Button).at(1)
     expect(acceptButton.text()).toEqual("Let's Do It!")
@@ -47,7 +49,7 @@ describe('YahooSellModal component', () => {
     expect(wrapper.find(Modal).first().prop('open')).toEqual(false)
     expect(SetUserSearchEngineMutation).toHaveBeenCalledWith(
       mockProps.userId,
-      'Yahoo'
+      'SearchForACause'
     )
     expect(SetYahooSearchOptInMutation).toHaveBeenCalledWith(
       mockProps.userId,
@@ -55,15 +57,16 @@ describe('YahooSellModal component', () => {
     )
     expect(CreateSearchEnginePromptLogMutation).toHaveBeenCalledWith(
       mockProps.userId,
-      'Yahoo',
+      'SearchForACause',
       true
     )
   })
 
   it('calls mutation, handler and closes on Decline', () => {
-    const YahooSellModal = require('src/components/YahooSellModal').default
+    const SearchForACauseSellModal =
+      require('src/components/SearchForACauseSellModal').default
     const mockProps = getMockProps()
-    const wrapper = mount(<YahooSellModal {...mockProps} />)
+    const wrapper = mount(<SearchForACauseSellModal {...mockProps} />)
     expect(wrapper.find(Modal).first().prop('open')).toEqual(true)
     const declineButton = wrapper.find(Button).at(0)
     expect(declineButton.text()).toEqual("I don't want more impact")
@@ -73,31 +76,33 @@ describe('YahooSellModal component', () => {
     expect(wrapper.find(Modal).first().prop('open')).toEqual(false)
     expect(CreateSearchEnginePromptLogMutation).toHaveBeenCalledWith(
       mockProps.userId,
-      'Yahoo',
+      'SearchForACause',
       false
     )
   })
 
   it('default handlers do not throw', () => {
-    const YahooSellModal = require('src/components/YahooSellModal').default
+    const SearchForACauseSellModal =
+      require('src/components/SearchForACauseSellModal').default
     const mockProps = getMockProps()
     delete mockProps.onDecline
     delete mockProps.onAccept
 
-    let wrapper = mount(<YahooSellModal {...mockProps} />)
+    let wrapper = mount(<SearchForACauseSellModal {...mockProps} />)
     const declineButton = wrapper.find(Button).at(0)
     expect(() => declineButton.simulate('click')).not.toThrow()
 
-    wrapper = mount(<YahooSellModal {...mockProps} />)
+    wrapper = mount(<SearchForACauseSellModal {...mockProps} />)
     const acceptButton = wrapper.find(Button).at(1)
     expect(() => acceptButton.simulate('click')).not.toThrow()
   })
 
   it('text adapts to hardSell prop', () => {
-    const YahooSellModal = require('src/components/YahooSellModal').default
+    const SearchForACauseSellModal =
+      require('src/components/SearchForACauseSellModal').default
     const mockProps = getMockProps()
 
-    let wrapper = mount(<YahooSellModal {...mockProps} />)
+    let wrapper = mount(<SearchForACauseSellModal {...mockProps} />)
     expect(wrapper.find(Typography).at(0).text()).toEqual(
       "You'll love having more impact."
     )
@@ -106,17 +111,18 @@ describe('YahooSellModal component', () => {
       ...mockProps,
       hardSell: false,
     }
-    wrapper = mount(<YahooSellModal {...newProps} />)
+    wrapper = mount(<SearchForACauseSellModal {...newProps} />)
     expect(wrapper.find(Typography).at(0).text()).toEqual(
       'Do even more good, for free'
     )
   })
 
   it('calls onClose when modal should close', () => {
-    const YahooSellModal = require('src/components/YahooSellModal').default
+    const SearchForACauseSellModal =
+      require('src/components/SearchForACauseSellModal').default
     const mockProps = getMockProps()
 
-    const wrapper = mount(<YahooSellModal {...mockProps} />)
+    const wrapper = mount(<SearchForACauseSellModal {...mockProps} />)
     act(() => {
       wrapper.find(Modal).first().prop('onClose')()
     })
