@@ -10,6 +10,7 @@ import confetti from 'canvas-confetti'
 import { act } from 'react-dom/test-utils'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import Dialog from '@material-ui/core/Dialog'
+import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
 
 jest.mock('next/router')
 jest.mock('src/utils/featureFlags', () => ({
@@ -72,6 +73,7 @@ const getMockProps = (userImpactOverrides, userOverrides) => ({
     notifications: [],
     ...userOverrides,
   },
+  showYahooPrompt: false,
   disabled: false,
 })
 beforeEach(async () => {
@@ -329,5 +331,22 @@ describe('UserImpact component', () => {
     const mockProps = getMockProps({ visitsUntilNextImpact: 12 })
     mount(<UserImpact {...mockProps} />)
     expect(confetti.create).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not render a SFAC sell notification if user is not in test group', () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(SearchForACauseSellNotification)
+    expect(notification.exists()).toBe(false)
+  })
+
+  it('does render a SFAC sell notification if user is not in test group', () => {
+    const UserImpact = require('src/components/UserImpact').default
+    const mockProps = getMockProps()
+    mockProps.user.showYahooPrompt = true
+    const wrapper = shallow(<UserImpact {...mockProps} />)
+    const notification = wrapper.find(SearchForACauseSellNotification)
+    expect(notification.exists()).toBe(true)
   })
 })

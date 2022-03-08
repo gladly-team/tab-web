@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const SearchInput = (props) => {
-  const { className, userId, app, user, tooltip } = props
+  const { className, userId, app, user, tooltip, onMoreInfoClick } = props
   const { searchEngine } = user
   const { searchEngines } = app
   const [searchSelectOpen, setSearchSelectOpen] = useState(false)
@@ -159,6 +159,7 @@ const SearchInput = (props) => {
         open={searchSelectOpen}
         onClose={onSearchSelectClose}
         onSearchEngineSwitch={onSwitchSearchEngine}
+        onMoreInfoClick={onMoreInfoClick}
       />
     </div>
   )
@@ -192,10 +193,12 @@ SearchInput.propTypes = {
       searchUrl: PropTypes.string,
     }),
   }).isRequired,
+  onMoreInfoClick: PropTypes.func,
 }
 SearchInput.defaultProps = {
   className: '',
   tooltip: false,
+  onMoreInfoClick: () => {},
 }
 
 export default SearchInput

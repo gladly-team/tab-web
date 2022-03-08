@@ -384,6 +384,10 @@ const Index = ({ data: fallbackData }) => {
 
   const classes = useStyles()
 
+  // state variables for Search
+  const [finishedSfacTestFlow, setFinishedSfacTestFlow] = useState(false)
+  const [displaySfacSellModal, setDisplaySfacSellModal] = useState(false)
+
   // this is a temporary workaround as the latest updates to the
   // relay store do not push into this component, so we are manually
   // toggling state and a rerender when we successfully fire the
@@ -551,6 +555,11 @@ const Index = ({ data: fallbackData }) => {
                       (missionStatus === 'started' ||
                         missionStatus === 'completed')
                     }
+                    setFinishedSfacTestFlow={() => {
+                      setFinishedSfacTestFlow(true)
+                      setDisplaySfacSellModal(false)
+                    }}
+                    displaySfacSellModal={displaySfacSellModal}
                   />
                 ) : (
                   <Link to={aboutURL}>
@@ -642,6 +651,8 @@ const Index = ({ data: fallbackData }) => {
                 className={classes.searchBar}
                 app={app}
                 user={user}
+                tooltip={finishedSfacTestFlow}
+                onMoreInfoClick={() => setDisplaySfacSellModal(true)}
               />
             </div>
           </div>

@@ -17,6 +17,8 @@ import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import MuiDialogActions from '@material-ui/core/DialogActions'
+import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
+import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
 
 const useStyles = makeStyles((theme) => ({
   impactCounter: {
@@ -60,8 +62,13 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
 }))
-const UserImpact = ({ user, disabled }) => {
-  const { cause, userImpact } = user
+const UserImpact = ({
+  user,
+  disabled,
+  setFinishedSfacTestFlow,
+  displaySfacSellModal,
+}) => {
+  const { cause, userImpact, showYahooPrompt } = user
   const {
     confirmedImpact,
     hasClaimedLatestReward,
@@ -85,6 +92,8 @@ const UserImpact = ({ user, disabled }) => {
   const [referralRewardDialogOpen, setReferralRewardDialogOpen] =
     useState(false)
   const [claimedReferralImpact, setClaimedReferralImpact] = useState(0)
+  const [hardSellModalMode, setHardSellModalMode] =
+    useState(displaySfacSellModal)
   const confettiCanvasRef = useRef(null)
   const confettiFunc = () => {
     const myConfetti = confetti.create(confettiCanvasRef.current, {
@@ -384,6 +393,25 @@ const UserImpact = ({ user, disabled }) => {
           buttonOnClick={handleClaimReferralNotification}
         />
       )}
+      {hardSellModalMode !== null && (
+        <SearchForACauseSellModal
+          userId={userId}
+          hardSell={hardSellModalMode}
+          onAccept={() => setFinishedSfacTestFlow()}
+          onDecline={() => setFinishedSfacTestFlow()}
+        />
+      )}
+      {showYahooPrompt && (
+        <SearchForACauseSellNotification
+          userId={userId}
+          onLearnMore={() => {
+            setHardSellModalMode(false)
+          }}
+          onNoThanks={() => {
+            setHardSellModalMode(true)
+          }}
+        />
+      )}
     </div>
   )
 }
@@ -431,9 +459,15 @@ UserImpact.propTypes = {
     ),
     hasSeenSquads: PropTypes.bool,
     email: PropTypes.string,
+    showYahooPrompt: PropTypes.bool,
   }).isRequired,
   disabled: PropTypes.bool.isRequired,
+  setFinishedSfacTestFlow: PropTypes.func,
+  displaySfacSellModal: PropTypes.bool,
 }
 
-UserImpact.defaultProps = {}
+UserImpact.defaultProps = {
+  setFinishedSfacTestFlow: () => {},
+  displaySfacSellModal: null,
+}
 export default UserImpact

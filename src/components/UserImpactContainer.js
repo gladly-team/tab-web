@@ -51,6 +51,7 @@ export default createFragmentContainer(UserImpact, {
         }
       }
       hasSeenSquads
+      showYahooPrompt
       ...EmailInviteDialogContainer_user
       ...SocialShareContainer_user
     }
