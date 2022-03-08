@@ -14286,10 +14286,10 @@ symbol.prototype.description@^1.0.0:
     has-symbols "^1.0.2"
     object.getownpropertydescriptors "^2.1.2"
 
-tab-ads@^1.1.4:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.5.tgz#dd560c77db1f66008ac7c50771b716a1cc72ebff"
-  integrity sha512-Rqs4Wfq9zDVeXKVMR3OY3bH+LbziVzgj7GmCvViG2h+MHd0EcLBfOymrU26Du7tg+4VceRouzOTiqbZYLqq8HQ==
+tab-ads@^1.1.7-alpha.0:
+  version "1.1.7-alpha.0"
+  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.7-alpha.0.tgz#267ef415bc681983e124270ce29202f32fb781b4"
+  integrity sha512-FjoggN1EdJsoqmVsMOJoK3TjgGVn9x5a0kWMhTkoBlBqTCdu4T4V8UdSEh8E9B45t1HRBKQj1J3jFO3/XUA4JQ==
   dependencies:
     lodash "^4.17.21"
 
