@@ -54,6 +54,7 @@ const getMockProps = () => ({
   tooltip: true,
   onSearchSelectMoreInfoClick: jest.fn(),
   onSearchEngineSwitch: jest.fn(),
+  onSearchInputClick: jest.fn(),
 })
 
 beforeAll(() => {
@@ -77,7 +78,7 @@ describe('SearchInput component', () => {
     }).not.toThrow()
   })
 
-  it('opens SearchInput clicking the InputAdornment, and closing makes SearchInput invisible', async () => {
+  it('opens SearchInput clicking the InputAdornment, and closing makes SearchInput invisible.', async () => {
     expect.assertions(3)
     const SearchInput = require('src/components/SearchInput').default
     const mockProps = getMockProps()
@@ -207,7 +208,7 @@ describe('SearchInput component', () => {
     )
   })
 
-  it('expect default onSearchSelectMoreInfoClick not to throw', async () => {
+  it('expect default onMoreInfoClick not to throw', async () => {
     expect.assertions(1)
     const SearchInput = require('src/components/SearchInput').default
     const mockProps = getMockProps()
@@ -216,5 +217,33 @@ describe('SearchInput component', () => {
 
     const searchSelect = wrapper.find(SearchSelect).first()
     expect(() => searchSelect.prop('onMoreInfoClick')()).not.toThrow()
+  })
+
+  it('Input onFocus runs onSearchInputClick', async () => {
+    expect.assertions(2)
+    const SearchInput = require('src/components/SearchInput').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<SearchInput {...mockProps} />)
+    expect(wrapper.find(SearchSelect).first().prop('open')).toEqual(false)
+
+    act(() => {
+      wrapper.find(Input).first().prop('onFocus')()
+    })
+    expect(mockProps.onSearchInputClick).toHaveBeenCalled()
+  })
+
+  it('Default onFocus does not throw', async () => {
+    expect.assertions(2)
+    const SearchInput = require('src/components/SearchInput').default
+    const mockProps = getMockProps()
+    delete mockProps.onSearchInputClick
+    const wrapper = mount(<SearchInput {...mockProps} />)
+    expect(wrapper.find(SearchSelect).first().prop('open')).toEqual(false)
+
+    expect(() =>
+      act(() => {
+        wrapper.find(Input).first().prop('onFocus')()
+      })
+    ).not.toThrow()
   })
 })

@@ -39,6 +39,7 @@ import { useGrowthBook } from '@growthbook/growthbook-react'
 import { validateAttributesObject } from 'src/utils/growthbook'
 import SearchInput from 'src/components/SearchInput'
 import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
+import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
 import { Button } from '@material-ui/core'
 import Notification from 'src/components/Notification'
 
@@ -986,6 +987,136 @@ describe('index.js', () => {
     expect(acceptButton.text()).toEqual("I don't want more impact")
     acceptButton.simulate('click')
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(false)
+  })
+
+  it('does not render a SFAC sell notification if showYahooPrompt is not true', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    act(() => {
+      wrapper.find(SearchInput).first().prop('onSearchInputClick')()
+    })
+    wrapper.update()
+
+    const notification = wrapper.find(SearchForACauseSellNotification)
+    expect(notification.exists()).toBe(false)
+  })
+
+  it('does render a SFAC sell notification if showYahooPrompt is true', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.showYahooPrompt = true
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    act(() => {
+      wrapper.find(SearchInput).first().prop('onSearchInputClick')()
+    })
+    wrapper.update()
+
+    const notification = wrapper.find(SearchForACauseSellNotification)
+    expect(notification.exists()).toBe(true)
+  })
+
+  it('clicking learn more on SFAC sell notification opens modal in normal mode', async () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.showYahooPrompt = true
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    act(() => {
+      wrapper.find(SearchInput).first().prop('onSearchInputClick')()
+    })
+    wrapper.update()
+
+    const notification = wrapper.find(SearchForACauseSellNotification)
+    const learnMoreButton = notification.find(Button).at(0)
+
+    learnMoreButton.simulate('click')
+
+    const sfacModal = wrapper.find(SearchForACauseSellModal).at(0)
+    expect(sfacModal.prop('open')).toEqual(true)
+    expect(sfacModal.prop('hardSell')).toEqual(false)
+  })
+
+  it('clicking no thanks on SFAC sell notification opens modal in hard sell mode', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.showYahooPrompt = true
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    act(() => {
+      wrapper.find(SearchInput).first().prop('onSearchInputClick')()
+    })
+    wrapper.update()
+
+    const notification = wrapper.find(SearchForACauseSellNotification)
+    const noThanksButton = notification.find(Button).at(1)
+
+    noThanksButton.simulate('click')
+
+    const sfacModal = wrapper.find(SearchForACauseSellModal).at(0)
+    expect(sfacModal.prop('open')).toEqual(true)
+    expect(sfacModal.prop('hardSell')).toEqual(true)
+  })
+
+  it('clicking accept on SFAC sell notification sets tooltip', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.showYahooPrompt = true
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    act(() => {
+      wrapper.find(SearchInput).first().prop('onSearchInputClick')()
+    })
+    wrapper.update()
+
+    const notification = wrapper.find(SearchForACauseSellNotification)
+    const acceptButton = notification.find(Button).at(2)
+
+    acceptButton.simulate('click')
+
+    expect(wrapper.find(SearchForACauseSellModal).prop('open')).toBe(false)
+    expect(wrapper.find(SearchInput).first().prop('tooltip')).toBe(true)
+  })
+
+  it('accepting sfac modal while sfac notification is open closes the modal', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.showYahooPrompt = true
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    expect(wrapper.find(SearchForACauseSellModal).prop('open')).toBe(false)
+    expect(
+      wrapper.find(SearchInput).first().prop('setYahooPaidSearchRewardOptIn')
+    ).toEqual(undefined)
+
+    act(() => {
+      wrapper.find(SearchInput).first().prop('onSearchInputClick')()
+      wrapper.find(SearchInput).first().prop('onSearchSelectMoreInfoClick')()
+    })
+    wrapper.update()
+
+    const modal = wrapper.find(SearchForACauseSellModal).first()
+    expect(modal.prop('open')).toBe(true)
+    expect(modal.prop('hardSell')).toBe(true)
+
+    expect(wrapper.find(SearchForACauseSellNotification).exists()).toBe(true)
+
+    const acceptButton = wrapper
+      .find(SearchForACauseSellModal)
+      .find(Button)
+      .at(1)
+    expect(acceptButton.text()).toEqual("Let's Do It!")
+    acceptButton.simulate('click')
+    expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(true)
+    expect(wrapper.find(SearchForACauseSellNotification).exists()).toBe(false)
   })
 })
 
