@@ -78,7 +78,7 @@ const SearchForACauseSellNotification = ({
             </Typography>
             <Typography variant="body1">
               Increase your impact, and raise more money, with every search that
-              you make with Search For A Cause!
+              you make with Search for a Cause!
             </Typography>
           </span>
         }
@@ -100,7 +100,7 @@ const SearchForACauseSellNotification = ({
               variant="contained"
               disableElevation
             >
-              Switch to Search For A Cause
+              Let's do it!
             </Button>
           </div>
         }

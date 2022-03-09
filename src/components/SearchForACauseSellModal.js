@@ -88,7 +88,7 @@ const SearchForACauseSellModal = ({
         </Typography>
         <Typography variant="body2">
           Increase your impact, and raise more money, with every search that you
-          make with Search For A Cause! It’s completely free.
+          make with Search for a Cause! It’s completely free.
         </Typography>
         <div className={classes.buttons}>
           <Button

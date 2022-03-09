@@ -73,7 +73,7 @@ describe('SearchForACauseSellNotification component', () => {
     const wrapper = mount(<SearchForACauseSellNotification {...mockProps} />)
     expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
     const acceptButton = wrapper.find(Button).at(2)
-    expect(acceptButton.text()).toEqual('Switch to Search For A Cause')
+    expect(acceptButton.text()).toEqual("Let's do it!")
     acceptButton.simulate('click')
 
     expect(SetUserSearchEngineMutation).toHaveBeenCalledWith(
