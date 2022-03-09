@@ -18,24 +18,24 @@ const getMockProps = () => ({
   userId: 'abcdefghijklmno',
   onLearnMore: jest.fn(),
   onNoThanks: jest.fn(),
-  onSwitchToYahoo: jest.fn(),
+  onSwitchToSearchForACause: jest.fn(),
 })
 
-describe('YahooSellNotification component', () => {
+describe('SearchForACauseSellNotification component', () => {
   it('renders without error', () => {
-    const YahooSellNotification =
-      require('src/components/YahooSellNotification').default
+    const SearchForACauseSellNotification =
+      require('src/components/SearchForACauseSellNotification').default
     const mockProps = getMockProps()
     expect(() => {
-      shallow(<YahooSellNotification {...mockProps} />)
+      shallow(<SearchForACauseSellNotification {...mockProps} />)
     }).not.toThrow()
   })
 
   it('calls handler and closes on clicking learn more', () => {
-    const YahooSellNotification =
-      require('src/components/YahooSellNotification').default
+    const SearchForACauseSellNotification =
+      require('src/components/SearchForACauseSellNotification').default
     const mockProps = getMockProps()
-    const wrapper = mount(<YahooSellNotification {...mockProps} />)
+    const wrapper = mount(<SearchForACauseSellNotification {...mockProps} />)
     expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
     const acceptButton = wrapper.find(Button).at(0)
     expect(acceptButton.text()).toEqual('Learn More')
@@ -47,10 +47,10 @@ describe('YahooSellNotification component', () => {
   })
 
   it('calls mutation, handler and closes on clicking no thanks', () => {
-    const YahooSellNotification =
-      require('src/components/YahooSellNotification').default
+    const SearchForACauseSellNotification =
+      require('src/components/SearchForACauseSellNotification').default
     const mockProps = getMockProps()
-    const wrapper = mount(<YahooSellNotification {...mockProps} />)
+    const wrapper = mount(<SearchForACauseSellNotification {...mockProps} />)
     expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
     const acceptButton = wrapper.find(Button).at(1)
     expect(acceptButton.text()).toEqual('No Thanks')
@@ -61,24 +61,24 @@ describe('YahooSellNotification component', () => {
     expect(wrapper.find(Notification).first().prop('open')).toEqual(false)
     expect(CreateSearchEnginePromptLogMutation).toHaveBeenCalledWith(
       mockProps.userId,
-      'Yahoo',
+      'SearchForACause',
       false
     )
   })
 
   it('calls appropriate mutations and closes on accepting', () => {
-    const YahooSellNotification =
-      require('src/components/YahooSellNotification').default
+    const SearchForACauseSellNotification =
+      require('src/components/SearchForACauseSellNotification').default
     const mockProps = getMockProps()
-    const wrapper = mount(<YahooSellNotification {...mockProps} />)
+    const wrapper = mount(<SearchForACauseSellNotification {...mockProps} />)
     expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
     const acceptButton = wrapper.find(Button).at(2)
-    expect(acceptButton.text()).toEqual('Switch to Yahoo')
+    expect(acceptButton.text()).toEqual("Let's do it!")
     acceptButton.simulate('click')
 
     expect(SetUserSearchEngineMutation).toHaveBeenCalledWith(
       mockProps.userId,
-      'Yahoo'
+      'SearchForACause'
     )
     expect(SetYahooSearchOptInMutation).toHaveBeenCalledWith(
       mockProps.userId,
@@ -86,32 +86,34 @@ describe('YahooSellNotification component', () => {
     )
     expect(CreateSearchEnginePromptLogMutation).toHaveBeenCalledWith(
       mockProps.userId,
-      'Yahoo',
+      'SearchForACause',
       true
     )
 
-    expect(mockProps.onSwitchToYahoo).toHaveBeenCalled()
+    expect(mockProps.onSwitchToSearchForACause).toHaveBeenCalled()
     expect(wrapper.find(Notification).first().prop('open')).toEqual(false)
   })
 
   it('default handlers do not throw', () => {
-    const YahooSellNotification =
-      require('src/components/YahooSellNotification').default
+    const SearchForACauseSellNotification =
+      require('src/components/SearchForACauseSellNotification').default
     const mockProps = getMockProps()
     delete mockProps.onLearnMore
     delete mockProps.onNoThanks
-    delete mockProps.onSwitchToYahoo
+    delete mockProps.onSwitchToSearchForACause
 
-    let wrapper = mount(<YahooSellNotification {...mockProps} />)
+    let wrapper = mount(<SearchForACauseSellNotification {...mockProps} />)
     const onLearnMoreButton = wrapper.find(Button).at(0)
     expect(() => onLearnMoreButton.simulate('click')).not.toThrow()
 
-    wrapper = mount(<YahooSellNotification {...mockProps} />)
+    wrapper = mount(<SearchForACauseSellNotification {...mockProps} />)
     const onNoThanksButton = wrapper.find(Button).at(1)
     expect(() => onNoThanksButton.simulate('click')).not.toThrow()
 
-    wrapper = mount(<YahooSellNotification {...mockProps} />)
-    const onSwitchToYahooButton = wrapper.find(Button).at(0)
-    expect(() => onSwitchToYahooButton.simulate('click')).not.toThrow()
+    wrapper = mount(<SearchForACauseSellNotification {...mockProps} />)
+    const onSwitchToSearchForACauseButton = wrapper.find(Button).at(0)
+    expect(() =>
+      onSwitchToSearchForACauseButton.simulate('click')
+    ).not.toThrow()
   })
 })
