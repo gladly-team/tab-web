@@ -9,6 +9,7 @@ import Link from 'src/components/Link'
 import Logo from 'src/components/Logo'
 import { aboutURL, accountURL, dashboardURL, surveyLink } from 'src/utils/urls'
 import { withBasePath } from 'src/utils/navigationUtils'
+import Footer from 'src/components/Footer'
 
 jest.mock('src/components/Link')
 jest.mock('src/components/Logo')
@@ -117,5 +118,12 @@ describe('SettingsPage component', () => {
     )
     expect(item.exists()).toBe(true)
     expect(item.prop('to')).toEqual(surveyLink)
+  })
+
+  it('renders a footer', () => {
+    const SettingsPage = require('src/components/SettingsPage').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<SettingsPage {...mockProps} />)
+    expect(wrapper.find(Footer)).toHaveLength(1)
   })
 })

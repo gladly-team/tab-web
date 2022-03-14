@@ -25,6 +25,7 @@ import {
 import { Divider } from '@material-ui/core'
 import { mdiOpenInNew } from '@mdi/js'
 import { areSameURLs, withBasePath } from 'src/utils/navigationUtils'
+import Footer from 'src/components/Footer'
 
 const sidebarWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -192,6 +193,7 @@ const SettingsPage = (props) => {
       >
         {children}
       </div>
+      <Footer />
     </div>
   )
 }
