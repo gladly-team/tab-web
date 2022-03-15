@@ -33,6 +33,7 @@ import SquadCounter from 'src/components/SquadCounter'
 import UserImpactContainer from 'src/components/UserImpactContainer'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import { useGrowthBook } from '@growthbook/growthbook-react'
+import { validateAttributesObject } from 'src/utils/growthbook'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -77,6 +78,7 @@ jest.mock('src/components/UserImpactContainer')
 jest.mock('src/utils/pageWrappers/CustomThemeHOC')
 jest.mock('src/utils/hooks/useCustomTheming')
 jest.mock('@growthbook/growthbook-react')
+jest.mock('src/utils/growthbook')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
@@ -857,7 +859,7 @@ describe('index.js', () => {
   })
 
   it('calls setFeatures on growthbook with correct values', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     const mockGrowthbook = {
@@ -867,13 +869,20 @@ describe('index.js', () => {
     useGrowthBook.mockReturnValue(mockGrowthbook)
     mount(<IndexPage {...mockProps} />)
 
-    expect(mockGrowthbook.setAttributes).toHaveBeenCalledWith({
+    const expectedAttributesObject = {
       id: mockProps.data.user.id,
       env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
       causeId: mockProps.data.user.cause.causeId,
       v4BetaEnabled: true,
       joined: mockProps.data.user.joined,
       isTabTeamMember: showInternalOnly(mockProps.data.user.email),
-    })
+    }
+    expect(validateAttributesObject).toHaveBeenCalledWith(
+      mockProps.data.user.id,
+      expectedAttributesObject
+    )
+    expect(mockGrowthbook.setAttributes).toHaveBeenCalledWith(
+      expectedAttributesObject
+    )
   })
 })
