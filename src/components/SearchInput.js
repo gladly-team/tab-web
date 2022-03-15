@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchIcon from '@material-ui/icons/Search'
 import { windowOpenTop } from 'src/utils/navigation'
+import LogSearchMutation from 'src/utils/mutations/LogSearchMutation'
 
 const searchBoxBorderColor = '#ced4da'
 const searchBoxBorderColorFocused = '#bdbdbd'
@@ -34,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const SearchInput = (props) => {
-  const { className } = props
+  const { className, userId } = props
   const classes = useStyles()
   const searchInputRef = React.createRef()
 
@@ -43,6 +44,10 @@ const SearchInput = (props) => {
     const searchURL = `https://www.google.com/search?q=${encodeURIComponent(
       query
     )}`
+    LogSearchMutation({
+      userId,
+      source: 'tab',
+    })
     windowOpenTop(searchURL)
   }
 
@@ -79,6 +84,7 @@ const SearchInput = (props) => {
 SearchInput.displayName = 'SearchInput'
 SearchInput.propTypes = {
   className: PropTypes.string,
+  userId: PropTypes.string.isRequired,
 }
 SearchInput.defaultProps = {
   className: '',

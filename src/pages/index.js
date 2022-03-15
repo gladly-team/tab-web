@@ -632,7 +632,7 @@ const Index = ({ data: fallbackData }) => {
                 color={enableBackgroundImages ? 'white' : null}
                 className={classes.logo}
               />
-              <SearchInput className={classes.searchBar} />
+              <SearchInput userId={userId} className={classes.searchBar} />
             </div>
           </div>
           <div className={classes.adsContainer}>
