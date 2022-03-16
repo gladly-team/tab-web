@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '100vw',
     minHeight: '100vh',
     background: grey['100'],
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
   },
   closeIcon: {
     color: '#fff',
