@@ -72,6 +72,7 @@ import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
+import { validateAttributesObject } from 'src/utils/growthbook'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -350,14 +351,16 @@ const Index = ({ data: fallbackData }) => {
   const growthbook = useGrowthBook()
 
   useEffect(() => {
-    growthbook.setAttributes({
+    const attributesObject = {
       id: userId,
       env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
       causeId,
       v4BetaEnabled: true,
       joined,
       isTabTeamMember: showInternalOnly(email),
-    })
+    }
+    validateAttributesObject(userId, attributesObject)
+    growthbook.setAttributes(attributesObject)
   }, [causeId, email, growthbook, joined, userId])
 
   // Set the theme based on cause.
