@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
     background: grey['100'],
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between',
   },
   closeIcon: {
     color: '#fff',
@@ -75,6 +74,9 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     marginTop: '10px',
     marginBottom: '10px',
+  },
+  footer: {
+    marginTop: 'auto',
   },
 }))
 
@@ -162,41 +164,45 @@ const SettingsPage = (props) => {
           </a>
         </Toolbar>
       </AppBar>
-      <div className={classes.sidebarContentContainer}>
-        <List className={classes.list}>
-          <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
-          <SettingsMenuItem to={aboutURL}>About the Cause</SettingsMenuItem>
-          <Divider className={classes.divider} />
-          <SettingsMenuItem
-            to={HELP_URL}
-            IconComponent={OpenInNew}
-            target="_blank"
-          >
-            Help
-          </SettingsMenuItem>
-          <SettingsMenuItem
-            to={FINANCIALS_URL}
-            IconComponent={OpenInNew}
-            target="_blank"
-          >
-            Our Financials
-          </SettingsMenuItem>
-          <SettingsMenuItem
-            to={surveyLink}
-            IconComponent={OpenInNew}
-            target="_blank"
-          >
-            Feedback
-          </SettingsMenuItem>
-        </List>
+      <div>
+        <div className={classes.sidebarContentContainer}>
+          <List className={classes.list}>
+            <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
+            <SettingsMenuItem to={aboutURL}>About the Cause</SettingsMenuItem>
+            <Divider className={classes.divider} />
+            <SettingsMenuItem
+              to={HELP_URL}
+              IconComponent={OpenInNew}
+              target="_blank"
+            >
+              Help
+            </SettingsMenuItem>
+            <SettingsMenuItem
+              to={FINANCIALS_URL}
+              IconComponent={OpenInNew}
+              target="_blank"
+            >
+              Our Financials
+            </SettingsMenuItem>
+            <SettingsMenuItem
+              to={surveyLink}
+              IconComponent={OpenInNew}
+              target="_blank"
+            >
+              Feedback
+            </SettingsMenuItem>
+          </List>
+        </div>
+        <div
+          data-test-id="settings-content"
+          className={classes.mainContentContainer}
+        >
+          {children}
+        </div>
       </div>
-      <div
-        data-test-id="settings-content"
-        className={classes.mainContentContainer}
-      >
-        {children}
+      <div className={classes.footer}>
+        <Footer />
       </div>
-      <Footer />
     </div>
   )
 }

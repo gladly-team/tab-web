@@ -100,7 +100,8 @@ const DivSubColumnTwo = styled('div')(() => ({
 const DivIconRowOne = styled('div')(({ theme }) => ({
   display: 'flex',
   color: '#fff',
-  marginLeft: theme.spacing(-2),
+  marginBottom: theme.spacing(1),
+  marginLeft: theme.spacing(-1.5),
 }))
 
 const DivIconRowTwo = styled('div')(() => ({
@@ -114,7 +115,7 @@ const Footer = () => {
     borderRadius: '10%',
   }
   const iconStyles = {
-    color: 'black',
+    color: theme.palette.text.primary,
     backgroundColor: '#fff',
     padding: theme.spacing(0.25),
     height: theme.spacing(4),
