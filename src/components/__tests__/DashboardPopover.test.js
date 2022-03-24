@@ -58,4 +58,28 @@ describe('DashboardPopover', () => {
     wrapper.setProps({ popoverClasses })
     expect(wrapper.find(Popover).prop('classes')).toBe(popoverClasses)
   })
+
+  it('passes the "anchorOrigin" prop to Popover', () => {
+    const DashboardPopover = require('src/components/DashboardPopover').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<DashboardPopover {...mockProps} />)
+    const anchorOrigin = {
+      horizontal: 'top',
+      vertical: 'top',
+    }
+    wrapper.setProps({ anchorOrigin })
+    expect(wrapper.find(Popover).prop('anchorOrigin')).toBe(anchorOrigin)
+  })
+
+  it('passes the "transformOrigin" prop to Popover', () => {
+    const DashboardPopover = require('src/components/DashboardPopover').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<DashboardPopover {...mockProps} />)
+    const transformOrigin = {
+      horizontal: 'top',
+      vertical: 'top',
+    }
+    wrapper.setProps({ transformOrigin })
+    expect(wrapper.find(Popover).prop('transformOrigin')).toBe(transformOrigin)
+  })
 })

@@ -15,7 +15,16 @@ const useStyles = makeStyles(() => ({
   },
 }))
 const DashboardPopover = (props) => {
-  const { anchorEl, onClose, open, className, children, popoverClasses } = props
+  const {
+    anchorEl,
+    onClose,
+    open,
+    className,
+    children,
+    popoverClasses,
+    anchorOrigin,
+    transformOrigin,
+  } = props
   const classes = useStyles()
   return (
     <Popover
@@ -23,8 +32,8 @@ const DashboardPopover = (props) => {
       anchorEl={anchorEl}
       onClose={onClose}
       classes={popoverClasses}
-      anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
-      transformOrigin={{ horizontal: 'center', vertical: 'top' }}
+      anchorOrigin={anchorOrigin}
+      transformOrigin={transformOrigin}
       className={clsx(classes.root, className)}
     >
       <div className={classes.popoverStyle} />
@@ -47,6 +56,14 @@ DashboardPopover.propTypes = {
   className: PropTypes.string,
   // eslint-disable-next-line react/forbid-prop-types
   popoverClasses: PropTypes.object,
+  anchorOrigin: PropTypes.shape({
+    horizontal: PropTypes.string,
+    vertical: PropTypes.string,
+  }),
+  transformOrigin: PropTypes.shape({
+    horizontal: PropTypes.string,
+    vertical: PropTypes.string,
+  }),
 }
 
 DashboardPopover.defaultProps = {
@@ -56,6 +73,8 @@ DashboardPopover.defaultProps = {
   open: false,
   className: 'default',
   popoverClasses: undefined,
+  anchorOrigin: { horizontal: 'center', vertical: 'bottom' },
+  transformOrigin: { horizontal: 'center', vertical: 'top' },
 }
 
 export default DashboardPopover
