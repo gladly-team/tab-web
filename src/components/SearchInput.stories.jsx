@@ -7,10 +7,15 @@ export default {
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const Template = (args) => <SearchInput {...args} />
+const Template = (args) => (
+  <div style={{ padding: '150px' }}>
+    <SearchInput {...args} />
+  </div>
+)
 export const standard = Template.bind({})
 standard.args = {
   userId: 'abcdefghijklmno',
+  tooltip: true,
   app: {
     searchEngines: {
       edges: [

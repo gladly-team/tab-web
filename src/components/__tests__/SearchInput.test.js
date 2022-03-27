@@ -5,6 +5,7 @@ import Input from '@material-ui/core/Input'
 import { IconButton } from '@material-ui/core'
 import { act } from 'react-dom/test-utils'
 import { windowOpenTop } from 'src/utils/navigation'
+import Tooltip from '@material-ui/core/Tooltip'
 import SearchSelect from '../SearchSelect'
 
 jest.mock('src/utils/mutations/LogSearchMutation')
@@ -46,6 +47,7 @@ const getMockProps = () => ({
       inputPrompt: 'Search Google',
     },
   },
+  tooltip: true,
 })
 
 // TODO: more tests
@@ -116,5 +118,17 @@ describe('SearchInput component', () => {
       userId: mockProps.userId,
       source: 'tab',
     })
+  })
+
+  it('tooltip icon button closes tooltip', () => {
+    const SearchInput = require('src/components/SearchInput').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<SearchInput {...mockProps} />)
+
+    expect(wrapper.find(Tooltip).first().prop('open')).toEqual(true)
+
+    wrapper.find(Tooltip).first().find(IconButton).at(1).simulate('click')
+
+    expect(wrapper.find(Tooltip).first().prop('open')).toEqual(false)
   })
 })

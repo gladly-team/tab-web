@@ -8,6 +8,8 @@ import SearchIcon from '@material-ui/icons/Search'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { windowOpenTop } from 'src/utils/navigation'
 import LogSearchMutation from 'src/utils/mutations/LogSearchMutation'
+import Tooltip from '@material-ui/core/Tooltip'
+import CloseIcon from '@material-ui/icons/Close'
 import SearchSelect from './SearchSelect'
 
 const searchBoxBorderColor = '#ced4da'
@@ -33,10 +35,25 @@ const useStyles = makeStyles((theme) => ({
   inputStyle: {
     padding: '12px 16px',
   },
+  tooltip: {
+    maxWidth: 'unset',
+    pointerEvents: 'auto',
+    backgroundColor: theme.palette.primary.main,
+  },
+  tooltipCloseButton: {
+    padding: theme.spacing(0),
+    paddingLeft: theme.spacing(0.5),
+    height: theme.spacing(1),
+    '& svg': {
+      height: theme.spacing(2),
+      width: theme.spacing(2),
+      color: 'white',
+    },
+  },
 }))
 
 const SearchInput = (props) => {
-  const { className, userId, app, user } = props
+  const { className, userId, app, user, tooltip } = props
   const { searchEngine } = user
   const { searchEngines } = app
   const [searchSelectOpen, setSearchSelectOpen] = useState(false)
@@ -75,6 +92,8 @@ const SearchInput = (props) => {
     setSearchSelectOpen(false)
   }
 
+  const [tooltipOpen, setTooltipOpen] = useState(tooltip)
+
   return (
     <div className={className}>
       <Input
@@ -100,12 +119,34 @@ const SearchInput = (props) => {
               <IconButton aria-label="Search button" onClick={onSearch}>
                 <SearchIcon style={{ color: searchBoxBorderColorFocused }} />
               </IconButton>
-              <IconButton
-                aria-label="Search select"
-                onClick={onSearchSelectOpen}
+              <Tooltip
+                classes={{
+                  tooltip: classes.tooltip,
+                }}
+                placement="top"
+                open={tooltipOpen}
+                title={
+                  <span>
+                    Great! You can always switch your search engine here later
+                    on.
+                    <IconButton
+                      className={classes.tooltipCloseButton}
+                      onClick={() => {
+                        setTooltipOpen(false)
+                      }}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </span>
+                }
               >
-                <ArrowDropDownIcon />
-              </IconButton>
+                <IconButton
+                  aria-label="Search select"
+                  onClick={onSearchSelectOpen}
+                >
+                  <ArrowDropDownIcon />
+                </IconButton>
+              </Tooltip>
             </div>
           </InputAdornment>
         }
@@ -127,6 +168,7 @@ SearchInput.displayName = 'SearchInput'
 SearchInput.propTypes = {
   className: PropTypes.string,
   userId: PropTypes.string.isRequired,
+  tooltip: PropTypes.bool,
   app: PropTypes.shape({
     searchEngines: PropTypes.shape({
       edges: PropTypes.arrayOf(
@@ -153,6 +195,7 @@ SearchInput.propTypes = {
 }
 SearchInput.defaultProps = {
   className: '',
+  tooltip: false,
 }
 
 export default SearchInput
