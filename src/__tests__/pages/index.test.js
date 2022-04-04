@@ -79,6 +79,7 @@ jest.mock('src/utils/pageWrappers/CustomThemeHOC')
 jest.mock('src/utils/hooks/useCustomTheming')
 jest.mock('@growthbook/growthbook-react')
 jest.mock('src/utils/growthbook')
+jest.mock('src/utils/logger')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
@@ -111,6 +112,7 @@ const getMockProps = () => ({
       tabs: 221,
       vcCurrent: 78,
       id: 'asdf',
+      joined: '2021-01-29T18:37:04.604Z',
       hasViewedIntroFlow: true,
       currentMission: undefined,
       cause: {
@@ -757,17 +759,29 @@ describe('index.js', () => {
       adUnitCode: '/12345/SomeAdUnit',
     })
   })
+
   it('shows the intro flow if a user has not completed it', () => {
+    const defaultMockProps = getMockProps()
     const mockProps = {
+      ...defaultMockProps,
       data: {
+        ...defaultMockProps.data,
         app: {},
         user: {
+          ...defaultMockProps.data.user,
           tabs: 221,
           vcCurrent: 78,
           id: 'asdf',
           hasViewedIntroFlow: false,
+          cause: {
+            ...defaultMockProps.data.user.cause,
+            onboarding: {
+              steps: [],
+            },
+          },
         },
         userImpact: {
+          ...defaultMockProps.data.userImpact,
           userId: 'asdf',
           visitsUntilNextImpact: 2,
           pendingUserReferralImpact: 10,
@@ -775,11 +789,6 @@ describe('index.js', () => {
           userImpactMetric: 3,
           confirmedImpact: true,
           hasClaimedLatestReward: true,
-        },
-        cause: {
-          onboarding: {
-            steps: [],
-          },
         },
       },
     }
@@ -800,16 +809,27 @@ describe('index.js', () => {
   })
 
   it('shows the homepage once a user completes the introflow', async () => {
+    const defaultMockProps = getMockProps()
     const mockProps = {
+      ...defaultMockProps,
       data: {
+        ...defaultMockProps.data,
         app: {},
         user: {
+          ...defaultMockProps.data.user,
           tabs: 221,
           vcCurrent: 78,
           id: 'asdf',
           hasViewedIntroFlow: false,
+          cause: {
+            ...defaultMockProps.data.user.cause,
+            onboarding: {
+              steps: [],
+            },
+          },
         },
         userImpact: {
+          ...defaultMockProps.data.userImpact,
           userId: 'asdf',
           visitsUntilNextImpact: 2,
           pendingUserReferralImpact: 10,
@@ -817,11 +837,6 @@ describe('index.js', () => {
           userImpactMetric: 3,
           confirmedImpact: true,
           hasClaimedLatestReward: true,
-        },
-        cause: {
-          onboarding: {
-            steps: [],
-          },
         },
       },
     }
@@ -858,7 +873,7 @@ describe('index.js', () => {
     )
   })
 
-  it('calls setFeatures on growthbook with correct values', async () => {
+  it('calls setFeatures on growthbook with correct values when the user is defined', async () => {
     expect.assertions(2)
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
@@ -884,5 +899,32 @@ describe('index.js', () => {
     expect(mockGrowthbook.setAttributes).toHaveBeenCalledWith(
       expectedAttributesObject
     )
+  })
+
+  it('does not call setFeatures on growthbook when the user is not defined', async () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+
+    // Suppress expected proptypes errors.
+    const consoleErrSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {})
+
+    const mockProps = {
+      ...getMockProps(),
+      data: {
+        ...getMockProps().data,
+        user: undefined,
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const mockGrowthbook = {
+      feature: jest.fn().mockReturnValue(mockProps.data),
+      setAttributes: jest.fn(),
+    }
+    useGrowthBook.mockReturnValue(mockGrowthbook)
+    mount(<IndexPage {...mockProps} />)
+    expect(mockGrowthbook.setAttributes).not.toHaveBeenCalled()
+    consoleErrSpy.mockRestore()
   })
 })

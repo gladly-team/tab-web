@@ -70,7 +70,7 @@ const SearchInput = (props) => {
       encodeURIComponent(query)
     )
     LogSearchMutation({
-      userId,
+      userIdGlobal: userId,
       source: 'tab',
     })
     windowOpenTop(searchURL)
