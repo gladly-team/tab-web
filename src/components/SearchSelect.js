@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
@@ -11,21 +11,16 @@ import Button from '@material-ui/core/Button'
 import DashboardPopover from './DashboardPopover'
 
 const useStyles = makeStyles((theme) => ({
-  yahooButtonText: {
+  impactButtonText: {
+    width: '100%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'flex-start',
     textAlign: 'left',
     padding: '11px',
-    marginLeft: theme.spacing(4),
     paddingTop: theme.spacing(0),
   },
   searchToggleButton: {
-    color: 'black',
-    textTransform: 'unset',
-    justifyContent: 'unset',
-  },
-  yahooSearchToggleButton: {
     color: 'black',
     textTransform: 'unset',
     justifyContent: 'unset',
@@ -56,11 +51,14 @@ const useStyles = makeStyles((theme) => ({
     '& svg': {
       color: 'black',
     },
+    '& p': {
+      fontWeight: '700',
+    },
   },
-  yahooSubtitleText: {
+  impactSubtitleText: {
     fontSize: '12px',
   },
-  yahooLinkText: {
+  impactLinkText: {
     color: '#F71F6C',
     textDecoration: 'underline',
     fontWeight: '700',
@@ -68,9 +66,11 @@ const useStyles = makeStyles((theme) => ({
   linkTextWrapper: {
     fontSize: '12px',
     textAlign: 'left',
+    paddingLeft: '43px',
   },
   popoverPaperClass: {
     borderRadius: '12px',
+    marginTop: theme.spacing(1),
   },
   buttonRoot: {
     border: '0px',
@@ -86,6 +86,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-start',
     textTransform: 'unset',
   },
+  toggleButtonGroup: {
+    width: '100%',
+  },
 }))
 
 const SearchSelect = ({
@@ -93,113 +96,100 @@ const SearchSelect = ({
   onClose,
   userId,
   onMoreInfoClick,
+  onSearchEngineSwitch,
   userSearchEngine,
+  searchEngines,
+  open,
 }) => {
   const classes = useStyles()
-  const [open, setOpen] = useState(true)
-  const [currentSearchEngine, setCurrentSearchEngine] =
-    useState(userSearchEngine)
+  const [isOpen, setIsOpen] = useState(open)
+  const [currentSearchEngine, setCurrentSearchEngine] = useState(
+    userSearchEngine.engineId
+  )
   const setCurrentSearchEngineHandler = useCallback(
     async (_event, newSearchEngine) => {
       if (newSearchEngine !== null) {
-        setCurrentSearchEngine(newSearchEngine)
         SetUserSearchEngineMutation(userId, newSearchEngine)
+        setCurrentSearchEngine(newSearchEngine)
+        onSearchEngineSwitch(newSearchEngine)
       }
     },
-    [userId]
+    [onSearchEngineSwitch, userId]
   )
   const onCloseHandler = useCallback(async () => {
     onClose()
-    setOpen(false)
   }, [onClose])
+
+  useEffect(() => {
+    setIsOpen(open)
+  }, [open])
+
+  const searchEnginesSorted = [...searchEngines.edges].sort(
+    (a, b) => a.node.rank - b.node.rank
+  )
+  const searchEngineButtonComponents = searchEnginesSorted.map(
+    (searchEngineNode) => (
+      <ToggleButton
+        key={searchEngineNode.node.engineId}
+        classes={{
+          root: classes.buttonRoot,
+          selected: classes.selectedButton,
+        }}
+        className={classes.searchToggleButton}
+        value={searchEngineNode.node.engineId}
+      >
+        <CheckIcon className={classes.checkIcon} />
+        <Typography>{searchEngineNode.node.name}</Typography>
+      </ToggleButton>
+    )
+  )
+  const indexOfCharitableSearchEngine = searchEnginesSorted.findIndex(
+    (engineNode) => engineNode.node.isCharitable
+  )
+  if (indexOfCharitableSearchEngine >= 0) {
+    searchEngineButtonComponents.splice(
+      indexOfCharitableSearchEngine + 1,
+      0,
+      <Button
+        key="moreInfo"
+        className={classes.impactButtonText}
+        classes={{
+          root: classes.moreInfoButton,
+          text: classes.moreInfoText,
+        }}
+        variant="text"
+        onClick={onMoreInfoClick}
+      >
+        <Typography className={classes.linkTextWrapper}>
+          <span className={classes.impactLinkText}>Earn More Impact</span> ❤️
+        </Typography>
+      </Button>
+    )
+  }
   return (
     <DashboardPopover
-      open={open}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={isOpen}
       anchorEl={anchorEl}
       onClose={onCloseHandler}
       popoverClasses={{ paper: classes.popoverPaperClass }}
     >
       <div className={classes.popoverContent}>
         <ToggleButtonGroup
+          className={classes.toggleButtonGroup}
           orientation="vertical"
           value={currentSearchEngine}
           exclusive
           onChange={setCurrentSearchEngineHandler}
         >
-          <ToggleButton
-            classes={{
-              root: classes.buttonRoot,
-              selected: classes.selectedButton,
-            }}
-            className={classes.yahooSearchToggleButton}
-            value="Yahoo"
-          >
-            <CheckIcon className={classes.checkIcon} />
-            <Typography>Yahoo</Typography>
-          </ToggleButton>
-          <div className={classes.yahooButtonText}>
-            <Typography className={classes.yahooSubtitleText}>
-              Earn impact and do more good with every search you make on the new
-              tab page.
-            </Typography>
-            <Button
-              classes={{
-                root: classes.moreInfoButton,
-                text: classes.moreInfoText,
-              }}
-              variant="text"
-              onClick={onMoreInfoClick}
-            >
-              <Typography className={classes.linkTextWrapper}>
-                <span className={classes.yahooLinkText}>Earn More Impact</span>{' '}
-                ❤️
-              </Typography>
-            </Button>
-          </div>
-          <ToggleButton
-            classes={{
-              root: classes.buttonRoot,
-              selected: classes.selectedButton,
-            }}
-            className={classes.searchToggleButton}
-            value="Google"
-          >
-            <CheckIcon className={classes.checkIcon} />
-            <Typography>Google</Typography>
-          </ToggleButton>
-          <ToggleButton
-            classes={{
-              root: classes.buttonRoot,
-              selected: classes.selectedButton,
-            }}
-            className={classes.searchToggleButton}
-            value="Bing"
-          >
-            <CheckIcon className={classes.checkIcon} />
-            <Typography>Bing</Typography>
-          </ToggleButton>
-          <ToggleButton
-            classes={{
-              root: classes.buttonRoot,
-              selected: classes.selectedButton,
-            }}
-            className={classes.searchToggleButton}
-            value="DuckDuckGo"
-          >
-            <CheckIcon className={classes.checkIcon} />
-            <Typography>DuckDuckGo</Typography>
-          </ToggleButton>
-          <ToggleButton
-            classes={{
-              root: classes.buttonRoot,
-              selected: classes.selectedButton,
-            }}
-            className={classes.searchToggleButton}
-            value="Ecosia"
-          >
-            <CheckIcon className={classes.checkIcon} />
-            <Typography>Ecosia</Typography>
-          </ToggleButton>
+          {searchEngineButtonComponents}
         </ToggleButtonGroup>
         <div className={classes.info}>
           <InfoIcon />
@@ -214,20 +204,43 @@ const SearchSelect = ({
 }
 
 SearchSelect.propTypes = {
+  open: PropTypes.bool,
   anchorEl: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.elementType }),
   ]),
   onClose: PropTypes.func,
   userId: PropTypes.string.isRequired,
-  userSearchEngine: PropTypes.string.isRequired,
+  userSearchEngine: PropTypes.shape({
+    engineId: PropTypes.string,
+    searchUrl: PropTypes.string,
+    inputPrompt: PropTypes.string,
+  }).isRequired,
   onMoreInfoClick: PropTypes.func,
+  onSearchEngineSwitch: PropTypes.func,
+  searchEngines: PropTypes.shape({
+    edges: PropTypes.arrayOf(
+      PropTypes.shape({
+        node: PropTypes.shape({
+          engineId: PropTypes.string,
+          name: PropTypes.string,
+          searchUrl: PropTypes.string,
+          rank: PropTypes.number,
+          isCharitable: PropTypes.bool,
+          inputPrompt: PropTypes.string,
+        }),
+      })
+    ),
+  }),
 }
 
 SearchSelect.defaultProps = {
+  open: false,
   anchorEl: undefined,
   onClose: () => {},
   onMoreInfoClick: () => {},
+  onSearchEngineSwitch: () => {},
+  searchEngines: [],
 }
 
 export default SearchSelect

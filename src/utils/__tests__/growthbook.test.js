@@ -1,8 +1,10 @@
 import { GrowthBook } from '@growthbook/growthbook-react'
 import CreateUserExperimentMutation from 'src/utils/mutations/CreateUserExperimentMutation'
+import { validateAttributesObject } from '../growthbook'
 
 jest.mock('@growthbook/growthbook-react')
 jest.mock('src/utils/mutations/CreateUserExperimentMutation')
+jest.mock('src/utils/logger')
 
 const mockAttributes = {
   id: 'test-user-id',
@@ -51,5 +53,29 @@ describe('growthbook trackingCallback is correct with correct values', () => {
 
     growthbook.feature('test-experiment-feature')
     expect(CreateUserExperimentMutation).not.toHaveBeenCalled()
+  })
+
+  it('correctly validates attributes object', () => {
+    const logger = require('src/utils/logger').default
+    const mockObject = {
+      id: 'abcdefghijklmno',
+      env: null,
+      causeId: 'causeId',
+      v4BetaEnabled: true,
+      joined: undefined,
+      isTabTeamMember: null,
+    }
+
+    validateAttributesObject('abc', mockObject)
+
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Growthbook Attribute env for userId abc was null'
+    )
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Growthbook Attribute joined for userId abc was undefined'
+    )
+    expect(logger.warn).toHaveBeenCalledWith(
+      'Growthbook Attribute isTabTeamMember for userId abc was null'
+    )
   })
 })

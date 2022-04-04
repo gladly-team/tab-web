@@ -23,7 +23,6 @@ import Logo from 'src/components/Logo'
 import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
 import UserBackgroundImageContainer from 'src/components/UserBackgroundImageContainer'
 import UserImpactContainer from 'src/components/UserImpactContainer'
-import SearchInput from 'src/components/SearchInput'
 import MissionHubButton from 'src/components/MissionHubButton'
 import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContainer'
 import SquadCounter from 'src/components/SquadCounter'
@@ -72,6 +71,8 @@ import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
+import { validateAttributesObject } from 'src/utils/growthbook'
+import SearchInputContainer from 'src/components/SearchInputContainer'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -267,6 +268,7 @@ const getRelayQuery = async ({ AuthUser }) => {
       query pagesIndexQuery($userId: String!) {
         app {
           ...MoneyRaisedContainer_app
+          ...SearchInputContainer_app
         }
         user(userId: $userId) {
           id
@@ -304,6 +306,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           ...InviteFriendsIconContainer_user
           ...SocialShareContainer_user
           ...EmailInviteDialogContainer_user
+          ...SearchInputContainer_user
         }
       }
     `,
@@ -350,14 +353,16 @@ const Index = ({ data: fallbackData }) => {
   const growthbook = useGrowthBook()
 
   useEffect(() => {
-    growthbook.setAttributes({
+    const attributesObject = {
       id: userId,
       env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
       causeId,
       v4BetaEnabled: true,
       joined,
       isTabTeamMember: showInternalOnly(email),
-    })
+    }
+    validateAttributesObject(userId, attributesObject)
+    growthbook.setAttributes(attributesObject)
   }, [causeId, email, growthbook, joined, userId])
 
   // Set the theme based on cause.
@@ -632,7 +637,12 @@ const Index = ({ data: fallbackData }) => {
                 color={enableBackgroundImages ? 'white' : null}
                 className={classes.logo}
               />
-              <SearchInput className={classes.searchBar} />
+              <SearchInputContainer
+                userId={userId}
+                className={classes.searchBar}
+                app={app}
+                user={user}
+              />
             </div>
           </div>
           <div className={classes.adsContainer}>

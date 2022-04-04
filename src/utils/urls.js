@@ -69,3 +69,29 @@ export const surveyLink =
   'https://docs.google.com/forms/d/e/1FAIpQLScS8RmMy1AvYHuBJPrNSnB9TOgG8Lq24ODh1RlODeIsw0U1MA/viewform?usp=sf_link'
 
 export const media = (imgPath) => `${MEDIA_ENDPOINT}/img/cause/${imgPath}`
+
+// Social
+export const facebookPageURL = 'https://www.facebook.com/TabForACause'
+export const instagramPageURL = 'https://www.instagram.com/tabforacause/'
+export const twitterPageURL = 'https://twitter.com/TabForACause'
+export const tiktokPageURL = 'https://www.tiktok.com/@tabforacause'
+
+// Extensions
+export const chromeExtensionURL =
+  'https://chrome.google.com/webstore/detail/tab-for-a-cause/gibkoahgjfhphbmeiphbcnhehbfdlcgo'
+export const edgeExtensionURL =
+  'https://microsoftedge.microsoft.com/addons/detail/hmiiajmhelfgiaoboffbjpjdckbmnddg'
+export const safariExtensionURL =
+  'https://apps.apple.com/us/app/tab-for-a-cause/id1579749108'
+
+// Zendesk
+export const externalHelpURL =
+  'https://gladly.zendesk.com/hc/en-us/categories/201939608-Tab-for-a-Cause'
+
+// For Footer
+export const adblockerWhitelistingURL = 'https://tab.gladly.io/adblockers'
+export const contactUsURL = 'https://tab.gladly.io/contact'
+export const privacyPolicyURL = 'https://tab.gladly.io/privacy'
+export const teamURL = 'https://tab.gladly.io/team'
+export const termsURL = 'https://tab.gladly.io/terms'
+export const jobsURL = 'https://tab.gladly.io/jobs'

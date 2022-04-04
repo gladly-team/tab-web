@@ -25,6 +25,7 @@ import {
 import { Divider } from '@material-ui/core'
 import { mdiOpenInNew } from '@mdi/js'
 import { areSameURLs, withBasePath } from 'src/utils/navigationUtils'
+import Footer from 'src/components/Footer'
 
 const sidebarWidth = 240
 const useStyles = makeStyles((theme) => ({
@@ -32,6 +33,8 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '100vw',
     minHeight: '100vh',
     background: grey['100'],
+    display: 'flex',
+    flexDirection: 'column',
   },
   closeIcon: {
     color: '#fff',
@@ -71,6 +74,9 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     marginTop: '10px',
     marginBottom: '10px',
+  },
+  footer: {
+    marginTop: 'auto',
   },
 }))
 
@@ -158,39 +164,44 @@ const SettingsPage = (props) => {
           </a>
         </Toolbar>
       </AppBar>
-      <div className={classes.sidebarContentContainer}>
-        <List className={classes.list}>
-          <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
-          <SettingsMenuItem to={aboutURL}>About the Cause</SettingsMenuItem>
-          <Divider className={classes.divider} />
-          <SettingsMenuItem
-            to={HELP_URL}
-            IconComponent={OpenInNew}
-            target="_blank"
-          >
-            Help
-          </SettingsMenuItem>
-          <SettingsMenuItem
-            to={FINANCIALS_URL}
-            IconComponent={OpenInNew}
-            target="_blank"
-          >
-            Our Financials
-          </SettingsMenuItem>
-          <SettingsMenuItem
-            to={surveyLink}
-            IconComponent={OpenInNew}
-            target="_blank"
-          >
-            Feedback
-          </SettingsMenuItem>
-        </List>
+      <div>
+        <div className={classes.sidebarContentContainer}>
+          <List className={classes.list}>
+            <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
+            <SettingsMenuItem to={aboutURL}>About the Cause</SettingsMenuItem>
+            <Divider className={classes.divider} />
+            <SettingsMenuItem
+              to={HELP_URL}
+              IconComponent={OpenInNew}
+              target="_blank"
+            >
+              Help
+            </SettingsMenuItem>
+            <SettingsMenuItem
+              to={FINANCIALS_URL}
+              IconComponent={OpenInNew}
+              target="_blank"
+            >
+              Our Financials
+            </SettingsMenuItem>
+            <SettingsMenuItem
+              to={surveyLink}
+              IconComponent={OpenInNew}
+              target="_blank"
+            >
+              Feedback
+            </SettingsMenuItem>
+          </List>
+        </div>
+        <div
+          data-test-id="settings-content"
+          className={classes.mainContentContainer}
+        >
+          {children}
+        </div>
       </div>
-      <div
-        data-test-id="settings-content"
-        className={classes.mainContentContainer}
-      >
-        {children}
+      <div className={classes.footer}>
+        <Footer />
       </div>
     </div>
   )

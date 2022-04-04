@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '5ayw00',
     fontFamily: 'Poppins',
   },
-  switchToYahooButton: {
+  switchToSearchForACauseButton: {
     background: '#29BEBA',
     borderRadius: '15px',
     height: '30px',
@@ -43,10 +43,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
 }))
-const YahooSellNotification = ({
+const SearchForACauseSellNotification = ({
   onLearnMore,
   onNoThanks,
-  onSwitchToYahoo,
+  onSwitchToSearchForACause,
   userId,
 }) => {
   const [open, setOpen] = useState(true)
@@ -56,15 +56,15 @@ const YahooSellNotification = ({
     setOpen(false)
   }
   const onNoThanksClick = () => {
-    CreateSearchEnginePromptLogMutation(userId, 'Yahoo', false)
+    CreateSearchEnginePromptLogMutation(userId, 'SearchForACause', false)
     onNoThanks()
     setOpen(false)
   }
-  const onSwitchToYahooClick = () => {
-    SetUserSearchEngineMutation(userId, 'Yahoo')
+  const onSwitchToSearchForACauseClick = () => {
+    SetUserSearchEngineMutation(userId, 'SearchForACause')
     SetYahooSearchOptInMutation(userId, true)
-    CreateSearchEnginePromptLogMutation(userId, 'Yahoo', true)
-    onSwitchToYahoo()
+    CreateSearchEnginePromptLogMutation(userId, 'SearchForACause', true)
+    onSwitchToSearchForACause()
     setOpen(false)
   }
   return (
@@ -78,7 +78,7 @@ const YahooSellNotification = ({
             </Typography>
             <Typography variant="body1">
               Increase your impact, and raise more money, with every search that
-              you make with Yahoo!
+              you make with Search for a Cause!
             </Typography>
           </span>
         }
@@ -95,12 +95,12 @@ const YahooSellNotification = ({
               No Thanks
             </Button>
             <Button
-              onClick={onSwitchToYahooClick}
-              className={classes.switchToYahooButton}
+              onClick={onSwitchToSearchForACauseClick}
+              className={classes.switchToSearchForACauseButton}
               variant="contained"
               disableElevation
             >
-              Switch to Yahoo
+              Let's do it!
             </Button>
           </div>
         }
@@ -109,17 +109,17 @@ const YahooSellNotification = ({
   )
 }
 
-YahooSellNotification.propTypes = {
+SearchForACauseSellNotification.propTypes = {
   userId: PropTypes.string.isRequired,
   onLearnMore: PropTypes.func,
   onNoThanks: PropTypes.func,
-  onSwitchToYahoo: PropTypes.func,
+  onSwitchToSearchForACause: PropTypes.func,
 }
 
-YahooSellNotification.defaultProps = {
+SearchForACauseSellNotification.defaultProps = {
   onLearnMore: () => {},
   onNoThanks: () => {},
-  onSwitchToYahoo: () => {},
+  onSwitchToSearchForACause: () => {},
 }
 
-export default YahooSellNotification
+export default SearchForACauseSellNotification

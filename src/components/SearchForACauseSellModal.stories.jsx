@@ -1,14 +1,14 @@
 import React from 'react'
 
-import YahooSellModal from './YahooSellModal'
+import SearchForACauseSellModal from './SearchForACauseSellModal'
 
 export default {
-  title: 'Components/YahooSellModal',
-  component: YahooSellModal,
+  title: 'Components/SearchForACauseSellModal',
+  component: SearchForACauseSellModal,
 }
 
 // eslint-disable-next-line react/jsx-props-no-spreading
-const Template = (args) => <YahooSellModal {...args} />
+const Template = (args) => <SearchForACauseSellModal {...args} />
 export const hardSell = Template.bind({})
 hardSell.args = {
   hardSell: true,

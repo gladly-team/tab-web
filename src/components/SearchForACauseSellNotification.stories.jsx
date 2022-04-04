@@ -1,9 +1,9 @@
 import React from 'react'
-import YahooSellNotification from './YahooSellNotification'
+import SearchForACauseSellNotification from './SearchForACauseSellNotification'
 
 export default {
-  title: 'Components/YahooSellNotification',
-  component: YahooSellNotification,
+  title: 'Components/SearchForACauseSellNotification',
+  component: SearchForACauseSellNotification,
   parameters: {
     backgrounds: {
       default: 'grey',
@@ -15,7 +15,7 @@ export default {
   },
 }
 
-const Template = (args) => <YahooSellNotification {...args} />
+const Template = (args) => <SearchForACauseSellNotification {...args} />
 export const basic = Template.bind({})
 basic.args = {
   userId: 'userId',
