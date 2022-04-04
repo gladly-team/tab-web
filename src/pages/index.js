@@ -352,17 +352,20 @@ const Index = ({ data: fallbackData }) => {
 
   const growthbook = useGrowthBook()
 
+  // Set Growthbook attributes when the user is defined/
   useEffect(() => {
-    const attributesObject = {
-      id: userId,
-      env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
-      causeId,
-      v4BetaEnabled: true,
-      joined,
-      isTabTeamMember: showInternalOnly(email),
+    if (userId) {
+      const attributesObject = {
+        id: userId,
+        env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
+        causeId,
+        v4BetaEnabled: true,
+        joined,
+        isTabTeamMember: showInternalOnly(email),
+      }
+      validateAttributesObject(userId, attributesObject)
+      growthbook.setAttributes(attributesObject)
     }
-    validateAttributesObject(userId, attributesObject)
-    growthbook.setAttributes(attributesObject)
   }, [causeId, email, growthbook, joined, userId])
 
   // Set the theme based on cause.
@@ -705,6 +708,18 @@ Index.propTypes = {
   data: PropTypes.shape({
     app: PropTypes.shape({}).isRequired,
     user: PropTypes.shape({
+      cause: PropTypes.shape({
+        causeId: PropTypes.string.isRequired,
+        individualImpactEnabled: PropTypes.bool.isRequired,
+        impactVisits: PropTypes.number,
+        landingPagePath: PropTypes.string,
+        theme: PropTypes.shape({
+          primaryColor: PropTypes.string.isRequired,
+          secondaryColor: PropTypes.string.isRequired,
+        }),
+      }).isRequired,
+      hasViewedIntroFlow: PropTypes.bool.isRequired,
+      joined: PropTypes.string.isRequired,
       tabs: PropTypes.number.isRequired,
       vcCurrent: PropTypes.number.isRequired,
     }).isRequired,
