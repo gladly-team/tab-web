@@ -3,6 +3,7 @@
 import { isClientSide } from 'src/utils/ssr'
 
 jest.mock('src/utils/ssr')
+jest.mock('src/utils/logger')
 beforeAll(() => {
   window.fbq = jest.fn()
 })

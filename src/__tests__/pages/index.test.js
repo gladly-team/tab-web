@@ -79,6 +79,7 @@ jest.mock('src/utils/pageWrappers/CustomThemeHOC')
 jest.mock('src/utils/hooks/useCustomTheming')
 jest.mock('@growthbook/growthbook-react')
 jest.mock('src/utils/growthbook')
+jest.mock('src/utils/logger')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
