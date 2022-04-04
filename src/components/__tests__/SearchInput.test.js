@@ -115,7 +115,7 @@ describe('SearchInput component', () => {
       .simulate('change', { target: { value: 'test' } })
     searchTextField.find('input').simulate('keypress', { key: 'Enter' })
     expect(LogSearchMutation).toHaveBeenCalledWith({
-      userId: mockProps.userId,
+      userIdGlobal: mockProps.userId,
       source: 'tab',
     })
   })
