@@ -10,6 +10,14 @@ const getMockProps = () => ({
     moneyRaised: 846892.02,
     dollarsPerDayRate: 602.12,
   },
+  user: {
+    features: [
+      {
+        featureName: 'money-raised-exclamation-point',
+        variation: 'false',
+      },
+    ],
+  },
 })
 
 beforeEach(() => {
@@ -140,5 +148,41 @@ describe('MoneyRaised component', () => {
     wrapper.find(DashboardPopover).prop('onClose')()
     wrapper.update()
     expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+  })
+
+  it('displays expected default title on the popover with no features set', () => {
+    const MoneyRaised = require('src/components/MoneyRaised').default
+    const defaultMockProps = getMockProps()
+    defaultMockProps.user.features = []
+    const wrapper = mount(<MoneyRaised {...defaultMockProps} />)
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+    wrapper.find(Button).first().simulate('click')
+    expect(
+      wrapper.find(DashboardPopover).find(Typography).at(0).text()
+    ).toEqual("We've raised this together")
+  })
+
+  it('displays expected default title on the popover when the user is *not* in the "exclamation point" experiment group', () => {
+    const MoneyRaised = require('src/components/MoneyRaised').default
+    const defaultMockProps = getMockProps()
+    defaultMockProps.user.features[0].variation = 'false'
+    const wrapper = mount(<MoneyRaised {...defaultMockProps} />)
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+    wrapper.find(Button).first().simulate('click')
+    expect(
+      wrapper.find(DashboardPopover).find(Typography).at(0).text()
+    ).toEqual("We've raised this together")
+  })
+
+  it('displays expected title on the popover when the user is in the "exclamation point" experiment group', () => {
+    const MoneyRaised = require('src/components/MoneyRaised').default
+    const defaultMockProps = getMockProps()
+    defaultMockProps.user.features[0].variation = 'true'
+    const wrapper = mount(<MoneyRaised {...defaultMockProps} />)
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
+    wrapper.find(Button).first().simulate('click')
+    expect(
+      wrapper.find(DashboardPopover).find(Typography).at(0).text()
+    ).toEqual("We've raised this together!")
   })
 })

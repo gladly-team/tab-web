@@ -8,4 +8,12 @@ export default createFragmentContainer(MoneyRaised, {
       dollarsPerDayRate
     }
   `,
+  user: graphql`
+    fragment MoneyRaisedContainer_user on User {
+      features {
+        featureName
+        variation
+      }
+    }
+  `,
 })

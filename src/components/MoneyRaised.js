@@ -7,6 +7,7 @@ import { get } from 'lodash/object'
 import DashboardPopover from 'src/components/DashboardPopover'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import { MONEY_RAISED_EXCLAMATION_POINT } from 'src/utils/experiments'
 
 const useStyles = makeStyles((theme) => ({
   currencyText: { color: get(theme, 'palette.backgroundContrastText.main') },
@@ -20,8 +21,10 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(1.5),
   },
 }))
+
 const MoneyRaised = (props) => {
   const {
+    user: { features },
     app: { dollarsPerDayRate, moneyRaised },
   } = props
   const classes = useStyles()
@@ -44,6 +47,14 @@ const MoneyRaised = (props) => {
   useInterval(() => {
     setMoneyRaised(currentMoneyRaised + 0.01)
   }, msPerPenny)
+
+  // For a test experiment.
+  const showExclamationPoint =
+    (
+      features.find(
+        (feature) => feature.featureName === MONEY_RAISED_EXCLAMATION_POINT
+      ) || {}
+    ).variation === 'true' || false
 
   return (
     <div>
@@ -70,7 +81,7 @@ const MoneyRaised = (props) => {
             className={classes.dropdownText}
             gutterBottom
           >
-            We've raised this together
+            We've raised this together{showExclamationPoint ? '!' : ''}
           </Typography>
           <Typography
             variant="body2"
@@ -88,6 +99,17 @@ const MoneyRaised = (props) => {
 
 MoneyRaised.displayName = 'MoneyRaised'
 MoneyRaised.propTypes = {
+  user: PropTypes.shape({
+    features: PropTypes.arrayOf(
+      PropTypes.shape({
+        featureName: PropTypes.string.isRequired,
+
+        // Allow any type for experiment variations.
+        // eslint-disable-next-line react/forbid-prop-types
+        variation: PropTypes.any,
+      })
+    ).isRequired,
+  }).isRequired,
   app: PropTypes.shape({
     moneyRaised: PropTypes.number.isRequired,
     dollarsPerDayRate: PropTypes.number.isRequired,
