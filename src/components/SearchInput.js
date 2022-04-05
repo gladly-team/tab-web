@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Input from '@material-ui/core/Input'
@@ -40,6 +40,11 @@ const useStyles = makeStyles((theme) => ({
     pointerEvents: 'auto',
     backgroundColor: theme.palette.primary.main,
   },
+  arrow: {
+    '&::before': {
+      backgroundColor: theme.palette.primary.main,
+    },
+  },
   tooltipCloseButton: {
     padding: theme.spacing(0),
     paddingLeft: theme.spacing(0.5),
@@ -53,7 +58,15 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const SearchInput = (props) => {
-  const { className, userId, app, user, tooltip } = props
+  const {
+    className,
+    userId,
+    app,
+    user,
+    tooltip,
+    onSearchSelectMoreInfoClick,
+    setYahooPaidSearchRewardOptIn,
+  } = props
   const { searchEngine, yahooPaidSearchRewardOptIn } = user
   const { searchEngines } = app
   const [searchSelectOpen, setSearchSelectOpen] = useState(false)
@@ -62,6 +75,35 @@ const SearchInput = (props) => {
   const fullInputRef = React.createRef()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [currentSearchEngine, setCurrentSearchEngine] = useState(searchEngine)
+  const [
+    currentYahooPaidSearchRewardOptIn,
+    setCurrentYahooPaidSearchRewardOptIn,
+  ] = useState(yahooPaidSearchRewardOptIn)
+  const [tooltipOpen, setTooltipOpen] = useState(tooltip)
+
+  const getSearchEngine = useCallback(
+    (searchEngineId) =>
+      searchEngines.edges.find(
+        (engine) => engine.node.engineId === searchEngineId
+      ).node,
+    [searchEngines]
+  )
+
+  useEffect(() => {
+    setCurrentSearchEngine(searchEngine)
+    setCurrentYahooPaidSearchRewardOptIn(
+      setYahooPaidSearchRewardOptIn !== undefined
+        ? setYahooPaidSearchRewardOptIn
+        : yahooPaidSearchRewardOptIn
+    )
+    setTooltipOpen(tooltip)
+  }, [
+    searchEngine,
+    getSearchEngine,
+    setYahooPaidSearchRewardOptIn,
+    yahooPaidSearchRewardOptIn,
+    tooltip,
+  ])
 
   const onSearch = () => {
     const query = searchInputRef.current.value
@@ -77,10 +119,7 @@ const SearchInput = (props) => {
   }
 
   const onSwitchSearchEngine = (newSearchEngineId) => {
-    const newSearchEngine = searchEngines.edges.find(
-      (engine) => engine.node.engineId === newSearchEngineId
-    ).node
-    setCurrentSearchEngine(newSearchEngine)
+    setCurrentSearchEngine(getSearchEngine(newSearchEngineId))
   }
 
   const onSearchSelectOpen = () => {
@@ -91,8 +130,6 @@ const SearchInput = (props) => {
   const onSearchSelectClose = () => {
     setSearchSelectOpen(false)
   }
-
-  const [tooltipOpen, setTooltipOpen] = useState(tooltip)
 
   return (
     <div className={className}>
@@ -121,10 +158,12 @@ const SearchInput = (props) => {
               </IconButton>
               <Tooltip
                 classes={{
+                  arrow: classes.arrow,
                   tooltip: classes.tooltip,
                 }}
                 placement="top"
                 open={tooltipOpen}
+                arrow
                 title={
                   <span>
                     Great! You can always switch your search engine here later
@@ -159,7 +198,8 @@ const SearchInput = (props) => {
         open={searchSelectOpen}
         onClose={onSearchSelectClose}
         onSearchEngineSwitch={onSwitchSearchEngine}
-        yahooPaidSearchRewardOptIn={yahooPaidSearchRewardOptIn}
+        yahooPaidSearchRewardOptIn={currentYahooPaidSearchRewardOptIn}
+        onMoreInfoClick={onSearchSelectMoreInfoClick}
       />
     </div>
   )
@@ -194,10 +234,14 @@ SearchInput.propTypes = {
     }),
     yahooPaidSearchRewardOptIn: PropTypes.bool,
   }).isRequired,
+  onSearchSelectMoreInfoClick: PropTypes.func,
+  setYahooPaidSearchRewardOptIn: PropTypes.bool,
 }
 SearchInput.defaultProps = {
   className: '',
   tooltip: false,
+  onSearchSelectMoreInfoClick: () => {},
+  setYahooPaidSearchRewardOptIn: undefined,
 }
 
 export default SearchInput

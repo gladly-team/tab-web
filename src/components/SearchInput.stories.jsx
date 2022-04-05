@@ -59,5 +59,6 @@ standard.args = {
       searchUrl: 'https://www.google.com/search?q={searchTerms}',
       inputPrompt: 'Search Google',
     },
+    yahooPaidSearchRewardOptIn: false,
   },
 }

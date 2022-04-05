@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import searchForACauseSell from 'src/assets/images/searchForACauseSell.png'
@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontWeight: '700',
   },
+  modal: {
+    zIndex: '100000000 !important',
+  },
 }))
 
 const SearchForACauseSellModal = ({
@@ -52,28 +55,29 @@ const SearchForACauseSellModal = ({
   userId,
   onAccept,
   onDecline,
+  onClose,
+  open,
 }) => {
   const classes = useStyles()
-  const [open, setOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(true)
   const declineSearchOptIn = useCallback(() => {
     CreateSearchEnginePromptLogMutation(userId, 'SearchForACause', false)
     onDecline()
-    setOpen(false)
-  }, [userId, onDecline])
+    onClose()
+  }, [userId, onDecline, onClose])
   const acceptSearchOptIn = useCallback(() => {
     SetYahooSearchOptInMutation(userId, true)
     SetUserSearchEngineMutation(userId, 'SearchForACause')
     CreateSearchEnginePromptLogMutation(userId, 'SearchForACause', true)
     onAccept()
-    setOpen(false)
-  }, [userId, onAccept])
+    onClose()
+  }, [userId, onAccept, onClose])
+
+  useEffect(() => {
+    setIsOpen(isOpen)
+  }, [isOpen])
   return (
-    <Modal
-      open={open}
-      onClose={() => {
-        setOpen(false)
-      }}
-    >
+    <Modal className={classes.modal} open={open} onClose={onClose}>
       <div className={classes.popoverContent}>
         <img
           src={searchForACauseSell}
@@ -116,11 +120,14 @@ SearchForACauseSellModal.propTypes = {
   userId: PropTypes.string.isRequired,
   onAccept: PropTypes.func,
   onDecline: PropTypes.func,
+  onClose: PropTypes.func,
+  open: PropTypes.bool.isRequired,
 }
 
 SearchForACauseSellModal.defaultProps = {
   onAccept: () => {},
   onDecline: () => {},
+  onClose: () => {},
 }
 
 export default SearchForACauseSellModal

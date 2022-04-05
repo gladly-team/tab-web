@@ -34,6 +34,9 @@ import UserImpactContainer from 'src/components/UserImpactContainer'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import { useGrowthBook } from '@growthbook/growthbook-react'
 import { validateAttributesObject } from 'src/utils/growthbook'
+import SearchInput from 'src/components/SearchInput'
+import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
+import { Button } from '@material-ui/core'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -926,5 +929,61 @@ describe('index.js', () => {
     mount(<IndexPage {...mockProps} />)
     expect(mockGrowthbook.setAttributes).not.toHaveBeenCalled()
     consoleErrSpy.mockRestore()
+  })
+
+  it('correctly handles set extra search impact flow when accepting', () => {
+    expect.assertions(6)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    expect(wrapper.find(SearchForACauseSellModal).exists()).toBe(false)
+    expect(
+      wrapper.find(SearchInput).first().prop('setYahooPaidSearchRewardOptIn')
+    ).toEqual(undefined)
+
+    act(() => {
+      wrapper.find(SearchInput).first().prop('onSearchSelectMoreInfoClick')()
+    })
+    wrapper.update()
+
+    const modal = wrapper.find(SearchForACauseSellModal).first()
+    expect(modal.prop('open')).toBe(true)
+    expect(modal.prop('hardSell')).toBe(true)
+
+    const acceptButton = wrapper.find(Button).at(1)
+    expect(acceptButton.text()).toEqual("Let's Do It!")
+    acceptButton.simulate('click')
+    expect(
+      wrapper.find(SearchInput).first().prop('setYahooPaidSearchRewardOptIn')
+    ).toEqual(true)
+  })
+
+  it('correctly handles set extra search impact flow when declining', () => {
+    expect.assertions(6)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    expect(wrapper.find(SearchForACauseSellModal).exists()).toBe(false)
+    expect(
+      wrapper.find(SearchInput).first().prop('setYahooPaidSearchRewardOptIn')
+    ).toEqual(undefined)
+
+    act(() => {
+      wrapper.find(SearchInput).first().prop('onSearchSelectMoreInfoClick')()
+    })
+    wrapper.update()
+
+    const modal = wrapper.find(SearchForACauseSellModal).first()
+    expect(modal.prop('open')).toBe(true)
+    expect(modal.prop('hardSell')).toBe(true)
+
+    const acceptButton = wrapper.find(Button).at(0)
+    expect(acceptButton.text()).toEqual("I don't want more impact")
+    acceptButton.simulate('click')
+    expect(
+      wrapper.find(SearchInput).first().prop('setYahooPaidSearchRewardOptIn')
+    ).toEqual(undefined)
   })
 })
