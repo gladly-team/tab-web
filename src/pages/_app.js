@@ -86,6 +86,9 @@ if (isClientSide()) {
 // The MUI theme prior to any user-level customization.
 const standardTheme = createTheme(defaultTheme)
 
+// Split-testing: we can set up an experiment within client code here or
+// via our GraphQL backend. Use backend experiment definitions whenever
+// possible.
 // Context for designing GrowthBook features: https://docs.google.com/document/d/1ru-oO7-OWVM3ByYZseJBQ-Mu8_1LwcLUMNlHdpQ2JN4/edit#heading=h.5qxtlklvlhrs
 // When adding a new experiment, design it so that the weights of the experiment should be constant.
 // For example to design an experiment and modify experiment, we can:
