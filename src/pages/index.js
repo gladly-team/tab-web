@@ -301,6 +301,7 @@ const getRelayQuery = async ({ AuthUser }) => {
             tabCount
             missionId
           }
+          ...MoneyRaisedContainer_user
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
           ...InviteFriendsIconContainer_user
@@ -575,7 +576,7 @@ const Index = ({ data: fallbackData }) => {
                     {growthbook.feature('test-feature').value ? (
                       <p>Welcome to our site!</p>
                     ) : null}
-                    <MoneyRaisedContainer app={app} />
+                    <MoneyRaisedContainer app={app} user={user} />
                   </Typography>
                 </div>
                 <div className={classes.settingsIconContainer}>
