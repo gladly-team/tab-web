@@ -46,6 +46,7 @@ const getMockProps = () => ({
       searchUrl: 'https://www.google.com/search?q={searchTerms}',
       inputPrompt: 'Search Google',
     },
+    yahooPaidSearchRewardOptIn: true,
   },
   tooltip: true,
 })
@@ -130,5 +131,23 @@ describe('SearchInput component', () => {
     wrapper.find(Tooltip).first().find(IconButton).at(1).simulate('click')
 
     expect(wrapper.find(Tooltip).first().prop('open')).toEqual(false)
+  })
+
+  it('forwards props to SearchInput element', () => {
+    const SearchInput = require('src/components/SearchInput').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<SearchInput {...mockProps} />)
+
+    const searchSelect = wrapper.find(SearchSelect).first()
+    expect(searchSelect.prop('userSearchEngine')).toEqual(
+      mockProps.user.searchEngine
+    )
+    expect(searchSelect.prop('userId')).toEqual(mockProps.userId)
+    expect(searchSelect.prop('searchEngines')).toEqual(
+      mockProps.app.searchEngines
+    )
+    expect(searchSelect.prop('yahooPaidSearchRewardOptIn')).toEqual(
+      mockProps.user.yahooPaidSearchRewardOptIn
+    )
   })
 })

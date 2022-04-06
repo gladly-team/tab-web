@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SearchInput = (props) => {
   const { className, userId, app, user, tooltip } = props
-  const { searchEngine } = user
+  const { searchEngine, yahooPaidSearchRewardOptIn } = user
   const { searchEngines } = app
   const [searchSelectOpen, setSearchSelectOpen] = useState(false)
   const classes = useStyles()
@@ -159,6 +159,7 @@ const SearchInput = (props) => {
         open={searchSelectOpen}
         onClose={onSearchSelectClose}
         onSearchEngineSwitch={onSwitchSearchEngine}
+        yahooPaidSearchRewardOptIn={yahooPaidSearchRewardOptIn}
       />
     </div>
   )
@@ -191,6 +192,7 @@ SearchInput.propTypes = {
       inputPrompt: PropTypes.string,
       searchUrl: PropTypes.string,
     }),
+    yahooPaidSearchRewardOptIn: PropTypes.bool,
   }).isRequired,
 }
 SearchInput.defaultProps = {
