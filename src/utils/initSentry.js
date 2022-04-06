@@ -26,8 +26,8 @@ const initSentry = () => {
 
       // Ignore network errors. Stop ignoring these in the future if we
       // more gracefully handle network failures.
-      /^AbortError$/,
-      /^Network Error$/,
+      /^AbortError/,
+      /^Network Error/,
       /^NetworkError when attempting to fetch resource.$/,
       /^TypeError: cancelled$/,
       /^TypeError: Failed to fetch$/,
@@ -35,10 +35,10 @@ const initSentry = () => {
       // This SecurityError occurs on Firefox when localStorage isn't available
       // in the new tab page context. We should handle this but will ignore
       // for now.
-      /^The operation is insecure.$/,
+      /^SecurityError: The operation is insecure.$/,
 
       // tab-cmp (unhandled Quantcast rejection)
-      /^GVLError$/,
+      /^GVLError/,
     ],
   })
 }
