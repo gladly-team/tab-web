@@ -117,8 +117,9 @@ describe('SearchSelect', () => {
     charitableButton.simulate('click')
     expect(mockProps.onMoreInfoClick).toHaveBeenCalled()
 
-    // also, check that onSearchSwitchEngine is not called
-    expect(mockProps.onSearchEngineSwitch).not.toHaveBeenCalled()
+    expect(mockProps.onSearchEngineSwitch).toHaveBeenCalledWith(
+      'SearchForACause'
+    )
   })
 
   it('renders impact badge in charitable engine button if opted in to impact search, and changes engine if clicked', () => {

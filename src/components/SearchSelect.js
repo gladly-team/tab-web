@@ -157,16 +157,11 @@ const SearchSelect = ({
     (a, b) => a.node.rank - b.node.rank
   )
 
-  const charitableEngineClickHandler = useCallback(
-    (event) => {
-      if (!yahooPaidSearchRewardOptIn) {
-        onMoreInfoClick()
-        event.stopPropagation()
-        event.preventDefault()
-      }
-    },
-    [onMoreInfoClick, yahooPaidSearchRewardOptIn]
-  )
+  const charitableEngineClickHandler = useCallback(() => {
+    if (!yahooPaidSearchRewardOptIn) {
+      onMoreInfoClick()
+    }
+  }, [onMoreInfoClick, yahooPaidSearchRewardOptIn])
 
   const searchEngineButtonComponents = searchEnginesSorted.map(
     (searchEngineNode) => (
@@ -199,7 +194,7 @@ const SearchSelect = ({
           )}
           {searchEngineNode.node.isCharitable && !yahooPaidSearchRewardOptIn && (
             <Typography align="left" className={classes.linkTextWrapper}>
-              <span className={classes.impactLinkText}>Earn More Impact</span>
+              <span className={classes.impactLinkText}>Earn More Impact </span>
               ❤️
             </Typography>
           )}
