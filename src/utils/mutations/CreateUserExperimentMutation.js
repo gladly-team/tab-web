@@ -9,7 +9,12 @@ const mutation = graphql`
   }
 `
 
-const CreateUserExperimentMutation = (userId, experimentId, variationId) =>
+const CreateUserExperimentMutation = ({
+  userId,
+  experimentId,
+  variationId,
+  variationValueStr,
+}) =>
   callMutation({
     mutation,
     variables: {
@@ -17,6 +22,7 @@ const CreateUserExperimentMutation = (userId, experimentId, variationId) =>
         userId,
         experimentId,
         variationId,
+        variationValueStr,
       },
     },
   })

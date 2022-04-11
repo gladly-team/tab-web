@@ -32,11 +32,12 @@ describe('growthbook trackingCallback is correct with correct values', () => {
     growthbook.setAttributes(mockAttributes)
 
     growthbook.feature('test-experiment-feature')
-    expect(CreateUserExperimentMutation).toHaveBeenCalledWith(
-      'test-user-id',
-      'test-experiment-feature',
-      'variation-A'
-    )
+    expect(CreateUserExperimentMutation).toHaveBeenCalledWith({
+      userId: 'test-user-id',
+      experimentId: 'test-experiment-feature',
+      variationId: 0,
+      variationValueStr: '"variation-A"',
+    })
   })
 
   it('does not run trackingCallback if not experiment', () => {
