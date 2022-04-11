@@ -7,19 +7,9 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import SetUserSearchEngineMutation from 'src/utils/mutations/SetUserSearchEngineMutation'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
 import CheckIcon from '@material-ui/icons/Check'
-import Button from '@material-ui/core/Button'
 import DashboardPopover from './DashboardPopover'
 
 const useStyles = makeStyles((theme) => ({
-  impactButtonText: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    textAlign: 'left',
-    padding: '11px',
-    paddingTop: theme.spacing(0),
-  },
   searchToggleButton: {
     color: 'black',
     textTransform: 'unset',
@@ -62,11 +52,14 @@ const useStyles = makeStyles((theme) => ({
     color: '#F71F6C',
     textDecoration: 'underline',
     fontWeight: '700',
+    width: 'fit-content',
   },
   linkTextWrapper: {
     fontSize: '12px',
     textAlign: 'left',
-    paddingLeft: '43px',
+    paddingRight: theme.spacing(0.5),
+    marginTop: theme.spacing(0.5),
+    marginBottom: theme.spacing(0.5),
   },
   popoverPaperClass: {
     borderRadius: '12px',
@@ -76,6 +69,7 @@ const useStyles = makeStyles((theme) => ({
     border: '0px',
   },
   checkIcon: {
+    alignSelf: 'flex-start',
     marginRight: theme.spacing(1),
     color: 'transparent',
   },
@@ -89,6 +83,40 @@ const useStyles = makeStyles((theme) => ({
   toggleButtonGroup: {
     width: '100%',
   },
+  impactBadge: {
+    backgroundColor: '#F50057',
+    borderRadius: theme.spacing(2),
+    color: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    width: 'fit-content',
+    paddingLeft: theme.spacing(1.5),
+    paddingRight: theme.spacing(1.5),
+    marginTop: theme.spacing(0.5),
+    marginBottom: theme.spacing(0.5),
+  },
+  impactBadgeHeart: {
+    fontSize: '10px',
+    backgroundColor: '#C51162',
+    width: '20px',
+    height: '20px',
+    borderRadius: '10px',
+    position: 'relative',
+    left: '-4px',
+    marginTop: theme.spacing(0.7),
+    marginBottom: theme.spacing(0.5),
+  },
+  impactBadgeHeartSpan: {
+    position: 'relative',
+    left: '-2px',
+    top: '3px',
+  },
+  impactCopy: {
+    fontWeight: '400 !important',
+  },
+  doubleImpact: {
+    fontWeight: '400 !important',
+  },
 }))
 
 const SearchSelect = ({
@@ -100,6 +128,7 @@ const SearchSelect = ({
   userSearchEngine,
   searchEngines,
   open,
+  yahooPaidSearchRewardOptIn,
 }) => {
   const classes = useStyles()
   const [isOpen, setIsOpen] = useState(open)
@@ -127,6 +156,13 @@ const SearchSelect = ({
   const searchEnginesSorted = [...searchEngines.edges].sort(
     (a, b) => a.node.rank - b.node.rank
   )
+
+  const charitableEngineClickHandler = useCallback(() => {
+    if (!yahooPaidSearchRewardOptIn) {
+      onMoreInfoClick()
+    }
+  }, [onMoreInfoClick, yahooPaidSearchRewardOptIn])
+
   const searchEngineButtonComponents = searchEnginesSorted.map(
     (searchEngineNode) => (
       <ToggleButton
@@ -137,35 +173,45 @@ const SearchSelect = ({
         }}
         className={classes.searchToggleButton}
         value={searchEngineNode.node.engineId}
+        onClick={
+          searchEngineNode.node.isCharitable
+            ? charitableEngineClickHandler
+            : () => {}
+        }
       >
         <CheckIcon className={classes.checkIcon} />
-        <Typography>{searchEngineNode.node.name}</Typography>
+        <div className={classes.toggleButtonText}>
+          <Typography align="left">{searchEngineNode.node.name}</Typography>
+          {searchEngineNode.node.isCharitable && yahooPaidSearchRewardOptIn && (
+            <div className={classes.impactBadge}>
+              <div className={classes.impactBadgeHeart}>
+                <span className={classes.impactBadgeHeartSpan}>❤️</span>
+              </div>
+              <Typography className={classes.doubleImpact} variant="body1">
+                2x Impact
+              </Typography>
+            </div>
+          )}
+          {searchEngineNode.node.isCharitable && !yahooPaidSearchRewardOptIn && (
+            <Typography align="left" className={classes.linkTextWrapper}>
+              <span className={classes.impactLinkText}>Earn More Impact </span>
+              ❤️
+            </Typography>
+          )}
+          {searchEngineNode.node.isCharitable ? (
+            <Typography
+              className={classes.impactCopy}
+              variant="body2"
+              align="left"
+            >
+              Earn impact and do more good with every search you make on the new
+              tab page
+            </Typography>
+          ) : null}
+        </div>
       </ToggleButton>
     )
   )
-  const indexOfCharitableSearchEngine = searchEnginesSorted.findIndex(
-    (engineNode) => engineNode.node.isCharitable
-  )
-  if (indexOfCharitableSearchEngine >= 0) {
-    searchEngineButtonComponents.splice(
-      indexOfCharitableSearchEngine + 1,
-      0,
-      <Button
-        key="moreInfo"
-        className={classes.impactButtonText}
-        classes={{
-          root: classes.moreInfoButton,
-          text: classes.moreInfoText,
-        }}
-        variant="text"
-        onClick={onMoreInfoClick}
-      >
-        <Typography className={classes.linkTextWrapper}>
-          <span className={classes.impactLinkText}>Earn More Impact</span> ❤️
-        </Typography>
-      </Button>
-    )
-  }
   return (
     <DashboardPopover
       anchorOrigin={{
@@ -232,6 +278,7 @@ SearchSelect.propTypes = {
       })
     ),
   }),
+  yahooPaidSearchRewardOptIn: PropTypes.bool.isRequired,
 }
 
 SearchSelect.defaultProps = {
