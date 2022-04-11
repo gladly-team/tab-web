@@ -25,6 +25,7 @@ export default createFragmentContainer(SearchInput, {
         inputPrompt
         searchUrl
       }
+      yahooPaidSearchRewardOptIn
     }
   `,
 })

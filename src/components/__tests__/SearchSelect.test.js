@@ -4,7 +4,6 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import SetUserSearchEngineMutation from 'src/utils/mutations/SetUserSearchEngineMutation'
 import ToggleButton from '@material-ui/lab/ToggleButton'
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import Button from '@material-ui/core/Button'
 import { act } from 'react-dom/test-utils'
 import Typography from '@material-ui/core/Typography'
@@ -59,6 +58,7 @@ const getMockProps = () => ({
     ],
   },
   onSearchEngineSwitch: jest.fn(),
+  yahooPaidSearchRewardOptIn: false,
 })
 
 afterEach(() => {
@@ -97,7 +97,7 @@ describe('SearchSelect', () => {
     )
   })
 
-  it('renders button if has charitable engine and onMoreInfoClick is run on link click', () => {
+  it('renders more info link in charitable engine button if has charitable engine and onMoreInfoClick is run on click', () => {
     const SearchSelect = require('src/components/SearchSelect').default
     const mockProps = getMockProps()
     mockProps.searchEngines.edges.push({
@@ -113,16 +113,19 @@ describe('SearchSelect', () => {
     const wrapper = mount(<SearchSelect {...mockProps} />)
 
     // assert clicking button calls onMoreInfoClick
-    const buttons = wrapper.find(Button)
-    expect(buttons).toHaveLength(1)
-    const getMoreInfoButton = buttons.first()
-    getMoreInfoButton.simulate('click')
+    const charitableButton = wrapper.find(ToggleButton).first()
+    charitableButton.simulate('click')
     expect(mockProps.onMoreInfoClick).toHaveBeenCalled()
+
+    expect(mockProps.onSearchEngineSwitch).toHaveBeenCalledWith(
+      'SearchForACause'
+    )
   })
 
-  it('renders more info link after charitable engine', () => {
+  it('renders impact badge in charitable engine button if opted in to impact search, and changes engine if clicked', () => {
     const SearchSelect = require('src/components/SearchSelect').default
     const mockProps = getMockProps()
+    mockProps.yahooPaidSearchRewardOptIn = true
     mockProps.searchEngines.edges.push({
       node: {
         name: 'Search for a Cause',
@@ -133,16 +136,19 @@ describe('SearchSelect', () => {
         inputPrompt: 'Search for a Cause',
       },
     })
-    const wrapper = shallow(<SearchSelect {...mockProps} />)
+    const wrapper = mount(<SearchSelect {...mockProps} />)
 
-    // assert more info is displayed after
-    const toggleButtonGroupChildren = wrapper
-      .find(ToggleButtonGroup)
-      .first()
-      .children()
-    expect(
-      toggleButtonGroupChildren.at(1).find(Typography).first().text()
-    ).toContain('Earn More Impact')
+    const charitableButton = wrapper.find(ToggleButton).first()
+    expect(charitableButton.find(Typography).at(1).text()).toEqual('2x Impact')
+
+    charitableButton.simulate('click')
+    expect(SetUserSearchEngineMutation).toHaveBeenCalledWith(
+      mockProps.userId,
+      'SearchForACause'
+    )
+    expect(mockProps.onSearchEngineSwitch).toHaveBeenCalledWith(
+      'SearchForACause'
+    )
   })
 
   it('expect that users search engine is changed on click of a toggle button, and executes onSearchEngineSwitch', () => {
