@@ -369,6 +369,10 @@ const Index = ({ data: fallbackData }) => {
     }
   }, [causeId, email, growthbook, joined, userId])
 
+  // TODO: remove this feature after testing on dev.
+  // eslint-disable-next-line no-unused-vars
+  const testFeature = growthbook.feature('test-experiment')
+
   // Set the theme based on cause.
   const setTheme = useCustomTheming()
   useEffect(

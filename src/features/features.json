@@ -1,13 +1,13 @@
 {
-  "test-feature": {
+  "test-experiment": {
     "defaultValue": false,
     "rules": [
       {
+        "variations": [false, true],
+        "coverage": 1,
         "condition": {
-          "isTabTeamMember": true,
-          "env": "local"
-        },
-        "force": true
+          "v4BetaEnabled": true
+        }
       }
     ]
   },
