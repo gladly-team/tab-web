@@ -1,17 +1,1 @@
-{
-  "test-experiment": {
-    "defaultValue": false,
-    "rules": [
-      {
-        "variations": [false, true],
-        "coverage": 1,
-        "condition": {
-          "v4BetaEnabled": true
-        }
-      }
-    ]
-  },
-  "yahoo-search": {
-    "defaultValue": false
-  }
-}
+{}
