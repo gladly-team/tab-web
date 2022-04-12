@@ -26,7 +26,9 @@ const initSentry = () => {
 
       // Ignore network errors. Stop ignoring these in the future if we
       // more gracefully handle network failures.
+      /^A network error \(such as timeout, interrupted connection or unreachable host\)/,
       /^AbortError/,
+      /^Load failed$/, // Safari
       /^Network Error/,
       /^NetworkError when attempting to fetch resource.$/,
       /^TypeError: cancelled$/,
