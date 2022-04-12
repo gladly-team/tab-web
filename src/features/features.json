@@ -1,17 +1,1 @@
-{
-  "test-feature": {
-    "defaultValue": false,
-    "rules": [
-      {
-        "condition": {
-          "isTabTeamMember": true,
-          "env": "local"
-        },
-        "force": true
-      }
-    ]
-  },
-  "yahoo-search": {
-    "defaultValue": false
-  }
-}
+{}
