@@ -937,7 +937,7 @@ describe('index.js', () => {
     const mockProps = getMockProps()
     const wrapper = mount(<IndexPage {...mockProps} />)
 
-    expect(wrapper.find(SearchForACauseSellModal).exists()).toBe(false)
+    expect(wrapper.find(SearchForACauseSellModal).prop('open')).toBe(false)
     expect(
       wrapper.find(SearchInput).first().prop('setYahooPaidSearchRewardOptIn')
     ).toEqual(undefined)
@@ -954,9 +954,7 @@ describe('index.js', () => {
     const acceptButton = wrapper.find(Button).at(1)
     expect(acceptButton.text()).toEqual("Let's Do It!")
     acceptButton.simulate('click')
-    expect(
-      wrapper.find(SearchInput).first().prop('setYahooPaidSearchRewardOptIn')
-    ).toEqual(true)
+    expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(true)
   })
 
   it('correctly handles set extra search impact flow when declining', () => {
@@ -965,7 +963,7 @@ describe('index.js', () => {
     const mockProps = getMockProps()
     const wrapper = mount(<IndexPage {...mockProps} />)
 
-    expect(wrapper.find(SearchForACauseSellModal).exists()).toBe(false)
+    expect(wrapper.find(SearchForACauseSellModal).prop('open')).toBe(false)
     expect(
       wrapper.find(SearchInput).first().prop('setYahooPaidSearchRewardOptIn')
     ).toEqual(undefined)
@@ -982,8 +980,6 @@ describe('index.js', () => {
     const acceptButton = wrapper.find(Button).at(0)
     expect(acceptButton.text()).toEqual("I don't want more impact")
     acceptButton.simulate('click')
-    expect(
-      wrapper.find(SearchInput).first().prop('setYahooPaidSearchRewardOptIn')
-    ).toEqual(undefined)
+    expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(false)
   })
 })

@@ -129,18 +129,12 @@ const SearchSelect = ({
   searchEngines,
   open,
   yahooPaidSearchRewardOptIn,
-  setSearchEngine,
 }) => {
   const classes = useStyles()
   const [isOpen, setIsOpen] = useState(open)
   const [currentSearchEngine, setCurrentSearchEngine] = useState(
     userSearchEngine.engineId
   )
-
-  useEffect(() => {
-    setCurrentSearchEngine(setSearchEngine || userSearchEngine.engineId)
-  }, [setSearchEngine, userSearchEngine])
-
   const setCurrentSearchEngineHandler = useCallback(
     async (_event, newSearchEngine) => {
       if (newSearchEngine !== null) {
@@ -286,7 +280,6 @@ SearchSelect.propTypes = {
     ),
   }),
   yahooPaidSearchRewardOptIn: PropTypes.bool.isRequired,
-  setSearchEngine: PropTypes.string,
 }
 
 SearchSelect.defaultProps = {
@@ -296,7 +289,6 @@ SearchSelect.defaultProps = {
   onMoreInfoClick: () => {},
   onSearchEngineSwitch: () => {},
   searchEngines: [],
-  setSearchEngine: undefined,
 }
 
 export default SearchSelect

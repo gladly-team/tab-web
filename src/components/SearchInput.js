@@ -10,6 +10,7 @@ import { windowOpenTop } from 'src/utils/navigation'
 import LogSearchMutation from 'src/utils/mutations/LogSearchMutation'
 import Tooltip from '@material-ui/core/Tooltip'
 import CloseIcon from '@material-ui/icons/Close'
+import { Typography } from '@material-ui/core'
 import SearchSelect from './SearchSelect'
 
 const searchBoxBorderColor = '#ced4da'
@@ -35,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
   inputStyle: {
     padding: '12px 16px',
   },
+  popper: {
+    zIndex: '100000 !important',
+  },
   tooltip: {
     maxWidth: 'unset',
     pointerEvents: 'auto',
@@ -58,15 +62,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const SearchInput = (props) => {
-  const {
-    className,
-    userId,
-    app,
-    user,
-    tooltip,
-    onSearchSelectMoreInfoClick,
-    setYahooPaidSearchRewardOptIn,
-  } = props
+  const { className, userId, app, user, tooltip, onSearchSelectMoreInfoClick } =
+    props
   const { searchEngine, yahooPaidSearchRewardOptIn } = user
   const { searchEngines } = app
   const [searchSelectOpen, setSearchSelectOpen] = useState(false)
@@ -75,10 +72,6 @@ const SearchInput = (props) => {
   const fullInputRef = React.createRef()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [currentSearchEngine, setCurrentSearchEngine] = useState(searchEngine)
-  const [
-    currentYahooPaidSearchRewardOptIn,
-    setCurrentYahooPaidSearchRewardOptIn,
-  ] = useState(yahooPaidSearchRewardOptIn)
   const [tooltipOpen, setTooltipOpen] = useState(tooltip)
 
   const getSearchEngine = useCallback(
@@ -91,19 +84,8 @@ const SearchInput = (props) => {
 
   useEffect(() => {
     setCurrentSearchEngine(searchEngine)
-    setCurrentYahooPaidSearchRewardOptIn(
-      setYahooPaidSearchRewardOptIn !== undefined
-        ? setYahooPaidSearchRewardOptIn
-        : yahooPaidSearchRewardOptIn
-    )
     setTooltipOpen(tooltip)
-  }, [
-    searchEngine,
-    getSearchEngine,
-    setYahooPaidSearchRewardOptIn,
-    yahooPaidSearchRewardOptIn,
-    tooltip,
-  ])
+  }, [searchEngine, getSearchEngine, yahooPaidSearchRewardOptIn, tooltip])
 
   const onSearch = () => {
     const query = searchInputRef.current.value
@@ -160,12 +142,13 @@ const SearchInput = (props) => {
                 classes={{
                   arrow: classes.arrow,
                   tooltip: classes.tooltip,
+                  popper: classes.popper,
                 }}
                 placement="top"
                 open={tooltipOpen}
                 arrow
                 title={
-                  <span>
+                  <Typography variant="body2">
                     Great! You can always switch your search engine here later
                     on.
                     <IconButton
@@ -176,7 +159,7 @@ const SearchInput = (props) => {
                     >
                       <CloseIcon />
                     </IconButton>
-                  </span>
+                  </Typography>
                 }
               >
                 <IconButton
@@ -198,7 +181,7 @@ const SearchInput = (props) => {
         open={searchSelectOpen}
         onClose={onSearchSelectClose}
         onSearchEngineSwitch={onSwitchSearchEngine}
-        yahooPaidSearchRewardOptIn={currentYahooPaidSearchRewardOptIn}
+        yahooPaidSearchRewardOptIn={yahooPaidSearchRewardOptIn}
         onMoreInfoClick={onSearchSelectMoreInfoClick}
       />
     </div>
@@ -235,13 +218,11 @@ SearchInput.propTypes = {
     yahooPaidSearchRewardOptIn: PropTypes.bool,
   }).isRequired,
   onSearchSelectMoreInfoClick: PropTypes.func,
-  setYahooPaidSearchRewardOptIn: PropTypes.bool,
 }
 SearchInput.defaultProps = {
   className: '',
   tooltip: false,
   onSearchSelectMoreInfoClick: () => {},
-  setYahooPaidSearchRewardOptIn: undefined,
 }
 
 export default SearchInput

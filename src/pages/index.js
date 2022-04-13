@@ -395,13 +395,12 @@ const Index = ({ data: fallbackData }) => {
   // SetHasViewedIntroFlowMutation
   const [justFinishedIntroFlow, setJustFinishedIntroFlow] = useState(false)
 
-  const [showSFACSellModalMode, setShowSFACSellModalMode] = useState(false)
+  const [showSFACSellModalMode, setShowSFACSellModalMode] = useState(null)
   const onSearchSelectMoreInfoClick = () => {
     setShowSFACSellModalMode('hard-sell')
   }
-  const [yahooPaidSearchRewardOptIn, setYahooPaidSearchRewardOptIn] =
-    useState(undefined)
-  const onSFACSellModalAccept = () => setYahooPaidSearchRewardOptIn(true)
+  const [showSearchInputTooltip, setSearchInputTooltip] = useState(false)
+  const onSFACSellModalAccept = () => setSearchInputTooltip(true)
 
   // set the causeId in local storage for tab ads
   useEffect(() => {
@@ -554,11 +553,11 @@ const Index = ({ data: fallbackData }) => {
                     progress={Math.floor((tabCount / tabGoal) * 100)}
                   />
                 ) : null}
-                {showSFACSellModalMode ? (
+                {userGlobalId ? (
                   <SearchForACauseSellModal
-                    userId={user.id}
+                    userId={userGlobalId}
                     hardSell={showSFACSellModalMode === 'hard-sell'}
-                    open={showSFACSellModalMode !== false}
+                    open={showSFACSellModalMode !== null}
                     onAccept={onSFACSellModalAccept}
                     onClose={() => setShowSFACSellModalMode(null)}
                   />
@@ -665,8 +664,7 @@ const Index = ({ data: fallbackData }) => {
                 app={app}
                 user={user}
                 onSearchSelectMoreInfoClick={onSearchSelectMoreInfoClick}
-                setYahooPaidSearchRewardOptIn={yahooPaidSearchRewardOptIn}
-                tooltip={yahooPaidSearchRewardOptIn}
+                tooltip={showSearchInputTooltip}
               />
             </div>
           </div>
