@@ -13,7 +13,7 @@ const getMockProps = () => ({
   user: {
     features: [
       {
-        featureName: 'money-raised-exclamation-point',
+        featureName: 'money-raised-exclamation-point-v2',
         variation: 'false',
       },
     ],
