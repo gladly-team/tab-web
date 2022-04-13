@@ -7,7 +7,7 @@ import { get } from 'lodash/object'
 import DashboardPopover from 'src/components/DashboardPopover'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import { MONEY_RAISED_EXCLAMATION_POINT } from 'src/utils/experiments'
+import { MONEY_RAISED_EXCLAMATION_POINT_V2 } from 'src/utils/experiments'
 
 const useStyles = makeStyles((theme) => ({
   currencyText: { color: get(theme, 'palette.backgroundContrastText.main') },
@@ -52,7 +52,7 @@ const MoneyRaised = (props) => {
   const showExclamationPoint =
     (
       features.find(
-        (feature) => feature.featureName === MONEY_RAISED_EXCLAMATION_POINT
+        (feature) => feature.featureName === MONEY_RAISED_EXCLAMATION_POINT_V2
       ) || {}
     ).variation === 'true' || false
 
