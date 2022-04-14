@@ -49,6 +49,8 @@ const getMockProps = () => ({
     yahooPaidSearchRewardOptIn: true,
   },
   tooltip: true,
+  onSearchSelectMoreInfoClick: jest.fn(),
+  onSearchEngineSwitch: jest.fn(),
 })
 
 // TODO: more tests
@@ -149,5 +151,16 @@ describe('SearchInput component', () => {
     expect(searchSelect.prop('yahooPaidSearchRewardOptIn')).toEqual(
       mockProps.user.yahooPaidSearchRewardOptIn
     )
+  })
+
+  it('expect default onSearchSelectMoreInfoClick not to throw', async () => {
+    expect.assertions(1)
+    const SearchInput = require('src/components/SearchInput').default
+    const mockProps = getMockProps()
+    delete mockProps.onSearchSelectMoreInfoClick
+    const wrapper = mount(<SearchInput {...mockProps} />)
+
+    const searchSelect = wrapper.find(SearchSelect).first()
+    expect(() => searchSelect.prop('onMoreInfoClick')()).not.toThrow()
   })
 })

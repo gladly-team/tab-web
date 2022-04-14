@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Input from '@material-ui/core/Input'
@@ -10,6 +10,7 @@ import { windowOpenTop } from 'src/utils/navigation'
 import LogSearchMutation from 'src/utils/mutations/LogSearchMutation'
 import Tooltip from '@material-ui/core/Tooltip'
 import CloseIcon from '@material-ui/icons/Close'
+import { Typography } from '@material-ui/core'
 import SearchSelect from './SearchSelect'
 
 const searchBoxBorderColor = '#ced4da'
@@ -35,10 +36,18 @@ const useStyles = makeStyles((theme) => ({
   inputStyle: {
     padding: '12px 16px',
   },
+  popper: {
+    zIndex: '100000 !important',
+  },
   tooltip: {
     maxWidth: 'unset',
     pointerEvents: 'auto',
     backgroundColor: theme.palette.primary.main,
+  },
+  arrow: {
+    '&::before': {
+      backgroundColor: theme.palette.primary.main,
+    },
   },
   tooltipCloseButton: {
     padding: theme.spacing(0),
@@ -53,7 +62,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const SearchInput = (props) => {
-  const { className, userId, app, user, tooltip } = props
+  const { className, userId, app, user, tooltip, onSearchSelectMoreInfoClick } =
+    props
   const { searchEngine, yahooPaidSearchRewardOptIn } = user
   const { searchEngines } = app
   const [searchSelectOpen, setSearchSelectOpen] = useState(false)
@@ -62,6 +72,20 @@ const SearchInput = (props) => {
   const fullInputRef = React.createRef()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [currentSearchEngine, setCurrentSearchEngine] = useState(searchEngine)
+  const [tooltipOpen, setTooltipOpen] = useState(tooltip)
+
+  const getSearchEngine = useCallback(
+    (searchEngineId) =>
+      searchEngines.edges.find(
+        (engine) => engine.node.engineId === searchEngineId
+      ).node,
+    [searchEngines]
+  )
+
+  useEffect(() => {
+    setCurrentSearchEngine(searchEngine)
+    setTooltipOpen(tooltip)
+  }, [searchEngine, getSearchEngine, yahooPaidSearchRewardOptIn, tooltip])
 
   const onSearch = () => {
     const query = searchInputRef.current.value
@@ -77,10 +101,7 @@ const SearchInput = (props) => {
   }
 
   const onSwitchSearchEngine = (newSearchEngineId) => {
-    const newSearchEngine = searchEngines.edges.find(
-      (engine) => engine.node.engineId === newSearchEngineId
-    ).node
-    setCurrentSearchEngine(newSearchEngine)
+    setCurrentSearchEngine(getSearchEngine(newSearchEngineId))
   }
 
   const onSearchSelectOpen = () => {
@@ -91,8 +112,6 @@ const SearchInput = (props) => {
   const onSearchSelectClose = () => {
     setSearchSelectOpen(false)
   }
-
-  const [tooltipOpen, setTooltipOpen] = useState(tooltip)
 
   return (
     <div className={className}>
@@ -121,12 +140,15 @@ const SearchInput = (props) => {
               </IconButton>
               <Tooltip
                 classes={{
+                  arrow: classes.arrow,
                   tooltip: classes.tooltip,
+                  popper: classes.popper,
                 }}
                 placement="top"
                 open={tooltipOpen}
+                arrow
                 title={
-                  <span>
+                  <Typography variant="body2">
                     Great! You can always switch your search engine here later
                     on.
                     <IconButton
@@ -137,7 +159,7 @@ const SearchInput = (props) => {
                     >
                       <CloseIcon />
                     </IconButton>
-                  </span>
+                  </Typography>
                 }
               >
                 <IconButton
@@ -160,6 +182,7 @@ const SearchInput = (props) => {
         onClose={onSearchSelectClose}
         onSearchEngineSwitch={onSwitchSearchEngine}
         yahooPaidSearchRewardOptIn={yahooPaidSearchRewardOptIn}
+        onMoreInfoClick={onSearchSelectMoreInfoClick}
       />
     </div>
   )
@@ -194,10 +217,12 @@ SearchInput.propTypes = {
     }),
     yahooPaidSearchRewardOptIn: PropTypes.bool,
   }).isRequired,
+  onSearchSelectMoreInfoClick: PropTypes.func,
 }
 SearchInput.defaultProps = {
   className: '',
   tooltip: false,
+  onSearchSelectMoreInfoClick: () => {},
 }
 
 export default SearchInput

@@ -7,7 +7,6 @@ import { mount, shallow } from 'enzyme'
 import { Button, Typography } from '@material-ui/core'
 import CreateSearchEnginePromptLogMutation from 'src/utils/mutations/CreateSearchEnginePromptLogMutation'
 import Modal from '@material-ui/core/Modal'
-import { act } from 'react-dom/test-utils'
 
 jest.mock('src/utils/mutations/SetYahooSearchOptInMutation')
 jest.mock('src/utils/mutations/SetUserSearchEngineMutation')
@@ -23,6 +22,8 @@ const getMockProps = () => ({
   onAccept: jest.fn(),
   onDecline: jest.fn(),
   anchorEl: document.createElement('button'),
+  onClose: jest.fn(),
+  open: true,
 })
 
 describe('SearchForACauseSellModal component', () => {
@@ -35,7 +36,7 @@ describe('SearchForACauseSellModal component', () => {
     }).not.toThrow()
   })
 
-  it('calls mutation, handler and closes on Accept', () => {
+  it('calls mutation, handler and calls onClose on Accept', () => {
     const SearchForACauseSellModal =
       require('src/components/SearchForACauseSellModal').default
     const mockProps = getMockProps()
@@ -46,7 +47,7 @@ describe('SearchForACauseSellModal component', () => {
     acceptButton.simulate('click')
 
     expect(mockProps.onAccept).toHaveBeenCalled()
-    expect(wrapper.find(Modal).first().prop('open')).toEqual(false)
+    expect(mockProps.onClose).toHaveBeenCalled()
     expect(SetUserSearchEngineMutation).toHaveBeenCalledWith(
       mockProps.userId,
       'SearchForACause'
@@ -67,13 +68,13 @@ describe('SearchForACauseSellModal component', () => {
       require('src/components/SearchForACauseSellModal').default
     const mockProps = getMockProps()
     const wrapper = mount(<SearchForACauseSellModal {...mockProps} />)
-    expect(wrapper.find(Modal).first().prop('open')).toEqual(true)
     const declineButton = wrapper.find(Button).at(0)
     expect(declineButton.text()).toEqual("I don't want more impact")
     declineButton.simulate('click')
 
     expect(mockProps.onDecline).toHaveBeenCalled()
-    expect(wrapper.find(Modal).first().prop('open')).toEqual(false)
+
+    expect(mockProps.onClose).toHaveBeenCalled()
     expect(CreateSearchEnginePromptLogMutation).toHaveBeenCalledWith(
       mockProps.userId,
       'SearchForACause',
@@ -87,6 +88,7 @@ describe('SearchForACauseSellModal component', () => {
     const mockProps = getMockProps()
     delete mockProps.onDecline
     delete mockProps.onAccept
+    delete mockProps.onClose
 
     let wrapper = mount(<SearchForACauseSellModal {...mockProps} />)
     const declineButton = wrapper.find(Button).at(0)
@@ -117,16 +119,16 @@ describe('SearchForACauseSellModal component', () => {
     )
   })
 
-  it('calls onClose when modal should close', () => {
+  it('forwards open prop to Modal', () => {
     const SearchForACauseSellModal =
       require('src/components/SearchForACauseSellModal').default
     const mockProps = getMockProps()
 
-    const wrapper = mount(<SearchForACauseSellModal {...mockProps} />)
-    act(() => {
-      wrapper.find(Modal).first().prop('onClose')()
-    })
-    wrapper.update()
-    expect(wrapper.find(Modal).first().prop('open')).toEqual(false)
+    let wrapper = mount(<SearchForACauseSellModal {...mockProps} />)
+    expect(wrapper.find(Modal).at(0).prop('open')).toEqual(true)
+
+    mockProps.open = false
+    wrapper = mount(<SearchForACauseSellModal {...mockProps} />)
+    expect(wrapper.find(Modal).at(0).prop('open')).toEqual(false)
   })
 })

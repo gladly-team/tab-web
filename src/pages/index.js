@@ -73,6 +73,7 @@ import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
 import { validateAttributesObject } from 'src/utils/growthbook'
 import SearchInputContainer from 'src/components/SearchInputContainer'
+import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -394,6 +395,13 @@ const Index = ({ data: fallbackData }) => {
   // SetHasViewedIntroFlowMutation
   const [justFinishedIntroFlow, setJustFinishedIntroFlow] = useState(false)
 
+  const [showSFACSellModalMode, setShowSFACSellModalMode] = useState(null)
+  const onSearchSelectMoreInfoClick = () => {
+    setShowSFACSellModalMode('hard-sell')
+  }
+  const [showSearchInputTooltip, setSearchInputTooltip] = useState(false)
+  const onSFACSellModalAccept = () => setSearchInputTooltip(true)
+
   // set the causeId in local storage for tab ads
   useEffect(() => {
     localStorageMgr.setItem(STORAGE_NEW_USER_CAUSE_ID, causeId)
@@ -545,6 +553,15 @@ const Index = ({ data: fallbackData }) => {
                     progress={Math.floor((tabCount / tabGoal) * 100)}
                   />
                 ) : null}
+                {userGlobalId ? (
+                  <SearchForACauseSellModal
+                    userId={userGlobalId}
+                    hardSell={showSFACSellModalMode === 'hard-sell'}
+                    open={showSFACSellModalMode !== null}
+                    onAccept={onSFACSellModalAccept}
+                    onClose={() => setShowSFACSellModalMode(null)}
+                  />
+                ) : null}
                 {individualImpactEnabled ? (
                   <UserImpactContainer
                     userId={userGlobalId}
@@ -646,6 +663,8 @@ const Index = ({ data: fallbackData }) => {
                 className={classes.searchBar}
                 app={app}
                 user={user}
+                onSearchSelectMoreInfoClick={onSearchSelectMoreInfoClick}
+                tooltip={showSearchInputTooltip}
               />
             </div>
           </div>

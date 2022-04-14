@@ -160,8 +160,9 @@ const SearchSelect = ({
   const charitableEngineClickHandler = useCallback(() => {
     if (!yahooPaidSearchRewardOptIn) {
       onMoreInfoClick()
+      onClose()
     }
-  }, [onMoreInfoClick, yahooPaidSearchRewardOptIn])
+  }, [onMoreInfoClick, onClose, yahooPaidSearchRewardOptIn])
 
   const searchEngineButtonComponents = searchEnginesSorted.map(
     (searchEngineNode) => (
