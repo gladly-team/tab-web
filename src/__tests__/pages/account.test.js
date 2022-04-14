@@ -630,7 +630,7 @@ describe('account.js: CMP privacy management', () => {
 })
 
 describe('account.js: toggle to switch cause', () => {
-  it('displays switch cause toggle for internal users', () => {
+  it('displays switch cause toggle for internal users', async () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
@@ -649,11 +649,15 @@ describe('account.js: toggle to switch cause', () => {
       },
     })
     const wrapper = mount(<AccountPage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+      wrapper.update()
+    })
     const switchCause = wrapper.find('[data-test-id="switch-cause"]')
     expect(switchCause.exists()).toBe(true)
   })
 
-  it('toggling to other cause updates user cause', () => {
+  it('toggling to other cause updates user cause', async () => {
     expect.assertions(1)
     const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
@@ -685,19 +689,27 @@ describe('account.js: toggle to switch cause', () => {
     })
     const wrapper = mount(<AccountPage {...mockProps} />)
     wrapper.find(ToggleButton).at(1).simulate('click')
+    await act(async () => {
+      await flushAllPromises()
+      wrapper.update()
+    })
     expect(SetUserCauseMutation).toHaveBeenCalledWith({
       causeId: 'SGa6zohkY',
       userId: 'some-user-id',
     })
   })
 
-  it('renders icons and tooltips for the available causes', () => {
+  it('renders icons and tooltips for the available causes', async () => {
     expect.assertions(5)
     const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     const defaultMockData = getMockDataResponse()
     useData.mockReturnValue({ data: defaultMockData })
     const wrapper = mount(<AccountPage {...mockProps} />)
+    await act(async () => {
+      await flushAllPromises()
+      wrapper.update()
+    })
     expect(wrapper.find(ToggleButton).length).toEqual(2)
     expect(
       wrapper.find(ToggleButton).at(0).find(CauseIcon).prop('icon')
