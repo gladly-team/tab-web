@@ -33,7 +33,7 @@ describe('awaitTimeLimit', () => {
   })
 
   it('rejects with a timeout when the promise does not resolve before the timeout', async () => {
-    expect.assertions(1)
+    expect.assertions(2)
     const asyncFunc = () =>
       new Promise((resolve) => {
         setTimeout(() => {
@@ -43,11 +43,12 @@ describe('awaitTimeLimit', () => {
 
     let err
     const prom = asyncFunc()
-    const resultPromise = awaitTimeLimit(prom, 50).catch((e) => {
+    awaitTimeLimit(prom, 50).catch((e) => {
       err = e
     })
     jest.advanceTimersByTime(51)
     await flushAllPromises()
     expect(err).toEqual(new Error('Awaited promise timed out.'))
+    expect(err.code).toEqual('AWAIT_TIMED_OUT')
   })
 })

@@ -1,3 +1,5 @@
+import { AwaitedPromiseTimeout } from 'src/utils/errors'
+
 /**
  * Await a Promise for up to a specified amount of time, then reject if
  * the Promise has not resolved.
@@ -17,7 +19,7 @@ const awaitTimeLimit = async (promiseToAwait, timeLimitMs) =>
         reject(err)
       })
     setTimeout(() => {
-      reject(new Error('Awaited promise timed out.'))
+      reject(new AwaitedPromiseTimeout())
     }, timeLimitMs)
   })
 
