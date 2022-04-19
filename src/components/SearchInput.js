@@ -90,8 +90,7 @@ const SearchInput = (props) => {
     setTooltipOpen(tooltip)
   }, [searchEngine, getSearchEngine, yahooPaidSearchRewardOptIn, tooltip])
 
-  // TODO: useCallback
-  const onSearch = async () => {
+  const onSearch = useCallback(async () => {
     const query = searchInputRef.current.value
     const searchURL = currentSearchEngine.searchUrl.replace(
       /{\w+}/,
@@ -115,7 +114,7 @@ const SearchInput = (props) => {
       }
     }
     windowOpenTop(searchURL)
-  }
+  }, [userId, currentSearchEngine.searchUrl, searchInputRef])
 
   const onSwitchSearchEngine = (newSearchEngineId) => {
     setCurrentSearchEngine(getSearchEngine(newSearchEngineId))
