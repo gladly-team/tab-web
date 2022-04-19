@@ -6,10 +6,13 @@ import { IconButton } from '@material-ui/core'
 import { act } from 'react-dom/test-utils'
 import { windowOpenTop } from 'src/utils/navigation'
 import Tooltip from '@material-ui/core/Tooltip'
+import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
+import logger from 'src/utils/logger'
 import SearchSelect from '../SearchSelect'
 
 jest.mock('src/utils/mutations/LogSearchMutation')
 jest.mock('src/utils/navigation')
+jest.mock('src/utils/logger')
 
 const getMockProps = () => ({
   userId: 'abcdefghijklmno',
@@ -53,7 +56,18 @@ const getMockProps = () => ({
   onSearchEngineSwitch: jest.fn(),
 })
 
-// TODO: more tests
+beforeAll(() => {
+  jest.useFakeTimers()
+})
+
+beforeEach(() => {
+  LogSearchMutation.mockResolvedValue({})
+})
+
+afterEach(() => {
+  jest.clearAllMocks()
+})
+
 describe('SearchInput component', () => {
   it('renders without error', () => {
     const SearchInput = require('src/components/SearchInput').default
@@ -82,7 +96,7 @@ describe('SearchInput component', () => {
     expect(wrapper.find(SearchSelect).first().prop('open')).toEqual(false)
   })
 
-  it('onSearchEngineSwitch passed to SearchInput changes search engine', async () => {
+  it('onSearchEngineSwitch passed to SearchInput changes the search engine result page', async () => {
     expect.assertions(2)
     const SearchInput = require('src/components/SearchInput').default
     const mockProps = getMockProps()
@@ -98,13 +112,13 @@ describe('SearchInput component', () => {
     expect(wrapper.find(Input).first().prop('placeholder')).toEqual(
       'Search DuckDuckGo'
     )
-
     const searchTextField = wrapper.find(Input)
     searchTextField
       .find('input')
       .simulate('change', { target: { value: 'test' } })
     searchTextField.find('input').simulate('keypress', { key: 'Enter' })
 
+    await flushAllPromises()
     expect(windowOpenTop).toHaveBeenCalledWith('https://duckduckgo.com/?q=')
   })
 
@@ -121,6 +135,46 @@ describe('SearchInput component', () => {
       userIdGlobal: mockProps.userId,
       source: 'tab',
     })
+  })
+
+  it('calls a redirect to the search engine result page (and does not throw or log) if LogTabMutation takes a really long time to resolve', async () => {
+    expect.assertions(2)
+    const SearchInput = require('src/components/SearchInput').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<SearchInput {...mockProps} />)
+    LogSearchMutation.mockReturnValueOnce(new Promise(() => {})) // unresolved request
+    const searchTextField = wrapper.find(Input)
+    searchTextField
+      .find('input')
+      .simulate('change', { target: { value: 'test' } })
+    searchTextField.find('input').simulate('keypress', { key: 'Enter' })
+    await flushAllPromises()
+    jest.runAllTimers()
+    await flushAllPromises()
+    expect(windowOpenTop).toHaveBeenCalledWith(
+      'https://www.google.com/search?q='
+    )
+    expect(logger.error).not.toHaveBeenCalled()
+  })
+
+  it('calls a redirect to the search engine result page (and logs but does not throw) if LogTabMutation rejects', async () => {
+    expect.assertions(2)
+    const SearchInput = require('src/components/SearchInput').default
+    const mockProps = getMockProps()
+    const wrapper = mount(<SearchInput {...mockProps} />)
+    LogSearchMutation.mockRejectedValue(new Error('Uh oh.'))
+    const searchTextField = wrapper.find(Input)
+    searchTextField
+      .find('input')
+      .simulate('change', { target: { value: 'test' } })
+    searchTextField.find('input').simulate('keypress', { key: 'Enter' })
+    await flushAllPromises()
+    jest.runAllTimers()
+    await flushAllPromises()
+    expect(windowOpenTop).toHaveBeenCalledWith(
+      'https://www.google.com/search?q='
+    )
+    expect(logger.error).toHaveBeenCalledWith(new Error('Uh oh.'))
   })
 
   it('tooltip icon button closes tooltip', () => {

@@ -11,6 +11,9 @@ import LogSearchMutation from 'src/utils/mutations/LogSearchMutation'
 import Tooltip from '@material-ui/core/Tooltip'
 import CloseIcon from '@material-ui/icons/Close'
 import { Typography } from '@material-ui/core'
+import awaitTimeLimit from 'src/utils/awaitTimeLimit'
+import { AwaitedPromiseTimeout } from 'src/utils/errors'
+import logger from 'src/utils/logger'
 import SearchSelect from './SearchSelect'
 
 const searchBoxBorderColor = '#ced4da'
@@ -87,18 +90,31 @@ const SearchInput = (props) => {
     setTooltipOpen(tooltip)
   }, [searchEngine, getSearchEngine, yahooPaidSearchRewardOptIn, tooltip])
 
-  const onSearch = () => {
+  const onSearch = useCallback(async () => {
     const query = searchInputRef.current.value
     const searchURL = currentSearchEngine.searchUrl.replace(
       /{\w+}/,
       encodeURIComponent(query)
     )
-    LogSearchMutation({
-      userIdGlobal: userId,
-      source: 'tab',
-    })
+
+    // Log the search event but time-cap how long we wait to avoid a bad UX
+    // if the request hangs.
+    try {
+      const MS_TO_WAIT_FOR_LOG = 50
+      await awaitTimeLimit(
+        LogSearchMutation({
+          userIdGlobal: userId,
+          source: 'tab',
+        }),
+        MS_TO_WAIT_FOR_LOG
+      )
+    } catch (e) {
+      if (e.code !== AwaitedPromiseTimeout.code) {
+        logger.error(e)
+      }
+    }
     windowOpenTop(searchURL)
-  }
+  }, [userId, currentSearchEngine.searchUrl, searchInputRef])
 
   const onSwitchSearchEngine = (newSearchEngineId) => {
     setCurrentSearchEngine(getSearchEngine(newSearchEngineId))
