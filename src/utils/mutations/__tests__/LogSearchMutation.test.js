@@ -26,4 +26,25 @@ describe('LogSearchMutation', () => {
       },
     })
   })
+
+  it('returns the callMutation response', async () => {
+    expect.assertions(1)
+    const LogSearchMutation =
+      require('src/utils/mutations/LogSearchMutation').default
+    callMutation.mockResolvedValue({
+      user: {
+        id: 'some-id',
+        searches: 100,
+        searchesToday: 5,
+      },
+    })
+    const response = await LogSearchMutation('some-user-id', 'some-tab-id')
+    expect(response).toEqual({
+      user: {
+        id: 'some-id',
+        searches: 100,
+        searchesToday: 5,
+      },
+    })
+  })
 })

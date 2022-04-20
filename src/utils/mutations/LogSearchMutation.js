@@ -21,13 +21,12 @@ const mutation = graphql`
   }
 `
 
-const LogSearchMutation = (input) => {
+const LogSearchMutation = (input) =>
   callMutation({
     mutation,
     variables: {
       input,
     },
   })
-}
 
 export default LogSearchMutation
