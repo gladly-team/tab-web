@@ -35,6 +35,7 @@ import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
+import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -74,6 +75,7 @@ import InfoIcon from '@material-ui/icons/InfoOutlined'
 import { validateAttributesObject } from 'src/utils/growthbook'
 import SearchInputContainer from 'src/components/SearchInputContainer'
 import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
+import Notification from 'src/components/Notification'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -102,12 +104,16 @@ const useStyles = makeStyles((theme) => ({
   },
   topContainer: {
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'flex-end',
     alignContent: 'flex-start',
   },
+  topRightContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
   userMenuContainer: {
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-end',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -122,6 +128,16 @@ const useStyles = makeStyles((theme) => ({
     height: 20,
     width: 20,
     color: get(theme, 'palette.backgroundContrastText.main'),
+  },
+  notificationsContainer: {
+    position: 'relative',
+  },
+  notification: {
+    position: 'static',
+  },
+  notificationButtonsWrapper: {
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
   achievementsContainer: {
     alignSelf: 'flex-end',
@@ -513,6 +529,10 @@ const Index = ({ data: fallbackData }) => {
     setJustFinishedIntroFlow(true)
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
+
+  // TODO: feature flag
+  const showUserSurvey = true
+
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {showIntro ? (
@@ -540,73 +560,99 @@ const Index = ({ data: fallbackData }) => {
           ) : null}
           <div className={classes.fullContainer}>
             <div className={classes.topContainer}>
-              <div className={classes.userMenuContainer}>
-                {missionsFeatureEnabled ? (
-                  <MissionHubButton status={missionStatus} />
-                ) : (
-                  <InviteFriendsIconContainer user={user} />
-                )}
-                {missionsFeatureEnabled &&
-                (missionStatus === 'started' ||
-                  missionStatus === 'completed') ? (
-                  <SquadCounter
-                    progress={Math.floor((tabCount / tabGoal) * 100)}
-                  />
-                ) : null}
-                {userGlobalId ? (
-                  <SearchForACauseSellModal
-                    userId={userGlobalId}
-                    hardSell={showSFACSellModalMode === 'hard-sell'}
-                    open={showSFACSellModalMode !== null}
-                    onAccept={onSFACSellModalAccept}
-                    onClose={() => setShowSFACSellModalMode(null)}
-                  />
-                ) : null}
-                {individualImpactEnabled ? (
-                  <UserImpactContainer
-                    userId={userGlobalId}
-                    userImpact={userImpact}
-                    user={user}
-                    disabled={
-                      missionsFeatureEnabled &&
-                      (missionStatus === 'started' ||
-                        missionStatus === 'completed')
-                    }
-                  />
-                ) : (
-                  <Link to={aboutURL}>
-                    <IconButton>
-                      <InfoIcon
-                        className={clsx(
-                          classes.userMenuItem,
-                          classes.settingsIcon
-                        )}
-                      />
-                    </IconButton>
-                  </Link>
-                )}
-                <div className={classes.moneyRaisedContainer}>
-                  <Typography
-                    variant="h5"
-                    className={clsx(classes.userMenuItem)}
-                  >
-                    {growthbook.feature('test-feature').value ? (
-                      <p>Welcome to our site!</p>
-                    ) : null}
-                    <MoneyRaisedContainer app={app} user={user} />
-                  </Typography>
+              <div className={classes.topRightContainer}>
+                <div className={classes.userMenuContainer}>
+                  {missionsFeatureEnabled ? (
+                    <MissionHubButton status={missionStatus} />
+                  ) : (
+                    <InviteFriendsIconContainer user={user} />
+                  )}
+                  {missionsFeatureEnabled &&
+                  (missionStatus === 'started' ||
+                    missionStatus === 'completed') ? (
+                    <SquadCounter
+                      progress={Math.floor((tabCount / tabGoal) * 100)}
+                    />
+                  ) : null}
+                  {userGlobalId ? (
+                    <SearchForACauseSellModal
+                      userId={userGlobalId}
+                      hardSell={showSFACSellModalMode === 'hard-sell'}
+                      open={showSFACSellModalMode !== null}
+                      onAccept={onSFACSellModalAccept}
+                      onClose={() => setShowSFACSellModalMode(null)}
+                    />
+                  ) : null}
+                  {individualImpactEnabled ? (
+                    <UserImpactContainer
+                      userId={userGlobalId}
+                      userImpact={userImpact}
+                      user={user}
+                      disabled={
+                        missionsFeatureEnabled &&
+                        (missionStatus === 'started' ||
+                          missionStatus === 'completed')
+                      }
+                    />
+                  ) : (
+                    <Link to={aboutURL}>
+                      <IconButton>
+                        <InfoIcon
+                          className={clsx(
+                            classes.userMenuItem,
+                            classes.settingsIcon
+                          )}
+                        />
+                      </IconButton>
+                    </Link>
+                  )}
+                  <div className={classes.moneyRaisedContainer}>
+                    <Typography
+                      variant="h5"
+                      className={clsx(classes.userMenuItem)}
+                    >
+                      {growthbook.feature('test-feature').value ? (
+                        <p>Welcome to our site!</p>
+                      ) : null}
+                      <MoneyRaisedContainer app={app} user={user} />
+                    </Typography>
+                  </div>
+                  <div className={classes.settingsIconContainer}>
+                    <Link to={accountURL}>
+                      <IconButton>
+                        <SettingsIcon
+                          className={clsx(
+                            classes.userMenuItem,
+                            classes.settingsIcon
+                          )}
+                        />
+                      </IconButton>
+                    </Link>
+                  </div>
                 </div>
-                <div className={classes.settingsIconContainer}>
-                  <Link to={accountURL}>
-                    <IconButton>
-                      <SettingsIcon
-                        className={clsx(
-                          classes.userMenuItem,
-                          classes.settingsIcon
-                        )}
-                      />
-                    </IconButton>
-                  </Link>
+                <div className={classes.notificationsContainer}>
+                  {showUserSurvey ? (
+                    <Notification
+                      className={classes.notification}
+                      text={
+                        <div>
+                          <Typography variant="h6" align="center" gutterBottom>
+                            Share Your Feedback
+                          </Typography>
+                          <Typography variant="body2" gutterBottom>
+                            Share Your Feedback
+                          </Typography>
+                        </div>
+                      }
+                      buttons={
+                        <div className={classes.notificationButtonsWrapper}>
+                          <Link to="/">
+                            <Button variant="text">Take the Survey</Button>
+                          </Link>
+                        </div>
+                      }
+                    />
+                  ) : null}
                 </div>
               </div>
             </div>

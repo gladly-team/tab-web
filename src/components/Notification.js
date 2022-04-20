@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton'
 
 const useStylesNotification = makeStyles(() => ({
   root: {
+    // TODO: positioning and margin shouldn't be within a reusable component.
     position: 'absolute',
     padding: '15px',
     marginTop: '10px',
