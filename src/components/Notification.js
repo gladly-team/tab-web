@@ -1,4 +1,5 @@
 import React from 'react'
+import clsx from 'clsx'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
@@ -8,10 +9,8 @@ import IconButton from '@material-ui/core/IconButton'
 
 const useStylesNotification = makeStyles(() => ({
   root: {
-    position: 'absolute',
+    position: 'relative',
     padding: '15px',
-    marginTop: '10px',
-    marginRight: '15px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
@@ -29,6 +28,7 @@ const useStylesNotification = makeStyles(() => ({
 }))
 const Notification = ({
   buttonOnClick,
+  className,
   text,
   buttonText,
   includeButton,
@@ -39,10 +39,11 @@ const Notification = ({
   onClose,
   includeClose,
   buttons,
+  style,
 }) => {
   const classes = useStylesNotification()
   return open ? (
-    <Paper className={classes.root}>
+    <Paper className={clsx(classes.root, className)} style={style}>
       {includeClose && (
         <IconButton
           onClick={onClose}
@@ -82,46 +83,59 @@ const Notification = ({
     </Paper>
   ) : null
 }
+
 Notification.displayName = 'Notification'
 Notification.propTypes = {
   /**
-    Callback function that fires when user clicks main CTA button
-  */
+   * Deprecated, use "buttons" instead.
+   * Callback function that fires when user clicks main CTA button
+   */
   buttonOnClick: PropTypes.func,
 
   /**
-    HTML element centered in middle of notification responsible for body of notification texxt
-  */
+   * Class name applied to the root element.
+   */
+  className: PropTypes.string,
+
+  /**
+   * HTML element centered in middle of notification responsible for body of
+   * notification text.
+   */
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
 
   /**
-    the label on main button
-  */
+   * Deprecated, use "buttons" instead.
+   * the label on main button
+   */
   buttonText: PropTypes.string,
 
   /**
-    manually remove having any cta button
-  */
+   * Deprecated, use "buttons" instead.
+   * manually remove having any cta button
+   */
   includeButton: PropTypes.bool,
 
   /**
-    second button left of main cta that uses secondary color
-  */
+   * Deprecated, use "buttons" instead.
+   * second button left of main cta that uses secondary color
+   */
   includeSecondaryButton: PropTypes.bool,
 
   /**
-    secondary button label
-  */
+   * Deprecated, use "buttons" instead.
+   * secondary button label
+   */
   secondaryButtonText: PropTypes.string,
 
   /**
-    Callback function that fires when user clicks secondary button
-  */
+   * Deprecated, use "buttons" instead.
+   * Callback function that fires when user clicks secondary button
+   */
   secondaryButtonOnClick: PropTypes.func,
 
   /**
-    Buttons provided by client. Overrides button and secondaryButton
-  */
+   * Buttons provided by client. Overrides button and secondaryButton
+   */
   buttons: PropTypes.element,
 
   /**
@@ -138,17 +152,25 @@ Notification.propTypes = {
     the onClose callback invoked when close button is clicked
   */
   onClose: PropTypes.func,
+
+  /**
+   * Style applied to the root element.
+   */
+  // eslint-disable-next-line react/forbid-prop-types
+  style: PropTypes.object,
 }
 Notification.defaultProps = {
-  buttonText: '',
-  buttonOnClick: () => {},
+  buttonText: '', // deprecated, use "buttons"
+  buttonOnClick: () => {}, // deprecated, use "buttons"
   buttons: null,
-  includeButton: true,
-  includeSecondaryButton: false,
-  secondaryButtonText: '',
-  secondaryButtonOnClick: () => {},
-  open: true,
+  className: '',
+  includeButton: true, // deprecated, use "buttons"
   includeClose: false,
+  includeSecondaryButton: false, // deprecated, use "buttons"
+  secondaryButtonText: '', // deprecated, use "buttons"
+  secondaryButtonOnClick: () => {}, // deprecated, use "buttons"
   onClose: () => {},
+  open: true,
+  style: {},
 }
 export default Notification
