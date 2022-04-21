@@ -673,7 +673,7 @@ const Index = ({ data: fallbackData }) => {
                       }
                       buttons={
                         <div className={classes.notificationButtonsWrapper}>
-                          <Link to="/">
+                          <Link to="https://docs.google.com/forms/d/1e_EsXtjdfwjD4_OP0k5xIoPAQbezWLHakEIponVhleI/edit?usp=sharing">
                             <Button variant="contained" color="primary">
                               Take the Survey
                             </Button>
