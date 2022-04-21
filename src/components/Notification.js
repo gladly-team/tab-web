@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton'
 
 const useStylesNotification = makeStyles(() => ({
   root: {
+    position: 'relative',
     padding: '15px',
     display: 'flex',
     flexDirection: 'column',
