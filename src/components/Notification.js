@@ -17,6 +17,7 @@ const useStylesNotification = makeStyles(() => ({
   },
   buttons: {
     flexDirection: 'row',
+    alignSelf: 'flex-end',
   },
   buttonsProvided: {
     flexDirection: 'row',
