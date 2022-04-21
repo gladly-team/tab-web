@@ -101,6 +101,7 @@ const MissionNotification = ({
     case DISPLAY_MISSION_STARTED:
       return (
         <Notification
+          className={classes.notification}
           open={open}
           text={
             <div>
@@ -129,6 +130,7 @@ const MissionNotification = ({
     case DISPLAY_MISSION_COMPLETED:
       return (
         <Notification
+          className={classes.notification}
           open={open}
           text={
             <div>
