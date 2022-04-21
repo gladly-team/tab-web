@@ -13,7 +13,7 @@ const useStylesNotification = makeStyles(() => ({
     padding: '15px',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-end',
+    flex: 1,
   },
   buttons: {
     flexDirection: 'row',

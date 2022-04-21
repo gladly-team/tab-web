@@ -110,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
   topRightContainer: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
   },
   userMenuContainer: {
     alignSelf: 'flex-end',
@@ -129,11 +129,14 @@ const useStyles = makeStyles((theme) => ({
     width: 20,
     color: get(theme, 'palette.backgroundContrastText.main'),
   },
-  notificationsContainer: {
-    position: 'relative',
-  },
   notification: {
-    position: 'static',
+    marginTop: theme.spacing(0.5),
+  },
+  notificationsContainer: {
+    width: 350,
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingRight: theme.spacing(1),
   },
   notificationButtonsWrapper: {
     display: 'flex',
@@ -630,24 +633,33 @@ const Index = ({ data: fallbackData }) => {
                     </Link>
                   </div>
                 </div>
+                {/**
+                 * TODO: consolidate all notifications here to manage
+                 * visible state. Right now, these will overlay the ones
+                 * that appear via the UserImpact component.
+                 */}
                 <div className={classes.notificationsContainer}>
                   {showUserSurvey ? (
                     <Notification
                       className={classes.notification}
                       text={
                         <div>
-                          <Typography variant="h6" align="center" gutterBottom>
+                          <Typography variant="body1" gutterBottom>
                             Share Your Feedback
                           </Typography>
                           <Typography variant="body2" gutterBottom>
-                            Share Your Feedback
+                            We'd love to hear from you! Let us know how we can
+                            make Tab for a Cause even better with this 2-minute
+                            survey.
                           </Typography>
                         </div>
                       }
                       buttons={
                         <div className={classes.notificationButtonsWrapper}>
                           <Link to="/">
-                            <Button variant="text">Take the Survey</Button>
+                            <Button variant="contained" color="primary">
+                              Take the Survey
+                            </Button>
                           </Link>
                         </div>
                       }
