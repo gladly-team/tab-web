@@ -85,43 +85,50 @@ const Notification = ({
 Notification.displayName = 'Notification'
 Notification.propTypes = {
   /**
-    Callback function that fires when user clicks main CTA button
-  */
+   * Deprecated, use "buttons" instead.
+   * Callback function that fires when user clicks main CTA button
+   */
   buttonOnClick: PropTypes.func,
 
   /**
-    HTML element centered in middle of notification responsible for body of notification texxt
-  */
+   * HTML element centered in middle of notification responsible for body of
+   * notification text.
+   */
   text: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
 
   /**
-    the label on main button
-  */
+   * Deprecated, use "buttons" instead.
+   * the label on main button
+   */
   buttonText: PropTypes.string,
 
   /**
-    manually remove having any cta button
-  */
+   * Deprecated, use "buttons" instead.
+   * manually remove having any cta button
+   */
   includeButton: PropTypes.bool,
 
   /**
-    second button left of main cta that uses secondary color
-  */
+   * Deprecated, use "buttons" instead.
+   * second button left of main cta that uses secondary color
+   */
   includeSecondaryButton: PropTypes.bool,
 
   /**
-    secondary button label
-  */
+   * Deprecated, use "buttons" instead.
+   * secondary button label
+   */
   secondaryButtonText: PropTypes.string,
 
   /**
-    Callback function that fires when user clicks secondary button
-  */
+   * Deprecated, use "buttons" instead.
+   * Callback function that fires when user clicks secondary button
+   */
   secondaryButtonOnClick: PropTypes.func,
 
   /**
-    Buttons provided by client. Overrides button and secondaryButton
-  */
+   * Buttons provided by client. Overrides button and secondaryButton
+   */
   buttons: PropTypes.element,
 
   /**
@@ -140,15 +147,15 @@ Notification.propTypes = {
   onClose: PropTypes.func,
 }
 Notification.defaultProps = {
-  buttonText: '',
-  buttonOnClick: () => {},
+  buttonText: '', // deprecated, use "buttons"
+  buttonOnClick: () => {}, // deprecated, use "buttons"
   buttons: null,
-  includeButton: true,
-  includeSecondaryButton: false,
-  secondaryButtonText: '',
-  secondaryButtonOnClick: () => {},
-  open: true,
+  includeButton: true, // deprecated, use "buttons"
   includeClose: false,
+  includeSecondaryButton: false, // deprecated, use "buttons"
+  secondaryButtonText: '', // deprecated, use "buttons"
+  secondaryButtonOnClick: () => {}, // deprecated, use "buttons"
   onClose: () => {},
+  open: true,
 }
 export default Notification
