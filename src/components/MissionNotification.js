@@ -18,6 +18,11 @@ const useStyles = makeStyles(() => ({
   bold: {
     fontWeight: 'bold',
   },
+  notification: {
+    position: 'absolute',
+    marginTop: '10px',
+    marginRight: '15px',
+  },
 }))
 
 const MissionNotification = ({
@@ -67,6 +72,7 @@ const MissionNotification = ({
       const invite = pendingMissionInvites[0]
       return (
         <Notification
+          className={classes.notification}
           open={open}
           text={
             <div>
@@ -95,6 +101,7 @@ const MissionNotification = ({
     case DISPLAY_MISSION_STARTED:
       return (
         <Notification
+          className={classes.notification}
           open={open}
           text={
             <div>
@@ -123,6 +130,7 @@ const MissionNotification = ({
     case DISPLAY_MISSION_COMPLETED:
       return (
         <Notification
+          className={classes.notification}
           open={open}
           text={
             <div>

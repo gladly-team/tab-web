@@ -59,6 +59,11 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  notification: {
+    position: 'absolute',
+    marginTop: '10px',
+    marginRight: '15px',
+  },
 }))
 const UserImpact = ({ user, disabled }) => {
   const { cause, userImpact } = user
@@ -356,6 +361,7 @@ const UserImpact = ({ user, disabled }) => {
       </Dialog>
       {showReward && (
         <Notification
+          className={classes.notification}
           text={<Markdown>{impact.claimImpactSubtitle}</Markdown>}
           buttonText="Hooray!"
           buttonOnClick={handleClaimReward}
@@ -363,6 +369,7 @@ const UserImpact = ({ user, disabled }) => {
       )}
       {referralRewardNotificationOpen && (
         <Notification
+          className={classes.notification}
           text={
             <div>
               <Markdown>

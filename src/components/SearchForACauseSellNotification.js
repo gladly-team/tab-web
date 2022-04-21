@@ -42,6 +42,11 @@ const useStyles = makeStyles((theme) => ({
   buttonsWrapper: {
     display: 'flex',
   },
+  notification: {
+    position: 'absolute',
+    marginTop: '10px',
+    marginRight: '15px',
+  },
 }))
 const SearchForACauseSellNotification = ({
   onLearnMore,
@@ -70,6 +75,7 @@ const SearchForACauseSellNotification = ({
   return (
     <div className={classes.wrapper}>
       <Notification
+        className={classes.notification}
         open={open}
         text={
           <span className={classes.text}>

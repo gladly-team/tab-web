@@ -17,11 +17,42 @@ export default {
   },
 }
 
-const Template = (args) => <Notification {...args} />
+const Template = (args) => (
+  <div style={{ width: 350 }}>
+    <Notification {...args} />
+  </div>
+)
+
+const TemplateLarger = (args) => (
+  <div style={{ width: 450 }}>
+    <Notification {...args} />
+  </div>
+)
+
 export const basic = Template.bind({})
 basic.args = {
   text: (
-    <div style={{ width: '300px' }}>
+    <div>
+      <Typography gutterBottom>
+        You did it! You just turned your tab into a treat for a cat. Keep it up,
+        and do good with every new tab!
+      </Typography>
+    </div>
+  ),
+
+  buttonText: 'Hooray!',
+  buttonOnClick: () => {
+    // eslint-disable-next-line no-undef, no-alert
+    window.alert('you clicked')
+  },
+  onClose: () => {},
+  includeClose: false,
+}
+
+export const basicWider = TemplateLarger.bind({})
+basicWider.args = {
+  text: (
+    <div>
       <Typography gutterBottom>
         You did it! You just turned your tab into a treat for a cat. Keep it up,
         and do good with every new tab!
@@ -41,7 +72,7 @@ basic.args = {
 export const withCloseButton = Template.bind({})
 withCloseButton.args = {
   text: (
-    <div style={{ width: '300px' }}>
+    <div>
       <Typography variant="body2" style={{ fontWeight: 'bold' }} gutterBottom>
         Introducing Squads!
       </Typography>
@@ -61,7 +92,7 @@ withCloseButton.args = {
 export const withSecondaryButton = Template.bind({})
 withSecondaryButton.args = {
   text: (
-    <div style={{ width: '300px' }}>
+    <div>
       <Typography variant="body2" style={{ fontWeight: 'bold' }} gutterBottom>
         Introducing Squads!
       </Typography>
@@ -84,7 +115,7 @@ withSecondaryButton.args = {
 export const withCustomButton = Template.bind({})
 withCustomButton.args = {
   text: (
-    <div style={{ width: '300px' }}>
+    <div>
       <Typography variant="body2" style={{ fontWeight: 'bold' }} gutterBottom>
         Introducing Squads!
       </Typography>
