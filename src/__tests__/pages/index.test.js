@@ -5,7 +5,10 @@ import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { accountURL } from 'src/utils/urls'
 import { act } from 'react-dom/test-utils'
-import { STORAGE_NEW_USER_CAUSE_ID } from 'src/utils/constants'
+import {
+  STORAGE_NEW_USER_CAUSE_ID,
+  USER_SURVEY_2022_NOTIFICATION,
+} from 'src/utils/constants'
 import {
   showMockAchievements,
   showBackgroundImages,
@@ -37,6 +40,7 @@ import { validateAttributesObject } from 'src/utils/growthbook'
 import SearchInput from 'src/components/SearchInput'
 import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
 import { Button } from '@material-ui/core'
+import Notification from 'src/components/Notification'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -52,6 +56,7 @@ jest.mock('src/utils/adHelpers', () => ({
   incrementTabsOpenedToday: jest.fn(),
 }))
 jest.mock('src/utils/localstorage-mgr', () => ({
+  getItem: jest.fn(),
   setItem: jest.fn(),
 }))
 jest.mock('src/utils/mutations/SetHasViewedIntroFlowMutation', () => () => {})
@@ -981,5 +986,114 @@ describe('index.js', () => {
     expect(acceptButton.text()).toEqual("I don't want more impact")
     acceptButton.simulate('click')
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(false)
+  })
+})
+
+describe.only('index.js: hardcoded notifications', () => {
+  it('does not render the user survey notification if it is not enabled', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const notification = wrapper.find(Notification)
+    expect(notification.exists()).not.toBe(true)
+  })
+
+  it('does not render the user survey notification if it is enabled but user has already dismissed it', () => {
+    const IndexPage = require('src/pages/index').default
+    localStorageMgr.getItem.mockReturnValue('true')
+    const mockProps = getMockProps()
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const notification = wrapper.find(Notification)
+    expect(notification.exists()).not.toBe(true)
+  })
+
+  it('renders the user survey notification if user has not dismissed and it is enabled', async () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = {
+      ...getMockProps(),
+      data: {
+        ...getMockProps().data,
+        user: {
+          ...getMockProps().data.user,
+          id: 'someId',
+          username: 'someUsername',
+          notifications: [{ code: 'userSurvey2022' }],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    localStorageMgr.getItem.mockReturnValue(undefined)
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const notification = wrapper.find(Notification)
+    expect(notification.exists()).toBe(true)
+  })
+
+  it('hides the user survey notification if it ends after initial render (this avoids "+1" problem of page loads after campaign end)', async () => {
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = {
+      ...getMockProps(),
+      data: {
+        ...getMockProps().data,
+        user: {
+          ...getMockProps().data.user,
+          id: 'someId',
+          username: 'someUsername',
+          notifications: [{ code: 'userSurvey2022' }],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    localStorageMgr.getItem.mockReturnValue(undefined)
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const notification = wrapper.find(Notification)
+    expect(notification.exists()).toBe(true)
+
+    wrapper.setProps({
+      ...getMockProps(),
+      data: {
+        ...getMockProps().data,
+        user: {
+          ...getMockProps().data.user,
+          id: 'someId',
+          username: 'someUsername',
+          notifications: [], // ended
+        },
+      },
+    })
+    wrapper.update()
+    expect(wrapper.find(Notification).at(1).exists()).toBe(false)
+  })
+
+  it('dismissing the user survey notification updates local storage and dismisses notification', async () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = {
+      ...getMockProps(),
+      data: {
+        ...getMockProps().data,
+        user: {
+          ...getMockProps().data.user,
+          id: 'someId',
+          username: 'someUsername',
+          notifications: [{ code: 'userSurvey2022' }],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    localStorageMgr.getItem.mockReturnValue(undefined)
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const notification = wrapper.find(Notification)
+    notification.find(Button).simulate('click')
+    await act(async () => {
+      wrapper.update()
+      flushAllPromises()
+    })
+    expect(notification.exists()).toBe(true)
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      USER_SURVEY_2022_NOTIFICATION,
+      'true'
+    )
   })
 })
