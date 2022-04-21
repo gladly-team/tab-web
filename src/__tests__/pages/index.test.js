@@ -989,7 +989,7 @@ describe('index.js', () => {
   })
 })
 
-describe.only('index.js: hardcoded notifications', () => {
+describe('index.js: hardcoded notifications', () => {
   it('does not render the user survey notification if it is not enabled', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
@@ -1068,6 +1068,7 @@ describe.only('index.js: hardcoded notifications', () => {
   })
 
   it('dismissing the user survey notification updates local storage and dismisses notification', async () => {
+    expect.assertions(1)
     const IndexPage = require('src/pages/index').default
     const mockProps = {
       ...getMockProps(),
@@ -1085,12 +1086,11 @@ describe.only('index.js: hardcoded notifications', () => {
     localStorageMgr.getItem.mockReturnValue(undefined)
     const wrapper = mount(<IndexPage {...mockProps} />)
     const notification = wrapper.find(Notification)
-    notification.find(Button).simulate('click')
+    notification.find(IconButton).simulate('click') // close icon
     await act(async () => {
       wrapper.update()
       flushAllPromises()
     })
-    expect(notification.exists()).toBe(true)
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       USER_SURVEY_2022_NOTIFICATION,
       'true'

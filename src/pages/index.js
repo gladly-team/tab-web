@@ -67,7 +67,11 @@ import {
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
-import { CAT_CHARITY, STORAGE_NEW_USER_CAUSE_ID } from 'src/utils/constants'
+import {
+  CAT_CHARITY,
+  STORAGE_NEW_USER_CAUSE_ID,
+  USER_SURVEY_2022_NOTIFICATION,
+} from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
@@ -321,6 +325,9 @@ const getRelayQuery = async ({ AuthUser }) => {
             tabCount
             missionId
           }
+          notifications {
+            code
+          }
           ...MoneyRaisedContainer_user
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
@@ -367,13 +374,20 @@ const Index = ({ data: fallbackData }) => {
     }
   }, [])
   const { app, user, userImpact } = data || {}
-  const { id: userId, currentMission, email, cause, joined } = user || {}
+  const {
+    id: userId,
+    currentMission,
+    email,
+    cause,
+    joined,
+    notifications = [],
+  } = user || {}
   const { theme, onboarding, causeId, individualImpactEnabled } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
 
   const growthbook = useGrowthBook()
 
-  // Set Growthbook attributes when the user is defined/
+  // Set Growthbook attributes when the user is defined.
   useEffect(() => {
     if (userId) {
       const attributesObject = {
@@ -459,6 +473,12 @@ const Index = ({ data: fallbackData }) => {
     }
   }, [globalTabCount])
 
+  // Show the user survey if it's enabled and the user hasn't dismissed it.
+  const [showUserSurvey, setShowUserSurvey] = useState(
+    localStorageMgr.getItem(USER_SURVEY_2022_NOTIFICATION) !== 'true' &&
+      !!notifications.find((notif) => notif.code === 'userSurvey2022')
+  )
+
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
   // any data server-side, in which case we'll fetch data in
@@ -532,9 +552,6 @@ const Index = ({ data: fallbackData }) => {
     setJustFinishedIntroFlow(true)
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
-
-  // TODO: feature flag
-  const showUserSurvey = true
 
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
@@ -663,6 +680,14 @@ const Index = ({ data: fallbackData }) => {
                           </Link>
                         </div>
                       }
+                      includeClose
+                      onClose={() => {
+                        localStorageMgr.setItem(
+                          USER_SURVEY_2022_NOTIFICATION,
+                          'true'
+                        )
+                        setShowUserSurvey(false)
+                      }}
                     />
                   ) : null}
                 </div>
