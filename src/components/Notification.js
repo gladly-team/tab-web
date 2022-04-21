@@ -1,4 +1,5 @@
 import React from 'react'
+import clsx from 'clsx'
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
@@ -8,10 +9,7 @@ import IconButton from '@material-ui/core/IconButton'
 
 const useStylesNotification = makeStyles(() => ({
   root: {
-    position: 'absolute',
     padding: '15px',
-    marginTop: '10px',
-    marginRight: '15px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
@@ -29,6 +27,7 @@ const useStylesNotification = makeStyles(() => ({
 }))
 const Notification = ({
   buttonOnClick,
+  className,
   text,
   buttonText,
   includeButton,
@@ -39,10 +38,11 @@ const Notification = ({
   onClose,
   includeClose,
   buttons,
+  style,
 }) => {
   const classes = useStylesNotification()
   return open ? (
-    <Paper className={classes.root}>
+    <Paper className={clsx(classes.root, className)} style={style}>
       {includeClose && (
         <IconButton
           onClick={onClose}
@@ -82,6 +82,7 @@ const Notification = ({
     </Paper>
   ) : null
 }
+
 Notification.displayName = 'Notification'
 Notification.propTypes = {
   /**
@@ -89,6 +90,11 @@ Notification.propTypes = {
    * Callback function that fires when user clicks main CTA button
    */
   buttonOnClick: PropTypes.func,
+
+  /**
+   * Class name applied to the root element.
+   */
+  className: PropTypes.string,
 
   /**
    * HTML element centered in middle of notification responsible for body of
@@ -145,11 +151,18 @@ Notification.propTypes = {
     the onClose callback invoked when close button is clicked
   */
   onClose: PropTypes.func,
+
+  /**
+   * Style applied to the root element.
+   */
+  // eslint-disable-next-line react/forbid-prop-types
+  style: PropTypes.object,
 }
 Notification.defaultProps = {
   buttonText: '', // deprecated, use "buttons"
   buttonOnClick: () => {}, // deprecated, use "buttons"
   buttons: null,
+  className: '',
   includeButton: true, // deprecated, use "buttons"
   includeClose: false,
   includeSecondaryButton: false, // deprecated, use "buttons"
@@ -157,5 +170,6 @@ Notification.defaultProps = {
   secondaryButtonOnClick: () => {}, // deprecated, use "buttons"
   onClose: () => {},
   open: true,
+  style: {},
 }
 export default Notification
