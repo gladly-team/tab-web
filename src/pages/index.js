@@ -474,10 +474,16 @@ const Index = ({ data: fallbackData }) => {
   }, [globalTabCount])
 
   // Show the user survey if it's enabled and the user hasn't dismissed it.
-  const [showUserSurvey, setShowUserSurvey] = useState(
-    localStorageMgr.getItem(USER_SURVEY_2022_NOTIFICATION) !== 'true' &&
+  const [showUserSurvey, setShowUserSurvey] = useState(false)
+  useEffect(() => {
+    if (
+      isClientSide() &&
+      localStorageMgr.getItem(USER_SURVEY_2022_NOTIFICATION) !== 'true' &&
       !!notifications.find((notif) => notif.code === 'userSurvey2022')
-  )
+    ) {
+      setShowUserSurvey(true)
+    }
+  }, [notifications])
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch

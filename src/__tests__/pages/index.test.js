@@ -990,6 +990,10 @@ describe('index.js', () => {
 })
 
 describe('index.js: hardcoded notifications', () => {
+  beforeEach(() => {
+    isClientSide.mockReturnValue(true)
+  })
+
   it('does not render the user survey notification if it is not enabled', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
@@ -1007,6 +1011,28 @@ describe('index.js: hardcoded notifications', () => {
     const wrapper = mount(<IndexPage {...mockProps} />)
     const notification = wrapper.find(Notification)
     expect(notification.exists()).not.toBe(true)
+  })
+
+  it('does not render the user survey notification if not on the client side', async () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = {
+      ...getMockProps(),
+      data: {
+        ...getMockProps().data,
+        user: {
+          ...getMockProps().data.user,
+          id: 'someId',
+          username: 'someUsername',
+          notifications: [{ code: 'userSurvey2022' }],
+        },
+      },
+    }
+    isClientSide.mockReturnValue(false) // server side
+    useData.mockReturnValue({ data: mockProps.data })
+    localStorageMgr.getItem.mockReturnValue(undefined)
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const notification = wrapper.find(Notification)
+    expect(notification.exists()).toBe(false)
   })
 
   it('renders the user survey notification if user has not dismissed and it is enabled', async () => {
