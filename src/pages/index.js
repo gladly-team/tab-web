@@ -35,6 +35,7 @@ import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
+import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -66,7 +67,11 @@ import {
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
-import { CAT_CHARITY, STORAGE_NEW_USER_CAUSE_ID } from 'src/utils/constants'
+import {
+  CAT_CHARITY,
+  STORAGE_NEW_USER_CAUSE_ID,
+  USER_SURVEY_2022_NOTIFICATION,
+} from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
@@ -74,6 +79,7 @@ import InfoIcon from '@material-ui/icons/InfoOutlined'
 import { validateAttributesObject } from 'src/utils/growthbook'
 import SearchInputContainer from 'src/components/SearchInputContainer'
 import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
+import Notification from 'src/components/Notification'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -102,12 +108,16 @@ const useStyles = makeStyles((theme) => ({
   },
   topContainer: {
     display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'flex-end',
     alignContent: 'flex-start',
   },
+  topRightContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+  },
   userMenuContainer: {
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-end',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -122,6 +132,19 @@ const useStyles = makeStyles((theme) => ({
     height: 20,
     width: 20,
     color: get(theme, 'palette.backgroundContrastText.main'),
+  },
+  notification: {
+    marginTop: theme.spacing(0.5),
+  },
+  notificationsContainer: {
+    width: 350,
+    display: 'flex',
+    justifyContent: 'flex-end',
+    paddingRight: theme.spacing(1),
+  },
+  notificationButtonsWrapper: {
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
   achievementsContainer: {
     alignSelf: 'flex-end',
@@ -302,6 +325,9 @@ const getRelayQuery = async ({ AuthUser }) => {
             tabCount
             missionId
           }
+          notifications {
+            code
+          }
           ...MoneyRaisedContainer_user
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
@@ -348,13 +374,20 @@ const Index = ({ data: fallbackData }) => {
     }
   }, [])
   const { app, user, userImpact } = data || {}
-  const { id: userId, currentMission, email, cause, joined } = user || {}
+  const {
+    id: userId,
+    currentMission,
+    email,
+    cause,
+    joined,
+    notifications = [],
+  } = user || {}
   const { theme, onboarding, causeId, individualImpactEnabled } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
 
   const growthbook = useGrowthBook()
 
-  // Set Growthbook attributes when the user is defined/
+  // Set Growthbook attributes when the user is defined.
   useEffect(() => {
     if (userId) {
       const attributesObject = {
@@ -440,6 +473,18 @@ const Index = ({ data: fallbackData }) => {
     }
   }, [globalTabCount])
 
+  // Show the user survey if it's enabled and the user hasn't dismissed it.
+  const [showUserSurvey, setShowUserSurvey] = useState(false)
+  useEffect(() => {
+    if (
+      isClientSide() &&
+      localStorageMgr.getItem(USER_SURVEY_2022_NOTIFICATION) !== 'true' &&
+      !!notifications.find((notif) => notif.code === 'userSurvey2022')
+    ) {
+      setShowUserSurvey(true)
+    }
+  }, [notifications])
+
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
   // any data server-side, in which case we'll fetch data in
@@ -513,6 +558,7 @@ const Index = ({ data: fallbackData }) => {
     setJustFinishedIntroFlow(true)
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
+
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {showIntro ? (
@@ -540,73 +586,116 @@ const Index = ({ data: fallbackData }) => {
           ) : null}
           <div className={classes.fullContainer}>
             <div className={classes.topContainer}>
-              <div className={classes.userMenuContainer}>
-                {missionsFeatureEnabled ? (
-                  <MissionHubButton status={missionStatus} />
-                ) : (
-                  <InviteFriendsIconContainer user={user} />
-                )}
-                {missionsFeatureEnabled &&
-                (missionStatus === 'started' ||
-                  missionStatus === 'completed') ? (
-                  <SquadCounter
-                    progress={Math.floor((tabCount / tabGoal) * 100)}
-                  />
-                ) : null}
-                {userGlobalId ? (
-                  <SearchForACauseSellModal
-                    userId={userGlobalId}
-                    hardSell={showSFACSellModalMode === 'hard-sell'}
-                    open={showSFACSellModalMode !== null}
-                    onAccept={onSFACSellModalAccept}
-                    onClose={() => setShowSFACSellModalMode(null)}
-                  />
-                ) : null}
-                {individualImpactEnabled ? (
-                  <UserImpactContainer
-                    userId={userGlobalId}
-                    userImpact={userImpact}
-                    user={user}
-                    disabled={
-                      missionsFeatureEnabled &&
-                      (missionStatus === 'started' ||
-                        missionStatus === 'completed')
-                    }
-                  />
-                ) : (
-                  <Link to={aboutURL}>
-                    <IconButton>
-                      <InfoIcon
-                        className={clsx(
-                          classes.userMenuItem,
-                          classes.settingsIcon
-                        )}
-                      />
-                    </IconButton>
-                  </Link>
-                )}
-                <div className={classes.moneyRaisedContainer}>
-                  <Typography
-                    variant="h5"
-                    className={clsx(classes.userMenuItem)}
-                  >
-                    {growthbook.feature('test-feature').value ? (
-                      <p>Welcome to our site!</p>
-                    ) : null}
-                    <MoneyRaisedContainer app={app} user={user} />
-                  </Typography>
+              <div className={classes.topRightContainer}>
+                <div className={classes.userMenuContainer}>
+                  {missionsFeatureEnabled ? (
+                    <MissionHubButton status={missionStatus} />
+                  ) : (
+                    <InviteFriendsIconContainer user={user} />
+                  )}
+                  {missionsFeatureEnabled &&
+                  (missionStatus === 'started' ||
+                    missionStatus === 'completed') ? (
+                    <SquadCounter
+                      progress={Math.floor((tabCount / tabGoal) * 100)}
+                    />
+                  ) : null}
+                  {userGlobalId ? (
+                    <SearchForACauseSellModal
+                      userId={userGlobalId}
+                      hardSell={showSFACSellModalMode === 'hard-sell'}
+                      open={showSFACSellModalMode !== null}
+                      onAccept={onSFACSellModalAccept}
+                      onClose={() => setShowSFACSellModalMode(null)}
+                    />
+                  ) : null}
+                  {individualImpactEnabled ? (
+                    <UserImpactContainer
+                      userId={userGlobalId}
+                      userImpact={userImpact}
+                      user={user}
+                      disabled={
+                        missionsFeatureEnabled &&
+                        (missionStatus === 'started' ||
+                          missionStatus === 'completed')
+                      }
+                    />
+                  ) : (
+                    <Link to={aboutURL}>
+                      <IconButton>
+                        <InfoIcon
+                          className={clsx(
+                            classes.userMenuItem,
+                            classes.settingsIcon
+                          )}
+                        />
+                      </IconButton>
+                    </Link>
+                  )}
+                  <div className={classes.moneyRaisedContainer}>
+                    <Typography
+                      variant="h5"
+                      className={clsx(classes.userMenuItem)}
+                    >
+                      {growthbook.feature('test-feature').value ? (
+                        <p>Welcome to our site!</p>
+                      ) : null}
+                      <MoneyRaisedContainer app={app} user={user} />
+                    </Typography>
+                  </div>
+                  <div className={classes.settingsIconContainer}>
+                    <Link to={accountURL}>
+                      <IconButton>
+                        <SettingsIcon
+                          className={clsx(
+                            classes.userMenuItem,
+                            classes.settingsIcon
+                          )}
+                        />
+                      </IconButton>
+                    </Link>
+                  </div>
                 </div>
-                <div className={classes.settingsIconContainer}>
-                  <Link to={accountURL}>
-                    <IconButton>
-                      <SettingsIcon
-                        className={clsx(
-                          classes.userMenuItem,
-                          classes.settingsIcon
-                        )}
-                      />
-                    </IconButton>
-                  </Link>
+                {/**
+                 * TODO: consolidate all notifications here to manage
+                 * visible state. Right now, these will overlay the ones
+                 * that appear via the UserImpact component.
+                 */}
+                <div className={classes.notificationsContainer}>
+                  {showUserSurvey ? (
+                    <Notification
+                      className={classes.notification}
+                      text={
+                        <div>
+                          <Typography variant="body1" gutterBottom>
+                            Share Your Feedback
+                          </Typography>
+                          <Typography variant="body2" gutterBottom>
+                            We'd love to hear from you! Let us know how we can
+                            make Tab for a Cause even better with this 2-minute
+                            survey.
+                          </Typography>
+                        </div>
+                      }
+                      buttons={
+                        <div className={classes.notificationButtonsWrapper}>
+                          <Link to="https://docs.google.com/forms/d/1e_EsXtjdfwjD4_OP0k5xIoPAQbezWLHakEIponVhleI/edit?usp=sharing">
+                            <Button variant="contained" color="primary">
+                              Take the Survey
+                            </Button>
+                          </Link>
+                        </div>
+                      }
+                      includeClose
+                      onClose={() => {
+                        localStorageMgr.setItem(
+                          USER_SURVEY_2022_NOTIFICATION,
+                          'true'
+                        )
+                        setShowUserSurvey(false)
+                      }}
+                    />
+                  ) : null}
                 </div>
               </div>
             </div>
