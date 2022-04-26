@@ -65,8 +65,15 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const SearchInput = (props) => {
-  const { className, userId, app, user, tooltip, onSearchSelectMoreInfoClick } =
-    props
+  const {
+    className,
+    userId,
+    app,
+    user,
+    tooltip,
+    onSearchSelectMoreInfoClick,
+    onSearchInputClick,
+  } = props
   const { searchEngine, yahooPaidSearchRewardOptIn } = user
   const { searchEngines } = app
   const [searchSelectOpen, setSearchSelectOpen] = useState(false)
@@ -135,6 +142,7 @@ const SearchInput = (props) => {
         type="text"
         ref={fullInputRef}
         inputRef={searchInputRef}
+        onFocus={() => onSearchInputClick()}
         onKeyPress={(e) => {
           if (e.key === 'Enter') {
             onSearch()
@@ -234,11 +242,13 @@ SearchInput.propTypes = {
     yahooPaidSearchRewardOptIn: PropTypes.bool,
   }).isRequired,
   onSearchSelectMoreInfoClick: PropTypes.func,
+  onSearchInputClick: PropTypes.func,
 }
 SearchInput.defaultProps = {
   className: '',
   tooltip: false,
   onSearchSelectMoreInfoClick: () => {},
+  onSearchInputClick: () => {},
 }
 
 export default SearchInput

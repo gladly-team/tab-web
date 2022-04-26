@@ -1,5 +1,5 @@
 // libraries
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { flowRight } from 'lodash/util'
 import { isNil } from 'lodash/lang'
@@ -80,6 +80,7 @@ import { validateAttributesObject } from 'src/utils/growthbook'
 import SearchInputContainer from 'src/components/SearchInputContainer'
 import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
 import Notification from 'src/components/Notification'
+import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -135,12 +136,15 @@ const useStyles = makeStyles((theme) => ({
   },
   notification: {
     marginTop: theme.spacing(0.5),
+    marginBottom: theme.spacing(1),
   },
   notificationsContainer: {
-    width: 350,
+    width: 400,
     display: 'flex',
     justifyContent: 'flex-end',
     paddingRight: theme.spacing(1),
+    flexDirection: 'column',
+    alignItems: 'flex-end',
   },
   notificationButtonsWrapper: {
     display: 'flex',
@@ -301,6 +305,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           tabs
           vcCurrent
           joined
+          showYahooPrompt
           cause {
             causeId
             individualImpactEnabled
@@ -381,6 +386,7 @@ const Index = ({ data: fallbackData }) => {
     cause,
     joined,
     notifications = [],
+    showYahooPrompt,
   } = user || {}
   const { theme, onboarding, causeId, individualImpactEnabled } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
@@ -433,7 +439,16 @@ const Index = ({ data: fallbackData }) => {
     setShowSFACSellModalMode('hard-sell')
   }
   const [showSearchInputTooltip, setSearchInputTooltip] = useState(false)
-  const onSFACSellModalAccept = () => setSearchInputTooltip(true)
+  const [showSFACNotification, setShowSFACNotification] = useState(false)
+
+  const onSFACSellModalAccept = () => {
+    setSearchInputTooltip(true)
+    setShowSFACNotification(false)
+  }
+  const onSearchInputClick = useCallback(
+    () => setShowSFACNotification(showYahooPrompt),
+    [showYahooPrompt]
+  )
 
   // set the causeId in local storage for tab ads
   useEffect(() => {
@@ -696,6 +711,16 @@ const Index = ({ data: fallbackData }) => {
                       }}
                     />
                   ) : null}
+                  {userGlobalId && showSFACNotification ? (
+                    <SearchForACauseSellNotification
+                      userId={userGlobalId}
+                      onLearnMore={() => setShowSFACSellModalMode('normal')}
+                      onNoThanks={() => setShowSFACSellModalMode('hard-sell')}
+                      onSwitchToSearchForACause={() =>
+                        setSearchInputTooltip(true)
+                      }
+                    />
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -753,6 +778,7 @@ const Index = ({ data: fallbackData }) => {
                 app={app}
                 user={user}
                 onSearchSelectMoreInfoClick={onSearchSelectMoreInfoClick}
+                onSearchInputClick={onSearchInputClick}
                 tooltip={showSearchInputTooltip}
               />
             </div>
@@ -831,6 +857,7 @@ Index.propTypes = {
       joined: PropTypes.string.isRequired,
       tabs: PropTypes.number.isRequired,
       vcCurrent: PropTypes.number.isRequired,
+      showYahooPrompt: PropTypes.bool,
     }).isRequired,
   }),
 }
