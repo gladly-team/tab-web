@@ -132,14 +132,10 @@ const SearchSelect = ({
 }) => {
   const classes = useStyles()
   const [isOpen, setIsOpen] = useState(open)
-  const [currentSearchEngine, setCurrentSearchEngine] = useState(
-    userSearchEngine.engineId
-  )
   const setCurrentSearchEngineHandler = useCallback(
     async (_event, newSearchEngine) => {
       if (newSearchEngine !== null) {
         SetUserSearchEngineMutation(userId, newSearchEngine)
-        setCurrentSearchEngine(newSearchEngine)
         onSearchEngineSwitch(newSearchEngine)
       }
     },
@@ -232,7 +228,7 @@ const SearchSelect = ({
         <ToggleButtonGroup
           className={classes.toggleButtonGroup}
           orientation="vertical"
-          value={currentSearchEngine}
+          value={userSearchEngine.engineId}
           exclusive
           onChange={setCurrentSearchEngineHandler}
         >
