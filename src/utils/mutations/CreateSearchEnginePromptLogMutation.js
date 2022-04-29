@@ -6,7 +6,9 @@ const mutation = graphql`
     $input: CreateSearchEnginePromptLogInput!
   ) {
     createSearchEnginePromptLog(input: $input) {
-      success
+      user {
+        showYahooPrompt
+      }
     }
   }
 `

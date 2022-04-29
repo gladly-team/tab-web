@@ -7,6 +7,7 @@ const mutation = graphql`
       user {
         userId
         yahooPaidSearchRewardOptIn
+        showYahooPrompt
       }
     }
   }
