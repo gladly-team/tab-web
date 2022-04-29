@@ -440,15 +440,18 @@ const Index = ({ data: fallbackData }) => {
   }
   const [showSearchInputTooltip, setSearchInputTooltip] = useState(false)
   const [showSFACNotification, setShowSFACNotification] = useState(false)
+  const [interactedWithSFACNotification, setInteractedWithSFACNotification] =
+    useState(true)
 
   const onSFACSellModalAccept = () => {
     setSearchInputTooltip(true)
     setShowSFACNotification(false)
+    setInteractedWithSFACNotification(false)
   }
-  const onSearchInputClick = useCallback(
-    () => setShowSFACNotification(showYahooPrompt),
-    [showYahooPrompt]
-  )
+
+  const onSearchInputClick = useCallback(() => {
+    setShowSFACNotification(showYahooPrompt && interactedWithSFACNotification)
+  }, [showYahooPrompt, interactedWithSFACNotification])
 
   // set the causeId in local storage for tab ads
   useEffect(() => {
