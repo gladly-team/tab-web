@@ -3,6 +3,8 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_MEDIA_ENDPOINT: https://prod-tab2017-media.gladly.io
     steps:
       - uses: actions/checkout@v2
         with:
