@@ -2,6 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import PetsIcon from '@material-ui/icons/Pets'
+import FavoriteIcon from '@material-ui/icons/Favorite'
 import {
   mdiJellyfish,
   mdiHandshake,
@@ -9,6 +10,7 @@ import {
   mdiMedicalBag,
   mdiFoodApple,
   mdiWater,
+  mdiAccountHeart,
 } from '@mdi/js'
 
 const getMockProps = () => ({
@@ -34,7 +36,7 @@ describe('CauseIcon component', () => {
     expect(wrapper.find(PetsIcon).exists()).toEqual(true)
   })
 
-  it('returns the paw icon when an unsupported icon name is passed', () => {
+  it('returns the heart icon when an unsupported icon name is passed', () => {
     // Suppress expected error.
     jest.spyOn(console, 'error').mockImplementationOnce(() => {})
     const CauseIcon = require('src/components/CauseIcon').default
@@ -43,7 +45,7 @@ describe('CauseIcon component', () => {
       icon: 'blah',
     }
     const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
-    expect(wrapper.find(PetsIcon).exists()).toEqual(true)
+    expect(wrapper.find(FavoriteIcon).exists()).toEqual(true)
   })
 
   it('returns the jellyfish icon', () => {
@@ -116,5 +118,17 @@ describe('CauseIcon component', () => {
     const svgIcon = wrapper.find(SvgIcon)
     const pathD = svgIcon.find('path').prop('d')
     expect(pathD).toEqual(mdiWater)
+  })
+
+  it('returns the person-heart icon', () => {
+    const CauseIcon = require('src/components/CauseIcon').default
+    const defaultMockProps = {
+      ...getMockProps(),
+      icon: 'person-heart',
+    }
+    const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
+    const svgIcon = wrapper.find(SvgIcon)
+    const pathD = svgIcon.find('path').prop('d')
+    expect(pathD).toEqual(mdiAccountHeart)
   })
 })

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import PetsIcon from '@material-ui/icons/Pets'
+import FavoriteIcon from '@material-ui/icons/Favorite'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import {
   mdiJellyfish,
@@ -9,6 +10,7 @@ import {
   mdiMedicalBag,
   mdiFoodApple,
   mdiWater,
+  mdiAccountHeart,
 } from '@mdi/js'
 
 const PAW = 'paw'
@@ -18,6 +20,7 @@ const PINE_TREE = 'pine-tree'
 const MEDICAL_BAG = 'medical-bag'
 const FOOD_APPLE = 'food-apple'
 const WATER = 'water'
+const PERSON_HEART = 'person-heart'
 
 const iconOptions = [
   PAW,
@@ -27,6 +30,7 @@ const iconOptions = [
   MEDICAL_BAG,
   FOOD_APPLE,
   WATER,
+  PERSON_HEART,
 ]
 
 const CauseIcon = ({ icon, className }) => {
@@ -107,8 +111,20 @@ const CauseIcon = ({ icon, className }) => {
         </SvgIcon>
       )
       break
+    case PERSON_HEART:
+      iconComp = (
+        <SvgIcon className={className}>
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d={mdiAccountHeart}
+            fill="inherit"
+          />
+        </SvgIcon>
+      )
+      break
     default:
-      iconComp = <PetsIcon className={className} />
+      iconComp = <FavoriteIcon className={className} />
       break
   }
   return iconComp
@@ -117,7 +133,7 @@ const CauseIcon = ({ icon, className }) => {
 CauseIcon.displayName = 'CauseIcon'
 
 CauseIcon.propTypes = {
-  classNmae: PropTypes.string,
+  className: PropTypes.string,
   icon: PropTypes.oneOf(iconOptions).isRequired,
 }
 
