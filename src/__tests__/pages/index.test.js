@@ -129,6 +129,7 @@ const getMockProps = () => ({
         impactVisits: 12,
         landingPagePath: '/foo/',
         individualImpactEnabled: true,
+        name: 'Example Cause',
         onboarding: {
           steps: [],
         },
@@ -436,6 +437,7 @@ describe('index.js', () => {
         user: {
           ...defaultMockProps.data.user,
           cause: {
+            ...defaultMockProps.data.user.cause,
             causeId: 'testSetMe',
             impactVisits: 12,
             landingPagePath: '/foo/',
