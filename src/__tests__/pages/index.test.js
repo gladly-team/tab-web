@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme'
 import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
-import { accountURL } from 'src/utils/urls'
+import { aboutURL, accountURL } from 'src/utils/urls'
 import { act } from 'react-dom/test-utils'
 import {
   STORAGE_NEW_USER_CAUSE_ID,
@@ -42,6 +42,8 @@ import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
 import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
 import { Button } from '@material-ui/core'
 import Notification from 'src/components/Notification'
+import Chip from '@material-ui/core/Chip'
+import { goTo } from 'src/utils/navigation'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -1119,6 +1121,18 @@ describe('index.js', () => {
     acceptButton.simulate('click')
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(true)
     expect(wrapper.find(SearchForACauseSellNotification).exists()).toBe(false)
+  })
+
+  it('shows a "supporting" chip that links to the "about the cause" page', () => {
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const elem = wrapper.find(Chip)
+    expect(elem.prop('label')).toEqual('Supporting: Example Cause')
+    elem.simulate('click')
+    expect(goTo).toHaveBeenCalledWith(aboutURL)
   })
 })
 
