@@ -293,6 +293,8 @@ if (isClientSide()) {
   loadAds()
 }
 
+const SUPPORTING_CAUSE_CHIP_FEATURE = 'supporting-cause-chip'
+
 const getRelayQuery = async ({ AuthUser }) => {
   // If the user is not authenticated, don't try to fetch data
   // for this page. We won't render the page until data exists.
@@ -338,6 +340,10 @@ const getRelayQuery = async ({ AuthUser }) => {
             tabGoal
             tabCount
             missionId
+          }
+          features {
+            featureName
+            variation
           }
           notifications {
             code
@@ -392,6 +398,7 @@ const Index = ({ data: fallbackData }) => {
     id: userId,
     currentMission,
     email,
+    features = [],
     cause,
     joined,
     notifications = [],
@@ -592,6 +599,13 @@ const Index = ({ data: fallbackData }) => {
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
 
+  const showSupportingCauseChip =
+    (
+      features.find(
+        (feature) => feature.featureName === SUPPORTING_CAUSE_CHIP_FEATURE
+      ) || {}
+    ).variation === 'true' || false
+
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {showIntro ? (
@@ -790,15 +804,17 @@ const Index = ({ data: fallbackData }) => {
                 color={enableBackgroundImages ? 'white' : null}
                 className={classes.logo}
               />
-              <Chip
-                label={`Supporting: ${causeName}`}
-                className={classes.supportingChip}
-                color="primary"
-                size="small"
-                onClick={() => {
-                  goTo(aboutURL)
-                }}
-              />
+              {showSupportingCauseChip && (
+                <Chip
+                  label={`Supporting: ${causeName}`}
+                  className={classes.supportingChip}
+                  color="primary"
+                  size="small"
+                  onClick={() => {
+                    goTo(aboutURL)
+                  }}
+                />
+              )}
               <SearchInputContainer
                 userId={userId}
                 className={classes.searchBar}
@@ -881,6 +897,15 @@ Index.propTypes = {
           secondaryColor: PropTypes.string.isRequired,
         }),
       }).isRequired,
+      features: PropTypes.arrayOf(
+        PropTypes.shape({
+          featureName: PropTypes.string.isRequired,
+
+          // Allow any type for experiment variations.
+          // eslint-disable-next-line react/forbid-prop-types
+          variation: PropTypes.any,
+        })
+      ).isRequired,
       hasViewedIntroFlow: PropTypes.bool.isRequired,
       joined: PropTypes.string.isRequired,
       tabs: PropTypes.number.isRequired,

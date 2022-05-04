@@ -140,6 +140,7 @@ const getMockProps = () => ({
           secondaryColor: '#DEDEDE',
         },
       },
+      features: [],
     },
     userImpact: {
       userId: 'asdf',
@@ -1123,16 +1124,76 @@ describe('index.js', () => {
     expect(wrapper.find(SearchForACauseSellNotification).exists()).toBe(false)
   })
 
-  it('shows a "supporting" chip that links to the "about the cause" page', () => {
+  it('shows a "supporting" chip that links to the "about the cause" page when the feature is enabled', () => {
     expect.assertions(2)
     const IndexPage = require('src/pages/index').default
-    const mockProps = getMockProps()
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          features: [
+            {
+              featureName: 'supporting-cause-chip',
+              variation: 'true',
+            },
+          ],
+        },
+      },
+    }
     useData.mockReturnValue({ data: mockProps.data })
     const wrapper = mount(<IndexPage {...mockProps} />)
     const elem = wrapper.find(Chip)
     expect(elem.prop('label')).toEqual('Supporting: Example Cause')
     elem.simulate('click')
     expect(goTo).toHaveBeenCalledWith(aboutURL)
+  })
+
+  it('does not show a "supporting" chip when the feature is disabled', () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          features: [
+            {
+              featureName: 'supporting-cause-chip',
+              variation: 'false',
+            },
+          ],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const elem = wrapper.find(Chip)
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('does not show a "supporting" chip when the feature is not returned in the list of features', () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          features: [],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const elem = wrapper.find(Chip)
+    expect(elem.exists()).toBe(false)
   })
 })
 
