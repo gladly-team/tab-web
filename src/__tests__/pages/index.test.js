@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme'
 import Link from 'src/components/Link'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
-import { accountURL } from 'src/utils/urls'
+import { aboutURL, accountURL } from 'src/utils/urls'
 import { act } from 'react-dom/test-utils'
 import {
   STORAGE_NEW_USER_CAUSE_ID,
@@ -42,6 +42,8 @@ import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
 import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
 import { Button } from '@material-ui/core'
 import Notification from 'src/components/Notification'
+import Chip from '@material-ui/core/Chip'
+import { goTo } from 'src/utils/navigation'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -129,6 +131,7 @@ const getMockProps = () => ({
         impactVisits: 12,
         landingPagePath: '/foo/',
         individualImpactEnabled: true,
+        name: 'Example Cause',
         onboarding: {
           steps: [],
         },
@@ -137,6 +140,7 @@ const getMockProps = () => ({
           secondaryColor: '#DEDEDE',
         },
       },
+      features: [],
     },
     userImpact: {
       userId: 'asdf',
@@ -436,6 +440,7 @@ describe('index.js', () => {
         user: {
           ...defaultMockProps.data.user,
           cause: {
+            ...defaultMockProps.data.user.cause,
             causeId: 'testSetMe',
             impactVisits: 12,
             landingPagePath: '/foo/',
@@ -1117,6 +1122,78 @@ describe('index.js', () => {
     acceptButton.simulate('click')
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(true)
     expect(wrapper.find(SearchForACauseSellNotification).exists()).toBe(false)
+  })
+
+  it('shows a "supporting" chip that links to the "about the cause" page when the feature is enabled', () => {
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          features: [
+            {
+              featureName: 'supporting-cause-chip',
+              variation: 'true',
+            },
+          ],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const elem = wrapper.find(Chip)
+    expect(elem.prop('label')).toEqual('Supporting: Example Cause')
+    elem.simulate('click')
+    expect(goTo).toHaveBeenCalledWith(aboutURL)
+  })
+
+  it('does not show a "supporting" chip when the feature is disabled', () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          features: [
+            {
+              featureName: 'supporting-cause-chip',
+              variation: 'false',
+            },
+          ],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const elem = wrapper.find(Chip)
+    expect(elem.exists()).toBe(false)
+  })
+
+  it('does not show a "supporting" chip when the feature is not returned in the list of features', () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          features: [],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const elem = wrapper.find(Chip)
+    expect(elem.exists()).toBe(false)
   })
 })
 

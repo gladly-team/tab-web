@@ -36,6 +36,7 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Button from '@material-ui/core/Button'
+import Chip from '@material-ui/core/Chip'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -48,7 +49,7 @@ import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntroFlowMutation'
-import { getHostname, getCurrentURL } from 'src/utils/navigation'
+import { getHostname, getCurrentURL, goTo } from 'src/utils/navigation'
 import {
   getAdUnits,
   areAdsEnabled,
@@ -206,14 +207,21 @@ const useStyles = makeStyles((theme) => ({
   searchBar: {
     position: 'relative',
     zIndex: 1e4, // must be higher than all content besides ads and modal
+    margin: theme.spacing(1),
   },
   logo: {
     height: 50,
-    padding: theme.spacing(2),
+    margin: theme.spacing(0.5),
     boxSizing: 'content-box',
     position: 'relative',
     zIndex: 1e4, // same as search bar
     pointerEvents: 'none',
+  },
+  supportingChip: {
+    position: 'relative',
+    zIndex: 1e4, // same as search bar
+    margin: theme.spacing(0.5),
+    alignSelf: 'center',
   },
   adsContainer: {
     position: 'absolute',
@@ -285,6 +293,8 @@ if (isClientSide()) {
   loadAds()
 }
 
+const SUPPORTING_CAUSE_CHIP_FEATURE = 'supporting-cause-chip'
+
 const getRelayQuery = async ({ AuthUser }) => {
   // If the user is not authenticated, don't try to fetch data
   // for this page. We won't render the page until data exists.
@@ -311,6 +321,7 @@ const getRelayQuery = async ({ AuthUser }) => {
             individualImpactEnabled
             impactVisits
             landingPagePath
+            name
             onboarding {
               steps {
                 title
@@ -329,6 +340,10 @@ const getRelayQuery = async ({ AuthUser }) => {
             tabGoal
             tabCount
             missionId
+          }
+          features {
+            featureName
+            variation
           }
           notifications {
             code
@@ -383,12 +398,19 @@ const Index = ({ data: fallbackData }) => {
     id: userId,
     currentMission,
     email,
+    features = [],
     cause,
     joined,
     notifications = [],
     showYahooPrompt,
   } = user || {}
-  const { theme, onboarding, causeId, individualImpactEnabled } = cause || {}
+  const {
+    theme,
+    onboarding,
+    causeId,
+    individualImpactEnabled,
+    name: causeName,
+  } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
 
   const growthbook = useGrowthBook()
@@ -576,6 +598,13 @@ const Index = ({ data: fallbackData }) => {
     setJustFinishedIntroFlow(true)
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
+
+  const showSupportingCauseChip =
+    (
+      features.find(
+        (feature) => feature.featureName === SUPPORTING_CAUSE_CHIP_FEATURE
+      ) || {}
+    ).variation === 'true' || false
 
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
@@ -775,6 +804,17 @@ const Index = ({ data: fallbackData }) => {
                 color={enableBackgroundImages ? 'white' : null}
                 className={classes.logo}
               />
+              {showSupportingCauseChip && (
+                <Chip
+                  label={`Supporting: ${causeName}`}
+                  className={classes.supportingChip}
+                  color="primary"
+                  size="small"
+                  onClick={() => {
+                    goTo(aboutURL)
+                  }}
+                />
+              )}
               <SearchInputContainer
                 userId={userId}
                 className={classes.searchBar}
@@ -851,11 +891,21 @@ Index.propTypes = {
         individualImpactEnabled: PropTypes.bool.isRequired,
         impactVisits: PropTypes.number,
         landingPagePath: PropTypes.string,
+        name: PropTypes.string.isRequired,
         theme: PropTypes.shape({
           primaryColor: PropTypes.string.isRequired,
           secondaryColor: PropTypes.string.isRequired,
         }),
       }).isRequired,
+      features: PropTypes.arrayOf(
+        PropTypes.shape({
+          featureName: PropTypes.string.isRequired,
+
+          // Allow any type for experiment variations.
+          // eslint-disable-next-line react/forbid-prop-types
+          variation: PropTypes.any,
+        })
+      ).isRequired,
       hasViewedIntroFlow: PropTypes.bool.isRequired,
       joined: PropTypes.string.isRequired,
       tabs: PropTypes.number.isRequired,
