@@ -36,6 +36,7 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Button from '@material-ui/core/Button'
+import Chip from '@material-ui/core/Chip'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -48,7 +49,7 @@ import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntroFlowMutation'
-import { getHostname, getCurrentURL } from 'src/utils/navigation'
+import { getHostname, getCurrentURL, goTo } from 'src/utils/navigation'
 import {
   getAdUnits,
   areAdsEnabled,
@@ -209,11 +210,19 @@ const useStyles = makeStyles((theme) => ({
   },
   logo: {
     height: 50,
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
+    paddingBottom: theme.spacing(0.5),
     boxSizing: 'content-box',
     position: 'relative',
     zIndex: 1e4, // same as search bar
     pointerEvents: 'none',
+  },
+  supportingChip: {
+    position: 'relative',
+    zIndex: 1e4, // same as search bar
+    margin: theme.spacing(1),
+    marginTop: theme.spacing(0),
+    alignSelf: 'center',
   },
   adsContainer: {
     position: 'absolute',
@@ -311,6 +320,7 @@ const getRelayQuery = async ({ AuthUser }) => {
             individualImpactEnabled
             impactVisits
             landingPagePath
+            name
             onboarding {
               steps {
                 title
@@ -388,7 +398,13 @@ const Index = ({ data: fallbackData }) => {
     notifications = [],
     showYahooPrompt,
   } = user || {}
-  const { theme, onboarding, causeId, individualImpactEnabled } = cause || {}
+  const {
+    theme,
+    onboarding,
+    causeId,
+    individualImpactEnabled,
+    name: causeName,
+  } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
 
   const growthbook = useGrowthBook()
@@ -775,6 +791,15 @@ const Index = ({ data: fallbackData }) => {
                 color={enableBackgroundImages ? 'white' : null}
                 className={classes.logo}
               />
+              <Chip
+                label={`Supporting: ${causeName}`}
+                className={classes.supportingChip}
+                color="primary"
+                size="small"
+                onClick={() => {
+                  goTo(aboutURL)
+                }}
+              />
               <SearchInputContainer
                 userId={userId}
                 className={classes.searchBar}
@@ -851,6 +876,7 @@ Index.propTypes = {
         individualImpactEnabled: PropTypes.bool.isRequired,
         impactVisits: PropTypes.number,
         landingPagePath: PropTypes.string,
+        name: PropTypes.string.isRequired,
         theme: PropTypes.shape({
           primaryColor: PropTypes.string.isRequired,
           secondaryColor: PropTypes.string.isRequired,
