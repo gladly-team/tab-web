@@ -207,11 +207,11 @@ const useStyles = makeStyles((theme) => ({
   searchBar: {
     position: 'relative',
     zIndex: 1e4, // must be higher than all content besides ads and modal
+    margin: theme.spacing(1),
   },
   logo: {
     height: 50,
-    padding: theme.spacing(1),
-    paddingBottom: theme.spacing(0.5),
+    margin: theme.spacing(0.5),
     boxSizing: 'content-box',
     position: 'relative',
     zIndex: 1e4, // same as search bar
@@ -220,8 +220,7 @@ const useStyles = makeStyles((theme) => ({
   supportingChip: {
     position: 'relative',
     zIndex: 1e4, // same as search bar
-    margin: theme.spacing(1),
-    marginTop: theme.spacing(0),
+    margin: theme.spacing(0.5),
     alignSelf: 'center',
   },
   adsContainer: {
