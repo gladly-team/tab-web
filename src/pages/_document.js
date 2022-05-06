@@ -19,28 +19,10 @@ class CustomDocument extends Document {
           <TabCMPHeadElements />
         </Head>
         <body style={{ margin: 0, padding: 0 }}>
-          {/*
-            Ads code. See:
-            https://github.com/gladly-team/tab-ads#html-tags
+          {/**
+           * Begin: Ads code.
+           * See: https://github.com/gladly-team/tab-ads#html-tags
            */}
-
-          {/* Google Analytics V4 Tag */}
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-LDFLQCKVHG"
-          />
-          <script
-            key="gtag-global-ga4"
-            dangerouslySetInnerHTML={{
-              __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-LDFLQCKVHG');
-            gtag('config', 'G-LDFLQCKVHG',{'tfac_app_version':'v4'});
-            `,
-            }}
-          />
           {/* Google Publisher Tag */}
           <script
             dangerouslySetInnerHTML={{
@@ -62,7 +44,6 @@ class CustomDocument extends Document {
               `,
             }}
           />
-
           {/* Amazon apstag */}
           <script
             dangerouslySetInnerHTML={{
@@ -73,6 +54,32 @@ class CustomDocument extends Document {
                   console.error(e)
                 }
                 `,
+            }}
+          />
+          {/* Index Exchange */}
+          <script
+            async
+            src="//js-sec.indexww.com/ht/p/189508-208262485043658.js"
+          />
+          {/**
+           * End: Ads code.
+           */}
+
+          {/* Google Analytics V4 Tag */}
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-LDFLQCKVHG"
+          />
+          <script
+            key="gtag-global-ga4"
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-LDFLQCKVHG');
+            gtag('config', 'G-LDFLQCKVHG',{'tfac_app_version':'v4'});
+            `,
             }}
           />
           {/* Reddit Pixel */}
@@ -107,14 +114,42 @@ class CustomDocument extends Document {
               src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
             />
           </noscript>
-          {/* Index Exchange */}
-          <script
-            async
-            src="//js-sec.indexww.com/ht/p/189508-208262485043658.js"
-          />
 
           <Main />
           <NextScript />
+
+          {/* Begin: Quantcast Measure */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window._qevents = window._qevents || [];
+                (function() {
+                var elem = document.createElement('script');
+                elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+                elem.async = true;
+                elem.type = "text/javascript";
+                var scpt = document.getElementsByTagName('script')[0];
+                scpt.parentNode.insertBefore(elem, scpt);
+                })();
+                window._qevents.push({
+                qacct:"p-FPBLJYpJgR9Zu",
+                uid:"__INSERT_EMAIL_HERE__"
+                });
+              `,
+            }}
+          />
+          <noscript>
+            <div style={{ display: 'none' }}>
+              <img
+                src="//pixel.quantserve.com/pixel/p-FPBLJYpJgR9Zu.gif"
+                border="0"
+                height="1"
+                width="1"
+                alt=""
+              />
+            </div>
+          </noscript>
+          {/* End: Quantcast Measure */}
         </body>
       </Html>
     )
