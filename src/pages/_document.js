@@ -19,28 +19,10 @@ class CustomDocument extends Document {
           <TabCMPHeadElements />
         </Head>
         <body style={{ margin: 0, padding: 0 }}>
-          {/*
-            Ads code. See:
-            https://github.com/gladly-team/tab-ads#html-tags
+          {/**
+           * Begin: Ads code.
+           * See: https://github.com/gladly-team/tab-ads#html-tags
            */}
-
-          {/* Google Analytics V4 Tag */}
-          <script
-            async
-            src="https://www.googletagmanager.com/gtag/js?id=G-LDFLQCKVHG"
-          />
-          <script
-            key="gtag-global-ga4"
-            dangerouslySetInnerHTML={{
-              __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-LDFLQCKVHG');
-            gtag('config', 'G-LDFLQCKVHG',{'tfac_app_version':'v4'});
-            `,
-            }}
-          />
           {/* Google Publisher Tag */}
           <script
             dangerouslySetInnerHTML={{
@@ -62,7 +44,6 @@ class CustomDocument extends Document {
               `,
             }}
           />
-
           {/* Amazon apstag */}
           <script
             dangerouslySetInnerHTML={{
@@ -73,6 +54,32 @@ class CustomDocument extends Document {
                   console.error(e)
                 }
                 `,
+            }}
+          />
+          {/* Index Exchange */}
+          <script
+            async
+            src="//js-sec.indexww.com/ht/p/189508-208262485043658.js"
+          />
+          {/**
+           * End: Ads code.
+           */}
+
+          {/* Google Analytics V4 Tag */}
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-LDFLQCKVHG"
+          />
+          <script
+            key="gtag-global-ga4"
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-LDFLQCKVHG');
+            gtag('config', 'G-LDFLQCKVHG',{'tfac_app_version':'v4'});
+            `,
             }}
           />
           {/* Reddit Pixel */}
@@ -107,11 +114,6 @@ class CustomDocument extends Document {
               src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
             />
           </noscript>
-          {/* Index Exchange */}
-          <script
-            async
-            src="//js-sec.indexww.com/ht/p/189508-208262485043658.js"
-          />
 
           <Main />
           <NextScript />
