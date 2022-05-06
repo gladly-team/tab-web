@@ -139,7 +139,7 @@ class CustomDocument extends Document {
             }}
           />
           <noscript>
-            <div style="display:none;">
+            <div style={{ display: 'none' }}>
               <img
                 src="//pixel.quantserve.com/pixel/p-FPBLJYpJgR9Zu.gif"
                 border="0"
