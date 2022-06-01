@@ -82,7 +82,7 @@ const SearchInput = (props) => {
   const fullInputRef = React.createRef()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const [currentSearchEngine, setCurrentSearchEngine] = useState(searchEngine)
-  const [tooltipOpen, setTooltipOpen] = useState(tooltip)
+  const [tooltipOpen, setTooltipOpen] = useState(!!tooltip)
 
   const getSearchEngine = useCallback(
     (searchEngineId) =>
@@ -94,7 +94,7 @@ const SearchInput = (props) => {
 
   useEffect(() => {
     setCurrentSearchEngine(searchEngine)
-    setTooltipOpen(tooltip)
+    setTooltipOpen(!!tooltip)
   }, [searchEngine, getSearchEngine, yahooPaidSearchRewardOptIn, tooltip])
 
   const onSearch = useCallback(async () => {
@@ -173,8 +173,7 @@ const SearchInput = (props) => {
                 arrow
                 title={
                   <Typography variant="body2">
-                    Great! You can always switch your search engine here later
-                    on.
+                    {tooltip}
                     <IconButton
                       className={classes.tooltipCloseButton}
                       onClick={() => {
@@ -216,7 +215,7 @@ SearchInput.displayName = 'SearchInput'
 SearchInput.propTypes = {
   className: PropTypes.string,
   userId: PropTypes.string.isRequired,
-  tooltip: PropTypes.bool,
+  tooltip: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
   app: PropTypes.shape({
     searchEngines: PropTypes.shape({
       edges: PropTypes.arrayOf(

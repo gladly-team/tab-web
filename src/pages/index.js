@@ -82,6 +82,8 @@ import SearchInputContainer from 'src/components/SearchInputContainer'
 import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
 import Notification from 'src/components/Notification'
 import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
+import { getFeatureValue } from 'src/utils/growthbookUtils'
+import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -348,6 +350,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           notifications {
             code
           }
+          searches
           ...MoneyRaisedContainer_user
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
@@ -403,6 +406,7 @@ const Index = ({ data: fallbackData }) => {
     joined,
     notifications = [],
     showYahooPrompt,
+    searches,
   } = user || {}
   const {
     theme,
@@ -466,14 +470,25 @@ const Index = ({ data: fallbackData }) => {
     useState(true)
 
   const onSFACSellModalAccept = () => {
-    setSearchInputTooltip(true)
+    setSearchInputTooltip(
+      'Great! You can always switch your search engine here later on.'
+    )
     setShowSFACNotification(false)
     setInteractedWithSFACNotification(false)
   }
 
   const onSearchInputClick = useCallback(() => {
     setShowSFACNotification(showYahooPrompt && interactedWithSFACNotification)
-  }, [showYahooPrompt, interactedWithSFACNotification])
+
+    // get feature, set tooltip if correct
+    const v2ExperimentVariation = getFeatureValue(
+      features,
+      YAHOO_SEARCH_NEW_USERS_V2
+    )
+    if (v2ExperimentVariation === 'Tooltip' && searches === 0) {
+      setSearchInputTooltip('You can switch your search engine here.')
+    }
+  }, [showYahooPrompt, interactedWithSFACNotification, features, searches])
 
   // set the causeId in local storage for tab ads
   useEffect(() => {
@@ -749,7 +764,9 @@ const Index = ({ data: fallbackData }) => {
                       onLearnMore={() => setShowSFACSellModalMode('normal')}
                       onNoThanks={() => setShowSFACSellModalMode('hard-sell')}
                       onSwitchToSearchForACause={() =>
-                        setSearchInputTooltip(true)
+                        setSearchInputTooltip(
+                          'Great! You can always switch your search engine here later on.'
+                        )
                       }
                     />
                   ) : null}

@@ -44,6 +44,7 @@ import { Button } from '@material-ui/core'
 import Notification from 'src/components/Notification'
 import Chip from '@material-ui/core/Chip'
 import { goTo } from 'src/utils/navigation'
+import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -141,6 +142,7 @@ const getMockProps = () => ({
         },
       },
       features: [],
+      searches: 10,
     },
     userImpact: {
       userId: 'asdf',
@@ -965,7 +967,9 @@ describe('index.js', () => {
     const acceptButton = wrapper.find(Button).at(1)
     expect(acceptButton.text()).toEqual("Let's Do It!")
     acceptButton.simulate('click')
-    expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(true)
+    expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(
+      'Great! You can always switch your search engine here later on.'
+    )
   })
 
   it('correctly handles set extra search impact flow when declining', () => {
@@ -1022,6 +1026,7 @@ describe('index.js', () => {
     wrapper.update()
 
     const notification = wrapper.find(SearchForACauseSellNotification)
+    expect(wrapper.find(SearchInput).first().prop('tooltip')).toBe(false)
     expect(notification.exists()).toBe(true)
   })
 
@@ -1087,7 +1092,9 @@ describe('index.js', () => {
     acceptButton.simulate('click')
 
     expect(wrapper.find(SearchForACauseSellModal).prop('open')).toBe(false)
-    expect(wrapper.find(SearchInput).first().prop('tooltip')).toBe(true)
+    expect(wrapper.find(SearchInput).first().prop('tooltip')).toBe(
+      'Great! You can always switch your search engine here later on.'
+    )
   })
 
   it('accepting sfac modal while sfac notification is open closes the modal', () => {
@@ -1120,8 +1127,104 @@ describe('index.js', () => {
       .at(1)
     expect(acceptButton.text()).toEqual("Let's Do It!")
     acceptButton.simulate('click')
-    expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(true)
+    expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(
+      'Great! You can always switch your search engine here later on.'
+    )
     expect(wrapper.find(SearchForACauseSellNotification).exists()).toBe(false)
+  })
+
+  it('displays tooltip when in v2 experiment and clicking on SearchInput with no searches', () => {
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          showYahooPrompt: false,
+          searches: 0,
+          features: [
+            {
+              featureName: YAHOO_SEARCH_NEW_USERS_V2,
+              variation: 'Tooltip',
+            },
+          ],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    act(() => {
+      wrapper.find(SearchInput).first().prop('onSearchInputClick')()
+    })
+    wrapper.update()
+
+    expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(
+      'You can switch your search engine here.'
+    )
+  })
+
+  it('does not display tooltip when in v2 experiment and clicking on SearchInput with searches', () => {
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          showYahooPrompt: false,
+          features: [
+            {
+              featureName: YAHOO_SEARCH_NEW_USERS_V2,
+              variation: 'Tooltip',
+            },
+          ],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    act(() => {
+      wrapper.find(SearchInput).first().prop('onSearchInputClick')()
+    })
+    wrapper.update()
+
+    expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(false)
+  })
+
+  it('does not display tooltip when in v2 experiment and clicking on SearchInput with non-tooltip variation', () => {
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          showYahooPrompt: false,
+          searches: 0,
+          features: [
+            {
+              featureName: YAHOO_SEARCH_NEW_USERS_V2,
+              variation: 'Notification',
+            },
+          ],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    act(() => {
+      wrapper.find(SearchInput).first().prop('onSearchInputClick')()
+    })
+    wrapper.update()
+
+    expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(false)
   })
 
   it('shows a "supporting" chip that links to the "about the cause" page when the feature is enabled', () => {
