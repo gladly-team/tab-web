@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
-import SetUserSearchEngineMutation from 'src/utils/mutations/SetUserSearchEngineMutation'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
 import CheckIcon from '@material-ui/icons/Check'
 import DashboardPopover from './DashboardPopover'
@@ -122,7 +121,6 @@ const useStyles = makeStyles((theme) => ({
 const SearchSelect = ({
   anchorEl,
   onClose,
-  userId,
   onMoreInfoClick,
   onSearchEngineSwitch,
   userSearchEngine,
@@ -135,11 +133,10 @@ const SearchSelect = ({
   const setCurrentSearchEngineHandler = useCallback(
     async (_event, newSearchEngine) => {
       if (newSearchEngine !== null) {
-        SetUserSearchEngineMutation(userId, newSearchEngine)
         onSearchEngineSwitch(newSearchEngine)
       }
     },
-    [onSearchEngineSwitch, userId]
+    [onSearchEngineSwitch]
   )
   const onCloseHandler = useCallback(async () => {
     onClose()
@@ -253,10 +250,8 @@ SearchSelect.propTypes = {
     PropTypes.shape({ current: PropTypes.elementType }),
   ]),
   onClose: PropTypes.func,
-  userId: PropTypes.string.isRequired,
   userSearchEngine: PropTypes.shape({
     engineId: PropTypes.string,
-    searchUrl: PropTypes.string,
     inputPrompt: PropTypes.string,
   }).isRequired,
   onMoreInfoClick: PropTypes.func,
@@ -267,7 +262,6 @@ SearchSelect.propTypes = {
         node: PropTypes.shape({
           engineId: PropTypes.string,
           name: PropTypes.string,
-          searchUrl: PropTypes.string,
           rank: PropTypes.number,
           isCharitable: PropTypes.bool,
           inputPrompt: PropTypes.string,

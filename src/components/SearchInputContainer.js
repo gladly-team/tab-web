@@ -9,7 +9,6 @@ export default createFragmentContainer(SearchInput, {
           node {
             engineId
             name
-            searchUrl
             rank
             isCharitable
             inputPrompt
@@ -23,7 +22,7 @@ export default createFragmentContainer(SearchInput, {
       searchEngine {
         engineId
         inputPrompt
-        searchUrl
+        searchUrlPersonalized
       }
       yahooPaidSearchRewardOptIn
     }
