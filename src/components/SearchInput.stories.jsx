@@ -15,7 +15,7 @@ const Template = (args) => (
 export const standard = Template.bind({})
 standard.args = {
   userId: 'abcdefghijklmno',
-  tooltip: true,
+  tooltip: 'Great! You can always switch your search engine here later on.',
   app: {
     searchEngines: {
       edges: [

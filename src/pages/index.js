@@ -72,6 +72,7 @@ import {
   CAT_CHARITY,
   STORAGE_NEW_USER_CAUSE_ID,
   USER_SURVEY_2022_NOTIFICATION,
+  HAS_SEEN_SEARCH_V2_TOOLTIP,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -485,7 +486,12 @@ const Index = ({ data: fallbackData }) => {
       features,
       YAHOO_SEARCH_NEW_USERS_V2
     )
-    if (v2ExperimentVariation === 'Tooltip' && searches === 0) {
+    if (
+      v2ExperimentVariation === 'Tooltip' &&
+      searches === 0 &&
+      !localStorageMgr.getItem(HAS_SEEN_SEARCH_V2_TOOLTIP)
+    ) {
+      localStorageMgr.setItem(HAS_SEEN_SEARCH_V2_TOOLTIP, true)
       setSearchInputTooltip('You can switch your search engine here.')
     }
   }, [showYahooPrompt, interactedWithSFACNotification, features, searches])

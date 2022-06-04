@@ -8,6 +8,7 @@ import { act } from 'react-dom/test-utils'
 import {
   STORAGE_NEW_USER_CAUSE_ID,
   USER_SURVEY_2022_NOTIFICATION,
+  HAS_SEEN_SEARCH_V2_TOOLTIP,
 } from 'src/utils/constants'
 import {
   showMockAchievements,
@@ -1164,6 +1165,42 @@ describe('index.js', () => {
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(
       'You can switch your search engine here.'
     )
+    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
+      HAS_SEEN_SEARCH_V2_TOOLTIP,
+      true
+    )
+  })
+
+  it('does not display tooltip when in v2 experiment and seen tooltip before per local storage', () => {
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          showYahooPrompt: false,
+          searches: 0,
+          features: [
+            {
+              featureName: YAHOO_SEARCH_NEW_USERS_V2,
+              variation: 'Tooltip',
+            },
+          ],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    localStorageMgr.getItem.mockReturnValue(true)
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    act(() => {
+      wrapper.find(SearchInput).first().prop('onSearchInputClick')()
+    })
+    wrapper.update()
+
+    expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(false)
   })
 
   it('does not display tooltip when in v2 experiment and clicking on SearchInput with searches', () => {
