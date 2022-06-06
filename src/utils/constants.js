@@ -21,3 +21,6 @@ export const STORAGE_TREES_CAUSE_ID = 'tdU_PsRIM'
 export const STORAGE_TABS_RECENT_DAY_COUNT = 'tab.user.lastTabDay.count'
 export const STORAGE_TABS_LAST_TAB_OPENED_DATE = 'tab.user.lastTabDay.date'
 export const MAX_TABS_WITH_ADS = 150
+
+// Constants for Local Storage Mgr
+export const HAS_SEEN_SEARCH_V2_TOOLTIP = 'has_seen_search_v2_tooltip'

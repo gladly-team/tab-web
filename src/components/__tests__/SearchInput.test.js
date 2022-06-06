@@ -51,7 +51,7 @@ const getMockProps = () => ({
     },
     yahooPaidSearchRewardOptIn: true,
   },
-  tooltip: true,
+  tooltip: 'Great! You can always switch your search engine here later on.',
   onSearchSelectMoreInfoClick: jest.fn(),
   onSearchEngineSwitch: jest.fn(),
   onSearchInputClick: jest.fn(),
