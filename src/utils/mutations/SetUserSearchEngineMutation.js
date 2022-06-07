@@ -9,7 +9,7 @@ const mutation = graphql`
         searchEngine {
           engineId
           name
-          searchUrl
+          searchUrlPersonalized
           rank
           isCharitable
           inputPrompt

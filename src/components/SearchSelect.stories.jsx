@@ -19,7 +19,7 @@ withoutCharitableEngine.args = {
   userSearchEngine: {
     name: 'Google',
     engineId: 'Google',
-    searchUrl: 'https://www.google.com/search?q={searchTerms}',
+    searchUrlPersonalized: 'https://www.google.com/search?q={searchTerms}',
     inputPrompt: 'Search Google',
   },
   onMoreInfoClick: () => {},
@@ -30,7 +30,6 @@ withoutCharitableEngine.args = {
         node: {
           name: 'DuckDuckGo',
           engineId: 'DuckDuckGo',
-          searchUrl: 'https://duckduckgo.com/?q={searchTerms}',
           rank: 3,
           isCharitable: false,
           inputPrompt: 'Search DuckDuckGo',
@@ -40,7 +39,6 @@ withoutCharitableEngine.args = {
         node: {
           name: 'Google',
           engineId: 'Google',
-          searchUrl: 'https://www.google.com/search?q={searchTerms}',
           rank: 1,
           isCharitable: false,
           inputPrompt: 'Search Google',
@@ -50,7 +48,6 @@ withoutCharitableEngine.args = {
         node: {
           name: 'Ecosia',
           engineId: 'Ecosia',
-          searchUrl: 'https://www.ecosia.org/search?q={searchTerms}',
           rank: 2,
           isCharitable: false,
           inputPrompt: 'Search Ecosia',
@@ -69,7 +66,7 @@ withCharitableEngine.args = {
   userSearchEngine: {
     name: 'Google',
     engineId: 'Google',
-    searchUrl: 'https://www.google.com/search?q={searchTerms}',
+    searchUrlPersonalized: 'https://www.google.com/search?q={searchTerms}',
     inputPrompt: 'Search Google',
   },
   onMoreInfoClick: () => {},
@@ -80,7 +77,6 @@ withCharitableEngine.args = {
         node: {
           name: 'DuckDuckGo',
           engineId: 'DuckDuckGo',
-          searchUrl: 'https://duckduckgo.com/?q={searchTerms}',
           rank: 3,
           isCharitable: false,
           inputPrompt: 'Search DuckDuckGo',
@@ -90,7 +86,6 @@ withCharitableEngine.args = {
         node: {
           name: 'Google',
           engineId: 'Google',
-          searchUrl: 'https://www.google.com/search?q={searchTerms}',
           rank: 1,
           isCharitable: false,
           inputPrompt: 'Search Google',
@@ -100,7 +95,6 @@ withCharitableEngine.args = {
         node: {
           name: 'Ecosia',
           engineId: 'Ecosia',
-          searchUrl: 'https://www.ecosia.org/search?q={searchTerms}',
           rank: 2,
           isCharitable: false,
           inputPrompt: 'Search Ecosia',
@@ -110,7 +104,6 @@ withCharitableEngine.args = {
         node: {
           name: 'Search for a Cause',
           engineId: 'SearchForACause',
-          searchUrl: 'http://tab.gladly.io/search/v2?q={searchTerms}',
           rank: 0,
           isCharitable: true,
           inputPrompt: 'Search for a Cause',
@@ -129,7 +122,7 @@ withCharitableEngineAndOptedIn.args = {
   userSearchEngine: {
     name: 'Google',
     engineId: 'Google',
-    searchUrl: 'https://www.google.com/search?q={searchTerms}',
+    searchUrlPersonalized: 'https://www.google.com/search?q={searchTerms}',
     inputPrompt: 'Search Google',
   },
   onMoreInfoClick: () => {},
@@ -140,7 +133,6 @@ withCharitableEngineAndOptedIn.args = {
         node: {
           name: 'DuckDuckGo',
           engineId: 'DuckDuckGo',
-          searchUrl: 'https://duckduckgo.com/?q={searchTerms}',
           rank: 3,
           isCharitable: false,
           inputPrompt: 'Search DuckDuckGo',
@@ -150,7 +142,6 @@ withCharitableEngineAndOptedIn.args = {
         node: {
           name: 'Google',
           engineId: 'Google',
-          searchUrl: 'https://www.google.com/search?q={searchTerms}',
           rank: 1,
           isCharitable: false,
           inputPrompt: 'Search Google',
@@ -160,7 +151,6 @@ withCharitableEngineAndOptedIn.args = {
         node: {
           name: 'Ecosia',
           engineId: 'Ecosia',
-          searchUrl: 'https://www.ecosia.org/search?q={searchTerms}',
           rank: 2,
           isCharitable: false,
           inputPrompt: 'Search Ecosia',
@@ -170,7 +160,6 @@ withCharitableEngineAndOptedIn.args = {
         node: {
           name: 'Search for a Cause',
           engineId: 'SearchForACause',
-          searchUrl: 'http://tab.gladly.io/search/v2?q={searchTerms}',
           rank: 0,
           isCharitable: true,
           inputPrompt: 'Search for a Cause',
