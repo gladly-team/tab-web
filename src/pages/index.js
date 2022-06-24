@@ -296,8 +296,6 @@ if (isClientSide()) {
   loadAds()
 }
 
-const SUPPORTING_CAUSE_CHIP_FEATURE = 'supporting-cause-chip'
-
 const getRelayQuery = async ({ AuthUser }) => {
   // If the user is not authenticated, don't try to fetch data
   // for this page. We won't render the page until data exists.
@@ -619,14 +617,6 @@ const Index = ({ data: fallbackData }) => {
     setJustFinishedIntroFlow(true)
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
-
-  const showSupportingCauseChip =
-    (
-      features.find(
-        (feature) => feature.featureName === SUPPORTING_CAUSE_CHIP_FEATURE
-      ) || {}
-    ).variation === 'true' || false
-
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {showIntro ? (
@@ -827,17 +817,15 @@ const Index = ({ data: fallbackData }) => {
                 color={enableBackgroundImages ? 'white' : null}
                 className={classes.logo}
               />
-              {showSupportingCauseChip && (
-                <Chip
-                  label={`Supporting: ${causeName}`}
-                  className={classes.supportingChip}
-                  color="primary"
-                  size="small"
-                  onClick={() => {
-                    goTo(aboutURL)
-                  }}
-                />
-              )}
+              <Chip
+                label={`Supporting: ${causeName}`}
+                className={classes.supportingChip}
+                color="primary"
+                size="small"
+                onClick={() => {
+                  goTo(aboutURL)
+                }}
+              />
               <SearchInputContainer
                 userId={userId}
                 className={classes.searchBar}
