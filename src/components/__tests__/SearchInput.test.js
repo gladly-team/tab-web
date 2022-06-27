@@ -1,6 +1,5 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
-import LogSearchMutation from 'src/utils/mutations/LogSearchMutation'
 import Input from '@material-ui/core/Input'
 import { IconButton } from '@material-ui/core'
 import { act } from 'react-dom/test-utils'
@@ -8,13 +7,10 @@ import { windowOpenTop } from 'src/utils/navigation'
 import Tooltip from '@material-ui/core/Tooltip'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import logger from 'src/utils/logger'
-import SetUserSearchEngineMutation from 'src/utils/mutations/SetUserSearchEngineMutation'
 import SearchSelect from '../SearchSelect'
 
-jest.mock('src/utils/mutations/LogSearchMutation')
 jest.mock('src/utils/navigation')
 jest.mock('src/utils/logger')
-jest.mock('src/utils/mutations/SetUserSearchEngineMutation')
 
 const getMockProps = () => ({
   userId: 'abcdefghijklmno',
@@ -25,6 +21,7 @@ const getMockProps = () => ({
           node: {
             name: 'Google',
             engineId: 'Google',
+            searchUrl: 'https://www.google.com/search?q={searchTerms}',
             rank: 1,
             isCharitable: false,
             inputPrompt: 'Search Google',
@@ -34,6 +31,7 @@ const getMockProps = () => ({
           node: {
             name: 'DuckDuckGo',
             engineId: 'DuckDuckGo',
+            searchUrl: 'https://duckduckgo.com/?q={searchTerms}',
             rank: 3,
             isCharitable: false,
             inputPrompt: 'Search DuckDuckGo',
@@ -46,7 +44,7 @@ const getMockProps = () => ({
     searchEngine: {
       name: 'Google',
       engineId: 'Google',
-      searchUrlPersonalized: 'https://www.google.com/search?q={searchTerms}',
+      searchUrl: 'https://www.google.com/search?q={searchTerms}',
       inputPrompt: 'Search Google',
     },
     yahooPaidSearchRewardOptIn: true,
@@ -59,10 +57,6 @@ const getMockProps = () => ({
 
 beforeAll(() => {
   jest.useFakeTimers()
-})
-
-beforeEach(() => {
-  LogSearchMutation.mockResolvedValue({})
 })
 
 afterEach(() => {
@@ -97,92 +91,37 @@ describe('SearchInput component', () => {
     expect(wrapper.find(SearchSelect).first().prop('open')).toEqual(false)
   })
 
-  it("searches with the updated URL when the user's search engine changes", async () => {
+  it('onSearchEngineSwitch passed to SearchInput changes the search engine result page', async () => {
     expect.assertions(2)
     const SearchInput = require('src/components/SearchInput').default
     const mockProps = getMockProps()
     const wrapper = mount(<SearchInput {...mockProps} />)
-    const searchTextField = wrapper.find(Input)
-    searchTextField
-      .find('input')
-      .simulate('change', { target: { value: 'test' } })
-    searchTextField.find('input').simulate('keypress', { key: 'Enter' })
-    await flushAllPromises()
-    expect(windowOpenTop).toHaveBeenCalledWith(
-      'https://www.google.com/search?q='
-    )
-    const updatedProps = {
-      ...mockProps,
-      user: {
-        ...mockProps.user,
-        searchEngine: {
-          ...mockProps.user.searchEngine,
-          name: 'DuckDuckGo',
-          engineId: 'DuckDuckGo',
-          rank: 3,
-          isCharitable: false,
-          inputPrompt: 'Search DuckDuckGo',
-          searchUrlPersonalized: 'https://duckduckgo.com/?q=',
-        },
-      },
-    }
-    wrapper.setProps(updatedProps)
-    wrapper.update()
-    searchTextField
-      .find('input')
-      .simulate('change', { target: { value: 'test' } })
-    searchTextField.find('input').simulate('keypress', { key: 'Enter' })
-    await flushAllPromises()
-    expect(windowOpenTop).toHaveBeenCalledWith('https://duckduckgo.com/?q=')
-  })
 
-  it('calls SetUserSearchEngineMutation when onSearchEngineSwitch from SearchInput is called', async () => {
-    expect.assertions(1)
-    const SearchInput = require('src/components/SearchInput').default
-    const mockProps = getMockProps()
-    const wrapper = mount(<SearchInput {...mockProps} />)
-    SetUserSearchEngineMutation.mockResolvedValue({
-      name: 'DuckDuckGo',
-      engineId: 'DuckDuckGo',
-      rank: 3,
-      isCharitable: false,
-      inputPrompt: 'Search DuckDuckGo',
-      searchUrlPersonalized: 'https://duckduckgo.com/?q=',
-    })
     act(() => {
       wrapper.find(SearchSelect).first().prop('onSearchEngineSwitch')(
         'DuckDuckGo'
       )
     })
     wrapper.update()
-    await flushAllPromises()
-    expect(SetUserSearchEngineMutation).toHaveBeenCalledWith(
-      'abcdefghijklmno',
-      'DuckDuckGo'
-    )
-  })
 
-  it('calls LogSearchMutation on search', () => {
-    const SearchInput = require('src/components/SearchInput').default
-    const mockProps = getMockProps()
-    const wrapper = mount(<SearchInput {...mockProps} />)
+    expect(wrapper.find(Input).first().prop('placeholder')).toEqual(
+      'Search DuckDuckGo'
+    )
     const searchTextField = wrapper.find(Input)
     searchTextField
       .find('input')
       .simulate('change', { target: { value: 'test' } })
     searchTextField.find('input').simulate('keypress', { key: 'Enter' })
-    expect(LogSearchMutation).toHaveBeenCalledWith({
-      userIdGlobal: mockProps.userId,
-      source: 'tab',
-    })
+
+    await flushAllPromises()
+    expect(windowOpenTop).toHaveBeenCalledWith('https://duckduckgo.com/?q=')
   })
 
-  it('calls a redirect to the search engine result page (and does not throw or log) if LogSearchMutation takes a really long time to resolve', async () => {
+  it('calls a redirect to the search engine result page (and does not throw or log) if LogTabMutation takes a really long time to resolve', async () => {
     expect.assertions(2)
     const SearchInput = require('src/components/SearchInput').default
     const mockProps = getMockProps()
     const wrapper = mount(<SearchInput {...mockProps} />)
-    LogSearchMutation.mockReturnValueOnce(new Promise(() => {})) // unresolved request
     const searchTextField = wrapper.find(Input)
     searchTextField
       .find('input')
@@ -197,12 +136,11 @@ describe('SearchInput component', () => {
     expect(logger.error).not.toHaveBeenCalled()
   })
 
-  it('calls a redirect to the search engine result page (and logs but does not throw) if LogSearchMutation rejects', async () => {
+  it('calls a redirect to the search engine result page (and logs but does not throw) if LogTabMutation rejects', async () => {
     expect.assertions(2)
     const SearchInput = require('src/components/SearchInput').default
     const mockProps = getMockProps()
     const wrapper = mount(<SearchInput {...mockProps} />)
-    LogSearchMutation.mockRejectedValue(new Error('Uh oh.'))
     const searchTextField = wrapper.find(Input)
     searchTextField
       .find('input')
@@ -238,6 +176,7 @@ describe('SearchInput component', () => {
     expect(searchSelect.prop('userSearchEngine')).toEqual(
       mockProps.user.searchEngine
     )
+    expect(searchSelect.prop('userId')).toEqual(mockProps.userId)
     expect(searchSelect.prop('searchEngines')).toEqual(
       mockProps.app.searchEngines
     )
