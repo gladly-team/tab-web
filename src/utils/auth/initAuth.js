@@ -103,8 +103,8 @@ const initAuth = () => {
     cookies: {
       name: 'TabAuth',
       keys: [
+        process.env.COOKIE_SECRET_20220711,
         process.env.COOKIE_SECRET_CURRENT,
-        process.env.COOKIE_SECRET_PREVIOUS,
       ],
       httpOnly: true,
       maxAge: 12 * 60 * 60 * 24 * 1000, // twelve days
