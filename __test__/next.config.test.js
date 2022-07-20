@@ -6,6 +6,7 @@ jest.mock('@zeit/next-source-maps', () => () => (config) => config)
 
 beforeEach(() => {
   process.env.NEXT_PUBLIC_VERCEL_URL = 'tab-abc123-gladly-team.vercel.app'
+  process.env.NEXT_PUBLIC_URLS_BASE_PATH = '/newtab'
 })
 
 afterEach(() => {
@@ -29,7 +30,7 @@ describe('Next.js config', () => {
     expect.assertions(1)
     const config = require('../next.config')
     expect(config.workboxOpts.runtimeCaching[0].urlPattern).toEqual(
-      /tab-abc123-gladly-team.vercel.app.*|https:\/\/prod-tab2017-media.gladly.io\/.*|https:\/\/dev-tab2017-media.gladly.io\/.*|https:\/\/dev-tab2017.gladly.io\/newtab\/.*|https:\/\/tab.gladly.io\/newtab\/.*/
+      /tab-abc123-gladly-team.vercel.app\/newtab.*|https:\/\/prod-tab2017-media.gladly.io\/.*|https:\/\/dev-tab2017-media.gladly.io\/.*|https:\/\/dev-tab2017.gladly.io\/newtab\/.*|https:\/\/tab.gladly.io\/newtab\/.*/
     )
   })
 
