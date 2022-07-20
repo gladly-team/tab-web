@@ -5,7 +5,6 @@ jest.mock('@sentry/webpack-plugin')
 jest.mock('@zeit/next-source-maps', () => () => (config) => config)
 
 beforeEach(() => {
-  process.env.NEXT_PUBLIC_VERCEL_URL = 'tab-abc123-gladly-team.vercel.app'
   process.env.NEXT_PUBLIC_URLS_BASE_PATH = '/newtab'
 })
 
@@ -30,15 +29,15 @@ describe('Next.js config', () => {
     expect.assertions(1)
     const config = require('../next.config')
     expect(config.workboxOpts.runtimeCaching[0].urlPattern).toEqual(
-      /tab-abc123-gladly-team.vercel.app\/newtab.*|https:\/\/prod-tab2017-media.gladly.io\/.*|https:\/\/dev-tab2017-media.gladly.io\/.*|https:\/\/dev-tab2017.gladly.io\/newtab\/.*|https:\/\/tab.gladly.io\/newtab\/.*/
+      /.*-gladly-team.vercel.app\/newtab.*|https:\/\/prod-tab2017-media.gladly.io\/.*|https:\/\/dev-tab2017-media.gladly.io\/.*|https:\/\/dev-tab2017.gladly.io\/newtab\/.*|https:\/\/tab.gladly.io\/newtab\/.*/
     )
   })
 
-  it('throws if the NEXT_PUBLIC_VERCEL_URL environment variable is not set', () => {
+  it('does not throw if the NEXT_PUBLIC_VERCEL_URL environment variable is not set', () => {
     expect.assertions(1)
     delete process.env.NEXT_PUBLIC_VERCEL_URL
     expect(() => {
       require('../next.config')
-    }).toThrow(new Error('Env var "NEXT_PUBLIC_VERCEL_URL" is required.'))
+    }).not.toThrow()
   })
 })

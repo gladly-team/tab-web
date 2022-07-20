@@ -34,18 +34,14 @@ const withSourceMaps = require('@zeit/next-source-maps')({
 })
 
 const basePath = process.env.NEXT_PUBLIC_URLS_BASE_PATH || ''
-const url = process.env.NEXT_PUBLIC_VERCEL_URL
-if (!url) {
-  throw new Error('Env var "NEXT_PUBLIC_VERCEL_URL" is required.')
-}
-
+const generalizedVercelDomain = '.*-gladly-team.vercel.app'
 const devAssetsRegex = 'https://prod-tab2017-media.gladly.io/.*'
 const prodAssetsRegex = 'https://dev-tab2017-media.gladly.io/.*'
 const devCloudFrontRegex = 'https://dev-tab2017.gladly.io/newtab/.*'
 const prodCloudFrontRegex = 'https://tab.gladly.io/newtab/.*'
 
 const cachingRegex = new RegExp(
-  `${url}${basePath}.*|${devAssetsRegex}|${prodAssetsRegex}|${devCloudFrontRegex}|${prodCloudFrontRegex}`
+  `${generalizedVercelDomain}${basePath}.*|${devAssetsRegex}|${prodAssetsRegex}|${devCloudFrontRegex}|${prodCloudFrontRegex}`
 )
 
 // Use the SentryWebpack plugin to upload the source maps during build.
