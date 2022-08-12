@@ -7,9 +7,14 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchIcon from '@material-ui/icons/Search'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { windowOpenTop } from 'src/utils/navigation'
+import LogSearchMutation from 'src/utils/mutations/LogSearchMutation'
 import Tooltip from '@material-ui/core/Tooltip'
 import CloseIcon from '@material-ui/icons/Close'
 import { Typography } from '@material-ui/core'
+import awaitTimeLimit from 'src/utils/awaitTimeLimit'
+import { AwaitedPromiseTimeout } from 'src/utils/errors'
+import logger from 'src/utils/logger'
+import SetUserSearchEngineMutation from 'src/utils/mutations/SetUserSearchEngineMutation'
 import SearchSelect from './SearchSelect'
 
 const searchBoxBorderColor = '#ced4da'
@@ -70,41 +75,46 @@ const SearchInput = (props) => {
     onSearchSelectMoreInfoClick,
     onSearchInputClick,
   } = props
-  const { searchEngine, yahooPaidSearchRewardOptIn } = user
+  const { searchEngine: currentSearchEngine, yahooPaidSearchRewardOptIn } = user
   const { searchEngines } = app
   const [searchSelectOpen, setSearchSelectOpen] = useState(false)
   const classes = useStyles()
   const searchInputRef = React.createRef()
   const fullInputRef = React.createRef()
   const [anchorEl, setAnchorEl] = React.useState(null)
-  const [currentSearchEngine, setCurrentSearchEngine] = useState(searchEngine)
   const [tooltipOpen, setTooltipOpen] = useState(!!tooltip)
-
-  const getSearchEngine = useCallback(
-    (searchEngineId) =>
-      searchEngines.edges.find(
-        (engine) => engine.node.engineId === searchEngineId
-      ).node,
-    [searchEngines]
-  )
-
   useEffect(() => {
-    setCurrentSearchEngine(searchEngine)
     setTooltipOpen(!!tooltip)
-  }, [searchEngine, getSearchEngine, yahooPaidSearchRewardOptIn, tooltip])
+  }, [tooltip])
 
   const onSearch = useCallback(async () => {
     const query = searchInputRef.current.value
-    const searchURL = currentSearchEngine.searchUrl.replace(
+    const searchURL = currentSearchEngine.searchUrlPersonalized.replace(
       /{\w+}/,
       encodeURIComponent(query)
     )
 
+    // Log the search event but time-cap how long we wait to avoid a bad UX
+    // if the request hangs.
+    try {
+      const MS_TO_WAIT_FOR_LOG = 50
+      await awaitTimeLimit(
+        LogSearchMutation({
+          userIdGlobal: userId,
+          source: 'tab',
+        }),
+        MS_TO_WAIT_FOR_LOG
+      )
+    } catch (e) {
+      if (e.code !== AwaitedPromiseTimeout.code) {
+        logger.error(e)
+      }
+    }
     windowOpenTop(searchURL)
-  }, [userId, currentSearchEngine.searchUrl, searchInputRef])
+  }, [userId, currentSearchEngine.searchUrlPersonalized, searchInputRef])
 
   const onSwitchSearchEngine = (newSearchEngineId) => {
-    setCurrentSearchEngine(getSearchEngine(newSearchEngineId))
+    SetUserSearchEngineMutation(userId, newSearchEngineId)
   }
 
   const onSearchSelectOpen = () => {
@@ -177,9 +187,8 @@ const SearchInput = (props) => {
         }
       />
       <SearchSelect
-        userSearchEngine={searchEngine}
+        userSearchEngine={currentSearchEngine}
         anchorEl={anchorEl}
-        userId={userId}
         searchEngines={searchEngines}
         open={searchSelectOpen}
         onClose={onSearchSelectClose}
@@ -203,7 +212,6 @@ SearchInput.propTypes = {
           node: PropTypes.shape({
             engineId: PropTypes.string,
             name: PropTypes.string,
-            searchUrl: PropTypes.string,
             rank: PropTypes.number,
             isCharitable: PropTypes.bool,
             inputPrompt: PropTypes.string,
@@ -216,7 +224,7 @@ SearchInput.propTypes = {
     searchEngine: PropTypes.shape({
       engineId: PropTypes.string,
       inputPrompt: PropTypes.string,
-      searchUrl: PropTypes.string,
+      searchUrlPersonalized: PropTypes.string,
     }),
     yahooPaidSearchRewardOptIn: PropTypes.bool,
   }).isRequired,
