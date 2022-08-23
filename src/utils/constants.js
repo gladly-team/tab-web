@@ -24,3 +24,8 @@ export const MAX_TABS_WITH_ADS = 150
 
 // Constants for Local Storage Mgr
 export const HAS_SEEN_SEARCH_V2_TOOLTIP = 'has_seen_search_v2_tooltip'
+
+export const CHROME_BROWSER = 'chrome'
+export const FIREFOX_BROWSER = 'firefox'
+export const EDGE_BROWSER = 'edge'
+export const UNSUPPORTED_BROWSER = 'other'
