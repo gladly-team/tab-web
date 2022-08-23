@@ -84,7 +84,7 @@ import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
 import Notification from 'src/components/Notification'
 import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
 import { getFeatureValue } from 'src/utils/growthbookUtils'
-import { YAHOO_SEARCH_NEW_USERS_V2, SFAC_EXTENSION_PROMPT } from 'src/utils/experiments'
+import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
 import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
 
 const AMBASSADOR_APPLICATION_LINK = 'https://forms.gle/bRir3cKmqZfCgbur9'
@@ -330,6 +330,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           vcCurrent
           joined
           showYahooPrompt
+          showSfacExtensionPrompt
           cause {
             causeId
             individualImpactEnabled
@@ -418,6 +419,7 @@ const Index = ({ data: fallbackData }) => {
     joined,
     notifications = [],
     showYahooPrompt,
+    showSfacExtensionPrompt,
     searches,
   } = user || {}
   const {
@@ -480,12 +482,7 @@ const Index = ({ data: fallbackData }) => {
   const [showSFACNotification, setShowSFACNotification] = useState(false)
   const [interactedWithSFACNotification, setInteractedWithSFACNotification] =
     useState(true)
-  const v2ExperimentVariation = getFeatureValue(
-    features,
-    SFAC_EXTENSION_PROMPT
-  )
-  const showSFACExtensionNotification = true
-  
+
   const onSFACSellModalAccept = () => {
     setSearchInputTooltip(
       'Great! You can always switch your search engine here later on.'
@@ -791,10 +788,8 @@ const Index = ({ data: fallbackData }) => {
                       }}
                     />
                   ) : null}
-                  {userGlobalId && showSFACExtensionNotification ? (
-                    <SfacExtensionSellNotification
-                      userId={userGlobalId} />
-                  />
+                  {userGlobalId && showSfacExtensionPrompt ? (
+                    <SfacExtensionSellNotification userId={userGlobalId} />
                   ) : null}
                   {userGlobalId && showSFACNotification ? (
                     <SearchForACauseSellNotification
@@ -964,6 +959,7 @@ Index.propTypes = {
       tabs: PropTypes.number.isRequired,
       vcCurrent: PropTypes.number.isRequired,
       showYahooPrompt: PropTypes.bool,
+      showSfacExtensionPrompt: PropTypes.bool,
     }).isRequired,
   }),
 }

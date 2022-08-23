@@ -41,6 +41,7 @@ import { validateAttributesObject } from 'src/utils/growthbook'
 import SearchInput from 'src/components/SearchInput'
 import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
 import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
+import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
 import { Button } from '@material-ui/core'
 import Notification from 'src/components/Notification'
 import Chip from '@material-ui/core/Chip'
@@ -1028,6 +1029,27 @@ describe('index.js', () => {
 
     const notification = wrapper.find(SearchForACauseSellNotification)
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toBe(false)
+    expect(notification.exists()).toBe(true)
+  })
+
+  it('does not render a SFAC extension notification if showSfacExtensionPrompt is not true', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    const notification = wrapper.find(SfacExtensionSellNotification)
+    expect(notification.exists()).toBe(false)
+  })
+
+  it('does render a SFAC extension notification if showSfacExtensionPrompt is true', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.showSfacExtensionPrompt = true
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    const notification = wrapper.find(SfacExtensionSellNotification)
     expect(notification.exists()).toBe(true)
   })
 
