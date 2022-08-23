@@ -71,8 +71,8 @@ import useData from 'src/utils/hooks/useData'
 import {
   CAT_CHARITY,
   STORAGE_NEW_USER_CAUSE_ID,
-  USER_SURVEY_2022_NOTIFICATION,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
+  AMBASSADOR_2022_NOTIFICATION,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -85,6 +85,8 @@ import Notification from 'src/components/Notification'
 import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
 import { getFeatureValue } from 'src/utils/growthbookUtils'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
+
+const AMBASSADOR_APPLICATION_LINK = 'https://forms.gle/bRir3cKmqZfCgbur9'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -251,6 +253,16 @@ const useStyles = makeStyles((theme) => ({
     overflow: 'visible',
     marginBottom: 10,
     pointerEvents: 'all', // needs to be clickable
+  },
+
+  // TODO: create reusable new button
+  newButton: {
+    background: '#29BEBA',
+    borderRadius: '15px',
+    height: '30px',
+    '&:hover': {
+      background: '#00a097',
+    },
   },
 }))
 
@@ -532,15 +544,15 @@ const Index = ({ data: fallbackData }) => {
     }
   }, [globalTabCount])
 
-  // Show the user survey if it's enabled and the user hasn't dismissed it.
-  const [showUserSurvey, setShowUserSurvey] = useState(false)
+  // Show a one-off notification.
+  const [showCustomNotification, setShowCustomNotification] = useState(false)
   useEffect(() => {
     if (
       isClientSide() &&
-      localStorageMgr.getItem(USER_SURVEY_2022_NOTIFICATION) !== 'true' &&
-      !!notifications.find((notif) => notif.code === 'userSurvey2022')
+      localStorageMgr.getItem(AMBASSADOR_2022_NOTIFICATION) !== 'true' &&
+      !!notifications.find((notif) => notif.code === 'collegeAmbassador2022')
     ) {
-      setShowUserSurvey(true)
+      setShowCustomNotification(true)
     }
   }, [notifications])
 
@@ -720,26 +732,42 @@ const Index = ({ data: fallbackData }) => {
                  * that appear via the UserImpact component.
                  */}
                 <div className={classes.notificationsContainer}>
-                  {showUserSurvey ? (
+                  {showCustomNotification ? (
                     <Notification
                       className={classes.notification}
                       text={
                         <div>
                           <Typography variant="body1" gutterBottom>
-                            Share Your Feedback
+                            ⚠️ Calling All College Students ⚠️
                           </Typography>
                           <Typography variant="body2" gutterBottom>
-                            We'd love to hear from you! Let us know how we can
-                            make Tab for a Cause even better with this 2-minute
-                            survey.
+                            Become a Tab for a Cause ambassador and earn cash
+                            and awesome merchandise (Patagonia, Built, Let’s Go
+                            Eco - just to name a few!) when your classmates join
+                            Tab for a Cause.{' '}
+                            <Link
+                              to={AMBASSADOR_APPLICATION_LINK}
+                              target="_blank"
+                              style={{ color: '#9d4ba3' }}
+                            >
+                              Click here to apply
+                            </Link>{' '}
+                            and for more information.{' '}
+                            <span style={{ fontWeight: 'bold' }}>
+                              Applications close September 12.
+                            </span>
                           </Typography>
                         </div>
                       }
                       buttons={
                         <div className={classes.notificationButtonsWrapper}>
-                          <Link to="https://docs.google.com/forms/d/1e_EsXtjdfwjD4_OP0k5xIoPAQbezWLHakEIponVhleI/edit?usp=sharing">
-                            <Button variant="contained" color="primary">
-                              Take the Survey
+                          <Link to={AMBASSADOR_APPLICATION_LINK}>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              className={classes.newButton}
+                            >
+                              Learn More
                             </Button>
                           </Link>
                         </div>
@@ -747,10 +775,10 @@ const Index = ({ data: fallbackData }) => {
                       includeClose
                       onClose={() => {
                         localStorageMgr.setItem(
-                          USER_SURVEY_2022_NOTIFICATION,
+                          AMBASSADOR_2022_NOTIFICATION,
                           'true'
                         )
-                        setShowUserSurvey(false)
+                        setShowCustomNotification(false)
                       }}
                     />
                   ) : null}
