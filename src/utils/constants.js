@@ -8,6 +8,8 @@ export const MEDIA_ENDPOINT = process.env.NEXT_PUBLIC_MEDIA_ENDPOINT
 
 // One-offs
 export const USER_SURVEY_2022_NOTIFICATION = 'tab.user.dismissedUserSurvey2022'
+export const AMBASSADOR_2022_NOTIFICATION =
+  'tab.user.dismissedAmbassadorNotif2022'
 
 // Squad Invite Constants
 export const MISSION_COMPLETE = 'mission_complete'
