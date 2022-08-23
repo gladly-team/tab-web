@@ -7,13 +7,9 @@ import InputAdornment from '@material-ui/core/InputAdornment'
 import SearchIcon from '@material-ui/icons/Search'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import { windowOpenTop } from 'src/utils/navigation'
-import LogSearchMutation from 'src/utils/mutations/LogSearchMutation'
 import Tooltip from '@material-ui/core/Tooltip'
 import CloseIcon from '@material-ui/icons/Close'
 import { Typography } from '@material-ui/core'
-import awaitTimeLimit from 'src/utils/awaitTimeLimit'
-import { AwaitedPromiseTimeout } from 'src/utils/errors'
-import logger from 'src/utils/logger'
 import SetUserSearchEngineMutation from 'src/utils/mutations/SetUserSearchEngineMutation'
 import SearchSelect from './SearchSelect'
 
@@ -87,31 +83,15 @@ const SearchInput = (props) => {
     setTooltipOpen(!!tooltip)
   }, [tooltip])
 
-  const onSearch = useCallback(async () => {
+  const onSearch = useCallback(() => {
     const query = searchInputRef.current.value
     const searchURL = currentSearchEngine.searchUrlPersonalized.replace(
       /{\w+}/,
       encodeURIComponent(query)
     )
 
-    // Log the search event but time-cap how long we wait to avoid a bad UX
-    // if the request hangs.
-    try {
-      const MS_TO_WAIT_FOR_LOG = 50
-      await awaitTimeLimit(
-        LogSearchMutation({
-          userIdGlobal: userId,
-          source: 'tab',
-        }),
-        MS_TO_WAIT_FOR_LOG
-      )
-    } catch (e) {
-      if (e.code !== AwaitedPromiseTimeout.code) {
-        logger.error(e)
-      }
-    }
     windowOpenTop(searchURL)
-  }, [userId, currentSearchEngine.searchUrlPersonalized, searchInputRef])
+  }, [currentSearchEngine.searchUrlPersonalized, searchInputRef])
 
   const onSwitchSearchEngine = (newSearchEngineId) => {
     SetUserSearchEngineMutation(userId, newSearchEngineId)
