@@ -741,10 +741,10 @@ const Index = ({ data: fallbackData }) => {
                             ⚠️ Calling All College Students ⚠️
                           </Typography>
                           <Typography variant="body2" gutterBottom>
-                            Become a Tab for a Cause ambassador and earn cash
-                            and awesome merchandise (Patagonia, Built, Let’s Go
-                            Eco - just to name a few!) when your classmates join
-                            Tab for a Cause.{' '}
+                            Become a Tab for a Cause ambassador to earn cash and
+                            awesome merchandise (Patagonia, Built, Let’s Go Eco
+                            - just to name a few!) when your classmates join Tab
+                            for a Cause.{' '}
                             <Link
                               to={AMBASSADOR_APPLICATION_LINK}
                               target="_blank"
