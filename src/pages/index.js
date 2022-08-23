@@ -761,7 +761,10 @@ const Index = ({ data: fallbackData }) => {
                       }
                       buttons={
                         <div className={classes.notificationButtonsWrapper}>
-                          <Link to={AMBASSADOR_APPLICATION_LINK}>
+                          <Link
+                            to={AMBASSADOR_APPLICATION_LINK}
+                            target="_blank"
+                          >
                             <Button
                               variant="contained"
                               color="primary"
