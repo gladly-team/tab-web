@@ -7,7 +7,7 @@ import { aboutURL, accountURL } from 'src/utils/urls'
 import { act } from 'react-dom/test-utils'
 import {
   STORAGE_NEW_USER_CAUSE_ID,
-  USER_SURVEY_2022_NOTIFICATION,
+  AMBASSADOR_2022_NOTIFICATION,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
 } from 'src/utils/constants'
 import {
@@ -1282,7 +1282,7 @@ describe('index.js: hardcoded notifications', () => {
     isClientSide.mockReturnValue(true)
   })
 
-  it('does not render the user survey notification if it is not enabled', () => {
+  it('does not render the college ambassador notification if it is not enabled', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: mockProps.data })
@@ -1291,17 +1291,7 @@ describe('index.js: hardcoded notifications', () => {
     expect(notification.exists()).not.toBe(true)
   })
 
-  it('does not render the user survey notification if it is enabled but user has already dismissed it', () => {
-    const IndexPage = require('src/pages/index').default
-    localStorageMgr.getItem.mockReturnValue('true')
-    const mockProps = getMockProps()
-    useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
-    const notification = wrapper.find(Notification)
-    expect(notification.exists()).not.toBe(true)
-  })
-
-  it('does not render the user survey notification if not on the client side', async () => {
+  it('does not render the college ambassador notification if it is enabled but user has already dismissed it', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = {
       ...getMockProps(),
@@ -1311,7 +1301,28 @@ describe('index.js: hardcoded notifications', () => {
           ...getMockProps().data.user,
           id: 'someId',
           username: 'someUsername',
-          notifications: [{ code: 'userSurvey2022' }],
+          notifications: [{ code: 'collegeAmbassador2022' }],
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    localStorageMgr.getItem.mockReturnValue('true')
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const notification = wrapper.find(Notification)
+    expect(notification.exists()).not.toBe(true)
+  })
+
+  it('does not render the college ambassador notification if not on the client side', async () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = {
+      ...getMockProps(),
+      data: {
+        ...getMockProps().data,
+        user: {
+          ...getMockProps().data.user,
+          id: 'someId',
+          username: 'someUsername',
+          notifications: [{ code: 'collegeAmbassador2022' }],
         },
       },
     }
@@ -1333,7 +1344,7 @@ describe('index.js: hardcoded notifications', () => {
           ...getMockProps().data.user,
           id: 'someId',
           username: 'someUsername',
-          notifications: [{ code: 'userSurvey2022' }],
+          notifications: [{ code: 'collegeAmbassador2022' }],
         },
       },
     }
@@ -1344,7 +1355,7 @@ describe('index.js: hardcoded notifications', () => {
     expect(notification.exists()).toBe(true)
   })
 
-  it('hides the user survey notification if it ends after initial render (this avoids "+1" problem of page loads after campaign end)', async () => {
+  it('hides the college ambassador notification if it ends after initial render (this avoids "+1" problem of page loads after campaign end)', async () => {
     expect.assertions(2)
     const IndexPage = require('src/pages/index').default
     const mockProps = {
@@ -1355,7 +1366,7 @@ describe('index.js: hardcoded notifications', () => {
           ...getMockProps().data.user,
           id: 'someId',
           username: 'someUsername',
-          notifications: [{ code: 'userSurvey2022' }],
+          notifications: [{ code: 'collegeAmbassador2022' }],
         },
       },
     }
@@ -1381,7 +1392,7 @@ describe('index.js: hardcoded notifications', () => {
     expect(wrapper.find(Notification).at(1).exists()).toBe(false)
   })
 
-  it('dismissing the user survey notification updates local storage and dismisses notification', async () => {
+  it('dismissing the college ambassador notification updates local storage and dismisses notification', async () => {
     expect.assertions(1)
     const IndexPage = require('src/pages/index').default
     const mockProps = {
@@ -1392,7 +1403,7 @@ describe('index.js: hardcoded notifications', () => {
           ...getMockProps().data.user,
           id: 'someId',
           username: 'someUsername',
-          notifications: [{ code: 'userSurvey2022' }],
+          notifications: [{ code: 'collegeAmbassador2022' }],
         },
       },
     }
@@ -1406,7 +1417,7 @@ describe('index.js: hardcoded notifications', () => {
       flushAllPromises()
     })
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
-      USER_SURVEY_2022_NOTIFICATION,
+      AMBASSADOR_2022_NOTIFICATION,
       'true'
     )
   })
