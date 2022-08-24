@@ -504,6 +504,18 @@ type CreateSearchEnginePromptLogPayload {
   clientMutationId: String
 }
 
+input CreateSfacExtensionPromptResponseInput {
+  userId: String!
+  browser: String!
+  accepted: Boolean!
+  clientMutationId: String
+}
+
+type CreateSfacExtensionPromptResponsePayload {
+  user: User
+  clientMutationId: String
+}
+
 input CreateSquadInvitesInput {
   inviterId: String!
   invitedEmails: [String]!
@@ -735,19 +747,28 @@ type LogReferralLinkClickPayload {
 }
 
 input LogSearchInput {
-  """The user Relay global ID. Provide either this or `userId`."""
+  """
+  The user Relay global ID. Provide either this or `userId` for an existing user.
+  """
   userIdGlobal: String
 
   """
-  The actual user ID (not the Relay global). Provide either this or `userIdGlobal`.
+  The actual user ID (not the Relay global). Provide either this or `userIdGlobal` for an existing user.
   """
   userId: String
+
+  """The anonymous user ID. Provide this for an anonymous user."""
+  anonUserId: String
   source: String
+  causeId: String
+  searchEngineId: String
+  version: Int
   clientMutationId: String
 }
 
 type LogSearchPayload {
   user: User
+  success: Boolean
   clientMutationId: String
 }
 
@@ -958,6 +979,7 @@ type Mutation {
   setYahooSearchOptIn(input: SetYahooSearchOptInInput!): SetYahooSearchOptInPayload
   setUserSearchEngine(input: SetUserSearchEngineInput!): SetUserSearchEnginePayload
   createSearchEnginePromptLog(input: CreateSearchEnginePromptLogInput!): CreateSearchEnginePromptLogPayload
+  createSfacExtensionPromptResponse(input: CreateSfacExtensionPromptResponseInput!): CreateSfacExtensionPromptResponsePayload
   createUserExperiment(input: CreateUserExperimentInput!): CreateUserExperimentPayload
 }
 
@@ -1592,6 +1614,9 @@ type User implements Node {
 
   """whether to show the yahoo search prompt"""
   showYahooPrompt: Boolean!
+
+  """whether to show the SFAC extension prompt"""
+  showSfacExtensionPrompt: Boolean!
 
   """whether or not the user has opted into searching for extra impact"""
   yahooPaidSearchRewardOptIn: Boolean!
