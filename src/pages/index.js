@@ -73,6 +73,7 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   AMBASSADOR_2022_NOTIFICATION,
+  UNSUPPORTED_BROWSER,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -86,6 +87,7 @@ import SearchForACauseSellNotification from 'src/components/SearchForACauseSellN
 import { getFeatureValue } from 'src/utils/growthbookUtils'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
 import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
+import detectBrowser from 'src/utils/detectBrowser'
 
 const AMBASSADOR_APPLICATION_LINK = 'https://forms.gle/bRir3cKmqZfCgbur9'
 
@@ -480,6 +482,13 @@ const Index = ({ data: fallbackData }) => {
   }
   const [showSearchInputTooltip, setSearchInputTooltip] = useState(false)
   const [showSFACNotification, setShowSFACNotification] = useState(false)
+  const [shouldShowSfacExtensionPrompt, setShouldShowSfacExtensionPrompt] = useState(false)
+  useEffect(() => {
+    if (detectBrowser() !== UNSUPPORTED_BROWSER) {
+      setShouldShowSfacExtensionPrompt(showSfacExtensionPrompt)
+    }
+  }, [showSfacExtensionPrompt])
+
   const [interactedWithSFACNotification, setInteractedWithSFACNotification] =
     useState(true)
 
@@ -788,7 +797,7 @@ const Index = ({ data: fallbackData }) => {
                       }}
                     />
                   ) : null}
-                  {userGlobalId && showSfacExtensionPrompt ? (
+                  {userGlobalId && shouldShowSfacExtensionPrompt ? (
                     <SfacExtensionSellNotification userId={userGlobalId} />
                   ) : null}
                   {userGlobalId && showSFACNotification ? (
