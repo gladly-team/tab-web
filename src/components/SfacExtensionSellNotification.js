@@ -1,8 +1,14 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
 import { Typography } from '@material-ui/core'
+import CreateSfacExtensionPromptResponseMutation from 'src/utils/mutations/CreateSfacExtensionPromptResponseMutation'
+import awaitTimeLimit from 'src/utils/awaitTimeLimit'
+import { windowOpenTop } from 'src/utils/navigation'
+import { GET_SEARCH_URL } from 'src/utils/urls'
+import { AwaitedPromiseTimeout } from 'src/utils/errors'
+import logger from 'src/utils/logger'
 import Notification from './Notification'
 
 const useStyles = makeStyles((theme) => ({
@@ -33,15 +39,28 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
 }))
-const SfacExtensionSellNotification = ({ onNo, onYes }) => {
+const SfacExtensionSellNotification = ({ browser, userId }) => {
   const [open, setOpen] = useState(true)
   const classes = useStyles()
-  const onNoClick = () => {
-    onNo()
+  const onYesClick = useCallback(async () => {
+    // Log the search event but time-cap how long we wait to avoid a bad UX
+    // if the request hangs.
+    try {
+      const MS_TO_WAIT_FOR_LOG = 50
+      await awaitTimeLimit(
+        CreateSfacExtensionPromptResponseMutation(userId, browser, true),
+        MS_TO_WAIT_FOR_LOG
+      )
+    } catch (e) {
+      if (e.code !== AwaitedPromiseTimeout.code) {
+        logger.error(e)
+      }
+    }
     setOpen(false)
-  }
-  const onYesClick = () => {
-    onYes()
+    windowOpenTop(GET_SEARCH_URL)
+  }, [userId, browser])
+  const onNoClick = () => {
+    CreateSfacExtensionPromptResponseMutation(userId, browser, false)
     setOpen(false)
   }
   return (
@@ -80,13 +99,13 @@ const SfacExtensionSellNotification = ({ onNo, onYes }) => {
 }
 
 SfacExtensionSellNotification.propTypes = {
-  onNo: PropTypes.func,
-  onYes: PropTypes.func,
+  browser: PropTypes.string,
+  userId: PropTypes.string,
 }
 
 SfacExtensionSellNotification.defaultProps = {
-  onNo: () => {},
-  onYes: () => {},
+  browser: PropTypes.string,
+  userId: PropTypes.string,
 }
 
 export default SfacExtensionSellNotification

@@ -482,7 +482,8 @@ const Index = ({ data: fallbackData }) => {
   }
   const [showSearchInputTooltip, setSearchInputTooltip] = useState(false)
   const [showSFACNotification, setShowSFACNotification] = useState(false)
-  const [shouldShowSfacExtensionPrompt, setShouldShowSfacExtensionPrompt] = useState(false)
+  const [shouldShowSfacExtensionPrompt, setShouldShowSfacExtensionPrompt] =
+    useState(false)
   useEffect(() => {
     if (detectBrowser() !== UNSUPPORTED_BROWSER) {
       setShouldShowSfacExtensionPrompt(showSfacExtensionPrompt)
@@ -798,7 +799,10 @@ const Index = ({ data: fallbackData }) => {
                     />
                   ) : null}
                   {userGlobalId && shouldShowSfacExtensionPrompt ? (
-                    <SfacExtensionSellNotification userId={userGlobalId} />
+                    <SfacExtensionSellNotification
+                      userId={userGlobalId}
+                      browser={detectBrowser()}
+                    />
                   ) : null}
                   {userGlobalId && showSFACNotification ? (
                     <SearchForACauseSellNotification

@@ -47,6 +47,7 @@ export const EXTERNAL_CLEAR_COOKIES_HELP_PAGE =
   'https://gladly.zendesk.com/hc/en-us/articles/360002317231-How-do-I-clear-my-cookies-and-site-data-for-Tab-for-a-Cause-'
 export const HELP_URL = 'https://tab.gladly.io/help/'
 export const FINANCIALS_URL = 'https://tab.gladly.io/financials/'
+export const GET_SEARCH_URL = 'https://tab.gladly.io/get-search/'
 // eslint-disable-next-line no-undef
 export const reload = () => window.location.reload()
 export const externalNavigation = (url) => {
