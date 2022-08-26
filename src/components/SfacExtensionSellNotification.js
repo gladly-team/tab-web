@@ -46,7 +46,7 @@ const SfacExtensionSellNotification = ({ browser, userId }) => {
     // Log the search event but time-cap how long we wait to avoid a bad UX
     // if the request hangs.
     try {
-      const MS_TO_WAIT_FOR_LOG = 50
+      const MS_TO_WAIT_FOR_LOG = 1500
       await awaitTimeLimit(
         CreateSfacExtensionPromptResponseMutation(userId, browser, true),
         MS_TO_WAIT_FOR_LOG

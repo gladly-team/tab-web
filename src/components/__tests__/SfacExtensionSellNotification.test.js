@@ -85,7 +85,7 @@ describe('SfacExtensionSellNotification component', () => {
     expect(logger.error).not.toHaveBeenCalled()
   })
 
-  it('calls a redirect to the search engine result page (and does not throw or log) if LogSearchMutation takes a really long time to resolve', async () => {
+  it('calls a redirect to the search engine result page (and does not throw or log) if CreateSfacExtensionPromptResponseMutation throws an error', async () => {
     expect.assertions(6)
     const SfacExtensionSellNotification =
       require('src/components/SfacExtensionSellNotification').default
