@@ -169,6 +169,12 @@ const getMockCurrentMission = () => ({
   missionId: 'abc-123',
 })
 
+const getWrapper = async (component) => {
+  let wrapper
+  await act(async () => wrapper = mount(component))
+  return wrapper
+}
+
 beforeEach(() => {
   showMockAchievements.mockReturnValue(false)
   showBackgroundImages.mockReturnValue(false)
@@ -783,7 +789,7 @@ describe('index.js', () => {
     })
   })
 
-  it('shows the intro flow if a user has not completed it', () => {
+  it('shows the intro flow if a user has not completed it', async () => {
     const defaultMockProps = getMockProps()
     const mockProps = {
       ...defaultMockProps,
@@ -827,7 +833,7 @@ describe('index.js', () => {
       },
     })
     const IndexPage = require('src/pages/index').default
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
     expect(wrapper.find(OnboardingFlow).exists()).toBe(true)
   })
 
@@ -875,15 +881,15 @@ describe('index.js', () => {
       },
     })
     const IndexPage = require('src/pages/index').default
-    const wrapper = mount(<IndexPage {...mockProps} />)
-    expect(wrapper.find(OnboardingFlow).exists()).toBe(true)
-    const flow = wrapper.find(OnboardingFlow)
     await act(async () => {
+      const wrapper = await getWrapper(<IndexPage {...mockProps} />)
+      expect(wrapper.find(OnboardingFlow).exists()).toBe(true)
+      const flow = wrapper.find(OnboardingFlow)
       flow.props().onComplete()
       await flushAllPromises()
       wrapper.update()
+      expect(wrapper.find(OnboardingFlow).exists()).toBe(false)
     })
-    expect(wrapper.find(OnboardingFlow).exists()).toBe(false)
   })
 
   it('sets the cause id for tab ads', () => {
@@ -951,11 +957,11 @@ describe('index.js', () => {
     consoleErrSpy.mockRestore()
   })
 
-  it('correctly handles set extra search impact flow when accepting', () => {
+  it('correctly handles set extra search impact flow when accepting', async () => {
     expect.assertions(6)
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     expect(wrapper.find(SearchForACauseSellModal).prop('open')).toBe(false)
     expect(
@@ -973,17 +979,20 @@ describe('index.js', () => {
 
     const acceptButton = wrapper.find(Button).at(1)
     expect(acceptButton.text()).toEqual("Let's Do It!")
-    acceptButton.simulate('click')
+    await act(async () => {
+      acceptButton.simulate('click')
+      wrapper.update()
+    })
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(
       'Great! You can always switch your search engine here later on.'
     )
   })
 
-  it('correctly handles set extra search impact flow when declining', () => {
+  it('correctly handles set extra search impact flow when declining', async () => {
     expect.assertions(6)
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     expect(wrapper.find(SearchForACauseSellModal).prop('open')).toBe(false)
     expect(
@@ -1001,15 +1010,18 @@ describe('index.js', () => {
 
     const acceptButton = wrapper.find(Button).at(0)
     expect(acceptButton.text()).toEqual("I don't want more impact")
-    acceptButton.simulate('click')
+    await act(async () => {
+      acceptButton.simulate('click')
+      wrapper.update()
+    })
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(false)
   })
 
-  it('does not render a SFAC sell notification if showYahooPrompt is not true', () => {
+  it('does not render a SFAC sell notification if showYahooPrompt is not true', async () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     act(() => {
       wrapper.find(SearchInput).first().prop('onSearchInputClick')()
@@ -1020,12 +1032,12 @@ describe('index.js', () => {
     expect(notification.exists()).toBe(false)
   })
 
-  it.only('does render a SFAC sell notification if showYahooPrompt is true', () => {
+  it('does render a SFAC sell notification if showYahooPrompt is true', async () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     mockProps.data.user.showYahooPrompt = true
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     act(() => {
       wrapper.find(SearchInput).first().prop('onSearchInputClick')()
@@ -1037,36 +1049,39 @@ describe('index.js', () => {
     expect(notification.exists()).toBe(true)
   })
 
-  it('does not render a SFAC extension notification if showSfacExtensionPrompt is not true', () => {
+  it('does not render a SFAC extension notification if showSfacExtensionPrompt is not true', async () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     const notification = wrapper.find(SfacExtensionSellNotification)
     expect(notification.exists()).toBe(false)
   })
 
-  it('does not render a SFAC extension notification if browser is unsupported', () => {
+  it('does not render a SFAC extension notification if browser is unsupported', async () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
-    //detectBrowser.mockResolvedValue(UNSUPPORTED_BROWSER)
+
+    detectBrowser.mockResolvedValue(UNSUPPORTED_BROWSER)
     mockProps.data.user.showSfacExtensionPrompt = true
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     const notification = wrapper.find(SfacExtensionSellNotification)
     expect(notification.exists()).toBe(false)
   })
 
-  it('does render a SFAC extension notification if showSfacExtensionPrompt is true', () => {
+  it('does render a SFAC extension notification if showSfacExtensionPrompt is true and supported browser', async () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     mockProps.data.user.showSfacExtensionPrompt = true
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
-    const notification = wrapper.find(SfacExtensionSellNotification)
+    wrapper.update()
+    const notification  = wrapper.find(SfacExtensionSellNotification)
+    console.log(notification)
     expect(notification.exists()).toBe(true)
   })
 
@@ -1075,7 +1090,7 @@ describe('index.js', () => {
     const mockProps = getMockProps()
     mockProps.data.user.showYahooPrompt = true
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     act(() => {
       wrapper.find(SearchInput).first().prop('onSearchInputClick')()
@@ -1092,12 +1107,12 @@ describe('index.js', () => {
     expect(sfacModal.prop('hardSell')).toEqual(false)
   })
 
-  it('clicking no thanks on SFAC sell notification opens modal in hard sell mode', () => {
+  it('clicking no thanks on SFAC sell notification opens modal in hard sell mode', async () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     mockProps.data.user.showYahooPrompt = true
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     act(() => {
       wrapper.find(SearchInput).first().prop('onSearchInputClick')()
@@ -1114,12 +1129,12 @@ describe('index.js', () => {
     expect(sfacModal.prop('hardSell')).toEqual(true)
   })
 
-  it('clicking accept on SFAC sell notification sets tooltip', () => {
+  it('clicking accept on SFAC sell notification sets tooltip', async () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     mockProps.data.user.showYahooPrompt = true
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     act(() => {
       wrapper.find(SearchInput).first().prop('onSearchInputClick')()
@@ -1137,12 +1152,12 @@ describe('index.js', () => {
     )
   })
 
-  it('accepting sfac modal while sfac notification is open closes the modal', () => {
+  it('accepting sfac modal while sfac notification is open closes the modal', async () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     mockProps.data.user.showYahooPrompt = true
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     expect(wrapper.find(SearchForACauseSellModal).prop('open')).toBe(false)
     expect(
@@ -1173,7 +1188,7 @@ describe('index.js', () => {
     expect(wrapper.find(SearchForACauseSellNotification).exists()).toBe(false)
   })
 
-  it('displays tooltip when in v2 experiment and clicking on SearchInput with no searches', () => {
+  it('displays tooltip when in v2 experiment and clicking on SearchInput with no searches', async () => {
     const IndexPage = require('src/pages/index').default
     const defaultMockProps = getMockProps()
     const mockProps = {
@@ -1194,7 +1209,7 @@ describe('index.js', () => {
       },
     }
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     act(() => {
       wrapper.find(SearchInput).first().prop('onSearchInputClick')()
@@ -1210,7 +1225,7 @@ describe('index.js', () => {
     )
   })
 
-  it('does not display tooltip when in v2 experiment and seen tooltip before per local storage', () => {
+  it('does not display tooltip when in v2 experiment and seen tooltip before per local storage', async () => {
     const IndexPage = require('src/pages/index').default
     const defaultMockProps = getMockProps()
     const mockProps = {
@@ -1232,7 +1247,7 @@ describe('index.js', () => {
     }
     useData.mockReturnValue({ data: mockProps.data })
     localStorageMgr.getItem.mockReturnValue(true)
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     act(() => {
       wrapper.find(SearchInput).first().prop('onSearchInputClick')()
@@ -1242,7 +1257,7 @@ describe('index.js', () => {
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(false)
   })
 
-  it('does not display tooltip when in v2 experiment and clicking on SearchInput with searches', () => {
+  it('does not display tooltip when in v2 experiment and clicking on SearchInput with searches', async () => {
     const IndexPage = require('src/pages/index').default
     const defaultMockProps = getMockProps()
     const mockProps = {
@@ -1262,7 +1277,7 @@ describe('index.js', () => {
       },
     }
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     act(() => {
       wrapper.find(SearchInput).first().prop('onSearchInputClick')()
@@ -1272,7 +1287,7 @@ describe('index.js', () => {
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(false)
   })
 
-  it('does not display tooltip when in v2 experiment and clicking on SearchInput with non-tooltip variation', () => {
+  it('does not display tooltip when in v2 experiment and clicking on SearchInput with non-tooltip variation', async () => {
     const IndexPage = require('src/pages/index').default
     const defaultMockProps = getMockProps()
     const mockProps = {
@@ -1293,7 +1308,7 @@ describe('index.js', () => {
       },
     }
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
 
     act(() => {
       wrapper.find(SearchInput).first().prop('onSearchInputClick')()
@@ -1303,12 +1318,12 @@ describe('index.js', () => {
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(false)
   })
 
-  it('shows a "supporting" chip that links to the "about the cause" page', () => {
+  it('shows a "supporting" chip that links to the "about the cause" page', async () => {
     expect.assertions(2)
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
     const elem = wrapper.find(Chip)
     expect(elem.prop('label')).toEqual('Supporting: Example Cause')
     elem.simulate('click')
@@ -1321,16 +1336,16 @@ describe('index.js: hardcoded notifications', () => {
     isClientSide.mockReturnValue(true)
   })
 
-  it('does not render the college ambassador notification if it is not enabled', () => {
+  it('does not render the college ambassador notification if it is not enabled', async () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
     const notification = wrapper.find(Notification)
     expect(notification.exists()).not.toBe(true)
   })
 
-  it('does not render the college ambassador notification if it is enabled but user has already dismissed it', () => {
+  it('does not render the college ambassador notification if it is enabled but user has already dismissed it', async () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = {
       ...getMockProps(),
@@ -1346,7 +1361,7 @@ describe('index.js: hardcoded notifications', () => {
     }
     useData.mockReturnValue({ data: mockProps.data })
     localStorageMgr.getItem.mockReturnValue('true')
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
     const notification = wrapper.find(Notification)
     expect(notification.exists()).not.toBe(true)
   })
@@ -1368,7 +1383,7 @@ describe('index.js: hardcoded notifications', () => {
     isClientSide.mockReturnValue(false) // server side
     useData.mockReturnValue({ data: mockProps.data })
     localStorageMgr.getItem.mockReturnValue(undefined)
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
     const notification = wrapper.find(Notification)
     expect(notification.exists()).toBe(false)
   })
@@ -1389,7 +1404,8 @@ describe('index.js: hardcoded notifications', () => {
     }
     useData.mockReturnValue({ data: mockProps.data })
     localStorageMgr.getItem.mockReturnValue(undefined)
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
+    wrapper.update()
     const notification = wrapper.find(Notification)
     expect(notification.exists()).toBe(true)
   })
@@ -1411,7 +1427,8 @@ describe('index.js: hardcoded notifications', () => {
     }
     useData.mockReturnValue({ data: mockProps.data })
     localStorageMgr.getItem.mockReturnValue(undefined)
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
+    wrapper.update()
     const notification = wrapper.find(Notification)
     expect(notification.exists()).toBe(true)
 
@@ -1448,13 +1465,16 @@ describe('index.js: hardcoded notifications', () => {
     }
     useData.mockReturnValue({ data: mockProps.data })
     localStorageMgr.getItem.mockReturnValue(undefined)
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = await getWrapper(<IndexPage {...mockProps} />)
+    wrapper.update()
     const notification = wrapper.find(Notification)
-    notification.find(IconButton).simulate('click') // close icon
+
     await act(async () => {
+      notification.find(IconButton).simulate('click') // close icon
       wrapper.update()
       flushAllPromises()
     })
+
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       AMBASSADOR_2022_NOTIFICATION,
       'true'
