@@ -48,6 +48,7 @@ export const EXTERNAL_CLEAR_COOKIES_HELP_PAGE =
 export const HELP_URL = 'https://tab.gladly.io/help/'
 export const FINANCIALS_URL = 'https://tab.gladly.io/financials/'
 export const GET_SEARCH_URL = 'https://tab.gladly.io/get-search/'
+export const SFAC_FEEDBACK_LINK = 'https://forms.gle/A3Xam2op2gFjoQNU6'
 // eslint-disable-next-line no-undef
 export const reload = () => window.location.reload()
 export const externalNavigation = (url) => {
