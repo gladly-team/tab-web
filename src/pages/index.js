@@ -484,19 +484,20 @@ const Index = ({ data: fallbackData }) => {
   const [showSFACNotification, setShowSFACNotification] = useState(false)
   const [shouldShowSfacExtensionPrompt, setShouldShowSfacExtensionPrompt] =
     useState(false)
+
   const [browser, setBrowser] = useState(null)
-
   useEffect(() => {
-    const shouldShowSfacExtensionPromptFunc = async () => {
-      const detectedBrowser = await detectBrowser()
+    const doBrowserDetection = () => {
+      const detectedBrowser = detectBrowser()
       setBrowser(detectedBrowser)
-      if (detectedBrowser !== UNSUPPORTED_BROWSER) {
-        setShouldShowSfacExtensionPrompt(showSfacExtensionPrompt)
-      }
     }
-
-    shouldShowSfacExtensionPromptFunc()
-  }, [showSfacExtensionPrompt])
+    doBrowserDetection()
+  }, [])
+  useEffect(() => {
+    if (browser && browser !== UNSUPPORTED_BROWSER) {
+      setShouldShowSfacExtensionPrompt(showSfacExtensionPrompt)
+    }
+  }, [browser, showSfacExtensionPrompt])
 
   const [interactedWithSFACNotification, setInteractedWithSFACNotification] =
     useState(true)
