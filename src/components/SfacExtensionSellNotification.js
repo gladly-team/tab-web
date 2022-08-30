@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonsWrapper: {
     display: 'flex',
+    justifyContent: 'flex-end',
   },
 }))
 const SfacExtensionSellNotification = ({ browser, userId }) => {
