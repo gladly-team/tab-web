@@ -65,6 +65,11 @@ const useData = ({ getRelayQuery, fallbackData, ...SWROptions }) => {
   // TODO: may want to cancel requests, like when a page unmounts.
   // https://github.com/vercel/swr/issues/129
 
+  // If revalidateOnMount is true, assume data is stale, most likely due
+  // to the service worker.
+  const { revalidateOnMount } = SWROptions
+  const [isDataFresh, setIsDataFresh] = useState(!revalidateOnMount)
+
   // https://github.com/vercel/swr#options
   // SWR won't fetch if the "key" function returns null.
   // https://github.com/vercel/swr#dependent-fetching
@@ -77,13 +82,24 @@ const useData = ({ getRelayQuery, fallbackData, ...SWROptions }) => {
     fetcher,
     {
       fallbackData,
+      revalidateOnMount,
       ...SWROptions,
+      onSuccess: (freshData) => {
+        // TODO: remove
+        // eslint-disable-next-line no-console
+        console.log('SWR onSuccess', freshData)
+        setIsDataFresh(true)
+      },
+      onError: () => {
+        setIsDataFresh(true)
+      },
     }
   )
 
   return {
     data,
     error,
+    isDataFresh,
   }
 }
 

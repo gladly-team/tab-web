@@ -79,7 +79,7 @@ describe('useData', () => {
       // https://github.com/testing-library/react-hooks-testing-library/issues/14#issuecomment-480225170
       await waitForNextUpdate()
     })
-    expect(result.current).toEqual({
+    expect(result.current).toMatchObject({
       data: {
         user: {
           tabs: 123,
@@ -116,7 +116,7 @@ describe('useData', () => {
       rerender()
       await waitForNextUpdate()
     })
-    expect(result.current).toEqual({
+    expect(result.current).toMatchObject({
       data: undefined,
       error: undefined,
     })
@@ -144,7 +144,7 @@ describe('useData', () => {
       rerender()
       await waitForNextUpdate()
     })
-    expect(result.current).toEqual({
+    expect(result.current).toMatchObject({
       data: undefined,
       error: undefined,
     })
@@ -243,7 +243,7 @@ describe('useData', () => {
       rerender()
       await waitForNextUpdate()
     })
-    expect(result.current).toEqual({
+    expect(result.current).toMatchObject({
       data: undefined,
       error: mockErr,
     })
@@ -340,7 +340,7 @@ describe('useData', () => {
       rerender()
       await waitForNextUpdate()
     })
-    expect(result.current).toEqual({
+    expect(result.current).toMatchObject({
       data: undefined,
       error: mockErr,
     })
@@ -491,6 +491,8 @@ describe('useData', () => {
         fallbackData: { some: 'initial data' },
         errorRetryCount: 2,
         revalidateOnMount: true,
+        onSuccess: expect.any(Function),
+        onError: expect.any(Function),
       }
     )
   })

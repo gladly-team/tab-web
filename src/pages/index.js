@@ -380,7 +380,7 @@ const getRelayQuery = async ({ AuthUser }) => {
 }
 
 const Index = ({ data: fallbackData }) => {
-  const { data } = useData({
+  const { data, isDataFresh } = useData({
     getRelayQuery,
     fallbackData,
 
@@ -390,6 +390,11 @@ const Index = ({ data: fallbackData }) => {
       revalidateOnMount: true,
     }),
   })
+
+  // TODO: remove
+  // eslint-disable-next-line no-console
+  console.log('isDataFresh', isDataFresh)
+
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
 

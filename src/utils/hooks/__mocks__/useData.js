@@ -9,7 +9,7 @@ const useData = jest.fn(({ getRelayQuery, fallbackData }) => {
       'Validation in mock: `useData` expects a function for "getRelayQuery.'
     )
   }
-  return { data: fallbackData, error: undefined }
+  return { data: fallbackData, error: undefined, isDataFresh: false }
 })
 
 export default useData
