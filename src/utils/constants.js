@@ -33,3 +33,9 @@ export const EDGE_BROWSER = 'edge'
 export const OPERA_BROWSER = 'opera'
 export const SAFARI_BROWSER = 'safari'
 export const UNSUPPORTED_BROWSER = 'other'
+
+export const SFAC_ACTIVITY_STATES = {
+  NEW: 'new',
+  ACTIVE: 'active',
+  INACTIVE: 'inactive',
+}

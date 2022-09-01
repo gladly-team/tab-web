@@ -12,11 +12,14 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     maxWidth: '20px',
     maxHeight: '20px',
+    background: '#fff',
+    borderRadius: '20px',
   },
-  badge: {
+  button: {
     borderRadius: '30px',
-    maxWidth: '40px',
-    maxHeight: '40px',
+    maxWidth: '52px',
+    maxHeight: '52px',
+    color: '#fff',
   },
   inactive: {
     color: '#E3720E',
@@ -44,7 +47,7 @@ const SfacActivityButton = ({ active, onClick }) => {
         )
       }
     >
-      <IconButton className={classes.badge} onClick={onClick}>
+      <IconButton className={classes.button} onClick={onClick}>
         <SearchIcon />
       </IconButton>
     </Badge>
