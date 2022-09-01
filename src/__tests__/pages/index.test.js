@@ -9,6 +9,7 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   AMBASSADOR_2022_NOTIFICATION,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
+  SFAC_ACTIVITY_STATES,
 } from 'src/utils/constants'
 import {
   showMockAchievements,
@@ -49,6 +50,9 @@ import { goTo } from 'src/utils/navigation'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
 import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
 import useBrowserName from 'src/utils/hooks/useBrowserName'
+import SfacActivityNotification from 'src/components/SfacActivityNotification'
+import SfacActivityButton from 'src/components/SfacActivityButton'
+import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -98,6 +102,7 @@ jest.mock('src/utils/growthbook')
 jest.mock('src/utils/logger')
 jest.mock('src/utils/hooks/useDoesBrowserSupportSearchExtension')
 jest.mock('src/utils/hooks/useBrowserName')
+jest.mock('src/utils/browserSupport')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
@@ -149,6 +154,8 @@ const getMockProps = () => ({
       },
       features: [],
       searches: 10,
+      sfacActivityState: SFAC_ACTIVITY_STATES.NEW,
+      showSfacIcon: false,
     },
     userImpact: {
       userId: 'asdf',
@@ -1499,5 +1506,114 @@ describe('index.js: hardcoded notifications', () => {
       AMBASSADOR_2022_NOTIFICATION,
       'true'
     )
+  })
+
+  it('renders a SFAC activity toggle button and info component with the correct props if supported', async () => {
+    isSearchActivityComponentSupported.mockReturnValue(true)
+    expect.assertions(7)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          showSfacIcon: true,
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const sfacActivityButton = wrapper.find(SfacActivityButton)
+    expect(sfacActivityButton.exists()).toBe(true)
+    expect(sfacActivityButton.first().prop('active')).toEqual(false)
+    const sfacActivityNotification = wrapper.find(SfacActivityNotification)
+    expect(sfacActivityNotification.exists()).toBe(true)
+    expect(sfacActivityNotification.first().prop('activityState')).toBe(
+      SFAC_ACTIVITY_STATES.NEW
+    )
+    expect(sfacActivityNotification.first().prop('searchesToday')).toBe(0)
+    expect(sfacActivityNotification.first().prop('totalSearches')).toBe(10)
+    expect(sfacActivityNotification.first().prop('impactName')).toBe(
+      defaultMockProps.data.user.cause.name
+    )
+  })
+
+  it('renders a SFAC activity toggle button and toggles UI element correctly', () => {
+    isSearchActivityComponentSupported.mockReturnValue(true)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          showSfacIcon: true,
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const sfacActivityButton = wrapper.find(SfacActivityButton).find(IconButton)
+
+    expect(wrapper.find(SfacActivityNotification).first().prop('open')).toEqual(
+      false
+    )
+
+    sfacActivityButton.first().simulate('click')
+
+    expect(wrapper.find(SfacActivityNotification).first().prop('open')).toEqual(
+      true
+    )
+
+    sfacActivityButton.first().simulate('click')
+
+    expect(wrapper.find(SfacActivityNotification).first().prop('open')).toEqual(
+      false
+    )
+  })
+
+  it('does not render a SFAC activity toggle button and info if not supported in browser', async () => {
+    isSearchActivityComponentSupported.mockReturnValue(false)
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          showSfacIcon: true,
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    expect(wrapper.find(SfacActivityButton).exists()).toBe(false)
+    expect(wrapper.find(SfacActivityNotification).exists()).toBe(false)
+  })
+
+  it('does not render a SFAC activity toggle button and info component if showSfacIcon is false', async () => {
+    isSearchActivityComponentSupported.mockReturnValue(true)
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          showSfacIcon: false,
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    expect(wrapper.find(SfacActivityButton).exists()).toBe(false)
+    expect(wrapper.find(SfacActivityNotification).exists()).toBe(false)
   })
 })

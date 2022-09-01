@@ -2,6 +2,7 @@
 
 import {
   isSearchExtensionSupported,
+  isSearchActivityComponentSupported,
   isTabExtensionSupported,
   simplifyBrowserName,
 } from 'src/utils/browserSupport'
@@ -119,5 +120,33 @@ describe('isTabExtensionSupported', () => {
 
   it('returns false on any other browser', () => {
     expect(isTabExtensionSupported(UNSUPPORTED_BROWSER)).toEqual(false)
+  })
+})
+
+describe('isSearchActivityComponentSupported', () => {
+  it('returns true on Chrome', () => {
+    expect(isSearchActivityComponentSupported(CHROME_BROWSER)).toEqual(true)
+  })
+
+  it('returns false on Edge', () => {
+    expect(isSearchActivityComponentSupported(EDGE_BROWSER)).toEqual(false)
+  })
+
+  it('returns false on Firefox', () => {
+    expect(isSearchActivityComponentSupported(FIREFOX_BROWSER)).toEqual(false)
+  })
+
+  it('returns false on Opera', () => {
+    expect(isSearchActivityComponentSupported(OPERA_BROWSER)).toEqual(false)
+  })
+
+  it('returns false on Safari', () => {
+    expect(isSearchActivityComponentSupported(SAFARI_BROWSER)).toEqual(false)
+  })
+
+  it('returns false on any other browser', () => {
+    expect(isSearchActivityComponentSupported(UNSUPPORTED_BROWSER)).toEqual(
+      false
+    )
   })
 })
