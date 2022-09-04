@@ -1,4 +1,4 @@
-import detectBrowser from 'browser-detect'
+import { detect as detectBrowser } from 'detect-browser'
 import {
   CHROME_BROWSER,
 
@@ -30,7 +30,7 @@ const detectSupportedBrowser = () => {
       browser = CHROME_BROWSER
       break
 
-    // case 'edge':
+    // case 'edge-chromium':
     //   browser = EDGE_BROWSER
     //   break
     case 'firefox':
