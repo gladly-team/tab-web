@@ -67,18 +67,18 @@ describe('detectBrowser', () => {
     expect(detectSupportedBrowser()).toEqual(FIREFOX_BROWSER)
   })
 
-  it('returns "edge" for desktop Edge', () => {
+  it('returns "other" for desktop Edge', () => {
     const browserDetectLib = require('browser-detect').default
     browserDetectLib.mockReturnValueOnce(createMockBrowserInfo('edge', false))
     const detectSupportedBrowser = require('src/utils/detectBrowser').default
-    expect(detectSupportedBrowser()).toEqual(EDGE_BROWSER)
+    expect(detectSupportedBrowser()).toEqual(UNSUPPORTED_BROWSER)
   })
 
-  it('returns "edge" for mobile Edge', () => {
+  it('returns "other" for mobile Edge', () => {
     const browserDetectLib = require('browser-detect').default
     browserDetectLib.mockReturnValueOnce(createMockBrowserInfo('edge', true))
     const detectSupportedBrowser = require('src/utils/detectBrowser').default
-    expect(detectSupportedBrowser()).toEqual(EDGE_BROWSER)
+    expect(detectSupportedBrowser()).toEqual(UNSUPPORTED_BROWSER)
   })
 
   it('returns "other" for desktop Safari', () => {
