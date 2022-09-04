@@ -172,7 +172,7 @@ const getMockCurrentMission = () => ({
 beforeEach(() => {
   showMockAchievements.mockReturnValue(false)
   showBackgroundImages.mockReturnValue(false)
-  useData.mockReturnValue({ data: getMockProps().data })
+  useData.mockReturnValue({ data: getMockProps().data, isDataFresh: true })
   process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
   detectBrowser.mockReturnValue(CHROME_BROWSER)
 })
@@ -1008,7 +1008,7 @@ describe('index.js', () => {
   it('does not render a SFAC sell notification if showYahooPrompt is not true', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
-    useData.mockReturnValue({ data: mockProps.data })
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
     const wrapper = mount(<IndexPage {...mockProps} />)
 
     act(() => {
@@ -1024,7 +1024,7 @@ describe('index.js', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     mockProps.data.user.showYahooPrompt = true
-    useData.mockReturnValue({ data: mockProps.data })
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
     const wrapper = mount(<IndexPage {...mockProps} />)
 
     act(() => {
@@ -1040,7 +1040,7 @@ describe('index.js', () => {
   it('does not render a SFAC extension notification if showSfacExtensionPrompt is not true', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
-    useData.mockReturnValue({ data: mockProps.data })
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
     const wrapper = mount(<IndexPage {...mockProps} />)
 
     const notification = wrapper.find(SfacExtensionSellNotification)
@@ -1052,7 +1052,7 @@ describe('index.js', () => {
     const mockProps = getMockProps()
     detectBrowser.mockReturnValue(UNSUPPORTED_BROWSER)
     mockProps.data.user.showSfacExtensionPrompt = true
-    useData.mockReturnValue({ data: mockProps.data })
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
     const wrapper = mount(<IndexPage {...mockProps} />)
 
     const notification = wrapper.find(SfacExtensionSellNotification)
@@ -1063,11 +1063,24 @@ describe('index.js', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     mockProps.data.user.showSfacExtensionPrompt = true
-    useData.mockReturnValue({ data: mockProps.data })
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
     const wrapper = mount(<IndexPage {...mockProps} />)
-
     const notification = wrapper.find(SfacExtensionSellNotification)
     expect(notification.exists()).toBe(true)
+  })
+
+  it('only renders the SFAC extension notification after fresh data is fetched', () => {
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.showSfacExtensionPrompt = true
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: false }) // not fresh
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    expect(wrapper.find(SfacExtensionSellNotification).exists()).toBe(false)
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true }) // fresh
+    wrapper.setProps({ ...mockProps }) // force a rerender after hook change
+    wrapper.update()
+    expect(wrapper.find(SfacExtensionSellNotification).exists()).toBe(true)
   })
 
   it('clicking learn more on SFAC sell notification opens modal in normal mode', async () => {
