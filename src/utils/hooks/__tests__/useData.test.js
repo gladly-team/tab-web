@@ -50,7 +50,7 @@ afterEach(() => {
 })
 
 describe('useData', () => {
-  it('returns fetched data when auth has initialized and a query is provided', async () => {
+  it('returns fetched data (and isDataFresh=true) when auth has initialized and a query is provided', async () => {
     expect.assertions(1)
 
     // Defer any state-affecting logic.
@@ -69,7 +69,7 @@ describe('useData', () => {
     await act(async () => {
       useAuthUser.mockReturnValue(getMockAuthUser())
       relayQueryPromiseResolver({
-        query: `returns fetched data when auth has initialized and a query is provided`,
+        query: `returns fetched data (and isDataFresh=true) when auth has initialized and a query is provided`,
         variables: {
           some: 'thing',
         },
@@ -79,7 +79,7 @@ describe('useData', () => {
       // https://github.com/testing-library/react-hooks-testing-library/issues/14#issuecomment-480225170
       await waitForNextUpdate()
     })
-    expect(result.current).toEqual({
+    expect(result.current).toMatchObject({
       data: {
         user: {
           tabs: 123,
@@ -87,10 +87,11 @@ describe('useData', () => {
         },
       },
       error: undefined,
+      isDataFresh: true,
     })
   })
 
-  it('returns undefined data when auth has not yet initialized', async () => {
+  it('returns undefined data (and isDataFresh=true) when auth has not yet initialized', async () => {
     expect.assertions(1)
 
     // We will not initialize the AuthUser.
@@ -108,7 +109,7 @@ describe('useData', () => {
 
     await act(async () => {
       relayQueryPromiseResolver({
-        query: `returns undefined data when auth has not yet initialized`,
+        query: `returns undefined data (and isDataFresh=true) when auth has not yet initialized`,
         variables: {
           some: 'thing',
         },
@@ -116,13 +117,14 @@ describe('useData', () => {
       rerender()
       await waitForNextUpdate()
     })
-    expect(result.current).toEqual({
+    expect(result.current).toMatchObject({
       data: undefined,
       error: undefined,
+      isDataFresh: true,
     })
   })
 
-  it('returns undefined data when no query is provided', async () => {
+  it('returns undefined data (and isDataFresh=true) when no query is provided', async () => {
     expect.assertions(1)
 
     // We will not initialize the AuthUser.
@@ -144,9 +146,10 @@ describe('useData', () => {
       rerender()
       await waitForNextUpdate()
     })
-    expect(result.current).toEqual({
+    expect(result.current).toMatchObject({
       data: undefined,
       error: undefined,
+      isDataFresh: true,
     })
   })
 
@@ -243,9 +246,10 @@ describe('useData', () => {
       rerender()
       await waitForNextUpdate()
     })
-    expect(result.current).toEqual({
+    expect(result.current).toMatchObject({
       data: undefined,
       error: mockErr,
+      isDataFresh: true,
     })
   })
 
@@ -340,7 +344,7 @@ describe('useData', () => {
       rerender()
       await waitForNextUpdate()
     })
-    expect(result.current).toEqual({
+    expect(result.current).toMatchObject({
       data: undefined,
       error: mockErr,
     })
@@ -491,7 +495,120 @@ describe('useData', () => {
         fallbackData: { some: 'initial data' },
         errorRetryCount: 2,
         revalidateOnMount: true,
+        onSuccess: expect.any(Function),
+        onError: expect.any(Function),
       }
     )
+  })
+
+  it('returns isDataFresh=false when revalidateOnMount is true and data has not yet fetched', async () => {
+    expect.assertions(1)
+    useAuthUser.mockReturnValue(getUninitializedAuthUser())
+    const mockGetRelayQuery = async () => {}
+    const { result } = renderHook(() =>
+      useData({
+        getRelayQuery: mockGetRelayQuery,
+        fallbackData: { some: 'initial data' },
+        revalidateOnMount: true,
+      })
+    )
+    expect(result.current).toMatchObject({
+      isDataFresh: false,
+    })
+  })
+
+  it("returns isDataFresh=true when revalidateOnMount is true and SWR's onSuccess is called after data fetch", async () => {
+    expect.assertions(2)
+    const useSWRSpy = jest.spyOn(useSWR, 'default')
+
+    // Defer any state-affecting logic.
+    useAuthUser.mockReturnValue(getUninitializedAuthUser())
+    let relayQueryPromiseResolver
+    const relayQueryPromise = new Promise((resolve) => {
+      relayQueryPromiseResolver = resolve
+    })
+    const mockGetRelayQuery = async () => relayQueryPromise
+
+    const { result, rerender, waitForNextUpdate } = renderHook(() =>
+      useData({
+        getRelayQuery: mockGetRelayQuery,
+        fallbackData: { some: 'initial data' },
+        revalidateOnMount: true,
+      })
+    )
+
+    // Update logic that affects the `useData` state.
+    await act(async () => {
+      useAuthUser.mockReturnValue(getMockAuthUser())
+      relayQueryPromiseResolver({
+        query: `returns fetched data when auth has initialized and a query is provided`,
+        variables: {
+          some: 'thing',
+        },
+      })
+      rerender()
+
+      expect(result.current).toMatchObject({
+        isDataFresh: false,
+      })
+
+      // Call SWR's onSuccess with data
+      const swrOptions = useSWRSpy.mock.calls[0][2]
+      swrOptions.onSuccess({
+        user: {
+          tabs: 123,
+          username: 'MyUsername',
+        },
+      })
+
+      await waitForNextUpdate()
+    })
+
+    expect(result.current).toMatchObject({
+      isDataFresh: true,
+    })
+  })
+
+  it("returns isDataFresh=true when revalidateOnMount is true and SWR's onError is called after data fetch", async () => {
+    expect.assertions(2)
+    const useSWRSpy = jest.spyOn(useSWR, 'default')
+
+    // Defer any state-affecting logic.
+    useAuthUser.mockReturnValue(getUninitializedAuthUser())
+    let relayQueryPromiseResolver
+    const relayQueryPromise = new Promise((resolve) => {
+      relayQueryPromiseResolver = resolve
+    })
+    const mockGetRelayQuery = async () => relayQueryPromise
+
+    const { result, rerender, waitForNextUpdate } = renderHook(() =>
+      useData({
+        getRelayQuery: mockGetRelayQuery,
+        fallbackData: { some: 'initial data' },
+        revalidateOnMount: true,
+      })
+    )
+
+    // Update logic that affects the `useData` state.
+    await act(async () => {
+      useAuthUser.mockReturnValue(getMockAuthUser())
+      relayQueryPromiseResolver({
+        query: `returns fetched data when auth has initialized and a query is provided`,
+        variables: {
+          some: 'thing',
+        },
+      })
+      rerender()
+      expect(result.current).toMatchObject({
+        isDataFresh: false,
+      })
+      const swrOptions = useSWRSpy.mock.calls[0][2]
+      swrOptions.onError(new Error('98.999998 problems'))
+      await waitForNextUpdate()
+    })
+
+    expect(result.current).toMatchObject({
+      isDataFresh: true,
+    })
   })
 })
