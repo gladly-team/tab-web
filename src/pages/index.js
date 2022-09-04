@@ -394,6 +394,7 @@ const Index = ({ data: fallbackData }) => {
       revalidateOnMount: true,
     }),
   })
+
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
 
