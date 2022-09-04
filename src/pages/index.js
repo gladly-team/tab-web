@@ -384,7 +384,7 @@ const getRelayQuery = async ({ AuthUser }) => {
 }
 
 const Index = ({ data: fallbackData }) => {
-  const { data } = useData({
+  const { data, isDataFresh } = useData({
     getRelayQuery,
     fallbackData,
 
@@ -488,17 +488,19 @@ const Index = ({ data: fallbackData }) => {
 
   const [browser, setBrowser] = useState(null)
   useEffect(() => {
-    const doBrowserDetection = () => {
-      const detectedBrowser = detectBrowser()
-      setBrowser(detectedBrowser)
-    }
-    doBrowserDetection()
+    const detectedBrowser = detectBrowser()
+    setBrowser(detectedBrowser)
   }, [])
   useEffect(() => {
-    if (browser && browser !== UNSUPPORTED_BROWSER) {
+    // Only show the prompt if:
+    // * The browser has a SFAC extension
+    // * We have fetched fresh data on whether to show the prompt. Otherwise,
+    //   we might show the prompt based on service worker -cached data that
+    //   hasn't yet updated since the user interacted.
+    if (browser && browser !== UNSUPPORTED_BROWSER && isDataFresh) {
       setShouldShowSfacExtensionPrompt(showSfacExtensionPrompt)
     }
-  }, [browser, showSfacExtensionPrompt])
+  }, [browser, showSfacExtensionPrompt, isDataFresh])
 
   const [interactedWithSFACNotification, setInteractedWithSFACNotification] =
     useState(true)
