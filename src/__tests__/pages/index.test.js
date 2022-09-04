@@ -9,6 +9,8 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   AMBASSADOR_2022_NOTIFICATION,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
+  CHROME_BROWSER,
+  UNSUPPORTED_BROWSER,
 } from 'src/utils/constants'
 import {
   showMockAchievements,
@@ -41,11 +43,13 @@ import { validateAttributesObject } from 'src/utils/growthbook'
 import SearchInput from 'src/components/SearchInput'
 import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
 import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
+import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
 import { Button } from '@material-ui/core'
 import Notification from 'src/components/Notification'
 import Chip from '@material-ui/core/Chip'
 import { goTo } from 'src/utils/navigation'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
+import detectBrowser from 'src/utils/detectBrowser'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -93,6 +97,7 @@ jest.mock('src/utils/hooks/useCustomTheming')
 jest.mock('@growthbook/growthbook-react')
 jest.mock('src/utils/growthbook')
 jest.mock('src/utils/logger')
+jest.mock('src/utils/detectBrowser')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
@@ -169,6 +174,7 @@ beforeEach(() => {
   showBackgroundImages.mockReturnValue(false)
   useData.mockReturnValue({ data: getMockProps().data })
   process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
+  detectBrowser.mockReturnValue(CHROME_BROWSER)
 })
 
 afterEach(() => {
@@ -1028,6 +1034,39 @@ describe('index.js', () => {
 
     const notification = wrapper.find(SearchForACauseSellNotification)
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toBe(false)
+    expect(notification.exists()).toBe(true)
+  })
+
+  it('does not render a SFAC extension notification if showSfacExtensionPrompt is not true', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    const notification = wrapper.find(SfacExtensionSellNotification)
+    expect(notification.exists()).toBe(false)
+  })
+
+  it('does not render a SFAC extension notification if browser is unsupported', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    detectBrowser.mockReturnValue(UNSUPPORTED_BROWSER)
+    mockProps.data.user.showSfacExtensionPrompt = true
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    const notification = wrapper.find(SfacExtensionSellNotification)
+    expect(notification.exists()).toBe(false)
+  })
+
+  it('does render a SFAC extension notification if showSfacExtensionPrompt is true', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.showSfacExtensionPrompt = true
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    const notification = wrapper.find(SfacExtensionSellNotification)
     expect(notification.exists()).toBe(true)
   })
 

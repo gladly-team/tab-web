@@ -73,6 +73,7 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   AMBASSADOR_2022_NOTIFICATION,
+  UNSUPPORTED_BROWSER,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -85,6 +86,8 @@ import Notification from 'src/components/Notification'
 import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
 import { getFeatureValue } from 'src/utils/growthbookUtils'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
+import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
+import detectBrowser from 'src/utils/detectBrowser'
 
 const AMBASSADOR_APPLICATION_LINK = 'https://forms.gle/bRir3cKmqZfCgbur9'
 
@@ -329,6 +332,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           vcCurrent
           joined
           showYahooPrompt
+          showSfacExtensionPrompt
           cause {
             causeId
             individualImpactEnabled
@@ -417,6 +421,7 @@ const Index = ({ data: fallbackData }) => {
     joined,
     notifications = [],
     showYahooPrompt,
+    showSfacExtensionPrompt,
     searches,
   } = user || {}
   const {
@@ -477,6 +482,23 @@ const Index = ({ data: fallbackData }) => {
   }
   const [showSearchInputTooltip, setSearchInputTooltip] = useState(false)
   const [showSFACNotification, setShowSFACNotification] = useState(false)
+  const [shouldShowSfacExtensionPrompt, setShouldShowSfacExtensionPrompt] =
+    useState(false)
+
+  const [browser, setBrowser] = useState(null)
+  useEffect(() => {
+    const doBrowserDetection = () => {
+      const detectedBrowser = detectBrowser()
+      setBrowser(detectedBrowser)
+    }
+    doBrowserDetection()
+  }, [])
+  useEffect(() => {
+    if (browser && browser !== UNSUPPORTED_BROWSER) {
+      setShouldShowSfacExtensionPrompt(showSfacExtensionPrompt)
+    }
+  }, [browser, showSfacExtensionPrompt])
+
   const [interactedWithSFACNotification, setInteractedWithSFACNotification] =
     useState(true)
 
@@ -785,6 +807,12 @@ const Index = ({ data: fallbackData }) => {
                       }}
                     />
                   ) : null}
+                  {userGlobalId && shouldShowSfacExtensionPrompt ? (
+                    <SfacExtensionSellNotification
+                      userId={userGlobalId}
+                      browser={browser}
+                    />
+                  ) : null}
                   {userGlobalId && showSFACNotification ? (
                     <SearchForACauseSellNotification
                       userId={userGlobalId}
@@ -953,6 +981,7 @@ Index.propTypes = {
       tabs: PropTypes.number.isRequired,
       vcCurrent: PropTypes.number.isRequired,
       showYahooPrompt: PropTypes.bool,
+      showSfacExtensionPrompt: PropTypes.bool,
     }).isRequired,
   }),
 }

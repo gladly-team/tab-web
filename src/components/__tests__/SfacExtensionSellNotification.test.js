@@ -1,10 +1,21 @@
 import React from 'react'
+import { act } from 'react-dom/test-utils'
 import { mount, shallow } from 'enzyme'
 import { Button } from '@material-ui/core'
+import CreateSfacExtensionPromptResponseMutation from 'src/utils/mutations/CreateSfacExtensionPromptResponseMutation'
+import { windowOpenTop } from 'src/utils/navigation'
+import { GET_SEARCH_URL } from 'src/utils/urls'
+import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
+import logger from 'src/utils/logger'
 import Notification from '../Notification'
 
-jest.mock('src/utils/mutations/SetYahooSearchOptInMutation')
-jest.mock('src/utils/mutations/CreateSearchEnginePromptLogMutation')
+jest.mock('src/utils/navigation')
+jest.mock('src/utils/logger')
+jest.mock('src/utils/mutations/CreateSfacExtensionPromptResponseMutation')
+
+beforeAll(() => {
+  jest.useFakeTimers()
+})
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -12,8 +23,7 @@ afterEach(() => {
 
 const getMockProps = () => ({
   userId: 'abcdefghijklmno',
-  onNo: jest.fn(),
-  onYes: jest.fn(),
+  browser: 'chrome',
 })
 
 describe('SfacExtensionSellNotification component', () => {
@@ -26,7 +36,7 @@ describe('SfacExtensionSellNotification component', () => {
     }).not.toThrow()
   })
 
-  it('calls handler and closes on clicking no', () => {
+  it('calls mutation, calls handler and closes on clicking no', () => {
     const SfacExtensionSellNotification =
       require('src/components/SfacExtensionSellNotification').default
     const mockProps = getMockProps()
@@ -36,11 +46,16 @@ describe('SfacExtensionSellNotification component', () => {
     expect(acceptButton.text()).toEqual('Maybe later')
     acceptButton.simulate('click')
 
-    expect(mockProps.onNo).toHaveBeenCalled()
+    expect(CreateSfacExtensionPromptResponseMutation).toHaveBeenCalledWith(
+      mockProps.userId,
+      'chrome',
+      false
+    )
     expect(wrapper.find(Notification).first().prop('open')).toEqual(false)
   })
 
-  it('calls mutation, handler and closes on clicking yes', () => {
+  it('calls mutation and redirect on clicking yes', async () => {
+    expect.assertions(6)
     const SfacExtensionSellNotification =
       require('src/components/SfacExtensionSellNotification').default
     const mockProps = getMockProps()
@@ -48,25 +63,58 @@ describe('SfacExtensionSellNotification component', () => {
     expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
     const acceptButton = wrapper.find(Button).at(1)
     expect(acceptButton.text()).toEqual("Let's do it!")
-    acceptButton.simulate('click')
 
-    expect(mockProps.onYes).toHaveBeenCalled()
+    CreateSfacExtensionPromptResponseMutation.mockResolvedValue({})
+
+    await act(async () => {
+      acceptButton.simulate('click')
+
+      await flushAllPromises()
+      jest.runAllTimers()
+      await flushAllPromises()
+    })
+
+    wrapper.update()
+    expect(CreateSfacExtensionPromptResponseMutation).toHaveBeenCalledWith(
+      mockProps.userId,
+      'chrome',
+      true
+    )
     expect(wrapper.find(Notification).first().prop('open')).toEqual(false)
+    expect(windowOpenTop).toHaveBeenCalledWith(GET_SEARCH_URL)
+    expect(logger.error).not.toHaveBeenCalled()
   })
 
-  it('default handlers do not throw', () => {
+  it('calls a redirect to the search engine result page (and does not throw or log) if CreateSfacExtensionPromptResponseMutation throws an error', async () => {
+    expect.assertions(6)
     const SfacExtensionSellNotification =
       require('src/components/SfacExtensionSellNotification').default
     const mockProps = getMockProps()
-    delete mockProps.onNo
-    delete mockProps.onYes
+    const wrapper = mount(<SfacExtensionSellNotification {...mockProps} />)
+    expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
+    const acceptButton = wrapper.find(Button).at(1)
+    expect(acceptButton.text()).toEqual("Let's do it!")
 
-    let wrapper = mount(<SfacExtensionSellNotification {...mockProps} />)
-    const onNoButton = wrapper.find(Button).at(0)
-    expect(() => onNoButton.simulate('click')).not.toThrow()
+    CreateSfacExtensionPromptResponseMutation.mockRejectedValue(
+      new Error('Uh oh.')
+    )
 
-    wrapper = mount(<SfacExtensionSellNotification {...mockProps} />)
-    const onYesButton = wrapper.find(Button).at(1)
-    expect(() => onYesButton.simulate('click')).not.toThrow()
+    await act(async () => {
+      acceptButton.simulate('click')
+
+      await flushAllPromises()
+      jest.runAllTimers()
+      await flushAllPromises()
+    })
+
+    wrapper.update()
+    expect(CreateSfacExtensionPromptResponseMutation).toHaveBeenCalledWith(
+      mockProps.userId,
+      'chrome',
+      true
+    )
+    expect(wrapper.find(Notification).first().prop('open')).toEqual(false)
+    expect(windowOpenTop).toHaveBeenCalledWith(GET_SEARCH_URL)
+    expect(logger.error).toHaveBeenCalledWith(new Error('Uh oh.'))
   })
 })
