@@ -2,7 +2,8 @@
 
 import {
   CHROME_BROWSER,
-  EDGE_BROWSER,
+
+  // EDGE_BROWSER,
   FIREFOX_BROWSER,
   UNSUPPORTED_BROWSER,
 } from '../constants'
