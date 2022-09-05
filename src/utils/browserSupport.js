@@ -2,6 +2,8 @@ import {
   CHROME_BROWSER,
   EDGE_BROWSER,
   FIREFOX_BROWSER,
+  OPERA_BROWSER,
+  SAFARI_BROWSER,
   UNSUPPORTED_BROWSER,
 } from 'src/utils/constants'
 
@@ -40,10 +42,7 @@ import {
   'yandexbrowser'
 
 */
-
-// TODO: use/export
-// eslint-disable-next-line no-unused-vars
-const simplifyBrowserName = (browserName) => {
+export const simplifyBrowserName = (browserName) => {
   switch (browserName) {
     case 'chrome':
     case 'chromium-webview':
@@ -57,21 +56,26 @@ const simplifyBrowserName = (browserName) => {
     case 'firefox':
     case 'fxios':
       return FIREFOX_BROWSER
-
-    // TODO: return opera
+    case 'opera':
+    case 'opera-mini':
+      return OPERA_BROWSER
     case 'ios':
     case 'ios-webview':
     case 'safari':
-      // TODO: use constant
-      return 'safari'
-
+      return SAFARI_BROWSER
     default:
       return UNSUPPORTED_BROWSER
   }
 }
 
 // TODO
-export const isSearchExtensionSupported = () => true
+export const isSearchExtensionSupported = (browserNameSimplified) => {
+  const sfacSupportedBrowsers = [CHROME_BROWSER, FIREFOX_BROWSER]
+  return sfacSupportedBrowsers.indexOf(browserNameSimplified) > -1
+}
 
 // TODO
-export const isTabExtensionSupported = () => true
+export const isTabExtensionSupported = (browserNameSimplified) => {
+  const tfacSupportedBrowsers = [CHROME_BROWSER, EDGE_BROWSER, SAFARI_BROWSER]
+  return tfacSupportedBrowsers.indexOf(browserNameSimplified) > -1
+}
