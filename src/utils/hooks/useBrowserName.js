@@ -1,8 +1,5 @@
 import useBrowserInfo from 'src/utils/hooks/useBrowserInfo'
-import {
-  isSearchExtensionSupported,
-  simplifyBrowserName,
-} from 'src/utils/browserSupport'
+import { simplifyBrowserName } from 'src/utils/browserSupport'
 
 const useBrowserName = ({ userAgent } = {}) => {
   const browserInfo = useBrowserInfo({ userAgent }) || {}

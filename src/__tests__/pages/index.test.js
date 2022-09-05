@@ -9,8 +9,6 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   AMBASSADOR_2022_NOTIFICATION,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
-  CHROME_BROWSER,
-  UNSUPPORTED_BROWSER,
 } from 'src/utils/constants'
 import {
   showMockAchievements,
@@ -50,6 +48,7 @@ import Chip from '@material-ui/core/Chip'
 import { goTo } from 'src/utils/navigation'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
 import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
+import useBrowserName from 'src/utils/hooks/useBrowserName'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -98,6 +97,7 @@ jest.mock('@growthbook/growthbook-react')
 jest.mock('src/utils/growthbook')
 jest.mock('src/utils/logger')
 jest.mock('src/utils/hooks/useDoesBrowserSupportSearchExtension')
+jest.mock('src/utils/hooks/useBrowserName')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
@@ -175,6 +175,7 @@ beforeEach(() => {
   useData.mockReturnValue({ data: getMockProps().data, isDataFresh: true })
   process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
   useDoesBrowserSupportSearchExtension.mockReturnValue(true)
+  useBrowserName.mockReturnValue('chrome')
 })
 
 afterEach(() => {
@@ -1081,6 +1082,17 @@ describe('index.js', () => {
     wrapper.setProps({ ...mockProps }) // force a rerender after hook change
     wrapper.update()
     expect(wrapper.find(SfacExtensionSellNotification).exists()).toBe(true)
+  })
+
+  it('passes the correct browser name to SFAC extension notification', () => {
+    useBrowserName.mockReturnValue('firefox')
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.showSfacExtensionPrompt = true
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const notification = wrapper.find(SfacExtensionSellNotification)
+    expect(notification.prop('browser')).toEqual('firefox')
   })
 
   it('clicking learn more on SFAC sell notification opens modal in normal mode', async () => {

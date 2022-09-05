@@ -73,7 +73,6 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   AMBASSADOR_2022_NOTIFICATION,
-  UNSUPPORTED_BROWSER,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -87,8 +86,8 @@ import SearchForACauseSellNotification from 'src/components/SearchForACauseSellN
 import { getFeatureValue } from 'src/utils/growthbookUtils'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
 import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
-import detectBrowser from 'src/utils/detectBrowser'
 import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
+import useBrowserName from 'src/utils/hooks/useBrowserName'
 
 const AMBASSADOR_APPLICATION_LINK = 'https://forms.gle/bRir3cKmqZfCgbur9'
 
@@ -487,19 +486,13 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const [shouldShowSfacExtensionPrompt, setShouldShowSfacExtensionPrompt] =
     useState(false)
 
-  // TODO: use this
-  // eslint-disable-next-line no-unused-vars
+  // Determine if we should show the SFAC extension prompt.
   const searchExtensionSupported = useDoesBrowserSupportSearchExtension({
     userAgent,
   })
-
-  // TODO: replace with new hook
-  const [browser, setBrowser] = useState(null)
-  useEffect(() => {
-    const detectedBrowser = detectBrowser()
-    setBrowser(detectedBrowser)
-  }, [])
-
+  const browser = useBrowserName({
+    userAgent,
+  })
   useEffect(() => {
     // Only show the prompt if:
     // * The browser has a SFAC extension
@@ -511,9 +504,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
     }
   }, [searchExtensionSupported, showSfacExtensionPrompt, isDataFresh])
 
+  // Determine if we should show the SFAC on-tab search info message.
   const [interactedWithSFACNotification, setInteractedWithSFACNotification] =
     useState(true)
-
   const onSFACSellModalAccept = () => {
     setSearchInputTooltip(
       'Great! You can always switch your search engine here later on.'
@@ -521,7 +514,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
     setShowSFACNotification(false)
     setInteractedWithSFACNotification(false)
   }
-
   const onSearchInputClick = useCallback(() => {
     setShowSFACNotification(showYahooPrompt && interactedWithSFACNotification)
 
