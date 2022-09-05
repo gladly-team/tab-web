@@ -1,12 +1,12 @@
 import { renderHook } from '@testing-library/react-hooks'
-import { detect } from 'detect-browser'
 import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
+import useBrowserInfo from 'src/utils/hooks/useBrowserInfo'
 
 // Let's choose not to mock other browser detection utils.
-jest.mock('detect-browser')
+jest.mock('src/utils/hooks/useBrowserInfo')
 
 beforeEach(() => {
-  detect.mockReturnValue({
+  useBrowserInfo.mockReturnValue({
     name: 'chrome',
     os: 'Mac OS',
     type: 'browser',
@@ -19,8 +19,23 @@ afterEach(() => {
 })
 
 describe('useDoesBrowserSupportSearchExtension', () => {
+  it('passes the user agent to useBrowserInfo, if provided', () => {
+    const mockUserAgent =
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0) Gecko/20100101 Firefox/104.0'
+    renderHook(() =>
+      useDoesBrowserSupportSearchExtension({ userAgent: mockUserAgent })
+    )
+    expect(useBrowserInfo).toHaveBeenCalledWith(mockUserAgent)
+  })
+
+  it('returns false if no browser could be detected', () => {
+    useBrowserInfo.mockReturnValue(undefined)
+    const { result } = renderHook(() => useDoesBrowserSupportSearchExtension())
+    expect(result.current).toEqual(false)
+  })
+
   it('returns true on Chrome', () => {
-    detect.mockReturnValue({
+    useBrowserInfo.mockReturnValue({
       name: 'chrome',
       os: 'Mac OS',
       type: 'browser',
@@ -31,7 +46,7 @@ describe('useDoesBrowserSupportSearchExtension', () => {
   })
 
   it('returns true on Chrome iOS', () => {
-    detect.mockReturnValue({
+    useBrowserInfo.mockReturnValue({
       name: 'crios',
       os: 'iPhone',
       type: 'browser',
@@ -42,7 +57,7 @@ describe('useDoesBrowserSupportSearchExtension', () => {
   })
 
   it('returns true on Firefox', () => {
-    detect.mockReturnValue({
+    useBrowserInfo.mockReturnValue({
       name: 'firefox',
       os: 'Mac OS',
       type: 'browser',
@@ -53,7 +68,7 @@ describe('useDoesBrowserSupportSearchExtension', () => {
   })
 
   it('returns false on Edge', () => {
-    detect.mockReturnValue({
+    useBrowserInfo.mockReturnValue({
       name: 'edge',
       os: 'Mac OS',
       type: 'browser',
@@ -64,7 +79,7 @@ describe('useDoesBrowserSupportSearchExtension', () => {
   })
 
   it('returns false on Edge Chromium', () => {
-    detect.mockReturnValue({
+    useBrowserInfo.mockReturnValue({
       name: 'edge-chromium',
       os: 'Mac OS',
       type: 'browser',
@@ -75,7 +90,7 @@ describe('useDoesBrowserSupportSearchExtension', () => {
   })
 
   it('returns false on Edge iOS', () => {
-    detect.mockReturnValue({
+    useBrowserInfo.mockReturnValue({
       name: 'edge-ios',
       os: 'Mac OS',
       type: 'browser',
@@ -86,7 +101,7 @@ describe('useDoesBrowserSupportSearchExtension', () => {
   })
 
   it('returns false on Safari', () => {
-    detect.mockReturnValue({
+    useBrowserInfo.mockReturnValue({
       name: 'safari',
       os: 'Mac OS',
       type: 'browser',
@@ -97,7 +112,7 @@ describe('useDoesBrowserSupportSearchExtension', () => {
   })
 
   it('returns false on Opera', () => {
-    detect.mockReturnValue({
+    useBrowserInfo.mockReturnValue({
       name: 'opera',
       os: 'Mac OS',
       type: 'browser',
