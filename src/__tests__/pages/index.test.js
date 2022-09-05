@@ -49,7 +49,7 @@ import Notification from 'src/components/Notification'
 import Chip from '@material-ui/core/Chip'
 import { goTo } from 'src/utils/navigation'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
-import detectBrowser from 'src/utils/detectBrowser'
+import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -97,7 +97,7 @@ jest.mock('src/utils/hooks/useCustomTheming')
 jest.mock('@growthbook/growthbook-react')
 jest.mock('src/utils/growthbook')
 jest.mock('src/utils/logger')
-jest.mock('src/utils/detectBrowser')
+jest.mock('src/utils/hooks/useDoesBrowserSupportSearchExtension')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
@@ -174,7 +174,7 @@ beforeEach(() => {
   showBackgroundImages.mockReturnValue(false)
   useData.mockReturnValue({ data: getMockProps().data, isDataFresh: true })
   process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
-  detectBrowser.mockReturnValue(CHROME_BROWSER)
+  useDoesBrowserSupportSearchExtension.mockReturnValue(true)
 })
 
 afterEach(() => {
@@ -1050,7 +1050,7 @@ describe('index.js', () => {
   it('does not render a SFAC extension notification if browser is unsupported', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
-    detectBrowser.mockReturnValue(UNSUPPORTED_BROWSER)
+    useDoesBrowserSupportSearchExtension.mockReturnValue(false)
     mockProps.data.user.showSfacExtensionPrompt = true
     useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
     const wrapper = mount(<IndexPage {...mockProps} />)
