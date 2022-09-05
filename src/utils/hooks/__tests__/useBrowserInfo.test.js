@@ -6,7 +6,6 @@ jest.mock('detect-browser')
 jest.mock('src/utils/ssr')
 
 beforeEach(() => {
-  isServerSide.mockReturnValue(false)
   detect.mockReturnValue({
     name: 'chrome',
     os: 'Mac OS',
