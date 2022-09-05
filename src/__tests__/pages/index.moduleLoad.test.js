@@ -4,6 +4,7 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
+import getMockNextJSContext from 'src/utils/testHelpers/getMockNextJSContext'
 
 jest.mock('tab-ads')
 jest.mock('next-firebase-auth')
@@ -49,6 +50,43 @@ const setUpAds = () => {
 
 beforeEach(() => {
   setUpAds()
+
+  // Default to the expected behavior of getServerSideProps functions
+  // composing each other's return props.
+  const returnComposedProps = async (ctx, getServerSidePropsFunc) => {
+    let composedProps = {}
+    if (getServerSidePropsFunc) {
+      composedProps = await getServerSidePropsFunc(ctx)
+    }
+    return {
+      ...composedProps,
+      props: {
+        ...composedProps.props,
+      },
+    }
+  }
+  const logUncaughtErrors =
+    require('src/utils/pageWrappers/logUncaughtErrors').default
+  logUncaughtErrors.mockImplementation(
+    (getServerSidePropsFunc) => async (ctx) =>
+      returnComposedProps(ctx, getServerSidePropsFunc)
+  )
+  const { withAuthUserTokenSSR } = require('next-firebase-auth')
+  withAuthUserTokenSSR.mockImplementation(
+    () => (getServerSidePropsFunc) => async (ctx) =>
+      returnComposedProps(ctx, getServerSidePropsFunc)
+  )
+  const { withSentrySSR } = require('src/utils/pageWrappers/withSentry')
+  withSentrySSR.mockImplementation(
+    (getServerSidePropsFunc) => async (ctx) =>
+      returnComposedProps(ctx, getServerSidePropsFunc)
+  )
+  const withDataSSR = require('src/utils/pageWrappers/withDataSSR').default
+  withDataSSR.mockImplementation(
+    // eslint-disable-next-line no-unused-vars
+    (_relayQuery) => (getServerSidePropsFunc) => async (ctx) =>
+      returnComposedProps(ctx, getServerSidePropsFunc)
+  )
 })
 
 afterEach(() => {
@@ -128,6 +166,34 @@ describe('index.js: getServerSideProps', () => {
       AuthUser: { ...getMockAuthUser(), id: null, email: null },
     })
     expect(response).toEqual({})
+  })
+
+  it('returns an undefined "userAgent" prop value when the User-Agent header is not defined', async () => {
+    expect.assertions(1)
+    const { getServerSideProps } = require('src/pages/index')
+    const ctx = getMockNextJSContext()
+    ctx.req.headers['user-agent'] = undefined
+    const response = await getServerSideProps(ctx)
+    expect(response).toEqual({
+      props: {
+        userAgent: undefined,
+      },
+    })
+  })
+
+  it('returns a set "userAgent" prop value when the User-Agent header is defined', async () => {
+    expect.assertions(1)
+    const { getServerSideProps } = require('src/pages/index')
+    const ctx = getMockNextJSContext()
+    const mockUserAgent =
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0) Gecko/20100101 Firefox/104.0'
+    ctx.req.headers['user-agent'] = mockUserAgent
+    const response = await getServerSideProps(ctx)
+    expect(response).toEqual({
+      props: {
+        userAgent: mockUserAgent,
+      },
+    })
   })
 })
 

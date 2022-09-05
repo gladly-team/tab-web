@@ -160,6 +160,7 @@ const getMockProps = () => ({
       hasClaimedLatestReward: true,
     },
   },
+  userAgent: undefined,
 })
 
 const getMockCurrentMission = () => ({
@@ -1004,6 +1005,20 @@ describe('index.js', () => {
     expect(acceptButton.text()).toEqual("I don't want more impact")
     acceptButton.simulate('click')
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(false)
+  })
+
+  it('passes the userAgent prop to "useBrowserName" and "useDoesBrowserSupportSearchExtension"', () => {
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const mockUserAgent =
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0) Gecko/20100101 Firefox/104.0'
+    const mockProps = getMockProps()
+    mockProps.userAgent = mockUserAgent
+    mount(<IndexPage {...mockProps} />)
+    expect(useBrowserName).toHaveBeenCalledWith({ userAgent: mockUserAgent })
+    expect(useDoesBrowserSupportSearchExtension).toHaveBeenCalledWith({
+      userAgent: mockUserAgent,
+    })
   })
 
   it('does not render a SFAC sell notification if showYahooPrompt is not true', () => {
