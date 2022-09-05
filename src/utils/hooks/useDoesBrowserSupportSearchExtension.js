@@ -5,7 +5,7 @@ import {
 } from 'src/utils/browserSupport'
 
 const useDoesBrowserSupportSearchExtension = ({ userAgent } = {}) => {
-  const browserInfo = useBrowserInfo(userAgent) || {}
+  const browserInfo = useBrowserInfo({ userAgent }) || {}
   const isSearchSupported = isSearchExtensionSupported(
     simplifyBrowserName(browserInfo.name)
   )

@@ -25,7 +25,7 @@ describe('useDoesBrowserSupportSearchExtension', () => {
     renderHook(() =>
       useDoesBrowserSupportSearchExtension({ userAgent: mockUserAgent })
     )
-    expect(useBrowserInfo).toHaveBeenCalledWith(mockUserAgent)
+    expect(useBrowserInfo).toHaveBeenCalledWith({ userAgent: mockUserAgent })
   })
 
   it('returns false if no browser could be detected', () => {

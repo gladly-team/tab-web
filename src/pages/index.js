@@ -88,6 +88,7 @@ import { getFeatureValue } from 'src/utils/growthbookUtils'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
 import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
 import detectBrowser from 'src/utils/detectBrowser'
+import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
 
 const AMBASSADOR_APPLICATION_LINK = 'https://forms.gle/bRir3cKmqZfCgbur9'
 
@@ -383,7 +384,7 @@ const getRelayQuery = async ({ AuthUser }) => {
   }
 }
 
-const Index = ({ data: fallbackData }) => {
+const Index = ({ data: fallbackData, userAgent }) => {
   const { data, isDataFresh } = useData({
     getRelayQuery,
     fallbackData,
@@ -485,6 +486,12 @@ const Index = ({ data: fallbackData }) => {
   const [showSFACNotification, setShowSFACNotification] = useState(false)
   const [shouldShowSfacExtensionPrompt, setShouldShowSfacExtensionPrompt] =
     useState(false)
+
+  // TODO: use this
+  // eslint-disable-next-line no-unused-vars
+  const searchExtensionSupported = useDoesBrowserSupportSearchExtension({
+    userAgent,
+  })
 
   const [browser, setBrowser] = useState(null)
   useEffect(() => {
@@ -987,10 +994,12 @@ Index.propTypes = {
       showSfacExtensionPrompt: PropTypes.bool,
     }).isRequired,
   }),
+  userAgent: PropTypes.string,
 }
 
 Index.defaultProps = {
   data: null,
+  userAgent: undefined,
 }
 
 // We have a top level Catch Boundary because sentry is not handling
@@ -1006,6 +1015,14 @@ export const getServerSideProps = flowRight([
   }),
   withSentrySSR,
   withDataSSR(getRelayQuery),
+  () => async (ctx) => {
+    const userAgent = get(ctx, 'req.headers["user-agent"]')
+    return {
+      props: {
+        userAgent,
+      },
+    }
+  },
 ])()
 
 export default flowRight([
