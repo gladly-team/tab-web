@@ -26,8 +26,19 @@ describe('useBrowserName', () => {
     expect(useBrowserInfo).toHaveBeenCalledWith({ userAgent: mockUserAgent })
   })
 
-  it('returns "other" if no browser could be detected', () => {
+  it('returns undefined if it has not yet determined the browser', () => {
     useBrowserInfo.mockReturnValue(undefined)
+    const { result } = renderHook(() => useBrowserName())
+    expect(result.current).toBeUndefined()
+  })
+
+  it('returns "other" if it is not one of the key browsers we care about', () => {
+    useBrowserInfo.mockReturnValue({
+      name: 'facebook',
+      os: 'Mac OS',
+      type: 'browser',
+      version: '58.0.3029',
+    })
     const { result } = renderHook(() => useBrowserName())
     expect(result.current).toEqual('other')
   })

@@ -7,8 +7,8 @@ import {
 /**
  * Return whether there is a Search for a Cause extension available for the
  * user's browser.
- * @param {String|undefined} userAgent - An optional user agent string. Used
- *   to determine the browser when on the server side.
+ * @param {String|undefined} userAgent - An optional user agent string to
+ *   support determining the browser on the server side.
  * @return {Boolean} Whether the browser supports a search extension
  */
 const useDoesBrowserSupportSearchExtension = ({ userAgent } = {}) => {

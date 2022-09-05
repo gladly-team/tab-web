@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
 import { detect } from 'detect-browser'
-import { isServerSide } from 'src/utils/ssr'
 
 /**
  * Return info about the user's browser and operating system.
- * @param {String|undefined} userAgent - An optional user agent string. Used
- *   only on the server side.
+ * @param {String|undefined} userAgent - An optional user agent string.
  * @return {Object} browserInfo - The return from the "detect-browser"
  *   library: https://github.com/DamonOehlman/detect-browser
  * @return {String} browserInfo.name - The browser name
@@ -16,7 +14,7 @@ import { isServerSide } from 'src/utils/ssr'
 const useBrowserInfo = ({ userAgent } = {}) => {
   // If provided a user agent string server-side, use it.
   let startingBrowserInfo
-  if (isServerSide() && userAgent) {
+  if (userAgent) {
     startingBrowserInfo = detect(userAgent)
   }
 
