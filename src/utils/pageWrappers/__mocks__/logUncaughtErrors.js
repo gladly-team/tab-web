@@ -1,1 +1,1 @@
-export default (input) => () => input
+export default jest.fn((input) => () => input)

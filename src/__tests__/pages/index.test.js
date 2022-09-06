@@ -9,8 +9,6 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   AMBASSADOR_2022_NOTIFICATION,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
-  CHROME_BROWSER,
-  UNSUPPORTED_BROWSER,
 } from 'src/utils/constants'
 import {
   showMockAchievements,
@@ -49,7 +47,8 @@ import Notification from 'src/components/Notification'
 import Chip from '@material-ui/core/Chip'
 import { goTo } from 'src/utils/navigation'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
-import detectBrowser from 'src/utils/detectBrowser'
+import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
+import useBrowserName from 'src/utils/hooks/useBrowserName'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -97,7 +96,8 @@ jest.mock('src/utils/hooks/useCustomTheming')
 jest.mock('@growthbook/growthbook-react')
 jest.mock('src/utils/growthbook')
 jest.mock('src/utils/logger')
-jest.mock('src/utils/detectBrowser')
+jest.mock('src/utils/hooks/useDoesBrowserSupportSearchExtension')
+jest.mock('src/utils/hooks/useBrowserName')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
@@ -160,6 +160,7 @@ const getMockProps = () => ({
       hasClaimedLatestReward: true,
     },
   },
+  userAgent: undefined,
 })
 
 const getMockCurrentMission = () => ({
@@ -174,7 +175,8 @@ beforeEach(() => {
   showBackgroundImages.mockReturnValue(false)
   useData.mockReturnValue({ data: getMockProps().data, isDataFresh: true })
   process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
-  detectBrowser.mockReturnValue(CHROME_BROWSER)
+  useDoesBrowserSupportSearchExtension.mockReturnValue(true)
+  useBrowserName.mockReturnValue('chrome')
 })
 
 afterEach(() => {
@@ -1005,6 +1007,20 @@ describe('index.js', () => {
     expect(wrapper.find(SearchInput).first().prop('tooltip')).toEqual(false)
   })
 
+  it('passes the userAgent prop to "useBrowserName" and "useDoesBrowserSupportSearchExtension"', () => {
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const mockUserAgent =
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:104.0) Gecko/20100101 Firefox/104.0'
+    const mockProps = getMockProps()
+    mockProps.userAgent = mockUserAgent
+    mount(<IndexPage {...mockProps} />)
+    expect(useBrowserName).toHaveBeenCalledWith({ userAgent: mockUserAgent })
+    expect(useDoesBrowserSupportSearchExtension).toHaveBeenCalledWith({
+      userAgent: mockUserAgent,
+    })
+  })
+
   it('does not render a SFAC sell notification if showYahooPrompt is not true', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
@@ -1050,7 +1066,7 @@ describe('index.js', () => {
   it('does not render a SFAC extension notification if browser is unsupported', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
-    detectBrowser.mockReturnValue(UNSUPPORTED_BROWSER)
+    useDoesBrowserSupportSearchExtension.mockReturnValue(false)
     mockProps.data.user.showSfacExtensionPrompt = true
     useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
     const wrapper = mount(<IndexPage {...mockProps} />)
@@ -1081,6 +1097,17 @@ describe('index.js', () => {
     wrapper.setProps({ ...mockProps }) // force a rerender after hook change
     wrapper.update()
     expect(wrapper.find(SfacExtensionSellNotification).exists()).toBe(true)
+  })
+
+  it('passes the correct browser name to SFAC extension notification', () => {
+    useBrowserName.mockReturnValue('firefox')
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.showSfacExtensionPrompt = true
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const notification = wrapper.find(SfacExtensionSellNotification)
+    expect(notification.prop('browser')).toEqual('firefox')
   })
 
   it('clicking learn more on SFAC sell notification opens modal in normal mode', async () => {

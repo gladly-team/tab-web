@@ -73,7 +73,6 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   AMBASSADOR_2022_NOTIFICATION,
-  UNSUPPORTED_BROWSER,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -87,7 +86,8 @@ import SearchForACauseSellNotification from 'src/components/SearchForACauseSellN
 import { getFeatureValue } from 'src/utils/growthbookUtils'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
 import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
-import detectBrowser from 'src/utils/detectBrowser'
+import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
+import useBrowserName from 'src/utils/hooks/useBrowserName'
 
 const AMBASSADOR_APPLICATION_LINK = 'https://forms.gle/bRir3cKmqZfCgbur9'
 
@@ -383,7 +383,7 @@ const getRelayQuery = async ({ AuthUser }) => {
   }
 }
 
-const Index = ({ data: fallbackData }) => {
+const Index = ({ data: fallbackData, userAgent }) => {
   const { data, isDataFresh } = useData({
     getRelayQuery,
     fallbackData,
@@ -486,25 +486,27 @@ const Index = ({ data: fallbackData }) => {
   const [shouldShowSfacExtensionPrompt, setShouldShowSfacExtensionPrompt] =
     useState(false)
 
-  const [browser, setBrowser] = useState(null)
-  useEffect(() => {
-    const detectedBrowser = detectBrowser()
-    setBrowser(detectedBrowser)
-  }, [])
+  // Determine if we should show the SFAC extension prompt.
+  const searchExtensionSupported = useDoesBrowserSupportSearchExtension({
+    userAgent,
+  })
+  const browser = useBrowserName({
+    userAgent,
+  })
   useEffect(() => {
     // Only show the prompt if:
     // * The browser has a SFAC extension
     // * We have fetched fresh data on whether to show the prompt. Otherwise,
     //   we might show the prompt based on service worker -cached data that
     //   hasn't yet updated since the user interacted.
-    if (browser && browser !== UNSUPPORTED_BROWSER && isDataFresh) {
+    if (searchExtensionSupported && isDataFresh) {
       setShouldShowSfacExtensionPrompt(showSfacExtensionPrompt)
     }
-  }, [browser, showSfacExtensionPrompt, isDataFresh])
+  }, [searchExtensionSupported, showSfacExtensionPrompt, isDataFresh])
 
+  // Determine if we should show the SFAC on-tab search info message.
   const [interactedWithSFACNotification, setInteractedWithSFACNotification] =
     useState(true)
-
   const onSFACSellModalAccept = () => {
     setSearchInputTooltip(
       'Great! You can always switch your search engine here later on.'
@@ -512,7 +514,6 @@ const Index = ({ data: fallbackData }) => {
     setShowSFACNotification(false)
     setInteractedWithSFACNotification(false)
   }
-
   const onSearchInputClick = useCallback(() => {
     setShowSFACNotification(showYahooPrompt && interactedWithSFACNotification)
 
@@ -987,10 +988,12 @@ Index.propTypes = {
       showSfacExtensionPrompt: PropTypes.bool,
     }).isRequired,
   }),
+  userAgent: PropTypes.string,
 }
 
 Index.defaultProps = {
   data: null,
+  userAgent: undefined,
 }
 
 // We have a top level Catch Boundary because sentry is not handling
@@ -1006,6 +1009,14 @@ export const getServerSideProps = flowRight([
   }),
   withSentrySSR,
   withDataSSR(getRelayQuery),
+  () => async (ctx) => {
+    const userAgent = get(ctx, 'req.headers["user-agent"]')
+    return {
+      props: {
+        userAgent,
+      },
+    }
+  },
 ])()
 
 export default flowRight([
