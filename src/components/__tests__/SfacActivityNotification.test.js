@@ -3,8 +3,8 @@ import { mount, shallow } from 'enzyme'
 import { Button, Typography } from '@material-ui/core'
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
-import { windowOpenTop } from 'src/utils/navigation'
 import { GET_SEARCH_URL, SFAC_FEEDBACK_LINK } from 'src/utils/urls'
+import Link from 'src/components/Link'
 import Notification from '../Notification'
 
 jest.mock('src/utils/navigation')
@@ -17,6 +17,7 @@ const getMockProps = () => ({
   activityState: 'new',
   searchesToday: 5,
   totalSearches: 100,
+  impactName: 'Trees',
 })
 
 describe('SfacActivityNotification component', () => {
@@ -72,12 +73,10 @@ describe('SfacActivityNotification component', () => {
       require('src/components/SfacActivityNotification').default
     const mockProps = getMockProps()
     const wrapper = mount(<SfacActivityNotification {...mockProps} />)
-    const button = wrapper.find(Button)
+    const link = wrapper.find(Link).at(0)
 
-    expect(button.at(1).text()).toEqual('Get It Now')
-
-    button.at(1).simulate('click')
-    expect(windowOpenTop).toHaveBeenCalledWith(GET_SEARCH_URL)
+    expect(link.text()).toEqual('GET IT NOW')
+    expect(link.prop('to')).toEqual(GET_SEARCH_URL)
   })
 
   it('show correct activity note, icon and copy in inactive mode', () => {
@@ -105,12 +104,10 @@ describe('SfacActivityNotification component', () => {
       activityState: 'inactive',
     }
     const wrapper = mount(<SfacActivityNotification {...mockProps} />)
-    const button = wrapper.find(Button)
+    const link = wrapper.find(Link).at(0)
 
-    expect(button.at(0).text()).toEqual('Feedback')
-
-    button.at(0).simulate('click')
-    expect(windowOpenTop).toHaveBeenCalledWith(SFAC_FEEDBACK_LINK)
+    expect(link.text()).toEqual('FEEDBACK')
+    expect(link.prop('to')).toEqual(SFAC_FEEDBACK_LINK)
   })
 
   it('has correct buttons, and get it now button opens get search page in inactive mode', () => {
@@ -121,12 +118,10 @@ describe('SfacActivityNotification component', () => {
       activityState: 'inactive',
     }
     const wrapper = mount(<SfacActivityNotification {...mockProps} />)
-    const button = wrapper.find(Button)
+    const link = wrapper.find(Link).at(1)
 
-    expect(button.at(1).text()).toEqual('Activate Extension')
-
-    button.at(1).simulate('click')
-    expect(windowOpenTop).toHaveBeenCalledWith(GET_SEARCH_URL)
+    expect(link.text()).toEqual('ACTIVATE EXTENSION')
+    expect(link.prop('to')).toEqual(GET_SEARCH_URL)
   })
 
   it('show correct activity note, icon, no buttons and copy in active mode', () => {

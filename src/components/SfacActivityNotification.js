@@ -5,8 +5,8 @@ import PropTypes from 'prop-types'
 import { Typography } from '@material-ui/core'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
-import { windowOpenTop } from 'src/utils/navigation'
 import { GET_SEARCH_URL, SFAC_FEEDBACK_LINK } from 'src/utils/urls'
+import Link from 'src/components/Link'
 import Notification from './Notification'
 
 const useStyles = makeStyles((theme) => ({
@@ -14,8 +14,21 @@ const useStyles = makeStyles((theme) => ({
     height: '30px',
     fontWeight: '500',
     fontFamily: 'Poppins',
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
   },
-  yesButton: {
+  noLink: {
+    paddingTop: theme.spacing(0.5),
+    height: '30px',
+    fontWeight: '500',
+    fontFamily: 'Poppins',
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+  },
+  yesLink: {
+    paddingTop: theme.spacing(0.5),
+    paddingLeft: theme.spacing(1.5),
+    paddingRight: theme.spacing(1.5),
     background: '#29BEBA',
     borderRadius: '15px',
     height: '30px',
@@ -31,7 +44,6 @@ const useStyles = makeStyles((theme) => ({
   },
   text: {
     paddingBottom: theme.spacing(3.5),
-    maxWidth: theme.spacing(56),
   },
   buttonsWrapper: {
     display: 'flex',
@@ -60,25 +72,27 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
   statusText: {
+    fontFamily: 'Poppins',
     paddingRight: theme.spacing(0.5),
+    fontWeight: 700,
   },
   searchCount: {
     fontWeight: 900,
   },
+  statusIcon: {
+    paddingTop: theme.spacing(0.5),
+    height: theme.spacing(2.5),
+  },
 }))
 const SfacExtensionSellNotification = ({
+  className,
   activityState,
   searchesToday,
   totalSearches,
+  impactName,
 }) => {
   const [open, setOpen] = useState(true)
   const classes = useStyles()
-  const onFeedbackClick = () => {
-    windowOpenTop(SFAC_FEEDBACK_LINK)
-  }
-  const onGetExtensionClick = () => {
-    windowOpenTop(GET_SEARCH_URL)
-  }
   const onNotNowClick = () => {
     setOpen(false)
   }
@@ -86,17 +100,22 @@ const SfacExtensionSellNotification = ({
   if (activityState === 'inactive') {
     buttons = (
       <div className={classes.buttonsWrapper}>
-        <Button onClick={onFeedbackClick} className={classes.noButton}>
-          Feedback
-        </Button>
-        <Button
-          onClick={onGetExtensionClick}
-          className={classes.yesButton}
-          variant="contained"
-          disableElevation
+        <Link
+          to={SFAC_FEEDBACK_LINK}
+          className={classes.noLink}
+          target="_blank"
+          rel="noopener noreferrer"
         >
-          Activate Extension
-        </Button>
+          FEEDBACK
+        </Link>
+        <Link
+          to={GET_SEARCH_URL}
+          className={classes.yesLink}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          ACTIVATE EXTENSION
+        </Link>
       </div>
     )
   } else if (activityState === 'new') {
@@ -105,19 +124,19 @@ const SfacExtensionSellNotification = ({
         <Button onClick={onNotNowClick} className={classes.noButton}>
           Not Now
         </Button>
-        <Button
-          onClick={onGetExtensionClick}
-          className={classes.yesButton}
-          variant="contained"
-          disableElevation
+        <Link
+          to={GET_SEARCH_URL}
+          className={classes.yesLink}
+          target="_blank"
+          rel="noopener noreferrer"
         >
-          Get It Now
-        </Button>
+          GET IT NOW
+        </Link>
       </div>
     )
   }
   return (
-    <div className={classes.wrapper}>
+    <div className={className}>
       <Notification
         open={open}
         text={
@@ -131,11 +150,11 @@ const SfacExtensionSellNotification = ({
                   <Typography className={classes.statusText} variant="body1">
                     Active
                   </Typography>
-                  <CheckCircleIcon />
+                  <CheckCircleIcon className={classes.statusIcon} />
                 </div>
                 <Typography variant="body1">
-                  Your searches are raising up to 4x more for Trees than just
-                  opening tabs. Great job!
+                  Your searches are raising up to 4x more for {impactName} than
+                  just opening tabs. Great job!
                 </Typography>
               </div>
             ) : (
@@ -144,18 +163,19 @@ const SfacExtensionSellNotification = ({
                   <Typography className={classes.statusText} variant="body1">
                     Inactive
                   </Typography>
-                  <DoNotDisturbOnIcon />
+                  <DoNotDisturbOnIcon className={classes.statusIcon} />
                 </div>
                 {activityState === 'inactive' ? (
                   <Typography variant="body1">
                     You haven’t used Search for Cause in a while! Searching
-                    raises up to 4x more for Trees than just opening tabs.
+                    raises up to 4x more for {impactName} than just opening
+                    tabs.
                   </Typography>
                 ) : (
                   <Typography variant="body1">
                     You can do even more good with our Search for a Cause
-                    extension. Searching raises up to 4x more for Trees than
-                    just opening tabs.
+                    extension. Searching raises up to 4x more for {impactName}{' '}
+                    than just opening tabs.
                   </Typography>
                 )}
               </div>
@@ -184,11 +204,15 @@ const SfacExtensionSellNotification = ({
 }
 
 SfacExtensionSellNotification.propTypes = {
+  className: PropTypes.string,
   activityState: PropTypes.string.isRequired,
   searchesToday: PropTypes.number.isRequired,
   totalSearches: PropTypes.number.isRequired,
+  impactName: PropTypes.string.isRequired,
 }
 
-SfacExtensionSellNotification.defaultProps = {}
+SfacExtensionSellNotification.defaultProps = {
+  className: '',
+}
 
 export default SfacExtensionSellNotification
