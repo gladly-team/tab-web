@@ -14,21 +14,8 @@ const useStyles = makeStyles((theme) => ({
     height: '30px',
     fontWeight: '500',
     fontFamily: 'Poppins',
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
   },
-  noLink: {
-    paddingTop: theme.spacing(0.5),
-    height: '30px',
-    fontWeight: '500',
-    fontFamily: 'Poppins',
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-  },
-  yesLink: {
-    paddingTop: theme.spacing(0.5),
-    paddingLeft: theme.spacing(1.5),
-    paddingRight: theme.spacing(1.5),
+  yesButton: {
     background: '#29BEBA',
     borderRadius: '15px',
     height: '30px',
@@ -80,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 900,
   },
   statusIcon: {
-    paddingTop: theme.spacing(0.5),
+    paddingTop: theme.spacing(0.1),
     height: theme.spacing(2.5),
   },
 }))
@@ -100,21 +87,17 @@ const SfacExtensionSellNotification = ({
   if (activityState === 'inactive') {
     buttons = (
       <div className={classes.buttonsWrapper}>
-        <Link
-          to={SFAC_FEEDBACK_LINK}
-          className={classes.noLink}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          FEEDBACK
+        <Link to={SFAC_FEEDBACK_LINK} target="_blank" rel="noopener noreferrer">
+          <Button className={classes.noButton}>Feedback</Button>
         </Link>
-        <Link
-          to={GET_SEARCH_URL}
-          className={classes.yesLink}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          ACTIVATE EXTENSION
+        <Link to={GET_SEARCH_URL} target="_blank" rel="noopener noreferrer">
+          <Button
+            className={classes.yesButton}
+            variant="contained"
+            disableElevation
+          >
+            Activate Extension
+          </Button>
         </Link>
       </div>
     )
@@ -124,13 +107,14 @@ const SfacExtensionSellNotification = ({
         <Button onClick={onNotNowClick} className={classes.noButton}>
           Not Now
         </Button>
-        <Link
-          to={GET_SEARCH_URL}
-          className={classes.yesLink}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          GET IT NOW
+        <Link to={GET_SEARCH_URL} target="_blank" rel="noopener noreferrer">
+          <Button
+            className={classes.yesButton}
+            variant="contained"
+            disableElevation
+          >
+            Get it Now
+          </Button>
         </Link>
       </div>
     )

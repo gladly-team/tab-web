@@ -75,7 +75,7 @@ describe('SfacActivityNotification component', () => {
     const wrapper = mount(<SfacActivityNotification {...mockProps} />)
     const link = wrapper.find(Link).at(0)
 
-    expect(link.text()).toEqual('GET IT NOW')
+    expect(link.text()).toEqual('Get it Now')
     expect(link.prop('to')).toEqual(GET_SEARCH_URL)
   })
 
@@ -106,7 +106,7 @@ describe('SfacActivityNotification component', () => {
     const wrapper = mount(<SfacActivityNotification {...mockProps} />)
     const link = wrapper.find(Link).at(0)
 
-    expect(link.text()).toEqual('FEEDBACK')
+    expect(link.text()).toEqual('Feedback')
     expect(link.prop('to')).toEqual(SFAC_FEEDBACK_LINK)
   })
 
@@ -120,7 +120,7 @@ describe('SfacActivityNotification component', () => {
     const wrapper = mount(<SfacActivityNotification {...mockProps} />)
     const link = wrapper.find(Link).at(1)
 
-    expect(link.text()).toEqual('ACTIVATE EXTENSION')
+    expect(link.text()).toEqual('Activate Extension')
     expect(link.prop('to')).toEqual(GET_SEARCH_URL)
   })
 
