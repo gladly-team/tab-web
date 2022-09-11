@@ -87,6 +87,18 @@ export const isSearchExtensionSupported = (browserNameSimplified) => {
 }
 
 /**
+ * Given a browser name, return whether we have the Search Activity component
+ * supported for that browser.
+ * @param {String} browserNameSimplified - The browser name. It should be one
+ *   of the return values from `simplifyBrowserName`.
+ * @return {Boolean} Whether the browser supports a search extension
+ */
+export const isSearchActivityComponentSupported = (browserNameSimplified) => {
+  const sfacSupportedBrowsers = [CHROME_BROWSER]
+  return sfacSupportedBrowsers.indexOf(browserNameSimplified) > -1
+}
+
+/**
  * Given a browser name, return whether we have a Tab for a Cause extension
  * for that browser.
  * @param {String} browserNameSimplified - The browser name. It should be one
