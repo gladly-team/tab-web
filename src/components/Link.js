@@ -43,7 +43,7 @@ const Link = (props) => {
   }
 
   return (
-    <NextJsLink href={to}>
+    <NextJsLink href={to || ''}>
       <a
         target={anchorTarget}
         className={clsx(classes.anchor, className)}
