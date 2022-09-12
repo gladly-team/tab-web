@@ -56,20 +56,7 @@ describe('SfacActivityNotification component', () => {
     expect(wrapper.find(DoNotDisturbOnIcon).exists()).toEqual(true)
   })
 
-  it('has correct buttons, and not now button calls close handler in new mode', () => {
-    const SfacActivityNotification =
-      require('src/components/SfacActivityNotification').default
-    const mockProps = getMockProps()
-    const wrapper = mount(<SfacActivityNotification {...mockProps} />)
-    const button = wrapper.find(Button)
-
-    expect(button.at(0).text()).toEqual('Not Now')
-
-    button.at(0).simulate('click')
-    expect(mockProps.onClose).toHaveBeenCalled()
-  })
-
-  it('has correct buttons, and get it now button opens get search page in new mode', () => {
+  it('has a "get it now" button that links to the URL to get the SFAC extension', () => {
     const SfacActivityNotification =
       require('src/components/SfacActivityNotification').default
     const mockProps = getMockProps()
