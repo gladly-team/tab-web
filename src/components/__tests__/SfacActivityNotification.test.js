@@ -5,7 +5,6 @@ import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import { GET_SEARCH_URL, SFAC_FEEDBACK_LINK } from 'src/utils/urls'
 import Link from 'src/components/Link'
-import Notification from '../Notification'
 
 jest.mock('src/utils/navigation')
 
