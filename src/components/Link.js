@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const Link = (props) => {
-  const { children, className, target, to, style } = props
+  const { children, className, target, to = '', style } = props
   const classes = useStyles()
   const [destInternal, setDestInternal] = useState(true)
 
@@ -43,7 +43,7 @@ const Link = (props) => {
   }
 
   return (
-    <NextJsLink href={to || ''}>
+    <NextJsLink href={to}>
       <a
         target={anchorTarget}
         className={clsx(classes.anchor, className)}
