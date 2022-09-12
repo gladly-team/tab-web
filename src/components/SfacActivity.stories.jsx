@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import blue from '@material-ui/core/colors/blue'
 import SfacActivity from './SfacActivity'
 
 export default {
@@ -9,7 +10,11 @@ export default {
 
 const useStyles = makeStyles(() => ({
   templateContainer: {
-    background: 'grey',
+    background: blue['200'],
+    padding: 24,
+    paddingLeft: 96,
+    width: '100%',
+    minHeight: 400,
   },
 }))
 
