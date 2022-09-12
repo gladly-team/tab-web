@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const Link = (props) => {
-  const { children, className, target, to, style } = props
+  const { children, className, target, to = '', style } = props
   const classes = useStyles()
   const [destInternal, setDestInternal] = useState(true)
 

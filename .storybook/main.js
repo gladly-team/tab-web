@@ -1,49 +1,69 @@
-const path = require('path');
-const dotenv = require('dotenv');
+/* eslint import/no-extraneous-dependencies: 0 */
+const path = require('path')
+const dotenv = require('dotenv')
+const webpack = require('webpack')
 
-// ----------------------------------------
-// Storybook custom env var parsing
+dotenv.config({
+  path: path.resolve(__dirname, '../.env.preview.info'),
+})
 
-const previewDotenv = dotenv.config({
-	path: path.resolve(__dirname, '../.env.preview.info'),
-});
+// From:
+// https://github.com/storybookjs/storybook/issues/12270#issuecomment-1039631674
+const injectVars = Object.keys(process.env).reduce((c, key) => {
+  if (/^NEXT_PUBLIC_/.test(key)) {
+    // eslint-disable-next-line no-param-reassign
+    c[`process.env.${key}`] = JSON.stringify(process.env[key])
+  }
+  return c
+}, {})
 
-// ----------------------------------------
+function injectEnv(definitions) {
+  const env = 'process.env'
+  if (!definitions[env]) {
+    return {
+      ...definitions,
+      [env]: JSON.stringify(
+        Object.fromEntries(
+          Object.entries(definitions)
+            .filter(([key]) => key.startsWith(env))
+            .map(([key, value]) => [
+              key.substring(env.length + 1),
+              JSON.parse(value),
+            ])
+        )
+      ),
+    }
+  }
+  return definitions
+}
 
 module.exports = {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: ['@storybook/addon-links', '@storybook/addon-essentials'],
   webpackFinal: (config) => {
+    // Always use the browser version of the Sentry library.
+    // eslint-disable-next-line no-param-reassign
     config.resolve.alias['@sentry/node'] = '@sentry/browser'
 
-    // ----------------------------------------
-		// Manually inject environment variables
-		// Note that otherwise, only `STORYBOOK_*` prefix env vars are supported
-		// Ref: https://github.com/storybookjs/storybook/issues/12270
+    // eslint-disable-next-line no-param-reassign
+    config.plugins = config.plugins.reduce((c, plugin) => {
+      // Manually inject some environment variables. Otherwise,
+      // only `STORYBOOK_*` prefix env vars are supported.
+      // https://github.com/storybookjs/storybook/issues/12270#issuecomment-1039631674
+      if (plugin instanceof webpack.DefinePlugin) {
+        return [
+          ...c,
+          new webpack.DefinePlugin(
+            injectEnv({
+              ...plugin.definitions,
+              ...injectVars,
+            })
+          ),
+        ]
+      }
 
-		const definePlugin = config.plugins.find(
-			(plgn) => plgn.definitions && plgn.definitions['process.env'],
-		);
-		const processEnv = definePlugin.definitions['process.env'];
-
-		/**
-		 * For a given dotenv file, validate and inject its
-		 * variables into the Storybook `process.env` object.
-		 */
-		const injectEnvVars = (envObj) => {
-			const envVarsToInject = envObj.parsed;
-			const hasEnvVarsToInject =
-				envVarsToInject && Object.keys(envVarsToInject).length > 0;
-
-			if (hasEnvVarsToInject) {
-				Object.keys(envVarsToInject).forEach((key) => {
-					processEnv[key] = JSON.stringify(envVarsToInject[key]);
-				});
-			}
-		};
-
-		injectEnvVars(previewDotenv);
-		// ----------------------------------------
+      return [...c, plugin]
+    }, [])
 
     return config
   },

@@ -7,5 +7,9 @@ build
 .vercel
 storybook-static
 
+# Include the Storybook config files:
+# https://github.com/storybookjs/storybook/issues/295#issuecomment-340122758
+!.storybook
+
 # We ignore next.config.*js in the NPM lint script because
 # linting the config breaks Vercel builds.
