@@ -522,7 +522,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const [showSfacActivityNotification, setShowSfacActivityNotification] =
     useState(false)
   const toggleSfacActivityNotification = () =>
-    setShowSfacActivityNotification(showSfacActivityNotification => !showSfacActivityNotification)
+    setShowSfacActivityNotification((s) => !s)
   const onSFACSellModalAccept = () => {
     setSearchInputTooltip(
       'Great! You can always switch your search engine here later on.'
