@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
@@ -72,16 +72,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 const SfacExtensionSellNotification = ({
+  open,
   className,
   activityState,
   searchesToday,
   totalSearches,
   impactName,
+  onClose,
 }) => {
-  const [open, setOpen] = useState(true)
   const classes = useStyles()
   const onNotNowClick = () => {
-    setOpen(false)
+    onClose()
   }
   let buttons = null
   if (activityState === 'inactive') {
@@ -188,11 +189,13 @@ const SfacExtensionSellNotification = ({
 }
 
 SfacExtensionSellNotification.propTypes = {
+  open: PropTypes.bool.isRequired,
   className: PropTypes.string,
   activityState: PropTypes.string.isRequired,
   searchesToday: PropTypes.number.isRequired,
   totalSearches: PropTypes.number.isRequired,
   impactName: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
 }
 
 SfacExtensionSellNotification.defaultProps = {

@@ -14,10 +14,12 @@ afterEach(() => {
 })
 
 const getMockProps = () => ({
+  open: true,
   activityState: 'new',
   searchesToday: 5,
   totalSearches: 100,
   impactName: 'Trees',
+  onClose: jest.fn(),
 })
 
 describe('SfacActivityNotification component', () => {
@@ -55,7 +57,7 @@ describe('SfacActivityNotification component', () => {
     expect(wrapper.find(DoNotDisturbOnIcon).exists()).toEqual(true)
   })
 
-  it('has correct buttons, and not now button closes notification in new mode', () => {
+  it('has correct buttons, and not now button calls close handler in new mode', () => {
     const SfacActivityNotification =
       require('src/components/SfacActivityNotification').default
     const mockProps = getMockProps()
@@ -65,7 +67,7 @@ describe('SfacActivityNotification component', () => {
     expect(button.at(0).text()).toEqual('Not Now')
 
     button.at(0).simulate('click')
-    expect(wrapper.find(Notification).first().prop('open')).toEqual(false)
+    expect(mockProps.onClose).toHaveBeenCalled()
   })
 
   it('has correct buttons, and get it now button opens get search page in new mode', () => {
@@ -96,7 +98,7 @@ describe('SfacActivityNotification component', () => {
     expect(wrapper.find(DoNotDisturbOnIcon).exists()).toEqual(true)
   })
 
-  it('has correct buttons, and not now button closes notification in inactive mode', () => {
+  it('has correct buttons, and link opens feedback button inactive mode', () => {
     const SfacActivityNotification =
       require('src/components/SfacActivityNotification').default
     const mockProps = {
