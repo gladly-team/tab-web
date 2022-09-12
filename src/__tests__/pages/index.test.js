@@ -9,7 +9,6 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   AMBASSADOR_2022_NOTIFICATION,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
-  SFAC_ACTIVITY_STATES,
 } from 'src/utils/constants'
 import {
   showMockAchievements,
@@ -50,8 +49,7 @@ import { goTo } from 'src/utils/navigation'
 import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
 import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
 import useBrowserName from 'src/utils/hooks/useBrowserName'
-import SfacActivityNotification from 'src/components/SfacActivityNotification'
-import SfacActivityButton from 'src/components/SfacActivityButton'
+import SfacActivityContainer from 'src/components/SfacActivityContainer'
 import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 
 jest.mock('uuid')
@@ -78,6 +76,7 @@ jest.mock('src/components/MoneyRaisedContainer', () => () => <div />)
 jest.mock('src/components/InviteFriendsIconContainer', () => () => <div />)
 jest.mock('src/components/UserImpactContainer', () => () => <div />)
 jest.mock('src/components/SearchInput', () => () => <div />)
+jest.mock('src/components/SfacActivity', () => () => <div />)
 jest.mock('src/utils/featureFlags')
 jest.mock('src/components/Achievement', () => () => (
   <div data-test-id="mock-achievement" />
@@ -154,7 +153,6 @@ const getMockProps = () => ({
       },
       features: [],
       searches: 10,
-      sfacActivityState: SFAC_ACTIVITY_STATES.NEW,
       showSfacIcon: false,
     },
     userImpact: {
@@ -1508,75 +1506,8 @@ describe('index.js: hardcoded notifications', () => {
     )
   })
 
-  it('renders a SFAC activity toggle button and info component with the correct props if supported', async () => {
+  it('renders the SFAC activity UI with the correct props if enabled and the browser is supported', async () => {
     isSearchActivityComponentSupported.mockReturnValue(true)
-    expect.assertions(7)
-    const IndexPage = require('src/pages/index').default
-    const defaultMockProps = getMockProps()
-    const mockProps = {
-      ...defaultMockProps,
-      data: {
-        ...defaultMockProps.data,
-        user: {
-          ...defaultMockProps.data.user,
-          showSfacIcon: true,
-        },
-      },
-    }
-    useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
-    const sfacActivityButton = wrapper.find(SfacActivityButton)
-    expect(sfacActivityButton.exists()).toBe(true)
-    expect(sfacActivityButton.first().prop('active')).toEqual(false)
-    const sfacActivityNotification = wrapper.find(SfacActivityNotification)
-    expect(sfacActivityNotification.exists()).toBe(true)
-    expect(sfacActivityNotification.first().prop('activityState')).toBe(
-      SFAC_ACTIVITY_STATES.NEW
-    )
-    expect(sfacActivityNotification.first().prop('searchesToday')).toBe(0)
-    expect(sfacActivityNotification.first().prop('totalSearches')).toBe(10)
-    expect(sfacActivityNotification.first().prop('impactName')).toBe(
-      defaultMockProps.data.user.cause.name
-    )
-  })
-
-  it('renders a SFAC activity toggle button and toggles UI element correctly', () => {
-    isSearchActivityComponentSupported.mockReturnValue(true)
-    const IndexPage = require('src/pages/index').default
-    const defaultMockProps = getMockProps()
-    const mockProps = {
-      ...defaultMockProps,
-      data: {
-        ...defaultMockProps.data,
-        user: {
-          ...defaultMockProps.data.user,
-          showSfacIcon: true,
-        },
-      },
-    }
-    useData.mockReturnValue({ data: mockProps.data })
-    const wrapper = mount(<IndexPage {...mockProps} />)
-    const sfacActivityButton = wrapper.find(SfacActivityButton).find(IconButton)
-
-    expect(wrapper.find(SfacActivityNotification).first().prop('open')).toEqual(
-      false
-    )
-
-    sfacActivityButton.first().simulate('click')
-
-    expect(wrapper.find(SfacActivityNotification).first().prop('open')).toEqual(
-      true
-    )
-
-    sfacActivityButton.first().simulate('click')
-
-    expect(wrapper.find(SfacActivityNotification).first().prop('open')).toEqual(
-      false
-    )
-  })
-
-  it('does not render a SFAC activity toggle button and info if not supported in browser', async () => {
-    isSearchActivityComponentSupported.mockReturnValue(false)
     expect.assertions(2)
     const IndexPage = require('src/pages/index').default
     const defaultMockProps = getMockProps()
@@ -1592,13 +1523,34 @@ describe('index.js: hardcoded notifications', () => {
     }
     useData.mockReturnValue({ data: mockProps.data })
     const wrapper = mount(<IndexPage {...mockProps} />)
-    expect(wrapper.find(SfacActivityButton).exists()).toBe(false)
-    expect(wrapper.find(SfacActivityNotification).exists()).toBe(false)
+    const sfacActivityUI = wrapper.find(SfacActivityContainer)
+    expect(sfacActivityUI.exists()).toBe(true)
+    expect(sfacActivityUI.prop('user')).toEqual(mockProps.data.user)
+  })
+
+  it('does not render the SFAC activity UI if the browser is not supported', async () => {
+    isSearchActivityComponentSupported.mockReturnValue(false) // not supported
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          showSfacIcon: true,
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    expect(wrapper.find(SfacActivityContainer).exists()).toBe(false)
   })
 
   it('does not render a SFAC activity toggle button and info component if showSfacIcon is false', async () => {
-    isSearchActivityComponentSupported.mockReturnValue(true)
-    expect.assertions(2)
+    isSearchActivityComponentSupported.mockReturnValue(true) // supported
+    expect.assertions(1)
     const IndexPage = require('src/pages/index').default
     const defaultMockProps = getMockProps()
     const mockProps = {
@@ -1613,7 +1565,6 @@ describe('index.js: hardcoded notifications', () => {
     }
     useData.mockReturnValue({ data: mockProps.data })
     const wrapper = mount(<IndexPage {...mockProps} />)
-    expect(wrapper.find(SfacActivityButton).exists()).toBe(false)
-    expect(wrapper.find(SfacActivityNotification).exists()).toBe(false)
+    expect(wrapper.find(SfacActivityContainer).exists()).toBe(false)
   })
 })

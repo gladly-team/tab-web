@@ -74,7 +74,6 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   AMBASSADOR_2022_NOTIFICATION,
-  SFAC_ACTIVITY_STATES,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -369,8 +368,6 @@ const getRelayQuery = async ({ AuthUser }) => {
             code
           }
           searches
-          searchesToday
-          sfacActivityState
           showSfacIcon
           ...MoneyRaisedContainer_user
           ...UserBackgroundImageContainer_user
@@ -431,8 +428,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
     showYahooPrompt,
     showSfacExtensionPrompt,
     searches,
-    sfacActivityState,
-    searchesToday,
     showSfacIcon,
   } = user || {}
   const {
@@ -519,10 +514,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
   // Determine if we should show the SFAC on-tab search info message.
   const [interactedWithSFACNotification, setInteractedWithSFACNotification] =
     useState(true)
-  const [showSfacActivityNotification, setShowSfacActivityNotification] =
-    useState(false)
-  const toggleSfacActivityNotification = () =>
-    setShowSfacActivityNotification((s) => !s)
   const onSFACSellModalAccept = () => {
     setSearchInputTooltip(
       'Great! You can always switch your search engine here later on.'
