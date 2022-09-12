@@ -372,7 +372,10 @@ const getRelayQuery = async ({ AuthUser }) => {
           searches
           searchesToday
           sfacActivityState
+<<<<<<< HEAD
           showSfacIcon
+=======
+>>>>>>> 2c68a86c38849f2620ed4b433af2bcd552dc2e98
           ...MoneyRaisedContainer_user
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
