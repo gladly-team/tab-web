@@ -31,6 +31,7 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
+// TODO: more tests
 describe('SfacActivity', () => {
   it('renders without error', () => {
     const SfacActivity = require('src/components/SfacActivity').default
