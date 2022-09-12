@@ -78,16 +78,8 @@ const SfacExtensionSellNotification = ({
   searchesToday,
   totalSearches,
   impactName,
-  onClose,
 }) => {
-  const [isOpen, setIsOpen] = useState(open)
-  useEffect(() => {
-    setIsOpen(open)
-  }, [open, setIsOpen])
   const classes = useStyles()
-  const onNotNowClick = () => {
-    onClose()
-  }
   let buttons = null
   if (activityState === 'inactive') {
     buttons = (
@@ -109,9 +101,6 @@ const SfacExtensionSellNotification = ({
   } else if (activityState === 'new') {
     buttons = (
       <div className={classes.buttonsWrapper}>
-        <Button onClick={onNotNowClick} className={classes.noButton}>
-          Not Now
-        </Button>
         <Link to={GET_SEARCH_URL} target="_blank" rel="noopener noreferrer">
           <Button
             className={classes.yesButton}
@@ -127,7 +116,7 @@ const SfacExtensionSellNotification = ({
   return (
     <div className={className}>
       <Notification
-        open={isOpen}
+        open
         text={
           <span className={classes.text}>
             <Typography className={classes.title}>
@@ -193,13 +182,11 @@ const SfacExtensionSellNotification = ({
 }
 
 SfacExtensionSellNotification.propTypes = {
-  open: PropTypes.bool.isRequired,
   className: PropTypes.string,
   activityState: PropTypes.string.isRequired,
   searchesToday: PropTypes.number.isRequired,
   totalSearches: PropTypes.number.isRequired,
   impactName: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
 }
 
 SfacExtensionSellNotification.defaultProps = {

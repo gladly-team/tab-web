@@ -28,8 +28,7 @@ import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContaine
 import SquadCounter from 'src/components/SquadCounter'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
-import SfacActivityButton from 'src/components/SfacActivityButton'
-import SfacActivityNotification from 'src/components/SfacActivityNotification'
+import SfacActivityContainer from 'src/components/SfacActivityContainer'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -380,6 +379,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           ...SocialShareContainer_user
           ...EmailInviteDialogContainer_user
           ...SearchInputContainer_user
+          ...SfacActivityContainer_user
         }
       }
     `,
@@ -722,10 +722,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                     />
                   ) : null}
                   {showSfacIcon && searchActivityNotificationSupported ? (
-                    <SfacActivityButton
-                      active={sfacActivityState === SFAC_ACTIVITY_STATES.ACTIVE}
-                      onClick={toggleSfacActivityNotification}
-                    />
+                    <SfacActivityContainer user={user} />
                   ) : null}
                   {individualImpactEnabled ? (
                     <UserImpactContainer
@@ -837,16 +834,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
                     <SfacExtensionSellNotification
                       userId={userGlobalId}
                       browser={browser}
-                    />
-                  ) : null}
-                  {showSfacIcon && searchActivityNotificationSupported ? (
-                    <SfacActivityNotification
-                      open={showSfacActivityNotification}
-                      activityState={sfacActivityState}
-                      searchesToday={searchesToday || 0}
-                      totalSearches={searches || 0}
-                      onClose={toggleSfacActivityNotification}
-                      impactName={causeName}
                     />
                   ) : null}
                   {userGlobalId && showSFACNotification ? (
