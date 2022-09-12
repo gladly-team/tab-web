@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Badge from '@material-ui/core/Badge'
@@ -29,11 +29,12 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const SfacActivityButton = ({ active, onClick }) => {
+const SfacActivityButton = forwardRef(({ active, onClick }, ref) => {
   const classes = useStyles()
 
   return (
     <Badge
+      ref={ref}
       overlap="circular"
       badgeContent={
         active ? (
@@ -52,7 +53,7 @@ const SfacActivityButton = ({ active, onClick }) => {
       </IconButton>
     </Badge>
   )
-}
+})
 
 SfacActivityButton.propTypes = {
   onClick: PropTypes.func.isRequired,

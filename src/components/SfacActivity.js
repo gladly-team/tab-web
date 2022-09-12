@@ -24,12 +24,13 @@ const SfacActivity = ({
   const buttonRef = useRef(undefined)
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   return (
-    <div ref={buttonRef}>
+    <div>
       <SfacActivityButton
         active={sfacActivityState === SFAC_ACTIVITY_STATES.ACTIVE}
         onClick={() => {
           setIsPopoverOpen(true)
         }}
+        ref={buttonRef}
       />
       <DashboardPopover
         open={isPopoverOpen}
