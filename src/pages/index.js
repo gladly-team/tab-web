@@ -28,6 +28,8 @@ import InviteFriendsIconContainer from 'src/components/InviteFriendsIconContaine
 import SquadCounter from 'src/components/SquadCounter'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
+import SfacActivityButton from 'src/components/SfacActivityButton'
+import SfacActivityNotification from 'src/components/SfacActivityNotification'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -73,6 +75,7 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   AMBASSADOR_2022_NOTIFICATION,
+  SFAC_ACTIVITY_STATES,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -88,6 +91,7 @@ import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
 import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
 import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
 import useBrowserName from 'src/utils/hooks/useBrowserName'
+import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 
 const AMBASSADOR_APPLICATION_LINK = 'https://forms.gle/bRir3cKmqZfCgbur9'
 
@@ -366,6 +370,9 @@ const getRelayQuery = async ({ AuthUser }) => {
             code
           }
           searches
+          searchesToday
+          sfacActivityState
+          showSfacIcon
           ...MoneyRaisedContainer_user
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
@@ -424,6 +431,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
     showYahooPrompt,
     showSfacExtensionPrompt,
     searches,
+    sfacActivityState,
+    searchesToday,
+    showSfacIcon,
   } = user || {}
   const {
     theme,
@@ -493,6 +503,8 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const browser = useBrowserName({
     userAgent,
   })
+  const searchActivityNotificationSupported =
+    isSearchActivityComponentSupported(browser)
   useEffect(() => {
     // Only show the prompt if:
     // * The browser has a SFAC extension
@@ -507,6 +519,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
   // Determine if we should show the SFAC on-tab search info message.
   const [interactedWithSFACNotification, setInteractedWithSFACNotification] =
     useState(true)
+  const [showSfacActivityNotification, setShowSfacActivityNotification] =
+    useState(false)
+  const toggleSfacActivityNotification = () =>
+    setShowSfacActivityNotification((s) => !s)
   const onSFACSellModalAccept = () => {
     setSearchInputTooltip(
       'Great! You can always switch your search engine here later on.'
@@ -705,6 +721,12 @@ const Index = ({ data: fallbackData, userAgent }) => {
                       onClose={() => setShowSFACSellModalMode(null)}
                     />
                   ) : null}
+                  {showSfacIcon && searchActivityNotificationSupported ? (
+                    <SfacActivityButton
+                      active={sfacActivityState === SFAC_ACTIVITY_STATES.ACTIVE}
+                      onClick={toggleSfacActivityNotification}
+                    />
+                  ) : null}
                   {individualImpactEnabled ? (
                     <UserImpactContainer
                       userId={userGlobalId}
@@ -815,6 +837,16 @@ const Index = ({ data: fallbackData, userAgent }) => {
                     <SfacExtensionSellNotification
                       userId={userGlobalId}
                       browser={browser}
+                    />
+                  ) : null}
+                  {showSfacIcon && searchActivityNotificationSupported ? (
+                    <SfacActivityNotification
+                      open={showSfacActivityNotification}
+                      activityState={sfacActivityState}
+                      searchesToday={searchesToday || 0}
+                      totalSearches={searches || 0}
+                      onClose={toggleSfacActivityNotification}
+                      impactName={causeName}
                     />
                   ) : null}
                   {userGlobalId && showSFACNotification ? (
