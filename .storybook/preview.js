@@ -1,3 +1,4 @@
+import React from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from 'src/utils/theme'
 import CssBaseline from '@material-ui/core/CssBaseline'
