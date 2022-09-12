@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
+import DashboardPopover from 'src/components/DashboardPopover'
 import SfacActivityButton from 'src/components/SfacActivityButton'
 import SfacActivityNotification from 'src/components/SfacActivityNotification'
-import DashboardPopover from 'src/components/DashboardPopover'
 import { SFAC_ACTIVITY_STATES } from 'src/utils/constants'
 
 const useStyles = makeStyles(() => ({
