@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
@@ -80,6 +80,10 @@ const SfacExtensionSellNotification = ({
   impactName,
   onClose,
 }) => {
+  const [isOpen, setIsOpen] = useState(open)
+  useEffect(() => {
+    setIsOpen(open)
+  }, [open, setIsOpen])
   const classes = useStyles()
   const onNotNowClick = () => {
     onClose()
@@ -123,7 +127,7 @@ const SfacExtensionSellNotification = ({
   return (
     <div className={className}>
       <Notification
-        open={open}
+        open={isOpen}
         text={
           <span className={classes.text}>
             <Typography className={classes.title}>

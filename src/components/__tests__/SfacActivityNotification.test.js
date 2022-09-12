@@ -12,6 +12,7 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
+
 const getMockProps = () => ({
   open: true,
   activityState: 'new',
