@@ -3,12 +3,19 @@ const dotenv = require('dotenv');
 const webpack = require('webpack');
 
 
-const previewDotenv = dotenv.config({
+dotenv.config({
 	path: path.resolve(__dirname, '../.env.preview.info'),
 });
 
 // From:
 // https://github.com/storybookjs/storybook/issues/12270#issuecomment-1039631674
+const injectVars = Object.keys(process.env).reduce((c,key) => {
+  if(/^NEXT_PUBLIC_/.test(key)) {
+    c[`process.env.${key}`] = JSON.stringify(process.env[key]);
+  }
+  return c;
+}, {})
+
 function injectEnv(definitions) {
   const env = 'process.env';
   if (!definitions[env]) {
@@ -44,7 +51,7 @@ module.exports = {
           new webpack.DefinePlugin(
             injectEnv({
               ...plugin.definitions,
-              ...previewDotenv,
+              ...injectVars,
             })
           ),
         ]
