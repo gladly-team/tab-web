@@ -9,6 +9,8 @@ import { GET_SEARCH_URL, SFAC_FEEDBACK_LINK } from 'src/utils/urls'
 import Link from 'src/components/Link'
 import Notification from './Notification'
 
+const statusIconSize = 18
+
 const useStyles = makeStyles((theme) => ({
   notification: {
     paddingLeft: theme.spacing(3),
@@ -52,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
   status: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
     paddingBottom: theme.spacing(2.5),
   },
   statusWrapper: {
@@ -74,8 +77,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 900,
   },
   statusIcon: {
-    paddingTop: theme.spacing(0.1),
-    height: theme.spacing(2.5),
+    height: statusIconSize,
+    width: statusIconSize,
   },
 }))
 const SfacExtensionSellNotification = ({
@@ -134,7 +137,10 @@ const SfacExtensionSellNotification = ({
                   <Typography className={classes.statusText} variant="body1">
                     Active
                   </Typography>
-                  <CheckCircleIcon className={classes.statusIcon} />
+                  <CheckCircleIcon
+                    style={{ width: statusIconSize, height: statusIconSize }}
+                    className={classes.statusIcon}
+                  />
                 </div>
                 <Typography variant="body1">
                   Your searches are raising up to 4x more for {impactName} than
@@ -147,7 +153,10 @@ const SfacExtensionSellNotification = ({
                   <Typography className={classes.statusText} variant="body1">
                     Inactive
                   </Typography>
-                  <DoNotDisturbOnIcon className={classes.statusIcon} />
+                  <DoNotDisturbOnIcon
+                    style={{ width: statusIconSize, height: statusIconSize }}
+                    className={classes.statusIcon}
+                  />
                 </div>
                 {activityState === 'inactive' ? (
                   <Typography variant="body1">
