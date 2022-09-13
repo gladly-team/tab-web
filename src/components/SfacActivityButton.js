@@ -10,15 +10,15 @@ import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
 const useStyles = makeStyles(() => ({
   badgeContent: {
     position: 'absolute',
-    maxWidth: '20px',
-    maxHeight: '20px',
+    width: 18,
+    height: 18,
     background: '#fff',
     borderRadius: '20px',
   },
   button: {
     borderRadius: '30px',
-    maxWidth: '52px',
-    maxHeight: '52px',
+    height: 40,
+    width: 40,
 
     // Button color theming gets easier in MUI v5:
     // https://stackoverflow.com/a/69836010/1332513
