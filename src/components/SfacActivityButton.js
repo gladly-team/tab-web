@@ -26,6 +26,9 @@ const useStyles = makeStyles(() => ({
     '&:hover': {
       background: 'white',
     },
+
+    // Ideally, we should use standard MUI styling.
+    boxShadow: '0px 2px 4px grey',
   },
   inactive: {
     color: '#E3720E',
