@@ -1,5 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
+import { act } from 'react-dom/test-utils'
 import DashboardPopover from 'src/components/DashboardPopover'
 import SfacActivityButton from 'src/components/SfacActivityButton'
 import SfacActivityNotification from 'src/components/SfacActivityNotification'
@@ -85,7 +86,7 @@ describe('SfacActivity', () => {
   })
 
   it('opens the popover when clicking the button and closes onClose', () => {
-    expect.assertions(2)
+    expect.assertions(3)
     const SfacActivity = require('src/components/SfacActivity').default
     const mockProps = getMockProps()
     const wrapper = mount(<SfacActivity {...mockProps} />)
@@ -93,6 +94,11 @@ describe('SfacActivity', () => {
     expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
     button.simulate('click')
     expect(wrapper.find(DashboardPopover).prop('open')).toBe(true)
+    act(() => {
+      wrapper.find(DashboardPopover).prop('onClose')()
+    })
+    wrapper.update()
+    expect(wrapper.find(DashboardPopover).prop('open')).toBe(false)
   })
 
   it('passes the expected props to SfacActivityNotification', () => {
