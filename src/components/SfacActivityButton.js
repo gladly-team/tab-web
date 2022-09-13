@@ -10,11 +10,11 @@ import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
 
 const badgeSize = 18
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   badgeContent: {
     position: 'absolute',
     fontSize: badgeSize,
-    background: '#fff',
+    background: theme.palette.common.white,
     borderRadius: '50%',
   },
   button: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
 
     // Button color theming gets easier in MUI v5:
     // https://stackoverflow.com/a/69836010/1332513
-    backgroundColor: '#fff !important',
+    backgroundColor: `${theme.palette.common.white} !important`,
     '&:hover': {
       background: 'white',
     },
@@ -37,6 +37,10 @@ const useStyles = makeStyles(() => ({
   },
   active: {
     color: '#219653',
+  },
+  searchIcon: {
+    // Matches current impact counter text.
+    color: theme.palette.text.primary,
   },
 }))
 
@@ -62,7 +66,7 @@ const SfacActivityButton = forwardRef(({ active, onClick }, ref) => {
       }
     >
       <IconButton className={classes.button} onClick={onClick}>
-        <SearchIcon />
+        <SearchIcon className={classes.searchIcon} />
       </IconButton>
     </Badge>
   )
