@@ -8,12 +8,12 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import IconButton from '@material-ui/core/IconButton'
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
 
+const badgeSize = 18
+
 const useStyles = makeStyles(() => ({
   badgeContent: {
     position: 'absolute',
-    width: 18,
-    height: 18,
-    fontSize: 18,
+    fontSize: badgeSize,
     background: '#fff',
     borderRadius: '20px',
   },
@@ -50,10 +50,12 @@ const SfacActivityButton = forwardRef(({ active, onClick }, ref) => {
       badgeContent={
         active ? (
           <CheckCircleIcon
+            style={{ width: badgeSize, height: badgeSize }}
             className={clsx(classes.badgeContent, classes.active)}
           />
         ) : (
           <DoNotDisturbOnIcon
+            style={{ width: badgeSize, height: badgeSize }}
             className={clsx(classes.badgeContent, classes.inactive)}
           />
         )
