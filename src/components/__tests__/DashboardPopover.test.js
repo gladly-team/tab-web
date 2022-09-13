@@ -82,4 +82,15 @@ describe('DashboardPopover', () => {
     wrapper.setProps({ transformOrigin })
     expect(wrapper.find(Popover).prop('transformOrigin')).toBe(transformOrigin)
   })
+
+  it('passes the "PaperProps" prop to Popover', () => {
+    const DashboardPopover = require('src/components/DashboardPopover').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<DashboardPopover {...mockProps} />)
+    const PaperProps = {
+      className: 'foo',
+    }
+    wrapper.setProps({ PaperProps })
+    expect(wrapper.find(Popover).prop('PaperProps')).toBe(PaperProps)
+  })
 })

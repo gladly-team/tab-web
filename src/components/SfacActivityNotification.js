@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
@@ -9,7 +9,16 @@ import { GET_SEARCH_URL, SFAC_FEEDBACK_LINK } from 'src/utils/urls'
 import Link from 'src/components/Link'
 import Notification from './Notification'
 
+const statusIconSize = 18
+
 const useStyles = makeStyles((theme) => ({
+  notification: {
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    borderRadius: 15,
+  },
   noButton: {
     height: '30px',
     fontWeight: '500',
@@ -45,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
   status: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
     paddingBottom: theme.spacing(2.5),
   },
   statusWrapper: {
@@ -67,27 +77,18 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 900,
   },
   statusIcon: {
-    paddingTop: theme.spacing(0.1),
-    height: theme.spacing(2.5),
+    height: statusIconSize,
+    width: statusIconSize,
   },
 }))
 const SfacExtensionSellNotification = ({
-  open,
   className,
   activityState,
   searchesToday,
   totalSearches,
   impactName,
-  onClose,
 }) => {
-  const [isOpen, setIsOpen] = useState(open)
-  useEffect(() => {
-    setIsOpen(open)
-  }, [open, setIsOpen])
   const classes = useStyles()
-  const onNotNowClick = () => {
-    onClose()
-  }
   let buttons = null
   if (activityState === 'inactive') {
     buttons = (
@@ -109,9 +110,6 @@ const SfacExtensionSellNotification = ({
   } else if (activityState === 'new') {
     buttons = (
       <div className={classes.buttonsWrapper}>
-        <Button onClick={onNotNowClick} className={classes.noButton}>
-          Not Now
-        </Button>
         <Link to={GET_SEARCH_URL} target="_blank" rel="noopener noreferrer">
           <Button
             className={classes.yesButton}
@@ -127,7 +125,7 @@ const SfacExtensionSellNotification = ({
   return (
     <div className={className}>
       <Notification
-        open={isOpen}
+        open
         text={
           <span className={classes.text}>
             <Typography className={classes.title}>
@@ -139,7 +137,10 @@ const SfacExtensionSellNotification = ({
                   <Typography className={classes.statusText} variant="body1">
                     Active
                   </Typography>
-                  <CheckCircleIcon className={classes.statusIcon} />
+                  <CheckCircleIcon
+                    style={{ width: statusIconSize, height: statusIconSize }}
+                    className={classes.statusIcon}
+                  />
                 </div>
                 <Typography variant="body1">
                   Your searches are raising up to 4x more for {impactName} than
@@ -152,7 +153,10 @@ const SfacExtensionSellNotification = ({
                   <Typography className={classes.statusText} variant="body1">
                     Inactive
                   </Typography>
-                  <DoNotDisturbOnIcon className={classes.statusIcon} />
+                  <DoNotDisturbOnIcon
+                    style={{ width: statusIconSize, height: statusIconSize }}
+                    className={classes.statusIcon}
+                  />
                 </div>
                 {activityState === 'inactive' ? (
                   <Typography variant="body1">
@@ -187,19 +191,18 @@ const SfacExtensionSellNotification = ({
         }
         includeButton={activityState !== 'active'}
         buttons={buttons}
+        className={classes.notification}
       />
     </div>
   )
 }
 
 SfacExtensionSellNotification.propTypes = {
-  open: PropTypes.bool.isRequired,
   className: PropTypes.string,
   activityState: PropTypes.string.isRequired,
   searchesToday: PropTypes.number.isRequired,
   totalSearches: PropTypes.number.isRequired,
   impactName: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
 }
 
 SfacExtensionSellNotification.defaultProps = {

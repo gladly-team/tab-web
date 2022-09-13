@@ -81,10 +81,7 @@ describe('Tab Tracking Methods', () => {
   })
 
   it('returns zero tabs today when the last tab day count is not set in localStorage', () => {
-    localStorageMgr.getItem.mockReturnValueOnce(
-      STORAGE_TABS_LAST_TAB_OPENED_DATE,
-      moment(mockNow).utc().toISOString()
-    )
+    localStorageMgr.getItem.mockReturnValueOnce(undefined)
     const { getTabsOpenedToday } = require('../adHelpers')
     expect(getTabsOpenedToday()).toBe(0)
   })
