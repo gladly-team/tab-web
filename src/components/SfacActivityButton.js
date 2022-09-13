@@ -54,11 +54,7 @@ const SfacActivityButton = forwardRef(({ active, onClick }, ref) => {
         )
       }
     >
-      <IconButton
-        color="dashboardBackground"
-        className={classes.button}
-        onClick={onClick}
-      >
+      <IconButton className={classes.button} onClick={onClick}>
         <SearchIcon />
       </IconButton>
     </Badge>
