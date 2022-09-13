@@ -12,6 +12,7 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     width: 18,
     height: 18,
+    fontSize: 18,
     background: '#fff',
     borderRadius: '20px',
   },
