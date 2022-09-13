@@ -111,6 +111,4 @@ describe('SfacActivity', () => {
       impactName: 'Trees',
     })
   })
-
-  // TODO: more tests
 })
