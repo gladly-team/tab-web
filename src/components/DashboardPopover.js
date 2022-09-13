@@ -24,6 +24,7 @@ const DashboardPopover = (props) => {
     popoverClasses,
     anchorOrigin,
     transformOrigin,
+    PaperProps,
   } = props
   const classes = useStyles()
   return (
@@ -35,6 +36,7 @@ const DashboardPopover = (props) => {
       anchorOrigin={anchorOrigin}
       transformOrigin={transformOrigin}
       className={clsx(classes.root, className)}
+      PaperProps={PaperProps}
     >
       <div className={classes.popoverStyle} />
       {children}
@@ -64,6 +66,8 @@ DashboardPopover.propTypes = {
     horizontal: PropTypes.string,
     vertical: PropTypes.string,
   }),
+  // eslint-disable-next-line react/forbid-prop-types
+  PaperProps: PropTypes.object,
 }
 
 DashboardPopover.defaultProps = {
@@ -75,6 +79,7 @@ DashboardPopover.defaultProps = {
   popoverClasses: undefined,
   anchorOrigin: { horizontal: 'center', vertical: 'bottom' },
   transformOrigin: { horizontal: 'center', vertical: 'top' },
+  PaperProps: {},
 }
 
 export default DashboardPopover

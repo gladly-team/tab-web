@@ -11,6 +11,9 @@ const useStyles = makeStyles(() => ({
     // Match other popovers in the user menu
     marginTop: 9,
   },
+  popoverPaper: {
+    borderRadius: 15,
+  },
   popoverContent: {
     width: 400,
   },
@@ -39,6 +42,11 @@ const SfacActivity = ({
           setIsPopoverOpen(false)
         }}
         className={classes.popover}
+        PaperProps={{
+          classes: {
+            root: classes.popoverPaper,
+          },
+        }}
       >
         <SfacActivityNotification
           className={classes.popoverContent}
