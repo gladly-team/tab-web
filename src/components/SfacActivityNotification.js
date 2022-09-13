@@ -10,6 +10,13 @@ import Link from 'src/components/Link'
 import Notification from './Notification'
 
 const useStyles = makeStyles((theme) => ({
+  notification: {
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    borderRadius: 15,
+  },
   noButton: {
     height: '30px',
     fontWeight: '500',
@@ -175,6 +182,7 @@ const SfacExtensionSellNotification = ({
         }
         includeButton={activityState !== 'active'}
         buttons={buttons}
+        className={classes.notification}
       />
     </div>
   )
