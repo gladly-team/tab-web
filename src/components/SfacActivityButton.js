@@ -19,7 +19,13 @@ const useStyles = makeStyles(() => ({
     borderRadius: '30px',
     maxWidth: '52px',
     maxHeight: '52px',
-    color: '#fff',
+
+    // Button color theming gets easier in MUI v5:
+    // https://stackoverflow.com/a/69836010/1332513
+    backgroundColor: '#fff !important',
+    '&:hover': {
+      background: 'white',
+    },
   },
   inactive: {
     color: '#E3720E',
@@ -48,7 +54,11 @@ const SfacActivityButton = forwardRef(({ active, onClick }, ref) => {
         )
       }
     >
-      <IconButton className={classes.button} onClick={onClick}>
+      <IconButton
+        color="dashboardBackground"
+        className={classes.button}
+        onClick={onClick}
+      >
         <SearchIcon />
       </IconButton>
     </Badge>
