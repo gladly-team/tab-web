@@ -1,6 +1,7 @@
 import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
+import clsx from 'clsx'
 import Badge from '@material-ui/core/Badge'
 import SearchIcon from '@material-ui/icons/Search'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
@@ -49,11 +50,11 @@ const SfacActivityButton = forwardRef(({ active, onClick }, ref) => {
       badgeContent={
         active ? (
           <CheckCircleIcon
-            className={`${classes.badgeContent} ${classes.active}`}
+            className={clsx(classes.badgeContent, classes.active)}
           />
         ) : (
           <DoNotDisturbOnIcon
-            className={`${classes.badgeContent} ${classes.inactive}`}
+            className={clsx(classes.badgeContent, classes.inactive)}
           />
         )
       }
