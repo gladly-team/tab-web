@@ -15,10 +15,10 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     fontSize: badgeSize,
     background: '#fff',
-    borderRadius: '20px',
+    borderRadius: '50%',
   },
   button: {
-    borderRadius: '30px',
+    borderRadius: '50%',
     height: 40,
     width: 40,
 
