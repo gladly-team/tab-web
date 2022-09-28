@@ -41,6 +41,7 @@ const Notification = ({
   includeClose,
   buttons,
   style,
+  buttonsClassName,
 }) => {
   const classes = useStylesNotification()
   return open ? (
@@ -55,7 +56,9 @@ const Notification = ({
       )}
       {text}
       {buttons ? (
-        <div className={classes.buttonsProvided}>{buttons}</div>
+        <div className={clsx(classes.buttonsProvided, buttonsClassName)}>
+          {buttons}
+        </div>
       ) : (
         <div className={classes.buttons}>
           {includeSecondaryButton ? (
@@ -159,6 +162,11 @@ Notification.propTypes = {
    */
   // eslint-disable-next-line react/forbid-prop-types
   style: PropTypes.object,
+
+  /**
+   * Class name applied to the buttons.
+   */
+  buttonsClassName: PropTypes.string,
 }
 Notification.defaultProps = {
   buttonText: '', // deprecated, use "buttons"
@@ -173,5 +181,6 @@ Notification.defaultProps = {
   onClose: () => {},
   open: true,
   style: {},
+  buttonsClassName: '',
 }
 export default Notification
