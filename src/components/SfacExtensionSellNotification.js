@@ -33,14 +33,13 @@ const useStyles = makeStyles((theme) => ({
   },
   text: {
     paddingBottom: theme.spacing(3.5),
-    maxWidth: theme.spacing(56),
   },
   buttonsWrapper: {
     display: 'flex',
     justifyContent: 'flex-end',
   },
 }))
-const SfacExtensionSellNotification = ({ browser, userId }) => {
+const SfacExtensionSellNotification = ({ browser, className, userId }) => {
   const [open, setOpen] = useState(true)
   const classes = useStyles()
   const onYesClick = useCallback(async () => {
@@ -65,7 +64,7 @@ const SfacExtensionSellNotification = ({ browser, userId }) => {
     setOpen(false)
   }
   return (
-    <div className={classes.wrapper}>
+    <div className={className}>
       <Notification
         open={open}
         text={
@@ -100,12 +99,14 @@ const SfacExtensionSellNotification = ({ browser, userId }) => {
 }
 
 SfacExtensionSellNotification.propTypes = {
+  className: PropTypes.string,
   browser: PropTypes.string,
   userId: PropTypes.string,
 }
 
 SfacExtensionSellNotification.defaultProps = {
   browser: PropTypes.string,
+  className: '',
   userId: PropTypes.string,
 }
 
