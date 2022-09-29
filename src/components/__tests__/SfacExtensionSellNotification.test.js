@@ -43,7 +43,7 @@ describe('SfacExtensionSellNotification component', () => {
     const wrapper = mount(<SfacExtensionSellNotification {...mockProps} />)
     expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
     const acceptButton = wrapper.find(Button).at(0)
-    expect(acceptButton.text()).toEqual('Maybe later')
+    expect(acceptButton.text()).toEqual('Dismiss')
     acceptButton.simulate('click')
 
     expect(CreateSfacExtensionPromptResponseMutation).toHaveBeenCalledWith(
@@ -62,7 +62,7 @@ describe('SfacExtensionSellNotification component', () => {
     const wrapper = mount(<SfacExtensionSellNotification {...mockProps} />)
     expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
     const acceptButton = wrapper.find(Button).at(1)
-    expect(acceptButton.text()).toEqual("Let's do it!")
+    expect(acceptButton.text()).toEqual('Try It Out')
 
     CreateSfacExtensionPromptResponseMutation.mockResolvedValue({})
 
@@ -93,7 +93,7 @@ describe('SfacExtensionSellNotification component', () => {
     const wrapper = mount(<SfacExtensionSellNotification {...mockProps} />)
     expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
     const acceptButton = wrapper.find(Button).at(1)
-    expect(acceptButton.text()).toEqual("Let's do it!")
+    expect(acceptButton.text()).toEqual('Try It Out')
 
     CreateSfacExtensionPromptResponseMutation.mockRejectedValue(
       new Error('Uh oh.')

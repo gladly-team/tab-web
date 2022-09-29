@@ -32,15 +32,14 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Poppins',
   },
   text: {
-    paddingBottom: theme.spacing(3.5),
-    maxWidth: theme.spacing(56),
+    paddingBottom: theme.spacing(2),
   },
   buttonsWrapper: {
     display: 'flex',
     justifyContent: 'flex-end',
   },
 }))
-const SfacExtensionSellNotification = ({ browser, userId }) => {
+const SfacExtensionSellNotification = ({ browser, className, userId }) => {
   const [open, setOpen] = useState(true)
   const classes = useStyles()
   const onYesClick = useCallback(async () => {
@@ -65,24 +64,25 @@ const SfacExtensionSellNotification = ({ browser, userId }) => {
     setOpen(false)
   }
   return (
-    <div className={classes.wrapper}>
+    <div className={className}>
       <Notification
         open={open}
         text={
           <span className={classes.text}>
-            <Typography className={classes.title}>
+            <Typography className={classes.title} gutterBottom>
               Make a bigger impact
             </Typography>
             <Typography variant="body1">
-              Turn your searches into money for causes with Search for a Cause.
-              Like tabbing, it’s free and easy!
+              We've just launched Search for a Cause, where you can turn your
+              searches into money for nonprofits—up to 4x more than tabs alone!
+              Like tabbing, it's free and easy. Will you try it out?
             </Typography>
           </span>
         }
         buttons={
           <div className={classes.buttonsWrapper}>
             <Button onClick={onNoClick} className={classes.noButton}>
-              Maybe later
+              Dismiss
             </Button>
             <Button
               onClick={onYesClick}
@@ -90,7 +90,7 @@ const SfacExtensionSellNotification = ({ browser, userId }) => {
               variant="contained"
               disableElevation
             >
-              Let's do it!
+              Try It Out
             </Button>
           </div>
         }
@@ -100,12 +100,14 @@ const SfacExtensionSellNotification = ({ browser, userId }) => {
 }
 
 SfacExtensionSellNotification.propTypes = {
+  className: PropTypes.string,
   browser: PropTypes.string,
   userId: PropTypes.string,
 }
 
 SfacExtensionSellNotification.defaultProps = {
   browser: PropTypes.string,
+  className: '',
   userId: PropTypes.string,
 }
 
