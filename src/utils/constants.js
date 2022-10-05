@@ -6,6 +6,8 @@ export const LANDING_PAGE_PATH_SEAS = '/teamseas/'
 export const LANDING_PAGE_PATH_CATS = '/cats/'
 export const MEDIA_ENDPOINT = process.env.NEXT_PUBLIC_MEDIA_ENDPOINT
 
+export const NOTIF_DISMISS_PREFIX = 'tab.user.dismissedNotif'
+
 // One-offs
 export const USER_SURVEY_2022_NOTIFICATION = 'tab.user.dismissedUserSurvey2022'
 export const AMBASSADOR_2022_NOTIFICATION =

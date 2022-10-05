@@ -41,6 +41,8 @@ export const missionHubURL = createPageURL('/missions')
 
 // For progressive web app.
 export const PWAManifestURL = withBasePath('/manifest.json')
+
+// Various links.
 export const EXTERNAL_CONTACT_US_URL =
   'https://gladly.zendesk.com/hc/en-us/requests/new'
 export const EXTERNAL_CLEAR_COOKIES_HELP_PAGE =
@@ -49,6 +51,9 @@ export const HELP_URL = 'https://tab.gladly.io/help/'
 export const FINANCIALS_URL = 'https://tab.gladly.io/financials/'
 export const GET_SEARCH_URL = 'https://tab.gladly.io/get-search/'
 export const SFAC_FEEDBACK_LINK = 'https://forms.gle/A3Xam2op2gFjoQNU6'
+export const ONE_AND_A_HALF_MILLION_RAISED_URL =
+  'https://tab.gladly.io/million-and-a-half/'
+
 // eslint-disable-next-line no-undef
 export const reload = () => window.location.reload()
 export const externalNavigation = (url) => {
