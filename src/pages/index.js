@@ -59,7 +59,12 @@ import {
   incrementTabsOpenedToday,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
-import { aboutURL, accountURL, achievementsURL } from 'src/utils/urls'
+import {
+  aboutURL,
+  accountURL,
+  achievementsURL,
+  ONE_AND_A_HALF_MILLION_RAISED_URL,
+} from 'src/utils/urls'
 import {
   showMockAchievements,
   showBackgroundImages,
@@ -73,7 +78,7 @@ import {
   CAT_CHARITY,
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
-  AMBASSADOR_2022_NOTIFICATION,
+  NOTIF_DISMISS_PREFIX,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -90,8 +95,6 @@ import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotif
 import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
 import useBrowserName from 'src/utils/hooks/useBrowserName'
 import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
-
-const AMBASSADOR_APPLICATION_LINK = 'https://forms.gle/bRir3cKmqZfCgbur9'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -260,14 +263,27 @@ const useStyles = makeStyles((theme) => ({
     pointerEvents: 'all', // needs to be clickable
   },
 
+  notificationTitle: {
+    fontWeight: '700',
+    fontSize: '24px',
+    fontFamily: 'Poppins',
+  },
+  notificationText: {
+    marginBottom: theme.spacing(2),
+  },
+
   // TODO: create reusable new button
-  newButton: {
+  notificationButton: {
     background: '#29BEBA',
     borderRadius: '15px',
     height: '30px',
     '&:hover': {
       background: '#00a097',
     },
+    fontWeight: '900',
+    fontFamily: 'Poppins',
+    marginLeft: theme.spacing(1),
+    color: 'white',
   },
 }))
 
@@ -578,16 +594,23 @@ const Index = ({ data: fallbackData, userAgent }) => {
   }, [globalTabCount])
 
   // Show a one-off notification.
+  const NOTIFICATION_ID = '1.5Mraised' // edit as needed
+  const notifLocalStorageKey = `${NOTIF_DISMISS_PREFIX}${NOTIFICATION_ID}`
   const [showCustomNotification, setShowCustomNotification] = useState(false)
   useEffect(() => {
     if (
       isClientSide() &&
-      localStorageMgr.getItem(AMBASSADOR_2022_NOTIFICATION) !== 'true' &&
-      !!notifications.find((notif) => notif.code === 'collegeAmbassador2022')
+      localStorageMgr.getItem(notifLocalStorageKey) !== 'true' &&
+      isDataFresh && // avoid flickering stale content
+      !!notifications.find((notif) => notif.code === NOTIFICATION_ID)
     ) {
       setShowCustomNotification(true)
     }
-  }, [notifications])
+  }, [notifications, isDataFresh, notifLocalStorageKey])
+  const onNotificationClose = () => {
+    localStorageMgr.setItem(notifLocalStorageKey, 'true')
+    setShowCustomNotification(false)
+  }
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -772,53 +795,42 @@ const Index = ({ data: fallbackData, userAgent }) => {
                     <Notification
                       className={classes.notification}
                       text={
-                        <div>
-                          <Typography variant="body1" gutterBottom>
-                            ⚠️ Calling All College Students ⚠️
+                        <div className={classes.notificationText}>
+                          <Typography
+                            variant="h2"
+                            gutterBottom
+                            className={classes.notificationTitle}
+                          >
+                            $1.5M raised!
                           </Typography>
-                          <Typography variant="body2" gutterBottom>
-                            Become a Tab for a Cause ambassador to earn cash and
-                            awesome merchandise (Patagonia, Built, Let’s Go Eco
-                            - just to name a few!) when your classmates join Tab
-                            for a Cause.{' '}
-                            <Link
-                              to={AMBASSADOR_APPLICATION_LINK}
-                              target="_blank"
-                              style={{ color: '#9d4ba3' }}
-                            >
-                              Click here to apply
-                            </Link>{' '}
-                            and for more information.{' '}
-                            <span style={{ fontWeight: 'bold' }}>
-                              Applications close September 12.
-                            </span>
+                          <Typography variant="body1" gutterBottom>
+                            Tabbers have now raised over $1,500,000 for charity!
+                            It's amazing what a dedicated community and a few
+                            (million) browser tabs can do :)
+                          </Typography>
+                          <Typography variant="body1" gutterBottom>
+                            See what we've accomplished together:
                           </Typography>
                         </div>
                       }
                       buttons={
                         <div className={classes.notificationButtonsWrapper}>
                           <Link
-                            to={AMBASSADOR_APPLICATION_LINK}
+                            to={ONE_AND_A_HALF_MILLION_RAISED_URL}
                             target="_blank"
                           >
                             <Button
                               variant="contained"
                               color="primary"
-                              className={classes.newButton}
+                              className={classes.notificationButton}
                             >
-                              Learn More
+                              Check it out
                             </Button>
                           </Link>
                         </div>
                       }
                       includeClose
-                      onClose={() => {
-                        localStorageMgr.setItem(
-                          AMBASSADOR_2022_NOTIFICATION,
-                          'true'
-                        )
-                        setShowCustomNotification(false)
-                      }}
+                      onClose={onNotificationClose}
                     />
                   ) : null}
                   {userGlobalId && shouldShowSfacExtensionPrompt ? (
