@@ -81,7 +81,6 @@ const GroupGoalNotification = ({
     onNextGoal()
   }
 
-  // todo: @jtan, move mode to an ENUM
   return (
     <div className={classes.wrapper}>
       <Notification
@@ -124,7 +123,7 @@ const GroupGoalNotification = ({
 }
 
 GroupGoalNotification.propTypes = {
-  mode: PropTypes.string.isRequired,
+  mode: PropTypes.oneOf(['completed', 'started']).isRequired,
   open: PropTypes.bool.isRequired,
   onDetails: PropTypes.func.isRequired,
   onNextGoal: PropTypes.func.isRequired,
