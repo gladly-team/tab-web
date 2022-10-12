@@ -100,7 +100,14 @@ const useStyles = makeStyles((theme) => ({
   pageContainer: {
     height: '100vh',
     width: '100vw',
-    background: theme.palette.background.paper,
+
+    // Use a dark background rather than white one to mitigate irritation for
+    // users who use dark mode. Equivalent to the default dark mode value for
+    // MUI `theme.palette.background.paper`:
+    // https://mui.com/material-ui/customization/default-theme/?expand-path=$.palette
+    // When dark mode is supported, use the theme instead.
+    background: '#121212',
+
     overflow: 'hidden',
   },
   OnboardingFlow: {
