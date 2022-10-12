@@ -54,6 +54,13 @@ const CustomThemeHOC = (Component) =>
             ...outerTheme,
             palette: {
               ...outerTheme.palette,
+
+              // TODO: dark mode. Requires full SSR support.
+              // https://mui.com/material-ui/customization/dark-mode/
+              // https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme
+              // https://github.com/WICG/user-preference-media-features-headers
+              // Maybe a library like this is helpful:
+              // https://github.com/pacocoursey/next-themes
               primary: {
                 // Explicitly leave off "dark" and "light" properties
                 // so that they're reset based on the custom "main" color.
