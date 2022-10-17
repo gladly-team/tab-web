@@ -79,6 +79,7 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   NOTIF_DISMISS_PREFIX,
+  CAUSE_IMPACT_TYPES,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -360,7 +361,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           showSfacExtensionPrompt
           cause {
             causeId
-            individualImpactEnabled
+            impactType
             impactVisits
             landingPagePath
             name
@@ -457,7 +458,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
     theme,
     onboarding,
     causeId,
-    individualImpactEnabled,
+    impactType,
     name: causeName,
   } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
@@ -578,7 +579,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
       // should show ads or not).
       incrementTabsOpenedToday()
 
-      if (individualImpactEnabled) {
+      if (impactType === CAUSE_IMPACT_TYPES.individual) {
         // this might seem confusing.  Right now we handle logging mission impact in the log tab mutation
         // but we use update impact to update v4 impact if a user is not in a mission
         // in the future we should handle both mission impact and individual v4 impact
@@ -591,7 +592,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
       }
       newTabView()
     }
-  }, [userGlobalId, tabId, missionStatus, individualImpactEnabled])
+  }, [userGlobalId, tabId, missionStatus, impactType])
 
   // log reddit and fbook event if first visit
   useEffect(() => {
@@ -745,7 +746,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                   {showSfacIcon && searchActivityNotificationSupported ? (
                     <SfacActivityContainer user={user} />
                   ) : null}
-                  {individualImpactEnabled ? (
+                  {impactType === CAUSE_IMPACT_TYPES.individual ? (
                     <UserImpactContainer
                       userId={userGlobalId}
                       userImpact={userImpact}
@@ -991,7 +992,7 @@ Index.propTypes = {
     user: PropTypes.shape({
       cause: PropTypes.shape({
         causeId: PropTypes.string.isRequired,
-        individualImpactEnabled: PropTypes.bool.isRequired,
+        impactType: PropTypes.string.isRequired,
         impactVisits: PropTypes.number,
         landingPagePath: PropTypes.string,
         name: PropTypes.string.isRequired,
