@@ -8,6 +8,7 @@ import { act } from 'react-dom/test-utils'
 import {
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
+  CAUSE_IMPACT_TYPES,
 } from 'src/utils/constants'
 import {
   showMockAchievements,
@@ -140,7 +141,7 @@ const getMockProps = () => ({
         causeId: 'testSetMe',
         impactVisits: 12,
         landingPagePath: '/foo/',
-        individualImpactEnabled: true,
+        impactType: CAUSE_IMPACT_TYPES.individual,
         name: 'Example Cause',
         onboarding: {
           steps: [],
@@ -444,7 +445,7 @@ describe('index.js', () => {
     expect(wrapper.find(UserImpactContainer).prop('disabled')).toBe(true)
   })
 
-  it('does not include the UserImpactContainer if individualImpactEnabled false, displays info button instead', () => {
+  it('does not include the UserImpactContainer if cause is not impact, displays info button instead', () => {
     expect.assertions(1)
     showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
     const IndexPage = require('src/pages/index').default
@@ -460,7 +461,7 @@ describe('index.js', () => {
             causeId: 'testSetMe',
             impactVisits: 12,
             landingPagePath: '/foo/',
-            individualImpactEnabled: false,
+            impactType: CAUSE_IMPACT_TYPES.group,
             onboarding: {
               steps: [],
             },

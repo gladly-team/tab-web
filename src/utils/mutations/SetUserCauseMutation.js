@@ -9,7 +9,6 @@ const mutation = graphql`
         cause {
           causeId
           name
-          individualImpactEnabled
           # Theme data is required for CustomThemeHOC.
           theme {
             primaryColor
