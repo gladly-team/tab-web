@@ -39,7 +39,7 @@ const defaultThemeObject = {
     fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
   },
   shape: {
-    borderRadius: 2,
+    borderRadius: 12,
   },
   overrides: {
     MuiAppBar: {
