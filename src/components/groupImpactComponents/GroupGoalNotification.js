@@ -10,28 +10,20 @@ const useStyles = makeStyles((theme) => ({
   learnButton: {
     height: '30px',
     fontWeight: '500',
-    fontFamily: 'Poppins',
   },
   noThanksButton: {
     marginLeft: 'auto',
     borderRadius: '15px',
     height: '30px',
     fontWeight: '5ayw00',
-    fontFamily: 'Poppins',
   },
   nextGoalButton: {
     background: '#29BEBA',
     borderRadius: '15px',
     height: '30px',
     fontWeight: '900',
-    fontFamily: 'Poppins',
     marginLeft: theme.spacing(1),
     color: 'white',
-  },
-  title: {
-    fontWeight: '700',
-    fontSize: '24px',
-    fontFamily: 'Poppins',
   },
   buttonsWrapper: {
     display: 'flex',

@@ -12,28 +12,24 @@ const useStyles = makeStyles((theme) => ({
   learnButton: {
     height: '30px',
     fontWeight: '500',
-    fontFamily: 'Poppins',
   },
   noThanksButton: {
     marginLeft: 'auto',
     borderRadius: '15px',
     height: '30px',
     fontWeight: '5ayw00',
-    fontFamily: 'Poppins',
   },
   switchToSearchForACauseButton: {
     background: '#29BEBA',
     borderRadius: '15px',
     height: '30px',
     fontWeight: '900',
-    fontFamily: 'Poppins',
     marginLeft: theme.spacing(1),
     color: 'white',
   },
   title: {
     fontWeight: '700',
     fontSize: '24px',
-    fontFamily: 'Poppins',
   },
   text: {
     paddingBottom: theme.spacing(3.5),
@@ -73,7 +69,7 @@ const SearchForACauseSellNotification = ({
         open={open}
         text={
           <span className={classes.text}>
-            <Typography className={classes.title}>
+            <Typography variant="h2" className={classes.title}>
               Want to make a greater impact?
             </Typography>
             <Typography variant="body1">

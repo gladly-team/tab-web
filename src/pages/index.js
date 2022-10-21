@@ -270,11 +270,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 10,
     pointerEvents: 'all', // needs to be clickable
   },
-
   notificationTitle: {
     fontWeight: '700',
     fontSize: '24px',
-    fontFamily: 'Poppins',
   },
   notificationText: {
     marginBottom: theme.spacing(2),
@@ -289,7 +287,6 @@ const useStyles = makeStyles((theme) => ({
       background: '#00a097',
     },
     fontWeight: '900',
-    fontFamily: 'Poppins',
     marginLeft: theme.spacing(1),
     color: 'white',
   },

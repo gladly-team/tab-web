@@ -42,13 +42,13 @@ const defaultThemeObject = {
     },
     h2: {
       fontFamily: 'Poppins',
-    }, 
+    },
     h3: {
       fontFamily: 'Poppins',
     },
     h4: {
       fontFamily: 'Poppins',
-    }
+    },
   },
   shape: {
     borderRadius: 12,
@@ -63,7 +63,7 @@ const defaultThemeObject = {
     MuiButton: {
       root: {
         fontFamily: 'Poppins',
-      }
+      },
     },
   },
 }
