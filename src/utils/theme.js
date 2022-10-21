@@ -36,7 +36,19 @@ const defaultThemeObject = {
   },
   typography: {
     fontSize: 14,
-    fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+    fontFamily: 'Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif',
+    h1: {
+      fontFamily: 'Poppins',
+    },
+    h2: {
+      fontFamily: 'Poppins',
+    }, 
+    h3: {
+      fontFamily: 'Poppins',
+    },
+    h4: {
+      fontFamily: 'Poppins',
+    }
   },
   shape: {
     borderRadius: 12,
@@ -47,6 +59,11 @@ const defaultThemeObject = {
         // Useful for when custom theming is set after load.
         transition: 'background-color 300ms',
       },
+    },
+    MuiButton: {
+      root: {
+        fontFamily: 'Poppins',
+      }
     },
   },
 }
