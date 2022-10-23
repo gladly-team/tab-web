@@ -21,17 +21,11 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   acceptButton: {
-    background: '#29BEBA',
-    borderRadius: '15px',
-    height: '30px',
     fontWeight: '800',
     marginLeft: theme.spacing(1),
-    color: 'white',
   },
   declineButton: {
     marginLeft: 'auto',
-    borderRadius: '15px',
-    height: '30px',
     fontWeight: '500',
   },
   buttons: {

@@ -48,6 +48,7 @@ standard.args = {
       ],
     },
   },
+  userId: 'abcd',
   user: {
     searchEngine: {
       name: 'Google',

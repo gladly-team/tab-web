@@ -286,15 +286,11 @@ const useStyles = makeStyles((theme) => ({
 
   // TODO: create reusable new button
   notificationButton: {
-    background: '#29BEBA',
-    borderRadius: '15px',
-    height: '30px',
     '&:hover': {
       background: '#00a097',
     },
     fontWeight: '900',
     marginLeft: theme.spacing(1),
-    color: 'white',
   },
   searchbarNotification: {
     zIndex: 99999,

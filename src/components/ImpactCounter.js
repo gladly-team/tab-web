@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       background: 'white',
     },
+    height: '40px',
   },
   impactIcon: {
     position: 'relative',
