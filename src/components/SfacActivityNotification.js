@@ -22,21 +22,18 @@ const useStyles = makeStyles((theme) => ({
   noButton: {
     height: '30px',
     fontWeight: '500',
-    fontFamily: 'Poppins',
   },
   yesButton: {
     background: '#29BEBA',
     borderRadius: '15px',
     height: '30px',
     fontWeight: '900',
-    fontFamily: 'Poppins',
     marginLeft: theme.spacing(1),
     color: 'white',
   },
   title: {
     fontWeight: '700',
     fontSize: '24px',
-    fontFamily: 'Poppins',
   },
   text: {
     paddingBottom: theme.spacing(3.5),
@@ -69,7 +66,6 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
   },
   statusText: {
-    fontFamily: 'Poppins',
     paddingRight: theme.spacing(0.5),
     fontWeight: 700,
   },
@@ -128,7 +124,7 @@ const SfacExtensionSellNotification = ({
         open
         text={
           <span className={classes.text}>
-            <Typography className={classes.title}>
+            <Typography variant="h2" className={classes.title}>
               Search for a Cause
             </Typography>
             {activityState === 'active' ? (

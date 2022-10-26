@@ -25,6 +25,10 @@ import '@fontsource/poppins/500.css'
 import { GrowthBook, GrowthBookProvider } from '@growthbook/growthbook-react'
 import features from 'src/features/features.json'
 import { trackingCallback } from 'src/utils/growthbook'
+import '@fontsource/roboto/300.css'
+import '@fontsource/roboto/400.css'
+import '@fontsource/roboto/500.css'
+import '@fontsource/roboto/700.css'
 
 initAuth()
 

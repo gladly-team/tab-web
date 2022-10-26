@@ -25,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '15px',
     height: '30px',
     fontWeight: '800',
-    fontFamily: 'Poppins',
     marginLeft: theme.spacing(1),
     color: 'white',
   },
@@ -34,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '15px',
     height: '30px',
     fontWeight: '500',
-    fontFamily: 'Poppins',
   },
   buttons: {
     width: '100%',

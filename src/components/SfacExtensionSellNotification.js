@@ -15,21 +15,18 @@ const useStyles = makeStyles((theme) => ({
   noButton: {
     height: '30px',
     fontWeight: '500',
-    fontFamily: 'Poppins',
   },
   yesButton: {
     background: '#29BEBA',
     borderRadius: '15px',
     height: '30px',
     fontWeight: '900',
-    fontFamily: 'Poppins',
     marginLeft: theme.spacing(1),
     color: 'white',
   },
   title: {
     fontWeight: '700',
     fontSize: '24px',
-    fontFamily: 'Poppins',
   },
   text: {
     paddingBottom: theme.spacing(2),
@@ -69,7 +66,7 @@ const SfacExtensionSellNotification = ({ browser, className, userId }) => {
         open={open}
         text={
           <span className={classes.text}>
-            <Typography className={classes.title} gutterBottom>
+            <Typography variant="h2" className={classes.title} gutterBottom>
               Make a bigger impact
             </Typography>
             <Typography variant="body1">
