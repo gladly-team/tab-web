@@ -12166,7 +12166,7 @@ next-unused@^0.0.6:
     ts-loader "^7.0.0"
     typescript "^4.2.3"
 
-next@^10.0.5:
+next@^10.2.3:
   version "10.2.3"
   resolved "https://registry.yarnpkg.com/next/-/next-10.2.3.tgz#5aa058a63626338cea91c198fda8f2715c058394"
   integrity sha512-dkM1mIfnORtGyzw/Yme8RdqNxlCMZyi4Lqj56F01/yHbe1ZtOaJ0cyqqRB4RGiPhjGGh0319f8ddjDyO1605Ow==
