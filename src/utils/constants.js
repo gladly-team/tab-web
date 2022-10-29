@@ -24,6 +24,7 @@ export const STORAGE_BLACK_EQUITY_CAUSE_ID = 'q1FFsAhbV'
 export const STORAGE_TREES_CAUSE_ID = 'tdU_PsRIM'
 export const STORAGE_TABS_RECENT_DAY_COUNT = 'tab.user.lastTabDay.count'
 export const STORAGE_TABS_LAST_TAB_OPENED_DATE = 'tab.user.lastTabDay.date'
+export const STORAGE_FEATURES = 'tab.user.features'
 export const MAX_TABS_WITH_ADS = 150
 
 // Constants for Local Storage Mgr
