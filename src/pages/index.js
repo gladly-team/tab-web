@@ -14,6 +14,7 @@ import {
   withAuthUserTokenSSR,
   AuthAction,
 } from 'next-firebase-auth'
+import moment from 'moment'
 import { useGrowthBook } from '@growthbook/growthbook-react'
 
 // custom components
@@ -470,14 +471,17 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
   // Set Growthbook attributes when the user is defined.
   useEffect(() => {
+    const joinedTime = joined && new Date(joined).getTime()
+    const timeSinceJoined = joinedTime && moment.utc().valueOf() - joinedTime
     if (userId) {
       const attributesObject = {
         id: userId,
         env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
         causeId,
         v4BetaEnabled: true,
-        joined,
+        joined: joinedTime,
         isTabTeamMember: showInternalOnly(email),
+        timeSinceJoined,
       }
       validateAttributesObject(userId, attributesObject)
       growthbook.setAttributes(attributesObject)

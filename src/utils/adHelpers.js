@@ -2,6 +2,9 @@ import { getAvailableAdUnits } from 'tab-ads'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import moment from 'moment'
 import localStorageMgr from './localstorage-mgr'
+import localStorageFeaturesManager from './localStorageFeaturesManager'
+import { V4_SHOW_THIRD_AD } from './experiments'
+
 import {
   STORAGE_TABS_RECENT_DAY_COUNT,
   STORAGE_TABS_LAST_TAB_OPENED_DATE,
@@ -133,6 +136,14 @@ export const incrementTabsOpenedToday = () => {
 const shouldShowOneAd = () => false
 
 /**
+ * Determine if we should show three ads. Controlled by V4_SHOW_THIRD_AD
+ * growthbook feature.
+ * @return {Boolean} Whether to show one ad.
+ */
+const shouldShowThreeAds = () =>
+  localStorageFeaturesManager.getFeatureValue(V4_SHOW_THIRD_AD) === 'true'
+
+/**
  * Return an object of ad units we should display. This returns ad units
  * even if ads are disabled.
  * @return {Object} AdUnitsInfo
@@ -152,6 +163,8 @@ export const getAdUnits = () => {
     numberOfAdsToShow = 0
   } else if (shouldShowOneAd()) {
     numberOfAdsToShow = 1
+  } else if (shouldShowThreeAds()) {
+    numberOfAdsToShow = 3
   } else {
     numberOfAdsToShow = DEFAULT_NUMBER_OF_ADS
   }

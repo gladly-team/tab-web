@@ -2,9 +2,11 @@ import moment from 'moment'
 import MockDate from 'mockdate'
 import localStorageMgr from '../localstorage-mgr'
 import {
+  MAX_TABS_WITH_ADS,
   STORAGE_TABS_LAST_TAB_OPENED_DATE,
   STORAGE_TABS_RECENT_DAY_COUNT,
 } from '../constants'
+import localStorageFeaturesManager from '../localStorageFeaturesManager'
 
 // jest.mock('js/utils/feature-flags')
 // jest.mock('js/utils/experiments')
@@ -13,6 +15,7 @@ jest.mock('../localstorage-mgr', () => ({
   getItem: jest.fn(),
   setItem: jest.fn(),
 }))
+jest.mock('../localStorageFeaturesManager')
 const mockNow = '2017-05-19T13:59:58.000Z'
 beforeEach(() => {
   process.env.NEXT_PUBLIC_ADS_ENABLED = true
@@ -160,5 +163,59 @@ describe('Tab Tracking Methods', () => {
       STORAGE_TABS_RECENT_DAY_COUNT,
       1
     )
+  })
+})
+
+describe('adHelpers: getAdUnits', () => {
+  it('returns zero ads if test returns false', () => {
+    localStorageFeaturesManager.getFeatureValue.mockReturnValue('false')
+    localStorageMgr.getItem.mockReturnValueOnce(
+      moment(mockNow).utc().toISOString()
+    )
+    localStorageMgr.getItem.mockReturnValueOnce(MAX_TABS_WITH_ADS + 1)
+    const { getAdUnits } = require('../adHelpers')
+    expect(getAdUnits()).toEqual({})
+  })
+  it('returns two ads if test returns false', () => {
+    localStorageFeaturesManager.getFeatureValue.mockReturnValue('false')
+    const { getAdUnits } = require('../adHelpers')
+    expect(getAdUnits()).toEqual({
+      leaderboard: {
+        // The long leaderboard ad.
+        adId: 'div-gpt-ad-1464385677836-0',
+        adUnitId: '/43865596/HBTL',
+        sizes: [[728, 90]],
+      },
+      rectangleAdPrimary: {
+        // The primary rectangle ad (bottom-right).
+        adId: 'div-gpt-ad-1464385742501-0',
+        adUnitId: '/43865596/HBTR',
+        sizes: [[300, 250]],
+      },
+    })
+  })
+  it('returns three ads if test returns true', () => {
+    localStorageFeaturesManager.getFeatureValue.mockReturnValue('true')
+    const { getAdUnits } = require('../adHelpers')
+    expect(getAdUnits()).toEqual({
+      leaderboard: {
+        // The long leaderboard ad.
+        adId: 'div-gpt-ad-1464385677836-0',
+        adUnitId: '/43865596/HBTL',
+        sizes: [[728, 90]],
+      },
+      rectangleAdPrimary: {
+        // The primary rectangle ad (bottom-right).
+        adId: 'div-gpt-ad-1464385742501-0',
+        adUnitId: '/43865596/HBTR',
+        sizes: [[300, 250]],
+      },
+      rectangleAdSecondary: {
+        // The second rectangle ad (right side, above the first).
+        adId: 'div-gpt-ad-1539903223131-0',
+        adUnitId: '/43865596/HBTR2',
+        sizes: [[300, 250]],
+      },
+    })
   })
 })
