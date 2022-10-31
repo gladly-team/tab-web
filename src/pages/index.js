@@ -96,6 +96,7 @@ import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotif
 import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
 import useBrowserName from 'src/utils/hooks/useBrowserName'
 import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
+import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -461,6 +462,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const { primaryColor, secondaryColor } = theme || {}
 
   const growthbook = useGrowthBook()
+
+  // Set features in local storage
+  useEffect(() => {
+    localStorageFeaturesManager.setFeatures(features)
+  }, [features])
 
   // Set Growthbook attributes when the user is defined.
   useEffect(() => {

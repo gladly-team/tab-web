@@ -51,6 +51,7 @@ import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowser
 import useBrowserName from 'src/utils/hooks/useBrowserName'
 import SfacActivityContainer from 'src/components/SfacActivityContainer'
 import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
+import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -102,6 +103,7 @@ jest.mock('src/utils/logger')
 jest.mock('src/utils/hooks/useDoesBrowserSupportSearchExtension')
 jest.mock('src/utils/hooks/useBrowserName')
 jest.mock('src/utils/browserSupport')
+jest.mock('src/utils/localStorageFeaturesManager')
 
 const setUpAds = () => {
   isClientSide.mockReturnValue(true)
@@ -1570,6 +1572,34 @@ describe('index.js: hardcoded notifications', () => {
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
       `tab.user.dismissedNotif${CURRENT_NOTIF_CODE}`,
       'true'
+    )
+  })
+
+  it('calls localStorageFeaturesManager on page load', async () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const sampleFeatures = [
+      {
+        featureName: YAHOO_SEARCH_NEW_USERS_V2,
+        variation: 'Tooltip',
+      },
+    ]
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          features: sampleFeatures,
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    mount(<IndexPage {...mockProps} />)
+
+    expect(localStorageFeaturesManager.setFeatures).toHaveBeenCalledWith(
+      sampleFeatures
     )
   })
 })
