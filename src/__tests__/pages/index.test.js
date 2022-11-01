@@ -1,6 +1,7 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
 import Link from 'src/components/Link'
+import MockDate from 'mockdate'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import { aboutURL, accountURL } from 'src/utils/urls'
@@ -52,6 +53,7 @@ import useBrowserName from 'src/utils/hooks/useBrowserName'
 import SfacActivityContainer from 'src/components/SfacActivityContainer'
 import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
+import moment from 'moment'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -176,6 +178,7 @@ const getMockCurrentMission = () => ({
   tabCount: 6,
   missionId: 'abc-123',
 })
+const mockNow = '2021-08-29T18:37:04.604Z'
 
 beforeEach(() => {
   showMockAchievements.mockReturnValue(false)
@@ -184,10 +187,12 @@ beforeEach(() => {
   process.env.NEXT_PUBLIC_SERVICE_WORKER_ENABLED = 'false'
   useDoesBrowserSupportSearchExtension.mockReturnValue(true)
   useBrowserName.mockReturnValue('chrome')
+  MockDate.set(moment(mockNow))
 })
 
 afterEach(() => {
   jest.clearAllMocks()
+  MockDate.set(moment(mockNow))
 })
 
 /* START: core tests */
@@ -917,13 +922,15 @@ describe('index.js', () => {
     useGrowthBook.mockReturnValue(mockGrowthbook)
     mount(<IndexPage {...mockProps} />)
 
+    const expectedJoinedTime = new Date(mockProps.data.user.joined).valueOf()
     const expectedAttributesObject = {
       id: mockProps.data.user.id,
       env: process.env.NEXT_PUBLIC_GROWTHBOOK_ENV,
       causeId: mockProps.data.user.cause.causeId,
       v4BetaEnabled: true,
-      joined: mockProps.data.user.joined,
+      joined: expectedJoinedTime,
       isTabTeamMember: showInternalOnly(mockProps.data.user.email),
+      timeSinceJoined: moment.utc().valueOf() - expectedJoinedTime,
     }
     expect(validateAttributesObject).toHaveBeenCalledWith(
       mockProps.data.user.id,
