@@ -5,67 +5,77 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { Stars } from '@mui/icons-material'
 
+const useStyles = makeStyles(() => ({
+  linearProgressRoot: {
+    borderRadius: ({ borderRadius }) => borderRadius,
+    width: ({ width }) => width,
+    height: '100%',
+  },
+  linearProgressBar: {
+    borderRadius: ({ borderRadius }) => borderRadius,
+    transform: ({ progress }) => `translateY(${100 - progress}%) !important`,
+  },
+  wrapper: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  markers: {
+    position: 'relative',
+    width: ({ width }) => width / 2,
+    left: ({ width }) => (-3 * width) / 4,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  numberMarker: {
+    backgroundColor: 'white',
+    fontSize: '12px',
+    width: '34px',
+    height: '34px',
+    borderRadius: '34px',
+    paddingTop: '8px',
+    paddingLeft: '5px',
+    fontWeight: '700',
+  },
+  completedMarker: {
+    marginTop: '8px',
+    borderRadius: '15px',
+    backgroundColor: 'white',
+    width: '34px',
+    height: '34px',
+    paddingLeft: '5px',
+    paddingTop: '5px',
+  },
+  dummyDiv: {
+    height: '34px',
+  },
+  innerBar: {
+    borderRadius: ({ borderRadius }) =>
+      `0px 0px ${borderRadius}px ${borderRadius}px !important`,
+  },
+}))
+
 const VerticalLinearProgress = ({
   progress,
   showMarkers,
   borderRadius,
   width,
 }) => {
-  const useStyles = makeStyles(() => ({
-    linearProgressRoot: {
-      borderRadius,
-      width,
-      height: '100%',
-    },
-    linearProgressBar: {
-      borderRadius,
-      transform: `translateY(${100 - progress}%) !important`,
-    },
-    wrapper: {
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'row',
-    },
-    markers: {
-      position: 'relative',
-      width: width / 2,
-      left: (-3 * width) / 4,
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    numberMarker: {
-      backgroundColor: 'white',
-      fontSize: '12px',
-      width: '34px',
-      height: '34px',
-      borderRadius: '34px',
-      paddingTop: '8px',
-      paddingLeft: '5px',
-      fontWeight: '700',
-    },
-    completedMarker: {
-      marginTop: '8px',
-      borderRadius: '15px',
-      backgroundColor: 'white',
-      width: '34px',
-      height: '34px',
-      paddingLeft: '5px',
-      paddingTop: '5px',
-    },
-    dummyDiv: {
-      height: '34px',
-    },
-  }))
-  const classes = useStyles()
+  const classes = useStyles({
+    borderRadius,
+    width,
+    progress,
+  })
   return (
     <div className={classes.wrapper}>
       <LinearProgress
         classes={{
           root: classes.linearProgressRoot,
           bar: classes.linearProgressBar,
+          bar1Determinate: classes.innerBar,
         }}
         variant="determinate"
         value={progress}

@@ -18,7 +18,8 @@ afterEach(() => {
 
 describe('VerticalLinearProgress component', () => {
   it('renders without error', () => {
-    const VerticalLinearProgress = require('src/components/VerticalLinearProgress').default
+    const VerticalLinearProgress =
+      require('src/components/VerticalLinearProgress').default
     const mockProps = getMockProps()
     expect(() => {
       shallow(<VerticalLinearProgress {...mockProps} />)
@@ -26,7 +27,8 @@ describe('VerticalLinearProgress component', () => {
   })
 
   it('passes on progress to LinearProgress element', () => {
-    const VerticalLinearProgress = require('src/components/VerticalLinearProgress').default
+    const VerticalLinearProgress =
+      require('src/components/VerticalLinearProgress').default
     const mockProps = getMockProps()
     const wrapper = shallow(<VerticalLinearProgress {...mockProps} />)
     const linearProgress = wrapper.find(LinearProgress).first()
@@ -34,18 +36,20 @@ describe('VerticalLinearProgress component', () => {
   })
 
   it('does not show markers if that showMarkers is false', () => {
-    const VerticalLinearProgress = require('src/components/VerticalLinearProgress').default
+    const VerticalLinearProgress =
+      require('src/components/VerticalLinearProgress').default
     const mockProps = getMockProps()
     const wrapper = shallow(<VerticalLinearProgress {...mockProps} />)
     expect(wrapper.find(Stars)).toEqual({})
   })
 
   it('does show markers if showMarkers is true', () => {
-    const VerticalLinearProgress = require('src/components/VerticalLinearProgress').default
-    const mockProps ={
+    const VerticalLinearProgress =
+      require('src/components/VerticalLinearProgress').default
+    const mockProps = {
       ...getMockProps(),
-      showMarkers: true
-    } 
+      showMarkers: true,
+    }
     const wrapper = shallow(<VerticalLinearProgress {...mockProps} />)
     expect(wrapper.find(Stars)).toHaveLength(1)
   })
