@@ -18,7 +18,7 @@ export default {
 
 const useStyles = makeStyles((theme) => ({
   widthDiv: {
-    width: theme.spacing(50),
+    width: theme.spacing(80),
   },
 }))
 
@@ -32,4 +32,5 @@ const Template = (args) => {
 export const basic = Template.bind({})
 basic.args = {
   userId: 'userId',
+  browser: 'chrome',
 }

@@ -32,4 +32,5 @@ const Template = (args) => {
 export const basic = Template.bind({})
 basic.args = {
   userId: 'userId',
+  browser: 'chrome',
 }
