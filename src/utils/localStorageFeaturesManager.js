@@ -9,7 +9,8 @@ const setFeatures = (features) => {
 const getFeatures = () => {
   const featuresString = localStorageManager.getItem(STORAGE_FEATURES)
   try {
-    return JSON.parse(featuresString)
+    const parsedString = JSON.parse(featuresString)
+    return parsedString === null ? [] : parsedString
   } catch (e) {
     return []
   }
