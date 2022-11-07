@@ -43,11 +43,15 @@ import SearchInput from 'src/components/SearchInput'
 import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
 import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
 import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
+import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotification'
 import { Button } from '@material-ui/core'
 import Notification from 'src/components/Notification'
 import Chip from '@material-ui/core/Chip'
 import { goTo } from 'src/utils/navigation'
-import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
+import {
+  YAHOO_SEARCH_NEW_USERS_V2,
+  SEARCHBAR_SFAC_EXTENSION_PROMPT,
+} from 'src/utils/experiments'
 import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
 import useBrowserName from 'src/utils/hooks/useBrowserName'
 import SfacActivityContainer from 'src/components/SfacActivityContainer'
@@ -1078,6 +1082,23 @@ describe('index.js', () => {
     expect(notification.exists()).toBe(false)
   })
 
+  it('does not render a Searchbar SFAC extension notification if showSfacExtensionPrompt is not true', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.features = [
+      {
+        featureName: SEARCHBAR_SFAC_EXTENSION_PROMPT,
+        variation: 'Notification',
+      },
+    ]
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
+
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    const notification = wrapper.find(SearchbarSFACSellNotification)
+    expect(notification.exists()).toBe(false)
+  })
+
   it('does not render a SFAC extension notification if browser is unsupported', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
@@ -1090,6 +1111,24 @@ describe('index.js', () => {
     expect(notification.exists()).toBe(false)
   })
 
+  it('does not render a Searchbar SFAC extension notification if browser is unsupported', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.features = [
+      {
+        featureName: SEARCHBAR_SFAC_EXTENSION_PROMPT,
+        variation: 'Notification',
+      },
+    ]
+    mockProps.data.user.showSfacExtensionPrompt = true
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
+    useDoesBrowserSupportSearchExtension.mockReturnValue(false)
+    const wrapper = mount(<IndexPage {...mockProps} />)
+
+    const notification = wrapper.find(SearchbarSFACSellNotification)
+    expect(notification.exists()).toBe(false)
+  })
+
   it('does render a SFAC extension notification if showSfacExtensionPrompt is true', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
@@ -1097,6 +1136,38 @@ describe('index.js', () => {
     useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
     const wrapper = mount(<IndexPage {...mockProps} />)
     const notification = wrapper.find(SfacExtensionSellNotification)
+    expect(notification.exists()).toBe(true)
+  })
+
+  it('does not render a SFAC extension notification if showSfacExtensionPrompt is true but show Searchbar Extension is true', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.features = [
+      {
+        featureName: SEARCHBAR_SFAC_EXTENSION_PROMPT,
+        variation: 'Notification',
+      },
+    ]
+    mockProps.data.user.showSfacExtensionPrompt = true
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const notification = wrapper.find(SfacExtensionSellNotification)
+    expect(notification.exists()).toBe(false)
+  })
+
+  it('does render a SFAC extension notification if showSfacExtensionPrompt is true and show Searchbar Extension is true', () => {
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.features = [
+      {
+        featureName: SEARCHBAR_SFAC_EXTENSION_PROMPT,
+        variation: 'Notification',
+      },
+    ]
+    mockProps.data.user.showSfacExtensionPrompt = true
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const notification = wrapper.find(SearchbarSFACSellNotification)
     expect(notification.exists()).toBe(true)
   })
 
@@ -1114,6 +1185,26 @@ describe('index.js', () => {
     expect(wrapper.find(SfacExtensionSellNotification).exists()).toBe(true)
   })
 
+  it('only renders the Searchbar extension notification after fresh data is fetched', () => {
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.features = [
+      {
+        featureName: SEARCHBAR_SFAC_EXTENSION_PROMPT,
+        variation: 'Notification',
+      },
+    ]
+    mockProps.data.user.showSfacExtensionPrompt = true
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: false }) // not fresh
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    expect(wrapper.find(SearchbarSFACSellNotification).exists()).toBe(false)
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true }) // fresh
+    wrapper.setProps({ ...mockProps }) // force a rerender after hook change
+    wrapper.update()
+    expect(wrapper.find(SearchbarSFACSellNotification).exists()).toBe(true)
+  })
+
   it('passes the correct browser name to SFAC extension notification', () => {
     useBrowserName.mockReturnValue('firefox')
     const IndexPage = require('src/pages/index').default
@@ -1122,6 +1213,23 @@ describe('index.js', () => {
     useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
     const wrapper = mount(<IndexPage {...mockProps} />)
     const notification = wrapper.find(SfacExtensionSellNotification)
+    expect(notification.prop('browser')).toEqual('firefox')
+  })
+
+  it('passes the correct browser name to Searchbar SFAC extension notification', () => {
+    useBrowserName.mockReturnValue('firefox')
+    const IndexPage = require('src/pages/index').default
+    const mockProps = getMockProps()
+    mockProps.data.user.features = [
+      {
+        featureName: SEARCHBAR_SFAC_EXTENSION_PROMPT,
+        variation: 'Notification',
+      },
+    ]
+    mockProps.data.user.showSfacExtensionPrompt = true
+    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
+    const wrapper = mount(<IndexPage {...mockProps} />)
+    const notification = wrapper.find(SearchbarSFACSellNotification)
     expect(notification.prop('browser')).toEqual('firefox')
   })
 
