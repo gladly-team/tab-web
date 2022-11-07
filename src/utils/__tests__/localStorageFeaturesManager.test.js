@@ -31,6 +31,13 @@ describe('local storage features manager', () => {
     expect(localStorageFeaturesManager.getFeatures()).toEqual([])
   })
 
+  it('getFeatures defaults to empty features list if features string is null', () => {
+    const localStorageFeaturesManager =
+      require('src/utils/localStorageFeaturesManager').default
+    window.localStorage.getItem.mockReturnValue(null)
+    expect(localStorageFeaturesManager.getFeatures()).toEqual([])
+  })
+
   it('getFeatures fetches features', () => {
     const localStorageFeaturesManager =
       require('src/utils/localStorageFeaturesManager').default
