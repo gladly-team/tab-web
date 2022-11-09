@@ -1,10 +1,10 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import SfacExtensionSellNotification from './SfacExtensionSellNotification'
+import SearchbarSFACSellNotification from './SearchbarSFACSellNotification'
 
 export default {
-  title: 'Components/SfacExtensionSellNotification',
-  component: SfacExtensionSellNotification,
+  title: 'Components/SearchbarSFACSellNotification',
+  component: SearchbarSFACSellNotification,
   parameters: {
     backgrounds: {
       default: 'grey',
@@ -18,14 +18,14 @@ export default {
 
 const useStyles = makeStyles((theme) => ({
   widthDiv: {
-    width: theme.spacing(50),
+    width: theme.spacing(80),
   },
 }))
 
 const Template = (args) => {
   const classes = useStyles()
   return (
-    <SfacExtensionSellNotification {...args} className={classes.widthDiv} />
+    <SearchbarSFACSellNotification {...args} className={classes.widthDiv} />
   )
 }
 
