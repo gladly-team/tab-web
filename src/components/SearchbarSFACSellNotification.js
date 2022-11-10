@@ -10,7 +10,7 @@ import { windowOpenTop } from 'src/utils/navigation'
 import { GET_SEARCH_URL } from 'src/utils/urls'
 import { AwaitedPromiseTimeout } from 'src/utils/errors'
 import logger from 'src/utils/logger'
-import SubdirectoryArrowLeftIcon from '@mui/icons-material/SubdirectoryArrowLeft'
+import SubdirectoryArrowRightIcon from '@mui/icons-material/SubdirectoryArrowRight'
 import Notification from './Notification'
 
 const useStyles = makeStyles((theme) => ({
@@ -38,10 +38,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
   },
   arrow: {
-    transform: 'rotate(90deg)',
+    transform: 'rotate(270deg)',
     position: 'absolute',
     backgroundColor: 'white',
-    left: theme.spacing(-3.5),
+    right: theme.spacing(-3.5),
     top: theme.spacing(-0.5),
     width: `${theme.spacing(5)}px !important`,
     height: `${theme.spacing(5)}px !important`,
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
   },
   mainDiv: {
-    paddingLeft: theme.spacing(3.5),
+    paddingRight: theme.spacing(3.5),
     paddingTop: theme.spacing(1),
   },
 }))
@@ -104,7 +104,7 @@ const SearchbarSFACSellNotification = ({ browser, className, userId }) => {
         text={
           <span className={classes.text}>
             <Typography variant="h2" className={classes.title} gutterBottom>
-              <SubdirectoryArrowLeftIcon className={classes.arrow} /> Your
+              <SubdirectoryArrowRightIcon className={classes.arrow} /> Your
               searches here could be doing good!
             </Typography>
             <Typography variant="body1" className={classes.firstText}>

@@ -300,8 +300,8 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 99999,
     position: 'absolute',
     width: theme.spacing(60),
-    top: theme.spacing(0),
-    left: theme.spacing(15),
+    top: '0px',
+    left: '30px',
   },
 }))
 
