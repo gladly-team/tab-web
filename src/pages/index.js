@@ -92,12 +92,16 @@ import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
 import Notification from 'src/components/Notification'
 import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
 import { getFeatureValue } from 'src/utils/growthbookUtils'
-import { YAHOO_SEARCH_NEW_USERS_V2 } from 'src/utils/experiments'
+import {
+  YAHOO_SEARCH_NEW_USERS_V2,
+  SEARCHBAR_SFAC_EXTENSION_PROMPT,
+} from 'src/utils/experiments'
 import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
 import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
 import useBrowserName from 'src/utils/hooks/useBrowserName'
 import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
+import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotification'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -291,6 +295,13 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '900',
     marginLeft: theme.spacing(1),
     color: 'white',
+  },
+  searchbarNotification: {
+    zIndex: 99999,
+    position: 'absolute',
+    width: theme.spacing(60),
+    top: '0px',
+    left: '30px',
   },
 }))
 
@@ -521,6 +532,8 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const [showSFACNotification, setShowSFACNotification] = useState(false)
   const [shouldShowSfacExtensionPrompt, setShouldShowSfacExtensionPrompt] =
     useState(false)
+  const [shouldShowSearchbarSFACPrompt, setShouldShowSearchbarSFACPrompt] =
+    useState(false)
 
   // Determine if we should show the SFAC extension prompt.
   const searchExtensionSupported = useDoesBrowserSupportSearchExtension({
@@ -538,9 +551,15 @@ const Index = ({ data: fallbackData, userAgent }) => {
     //   we might show the prompt based on service worker -cached data that
     //   hasn't yet updated since the user interacted.
     if (searchExtensionSupported && isDataFresh) {
-      setShouldShowSfacExtensionPrompt(showSfacExtensionPrompt)
+      const searchbarSfacPrompt =
+        getFeatureValue(features, SEARCHBAR_SFAC_EXTENSION_PROMPT) ===
+          'Notification' && showSfacExtensionPrompt
+      setShouldShowSfacExtensionPrompt(
+        !searchbarSfacPrompt && showSfacExtensionPrompt
+      )
+      setShouldShowSearchbarSFACPrompt(searchbarSfacPrompt)
     }
-  }, [searchExtensionSupported, showSfacExtensionPrompt, isDataFresh])
+  }, [searchExtensionSupported, showSfacExtensionPrompt, isDataFresh, features])
 
   // Determine if we should show the SFAC on-tab search info message.
   const [interactedWithSFACNotification, setInteractedWithSFACNotification] =
@@ -702,6 +721,13 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
+      {shouldShowSearchbarSFACPrompt && userGlobalId ? (
+        <SearchbarSFACSellNotification
+          className={classes.searchbarNotification}
+          userId={userGlobalId}
+          browser={browser}
+        />
+      ) : null}
       {showIntro ? (
         <div className={classes.OnboardingFlow}>
           <div
