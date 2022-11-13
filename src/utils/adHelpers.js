@@ -1,3 +1,5 @@
+/* globals window */
+
 import { getAvailableAdUnits } from 'tab-ads'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import moment from 'moment'
@@ -141,6 +143,7 @@ const shouldShowOneAd = () => false
  * @return {Boolean} Whether to show one ad.
  */
 const shouldShowThreeAds = () =>
+  (!window.innerHeight || window.innerHeight > 800) &&
   localStorageFeaturesManager.getFeatureValue(V4_SHOW_THIRD_AD) === 'true'
 
 /**
