@@ -51,7 +51,7 @@ import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntroFlowMutation'
-import { getHostname, getCurrentURL, goTo } from 'src/utils/navigation'
+import { getCurrentURL, goTo } from 'src/utils/navigation'
 import {
   getAdUnits,
   areAdsEnabled,
@@ -330,7 +330,6 @@ if (isClientSide()) {
           timeout: 500,
         },
         publisher: {
-          domain: getHostname(),
           pageUrl: getCurrentURL(),
         },
         logLevel: 'error',
