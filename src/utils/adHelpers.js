@@ -143,7 +143,7 @@ const shouldShowOneAd = () => false
  * @return {Boolean} Whether to show one ad.
  */
 const shouldShowThreeAds = () =>
-  (!window.innerHeight || window.innerHeight > 800) &&
+  (!window.innerHeight || window.innerHeight > 700) &&
   localStorageFeaturesManager.getFeatureValue(V4_SHOW_THIRD_AD) === 'true'
 
 /**
