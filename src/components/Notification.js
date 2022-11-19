@@ -66,7 +66,6 @@ const Notification = ({
               className={classes.secondaryButton}
               size="small"
               variant="outlined"
-              color="primary"
               onClick={secondaryButtonOnClick}
             >
               {secondaryButtonText}
@@ -76,7 +75,6 @@ const Notification = ({
             <Button
               size="small"
               variant="contained"
-              color="primary"
               onClick={buttonOnClick}
             >
               {buttonText}
