@@ -68,9 +68,12 @@ const defaultThemeObject = {
         },
         color: 'white',
       },
+      outlined: {
+        borderColor: '#29BEBA',
+        color: '#29BEBA',
+      },
       root: {
-        borderRadius: '15px',
-        height: '30px',
+        borderRadius: '9999px',
         fontFamily: 'Poppins',
       },
     },

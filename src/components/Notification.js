@@ -66,19 +66,13 @@ const Notification = ({
               className={classes.secondaryButton}
               size="small"
               variant="outlined"
-              color="primary"
               onClick={secondaryButtonOnClick}
             >
               {secondaryButtonText}
             </Button>
           ) : null}
           {includeButton ? (
-            <Button
-              size="small"
-              variant="contained"
-              color="primary"
-              onClick={buttonOnClick}
-            >
+            <Button size="small" variant="contained" onClick={buttonOnClick}>
               {buttonText}
             </Button>
           ) : null}

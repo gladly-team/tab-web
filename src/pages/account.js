@@ -298,8 +298,7 @@ const Account = ({ data: fallbackData }) => {
             Account
           </Typography>
           <Button
-            color="default"
-            variant="contained"
+            variant="outlined"
             onClick={onLogoutClick}
             disabled={isLoggingOut}
             className={classes.logoutButton}
@@ -381,8 +380,7 @@ const Account = ({ data: fallbackData }) => {
             <div>
               <div>
                 <Button
-                  color="default"
-                  variant="contained"
+                  variant="outlined"
                   className={classes.revertButton}
                   disabled={isRevertingToClassicTab}
                   onClick={() => {
