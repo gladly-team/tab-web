@@ -72,11 +72,7 @@ const Notification = ({
             </Button>
           ) : null}
           {includeButton ? (
-            <Button
-              size="small"
-              variant="contained"
-              onClick={buttonOnClick}
-            >
+            <Button size="small" variant="contained" onClick={buttonOnClick}>
               {buttonText}
             </Button>
           ) : null}

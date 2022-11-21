@@ -1,5 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import blue from '@material-ui/core/colors/blue'
 import GroupImpactSidebar from './GroupImpactSidebar'
 
 export default {
@@ -9,7 +10,8 @@ export default {
 
 const useStyles = makeStyles(() => ({
   templateContainer: {
-    height: 400,
+    background: blue['200'],
+    height: 1000,
   },
 }))
 
@@ -23,14 +25,16 @@ const Template = (args) => {
   )
 }
 
-export const completed = Template.bind({})
-completed.args = {
-  mode: 'completed',
-  impactTitle: 'Fund two visits from a community healthworker',
-}
-
-export const started = Template.bind({})
-started.args = {
-  mode: 'started',
-  impactTitle: 'Fund two visits from a community healthworker',
+export const standard = Template.bind({})
+standard.args = {
+  impactMetric: {
+    impactTitle: "Provide 1 home visit from a community health worker",
+    whyValuableDescription: "Community health workers provide quality health care to those who might not otherwise have access."
+  },
+  groupImpactMetric: {
+    dollarProgress: 28e5,
+    dollarGoal: 5e6
+  },
+  participants: 109382,
+  badgeText: "New"
 }
