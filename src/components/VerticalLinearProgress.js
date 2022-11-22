@@ -16,14 +16,15 @@ const useStyles = makeStyles(() => ({
     transform: ({ progress }) => `translateY(${100 - progress}%) !important`,
   },
   wrapper: {
+    position: 'relative',
     height: '100%',
     display: 'flex',
     flexDirection: 'row',
   },
   markers: {
-    position: 'relative',
+    position: 'absolute',
     width: ({ width }) => width / 2,
-    left: ({ width }) => (-3 * width) / 4,
+    left: ({ width }) => width / 4,
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -72,6 +73,7 @@ const VerticalLinearProgress = ({
   return (
     <div className={classes.wrapper}>
       <LinearProgress
+        color="primary"
         classes={{
           root: classes.linearProgressRoot,
           bar: classes.linearProgressBar,
@@ -83,7 +85,7 @@ const VerticalLinearProgress = ({
       {showMarkers && (
         <div className={classes.markers}>
           <div className={classes.completedMarker}>
-            <Stars color="secondary" />
+            <Stars color="primary" />
           </div>
           <Typography className={classes.numberMarker}>75%</Typography>
           <Typography className={classes.numberMarker}>50%</Typography>

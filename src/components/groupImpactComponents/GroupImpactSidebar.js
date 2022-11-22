@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import theme from 'src/utils/theme'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
+import Box from '@material-ui/core/Box'
 
 // import StarsOutlined from '@material-ui/icons/StarsOutlined'
 // import HealthAndSafetyOutlined from '@mui/icons-material/HealthAndSafetyOutlined'
@@ -17,7 +18,7 @@ import VerticalLinearProgress from '../VerticalLinearProgress'
 const useStyles = makeStyles(() => ({
   wrapper: {
     height: 600,
-    width: 460,
+    width: 400,
     backgroundColor: 'white',
     transition: 'width 500ms',
   },
@@ -30,11 +31,13 @@ const useStyles = makeStyles(() => ({
   },
   collapsedWrapper: {
     height: '100%',
-    width: '100%'
+    width: '100%',
   },
   sidebarText: {
     display: 'flex',
     flexDirection: 'column',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
   },
   sidebarButtons: {
     width: '100%',
@@ -101,9 +104,12 @@ const GroupImpactSidebar = ({
   }
 
   return (
-    <div className={classes.wrapper} style={{
-        width: open ? '460px' : '8px'
-      }}>
+    <div
+      className={classes.wrapper}
+      style={{
+        width: open ? '400px' : '8px',
+      }}
+    >
       {open ? (
         <div className={classes.expandedWrapper}>
           <VerticalLinearProgress
@@ -167,14 +173,14 @@ const GroupImpactSidebar = ({
           </div>{' '}
         </div>
       ) : (
-        <div onClick={toggleOpen} className={classes.collapsedWrapper}>
+        <Box onClick={toggleOpen} className={classes.collapsedWrapper}>
           <VerticalLinearProgress
-          progress={progress}
-          width={460}
-          borderRadius={0}
-          showMarkers={false}
-        />
-        </div>
+            progress={progress}
+            width={400}
+            borderRadius={0}
+            showMarkers={false}
+          />
+        </Box>
       )}
     </div>
   )
