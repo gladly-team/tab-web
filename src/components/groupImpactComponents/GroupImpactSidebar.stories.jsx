@@ -28,13 +28,14 @@ const Template = (args) => {
 export const standard = Template.bind({})
 standard.args = {
   impactMetric: {
-    impactTitle: "Provide 1 home visit from a community health worker",
-    whyValuableDescription: "Community health workers provide quality health care to those who might not otherwise have access."
+    impactTitle: 'Provide 1 home visit from a community health worker',
+    whyValuableDescription:
+      'Community health workers provide quality health care to those who might not otherwise have access.',
   },
   groupImpactMetric: {
     dollarProgress: 28e5,
-    dollarGoal: 5e6
+    dollarGoal: 5e6,
   },
   participants: 109382,
-  badgeText: "New"
+  badgeText: 'New',
 }
