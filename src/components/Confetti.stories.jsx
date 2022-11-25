@@ -11,3 +11,8 @@ export default {
 const Template = (args) => <Confetti {...args} />
 export const standard = Template.bind({})
 standard.args = {}
+standard.parameters = {
+  chromatic: {
+    disableSnapshot: true,
+  },
+}

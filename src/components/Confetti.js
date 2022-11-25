@@ -19,8 +19,8 @@ const Celebration = () => {
     })
     const count = 200
     const defaults = {
-      origin: { y: 0.51, x: 0.9 },
-      angle: 140,
+      origin: { y: 0, x: 0 },
+      angle: 315,
     }
 
     const fire = (particleRatio, opts) =>
