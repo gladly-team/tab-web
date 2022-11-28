@@ -78,6 +78,9 @@ const useStyles = makeStyles((theme) => ({
   footer: {
     marginTop: 'auto',
   },
+  listItemButton: {
+    borderRadius: '9999px',
+  },
 }))
 
 const OpenInNew = ({ className }) => (
@@ -109,7 +112,13 @@ const SettingsMenuItem = (props) => {
   const classes = useStyles({ isActive })
   return (
     <Link to={to} target={target} className={classes.menuItem}>
-      <ListItem button>
+      <ListItem
+        button
+        classes={{
+          root: classes.listItemButton,
+          selected: classes.listItemButton,
+        }}
+      >
         <ListItemText
           primary={children}
           primaryTypographyProps={{
