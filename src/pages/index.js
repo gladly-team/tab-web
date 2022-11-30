@@ -838,8 +838,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
                             >
                               Search for a Cause
                             </Link>{' '}
-                            this month will help rehabilitate a community well
-                            in Malawi through <b>charity:water</b>.{' '}
+                            this month will contribute to the rehabilitation of
+                            a community well in Malawi through{' '}
+                            <b>charity:water</b>.{' '}
                             <Link
                               to="https://campaigns.gladly.io"
                               className={classes.notificationTextLink}
