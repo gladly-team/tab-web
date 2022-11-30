@@ -65,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
   menuItem: {
     display: 'block',
+    borderRadius: '9999px',
     background: (props) => (props.isActive ? grey['300'] : 'inherit'),
   },
   sidebarContentContainer: {
@@ -77,6 +78,9 @@ const useStyles = makeStyles((theme) => ({
   },
   footer: {
     marginTop: 'auto',
+  },
+  listItemButton: {
+    borderRadius: '9999px',
   },
 }))
 
@@ -109,7 +113,12 @@ const SettingsMenuItem = (props) => {
   const classes = useStyles({ isActive })
   return (
     <Link to={to} target={target} className={classes.menuItem}>
-      <ListItem button>
+      <ListItem
+        button
+        classes={{
+          root: classes.listItemButton,
+        }}
+      >
         <ListItemText
           primary={children}
           primaryTypographyProps={{

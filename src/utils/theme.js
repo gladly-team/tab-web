@@ -61,7 +61,19 @@ const defaultThemeObject = {
       },
     },
     MuiButton: {
+      contained: {
+        backgroundColor: '#29BEBA',
+        '&:hover': {
+          backgroundColor: '#1C8582',
+        },
+        color: 'white',
+      },
+      outlined: {
+        borderColor: '#29BEBA',
+        color: '#29BEBA',
+      },
       root: {
+        borderRadius: '9999px',
         fontFamily: 'Poppins',
       },
     },

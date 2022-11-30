@@ -8,22 +8,15 @@ import Notification from '../Notification'
 
 const useStyles = makeStyles((theme) => ({
   learnButton: {
-    height: '30px',
     fontWeight: '500',
   },
   noThanksButton: {
     marginLeft: 'auto',
-    borderRadius: '15px',
-    height: '30px',
-    fontWeight: '5ayw00',
+    fontWeight: '500',
   },
   nextGoalButton: {
-    background: '#29BEBA',
-    borderRadius: '15px',
-    height: '30px',
     fontWeight: '900',
     marginLeft: theme.spacing(1),
-    color: 'white',
   },
   buttonsWrapper: {
     display: 'flex',
