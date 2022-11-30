@@ -76,6 +76,7 @@ import {
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   NOTIF_DISMISS_PREFIX,
   CAUSE_IMPACT_TYPES,
+  CURRENT_CUSTOM_NOTIF_CODE,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -612,15 +613,15 @@ const Index = ({ data: fallbackData, userAgent }) => {
   }, [globalTabCount])
 
   // Show a one-off notification.
-  const NOTIFICATION_ID = 'sfac-dec-2022' // edit as needed
-  const notifLocalStorageKey = `${NOTIF_DISMISS_PREFIX}${NOTIFICATION_ID}`
+  // Edit the constant as needed to show a new notification.
+  const notifLocalStorageKey = `${NOTIF_DISMISS_PREFIX}${CURRENT_CUSTOM_NOTIF_CODE}`
   const [showCustomNotification, setShowCustomNotification] = useState(false)
   useEffect(() => {
     if (
       isClientSide() &&
       localStorageMgr.getItem(notifLocalStorageKey) !== 'true' &&
       isDataFresh && // avoid flickering stale content
-      !!notifications.find((notif) => notif.code === NOTIFICATION_ID)
+      !!notifications.find((notif) => notif.code === CURRENT_CUSTOM_NOTIF_CODE)
     ) {
       setShowCustomNotification(true)
     }
