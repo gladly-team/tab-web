@@ -65,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
   menuItem: {
     display: 'block',
+    borderRadius: '9999px',
     background: (props) => (props.isActive ? grey['300'] : 'inherit'),
   },
   sidebarContentContainer: {
@@ -116,7 +117,6 @@ const SettingsMenuItem = (props) => {
         button
         classes={{
           root: classes.listItemButton,
-          selected: classes.listItemButton,
         }}
       >
         <ListItemText
