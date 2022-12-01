@@ -7,7 +7,9 @@ export const LANDING_PAGE_PATH_CATS = '/cats/'
 export const MEDIA_ENDPOINT = process.env.NEXT_PUBLIC_MEDIA_ENDPOINT
 
 export const NOTIF_DISMISS_PREFIX = 'tab.user.dismissedNotif'
-export const CURRENT_CUSTOM_NOTIF_CODE = 'sfac-dec-2022'
+
+// Current shown global notification code. Use Pascal case.
+export const CURRENT_CUSTOM_NOTIF_CODE = 'SFACDec2022'
 
 // One-offs
 export const USER_SURVEY_2022_NOTIFICATION = 'tab.user.dismissedUserSurvey2022'
