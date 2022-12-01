@@ -60,12 +60,7 @@ import {
   incrementTabsOpenedToday,
 } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
-import {
-  aboutURL,
-  accountURL,
-  achievementsURL,
-  ONE_AND_A_HALF_MILLION_RAISED_URL,
-} from 'src/utils/urls'
+import { aboutURL, accountURL, achievementsURL } from 'src/utils/urls'
 import {
   showMockAchievements,
   showBackgroundImages,
@@ -81,6 +76,7 @@ import {
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   NOTIF_DISMISS_PREFIX,
   CAUSE_IMPACT_TYPES,
+  CURRENT_CUSTOM_NOTIF_CODE,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -283,14 +279,8 @@ const useStyles = makeStyles((theme) => ({
   notificationText: {
     marginBottom: theme.spacing(2),
   },
-
-  // TODO: create reusable new button
-  notificationButton: {
-    '&:hover': {
-      background: '#00a097',
-    },
-    fontWeight: '900',
-    marginLeft: theme.spacing(1),
+  notificationTextLink: {
+    textDecoration: 'underline',
   },
   searchbarNotification: {
     zIndex: 99999,
@@ -623,15 +613,15 @@ const Index = ({ data: fallbackData, userAgent }) => {
   }, [globalTabCount])
 
   // Show a one-off notification.
-  const NOTIFICATION_ID = '1.5Mraised' // edit as needed
-  const notifLocalStorageKey = `${NOTIF_DISMISS_PREFIX}${NOTIFICATION_ID}`
+  // Edit the constant as needed to show a new notification.
+  const notifLocalStorageKey = `${NOTIF_DISMISS_PREFIX}${CURRENT_CUSTOM_NOTIF_CODE}`
   const [showCustomNotification, setShowCustomNotification] = useState(false)
   useEffect(() => {
     if (
       isClientSide() &&
       localStorageMgr.getItem(notifLocalStorageKey) !== 'true' &&
       isDataFresh && // avoid flickering stale content
-      !!notifications.find((notif) => notif.code === NOTIFICATION_ID)
+      !!notifications.find((notif) => notif.code === CURRENT_CUSTOM_NOTIF_CODE)
     ) {
       setShowCustomNotification(true)
     }
@@ -837,31 +827,36 @@ const Index = ({ data: fallbackData, userAgent }) => {
                             gutterBottom
                             className={classes.notificationTitle}
                           >
-                            $1.5M raised!
+                            Give the gift of clean water this December!
                           </Typography>
-                          <Typography variant="body1" gutterBottom>
-                            Tabbers have now raised over $1,500,000 for charity!
-                            It's amazing what a dedicated community and a few
-                            (million) browser tabs can do :)
-                          </Typography>
-                          <Typography variant="body1" gutterBottom>
-                            See what we've accomplished together:
+                          <Typography variant="body1">
+                            Every search you make on{' '}
+                            <Link
+                              to="http://tab.gladly.io/get-search/"
+                              target="_blank"
+                              className={classes.notificationTextLink}
+                            >
+                              Search for a Cause
+                            </Link>{' '}
+                            this month will contribute to the rehabilitation of
+                            a community well in Malawi through{' '}
+                            <b>charity:water</b>.{' '}
+                            <Link
+                              to="https://campaigns.gladly.io"
+                              className={classes.notificationTextLink}
+                            >
+                              Learn more about the project here.
+                            </Link>
                           </Typography>
                         </div>
                       }
                       buttons={
                         <div className={classes.notificationButtonsWrapper}>
                           <Link
-                            to={ONE_AND_A_HALF_MILLION_RAISED_URL}
+                            to="https://campaigns.gladly.io"
                             target="_blank"
                           >
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              className={classes.notificationButton}
-                            >
-                              Check it out
-                            </Button>
+                            <Button variant="contained">Read more</Button>
                           </Link>
                         </div>
                       }

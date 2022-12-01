@@ -7,7 +7,6 @@ import { isURLForDifferentApp, withBasePath } from 'src/utils/navigationUtils'
 
 const useStyles = makeStyles(() => ({
   anchor: {
-    display: 'inline-block',
     color: 'inherit',
     textDecoration: 'none',
   },

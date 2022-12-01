@@ -10,6 +10,7 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   CAUSE_IMPACT_TYPES,
+  CURRENT_CUSTOM_NOTIF_CODE,
 } from 'src/utils/constants'
 import {
   showMockAchievements,
@@ -1544,7 +1545,6 @@ describe('index.js', () => {
 /* END: core tests */
 
 /* START: notification tests */
-const CURRENT_NOTIF_CODE = '1.5Mraised' // update as needed
 describe('index.js: hardcoded notifications', () => {
   beforeEach(() => {
     isClientSide.mockReturnValue(true)
@@ -1569,7 +1569,7 @@ describe('index.js: hardcoded notifications', () => {
           ...getMockProps().data.user,
           id: 'someId',
           username: 'someUsername',
-          notifications: [{ code: CURRENT_NOTIF_CODE }],
+          notifications: [{ code: CURRENT_CUSTOM_NOTIF_CODE }],
         },
       },
     }
@@ -1590,7 +1590,7 @@ describe('index.js: hardcoded notifications', () => {
           ...getMockProps().data.user,
           id: 'someId',
           username: 'someUsername',
-          notifications: [{ code: CURRENT_NOTIF_CODE }],
+          notifications: [{ code: CURRENT_CUSTOM_NOTIF_CODE }],
         },
       },
     }
@@ -1612,7 +1612,7 @@ describe('index.js: hardcoded notifications', () => {
           ...getMockProps().data.user,
           id: 'someId',
           username: 'someUsername',
-          notifications: [{ code: CURRENT_NOTIF_CODE }],
+          notifications: [{ code: CURRENT_CUSTOM_NOTIF_CODE }],
         },
       },
     }
@@ -1634,7 +1634,7 @@ describe('index.js: hardcoded notifications', () => {
           ...getMockProps().data.user,
           id: 'someId',
           username: 'someUsername',
-          notifications: [{ code: CURRENT_NOTIF_CODE }],
+          notifications: [{ code: CURRENT_CUSTOM_NOTIF_CODE }],
         },
       },
     }
@@ -1671,7 +1671,7 @@ describe('index.js: hardcoded notifications', () => {
           ...getMockProps().data.user,
           id: 'someId',
           username: 'someUsername',
-          notifications: [{ code: CURRENT_NOTIF_CODE }],
+          notifications: [{ code: CURRENT_CUSTOM_NOTIF_CODE }],
         },
       },
     }
@@ -1685,7 +1685,7 @@ describe('index.js: hardcoded notifications', () => {
       flushAllPromises()
     })
     expect(localStorageMgr.setItem).toHaveBeenCalledWith(
-      `tab.user.dismissedNotif${CURRENT_NOTIF_CODE}`,
+      `tab.user.dismissedNotif${CURRENT_CUSTOM_NOTIF_CODE}`,
       'true'
     )
   })
