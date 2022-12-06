@@ -18,22 +18,27 @@ import VerticalLinearProgress from '../VerticalLinearProgress'
 
 const useStyles = makeStyles(() => ({
   wrapper: {
-    height: 600,
+    height: '100%',
     width: 400,
-    backgroundcolor: 'transparent',
   },
   expandedWrapper: {
     backgroundColor: 'white',
     height: '100%',
     display: 'flex',
     flexDirection: 'row',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
+    cursor: 'pointer',
   },
   collapsedWrapper: {
     height: '100%',
     width: '100%',
-    paddingTop: '10px',
+    paddingTop: theme.spacing(2),
+    cursor: 'pointer',
+    display: 'flex',
+    flexDirection: 'column',
   },
   sidebarText: {
     display: 'flex',
@@ -48,8 +53,8 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
   },
   divider: {
-    marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(4),
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
   },
   buttonContent: {
     display: 'flex',
@@ -59,6 +64,8 @@ const useStyles = makeStyles(() => ({
   sidebarButton: {
     flex: '1 1 0',
     textTransform: 'none',
+    borderRadius: '8px',
+    padding: theme.spacing(1.5),
   },
   sidebarButtonText: {
     fontSize: '14px',
@@ -85,7 +92,13 @@ const useStyles = makeStyles(() => ({
     borderRadius: '4px',
   },
   closeButton: {
+    borderRadius: '8px',
     marginLeft: 'auto',
+  },
+  closeButtonIcon: {
+    width: 40,
+    height: 40,
+    marginRight: '-16px',
   },
   pullTab: {
     width: 72,
@@ -104,29 +117,25 @@ const useStyles = makeStyles(() => ({
 
 const GroupImpactSidebar = ({
   badgeText,
-  participants,
   impactMetric,
   groupImpactMetric,
+  open,
 }) => {
-  const [open, setOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(open)
   const { impactTitle, whyValuableDescription } = impactMetric
   const { dollarProgress, dollarGoal } = groupImpactMetric
   const classes = useStyles()
   const progress = Math.round(100 * (dollarProgress / dollarGoal))
 
-  const toggleOpen = () => {
-    setOpen((prev) => !prev)
+  const toggleOpen = (e) => {
+    setIsOpen((prev) => !prev)
+    e.stopPropagation()
   }
 
   return (
-    <div
-      className={classes.wrapper}
-      style={{
-        width: open ? '400px' : '72px',
-      }}
-    >
-      {open ? (
-        <div className={classes.expandedWrapper}>
+    <div className={classes.wrapper}>
+      {isOpen ? (
+        <Box onClick={toggleOpen} className={classes.expandedWrapper}>
           <VerticalLinearProgress
             progress={progress}
             width={64}
@@ -142,7 +151,7 @@ const GroupImpactSidebar = ({
                 <span className={classes.badge}>{badgeText}</span>
               ) : null}
               <Button onClick={toggleOpen} className={classes.closeButton}>
-                <ArrowBackIos />
+                <ArrowBackIos className={classes.closeButtonIcon} />
               </Button>
             </div>
             <Typography variant="body2">{impactTitle}</Typography>
@@ -150,10 +159,6 @@ const GroupImpactSidebar = ({
               {progress}%
             </Typography>
             <Typography variant="body2">completed</Typography>
-            <Typography className={classes.robotoBold} variant="h6">
-              {participants}
-            </Typography>
-            <Typography variant="body2">participants</Typography>
             <Divider className={classes.divider} />
             <Typography className={classes.robotoBold} variant="h6">
               Why it Matters
@@ -186,7 +191,7 @@ const GroupImpactSidebar = ({
             </div>
             <Divider className={classes.divider} />
           </div>{' '}
-        </div>
+        </Box>
       ) : (
         <Box onClick={toggleOpen} className={classes.collapsedWrapper}>
           <div className={classes.pullTab}>
@@ -206,6 +211,7 @@ const GroupImpactSidebar = ({
 
 GroupImpactSidebar.displayName = 'GroupImpactSidebar'
 GroupImpactSidebar.propTypes = {
+  open: PropTypes.bool.isRequired,
   badgeText: PropTypes.string,
   impactMetric: PropTypes.shape({
     impactTitle: PropTypes.string.isRequired,
@@ -215,7 +221,6 @@ GroupImpactSidebar.propTypes = {
     dollarProgress: PropTypes.number.isRequired,
     dollarGoal: PropTypes.number.isRequired,
   }).isRequired,
-  participants: PropTypes.number.isRequired,
 }
 
 GroupImpactSidebar.defaultProps = {

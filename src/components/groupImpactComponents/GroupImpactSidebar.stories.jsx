@@ -11,7 +11,7 @@ export default {
 const useStyles = makeStyles(() => ({
   templateContainer: {
     background: blue['200'],
-    height: 1000,
+    height: 800,
   },
 }))
 
@@ -25,8 +25,9 @@ const Template = (args) => {
   )
 }
 
-export const standard = Template.bind({})
-standard.args = {
+export const open = Template.bind({})
+open.args = {
+  open: true,
   impactMetric: {
     impactTitle: 'Provide 1 home visit from a community health worker',
     whyValuableDescription:
@@ -36,6 +37,20 @@ standard.args = {
     dollarProgress: 28e5,
     dollarGoal: 5e6,
   },
-  participants: 109382,
+  badgeText: 'New',
+}
+
+export const closed = Template.bind({})
+closed.args = {
+  open: false,
+  impactMetric: {
+    impactTitle: 'Provide 1 home visit from a community health worker',
+    whyValuableDescription:
+      'Community health workers provide quality health care to those who might not otherwise have access.',
+  },
+  groupImpactMetric: {
+    dollarProgress: 28e5,
+    dollarGoal: 5e6,
+  },
   badgeText: 'New',
 }

@@ -2,6 +2,8 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { Button, Typography } from '@material-ui/core'
 import VerticalLinearProgress from 'src/components/VerticalLinearProgress'
+import InfoIcon from '@material-ui/icons/InfoOutlined'
+import Stars from '@mui/icons-material/Stars'
 import Box from '@material-ui/core/Box'
 
 const getMockProps = () => ({
@@ -15,6 +17,7 @@ const getMockProps = () => ({
     dollarGoal: 600,
   },
   participants: 1234,
+  open: true,
 })
 
 describe('GroupImpactSidebar component', () => {
@@ -59,7 +62,7 @@ describe('GroupImpactSidebar component', () => {
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
     const mockProps = getMockProps()
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
-    expect(wrapper.find(Typography).at(7).text()).toEqual(
+    expect(wrapper.find(Typography).at(5).text()).toEqual(
       mockProps.impactMetric.whyValuableDescription
     )
   })
@@ -94,34 +97,22 @@ describe('GroupImpactSidebar component', () => {
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
     const button = wrapper.find(Button).first()
 
-    expect(wrapper.find(Box).exists()).toEqual(false)
+    expect(wrapper.find(InfoIcon).length).toEqual(1)
+    expect(wrapper.find(Stars).length).toEqual(0)
 
-    button.simulate('click')
+    button.simulate('click', {
+      stopPropagation: () => {},
+    })
     wrapper.update()
 
-    const box = wrapper.find(Box)
-    expect(box.exists()).toEqual(true)
-    expect(
-      wrapper.find(VerticalLinearProgress).first().prop('progress')
-    ).toEqual(
-      Math.round(
-        100 *
-          (mockProps.groupImpactMetric.dollarProgress /
-            mockProps.groupImpactMetric.dollarGoal)
-      )
-    )
+    expect(wrapper.find(InfoIcon).length).toEqual(0)
+    expect(wrapper.find(Stars).length).toEqual(1)
 
-    box.first().simulate('click')
-    expect(wrapper.find(Box).exists()).toEqual(false)
-  })
-
-  it('displays participants', () => {
-    const GroupImpactSidebar =
-      require('src/components/groupImpactComponents/GroupImpactSidebar').default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
-    expect(wrapper.find(Typography).at(4).text()).toEqual(
-      `${mockProps.participants}`
-    )
+    const box = wrapper.find(Box).first()
+    box.first().simulate('click', {
+      stopPropagation: () => {},
+    })
+    expect(wrapper.find(InfoIcon).length).toEqual(1)
+    expect(wrapper.find(Stars).length).toEqual(0)
   })
 })
