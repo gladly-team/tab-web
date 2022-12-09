@@ -36,6 +36,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
@@ -70,6 +71,7 @@ import {
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
+import useInterval from 'src/utils/hooks/useInterval'
 import {
   CAT_CHARITY,
   STORAGE_NEW_USER_CAUSE_ID,
@@ -281,6 +283,10 @@ const useStyles = makeStyles((theme) => ({
   },
   notificationTextLink: {
     textDecoration: 'underline',
+  },
+  notificationProgress: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
   },
   searchbarNotification: {
     zIndex: 99999,
@@ -631,6 +637,12 @@ const Index = ({ data: fallbackData, userAgent }) => {
     setShowCustomNotification(false)
   }
 
+  // Animate progress
+  const [sfacNotifProgress, setSfacNotifProgress] = useState(0)
+  useInterval(() => {
+    setSfacNotifProgress(20)
+  }, 300)
+
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
   // any data server-side, in which case we'll fetch data in
@@ -827,36 +839,33 @@ const Index = ({ data: fallbackData, userAgent }) => {
                             gutterBottom
                             className={classes.notificationTitle}
                           >
-                            Give the gift of clean water this December!
+                            We're well on our way
                           </Typography>
-                          <Typography variant="body1">
-                            Every search you make on{' '}
-                            <Link
-                              to="http://tab.gladly.io/get-search/"
-                              target="_blank"
-                              className={classes.notificationTextLink}
-                            >
-                              Search for a Cause
-                            </Link>{' '}
-                            this month will contribute to the rehabilitation of
-                            a community well in Malawi through{' '}
-                            <b>charity:water</b>.{' '}
+                          <Typography variant="body1" gutterBottom>
+                            We’re 20% of the way to{' '}
                             <Link
                               to="https://campaigns.gladly.io"
                               className={classes.notificationTextLink}
                             >
-                              Learn more about the project here.
+                              restoring a well in Malawi
                             </Link>
+                            ! Try Search for a Cause to help us reach our goal
+                            by the end of the month.
                           </Typography>
+                          <LinearProgress
+                            variant="determinate"
+                            value={sfacNotifProgress}
+                            className={classes.notificationProgress}
+                          />
                         </div>
                       }
                       buttons={
                         <div className={classes.notificationButtonsWrapper}>
                           <Link
-                            to="https://campaigns.gladly.io"
+                            to="https://tab.gladly.io/get-search/"
                             target="_blank"
                           >
-                            <Button variant="contained">Read more</Button>
+                            <Button variant="contained">Make a search</Button>
                           </Link>
                         </div>
                       }

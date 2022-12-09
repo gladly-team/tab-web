@@ -9,7 +9,7 @@ export const MEDIA_ENDPOINT = process.env.NEXT_PUBLIC_MEDIA_ENDPOINT
 export const NOTIF_DISMISS_PREFIX = 'tab.user.dismissedNotif'
 
 // Current shown global notification code. Use Pascal case.
-export const CURRENT_CUSTOM_NOTIF_CODE = 'SFACDec2022'
+export const CURRENT_CUSTOM_NOTIF_CODE = 'SFACDec2022v2'
 
 // One-offs
 export const USER_SURVEY_2022_NOTIFICATION = 'tab.user.dismissedUserSurvey2022'
