@@ -15,20 +15,26 @@ const useStyles = makeStyles(() => ({
     borderRadius: ({ borderRadius }) => borderRadius,
     transform: ({ progress }) => `translateY(${100 - progress}%) !important`,
   },
+  linearProgress: {
+    gridRowStart: 1,
+    gridColumnStart: 1,
+  },
   wrapper: {
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    position: 'static',
     height: '100%',
-    display: 'flex',
-    flexDirection: 'row',
   },
   markers: {
-    position: 'relative',
-    width: ({ width }) => width / 2,
-    left: ({ width }) => (-3 * width) / 4,
-    height: '100%',
+    width: ({ width }) => width,
+    zIndex: 20,
+    gridRowStart: 1,
+    gridColumnStart: 1,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height: 'inherit',
   },
   numberMarker: {
     backgroundColor: 'white',
@@ -72,6 +78,7 @@ const VerticalLinearProgress = ({
   return (
     <div className={classes.wrapper}>
       <LinearProgress
+        className={classes.linearProgress}
         classes={{
           root: classes.linearProgressRoot,
           bar: classes.linearProgressBar,
