@@ -9,6 +9,7 @@ const useStyles = makeStyles(() => ({
   linearProgressRoot: {
     borderRadius: ({ borderRadius }) => borderRadius,
     width: ({ width }) => width,
+    transition: 'width .3s',
     height: '100%',
   },
   linearProgressBar: {

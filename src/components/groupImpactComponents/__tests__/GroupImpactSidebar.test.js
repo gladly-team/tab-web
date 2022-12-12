@@ -115,4 +115,25 @@ describe('GroupImpactSidebar component', () => {
     expect(wrapper.find(InfoIcon).length).toEqual(1)
     expect(wrapper.find(Stars).length).toEqual(0)
   })
+
+  it('expands closed sidebar on hover', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = {
+      ...getMockProps(),
+      open: false,
+    }
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+
+    expect(wrapper.find(VerticalLinearProgress).first().prop('width')).toEqual(
+      8
+    )
+
+    wrapper.find(Box).first().simulate('mouseover')
+    wrapper.update()
+
+    expect(wrapper.find(VerticalLinearProgress).first().prop('width')).toEqual(
+      24
+    )
+  })
 })

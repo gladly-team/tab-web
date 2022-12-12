@@ -8,12 +8,14 @@ import theme from 'src/utils/theme'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
 import Box from '@material-ui/core/Box'
 import Stars from '@mui/icons-material/Stars'
+import Fade from '@material-ui/core/Fade'
 
 // import StarsOutlined from '@material-ui/icons/StarsOutlined'
 // import HealthAndSafetyOutlined from '@mui/icons-material/HealthAndSafetyOutlined'
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import Link from 'src/components/Link'
 import { aboutURL } from 'src/utils/urls'
+import clsx from 'clsx'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 
 const useStyles = makeStyles(() => ({
@@ -34,7 +36,7 @@ const useStyles = makeStyles(() => ({
   },
   collapsedWrapper: {
     height: '100%',
-    width: '100%',
+    width: 100,
     paddingTop: theme.spacing(2),
     cursor: 'pointer',
     display: 'flex',
@@ -101,17 +103,28 @@ const useStyles = makeStyles(() => ({
     marginRight: '-16px',
   },
   pullTab: {
-    width: 72,
     height: 40,
+    transition: 'width .3s',
     backgroundColor: 'white',
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'flex-end',
     borderTopRightRadius: '12px',
     borderBottomRightRadius: '12px',
   },
   pullTabStar: {
-    marginLeft: 34,
     color: '#FF6A08',
+    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(0.5),
+  },
+  pullTabCollapsed: {
+    width: 62,
+  },
+  pullTabExpanded: {
+    width: 72,
+  },
+  pullTabProgress: {
+    fontWeight: 500,
   },
 }))
 
@@ -122,6 +135,7 @@ const GroupImpactSidebar = ({
   open,
 }) => {
   const [isOpen, setIsOpen] = useState(open)
+  const [isClosedHover, setIsClosedHover] = useState(false)
   const { impactTitle, whyValuableDescription } = impactMetric
   const { dollarProgress, dollarGoal } = groupImpactMetric
   const classes = useStyles()
@@ -193,13 +207,29 @@ const GroupImpactSidebar = ({
           </div>{' '}
         </Box>
       ) : (
-        <Box onClick={toggleOpen} className={classes.collapsedWrapper}>
-          <div className={classes.pullTab}>
+        <Box
+          onClick={toggleOpen}
+          className={classes.collapsedWrapper}
+          onMouseOver={() => setIsClosedHover(true)}
+          onMouseOut={() => setIsClosedHover(false)}
+        >
+          <div
+            className={
+              isClosedHover
+                ? clsx(classes.pullTab, classes.pullTabExpanded)
+                : clsx(classes.pullTab, classes.pullTabCollapsed)
+            }
+          >
+            <Fade in={isClosedHover}>
+              <Typography variant="body2" className={classes.pullTabProgress}>
+                {progress}%
+              </Typography>
+            </Fade>
             <Stars className={classes.pullTabStar} />
           </div>
           <VerticalLinearProgress
             progress={progress}
-            width={8}
+            width={isClosedHover ? 24 : 8}
             borderRadius={0}
             showMarkers={false}
           />
