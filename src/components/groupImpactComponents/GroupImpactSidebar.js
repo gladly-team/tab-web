@@ -142,15 +142,14 @@ const useStyles = makeStyles(() => ({
 
 const GroupImpactSidebar = ({
   badgeText,
-  impactMetric,
   groupImpactMetric,
   open,
   nextGoalButtonClickHandler,
 }) => {
   const [isOpen, setIsOpen] = useState(open)
   const [isClosedHover, setIsClosedHover] = useState(false)
+  const { dollarProgress, dollarGoal, impactMetric } = groupImpactMetric
   const { impactTitle, whyValuableDescription } = impactMetric
-  const { dollarProgress, dollarGoal } = groupImpactMetric
   const classes = useStyles()
   const progress = Math.round(100 * (dollarProgress / dollarGoal))
 
@@ -264,13 +263,13 @@ GroupImpactSidebar.displayName = 'GroupImpactSidebar'
 GroupImpactSidebar.propTypes = {
   open: PropTypes.bool.isRequired,
   badgeText: PropTypes.string,
-  impactMetric: PropTypes.shape({
-    impactTitle: PropTypes.string.isRequired,
-    whyValuableDescription: PropTypes.string.isRequired,
-  }).isRequired,
   groupImpactMetric: PropTypes.shape({
     dollarProgress: PropTypes.number.isRequired,
     dollarGoal: PropTypes.number.isRequired,
+    impactMetric: PropTypes.shape({
+      impactTitle: PropTypes.string.isRequired,
+      whyValuableDescription: PropTypes.string.isRequired,
+    }),
   }).isRequired,
   nextGoalButtonClickHandler: PropTypes.func,
 }
