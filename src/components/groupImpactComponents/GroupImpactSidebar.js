@@ -126,6 +126,9 @@ const useStyles = makeStyles(() => ({
   pullTabProgress: {
     fontWeight: 500,
   },
+  nextGoalButton: {
+    fontWeight: 700,
+  },
 }))
 
 const GroupImpactSidebar = ({
@@ -133,6 +136,7 @@ const GroupImpactSidebar = ({
   impactMetric,
   groupImpactMetric,
   open,
+  nextGoalButtonClickHandler,
 }) => {
   const [isOpen, setIsOpen] = useState(open)
   const [isClosedHover, setIsClosedHover] = useState(false)
@@ -204,6 +208,15 @@ const GroupImpactSidebar = ({
             </Button> */}
             </div>
             <Divider className={classes.divider} />
+            {nextGoalButtonClickHandler && (
+              <Button
+                className={classes.nextGoalButton}
+                variant="contained"
+                onClick={nextGoalButtonClickHandler}
+              >
+                Start Next Goal
+              </Button>
+            )}
           </div>{' '}
         </Box>
       ) : (
@@ -251,10 +264,12 @@ GroupImpactSidebar.propTypes = {
     dollarProgress: PropTypes.number.isRequired,
     dollarGoal: PropTypes.number.isRequired,
   }).isRequired,
+  nextGoalButtonClickHandler: PropTypes.func,
 }
 
 GroupImpactSidebar.defaultProps = {
   badgeText: null,
+  nextGoalButtonClickHandler: null,
 }
 
 export default GroupImpactSidebar
