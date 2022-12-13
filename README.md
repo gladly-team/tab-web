@@ -1,10 +1,13 @@
 [![codecov](https://codecov.io/gh/gladly-team/tab-web/branch/master/graph/badge.svg?token=Hbjg2dNtLv)](https://codecov.io/gh/gladly-team/tab-web)
 
+
 # [Tab for a Cause](https://tab.gladly.io/)
 
-🚨 **Work in progress** 🚨: see [gladly-team/tab](https://github.com/gladly-team/tab) for the production web app
+The easiest way to do good every day. **[Join in](https://tab.gladly.io)**
 
 ## Getting Started!
+
+This repo contains the latest web app. See [gladly-team/tab](https://github.com/gladly-team/tab) for most backend services.
 
 1. `git clone git@github.com:gladly-team/tab-web.git`
 2. `cd tab-web`
