@@ -27,8 +27,8 @@ const TabCMPHeadElements = () => (
             // var host = window.location.hostname;
             // var element = document.createElement('script');
             // var firstScript = document.getElementsByTagName('script')[0];
-            // var url = 'https://quantcast.mgr.consensu.org'
-            //   .concat('/choice/', 'FPBLJYpJgR9Zu', '/', host, '/choice.js')
+            // var url = 'https://cmp.quantcast.com'
+            //   .concat('/choice/', 'FPBLJYpJgR9Zu', '/', host, '/choice.js?tag_version=V2');
             var uspTries = 0;
             var uspTriesLimit = 3;
             // element.async = true;
@@ -145,6 +145,9 @@ const TabCMPHeadElements = () => (
                     args[2](retr);
                   }
                 } else {
+                  if(args[0] === 'init' && typeof args[3] === 'object') {
+                    args[3] = Object.assign(args[3], { tag_version: 'V2' });
+                  }
                   queue.push(args);
                 }
               }
@@ -178,7 +181,9 @@ const TabCMPHeadElements = () => (
                       if (msgIsString) {
                         returnMsg = JSON.stringify(returnMsg);
                       }
-                      event.source.postMessage(returnMsg, '*');
+                      if (event && event.source && event.source.postMessage) {
+                        event.source.postMessage(returnMsg, '*');
+                      }
                     },
                     payload.parameter
                   );
@@ -245,7 +250,7 @@ const TabCMPHeadElements = () => (
                     const storedUSPPingData = JSON.parse(localStorage.getItem('tabCMP.uspPing.data'))
                     if (storedUSPPingData) {
                       const cb = arg[2]
-                      cb(storedUSPPingData, true )
+                      cb(storedUSPPingData, true)
                       return
                     } else {
                     }
