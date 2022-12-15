@@ -133,4 +133,28 @@ describe('GroupImpactSidebar component', () => {
 
     expect(wrapper.find(VerticalLinearProgress).at(1).prop('width')).toEqual(24)
   })
+
+  it('shows start next goal button if handler defined and runs handler', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = {
+      ...getMockProps(),
+      nextGoalButtonClickHandler: jest.fn(),
+    }
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+
+    const button = wrapper.find(Button).at(2)
+    button.simulate('click')
+
+    expect(mockProps.nextGoalButtonClickHandler).toHaveBeenCalled()
+  })
+
+  it('does not show start next goal button if handler is not defined', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+
+    expect(wrapper.find(Button).length).toEqual(2)
+  })
 })
