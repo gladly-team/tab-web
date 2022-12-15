@@ -11,7 +11,7 @@ export default {
 const useStyles = makeStyles(() => ({
   templateContainer: {
     background: blue['200'],
-    height: 800,
+    height: 700,
   },
 }))
 

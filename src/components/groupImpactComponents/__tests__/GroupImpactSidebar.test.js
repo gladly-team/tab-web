@@ -2,9 +2,9 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { Button, Typography } from '@material-ui/core'
 import VerticalLinearProgress from 'src/components/VerticalLinearProgress'
-import InfoIcon from '@material-ui/icons/InfoOutlined'
-import Stars from '@mui/icons-material/Stars'
 import Box from '@material-ui/core/Box'
+import Slide from '@material-ui/core/Slide'
+import Fade from '@material-ui/core/Fade'
 
 const getMockProps = () => ({
   badgeText: 'badge-text',
@@ -97,23 +97,21 @@ describe('GroupImpactSidebar component', () => {
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
     const button = wrapper.find(Button).first()
 
-    expect(wrapper.find(InfoIcon).length).toEqual(1)
-    expect(wrapper.find(Stars).length).toEqual(0)
+    expect(wrapper.find(Slide).prop('in')).toEqual(true)
 
     button.simulate('click', {
       stopPropagation: () => {},
     })
     wrapper.update()
 
-    expect(wrapper.find(InfoIcon).length).toEqual(0)
-    expect(wrapper.find(Stars).length).toEqual(1)
+    expect(wrapper.find(Slide).prop('in')).toEqual(false)
 
     const box = wrapper.find(Box).first()
     box.first().simulate('click', {
       stopPropagation: () => {},
     })
-    expect(wrapper.find(InfoIcon).length).toEqual(1)
-    expect(wrapper.find(Stars).length).toEqual(0)
+
+    expect(wrapper.find(Slide).prop('in')).toEqual(true)
   })
 
   it('expands closed sidebar on hover', () => {
@@ -125,15 +123,14 @@ describe('GroupImpactSidebar component', () => {
     }
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
 
-    expect(wrapper.find(VerticalLinearProgress).first().prop('width')).toEqual(
-      8
-    )
+    expect(wrapper.find(VerticalLinearProgress).at(1).prop('width')).toEqual(8)
+    expect(wrapper.find(Fade).prop('in')).toEqual(false)
 
-    wrapper.find(Box).first().simulate('mouseover')
+    wrapper.find(Box).at(1).simulate('mouseover')
     wrapper.update()
 
-    expect(wrapper.find(VerticalLinearProgress).first().prop('width')).toEqual(
-      24
-    )
+    expect(wrapper.find(Fade).prop('in')).toEqual(true)
+
+    expect(wrapper.find(VerticalLinearProgress).at(1).prop('width')).toEqual(24)
   })
 })

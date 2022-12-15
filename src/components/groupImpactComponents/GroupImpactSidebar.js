@@ -9,6 +9,7 @@ import InfoIcon from '@material-ui/icons/InfoOutlined'
 import Box from '@material-ui/core/Box'
 import Stars from '@mui/icons-material/Stars'
 import Fade from '@material-ui/core/Fade'
+import Slide from '@material-ui/core/Slide'
 
 // import StarsOutlined from '@material-ui/icons/StarsOutlined'
 // import HealthAndSafetyOutlined from '@mui/icons-material/HealthAndSafetyOutlined'
@@ -22,8 +23,13 @@ const useStyles = makeStyles(() => ({
   wrapper: {
     height: '100%',
     width: 400,
+    display: 'grid',
+    gridTemplateColumns: '1fr',
   },
   expandedWrapper: {
+    zIndex: 21,
+    gridRowStart: 1,
+    gridColumnStart: 1,
     backgroundColor: 'white',
     height: '100%',
     display: 'flex',
@@ -35,6 +41,9 @@ const useStyles = makeStyles(() => ({
     cursor: 'pointer',
   },
   collapsedWrapper: {
+    gridRowStart: 1,
+    gridColumnStart: 1,
+    top: 0,
     height: '100%',
     width: 100,
     paddingTop: theme.spacing(2),
@@ -148,7 +157,7 @@ const GroupImpactSidebar = ({
 
   return (
     <div className={classes.wrapper}>
-      {isOpen ? (
+      <Slide direction="right" in={isOpen}>
         <Box onClick={toggleOpen} className={classes.expandedWrapper}>
           <VerticalLinearProgress
             progress={progress}
@@ -206,35 +215,34 @@ const GroupImpactSidebar = ({
             <Divider className={classes.divider} />
           </div>{' '}
         </Box>
-      ) : (
-        <Box
-          onClick={toggleOpen}
-          className={classes.collapsedWrapper}
-          onMouseOver={() => setIsClosedHover(true)}
-          onMouseOut={() => setIsClosedHover(false)}
+      </Slide>
+      <Box
+        onClick={toggleOpen}
+        className={classes.collapsedWrapper}
+        onMouseOver={() => setIsClosedHover(true)}
+        onMouseOut={() => setIsClosedHover(false)}
+      >
+        <div
+          className={
+            isClosedHover
+              ? clsx(classes.pullTab, classes.pullTabExpanded)
+              : clsx(classes.pullTab, classes.pullTabCollapsed)
+          }
         >
-          <div
-            className={
-              isClosedHover
-                ? clsx(classes.pullTab, classes.pullTabExpanded)
-                : clsx(classes.pullTab, classes.pullTabCollapsed)
-            }
-          >
-            <Fade in={isClosedHover}>
-              <Typography variant="body2" className={classes.pullTabProgress}>
-                {progress}%
-              </Typography>
-            </Fade>
-            <Stars className={classes.pullTabStar} />
-          </div>
-          <VerticalLinearProgress
-            progress={progress}
-            width={isClosedHover ? 24 : 8}
-            borderRadius={0}
-            showMarkers={false}
-          />
-        </Box>
-      )}
+          <Fade in={isClosedHover}>
+            <Typography variant="body2" className={classes.pullTabProgress}>
+              {progress}%
+            </Typography>
+          </Fade>
+          <Stars className={classes.pullTabStar} />
+        </div>
+        <VerticalLinearProgress
+          progress={progress}
+          width={isClosedHover ? 24 : 8}
+          borderRadius={0}
+          showMarkers={false}
+        />
+      </Box>
     </div>
   )
 }
