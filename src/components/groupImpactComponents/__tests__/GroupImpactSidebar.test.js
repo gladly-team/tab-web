@@ -8,15 +8,14 @@ import Fade from '@material-ui/core/Fade'
 
 const getMockProps = () => ({
   badgeText: 'badge-text',
-  impactMetric: {
-    impactTitle: 'impact-title',
-    whyValuableDescription: 'why-valuable-description',
-  },
   groupImpactMetric: {
     dollarProgress: 250,
     dollarGoal: 600,
+    impactMetric: {
+      impactTitle: 'impact-title',
+      whyValuableDescription: 'why-valuable-description',
+    },
   },
-  participants: 1234,
   open: true,
 })
 
@@ -53,7 +52,7 @@ describe('GroupImpactSidebar component', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
     expect(wrapper.find(Typography).at(1).text()).toEqual(
-      mockProps.impactMetric.impactTitle
+      mockProps.groupImpactMetric.impactMetric.impactTitle
     )
   })
 
@@ -63,7 +62,7 @@ describe('GroupImpactSidebar component', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
     expect(wrapper.find(Typography).at(5).text()).toEqual(
-      mockProps.impactMetric.whyValuableDescription
+      mockProps.groupImpactMetric.impactMetric.whyValuableDescription
     )
   })
 
