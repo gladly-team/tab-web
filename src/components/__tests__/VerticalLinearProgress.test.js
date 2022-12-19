@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { Stars } from '@mui/icons-material'
 
@@ -52,5 +52,21 @@ describe('VerticalLinearProgress component', () => {
     }
     const wrapper = shallow(<VerticalLinearProgress {...mockProps} />)
     expect(wrapper.find(Stars)).toHaveLength(1)
+  })
+
+  it('sets start and end progress correctly before/after render even with starting progress', () => {
+    const VerticalLinearProgress =
+      require('src/components/VerticalLinearProgress').default
+    const mockProps = {
+      ...getMockProps(),
+      startingProgress: 20,
+    }
+    const wrapper = shallow(<VerticalLinearProgress {...mockProps} />)
+    const linearProgress = wrapper.find(LinearProgress).first()
+    expect(linearProgress.prop('value')).toEqual(mockProps.startingProgress)
+
+    const wrapperMounted = mount(<VerticalLinearProgress {...mockProps} />)
+    const linearProgressMounted = wrapperMounted.find(LinearProgress).first()
+    expect(linearProgressMounted.prop('value')).toEqual(mockProps.progress)
   })
 })

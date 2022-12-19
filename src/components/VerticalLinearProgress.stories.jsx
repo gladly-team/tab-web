@@ -38,4 +38,24 @@ inCollapsedSidebar.args = {
   borderRadius: 0,
   showMarkers: false,
 }
-inGroupImpactSidebar.parameters = {}
+inCollapsedSidebar.parameters = {}
+
+export const animated = Template.bind({})
+animated.args = {
+  progress: 80,
+  width: 8,
+  borderRadius: 0,
+  showMarkers: false,
+  startingProgress: 30,
+}
+animated.parameters = {}
+
+export const animatedDownwards = Template.bind({})
+animatedDownwards.args = {
+  progress: 30,
+  width: 8,
+  borderRadius: 0,
+  showMarkers: false,
+  startingProgress: 80,
+}
+animatedDownwards.parameters = {}
