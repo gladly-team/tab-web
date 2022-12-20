@@ -70,3 +70,27 @@ withButton.args = {
   badgeText: 'New',
   nextGoalButtonClickHandler: () => {},
 }
+
+export const withOldGoal = Template.bind({})
+withOldGoal.args = {
+  open: true,
+  lastGroupImpactMetric: {
+    dollarProgress: 5e6,
+    dollarGoal: 5e6,
+    impactMetric: {
+      impactTitle: 'Provide 1 home visit from a community health worker',
+      whyValuableDescription:
+        'Community health workers provide quality health care to those who might not otherwise have access.',
+    },
+  },
+  groupImpactMetric: {
+    dollarProgress: 10e5,
+    dollarGoal: 5e6,
+    impactMetric: {
+      impactTitle: 'Provide 2 home visits from a community health worker',
+      whyValuableDescription:
+        'Community health workers provide quality health care to those who might not otherwise have access.',
+    },
+  },
+  badgeText: 'New',
+}
