@@ -145,33 +145,16 @@ const GroupImpactSidebar = ({
   groupImpactMetric,
   open,
   nextGoalButtonClickHandler,
-  lastGroupImpactMetric,
 }) => {
   const [isOpen, setIsOpen] = useState(open)
-  const [displaySidebarText, setDisplaySidebarText] = useState(true)
-  const [displayingOldGoal, setDisplayingOldGoal] = useState(
-    !!lastGroupImpactMetric
-  )
   const [isClosedHover, setIsClosedHover] = useState(false)
-  const { dollarProgress, dollarGoal, impactMetric } = displayingOldGoal
-    ? lastGroupImpactMetric
-    : groupImpactMetric
+  const { dollarProgress, dollarGoal, impactMetric } = groupImpactMetric
   const { impactTitle, whyValuableDescription } = impactMetric
   const classes = useStyles()
   const progress = Math.round(100 * (dollarProgress / dollarGoal))
 
   const toggleOpen = (e) => {
     setIsOpen((prev) => !prev)
-    e.stopPropagation()
-  }
-
-  const onClickNextGoalButton = (e) => {
-    setDisplaySidebarText(false)
-    nextGoalButtonClickHandler()
-    setTimeout(() => {
-      setDisplayingOldGoal(false)
-      setDisplaySidebarText(true)
-    }, 600)
     e.stopPropagation()
   }
 
@@ -185,42 +168,41 @@ const GroupImpactSidebar = ({
             borderRadius={32}
             showMarkers
           />
-          <Fade in={displaySidebarText} timeout={500}>
-            <div className={classes.sidebarText}>
-              <div className={classes.goalText}>
-                <Typography className={classes.robotoBold} variant="h5">
-                  GOAL
-                </Typography>
-                {badgeText ? (
-                  <span className={classes.badge}>{badgeText}</span>
-                ) : null}
-                <Button onClick={toggleOpen} className={classes.closeButton}>
-                  <ArrowBackIos className={classes.closeButtonIcon} />
+          <div className={classes.sidebarText}>
+            <div className={classes.goalText}>
+              <Typography className={classes.robotoBold} variant="h5">
+                GOAL
+              </Typography>
+              {badgeText ? (
+                <span className={classes.badge}>{badgeText}</span>
+              ) : null}
+              <Button onClick={toggleOpen} className={classes.closeButton}>
+                <ArrowBackIos className={classes.closeButtonIcon} />
+              </Button>
+            </div>
+            <Typography variant="body2">{impactTitle}</Typography>
+            <Typography className={classes.robotoBold} variant="h3">
+              {progress}%
+            </Typography>
+            <Typography variant="body2">completed</Typography>
+            <Divider className={classes.divider} />
+            <Typography className={classes.robotoBold} variant="h6">
+              Why it Matters
+            </Typography>
+            <Typography>{whyValuableDescription}</Typography>
+            <Divider className={classes.divider} />
+            <div className={classes.sidebarButtons}>
+              <Link to={aboutURL}>
+                <Button className={classes.sidebarButton}>
+                  <div className={classes.buttonContent}>
+                    <InfoIcon />
+                    <Typography className={classes.sidebarButtonText}>
+                      About the Cause
+                    </Typography>
+                  </div>
                 </Button>
-              </div>
-              <Typography variant="body2">{impactTitle}</Typography>
-              <Typography className={classes.robotoBold} variant="h3">
-                {progress}%
-              </Typography>
-              <Typography variant="body2">completed</Typography>
-              <Divider className={classes.divider} />
-              <Typography className={classes.robotoBold} variant="h6">
-                Why it Matters
-              </Typography>
-              <Typography>{whyValuableDescription}</Typography>
-              <Divider className={classes.divider} />
-              <div className={classes.sidebarButtons}>
-                <Link to={aboutURL}>
-                  <Button className={classes.sidebarButton}>
-                    <div className={classes.buttonContent}>
-                      <InfoIcon />
-                      <Typography className={classes.sidebarButtonText}>
-                        About the Cause
-                      </Typography>
-                    </div>
-                  </Button>
-                </Link>
-                {/* <Button className={classes.sidebarButton}>
+              </Link>
+              {/* <Button className={classes.sidebarButton}>
             <div className={classes.buttonContent}>
               <StarsOutlined />
               <Typography className={classes.sidebarButtonText}>Impact</Typography>
@@ -232,19 +214,18 @@ const GroupImpactSidebar = ({
               <Typography className={classes.sidebarButtonText}>Nonprofits</Typography>
             </div>
             </Button> */}
-              </div>
-              <Divider className={classes.divider} />
-              {displayingOldGoal && (
-                <Button
-                  className={classes.nextGoalButton}
-                  variant="contained"
-                  onClick={onClickNextGoalButton}
-                >
-                  Start Next Goal
-                </Button>
-              )}
             </div>
-          </Fade>
+            <Divider className={classes.divider} />
+            {nextGoalButtonClickHandler && (
+              <Button
+                className={classes.nextGoalButton}
+                variant="contained"
+                onClick={nextGoalButtonClickHandler}
+              >
+                Start Next Goal
+              </Button>
+            )}
+          </div>{' '}
         </Box>
       </Slide>
       <Box
@@ -290,21 +271,12 @@ GroupImpactSidebar.propTypes = {
       whyValuableDescription: PropTypes.string.isRequired,
     }),
   }).isRequired,
-  lastGroupImpactMetric: PropTypes.shape({
-    dollarProgress: PropTypes.number.isRequired,
-    dollarGoal: PropTypes.number.isRequired,
-    impactMetric: PropTypes.shape({
-      impactTitle: PropTypes.string.isRequired,
-      whyValuableDescription: PropTypes.string.isRequired,
-    }),
-  }),
   nextGoalButtonClickHandler: PropTypes.func,
 }
 
 GroupImpactSidebar.defaultProps = {
   badgeText: null,
-  nextGoalButtonClickHandler: () => {},
-  lastGroupImpactMetric: null,
+  nextGoalButtonClickHandler: null,
 }
 
 export default GroupImpactSidebar
