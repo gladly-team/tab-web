@@ -19,6 +19,8 @@ export const AMBASSADOR_2022_NOTIFICATION =
 // Squad Invite Constants
 export const MISSION_COMPLETE = 'mission_complete'
 export const MISSION_STARTED = 'mission_started'
+
+// Constants for Local Storage Mgr
 export const STORAGE_KEY_USERNAME = 'tab.user.username'
 export const STORAGE_NEW_USER_CAUSE_ID = 'tab.newUser.causeId'
 export const STORAGE_CATS_CAUSE_ID = 'CA6A5C2uj'
@@ -29,9 +31,11 @@ export const STORAGE_TABS_RECENT_DAY_COUNT = 'tab.user.lastTabDay.count'
 export const STORAGE_TABS_LAST_TAB_OPENED_DATE = 'tab.user.lastTabDay.date'
 export const STORAGE_FEATURES = 'tab.user.features'
 export const MAX_TABS_WITH_ADS = 150
-
-// Constants for Local Storage Mgr
 export const HAS_SEEN_SEARCH_V2_TOOLTIP = 'has_seen_search_v2_tooltip'
+export const LAST_SEEN_GROUP_IMPACT_METRIC =
+  'tab.use.groupImpactMetric.lastSeenGroupImpactMetric'
+export const COMPLETED_GROUP_IMPACT_VIEWS =
+  'tab.use.groupImpactMetric.completedGroupImpactViews'
 
 export const CHROME_BROWSER = 'chrome'
 export const FIREFOX_BROWSER = 'firefox'
