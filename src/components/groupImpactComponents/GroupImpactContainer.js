@@ -5,6 +5,7 @@ export default createFragmentContainer(GroupImpact, {
   user: graphql`
     fragment GroupImpactContainer_cause on Cause {
       groupImpactMetric {
+        id
         dollarProgress
         dollarGoal
         impactMetric {
