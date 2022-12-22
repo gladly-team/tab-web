@@ -36,6 +36,8 @@ export const LAST_SEEN_GROUP_IMPACT_METRIC =
   'tab.use.groupImpactMetric.lastSeenGroupImpactMetric'
 export const COMPLETED_GROUP_IMPACT_VIEWS =
   'tab.use.groupImpactMetric.completedGroupImpactViews'
+export const CURRENT_GROUP_IMPACT_VIEWS =
+  'tab.use.groupImpactMetric.currentGroupImpactViews'
 
 export const CHROME_BROWSER = 'chrome'
 export const FIREFOX_BROWSER = 'firefox'

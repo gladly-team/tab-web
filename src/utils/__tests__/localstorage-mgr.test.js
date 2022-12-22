@@ -7,6 +7,13 @@ describe('local storage mng', () => {
     expect(window.localStorage.getItem).toHaveBeenCalledWith('somekey')
   })
 
+  it('getNumericItem calls localStorage.getItem and returns number', () => {
+    const localStorageMgr = require('src/utils/localstorage-mgr').default
+    window.localStorage.getItem.mockReturnValueOnce('5')
+    expect(localStorageMgr.getNumericItem('somekey')).toBe(5)
+    expect(window.localStorage.getItem).toHaveBeenCalledWith('somekey')
+  })
+
   it('setItem calls localStorage.setItem', () => {
     const localStorageMgr = require('src/utils/localstorage-mgr').default
     localStorageMgr.setItem('somekey', 'someval')
@@ -37,6 +44,20 @@ describe('local storage mng', () => {
       localStorageMgr.getItem('somekey')
     }).not.toThrow()
     expect(localStorageMgr.getItem('somekey')).toBeNull()
+  })
+
+  it('getNumericItem returns default if data malformed', () => {
+    const localStorageMgr = require('src/utils/localstorage-mgr').default
+    window.localStorage.getItem.mockReturnValueOnce('not a number')
+    expect(localStorageMgr.getNumericItem('somekey', 3)).toEqual(3)
+  })
+
+  it('getNumericItem returns default if localStorage throws', () => {
+    const localStorageMgr = require('src/utils/localstorage-mgr').default
+    window.localStorage.getItem.mockImplementationOnce(() => {
+      throw new Error('This browser is not a fan of localStorage.')
+    })
+    expect(localStorageMgr.getNumericItem('somekey', 3)).toEqual(3)
   })
 
   it("setItem doesn't throw even if localStorage throws", () => {

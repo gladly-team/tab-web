@@ -17,6 +17,14 @@ export default {
     }
   },
 
+  getNumericItem: (key, defaultValue) => {
+    try {
+      return parseInt(window.localStorage.getItem(key), 10) || defaultValue
+    } catch (e) {
+      return defaultValue
+    }
+  },
+
   removeItem: (key) => {
     try {
       window.localStorage.removeItem(key)
