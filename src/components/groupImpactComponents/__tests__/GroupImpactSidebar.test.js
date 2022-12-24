@@ -7,7 +7,7 @@ import Slide from '@material-ui/core/Slide'
 import Fade from '@material-ui/core/Fade'
 
 const getMockProps = () => ({
-  badgeText: 'badge-text',
+  groupImpactSidebarState: 'badge-text',
   groupImpactMetric: {
     dollarProgress: 250,
     dollarGoal: 600,
@@ -38,14 +38,16 @@ describe('GroupImpactSidebar component', () => {
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
     const mockProps = getMockProps()
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
-    expect(wrapper.find('span').first().text()).toEqual(mockProps.badgeText)
+    expect(wrapper.find('span').first().text()).toEqual(
+      mockProps.groupImpactSidebarState
+    )
   })
 
   it('does not display badge text if not', () => {
     const GroupImpactSidebar =
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
     const mockProps = getMockProps()
-    delete mockProps.badgeText
+    delete mockProps.groupImpactSidebarState
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
     expect(wrapper.find('span').exists()).toBe(false)
   })

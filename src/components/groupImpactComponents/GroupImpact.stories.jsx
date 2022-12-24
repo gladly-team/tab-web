@@ -54,7 +54,7 @@ celebration.decorators = [
     localstorageManager.setItem(COMPLETED_GROUP_IMPACT_VIEWS, 0)
     localstorageGroupImpactManager.setLastSeenGroupImpactMetric({
       id: 'bcde',
-      dollarProgress: 28e5,
+      dollarProgress: 5e6,
       dollarGoal: 5e6,
       impactMetric: {
         impactTitle: 'Provide 1 home visit from a community health worker',
@@ -66,8 +66,8 @@ celebration.decorators = [
   },
 ]
 
-export const completed = Template.bind({})
-completed.args = {
+export const completedToNew = Template.bind({})
+completedToNew.args = {
   groupImpactMetric: {
     id: 'abcd',
     dollarProgress: 28e5,
@@ -79,12 +79,12 @@ completed.args = {
     },
   },
 }
-completed.decorators = [
+completedToNew.decorators = [
   (Story) => {
     localstorageManager.setItem(COMPLETED_GROUP_IMPACT_VIEWS, 2)
     localstorageGroupImpactManager.setLastSeenGroupImpactMetric({
       id: 'bcde',
-      dollarProgress: 28e5,
+      dollarProgress: 5e6,
       dollarGoal: 5e6,
       impactMetric: {
         impactTitle: 'Provide 1 home visit from a community health worker',

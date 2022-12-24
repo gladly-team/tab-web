@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import blue from '@material-ui/core/colors/blue'
+import { GROUP_IMPACT_SIDEBAR_STATE } from 'src/utils/constants'
 import GroupImpactSidebar from './GroupImpactSidebar'
 
 export default {
@@ -37,7 +38,7 @@ open.args = {
         'Community health workers provide quality health care to those who might not otherwise have access.',
     },
   },
-  badgeText: 'New',
+  groupImpactSidebarState: GROUP_IMPACT_SIDEBAR_STATE.NEW,
 }
 
 export const closed = Template.bind({})
@@ -52,23 +53,7 @@ closed.args = {
         'Community health workers provide quality health care to those who might not otherwise have access.',
     },
   },
-  badgeText: 'New',
-}
-
-export const withButton = Template.bind({})
-withButton.args = {
-  open: true,
-  groupImpactMetric: {
-    dollarProgress: 28e5,
-    dollarGoal: 5e6,
-    impactMetric: {
-      impactTitle: 'Provide 1 home visit from a community health worker',
-      whyValuableDescription:
-        'Community health workers provide quality health care to those who might not otherwise have access.',
-    },
-  },
-  badgeText: 'New',
-  nextGoalButtonClickHandler: () => {},
+  groupImpactSidebarState: GROUP_IMPACT_SIDEBAR_STATE.NEW,
 }
 
 export const withOldGoal = Template.bind({})
@@ -79,8 +64,7 @@ withOldGoal.args = {
     dollarGoal: 5e6,
     impactMetric: {
       impactTitle: 'Provide 1 home visit from a community health worker',
-      whyValuableDescription:
-        'Community health workers provide quality health care to those who might not otherwise have access.',
+      whyValuableDescription: 'Last valuable description.',
     },
   },
   groupImpactMetric: {
@@ -92,5 +76,5 @@ withOldGoal.args = {
         'Community health workers provide quality health care to those who might not otherwise have access.',
     },
   },
-  badgeText: 'New',
+  groupImpactSidebarState: GROUP_IMPACT_SIDEBAR_STATE.COMPLETED,
 }

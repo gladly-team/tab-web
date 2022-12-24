@@ -57,3 +57,9 @@ export const SFAC_ACTIVITY_STATES = {
   ACTIVE: 'active',
   INACTIVE: 'inactive',
 }
+
+export const GROUP_IMPACT_SIDEBAR_STATE = {
+  NORMAL: '',
+  NEW: 'NEW',
+  COMPLETED: 'COMPLETED',
+}

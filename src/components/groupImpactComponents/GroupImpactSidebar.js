@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -17,6 +17,7 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import Link from 'src/components/Link'
 import { aboutURL } from 'src/utils/urls'
 import clsx from 'clsx'
+import { GROUP_IMPACT_SIDEBAR_STATE } from 'src/utils/constants'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 
 const useStyles = makeStyles(() => ({
@@ -141,7 +142,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const GroupImpactSidebar = ({
-  badgeText,
+  groupImpactSidebarState,
   groupImpactMetric,
   open,
   nextGoalButtonClickHandler,
@@ -160,6 +161,13 @@ const GroupImpactSidebar = ({
   const classes = useStyles()
   const progress = Math.round(100 * (dollarProgress / dollarGoal))
 
+  useEffect(() => {
+    setDisplayingOldGoal(
+      groupImpactSidebarState === GROUP_IMPACT_SIDEBAR_STATE.COMPLETED &&
+        lastGroupImpactMetric
+    )
+  }, [groupImpactSidebarState, lastGroupImpactMetric])
+
   const toggleOpen = (e) => {
     setIsOpen((prev) => !prev)
     e.stopPropagation()
@@ -167,10 +175,10 @@ const GroupImpactSidebar = ({
 
   const onClickNextGoalButton = (e) => {
     setDisplaySidebarText(false)
-    nextGoalButtonClickHandler()
     setTimeout(() => {
       setDisplayingOldGoal(false)
       setDisplaySidebarText(true)
+      nextGoalButtonClickHandler()
     }, 600)
     e.stopPropagation()
   }
@@ -191,8 +199,10 @@ const GroupImpactSidebar = ({
                 <Typography className={classes.robotoBold} variant="h5">
                   GOAL
                 </Typography>
-                {badgeText ? (
-                  <span className={classes.badge}>{badgeText}</span>
+                {groupImpactSidebarState ? (
+                  <span className={classes.badge}>
+                    {groupImpactSidebarState}
+                  </span>
                 ) : null}
                 <Button onClick={toggleOpen} className={classes.closeButton}>
                   <ArrowBackIos className={classes.closeButtonIcon} />
@@ -281,7 +291,7 @@ const GroupImpactSidebar = ({
 GroupImpactSidebar.displayName = 'GroupImpactSidebar'
 GroupImpactSidebar.propTypes = {
   open: PropTypes.bool.isRequired,
-  badgeText: PropTypes.string,
+  groupImpactSidebarState: PropTypes.string,
   groupImpactMetric: PropTypes.shape({
     dollarProgress: PropTypes.number.isRequired,
     dollarGoal: PropTypes.number.isRequired,
@@ -302,7 +312,7 @@ GroupImpactSidebar.propTypes = {
 }
 
 GroupImpactSidebar.defaultProps = {
-  badgeText: null,
+  groupImpactSidebarState: null,
   nextGoalButtonClickHandler: () => {},
   lastGroupImpactMetric: null,
 }

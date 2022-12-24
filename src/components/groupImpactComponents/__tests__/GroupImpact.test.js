@@ -1,9 +1,10 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import localstorageGroupImpactManager from 'src/utils/localstorageGroupImpactManager'
 import localstorageManager from 'src/utils/localstorage-mgr'
 import Celebration from 'src/components/Confetti'
 import {
+  GROUP_IMPACT_SIDEBAR_STATE,
   CURRENT_GROUP_IMPACT_VIEWS,
   COMPLETED_GROUP_IMPACT_VIEWS,
 } from 'src/utils/constants'
@@ -11,6 +12,7 @@ import GroupImpactSidebar from '../GroupImpactSidebar'
 
 jest.mock('src/utils/localstorage-mgr')
 jest.mock('src/utils/localstorageGroupImpactManager')
+jest.mock('src/components/Confetti', () => () => <div />)
 
 const getMockProps = () => ({
   groupImpactMetric: {
@@ -55,7 +57,7 @@ describe('GroupImpact component', () => {
         },
       }
     )
-    const wrapper = shallow(<GroupImpact {...mockProps} />)
+    const wrapper = mount(<GroupImpact {...mockProps} />)
     expect(wrapper.find(Celebration).length).toEqual(1)
   })
 
@@ -76,7 +78,7 @@ describe('GroupImpact component', () => {
         },
       }
     )
-    const wrapper = shallow(<GroupImpact {...mockProps} />)
+    const wrapper = mount(<GroupImpact {...mockProps} />)
     expect(wrapper.find(Celebration).length).toEqual(0)
   })
 
@@ -97,7 +99,7 @@ describe('GroupImpact component', () => {
         },
       }
     )
-    const wrapper = shallow(<GroupImpact {...mockProps} />)
+    const wrapper = mount(<GroupImpact {...mockProps} />)
     expect(wrapper.find(Celebration).length).toEqual(0)
   })
 
@@ -119,10 +121,10 @@ describe('GroupImpact component', () => {
     localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
       lastGroupImpactMetric
     )
-    const wrapper = shallow(<GroupImpact {...mockProps} />)
-    expect(wrapper.find(GroupImpactSidebar).first().prop('badgeText')).toEqual(
-      'COMPLETED'
-    )
+    const wrapper = mount(<GroupImpact {...mockProps} />)
+    expect(
+      wrapper.find(GroupImpactSidebar).first().prop('groupImpactSidebarState')
+    ).toEqual('COMPLETED')
     expect(
       wrapper.find(GroupImpactSidebar).first().prop('lastGroupImpactMetric')
     ).toEqual(lastGroupImpactMetric)
@@ -132,7 +134,7 @@ describe('GroupImpact component', () => {
     )
   })
 
-  it('renders switches to new mode for next view if has viewed enough times while completed', () => {
+  it('renders switches to new mode if has viewed enough times while completed', () => {
     const GroupImpact =
       require('src/components/groupImpactComponents/GroupImpact').default
     const mockProps = getMockProps()
@@ -150,10 +152,10 @@ describe('GroupImpact component', () => {
     localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
       lastGroupImpactMetric
     )
-    const wrapper = shallow(<GroupImpact {...mockProps} />)
-    expect(wrapper.find(GroupImpactSidebar).first().prop('badgeText')).toEqual(
-      'COMPLETED'
-    )
+    const wrapper = mount(<GroupImpact {...mockProps} />)
+    expect(
+      wrapper.find(GroupImpactSidebar).first().prop('groupImpactSidebarState')
+    ).toEqual('NEW')
     expect(
       wrapper.find(GroupImpactSidebar).first().prop('lastGroupImpactMetric')
     ).toEqual(lastGroupImpactMetric)
@@ -178,13 +180,13 @@ describe('GroupImpact component', () => {
     localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
       mockProps.groupImpactMetric
     )
-    const wrapper = shallow(<GroupImpact {...mockProps} />)
-    expect(wrapper.find(GroupImpactSidebar).first().prop('badgeText')).toEqual(
-      'NEW'
-    )
+    const wrapper = mount(<GroupImpact {...mockProps} />)
+    expect(
+      wrapper.find(GroupImpactSidebar).first().prop('groupImpactSidebarState')
+    ).toEqual(GROUP_IMPACT_SIDEBAR_STATE.NEW)
     expect(
       wrapper.find(GroupImpactSidebar).first().prop('lastGroupImpactMetric')
-    ).toEqual(false)
+    ).toEqual(mockProps.groupImpactMetric)
     expect(localstorageManager.setItem).toHaveBeenCalledWith(
       CURRENT_GROUP_IMPACT_VIEWS,
       1
@@ -199,13 +201,10 @@ describe('GroupImpact component', () => {
     localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
       mockProps.groupImpactMetric
     )
-    const wrapper = shallow(<GroupImpact {...mockProps} />)
-    expect(wrapper.find(GroupImpactSidebar).first().prop('badgeText')).toEqual(
-      ''
-    )
+    const wrapper = mount(<GroupImpact {...mockProps} />)
     expect(
-      wrapper.find(GroupImpactSidebar).first().prop('lastGroupImpactMetric')
-    ).toEqual(false)
+      wrapper.find(GroupImpactSidebar).first().prop('groupImpactSidebarState')
+    ).toEqual(GROUP_IMPACT_SIDEBAR_STATE.NORMAL)
     expect(localstorageManager.setItem).not.toHaveBeenCalled()
   })
 })
