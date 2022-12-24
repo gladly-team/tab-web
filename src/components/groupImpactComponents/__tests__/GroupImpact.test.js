@@ -8,7 +8,10 @@ import {
   CURRENT_GROUP_IMPACT_VIEWS,
   COMPLETED_GROUP_IMPACT_VIEWS,
 } from 'src/utils/constants'
+import Button from '@material-ui/core/Button'
+import Slide from '@material-ui/core/Slide'
 import GroupImpactSidebar from '../GroupImpactSidebar'
+import GroupGoalNotification from '../GroupGoalNotification'
 
 jest.mock('src/utils/localstorage-mgr')
 jest.mock('src/utils/localstorageGroupImpactManager')
@@ -40,7 +43,7 @@ describe('GroupImpact component', () => {
     }).not.toThrow()
   })
 
-  it('renders celebration if there is a different last group impact metric and viewed once', () => {
+  it('renders celebration if there is a different last group impact metric and first view', () => {
     const GroupImpact =
       require('src/components/groupImpactComponents/GroupImpact').default
     const mockProps = getMockProps()
@@ -158,7 +161,7 @@ describe('GroupImpact component', () => {
     ).toEqual('NEW')
     expect(
       wrapper.find(GroupImpactSidebar).first().prop('lastGroupImpactMetric')
-    ).toEqual(lastGroupImpactMetric)
+    ).toEqual(mockProps.groupImpactMetric)
     expect(localstorageManager.setItem).toHaveBeenCalledWith(
       COMPLETED_GROUP_IMPACT_VIEWS,
       0
@@ -206,5 +209,133 @@ describe('GroupImpact component', () => {
       wrapper.find(GroupImpactSidebar).first().prop('groupImpactSidebarState')
     ).toEqual(GROUP_IMPACT_SIDEBAR_STATE.NORMAL)
     expect(localstorageManager.setItem).not.toHaveBeenCalled()
+  })
+
+  it('displays group goal notification if new mode for component, with correct handler which toggles sidebar', () => {
+    const GroupImpact =
+      require('src/components/groupImpactComponents/GroupImpact').default
+    const mockProps = getMockProps()
+    localstorageManager.getNumericItem.mockReturnValue(0)
+    localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
+      mockProps.groupImpactMetric
+    )
+    const wrapper = mount(<GroupImpact {...mockProps} />)
+    expect(wrapper.find(GroupGoalNotification).first().prop('mode')).toEqual(
+      GROUP_IMPACT_SIDEBAR_STATE.NEW
+    )
+    expect(wrapper.find(GroupImpactSidebar).prop('open')).toEqual(false)
+    expect(wrapper.find(Slide).at(1).prop('in')).toEqual(true)
+
+    const detailsButton = wrapper
+      .find(GroupGoalNotification)
+      .find(Button)
+      .first()
+    detailsButton.simulate('click')
+
+    expect(wrapper.find(GroupImpactSidebar).prop('open')).toEqual(true)
+    expect(wrapper.find(Slide).at(1).prop('in')).toEqual(false)
+  })
+
+  it('displays group goal notification if completed mode for component, with correct handler which toggles sidebar', () => {
+    const GroupImpact =
+      require('src/components/groupImpactComponents/GroupImpact').default
+    const mockProps = getMockProps()
+    localstorageManager.getNumericItem.mockReturnValue(0)
+    const lastGroupImpactMetric = {
+      id: 'bcde',
+      dollarProgress: 28e5,
+      dollarGoal: 5e6,
+      impactMetric: {
+        impactTitle: 'Provide 1 home visit from a community health worker',
+        whyValuableDescription:
+          'Community health workers provide quality health care to those who might not otherwise have access.',
+      },
+    }
+    localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
+      lastGroupImpactMetric
+    )
+    const wrapper = mount(<GroupImpact {...mockProps} />)
+    expect(wrapper.find(GroupGoalNotification).first().prop('mode')).toEqual(
+      GROUP_IMPACT_SIDEBAR_STATE.COMPLETED
+    )
+
+    expect(wrapper.find(GroupImpactSidebar).prop('open')).toEqual(false)
+    expect(wrapper.find(Slide).at(1).prop('in')).toEqual(true)
+
+    const detailsButton = wrapper
+      .find(GroupGoalNotification)
+      .find(Button)
+      .first()
+    detailsButton.simulate('click')
+
+    expect(wrapper.find(GroupImpactSidebar).prop('open')).toEqual(true)
+    expect(wrapper.find(Slide).at(1).prop('in')).toEqual(false)
+  })
+
+  it('displays group goal notification if completed mode for component, with correct handler which completes new', () => {
+    const GroupImpact =
+      require('src/components/groupImpactComponents/GroupImpact').default
+    const mockProps = getMockProps()
+    localstorageManager.getNumericItem.mockReturnValue(0)
+    const lastGroupImpactMetric = {
+      id: 'bcde',
+      dollarProgress: 28e5,
+      dollarGoal: 5e6,
+      impactMetric: {
+        impactTitle: 'Provide 1 home visit from a community health worker',
+        whyValuableDescription:
+          'Community health workers provide quality health care to those who might not otherwise have access.',
+      },
+    }
+    localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
+      lastGroupImpactMetric
+    )
+
+    const wrapper = mount(<GroupImpact {...mockProps} />)
+    expect(wrapper.find(GroupGoalNotification).first().prop('mode')).toEqual(
+      GROUP_IMPACT_SIDEBAR_STATE.COMPLETED
+    )
+
+    expect(wrapper.find(GroupImpactSidebar).prop('open')).toEqual(false)
+    expect(wrapper.find(Slide).at(1).prop('in')).toEqual(true)
+
+    const detailsButton = wrapper.find(GroupGoalNotification).find(Button).at(1)
+    detailsButton.simulate('click')
+
+    expect(
+      wrapper.find(GroupImpactSidebar).first().prop('groupImpactSidebarState')
+    ).toEqual('NEW')
+    expect(
+      wrapper.find(GroupImpactSidebar).first().prop('lastGroupImpactMetric')
+    ).toEqual(mockProps.groupImpactMetric)
+    expect(localstorageManager.setItem).toHaveBeenCalledWith(
+      COMPLETED_GROUP_IMPACT_VIEWS,
+      0
+    )
+    expect(localstorageManager.setItem).toHaveBeenCalledWith(
+      CURRENT_GROUP_IMPACT_VIEWS,
+      0
+    )
+    expect(
+      localstorageGroupImpactManager.setLastSeenGroupImpactMetric
+    ).toHaveBeenCalledWith(mockProps.groupImpactMetric)
+
+    expect(wrapper.find(GroupImpactSidebar).prop('open')).toEqual(false)
+    expect(wrapper.find(Slide).at(1).prop('in')).toEqual(true)
+    expect(wrapper.find(GroupGoalNotification).first().prop('mode')).toEqual(
+      GROUP_IMPACT_SIDEBAR_STATE.NEW
+    )
+  })
+
+  it('does not display group goal notification if not normal mode for component, with correct handler which toggles sidebar', () => {
+    const GroupImpact =
+      require('src/components/groupImpactComponents/GroupImpact').default
+    const mockProps = getMockProps()
+    localstorageManager.getNumericItem.mockReturnValue(5)
+    localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
+      mockProps.groupImpactMetric
+    )
+    const wrapper = mount(<GroupImpact {...mockProps} />)
+    expect(wrapper.find(GroupGoalNotification).exists()).toEqual(false)
   })
 })

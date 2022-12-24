@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
 import confetti from 'canvas-confetti'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -11,7 +12,8 @@ const useStyles = makeStyles(() => ({
     pointerEvents: 'none',
   },
 }))
-const Celebration = () => {
+const Celebration = ({ fireOnce }) => {
+  const [fired, setFired] = useState(false)
   const confettiCanvasRef = useRef(null)
   const confettiFunc = () => {
     const myConfetti = confetti.create(confettiCanvasRef.current, {
@@ -55,8 +57,11 @@ const Celebration = () => {
   }
   const classes = useStyles()
   useEffect(() => {
-    confettiFunc()
-  })
+    if (!fireOnce || !fired) {
+      confettiFunc()
+      setFired(true)
+    }
+  }, [fireOnce, fired])
   return (
     <canvas
       id="confettiCanvas"
@@ -69,5 +74,10 @@ const Celebration = () => {
 }
 
 Celebration.displayName = 'Celebration'
-
+Celebration.propTypes = {
+  fireOnce: PropTypes.bool,
+}
+Celebration.defaultProps = {
+  fireOnce: false,
+}
 export default Celebration

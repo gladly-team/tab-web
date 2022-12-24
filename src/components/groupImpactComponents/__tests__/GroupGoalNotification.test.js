@@ -1,10 +1,11 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { Button, Typography } from '@material-ui/core'
+import { GROUP_IMPACT_SIDEBAR_STATE } from 'src/utils/constants'
 import Notification from '../../Notification'
 
 const getMockProps = () => ({
-  mode: 'completed',
+  mode: GROUP_IMPACT_SIDEBAR_STATE.COMPLETED,
   open: true,
   onDetails: jest.fn(),
   onNextGoal: jest.fn(),
@@ -45,7 +46,7 @@ describe('GroupGoalNotification component', () => {
       require('src/components/groupImpactComponents/GroupGoalNotification').default
     const mockProps = {
       ...getMockProps(),
-      mode: 'started',
+      mode: GROUP_IMPACT_SIDEBAR_STATE.NEW,
     }
     const wrapper = mount(<GroupGoalNotification {...mockProps} />)
     expect(wrapper.find(Typography).first().text()).toEqual(
@@ -76,7 +77,7 @@ describe('GroupGoalNotification component', () => {
       require('src/components/groupImpactComponents/GroupGoalNotification').default
     const mockProps = {
       ...getMockProps(),
-      mode: 'started',
+      mode: GROUP_IMPACT_SIDEBAR_STATE.NEW,
     }
     const wrapper = mount(<GroupGoalNotification {...mockProps} />)
     const expandButton = wrapper.find(Button).at(0)

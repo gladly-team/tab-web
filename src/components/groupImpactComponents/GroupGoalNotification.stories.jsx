@@ -1,4 +1,5 @@
 import React from 'react'
+import { GROUP_IMPACT_SIDEBAR_STATE } from 'src/utils/constants'
 
 import GroupGoalNotification from './GroupGoalNotification'
 
@@ -11,12 +12,12 @@ export default {
 const Template = (args) => <GroupGoalNotification {...args} />
 export const completed = Template.bind({})
 completed.args = {
-  mode: 'completed',
+  mode: GROUP_IMPACT_SIDEBAR_STATE.COMPLETED,
   impactTitle: 'Fund two visits from a community healthworker',
 }
 
 export const started = Template.bind({})
 started.args = {
-  mode: 'started',
+  mode: GROUP_IMPACT_SIDEBAR_STATE.NEW,
   impactTitle: 'Fund two visits from a community healthworker',
 }

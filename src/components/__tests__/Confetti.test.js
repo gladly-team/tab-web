@@ -27,6 +27,6 @@ describe('Confetti component', () => {
   it('launches confetti', async () => {
     const Confetti = require('src/components/Confetti').default
     mount(<Confetti />)
-    expect(confetti.create).toHaveBeenCalledTimes(1)
+    expect(confetti.create).toHaveBeenCalledTimes(2) // create is called twice on render
   })
 })
