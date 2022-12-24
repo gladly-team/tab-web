@@ -7,7 +7,7 @@ import Slide from '@material-ui/core/Slide'
 import Fade from '@material-ui/core/Fade'
 
 const getMockProps = () => ({
-  badgeText: 'badge-text',
+  groupImpactSidebarState: 'badge-text',
   groupImpactMetric: {
     dollarProgress: 250,
     dollarGoal: 600,
@@ -17,6 +17,10 @@ const getMockProps = () => ({
     },
   },
   open: true,
+})
+
+beforeEach(() => {
+  jest.useFakeTimers()
 })
 
 describe('GroupImpactSidebar component', () => {
@@ -34,14 +38,16 @@ describe('GroupImpactSidebar component', () => {
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
     const mockProps = getMockProps()
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
-    expect(wrapper.find('span').first().text()).toEqual(mockProps.badgeText)
+    expect(wrapper.find('span').first().text()).toEqual(
+      mockProps.groupImpactSidebarState
+    )
   })
 
   it('does not display badge text if not', () => {
     const GroupImpactSidebar =
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
     const mockProps = getMockProps()
-    delete mockProps.badgeText
+    delete mockProps.groupImpactSidebarState
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
     expect(wrapper.find('span').exists()).toBe(false)
   })
@@ -123,32 +129,94 @@ describe('GroupImpactSidebar component', () => {
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
 
     expect(wrapper.find(VerticalLinearProgress).at(1).prop('width')).toEqual(8)
-    expect(wrapper.find(Fade).prop('in')).toEqual(false)
+    expect(wrapper.find(Fade).last().prop('in')).toEqual(false)
 
     wrapper.find(Box).at(1).simulate('mouseover')
     wrapper.update()
 
-    expect(wrapper.find(Fade).prop('in')).toEqual(true)
+    expect(wrapper.find(Fade).last().prop('in')).toEqual(true)
 
     expect(wrapper.find(VerticalLinearProgress).at(1).prop('width')).toEqual(24)
   })
 
-  it('shows start next goal button if handler defined and runs handler', () => {
+  it('shows start next goal button if last groupImpactMetric defined with correct content, runs handler and switches content', () => {
     const GroupImpactSidebar =
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
     const mockProps = {
       ...getMockProps(),
       nextGoalButtonClickHandler: jest.fn(),
+      lastGroupImpactMetric: {
+        dollarProgress: 5e6,
+        dollarGoal: 5e6,
+        impactMetric: {
+          impactTitle: 'Provide 1 home visit from a community health worker',
+          whyValuableDescription:
+            'Community health workers provide quality health care to those who might not otherwise have access.',
+        },
+      },
     }
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
 
+    expect(wrapper.find(Typography).at(1).text()).toEqual(
+      mockProps.lastGroupImpactMetric.impactMetric.impactTitle
+    )
+
+    expect(wrapper.find(Typography).at(5).text()).toEqual(
+      mockProps.lastGroupImpactMetric.impactMetric.whyValuableDescription
+    )
+
+    expect(wrapper.find(Typography).at(2).text()).toEqual(
+      `${Math.round(
+        100 *
+          (mockProps.lastGroupImpactMetric.dollarProgress /
+            mockProps.lastGroupImpactMetric.dollarGoal)
+      )}%`
+    )
+    expect(
+      wrapper.find(VerticalLinearProgress).first().prop('progress')
+    ).toEqual(
+      Math.round(
+        100 *
+          (mockProps.lastGroupImpactMetric.dollarProgress /
+            mockProps.lastGroupImpactMetric.dollarGoal)
+      )
+    )
+
     const button = wrapper.find(Button).at(2)
-    button.simulate('click')
+    button.first().simulate('click', {
+      stopPropagation: () => {},
+    })
+    jest.runAllTimers()
+
+    expect(wrapper.find(Typography).at(1).text()).toEqual(
+      mockProps.groupImpactMetric.impactMetric.impactTitle
+    )
+
+    expect(wrapper.find(Typography).at(5).text()).toEqual(
+      mockProps.groupImpactMetric.impactMetric.whyValuableDescription
+    )
+
+    expect(wrapper.find(Typography).at(2).text()).toEqual(
+      `${Math.round(
+        100 *
+          (mockProps.groupImpactMetric.dollarProgress /
+            mockProps.groupImpactMetric.dollarGoal)
+      )}%`
+    )
+    expect(
+      wrapper.find(VerticalLinearProgress).first().prop('progress')
+    ).toEqual(
+      Math.round(
+        100 *
+          (mockProps.groupImpactMetric.dollarProgress /
+            mockProps.groupImpactMetric.dollarGoal)
+      )
+    )
 
     expect(mockProps.nextGoalButtonClickHandler).toHaveBeenCalled()
   })
 
-  it('does not show start next goal button if handler is not defined', () => {
+  it('does not show start next goal button if lastGroupImpactMetric is not defined', () => {
     const GroupImpactSidebar =
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
     const mockProps = getMockProps()

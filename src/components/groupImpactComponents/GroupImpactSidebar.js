@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -17,6 +17,7 @@ import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import Link from 'src/components/Link'
 import { aboutURL } from 'src/utils/urls'
 import clsx from 'clsx'
+import { GROUP_IMPACT_SIDEBAR_STATE } from 'src/utils/constants'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 
 const useStyles = makeStyles(() => ({
@@ -141,20 +142,44 @@ const useStyles = makeStyles(() => ({
 }))
 
 const GroupImpactSidebar = ({
-  badgeText,
+  groupImpactSidebarState,
   groupImpactMetric,
   open,
   nextGoalButtonClickHandler,
+  lastGroupImpactMetric,
 }) => {
   const [isOpen, setIsOpen] = useState(open)
+  const [displaySidebarText, setDisplaySidebarText] = useState(true)
+  const [displayingOldGoal, setDisplayingOldGoal] = useState(
+    !!lastGroupImpactMetric
+  )
   const [isClosedHover, setIsClosedHover] = useState(false)
-  const { dollarProgress, dollarGoal, impactMetric } = groupImpactMetric
+  const { dollarProgress, dollarGoal, impactMetric } = displayingOldGoal
+    ? lastGroupImpactMetric
+    : groupImpactMetric
   const { impactTitle, whyValuableDescription } = impactMetric
   const classes = useStyles()
   const progress = Math.round(100 * (dollarProgress / dollarGoal))
 
+  useEffect(() => {
+    setDisplayingOldGoal(
+      groupImpactSidebarState === GROUP_IMPACT_SIDEBAR_STATE.COMPLETED &&
+        lastGroupImpactMetric
+    )
+  }, [groupImpactSidebarState, lastGroupImpactMetric])
+
   const toggleOpen = (e) => {
     setIsOpen((prev) => !prev)
+    e.stopPropagation()
+  }
+
+  const onClickNextGoalButton = (e) => {
+    setDisplaySidebarText(false)
+    setTimeout(() => {
+      setDisplayingOldGoal(false)
+      setDisplaySidebarText(true)
+      nextGoalButtonClickHandler()
+    }, 600)
     e.stopPropagation()
   }
 
@@ -168,41 +193,44 @@ const GroupImpactSidebar = ({
             borderRadius={32}
             showMarkers
           />
-          <div className={classes.sidebarText}>
-            <div className={classes.goalText}>
-              <Typography className={classes.robotoBold} variant="h5">
-                GOAL
-              </Typography>
-              {badgeText ? (
-                <span className={classes.badge}>{badgeText}</span>
-              ) : null}
-              <Button onClick={toggleOpen} className={classes.closeButton}>
-                <ArrowBackIos className={classes.closeButtonIcon} />
-              </Button>
-            </div>
-            <Typography variant="body2">{impactTitle}</Typography>
-            <Typography className={classes.robotoBold} variant="h3">
-              {progress}%
-            </Typography>
-            <Typography variant="body2">completed</Typography>
-            <Divider className={classes.divider} />
-            <Typography className={classes.robotoBold} variant="h6">
-              Why it Matters
-            </Typography>
-            <Typography>{whyValuableDescription}</Typography>
-            <Divider className={classes.divider} />
-            <div className={classes.sidebarButtons}>
-              <Link to={aboutURL}>
-                <Button className={classes.sidebarButton}>
-                  <div className={classes.buttonContent}>
-                    <InfoIcon />
-                    <Typography className={classes.sidebarButtonText}>
-                      About the Cause
-                    </Typography>
-                  </div>
+          <Fade in={displaySidebarText} timeout={500}>
+            <div className={classes.sidebarText}>
+              <div className={classes.goalText}>
+                <Typography className={classes.robotoBold} variant="h5">
+                  GOAL
+                </Typography>
+                {groupImpactSidebarState ? (
+                  <span className={classes.badge}>
+                    {groupImpactSidebarState}
+                  </span>
+                ) : null}
+                <Button onClick={toggleOpen} className={classes.closeButton}>
+                  <ArrowBackIos className={classes.closeButtonIcon} />
                 </Button>
-              </Link>
-              {/* <Button className={classes.sidebarButton}>
+              </div>
+              <Typography variant="body2">{impactTitle}</Typography>
+              <Typography className={classes.robotoBold} variant="h3">
+                {progress}%
+              </Typography>
+              <Typography variant="body2">completed</Typography>
+              <Divider className={classes.divider} />
+              <Typography className={classes.robotoBold} variant="h6">
+                Why it Matters
+              </Typography>
+              <Typography>{whyValuableDescription}</Typography>
+              <Divider className={classes.divider} />
+              <div className={classes.sidebarButtons}>
+                <Link to={aboutURL}>
+                  <Button className={classes.sidebarButton}>
+                    <div className={classes.buttonContent}>
+                      <InfoIcon />
+                      <Typography className={classes.sidebarButtonText}>
+                        About the Cause
+                      </Typography>
+                    </div>
+                  </Button>
+                </Link>
+                {/* <Button className={classes.sidebarButton}>
             <div className={classes.buttonContent}>
               <StarsOutlined />
               <Typography className={classes.sidebarButtonText}>Impact</Typography>
@@ -214,18 +242,19 @@ const GroupImpactSidebar = ({
               <Typography className={classes.sidebarButtonText}>Nonprofits</Typography>
             </div>
             </Button> */}
+              </div>
+              <Divider className={classes.divider} />
+              {displayingOldGoal && (
+                <Button
+                  className={classes.nextGoalButton}
+                  variant="contained"
+                  onClick={onClickNextGoalButton}
+                >
+                  Start Next Goal
+                </Button>
+              )}
             </div>
-            <Divider className={classes.divider} />
-            {nextGoalButtonClickHandler && (
-              <Button
-                className={classes.nextGoalButton}
-                variant="contained"
-                onClick={nextGoalButtonClickHandler}
-              >
-                Start Next Goal
-              </Button>
-            )}
-          </div>{' '}
+          </Fade>
         </Box>
       </Slide>
       <Box
@@ -262,7 +291,7 @@ const GroupImpactSidebar = ({
 GroupImpactSidebar.displayName = 'GroupImpactSidebar'
 GroupImpactSidebar.propTypes = {
   open: PropTypes.bool.isRequired,
-  badgeText: PropTypes.string,
+  groupImpactSidebarState: PropTypes.string,
   groupImpactMetric: PropTypes.shape({
     dollarProgress: PropTypes.number.isRequired,
     dollarGoal: PropTypes.number.isRequired,
@@ -271,12 +300,21 @@ GroupImpactSidebar.propTypes = {
       whyValuableDescription: PropTypes.string.isRequired,
     }),
   }).isRequired,
+  lastGroupImpactMetric: PropTypes.shape({
+    dollarProgress: PropTypes.number.isRequired,
+    dollarGoal: PropTypes.number.isRequired,
+    impactMetric: PropTypes.shape({
+      impactTitle: PropTypes.string.isRequired,
+      whyValuableDescription: PropTypes.string.isRequired,
+    }),
+  }),
   nextGoalButtonClickHandler: PropTypes.func,
 }
 
 GroupImpactSidebar.defaultProps = {
-  badgeText: null,
-  nextGoalButtonClickHandler: null,
+  groupImpactSidebarState: null,
+  nextGoalButtonClickHandler: () => {},
+  lastGroupImpactMetric: null,
 }
 
 export default GroupImpactSidebar
