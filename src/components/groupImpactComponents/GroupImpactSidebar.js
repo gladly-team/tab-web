@@ -23,9 +23,15 @@ import VerticalLinearProgress from '../VerticalLinearProgress'
 const useStyles = makeStyles(() => ({
   wrapper: {
     height: '100%',
-    width: 400,
     display: 'grid',
     gridTemplateColumns: '1fr',
+    transition: 'width .3s',
+  },
+  expanded: {
+    width: 400,
+  },
+  closed: {
+    width: 0,
   },
   expandedWrapper: {
     zIndex: 21,
@@ -46,7 +52,6 @@ const useStyles = makeStyles(() => ({
     gridColumnStart: 1,
     top: 0,
     height: '100%',
-    width: 100,
     paddingTop: theme.spacing(2),
     cursor: 'pointer',
     display: 'flex',
@@ -114,13 +119,14 @@ const useStyles = makeStyles(() => ({
   },
   pullTab: {
     height: 40,
+    minHeight: 40,
     transition: 'width .3s',
     backgroundColor: 'white',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    borderTopRightRadius: '12px',
-    borderBottomRightRadius: '12px',
+    borderTopRightRadius: '8px',
+    borderBottomRightRadius: '8px',
   },
   pullTabStar: {
     color: '#FF6A08',
@@ -147,6 +153,7 @@ const GroupImpactSidebar = ({
   open,
   nextGoalButtonClickHandler,
   lastGroupImpactMetric,
+  openHandler,
 }) => {
   const [isOpen, setIsOpen] = useState(open)
   const [displaySidebarText, setDisplaySidebarText] = useState(true)
@@ -162,6 +169,10 @@ const GroupImpactSidebar = ({
   const progress = Math.round(100 * (dollarProgress / dollarGoal))
 
   useEffect(() => {
+    setIsOpen(open)
+  }, [open])
+
+  useEffect(() => {
     setDisplayingOldGoal(
       groupImpactSidebarState === GROUP_IMPACT_SIDEBAR_STATE.COMPLETED &&
         lastGroupImpactMetric
@@ -170,6 +181,7 @@ const GroupImpactSidebar = ({
 
   const toggleOpen = (e) => {
     setIsOpen((prev) => !prev)
+    openHandler()
     e.stopPropagation()
   }
 
@@ -183,8 +195,15 @@ const GroupImpactSidebar = ({
     e.stopPropagation()
   }
 
+  let wrapperWidthClass = classes.expanded
+  if (!isOpen && isClosedHover) {
+    wrapperWidthClass = classes.pullTabExpanded
+  } else {
+    wrapperWidthClass = classes.pullTabCollapsed
+  }
+
   return (
-    <div className={classes.wrapper}>
+    <div className={clsx(wrapperWidthClass, classes.wrapper)}>
       <Slide direction="right" in={isOpen}>
         <Box onClick={toggleOpen} className={classes.expandedWrapper}>
           <VerticalLinearProgress
@@ -309,11 +328,13 @@ GroupImpactSidebar.propTypes = {
     }),
   }),
   nextGoalButtonClickHandler: PropTypes.func,
+  openHandler: PropTypes.func,
 }
 
 GroupImpactSidebar.defaultProps = {
   groupImpactSidebarState: null,
   nextGoalButtonClickHandler: () => {},
+  openHandler: () => {},
   lastGroupImpactMetric: null,
 }
 

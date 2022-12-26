@@ -17,6 +17,7 @@ const getMockProps = () => ({
     },
   },
   open: true,
+  openHandler: jest.fn(),
 })
 
 beforeEach(() => {
@@ -117,6 +118,7 @@ describe('GroupImpactSidebar component', () => {
     })
 
     expect(wrapper.find(Slide).prop('in')).toEqual(true)
+    expect(mockProps.openHandler).toHaveBeenCalledTimes(2)
   })
 
   it('expands closed sidebar on hover', () => {

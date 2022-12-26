@@ -4,19 +4,23 @@ import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
 import { Typography } from '@material-ui/core'
 import { ArrowForwardIos } from '@material-ui/icons'
+import { GROUP_IMPACT_SIDEBAR_STATE } from 'src/utils/constants'
 import Notification from '../Notification'
 
 const useStyles = makeStyles((theme) => ({
   learnButton: {
     fontWeight: '500',
+    height: 24,
   },
   noThanksButton: {
     marginLeft: 'auto',
     fontWeight: '500',
+    height: 24,
   },
   nextGoalButton: {
     fontWeight: '900',
     marginLeft: theme.spacing(1),
+    height: 24,
   },
   buttonsWrapper: {
     display: 'flex',
@@ -35,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(0),
     paddingTop: theme.spacing(0),
     paddingBottom: theme.spacing(0),
-    height: theme.spacing(6),
+    height: 40,
   },
   notificationButtons: {
     width: 'auto',
@@ -74,11 +78,14 @@ const GroupGoalNotification = ({
         open={open}
         text={
           <Typography className={classes.notificationText} variant="body2">
-            {mode === 'completed' ? 'COMPLETED' : 'GOAL STARTED'}: {impactTitle}
+            {mode === GROUP_IMPACT_SIDEBAR_STATE.COMPLETED
+              ? 'COMPLETED'
+              : 'GOAL STARTED'}
+            : {impactTitle}
           </Typography>
         }
         buttons={
-          mode === 'completed' ? (
+          mode === GROUP_IMPACT_SIDEBAR_STATE.COMPLETED ? (
             <div className={classes.buttonsWrapper}>
               <Button
                 onClick={onDetailsHandler}
@@ -108,7 +115,10 @@ const GroupGoalNotification = ({
 }
 
 GroupGoalNotification.propTypes = {
-  mode: PropTypes.oneOf(['completed', 'started']).isRequired,
+  mode: PropTypes.oneOf([
+    GROUP_IMPACT_SIDEBAR_STATE.COMPLETED,
+    GROUP_IMPACT_SIDEBAR_STATE.NEW,
+  ]).isRequired,
   open: PropTypes.bool.isRequired,
   onDetails: PropTypes.func.isRequired,
   onNextGoal: PropTypes.func.isRequired,
