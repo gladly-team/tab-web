@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import GroupImpactSidebar from 'src/components/groupImpactComponents/GroupImpactSidebar'
 import GroupGoalNotification from 'src/components/groupImpactComponents/GroupGoalNotification'
@@ -12,6 +12,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles'
 import Slide from '@material-ui/core/Slide'
 import Fade from '@material-ui/core/Fade'
+import useOnClickOutside from 'src/utils/hooks/useOnClickOutside'
 import Celebration from '../Confetti'
 
 const COMPLETED_VIEWS_BEFORE_NEW = 3
@@ -29,18 +30,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const GroupImpact = ({ groupImpactMetric }) => {
+const GroupImpact = ({ user }) => {
+  const { cause } = user
+  const { groupImpactMetric } = cause
   const classes = useStyles()
+
+  // Locking groupImpactMetric so it does not change on other action on the page.
   const [lastGroupImpactMetric, setLastSeenGroupImpactMetric] = useState(
-    localstorageGroupImpactManager.getLastSeenGroupImpactMetric()
+    localstorageGroupImpactManager.getLastSeenGroupImpactMetric() || {
+      id: null,
+    }
   )
   const [displayCelebration, setDisplayCelebration] = useState(false)
   const [sidebarMode, setSidebarMode] = useState(
     GROUP_IMPACT_SIDEBAR_STATE.NORMAL
   )
-  const { impactMetric } = groupImpactMetric
-  const { impactTitle } = impactMetric
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const { id, dollarGoal, impactMetric } = groupImpactMetric
+  const { impactTitle, whyValuableDescription } = impactMetric
 
   const toggleSidebar = () => {
     setSidebarOpen((prev) => !prev)
@@ -50,20 +57,48 @@ const GroupImpact = ({ groupImpactMetric }) => {
     setSidebarOpen(true)
   }
 
-  const beginNewGoal = useCallback(() => {
-    localstorageGroupImpactManager.setLastSeenGroupImpactMetric(
-      groupImpactMetric
+  const onGoalStarted = () => {
+    setSidebarOpen(true)
+    setSidebarMode(GROUP_IMPACT_SIDEBAR_STATE.NORMAL)
+
+    // Advance views to put sidebar in future to normal mode.
+    localStorageManager.setItem(
+      CURRENT_GROUP_IMPACT_VIEWS,
+      NEW_VIEWS_BEFORE_NORMAL + 1
     )
-    setLastSeenGroupImpactMetric(groupImpactMetric)
+  }
+
+  const beginNewGoal = useCallback(() => {
+    const newGroupImpactMetric = {
+      id,
+      dollarProgress: dollarGoal,
+      dollarGoal,
+      impactMetric: {
+        impactTitle,
+        whyValuableDescription,
+      },
+    }
+    localstorageGroupImpactManager.setLastSeenGroupImpactMetric(
+      newGroupImpactMetric
+    )
+    setLastSeenGroupImpactMetric(newGroupImpactMetric)
     localStorageManager.setItem(COMPLETED_GROUP_IMPACT_VIEWS, 0)
     localStorageManager.setItem(CURRENT_GROUP_IMPACT_VIEWS, 0)
     setSidebarMode(GROUP_IMPACT_SIDEBAR_STATE.NEW)
-  }, [groupImpactMetric])
+  }, [id, dollarGoal, impactTitle, whyValuableDescription])
 
   useEffect(() => {
-    const differentGoal =
-      lastGroupImpactMetric && lastGroupImpactMetric.id !== groupImpactMetric.id
-    if (differentGoal) {
+    if (lastGroupImpactMetric.id === null) {
+      localstorageGroupImpactManager.setLastSeenGroupImpactMetric(
+        groupImpactMetric
+      )
+      setLastSeenGroupImpactMetric(groupImpactMetric)
+    }
+  }, [groupImpactMetric, lastGroupImpactMetric.id])
+
+  useEffect(() => {
+    const differentGoal = lastGroupImpactMetric.id !== id
+    if (differentGoal && lastGroupImpactMetric.id) {
       setSidebarMode(GROUP_IMPACT_SIDEBAR_STATE.COMPLETED)
       const completedViews = localStorageManager.getNumericItem(
         COMPLETED_GROUP_IMPACT_VIEWS,
@@ -94,15 +129,24 @@ const GroupImpact = ({ groupImpactMetric }) => {
         )
       }
     }
-  }, [beginNewGoal, groupImpactMetric, lastGroupImpactMetric])
+  }, [beginNewGoal, id, lastGroupImpactMetric.id])
+
+  const ref = useRef()
+  useOnClickOutside(ref, () => {
+    if (sidebarOpen) {
+      setSidebarOpen(false)
+    }
+  })
 
   return (
-    <div className={classes.wrapper}>
+    <div className={classes.wrapper} ref={ref}>
       {displayCelebration && <Celebration fireOnce />}
       <GroupImpactSidebar
         groupImpactSidebarState={sidebarMode}
         groupImpactMetric={groupImpactMetric}
-        lastGroupImpactMetric={lastGroupImpactMetric}
+        lastGroupImpactMetric={
+          lastGroupImpactMetric.id && lastGroupImpactMetric
+        }
         open={sidebarOpen}
         nextGoalButtonClickHandler={
           sidebarMode === GROUP_IMPACT_SIDEBAR_STATE.COMPLETED
@@ -121,7 +165,7 @@ const GroupImpact = ({ groupImpactMetric }) => {
                 impactTitle={impactTitle}
                 onDetails={openSidebar}
                 onNextGoal={beginNewGoal}
-                onGoalStarted={openSidebar}
+                onGoalStarted={onGoalStarted}
               />
             </div>
           </Fade>
@@ -132,14 +176,18 @@ const GroupImpact = ({ groupImpactMetric }) => {
 }
 
 GroupImpact.propTypes = {
-  groupImpactMetric: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    dollarProgress: PropTypes.number.isRequired,
-    dollarGoal: PropTypes.number.isRequired,
-    impactMetric: PropTypes.shape({
-      impactTitle: PropTypes.string.isRequired,
-      whyValuableDescription: PropTypes.string.isRequired,
-    }),
+  user: PropTypes.shape({
+    cause: PropTypes.shape({
+      groupImpactMetric: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        dollarProgress: PropTypes.number.isRequired,
+        dollarGoal: PropTypes.number.isRequired,
+        impactMetric: PropTypes.shape({
+          impactTitle: PropTypes.string.isRequired,
+          whyValuableDescription: PropTypes.string.isRequired,
+        }),
+      }).isRequired,
+    }).isRequired,
   }).isRequired,
 }
 

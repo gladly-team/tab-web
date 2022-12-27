@@ -18,13 +18,17 @@ jest.mock('src/utils/localstorageGroupImpactManager')
 jest.mock('src/components/Confetti', () => () => <div />)
 
 const getMockProps = () => ({
-  groupImpactMetric: {
-    id: 'abcd',
-    dollarProgress: 250,
-    dollarGoal: 600,
-    impactMetric: {
-      impactTitle: 'impact-title',
-      whyValuableDescription: 'why-valuable-description',
+  user: {
+    cause: {
+      groupImpactMetric: {
+        id: 'abcd',
+        dollarProgress: 250,
+        dollarGoal: 600,
+        impactMetric: {
+          impactTitle: 'impact-title',
+          whyValuableDescription: 'why-valuable-description',
+        },
+      },
     },
   },
 })
@@ -163,7 +167,7 @@ describe.skip('GroupImpact component', () => {
     ).toEqual('NEW')
     expect(
       wrapper.find(GroupImpactSidebar).first().prop('lastGroupImpactMetric')
-    ).toEqual(mockProps.groupImpactMetric)
+    ).toEqual(mockProps.user.cause.groupImpactMetric)
     expect(localstorageManager.setItem).toHaveBeenCalledWith(
       COMPLETED_GROUP_IMPACT_VIEWS,
       0
@@ -174,7 +178,7 @@ describe.skip('GroupImpact component', () => {
     )
     expect(
       localstorageGroupImpactManager.setLastSeenGroupImpactMetric
-    ).toHaveBeenCalledWith(mockProps.groupImpactMetric)
+    ).toHaveBeenCalledWith(mockProps.user.cause.groupImpactMetric)
   })
 
   it('is in new mode if has not viewed enough times while new', () => {
@@ -183,7 +187,7 @@ describe.skip('GroupImpact component', () => {
     const mockProps = getMockProps()
     localstorageManager.getNumericItem.mockReturnValue(0)
     localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
-      mockProps.groupImpactMetric
+      mockProps.user.cause.groupImpactMetric
     )
     const wrapper = mount(<GroupImpact {...mockProps} />)
     expect(
@@ -191,7 +195,7 @@ describe.skip('GroupImpact component', () => {
     ).toEqual(GROUP_IMPACT_SIDEBAR_STATE.NEW)
     expect(
       wrapper.find(GroupImpactSidebar).first().prop('lastGroupImpactMetric')
-    ).toEqual(mockProps.groupImpactMetric)
+    ).toEqual(mockProps.user.cause.groupImpactMetric)
     expect(localstorageManager.setItem).toHaveBeenCalledWith(
       CURRENT_GROUP_IMPACT_VIEWS,
       1
@@ -204,7 +208,7 @@ describe.skip('GroupImpact component', () => {
     const mockProps = getMockProps()
     localstorageManager.getNumericItem.mockReturnValue(4)
     localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
-      mockProps.groupImpactMetric
+      mockProps.user.cause.groupImpactMetric
     )
     const wrapper = mount(<GroupImpact {...mockProps} />)
     expect(
@@ -219,7 +223,7 @@ describe.skip('GroupImpact component', () => {
     const mockProps = getMockProps()
     localstorageManager.getNumericItem.mockReturnValue(0)
     localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
-      mockProps.groupImpactMetric
+      mockProps.user.cause.groupImpactMetric
     )
     const wrapper = mount(<GroupImpact {...mockProps} />)
     expect(wrapper.find(GroupGoalNotification).first().prop('mode')).toEqual(
@@ -235,7 +239,12 @@ describe.skip('GroupImpact component', () => {
     detailsButton.simulate('click')
 
     expect(wrapper.find(GroupImpactSidebar).prop('open')).toEqual(true)
-    expect(wrapper.find(Slide).at(1).prop('in')).toEqual(false)
+    expect(wrapper.find(GroupGoalNotification).exists()).toEqual(false)
+
+    expect(localstorageManager.setItem).toHaveBeenCalledWith(
+      CURRENT_GROUP_IMPACT_VIEWS,
+      4
+    )
   })
 
   it('displays group goal notification if completed mode for component, with correct handler which toggles sidebar', () => {
@@ -309,7 +318,7 @@ describe.skip('GroupImpact component', () => {
     ).toEqual('NEW')
     expect(
       wrapper.find(GroupImpactSidebar).first().prop('lastGroupImpactMetric')
-    ).toEqual(mockProps.groupImpactMetric)
+    ).toEqual(mockProps.user.cause.groupImpactMetric)
     expect(localstorageManager.setItem).toHaveBeenCalledWith(
       COMPLETED_GROUP_IMPACT_VIEWS,
       0
@@ -320,7 +329,7 @@ describe.skip('GroupImpact component', () => {
     )
     expect(
       localstorageGroupImpactManager.setLastSeenGroupImpactMetric
-    ).toHaveBeenCalledWith(mockProps.groupImpactMetric)
+    ).toHaveBeenCalledWith(mockProps.user.cause.groupImpactMetric)
 
     expect(wrapper.find(GroupImpactSidebar).prop('open')).toEqual(false)
     expect(wrapper.find(Slide).at(1).prop('in')).toEqual(true)
@@ -335,7 +344,7 @@ describe.skip('GroupImpact component', () => {
     const mockProps = getMockProps()
     localstorageManager.getNumericItem.mockReturnValue(5)
     localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
-      mockProps.groupImpactMetric
+      mockProps.user.cause.groupImpactMetric
     )
     const wrapper = mount(<GroupImpact {...mockProps} />)
     expect(wrapper.find(GroupGoalNotification).exists()).toEqual(false)

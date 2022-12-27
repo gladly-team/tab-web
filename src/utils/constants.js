@@ -33,11 +33,11 @@ export const STORAGE_FEATURES = 'tab.user.features'
 export const MAX_TABS_WITH_ADS = 150
 export const HAS_SEEN_SEARCH_V2_TOOLTIP = 'has_seen_search_v2_tooltip'
 export const LAST_SEEN_GROUP_IMPACT_METRIC =
-  'tab.use.groupImpactMetric.lastSeenGroupImpactMetric'
+  'tab.user.groupImpactMetric.lastSeenGroupImpactMetric'
 export const COMPLETED_GROUP_IMPACT_VIEWS =
-  'tab.use.groupImpactMetric.completedGroupImpactViews'
+  'tab.user.groupImpactMetric.completedGroupImpactViews'
 export const CURRENT_GROUP_IMPACT_VIEWS =
-  'tab.use.groupImpactMetric.currentGroupImpactViews'
+  'tab.user.groupImpactMetric.currentGroupImpactViews'
 
 export const CHROME_BROWSER = 'chrome'
 export const FIREFOX_BROWSER = 'firefox'

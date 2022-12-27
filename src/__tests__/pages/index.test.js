@@ -58,6 +58,7 @@ import SfacActivityContainer from 'src/components/SfacActivityContainer'
 import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import moment from 'moment'
+import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -473,7 +474,7 @@ describe('index.js', () => {
             causeId: 'testSetMe',
             impactVisits: 12,
             landingPagePath: '/foo/',
-            impactType: CAUSE_IMPACT_TYPES.group,
+            impactType: CAUSE_IMPACT_TYPES.none,
             onboarding: {
               steps: [],
             },
@@ -1585,6 +1586,53 @@ describe('index.js: hardcoded notifications', () => {
     expect(localStorageFeaturesManager.setFeatures).toHaveBeenCalledWith(
       sampleFeatures
     )
+  })
+
+  it('displays GroupImpactContainer if group impact is enabled', async () => {
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          cause: {
+            ...defaultMockProps.data.user.cause,
+            impactType: CAUSE_IMPACT_TYPES.group,
+            groupImpactMetric: {
+              id: 'abcd',
+              dollarProgress: 28e5,
+              dollarGoal: 5e6,
+              impactMetric: {
+                impactTitle:
+                  'Provide 1 home visit from a community health worker',
+                whyValuableDescription:
+                  'Community health workers provide quality health care to those who might not otherwise have access.',
+              },
+            },
+          },
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+
+    expect(wrapper.find(GroupImpactContainer).exists()).toBe(true)
+    expect(wrapper.find(GroupImpactContainer).prop('user')).toEqual(
+      mockProps.data.user
+    )
+  })
+
+  it('does not display GroupImpactContainer if group impact is enabled', async () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    useData.mockReturnValue({ data: defaultMockProps.data })
+    const wrapper = shallow(<IndexPage {...defaultMockProps} />)
+
+    expect(wrapper.find(GroupImpactContainer).exists()).toBe(false)
   })
 })
 

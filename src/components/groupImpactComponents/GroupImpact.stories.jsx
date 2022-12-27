@@ -33,14 +33,18 @@ const Template = (args) => {
 
 export const celebration = Template.bind({})
 celebration.args = {
-  groupImpactMetric: {
-    id: 'abcd',
-    dollarProgress: 28e5,
-    dollarGoal: 5e6,
-    impactMetric: {
-      impactTitle: 'Provide 1 home visit from a community health worker',
-      whyValuableDescription:
-        'Community health workers provide quality health care to those who might not otherwise have access.',
+  user: {
+    cause: {
+      groupImpactMetric: {
+        id: 'abcd',
+        dollarProgress: 28e5,
+        dollarGoal: 5e6,
+        impactMetric: {
+          impactTitle: 'Provide 1 home visit from a community health worker',
+          whyValuableDescription:
+            'Community health workers provide quality health care to those who might not otherwise have access.',
+        },
+      },
     },
   },
 }
@@ -68,14 +72,18 @@ celebration.decorators = [
 
 export const completedToNew = Template.bind({})
 completedToNew.args = {
-  groupImpactMetric: {
-    id: 'abcd',
-    dollarProgress: 28e5,
-    dollarGoal: 5e6,
-    impactMetric: {
-      impactTitle: 'Provide 1 home visit from a community health worker',
-      whyValuableDescription:
-        'Community health workers provide quality health care to those who might not otherwise have access.',
+  user: {
+    cause: {
+      groupImpactMetric: {
+        id: 'abcd',
+        dollarProgress: 28e5,
+        dollarGoal: 5e6,
+        impactMetric: {
+          impactTitle: 'Provide 1 home visit from a community health worker',
+          whyValuableDescription:
+            'Community health workers provide quality health care to those who might not otherwise have access.',
+        },
+      },
     },
   },
 }
@@ -98,14 +106,18 @@ completedToNew.decorators = [
 
 export const newGoal = Template.bind({})
 newGoal.args = {
-  groupImpactMetric: {
-    id: 'abcd',
-    dollarProgress: 28e5,
-    dollarGoal: 5e6,
-    impactMetric: {
-      impactTitle: 'Provide 1 home visit from a community health worker',
-      whyValuableDescription:
-        'Community health workers provide quality health care to those who might not otherwise have access.',
+  user: {
+    cause: {
+      groupImpactMetric: {
+        id: 'abcd',
+        dollarProgress: 28e5,
+        dollarGoal: 5e6,
+        impactMetric: {
+          impactTitle: 'Provide 1 home visit from a community health worker',
+          whyValuableDescription:
+            'Community health workers provide quality health care to those who might not otherwise have access.',
+        },
+      },
     },
   },
 }
@@ -113,7 +125,7 @@ newGoal.decorators = [
   (Story) => {
     localstorageManager.setItem(CURRENT_GROUP_IMPACT_VIEWS, 0)
     localstorageGroupImpactManager.setLastSeenGroupImpactMetric(
-      newGoal.args.groupImpactMetric
+      newGoal.args.user.cause.groupImpactMetric
     )
     return <Story />
   },
@@ -121,14 +133,18 @@ newGoal.decorators = [
 
 export const standardView = Template.bind({})
 standardView.args = {
-  groupImpactMetric: {
-    id: 'abcd',
-    dollarProgress: 28e5,
-    dollarGoal: 5e6,
-    impactMetric: {
-      impactTitle: 'Provide 1 home visit from a community health worker',
-      whyValuableDescription:
-        'Community health workers provide quality health care to those who might not otherwise have access.',
+  user: {
+    cause: {
+      groupImpactMetric: {
+        id: 'abcd',
+        dollarProgress: 28e5,
+        dollarGoal: 5e6,
+        impactMetric: {
+          impactTitle: 'Provide 1 home visit from a community health worker',
+          whyValuableDescription:
+            'Community health workers provide quality health care to those who might not otherwise have access.',
+        },
+      },
     },
   },
 }
@@ -136,8 +152,33 @@ standardView.decorators = [
   (Story) => {
     localstorageManager.setItem(CURRENT_GROUP_IMPACT_VIEWS, 4)
     localstorageGroupImpactManager.setLastSeenGroupImpactMetric(
-      newGoal.args.groupImpactMetric
+      standardView.args.user.cause.groupImpactMetric
     )
+    return <Story />
+  },
+]
+
+export const standardViewWithNoOldGoal = Template.bind({})
+standardViewWithNoOldGoal.args = {
+  user: {
+    cause: {
+      groupImpactMetric: {
+        id: 'abcd',
+        dollarProgress: 28e5,
+        dollarGoal: 5e6,
+        impactMetric: {
+          impactTitle: 'Provide 1 home visit from a community health worker',
+          whyValuableDescription:
+            'Community health workers provide quality health care to those who might not otherwise have access.',
+        },
+      },
+    },
+  },
+}
+standardViewWithNoOldGoal.decorators = [
+  (Story) => {
+    localstorageManager.setItem(CURRENT_GROUP_IMPACT_VIEWS, 4)
+    localstorageGroupImpactManager.setLastSeenGroupImpactMetric(undefined)
     return <Story />
   },
 ]

@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
-import theme from 'src/utils/theme'
 import InfoIcon from '@material-ui/icons/InfoOutlined'
 import Box from '@material-ui/core/Box'
 import Stars from '@mui/icons-material/Stars'
@@ -20,7 +19,7 @@ import clsx from 'clsx'
 import { GROUP_IMPACT_SIDEBAR_STATE } from 'src/utils/constants'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
     height: '100%',
     display: 'grid',
@@ -129,7 +128,7 @@ const useStyles = makeStyles(() => ({
     borderBottomRightRadius: '8px',
   },
   pullTabStar: {
-    color: '#FF6A08',
+    color: theme.palette.primary.main,
     marginRight: theme.spacing(1),
     marginLeft: theme.spacing(0.5),
   },
@@ -166,7 +165,10 @@ const GroupImpactSidebar = ({
     : groupImpactMetric
   const { impactTitle, whyValuableDescription } = impactMetric
   const classes = useStyles()
-  const progress = Math.round(100 * (dollarProgress / dollarGoal))
+  const progress = Math.min(
+    Math.round(100 * (dollarProgress / dollarGoal)),
+    100
+  )
 
   useEffect(() => {
     setIsOpen(open)
@@ -198,7 +200,7 @@ const GroupImpactSidebar = ({
   let wrapperWidthClass = classes.expanded
   if (!isOpen && isClosedHover) {
     wrapperWidthClass = classes.pullTabExpanded
-  } else {
+  } else if (!isOpen) {
     wrapperWidthClass = classes.pullTabCollapsed
   }
 
