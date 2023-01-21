@@ -714,10 +714,8 @@ const Index = ({ data: fallbackData, userAgent }) => {
   // Jan 2023 SFAC notification
   const SFAC_JAN_NONE = 'None'
   const SFAC_JAN_EXT = 'LinkToExt'
-  const sfacJanNotifVariation = getFeatureValue(
-    features,
-    'notif-sfac-jan-2023'
-  ) || SFAC_JAN_NONE
+  const sfacJanNotifVariation =
+    getFeatureValue(features, 'notif-sfac-jan-2023') || SFAC_JAN_NONE
   const searchLink =
     sfacJanNotifVariation === SFAC_JAN_EXT
       ? 'https://tab.gladly.io/get-search/'
@@ -885,7 +883,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                       onClose={onNotificationClose}
                     />
                   ) : null}
-                  {{sfacJanNotifVariation !== SFAC_JAN_NONE ? (
+                  {sfacJanNotifVariation !== SFAC_JAN_NONE ? (
                     <Notification
                       className={classes.notification}
                       text={
@@ -908,16 +906,16 @@ const Index = ({ data: fallbackData, userAgent }) => {
                             !
                           </Typography>
                           <Typography variant="body1" gutterBottom>
-                          Vote for one of ten amazing non-profits for our
-                        community to support in February. Each search you make
-                        this week will count as an additional vote.
-                        </Typography>
+                            Vote for one of ten amazing non-profits for our
+                            community to support in February. Each search you
+                            make this week will count as an additional vote.
+                          </Typography>
                         </div>
                       }
                       buttons={
                         <div className={classes.notificationButtonsWrapper}>
                           <Link
-                            to='https://forms.gle/2tApCrfUgQE2LhmA8'
+                            to="https://forms.gle/2tApCrfUgQE2LhmA8"
                             target="_blank"
                           >
                             <Button variant="contained">Vote</Button>
