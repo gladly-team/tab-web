@@ -10,7 +10,6 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   CAUSE_IMPACT_TYPES,
-  CURRENT_CUSTOM_NOTIF_CODE,
 } from 'src/utils/constants'
 import {
   showMockAchievements,
@@ -161,6 +160,7 @@ const getMockProps = () => ({
         },
       },
       features: [],
+      notifications: [],
       searches: 10,
       showSfacIcon: false,
     },
@@ -1557,137 +1557,6 @@ describe('index.js: hardcoded notifications', () => {
     const wrapper = mount(<IndexPage {...mockProps} />)
     const notification = wrapper.find(Notification)
     expect(notification.exists()).not.toBe(true)
-  })
-
-  it('does not render the one-off notification if it is enabled but user has already dismissed it', () => {
-    const IndexPage = require('src/pages/index').default
-    const mockProps = {
-      ...getMockProps(),
-      data: {
-        ...getMockProps().data,
-        user: {
-          ...getMockProps().data.user,
-          id: 'someId',
-          username: 'someUsername',
-          notifications: [{ code: CURRENT_CUSTOM_NOTIF_CODE }],
-        },
-      },
-    }
-    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
-    localStorageMgr.getItem.mockReturnValue('true')
-    const wrapper = mount(<IndexPage {...mockProps} />)
-    const notification = wrapper.find(Notification)
-    expect(notification.exists()).not.toBe(true)
-  })
-
-  it('does not render the one-off notification if not on the client side', async () => {
-    const IndexPage = require('src/pages/index').default
-    const mockProps = {
-      ...getMockProps(),
-      data: {
-        ...getMockProps().data,
-        user: {
-          ...getMockProps().data.user,
-          id: 'someId',
-          username: 'someUsername',
-          notifications: [{ code: CURRENT_CUSTOM_NOTIF_CODE }],
-        },
-      },
-    }
-    isClientSide.mockReturnValue(false) // server side
-    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
-    localStorageMgr.getItem.mockReturnValue(undefined)
-    const wrapper = mount(<IndexPage {...mockProps} />)
-    const notification = wrapper.find(Notification)
-    expect(notification.exists()).toBe(false)
-  })
-
-  it('renders the user survey notification if user has not dismissed and it is enabled', async () => {
-    const IndexPage = require('src/pages/index').default
-    const mockProps = {
-      ...getMockProps(),
-      data: {
-        ...getMockProps().data,
-        user: {
-          ...getMockProps().data.user,
-          id: 'someId',
-          username: 'someUsername',
-          notifications: [{ code: CURRENT_CUSTOM_NOTIF_CODE }],
-        },
-      },
-    }
-    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
-    localStorageMgr.getItem.mockReturnValue(undefined)
-    const wrapper = mount(<IndexPage {...mockProps} />)
-    const notification = wrapper.find(Notification)
-    expect(notification.exists()).toBe(true)
-  })
-
-  it('hides the one-off notification if it ends after initial render (this avoids "+1" problem of page loads after campaign end)', async () => {
-    expect.assertions(2)
-    const IndexPage = require('src/pages/index').default
-    const mockProps = {
-      ...getMockProps(),
-      data: {
-        ...getMockProps().data,
-        user: {
-          ...getMockProps().data.user,
-          id: 'someId',
-          username: 'someUsername',
-          notifications: [{ code: CURRENT_CUSTOM_NOTIF_CODE }],
-        },
-      },
-    }
-    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
-    localStorageMgr.getItem.mockReturnValue(undefined)
-    const wrapper = mount(<IndexPage {...mockProps} />)
-    const notification = wrapper.find(Notification)
-    expect(notification.exists()).toBe(true)
-
-    wrapper.setProps({
-      ...getMockProps(),
-      data: {
-        ...getMockProps().data,
-        user: {
-          ...getMockProps().data.user,
-          id: 'someId',
-          username: 'someUsername',
-          notifications: [], // ended
-        },
-      },
-    })
-    wrapper.update()
-    expect(wrapper.find(Notification).at(1).exists()).toBe(false)
-  })
-
-  it('dismissing the one-off notification updates local storage and dismisses notification', async () => {
-    expect.assertions(1)
-    const IndexPage = require('src/pages/index').default
-    const mockProps = {
-      ...getMockProps(),
-      data: {
-        ...getMockProps().data,
-        user: {
-          ...getMockProps().data.user,
-          id: 'someId',
-          username: 'someUsername',
-          notifications: [{ code: CURRENT_CUSTOM_NOTIF_CODE }],
-        },
-      },
-    }
-    useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
-    localStorageMgr.getItem.mockReturnValue(undefined)
-    const wrapper = mount(<IndexPage {...mockProps} />)
-    const notification = wrapper.find(Notification)
-    notification.find(IconButton).simulate('click') // close icon
-    await act(async () => {
-      wrapper.update()
-      flushAllPromises()
-    })
-    expect(localStorageMgr.setItem).toHaveBeenCalledWith(
-      `tab.user.dismissedNotif${CURRENT_CUSTOM_NOTIF_CODE}`,
-      'true'
-    )
   })
 
   it('calls localStorageFeaturesManager on page load', async () => {

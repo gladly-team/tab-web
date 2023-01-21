@@ -36,7 +36,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
@@ -71,14 +70,12 @@ import {
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
-import useInterval from 'src/utils/hooks/useInterval'
 import {
   CAT_CHARITY,
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   NOTIF_DISMISS_PREFIX,
   CAUSE_IMPACT_TYPES,
-  CURRENT_CUSTOM_NOTIF_CODE,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -649,7 +646,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
         }))
       setNotifsToShow(notifsToShow)
     }
-  }, [notifications, isDataFresh])
+  }, [JSON.stringify(notifications), isDataFresh])
 
   // Jan 2023 SFAC notification
   const notifSFACJanuary = notificationsToShow.find(
@@ -659,12 +656,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const shouldShowNotifSFACJanuary =
     notifSFACJanuary &&
     (notifSFACJanuary.variation || SFAC_JAN_NONE) !== SFAC_JAN_NONE
-
-  // Animate progress
-  const [sfacNotifProgress, setSfacNotifProgress] = useState(0)
-  useInterval(() => {
-    setSfacNotifProgress(20)
-  }, 300)
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
