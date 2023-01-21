@@ -646,6 +646,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
         }))
       setNotifsToShow(notifsToShow)
     }
+
+    // Rerun when notifications content changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(notifications), isDataFresh])
 
   // Jan 2023 SFAC notification
