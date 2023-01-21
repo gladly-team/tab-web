@@ -893,7 +893,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                             gutterBottom
                             className={classes.notificationTitle}
                           >
-                            Choose the next spotlight charity!
+                            Choose your charity!
                           </Typography>
                           <Typography variant="body1" gutterBottom>
                             Help pick the next spotlight charity on{' '}
@@ -905,7 +905,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                             </Link>
                             !
                           </Typography>
-                          <Typography variant="body1" gutterBottom>
+                          <Typography variant="body1">
                             Vote for one of ten amazing non-profits for our
                             community to support in February. Each search you
                             make this week will count as an additional vote.
