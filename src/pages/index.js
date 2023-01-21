@@ -391,6 +391,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           }
           notifications {
             code
+            variation
           }
           searches
           showSfacIcon
@@ -618,24 +619,46 @@ const Index = ({ data: fallbackData, userAgent }) => {
     }
   }, [globalTabCount])
 
-  // Show a one-off notification.
-  // Edit the constant as needed to show a new notification.
-  const notifLocalStorageKey = `${NOTIF_DISMISS_PREFIX}${CURRENT_CUSTOM_NOTIF_CODE}`
-  const [showCustomNotification, setShowCustomNotification] = useState(false)
+  // Determine if we should show any notifications. Currently, each
+  // notification is is configured on a one-off basis here (UI) and in the
+  // backend (enabling/disabling).
+  const [notificationsToShow, setNotifsToShow] = useState([])
   useEffect(() => {
-    if (
-      isClientSide() &&
-      localStorageMgr.getItem(notifLocalStorageKey) !== 'true' &&
-      isDataFresh && // avoid flickering stale content
-      !!notifications.find((notif) => notif.code === CURRENT_CUSTOM_NOTIF_CODE)
-    ) {
-      setShowCustomNotification(true)
+    const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
+    const onNotificationClose = (code) => {
+      localStorageMgr.setItem(getNotifDismissKey(code), 'true')
+      setNotifsToShow((notifsToShow) =>
+        notifsToShow.filter((notif) => notif.code !== code)
+      )
     }
-  }, [notifications, isDataFresh, notifLocalStorageKey])
-  const onNotificationClose = () => {
-    localStorageMgr.setItem(notifLocalStorageKey, 'true')
-    setShowCustomNotification(false)
-  }
+    const hasDismissedNotif = (notif) =>
+      localStorageMgr.getItem(getNotifDismissKey(notif.code)) === 'true'
+
+    if (
+      // Only show notifications on the client side
+      isClientSide() &&
+      isDataFresh // avoid flickering stale content
+    ) {
+      // Filter out notifications that have been dismissed and add a
+      // helper for dismissing.
+      const notifsToShow = notifications
+        .filter((n) => !hasDismissedNotif(n))
+        .map((n) => ({
+          ...n,
+          onDismiss: () => onNotificationClose(n.code),
+        }))
+      setNotifsToShow(notifsToShow)
+    }
+  }, [notifications, isDataFresh])
+
+  // Jan 2023 SFAC notification
+  const notifSFACJanuary = notificationsToShow.find(
+    (notif) => notif.code === 'notif-sfac-jan-2023'
+  )
+  const SFAC_JAN_NONE = 'None'
+  const shouldShowNotifSFACJanuary =
+    notifSFACJanuary &&
+    (notifSFACJanuary.variation || SFAC_JAN_NONE) !== SFAC_JAN_NONE
 
   // Animate progress
   const [sfacNotifProgress, setSfacNotifProgress] = useState(0)
@@ -710,16 +733,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const onAdError = (e) => {
     logger.error(e)
   }
-
-  // Jan 2023 SFAC notification
-  const SFAC_JAN_NONE = 'None'
-  const SFAC_JAN_EXT = 'LinkToExt'
-  const sfacJanNotifVariation =
-    getFeatureValue(features, 'notif-sfac-jan-2023') || SFAC_JAN_NONE
-  const searchLink =
-    sfacJanNotifVariation === SFAC_JAN_EXT
-      ? 'https://tab.gladly.io/get-search/'
-      : 'https://search.gladly.io'
 
   const onCompletedOnboarding = async () => {
     await SetHasViewedIntroFlowMutation({ enabled: true, userId: userGlobalId })
@@ -839,51 +852,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                  * that appear via the UserImpact component.
                  */}
                 <div className={classes.notificationsContainer}>
-                  {showCustomNotification ? (
-                    <Notification
-                      className={classes.notification}
-                      text={
-                        <div className={classes.notificationText}>
-                          <Typography
-                            variant="h2"
-                            gutterBottom
-                            className={classes.notificationTitle}
-                          >
-                            We're well on our way
-                          </Typography>
-                          <Typography variant="body1" gutterBottom>
-                            We’re 20% of the way to{' '}
-                            <Link
-                              to="https://campaigns.gladly.io"
-                              className={classes.notificationTextLink}
-                            >
-                              restoring a well in Malawi
-                            </Link>
-                            ! Try Search for a Cause to help us reach our goal
-                            by the end of the month.
-                          </Typography>
-                          <LinearProgress
-                            variant="determinate"
-                            value={sfacNotifProgress}
-                            className={classes.notificationProgress}
-                          />
-                        </div>
-                      }
-                      buttons={
-                        <div className={classes.notificationButtonsWrapper}>
-                          <Link
-                            to="https://tab.gladly.io/get-search/"
-                            target="_blank"
-                          >
-                            <Button variant="contained">Make a search</Button>
-                          </Link>
-                        </div>
-                      }
-                      includeClose
-                      onClose={onNotificationClose}
-                    />
-                  ) : null}
-                  {sfacJanNotifVariation !== SFAC_JAN_NONE ? (
+                  {shouldShowNotifSFACJanuary ? (
                     <Notification
                       className={classes.notification}
                       text={
@@ -898,7 +867,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
                           <Typography variant="body1" gutterBottom>
                             Help pick the next spotlight charity on{' '}
                             <Link
-                              to={searchLink}
+                              to={
+                                notifSFACJanuary.variation === 'LinkToExt'
+                                  ? 'https://tab.gladly.io/get-search/'
+                                  : 'https://search.gladly.io'
+                              }
                               className={classes.notificationTextLink}
                             >
                               Search for a Cause
@@ -923,7 +896,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                         </div>
                       }
                       includeClose
-                      onClose={onNotificationClose}
+                      onClose={notifSFACJanuary.onDismiss}
                     />
                   ) : null}
                   {userGlobalId && shouldShowSfacExtensionPrompt ? (
@@ -1089,10 +1062,13 @@ Index.propTypes = {
       features: PropTypes.arrayOf(
         PropTypes.shape({
           featureName: PropTypes.string.isRequired,
-
-          // Allow any type for experiment variations.
-          // eslint-disable-next-line react/forbid-prop-types
-          variation: PropTypes.any,
+          variation: PropTypes.string,
+        })
+      ).isRequired,
+      notifications: PropTypes.arrayOf(
+        PropTypes.shape({
+          code: PropTypes.string.isRequired,
+          variation: PropTypes.string,
         })
       ).isRequired,
       hasViewedIntroFlow: PropTypes.bool.isRequired,
