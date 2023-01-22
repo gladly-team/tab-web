@@ -36,7 +36,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
@@ -71,14 +70,12 @@ import {
 import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
-import useInterval from 'src/utils/hooks/useInterval'
 import {
   CAT_CHARITY,
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   NOTIF_DISMISS_PREFIX,
   CAUSE_IMPACT_TYPES,
-  CURRENT_CUSTOM_NOTIF_CODE,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -391,6 +388,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           }
           notifications {
             code
+            variation
           }
           searches
           showSfacIcon
@@ -618,30 +616,49 @@ const Index = ({ data: fallbackData, userAgent }) => {
     }
   }, [globalTabCount])
 
-  // Show a one-off notification.
-  // Edit the constant as needed to show a new notification.
-  const notifLocalStorageKey = `${NOTIF_DISMISS_PREFIX}${CURRENT_CUSTOM_NOTIF_CODE}`
-  const [showCustomNotification, setShowCustomNotification] = useState(false)
+  // Determine if we should show any notifications. Currently, each
+  // notification is is configured on a one-off basis here (UI) and in the
+  // backend (enabling/disabling).
+  const [notificationsToShow, setNotifsToShow] = useState([])
   useEffect(() => {
-    if (
-      isClientSide() &&
-      localStorageMgr.getItem(notifLocalStorageKey) !== 'true' &&
-      isDataFresh && // avoid flickering stale content
-      !!notifications.find((notif) => notif.code === CURRENT_CUSTOM_NOTIF_CODE)
-    ) {
-      setShowCustomNotification(true)
+    const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
+    const onNotificationClose = (code) => {
+      localStorageMgr.setItem(getNotifDismissKey(code), 'true')
+      setNotifsToShow((notifsToShow) =>
+        notifsToShow.filter((notif) => notif.code !== code)
+      )
     }
-  }, [notifications, isDataFresh, notifLocalStorageKey])
-  const onNotificationClose = () => {
-    localStorageMgr.setItem(notifLocalStorageKey, 'true')
-    setShowCustomNotification(false)
-  }
+    const hasDismissedNotif = (notif) =>
+      localStorageMgr.getItem(getNotifDismissKey(notif.code)) === 'true'
 
-  // Animate progress
-  const [sfacNotifProgress, setSfacNotifProgress] = useState(0)
-  useInterval(() => {
-    setSfacNotifProgress(20)
-  }, 300)
+    if (
+      // Only show notifications on the client side
+      isClientSide() &&
+      isDataFresh // avoid flickering stale content
+    ) {
+      // Filter out notifications that have been dismissed and add a
+      // helper for dismissing.
+      const notifsToShow = notifications
+        .filter((n) => !hasDismissedNotif(n))
+        .map((n) => ({
+          ...n,
+          onDismiss: () => onNotificationClose(n.code),
+        }))
+      setNotifsToShow(notifsToShow)
+    }
+
+    // Rerun when notifications content changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(notifications), isDataFresh])
+
+  // Jan 2023 SFAC notification
+  const notifSFACJanuary = notificationsToShow.find(
+    (notif) => notif.code === 'notif-sfac-jan-2023'
+  )
+  const SFAC_JAN_NONE = 'None'
+  const shouldShowNotifSFACJanuary =
+    notifSFACJanuary &&
+    (notifSFACJanuary.variation || SFAC_JAN_NONE) !== SFAC_JAN_NONE
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -829,7 +846,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                  * that appear via the UserImpact component.
                  */}
                 <div className={classes.notificationsContainer}>
-                  {showCustomNotification ? (
+                  {shouldShowNotifSFACJanuary ? (
                     <Notification
                       className={classes.notification}
                       text={
@@ -839,38 +856,41 @@ const Index = ({ data: fallbackData, userAgent }) => {
                             gutterBottom
                             className={classes.notificationTitle}
                           >
-                            We're well on our way
+                            Choose your charity!
                           </Typography>
                           <Typography variant="body1" gutterBottom>
-                            We’re 20% of the way to{' '}
+                            Help pick the next spotlight charity on{' '}
                             <Link
-                              to="https://campaigns.gladly.io"
+                              to={
+                                notifSFACJanuary.variation === 'LinkToExt'
+                                  ? 'https://tab.gladly.io/get-search/'
+                                  : 'https://search.gladly.io'
+                              }
                               className={classes.notificationTextLink}
                             >
-                              restoring a well in Malawi
+                              Search for a Cause
                             </Link>
-                            ! Try Search for a Cause to help us reach our goal
-                            by the end of the month.
+                            !
                           </Typography>
-                          <LinearProgress
-                            variant="determinate"
-                            value={sfacNotifProgress}
-                            className={classes.notificationProgress}
-                          />
+                          <Typography variant="body1">
+                            Vote for one of ten amazing non-profits for our
+                            community to support in February. Each search you
+                            make this week will count as an additional vote.
+                          </Typography>
                         </div>
                       }
                       buttons={
                         <div className={classes.notificationButtonsWrapper}>
                           <Link
-                            to="https://tab.gladly.io/get-search/"
+                            to="https://forms.gle/2tApCrfUgQE2LhmA8"
                             target="_blank"
                           >
-                            <Button variant="contained">Make a search</Button>
+                            <Button variant="contained">Vote</Button>
                           </Link>
                         </div>
                       }
                       includeClose
-                      onClose={onNotificationClose}
+                      onClose={notifSFACJanuary.onDismiss}
                     />
                   ) : null}
                   {userGlobalId && shouldShowSfacExtensionPrompt ? (
@@ -1036,10 +1056,13 @@ Index.propTypes = {
       features: PropTypes.arrayOf(
         PropTypes.shape({
           featureName: PropTypes.string.isRequired,
-
-          // Allow any type for experiment variations.
-          // eslint-disable-next-line react/forbid-prop-types
-          variation: PropTypes.any,
+          variation: PropTypes.string,
+        })
+      ).isRequired,
+      notifications: PropTypes.arrayOf(
+        PropTypes.shape({
+          code: PropTypes.string.isRequired,
+          variation: PropTypes.string,
         })
       ).isRequired,
       hasViewedIntroFlow: PropTypes.bool.isRequired,
