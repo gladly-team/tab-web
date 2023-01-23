@@ -10,6 +10,11 @@ module.exports = {
     '!**/.storybook/**',
   ],
   coverageDirectory: './coverage/',
+
+  // Working around a potential memory leak that's breaking builds:
+  // "MaxListenersExceededWarning: Possible EventEmitter memory leak detected."
+  // https://github.com/facebook/jest/issues/7874
+  maxWorkers: 1,
   moduleNameMapper: {
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
   },

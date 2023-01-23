@@ -5,7 +5,9 @@ afterEach(() => {
   jest.clearAllMocks()
 })
 
-describe('GroupImpact container', () => {
+// Disabling until resolving memory/deploy issues.
+// eslint-disable-next-line jest/no-disabled-tests
+describe.skip('GroupImpact container', () => {
   it('wraps the correct component', () => {
     const { createFragmentContainer } = require('react-relay')
     const GroupImpact =
