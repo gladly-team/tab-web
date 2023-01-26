@@ -115,6 +115,13 @@ class CustomDocument extends Document {
             />
           </noscript>
 
+          {/* Admiral */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(o,_name){function n(){(n.q=n.q||[]).push(arguments)}n.v=1,o[_name]=o[_name]||n;!(function(o,t,n,c){function e(n){(function(){try{return(localStorage.getItem("v4ac1eiZr0")||"").split(",")[4]>0}catch(o){}return!1})()&&(n=o[t].pubads())&&n.setTargeting("admiral-engaged","true")}(c=o[t]=o[t]||{}).cmd=c.cmd||[],typeof c.pubads===n?e():typeof c.cmd.unshift===n?c.cmd.unshift(e):c.cmd.push(e)})(window,"googletag","function");})(window,String.fromCharCode(97,100,109,105,114,97,108));!(function(t,c,i){i=t.createElement(c),t=t.getElementsByTagName(c)[0],i.async=1,i.src="https://aspiringtoy.com/v2iqibn7-fItC05A4-ZyEpD0NnubSKXGapWF6890uh6J2OB4MTuBYth0",t.parentNode.insertBefore(i,t)})(document,"script");`,
+            }}
+          />
+
           <Main />
           <NextScript />
 
