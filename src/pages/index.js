@@ -852,12 +852,12 @@ const Index = ({ data: fallbackData, userAgent }) => {
                             gutterBottom
                             className={classes.notificationTitle}
                           >
-                            Support Rainforest Alliance this month!
+                            Support Rainforest Alliance!
                           </Typography>
 
                           <Typography variant="body1" gutterBottom>
-                            Your votes are counted and this month, the money
-                            raised on Search for a Cause will support{' '}
+                            Your votes are counted and this month Search for a
+                            Cause will support{' '}
                             <Link
                               to="https://www.rainforest-alliance.org/"
                               target="_blank"
@@ -869,10 +869,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
                           </Typography>
 
                           <Typography variant="body1" gutterBottom>
-                            Rainforest Alliance is committed to creating a world
-                            where people and nature thrive together through
-                            climate resilience, community forestry, and human
-                            rights.
+                            Rainforest Alliance helps people and nature thrive
+                            together through climate resilience, community
+                            forestry, and human rights.
                           </Typography>
 
                           <Typography variant="body1">
@@ -883,8 +882,8 @@ const Index = ({ data: fallbackData, userAgent }) => {
                               className={classes.notificationTextLink}
                             >
                               Search for a Cause
-                            </Link>{' '}
-                            today!
+                            </Link>
+                            !
                           </Typography>
                         </div>
                       }
