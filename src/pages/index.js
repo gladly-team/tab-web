@@ -651,14 +651,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(notifications), isDataFresh])
 
-  // Jan 2023 SFAC notification
-  const notifSFACJanuary = notificationsToShow.find(
-    (notif) => notif.code === 'notif-sfac-jan-2023'
+  // Feb 2023 SFAC notification
+  const notifSFACFeb = notificationsToShow.find(
+    (notif) => notif.code === 'notif-sfac-feb-2023'
   )
-  const SFAC_JAN_NONE = 'None'
-  const shouldShowNotifSFACJanuary =
-    notifSFACJanuary &&
-    (notifSFACJanuary.variation || SFAC_JAN_NONE) !== SFAC_JAN_NONE
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -846,7 +842,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                  * that appear via the UserImpact component.
                  */}
                 <div className={classes.notificationsContainer}>
-                  {shouldShowNotifSFACJanuary ? (
+                  {notifSFACFeb ? (
                     <Notification
                       className={classes.notification}
                       text={
@@ -856,41 +852,54 @@ const Index = ({ data: fallbackData, userAgent }) => {
                             gutterBottom
                             className={classes.notificationTitle}
                           >
-                            Choose your charity!
+                            Support Rainforest Alliance this month!
                           </Typography>
+
                           <Typography variant="body1" gutterBottom>
-                            Help pick the next spotlight charity on{' '}
+                            Your votes are counted and this month, the money
+                            raised on Search for a Cause will support{' '}
                             <Link
-                              to={
-                                notifSFACJanuary.variation === 'LinkToExt'
-                                  ? 'https://tab.gladly.io/get-search/'
-                                  : 'https://search.gladly.io'
-                              }
+                              to="https://www.rainforest-alliance.org/"
+                              target="_blank"
                               className={classes.notificationTextLink}
                             >
-                              Search for a Cause
+                              Rainforest Alliance
                             </Link>
                             !
                           </Typography>
+
+                          <Typography variant="body1" gutterBottom>
+                            Rainforest Alliance is committed to creating a world
+                            where people and nature thrive together through
+                            climate resilience, community forestry, and human
+                            rights.
+                          </Typography>
+
                           <Typography variant="body1">
-                            Vote for one of ten amazing non-profits for our
-                            community to support in February. Each search you
-                            make this week will count as an additional vote.
+                            If you aren’t already, try out{' '}
+                            <Link
+                              to="https://search.gladly.io/"
+                              target="_blank"
+                              className={classes.notificationTextLink}
+                            >
+                              Search for a Cause
+                            </Link>{' '}
+                            today!
                           </Typography>
                         </div>
                       }
                       buttons={
                         <div className={classes.notificationButtonsWrapper}>
                           <Link
-                            to="https://forms.gle/2tApCrfUgQE2LhmA8"
+                            to="https://tab.gladly.io/get-search/"
                             target="_blank"
                           >
-                            <Button variant="contained">Vote</Button>
+                            <Button variant="contained">Make a search</Button>
                           </Link>
                         </div>
                       }
                       includeClose
-                      onClose={notifSFACJanuary.onDismiss}
+                      onClose={notifSFACFeb.onDismiss}
                     />
                   ) : null}
                   {userGlobalId && shouldShowSfacExtensionPrompt ? (
