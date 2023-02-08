@@ -362,6 +362,7 @@ const getRelayQuery = async ({ AuthUser }) => {
             impactType
             impactVisits
             landingPagePath
+            landingPagePhrase
             name
             onboarding {
               steps {
@@ -453,13 +454,8 @@ const Index = ({ data: fallbackData, userAgent }) => {
     searches,
     showSfacIcon,
   } = user || {}
-  const {
-    theme,
-    onboarding,
-    causeId,
-    impactType,
-    name: causeName,
-  } = cause || {}
+  const { theme, onboarding, causeId, impactType, landingPagePhrase } =
+    cause || {}
   const { primaryColor, secondaryColor } = theme || {}
 
   const growthbook = useGrowthBook()
@@ -971,7 +967,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 className={classes.logo}
               />
               <Chip
-                label={`Supporting: ${causeName}`}
+                label={landingPagePhrase}
                 className={classes.supportingChip}
                 color="primary"
                 size="small"
@@ -1055,6 +1051,7 @@ Index.propTypes = {
         impactType: PropTypes.string.isRequired,
         impactVisits: PropTypes.number,
         landingPagePath: PropTypes.string,
+        landingPagePhrase: PropTypes.string,
         name: PropTypes.string.isRequired,
         theme: PropTypes.shape({
           primaryColor: PropTypes.string.isRequired,

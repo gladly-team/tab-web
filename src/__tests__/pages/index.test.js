@@ -151,6 +151,7 @@ const getMockProps = () => ({
         landingPagePath: '/foo/',
         impactType: CAUSE_IMPACT_TYPES.individual,
         name: 'Example Cause',
+        landingPagePhrase: 'Landing Phase Example Cause',
         onboarding: {
           steps: [],
         },
@@ -1474,7 +1475,7 @@ describe('index.js', () => {
     useData.mockReturnValue({ data: mockProps.data })
     const wrapper = mount(<IndexPage {...mockProps} />)
     const elem = wrapper.find(Chip)
-    expect(elem.prop('label')).toEqual('Supporting: Example Cause')
+    expect(elem.prop('label')).toEqual('Landing Phase Example Cause')
     elem.simulate('click')
     expect(goTo).toHaveBeenCalledWith(aboutURL)
   })
