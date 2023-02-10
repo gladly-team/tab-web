@@ -229,7 +229,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     paddingBottom: 220, // for visually-appealing vertical centering
     position: 'relative',
-    zIndex: 900,
   },
   searchBarContainer: {
     display: 'flex',
