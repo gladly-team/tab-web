@@ -1,12 +1,11 @@
 import { LinearProgress, Typography } from '@material-ui/core'
-
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { Stars } from '@mui/icons-material'
 
 const useAnimationStyles = ({ endProgress, borderRadius, width }) => {
-  const classes = makeStyles(() => ({
+  const classes = makeStyles((theme) => ({
     linearProgressRoot: {
       borderRadius,
       width,
@@ -64,6 +63,9 @@ const useAnimationStyles = ({ endProgress, borderRadius, width }) => {
     innerBar: {
       borderRadius: `0px 0px ${borderRadius}px ${borderRadius}px !important`,
     },
+    star: {
+      color: theme.palette.primary.main,
+    },
   }))
   return classes()
 }
@@ -104,7 +106,7 @@ const VerticalLinearProgress = ({
       {showMarkers && (
         <div className={classes.markers}>
           <div className={classes.completedMarker}>
-            <Stars color="secondary" />
+            <Stars className={classes.star} />
           </div>
           <Typography className={classes.numberMarker}>75%</Typography>
           <Typography className={classes.numberMarker}>50%</Typography>

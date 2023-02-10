@@ -97,6 +97,7 @@ import useBrowserName from 'src/utils/hooks/useBrowserName'
 import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotification'
+import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -134,6 +135,15 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
     alignContent: 'flex-start',
+    height: '100%',
+    position: 'static',
+  },
+  groupImpactContainer: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    marginRight: 'auto',
+    height: '100%',
   },
   topRightContainer: {
     display: 'flex',
@@ -218,6 +228,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 220, // for visually-appealing vertical centering
+    position: 'relative',
+    zIndex: 900,
   },
   searchBarContainer: {
     display: 'flex',
@@ -300,6 +312,7 @@ if (isClientSide()) {
   const loadAds = () => {
     try {
       const setGAMDevKey = isGAMDevEnvironment()
+
       fetchAds({
         adUnits: Object.values(getAdUnits()),
         pageLevelKeyValues: {
@@ -401,6 +414,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           ...EmailInviteDialogContainer_user
           ...SearchInputContainer_user
           ...SfacActivityContainer_user
+          ...GroupImpactContainer_user
         }
       }
     `,
@@ -542,9 +556,17 @@ const Index = ({ data: fallbackData, userAgent }) => {
       setShouldShowSfacExtensionPrompt(
         !searchbarSfacPrompt && showSfacExtensionPrompt
       )
-      setShouldShowSearchbarSFACPrompt(searchbarSfacPrompt)
+      setShouldShowSearchbarSFACPrompt(
+        searchbarSfacPrompt && !(impactType === CAUSE_IMPACT_TYPES.group)
+      )
     }
-  }, [searchExtensionSupported, showSfacExtensionPrompt, isDataFresh, features])
+  }, [
+    searchExtensionSupported,
+    showSfacExtensionPrompt,
+    isDataFresh,
+    features,
+    impactType,
+  ])
 
   // Determine if we should show the SFAC on-tab search info message.
   const [interactedWithSFACNotification, setInteractedWithSFACNotification] =
@@ -916,6 +938,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
                     />
                   ) : null}
                 </div>
+              </div>
+              <div className={classes.groupImpactContainer}>
+                {impactType === CAUSE_IMPACT_TYPES.group && (
+                  <GroupImpactContainer user={user} />
+                )}
               </div>
             </div>
             {showAchievements ? (

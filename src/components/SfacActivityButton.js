@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.common.white,
     borderRadius: '50%',
   },
+  badgeZIndex: {
+    zIndex: 'unset',
+  },
   button: {
     borderRadius: '50%',
     height: 40,
@@ -49,6 +52,7 @@ const SfacActivityButton = forwardRef(({ active, onClick }, ref) => {
 
   return (
     <Badge
+      classes={{ badge: classes.badgeZIndex }}
       ref={ref}
       overlap="circular"
       badgeContent={
