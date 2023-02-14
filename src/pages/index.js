@@ -668,10 +668,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(notifications), isDataFresh])
 
-  // Feb 2023 SFAC notification
-  const notifSFACFeb = notificationsToShow.find(
-    (notif) => notif.code === 'notif-sfac-feb-2023'
-  )
+  // // Feb 2023 SFAC notification
+  // const notifSFACFeb = notificationsToShow.find(
+  //   (notif) => notif.code === 'notif-sfac-feb-2023'
+  // )
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -859,7 +859,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                  * that appear via the UserImpact component.
                  */}
                 <div className={classes.notificationsContainer}>
-                  {notifSFACFeb ? (
+                  {/* {notifSFACFeb ? (
                     <Notification
                       className={classes.notification}
                       text={
@@ -917,7 +917,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                       includeClose
                       onClose={notifSFACFeb.onDismiss}
                     />
-                  ) : null}
+                  ) : null} */}
                   {userGlobalId && shouldShowSfacExtensionPrompt ? (
                     <SfacExtensionSellNotification
                       userId={userGlobalId}
