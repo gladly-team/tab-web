@@ -37,7 +37,6 @@ import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
-import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
 
 // utils
@@ -84,7 +83,6 @@ import InfoIcon from '@material-ui/icons/InfoOutlined'
 import { validateAttributesObject } from 'src/utils/growthbook'
 import SearchInputContainer from 'src/components/SearchInputContainer'
 import SearchForACauseSellModal from 'src/components/SearchForACauseSellModal'
-import Notification from 'src/components/Notification'
 import SearchForACauseSellNotification from 'src/components/SearchForACauseSellNotification'
 import { getFeatureValue } from 'src/utils/growthbookUtils'
 import {
@@ -636,7 +634,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
   // Determine if we should show any notifications. Currently, each
   // notification is is configured on a one-off basis here (UI) and in the
   // backend (enabling/disabling).
-  const [notificationsToShow, setNotifsToShow] = useState([])
+  const [, setNotifsToShow] = useState([])
   useEffect(() => {
     const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
     const onNotificationClose = (code) => {
