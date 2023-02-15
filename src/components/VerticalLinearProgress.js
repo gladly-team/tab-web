@@ -111,7 +111,7 @@ const VerticalLinearProgress = ({
             <Stars className={classes.star} />
           </div>
           <Typography className={classes.numberMarker}>75%</Typography>
-          <Typography className={classes.numberMarker}>42%</Typography>
+          <Typography className={classes.numberMarker}>50%</Typography>
           <Typography className={classes.numberMarker}>25%</Typography>
           <div className={classes.dummyDiv} />
         </div>

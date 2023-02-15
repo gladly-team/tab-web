@@ -136,9 +136,11 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'flex-end',
     alignContent: 'flex-start',
     height: '100%',
-    position: 'static',
+    position: 'relative',
+    zIndex: 100,
   },
   groupImpactContainer: {
+    zIndex: 1e6,
     position: 'fixed',
     top: 0,
     left: 0,
@@ -938,11 +940,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
                   ) : null}
                 </div>
               </div>
-              <div className={classes.groupImpactContainer}>
-                {impactType === CAUSE_IMPACT_TYPES.group && (
-                  <GroupImpactContainer user={user} />
-                )}
-              </div>
             </div>
             {showAchievements ? (
               <Link
@@ -1059,6 +1056,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 />
               </div>
             ) : null}
+          </div>
+          <div className={classes.groupImpactContainer}>
+            {impactType === CAUSE_IMPACT_TYPES.group && (
+              <GroupImpactContainer user={user} />
+            )}
           </div>
         </>
       )}

@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     width: 0,
   },
   expandedWrapper: {
-    zIndex: 21,
+    zIndex: 1e6,
     gridRowStart: 1,
     gridColumnStart: 1,
     backgroundColor: 'white',
@@ -45,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
     cursor: 'pointer',
+    position: 'relative',
   },
   collapsedWrapper: {
     gridRowStart: 1,
@@ -133,10 +134,10 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(0.5),
   },
   pullTabCollapsed: {
-    width: 62,
+    width: 76,
   },
   pullTabExpanded: {
-    width: 72,
+    width: 84,
   },
   pullTabProgress: {
     fontWeight: 500,
@@ -291,11 +292,9 @@ const GroupImpactSidebar = ({
               : clsx(classes.pullTab, classes.pullTabCollapsed)
           }
         >
-          <Fade in={isClosedHover}>
-            <Typography variant="body2" className={classes.pullTabProgress}>
-              {progress}%
-            </Typography>
-          </Fade>
+          <Typography variant="body2" className={classes.pullTabProgress}>
+            {progress}%
+          </Typography>
           <Stars className={classes.pullTabStar} />
         </div>
         <VerticalLinearProgress
