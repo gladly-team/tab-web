@@ -4,7 +4,6 @@ import moment from 'moment'
 import MockDate from 'mockdate'
 import localStorageMgr from '../localstorage-mgr'
 import {
-  MAX_TABS_WITH_ADS,
   STORAGE_TABS_LAST_TAB_OPENED_DATE,
   STORAGE_TABS_RECENT_DAY_COUNT,
 } from '../constants'
@@ -170,33 +169,6 @@ describe('Tab Tracking Methods', () => {
 })
 
 describe('adHelpers: getAdUnits', () => {
-  it('returns zero ads if test returns false', () => {
-    localStorageFeaturesManager.getFeatureValue.mockReturnValue('false')
-    localStorageMgr.getItem.mockReturnValueOnce(
-      moment(mockNow).utc().toISOString()
-    )
-    localStorageMgr.getItem.mockReturnValueOnce(MAX_TABS_WITH_ADS + 1)
-    const { getAdUnits } = require('../adHelpers')
-    expect(getAdUnits()).toEqual({})
-  })
-  it('returns two ads if test returns false', () => {
-    localStorageFeaturesManager.getFeatureValue.mockReturnValue('false')
-    const { getAdUnits } = require('../adHelpers')
-    expect(getAdUnits()).toEqual({
-      leaderboard: {
-        // The long leaderboard ad.
-        adId: 'div-gpt-ad-1464385677836-0',
-        adUnitId: '/43865596/HBTL',
-        sizes: [[728, 90]],
-      },
-      rectangleAdPrimary: {
-        // The primary rectangle ad (bottom-right).
-        adId: 'div-gpt-ad-1464385742501-0',
-        adUnitId: '/43865596/HBTR',
-        sizes: [[300, 250]],
-      },
-    })
-  })
   it('returns three ads if test returns true and screen large enough', () => {
     localStorageFeaturesManager.getFeatureValue.mockReturnValue('true')
     const { getAdUnits } = require('../adHelpers')
