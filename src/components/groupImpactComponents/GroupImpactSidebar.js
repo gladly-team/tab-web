@@ -17,6 +17,7 @@ import Link from 'src/components/Link'
 import { aboutURL } from 'src/utils/urls'
 import clsx from 'clsx'
 import { GROUP_IMPACT_SIDEBAR_STATE } from 'src/utils/constants'
+import gtag from 'ga-gtag'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 
 const useStyles = makeStyles((theme) => ({
@@ -183,12 +184,24 @@ const GroupImpactSidebar = ({
   }, [groupImpactSidebarState, lastGroupImpactMetric])
 
   const toggleOpen = (e) => {
+    if (isOpen) {
+      gtag('event', 'group_impact_sidebar', {
+        interaction: 'close',
+      })
+    } else {
+      gtag('event', 'group_impact_sidebar', {
+        interaction: 'open',
+      })
+    }
     setIsOpen((prev) => !prev)
     openHandler()
     e.stopPropagation()
   }
 
   const onClickNextGoalButton = (e) => {
+    gtag('event', 'group_impact_sidebar', {
+      interaction: 'next_goal',
+    })
     setDisplaySidebarText(false)
     setTimeout(() => {
       setDisplayingOldGoal(false)
