@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
 import { Typography } from '@material-ui/core'
 import { ArrowForwardIos } from '@material-ui/icons'
 import { GROUP_IMPACT_SIDEBAR_STATE } from 'src/utils/constants'
+import gtag from 'ga-gtag'
 import Notification from '../Notification'
 
 const useStyles = makeStyles((theme) => ({
@@ -63,12 +64,27 @@ const GroupGoalNotification = ({
   impactTitle,
 }) => {
   const classes = useStyles()
-  const onDetailsHandler = () => {
+  const onDetailsHandler = useCallback(() => {
+    gtag('event', 'group_impact_notification', {
+      interaction: 'details',
+      mode,
+    })
     onDetails()
-  }
-  const onNextGoalHandler = () => {
+  }, [mode, onDetails])
+  const onNextGoalHandler = useCallback(() => {
+    gtag('event', 'group_impact_notification', {
+      interaction: 'next_goal',
+      mode,
+    })
     onNextGoal()
-  }
+  }, [mode, onNextGoal])
+  const onGoalStartedHandler = useCallback(() => {
+    gtag('event', 'group_impact_notification', {
+      interaction: 'goal_started',
+      mode,
+    })
+    onGoalStarted()
+  }, [mode, onGoalStarted])
 
   return (
     <div className={classes.wrapper}>
@@ -104,7 +120,10 @@ const GroupGoalNotification = ({
               </Button>
             </div>
           ) : (
-            <Button onClick={onGoalStarted} className={classes.startedButton}>
+            <Button
+              onClick={onGoalStartedHandler}
+              className={classes.startedButton}
+            >
               <ArrowForwardIos />
             </Button>
           )

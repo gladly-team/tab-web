@@ -5,6 +5,7 @@ import VerticalLinearProgress from 'src/components/VerticalLinearProgress'
 import Box from '@material-ui/core/Box'
 import Slide from '@material-ui/core/Slide'
 import Fade from '@material-ui/core/Fade'
+import gtag from 'ga-gtag'
 
 const getMockProps = () => ({
   groupImpactSidebarState: 'badge-text',
@@ -113,6 +114,9 @@ describe.skip('GroupImpactSidebar component', () => {
     wrapper.update()
 
     expect(wrapper.find(Slide).prop('in')).toEqual(false)
+    expect(gtag).toHaveBeenCalledWith('event', 'group_impact_sidebar', {
+      interaction: 'open',
+    })
 
     const box = wrapper.find(Box).first()
     box.first().simulate('click', {
@@ -120,6 +124,9 @@ describe.skip('GroupImpactSidebar component', () => {
     })
 
     expect(wrapper.find(Slide).prop('in')).toEqual(true)
+    expect(gtag).toHaveBeenCalledWith('event', 'group_impact_sidebar', {
+      interaction: 'close',
+    })
     expect(mockProps.openHandler).toHaveBeenCalledTimes(2)
   })
 
