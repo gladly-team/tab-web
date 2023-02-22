@@ -258,7 +258,6 @@ const useStyles = makeStyles((theme) => ({
   },
   adsContainer: {
     position: 'absolute',
-    zIndex: 1e5, // must be on top of all content
     overflow: 'visible',
     display: 'flex',
     alignItems: 'flex-end',
