@@ -237,7 +237,7 @@ const GroupImpactSidebar = ({
               <Typography variant="body2">completed</Typography>
               <Divider className={classes.divider} />
               <Typography className={classes.robotoBold} variant="h6">
-                Why it Matters
+                How this Helps
               </Typography>
               <Typography>{whyValuableDescription}</Typography>
               <Divider className={classes.divider} />
