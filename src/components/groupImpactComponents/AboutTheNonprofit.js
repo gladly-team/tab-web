@@ -9,6 +9,7 @@ import Link from 'src/components/Link'
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(6),
+    margin: theme.spacing(1),
   },
   rowBold: {
     fontWeight: 700,

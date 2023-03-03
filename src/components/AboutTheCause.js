@@ -8,6 +8,8 @@ import Markdown from 'src/components/Markdown'
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
     padding: theme.spacing(6),
+    margin: theme.spacing(1),
+    marginTop: theme.spacing(2),
   },
   title: {
     paddingBottom: theme.spacing(1),

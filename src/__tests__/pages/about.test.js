@@ -5,6 +5,9 @@ import getMockAuthUser from 'src/utils/testHelpers/getMockAuthUser'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import SettingsPage from 'src/components/SettingsPage'
 import AboutTheCause from 'src/components/AboutTheCause'
+import { CAUSE_IMPACT_TYPES } from 'src/utils/constants'
+import ImpactMetricList from 'src/components/groupImpactComponents/ImpactMetricList'
+import AboutTheNonprofit from 'src/components/groupImpactComponents/AboutTheNonprofit'
 
 jest.mock('src/components/SettingsPage')
 jest.mock('src/utils/pageWrappers/withRelay')
@@ -21,9 +24,39 @@ const getMockDataResponse = () => ({
     username: 'IAmFake',
     cause: {
       about: '### Something Here\n\nWith some other content.',
+      impactType: CAUSE_IMPACT_TYPES.individual,
       theme: {
         primaryColor: '#FF0000',
         secondaryColor: 'CCC',
+      },
+      charity: {
+        name: 'Charity',
+        impactMetrics: [
+          {
+            id: 'nQUobFEFe',
+            charityId: 'cb7ab7e4-bda6-4fdf-825a-30db05911705', // Partners in Health
+            dollarAmount: 5e6, // $5
+            impactTitle: 'Provide 1 home visit from a community health worker',
+            metricTitle: '1 home visit',
+            description:
+              'Living in the communities in which they work, community health workers are trusted neighbors who know their community best and use their linguistic, cultural, and technical expertise.\n\nThis provides access to care for people who might not otherwise have it.',
+            whyValuableDescription:
+              'Community health workers provide quality health care to those who might not otherwise have access.',
+            active: false,
+          },
+          {
+            id: 'mhwYA7KbK',
+            charityId: 'cb7ab7e4-bda6-4fdf-825a-30db05911705', // Partners in Health
+            dollarAmount: 60e6, // $60
+            impactTitle: 'Provide prenatal care for one woman',
+            metricTitle: 'prenatal care',
+            description:
+              'Provide prenatal care to one impoverished mother-to-be--and ensure her pregnancy stays safe.',
+            whyValuableDescription:
+              'This prenatal care helps ensure a safe pregnancy for an impoverished mother-to-be.',
+            active: false,
+          },
+        ],
       },
       landingPagePath: '/foo',
     },
@@ -134,5 +167,51 @@ describe('about.js', () => {
     const wrapper = shallow(<AboutPage {...mockProps} />)
     expect(wrapper.find(SettingsPage).children().length).toBeGreaterThan(0)
     expect(wrapper.find(AboutTheCause).prop('cause')).toEqual(data.user.cause)
+  })
+
+  it('does not render group impact specific content if impact type is not group', () => {
+    expect.assertions(2)
+    const AboutPage = require('src/pages/about').default
+    const data = getMockDataResponse()
+    useData.mockReturnValue({ data })
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AboutPage {...mockProps} />)
+
+    expect(wrapper.find(AboutTheNonprofit).length).toEqual(0)
+    expect(wrapper.find(ImpactMetricList).length).toEqual(0)
+  })
+
+  it('renders group impact specific content if impact type is group', () => {
+    expect.assertions(5)
+    const AboutPage = require('src/pages/about').default
+    const defaultMockData = getMockDataResponse()
+    useData.mockReturnValue({
+      data: {
+        ...defaultMockData,
+        user: {
+          ...defaultMockData.user,
+          cause: {
+            ...defaultMockData.user.cause,
+            impactType: CAUSE_IMPACT_TYPES.group,
+          },
+        },
+      },
+    })
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AboutPage {...mockProps} />)
+
+    const aboutTheNonprofit = wrapper.find(AboutTheNonprofit)
+    expect(aboutTheNonprofit.length).toEqual(1)
+    expect(aboutTheNonprofit.at(0).prop('charity')).toEqual(
+      defaultMockData.user.cause.charity
+    )
+    const impactMetricList = wrapper.find(ImpactMetricList)
+    expect(impactMetricList.length).toEqual(1)
+    expect(impactMetricList.at(0).prop('impactMetrics')).toEqual(
+      defaultMockData.user.cause.charity.impactMetrics
+    )
+    expect(impactMetricList.at(0).prop('charityName')).toEqual(
+      defaultMockData.user.cause.charity.name
+    )
   })
 })
