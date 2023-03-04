@@ -14,10 +14,15 @@ import Slide from '@material-ui/core/Slide'
 // import HealthAndSafetyOutlined from '@mui/icons-material/HealthAndSafetyOutlined'
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import Link from 'src/components/Link'
-import { aboutURL } from 'src/utils/urls'
+import { aboutURL, GET_SEARCH_URL } from 'src/utils/urls'
 import clsx from 'clsx'
-import { GROUP_IMPACT_SIDEBAR_STATE } from 'src/utils/constants'
+import {
+  GROUP_IMPACT_SIDEBAR_STATE,
+  SFAC_ACTIVITY_STATES,
+} from 'src/utils/constants'
 import gtag from 'ga-gtag'
+import { windowOpenTop } from 'src/utils/navigation'
+import { lighten } from '@material-ui/core'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 
 const useStyles = makeStyles((theme) => ({
@@ -146,6 +151,18 @@ const useStyles = makeStyles((theme) => ({
   nextGoalButton: {
     fontWeight: 700,
   },
+  sfacUpsell: {
+    backgroundColor: lighten(theme.palette.primary.main, 0.62),
+    padding: theme.spacing(1),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    borderRadius: '8px',
+  },
+  yesButton: {
+    marginTop: theme.spacing(1),
+    fontWeight: '700',
+  },
 }))
 
 const GroupImpactSidebar = ({
@@ -155,6 +172,7 @@ const GroupImpactSidebar = ({
   nextGoalButtonClickHandler,
   lastGroupImpactMetric,
   openHandler,
+  sfacActivityState,
 }) => {
   const [isOpen, setIsOpen] = useState(open)
   const [displaySidebarText, setDisplaySidebarText] = useState(true)
@@ -171,6 +189,12 @@ const GroupImpactSidebar = ({
     Math.round(100 * (dollarProgress / dollarGoal)),
     100
   )
+  const onYesClick = () => {
+    gtag('event', 'group_impact_sidebar', {
+      interaction: 'click_search_upsell',
+    })
+    windowOpenTop(GET_SEARCH_URL)
+  }
 
   useEffect(() => {
     setIsOpen(open)
@@ -288,6 +312,22 @@ const GroupImpactSidebar = ({
                   Start Next Goal
                 </Button>
               )}
+              {sfacActivityState !== SFAC_ACTIVITY_STATES.ACTIVE && (
+                <div className={classes.sfacUpsell}>
+                  <Typography>
+                    You could triple your impact by raising money each time you
+                    search. Try out our newest project: Search for a Cause
+                    today!
+                  </Typography>
+                  <Button
+                    onClick={onYesClick}
+                    className={classes.yesButton}
+                    variant="contained"
+                  >
+                    Learn More
+                  </Button>
+                </div>
+              )}
             </div>
           </Fade>
         </Box>
@@ -343,6 +383,7 @@ GroupImpactSidebar.propTypes = {
   }),
   nextGoalButtonClickHandler: PropTypes.func,
   openHandler: PropTypes.func,
+  sfacActivityState: PropTypes.string,
 }
 
 GroupImpactSidebar.defaultProps = {
@@ -350,6 +391,7 @@ GroupImpactSidebar.defaultProps = {
   nextGoalButtonClickHandler: () => {},
   openHandler: () => {},
   lastGroupImpactMetric: null,
+  sfacActivityState: null,
 }
 
 export default GroupImpactSidebar
