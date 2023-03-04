@@ -108,6 +108,9 @@ AboutPage.propTypes = {
         impactType: PropTypes.string.isRequired,
         charity: PropTypes.shape({
           name: PropTypes.string.isRequired,
+          image: PropTypes.string.isRequired,
+          description: PropTypes.string.isRequired,
+          website: PropTypes.string.isRequired,
           impactMetrics: PropTypes.arrayOf(
             PropTypes.shape({
               impactTitle: PropTypes.string,
