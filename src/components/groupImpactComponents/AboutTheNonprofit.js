@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
   description: {
     paddingBottom: theme.spacing(2),
+    whiteSpace: 'pre-line',
   },
   launch: {
     position: 'relative',
