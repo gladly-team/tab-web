@@ -9,6 +9,7 @@ import Link from 'src/components/Link'
 const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(6),
+    margin: theme.spacing(1),
   },
   rowBold: {
     fontWeight: 700,
@@ -53,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
   description: {
     paddingBottom: theme.spacing(2),
+    whiteSpace: 'pre-line',
   },
   launch: {
     position: 'relative',

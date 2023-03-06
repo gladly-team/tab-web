@@ -4,6 +4,7 @@ import { flowRight } from 'lodash/util'
 import { get } from 'lodash/object'
 import { graphql } from 'react-relay'
 import { withAuthUser, AuthAction } from 'next-firebase-auth'
+import { makeStyles } from '@material-ui/core/styles'
 import { withSentry } from 'src/utils/pageWrappers/withSentry'
 import withRelay from 'src/utils/pageWrappers/withRelay'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
@@ -12,7 +13,19 @@ import useData from 'src/utils/hooks/useData'
 import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import SettingsPage from 'src/components/SettingsPage'
 import AboutTheCause from 'src/components/AboutTheCause'
+import { CAUSE_IMPACT_TYPES } from 'src/utils/constants'
+import ImpactMetricList from 'src/components/groupImpactComponents/ImpactMetricList'
+import AboutTheNonprofit from 'src/components/groupImpactComponents/AboutTheNonprofit'
 
+const useStyles = makeStyles((theme) => ({
+  content: {
+    margin: theme.spacing(1),
+  },
+  groupImpactContent: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+}))
 const getRelayQuery = ({ AuthUser }) => {
   const userId = AuthUser.id
   return {
@@ -26,6 +39,17 @@ const getRelayQuery = ({ AuthUser }) => {
               primaryColor
               secondaryColor
             }
+            charity {
+              name
+              image
+              description
+              website
+              impactMetrics {
+                impactTitle
+                description
+                metricTitle
+              }
+            }
           }
         }
       }
@@ -37,9 +61,11 @@ const getRelayQuery = ({ AuthUser }) => {
 }
 
 const AboutPage = ({ data: fallbackData }) => {
+  const classes = useStyles()
+
   const { data } = useData({ getRelayQuery, fallbackData })
   const fetchInProgress = !data
-  const cause = get(data, 'user.cause')
+  const cause = get(data, 'user.cause', {})
   const theme = get(data, 'user.cause.theme', {})
   const { primaryColor, secondaryColor } = theme
 
@@ -51,7 +77,20 @@ const AboutPage = ({ data: fallbackData }) => {
 
   return (
     <SettingsPage>
-      {fetchInProgress ? null : <AboutTheCause cause={cause} />}
+      {fetchInProgress ? null : (
+        <div classes={classes.content}>
+          <AboutTheCause cause={cause} />
+          {cause.impactType === CAUSE_IMPACT_TYPES.group && (
+            <div className={classes.groupImpactContent}>
+              <ImpactMetricList
+                impactMetrics={cause.charity.impactMetrics}
+                charityName={cause.charity.name}
+              />
+              <AboutTheNonprofit charity={cause.charity} />
+            </div>
+          )}
+        </div>
+      )}
     </SettingsPage>
   )
 }
@@ -65,6 +104,20 @@ AboutPage.propTypes = {
         theme: PropTypes.shape({
           primaryColor: PropTypes.string.isRequired,
           secondaryColor: PropTypes.string.isRequired,
+        }).isRequired,
+        impactType: PropTypes.string.isRequired,
+        charity: PropTypes.shape({
+          name: PropTypes.string.isRequired,
+          image: PropTypes.string.isRequired,
+          description: PropTypes.string.isRequired,
+          website: PropTypes.string.isRequired,
+          impactMetrics: PropTypes.arrayOf(
+            PropTypes.shape({
+              impactTitle: PropTypes.string,
+              description: PropTypes.string,
+              metricTitle: PropTypes.string,
+            })
+          ),
         }).isRequired,
       }),
     }).isRequired,
