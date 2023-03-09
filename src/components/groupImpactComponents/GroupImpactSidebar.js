@@ -150,6 +150,7 @@ const useStyles = makeStyles((theme) => ({
   },
   nextGoalButton: {
     fontWeight: 700,
+    marginBottom: theme.spacing(1),
   },
   sfacUpsell: {
     backgroundColor: lighten(theme.palette.primary.main, 0.62),
