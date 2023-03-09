@@ -4,8 +4,13 @@ import { Button, Typography } from '@material-ui/core'
 import VerticalLinearProgress from 'src/components/VerticalLinearProgress'
 import Box from '@material-ui/core/Box'
 import Slide from '@material-ui/core/Slide'
-import Fade from '@material-ui/core/Fade'
 import gtag from 'ga-gtag'
+import { SFAC_ACTIVITY_STATES } from 'src/utils/constants'
+import { GET_SEARCH_URL } from 'src/utils/urls'
+import { windowOpenTop } from 'src/utils/navigation'
+
+jest.mock('ga-gtag')
+jest.mock('src/utils/navigation')
 
 const getMockProps = () => ({
   groupImpactSidebarState: 'badge-text',
@@ -19,6 +24,7 @@ const getMockProps = () => ({
   },
   open: true,
   openHandler: jest.fn(),
+  sfacActivityState: SFAC_ACTIVITY_STATES.ACTIVE,
 })
 
 beforeEach(() => {
@@ -27,7 +33,7 @@ beforeEach(() => {
 
 // Disabling until resolving memory/deploy issues.
 // eslint-disable-next-line jest/no-disabled-tests
-describe.skip('GroupImpactSidebar component', () => {
+describe('GroupImpactSidebar component', () => {
   it('renders without error', () => {
     const GroupImpactSidebar =
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
@@ -115,7 +121,7 @@ describe.skip('GroupImpactSidebar component', () => {
 
     expect(wrapper.find(Slide).prop('in')).toEqual(false)
     expect(gtag).toHaveBeenCalledWith('event', 'group_impact_sidebar', {
-      interaction: 'open',
+      interaction: 'close',
     })
 
     const box = wrapper.find(Box).first()
@@ -140,12 +146,9 @@ describe.skip('GroupImpactSidebar component', () => {
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
 
     expect(wrapper.find(VerticalLinearProgress).at(1).prop('width')).toEqual(8)
-    expect(wrapper.find(Fade).last().prop('in')).toEqual(false)
 
     wrapper.find(Box).at(1).simulate('mouseover')
     wrapper.update()
-
-    expect(wrapper.find(Fade).last().prop('in')).toEqual(true)
 
     expect(wrapper.find(VerticalLinearProgress).at(1).prop('width')).toEqual(24)
   })
@@ -234,5 +237,39 @@ describe.skip('GroupImpactSidebar component', () => {
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
 
     expect(wrapper.find(Button).length).toEqual(2)
+  })
+
+  it('does not display upsell widget if not search user', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = {
+      ...getMockProps(),
+      sfacActivityState: SFAC_ACTIVITY_STATES.ACTIVE,
+    }
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+
+    expect(wrapper.find(Typography).length).toEqual(8)
+  })
+
+  it('displays upsell widget if not search user, and button works correctly', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = {
+      ...getMockProps(),
+      sfacActivityState: SFAC_ACTIVITY_STATES.INACTIVE,
+    }
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+
+    expect(wrapper.find(Typography).at(7).text()).toEqual(
+      `You could triple your impact by raising money each time you search. Try out our newest project: Search for a Cause today!`
+    )
+
+    const sfacButton = wrapper.find(Button).last()
+    sfacButton.simulate('click')
+
+    expect(gtag).toHaveBeenCalledWith('event', 'group_impact_sidebar', {
+      interaction: 'click_search_upsell',
+    })
+    expect(windowOpenTop).toHaveBeenCalledWith(GET_SEARCH_URL)
   })
 })
