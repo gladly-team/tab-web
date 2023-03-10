@@ -14,7 +14,7 @@ import Slide from '@material-ui/core/Slide'
 // import HealthAndSafetyOutlined from '@mui/icons-material/HealthAndSafetyOutlined'
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import Link from 'src/components/Link'
-import { aboutURL, GET_SEARCH_URL } from 'src/utils/urls'
+import { aboutURL, searchLandingURL } from 'src/utils/urls'
 import clsx from 'clsx'
 import {
   GROUP_IMPACT_SIDEBAR_STATE,
@@ -194,7 +194,7 @@ const GroupImpactSidebar = ({
     gtag('event', 'group_impact_sidebar', {
       interaction: 'click_search_upsell',
     })
-    windowOpenTop(GET_SEARCH_URL)
+    windowOpenTop(searchLandingURL)
   }
 
   useEffect(() => {

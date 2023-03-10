@@ -6,7 +6,7 @@ import Box from '@material-ui/core/Box'
 import Slide from '@material-ui/core/Slide'
 import gtag from 'ga-gtag'
 import { SFAC_ACTIVITY_STATES } from 'src/utils/constants'
-import { GET_SEARCH_URL } from 'src/utils/urls'
+import { searchLandingURL } from 'src/utils/urls'
 import { windowOpenTop } from 'src/utils/navigation'
 
 jest.mock('ga-gtag')
@@ -270,6 +270,6 @@ describe('GroupImpactSidebar component', () => {
     expect(gtag).toHaveBeenCalledWith('event', 'group_impact_sidebar', {
       interaction: 'click_search_upsell',
     })
-    expect(windowOpenTop).toHaveBeenCalledWith(GET_SEARCH_URL)
+    expect(windowOpenTop).toHaveBeenCalledWith(searchLandingURL)
   })
 })
