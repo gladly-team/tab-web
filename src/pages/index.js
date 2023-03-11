@@ -266,6 +266,7 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     left: 0,
     pointerEvents: 'none', // don't block the main page
+    zIndex: 1.5e6,
   },
   adsContainerRectangles: {
     display: 'flex',
