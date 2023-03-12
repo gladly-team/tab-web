@@ -2,6 +2,7 @@ import React from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
 import theme from 'src/utils/theme'
 import CssBaseline from '@material-ui/core/CssBaseline'
+import { install } from 'ga-gtag'
 
 import '@fontsource/poppins/300.css'
 import '@fontsource/poppins/400.css'
@@ -24,11 +25,14 @@ export const parameters = {
 }
 
 export const decorators = [
-  (Story) => (
-    <ThemeProvider theme={theme}>
-      <CssBaseline>
-        <Story />
-      </CssBaseline>
-    </ThemeProvider>
-  ),
+  (Story) => {
+    install('G-LDFLQCKVHG')
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline>
+          <Story />
+        </CssBaseline>
+      </ThemeProvider>
+    )
+  },
 ]
