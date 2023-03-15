@@ -38,6 +38,7 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Chip from '@material-ui/core/Chip'
+import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -96,6 +97,7 @@ import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotification'
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
+import Notification from 'src/components/Notification'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -636,7 +638,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
   // Determine if we should show any notifications. Currently, each
   // notification is is configured on a one-off basis here (UI) and in the
   // backend (enabling/disabling).
-  const [, setNotifsToShow] = useState([])
+  const [notificationsToShow, setNotifsToShow] = useState([])
   useEffect(() => {
     const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
     const onNotificationClose = (code) => {
@@ -668,10 +670,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(notifications), isDataFresh])
 
-  // // Feb 2023 SFAC notification
-  // const notifSFACFeb = notificationsToShow.find(
-  //   (notif) => notif.code === 'notif-sfac-feb-2023'
-  // )
+  // Our notification
+  const notif = notificationsToShow.find(
+    (res) => res.code === 'user-survey-march-2023'
+  )
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -859,7 +861,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                  * that appear via the UserImpact component.
                  */}
                 <div className={classes.notificationsContainer}>
-                  {/* {notifSFACFeb ? (
+                  {notif ? (
                     <Notification
                       className={classes.notification}
                       text={
@@ -869,55 +871,33 @@ const Index = ({ data: fallbackData, userAgent }) => {
                             gutterBottom
                             className={classes.notificationTitle}
                           >
-                            Support Rainforest Alliance!
+                            We want to hear from you!
                           </Typography>
 
                           <Typography variant="body1" gutterBottom>
-                            Your votes are counted and this month Search for a
-                            Cause will support{' '}
-                            <Link
-                              to="https://www.rainforest-alliance.org/"
-                              target="_blank"
-                              className={classes.notificationTextLink}
-                            >
-                              Rainforest Alliance
-                            </Link>
-                            !
+                            Let us know how we can make Tab for a Cause even
+                            better by filling out this quick survey.
                           </Typography>
-
+                          <br />
                           <Typography variant="body1" gutterBottom>
-                            Rainforest Alliance helps people and nature thrive
-                            together through climate resilience, community
-                            forestry, and human rights.
-                          </Typography>
-
-                          <Typography variant="body1">
-                            If you aren’t already, try out{' '}
-                            <Link
-                              to="https://search.gladly.io/"
-                              target="_blank"
-                              className={classes.notificationTextLink}
-                            >
-                              Search for a Cause
-                            </Link>
-                            !
+                            Thanks for your help!
                           </Typography>
                         </div>
                       }
                       buttons={
                         <div className={classes.notificationButtonsWrapper}>
                           <Link
-                            to="https://tab.gladly.io/get-search/"
+                            to="https://docs.google.com/forms/d/e/1FAIpQLSeXMUUPmIJ6hnETY770VWPcbAsxjDNV23LkBKEIA3bY-nV3MA/viewform"
                             target="_blank"
                           >
-                            <Button variant="contained">Make a search</Button>
+                            <Button variant="contained">Take Survey</Button>
                           </Link>
                         </div>
                       }
                       includeClose
-                      onClose={notifSFACFeb.onDismiss}
+                      onClose={notif.onDismiss}
                     />
-                  ) : null} */}
+                  ) : null}
                   {userGlobalId && shouldShowSfacExtensionPrompt ? (
                     <SfacExtensionSellNotification
                       userId={userGlobalId}
