@@ -38,7 +38,6 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Chip from '@material-ui/core/Chip'
-import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -97,7 +96,6 @@ import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotification'
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
-import Notification from 'src/components/Notification'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -638,7 +636,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
   // Determine if we should show any notifications. Currently, each
   // notification is is configured on a one-off basis here (UI) and in the
   // backend (enabling/disabling).
-  const [notificationsToShow, setNotifsToShow] = useState([])
+  const [, setNotifsToShow] = useState([])
   useEffect(() => {
     const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
     const onNotificationClose = (code) => {
@@ -670,10 +668,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(notifications), isDataFresh])
 
-  // Our notification
-  const notif = notificationsToShow.find(
-    (res) => res.code === 'user-survey-march-2023'
-  )
+  // // Our notification
+  // const notif = notificationsToShow.find(
+  //   (res) => res.code === 'user-survey-march-2023'
+  // )
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -861,7 +859,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                  * that appear via the UserImpact component.
                  */}
                 <div className={classes.notificationsContainer}>
-                  {notif ? (
+                  {/* {notif ? (
                     <Notification
                       className={classes.notification}
                       text={
@@ -897,7 +895,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                       includeClose
                       onClose={notif.onDismiss}
                     />
-                  ) : null}
+                  ) : null} */}
                   {userGlobalId && shouldShowSfacExtensionPrompt ? (
                     <SfacExtensionSellNotification
                       userId={userGlobalId}
