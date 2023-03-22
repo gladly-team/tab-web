@@ -120,7 +120,6 @@ const useStyles = makeStyles((theme) => ({
   },
   fullContainer: {
     position: 'absolute',
-    zIndex: 1e3,
     top: 0,
     right: 0,
     left: 0,
@@ -178,6 +177,10 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(1),
     flexDirection: 'column',
     alignItems: 'flex-end',
+    position: 'absolute',
+    right: 0,
+    top: 62,
+    zIndex: 1e5,
   },
   notificationButtonsWrapper: {
     display: 'flex',
@@ -228,7 +231,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     paddingBottom: 220, // for visually-appealing vertical centering
-    position: 'relative',
   },
   searchBarContainer: {
     display: 'flex',
@@ -266,7 +268,7 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     left: 0,
     pointerEvents: 'none', // don't block the main page
-    zIndex: 1.5e6,
+    zIndex: 1.5e3,
   },
   adsContainerRectangles: {
     display: 'flex',
@@ -853,68 +855,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
                     </Link>
                   </div>
                 </div>
-                {/**
-                 * TODO: consolidate all notifications here to manage
-                 * visible state. Right now, these will overlay the ones
-                 * that appear via the UserImpact component.
-                 */}
-                <div className={classes.notificationsContainer}>
-                  {/* {notif ? (
-                    <Notification
-                      className={classes.notification}
-                      text={
-                        <div className={classes.notificationText}>
-                          <Typography
-                            variant="h2"
-                            gutterBottom
-                            className={classes.notificationTitle}
-                          >
-                            We want to hear from you!
-                          </Typography>
-
-                          <Typography variant="body1" gutterBottom>
-                            Let us know how we can make Tab for a Cause even
-                            better by filling out this quick survey.
-                          </Typography>
-                          <br />
-                          <Typography variant="body1" gutterBottom>
-                            Thanks for your help!
-                          </Typography>
-                        </div>
-                      }
-                      buttons={
-                        <div className={classes.notificationButtonsWrapper}>
-                          <Link
-                            to="https://docs.google.com/forms/d/e/1FAIpQLSeXMUUPmIJ6hnETY770VWPcbAsxjDNV23LkBKEIA3bY-nV3MA/viewform"
-                            target="_blank"
-                          >
-                            <Button variant="contained">Take Survey</Button>
-                          </Link>
-                        </div>
-                      }
-                      includeClose
-                      onClose={notif.onDismiss}
-                    />
-                  ) : null} */}
-                  {userGlobalId && shouldShowSfacExtensionPrompt ? (
-                    <SfacExtensionSellNotification
-                      userId={userGlobalId}
-                      browser={browser}
-                    />
-                  ) : null}
-                  {userGlobalId && showSFACNotification ? (
-                    <SearchForACauseSellNotification
-                      userId={userGlobalId}
-                      onLearnMore={() => setShowSFACSellModalMode('normal')}
-                      onNoThanks={() => setShowSFACSellModalMode('hard-sell')}
-                      onSwitchToSearchForACause={() =>
-                        setSearchInputTooltip(
-                          'Great! You can always switch your search engine here later on.'
-                        )
-                      }
-                    />
-                  ) : null}
-                </div>
               </div>
             </div>
             {showAchievements ? (
@@ -956,6 +896,68 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 <div /> {/* take up a spacing unit */}
                 <div className={classes.timelineBar} />
               </Link>
+            ) : null}
+          </div>
+          {/**
+           * TODO: consolidate all notifications here to manage
+           * visible state. Right now, these will overlay the ones
+           * that appear via the UserImpact component.
+           */}
+          <div className={classes.notificationsContainer}>
+            {/* {notif ? (
+                    <Notification
+                      className={classes.notification}
+                      text={
+                        <div className={classes.notificationText}>
+                          <Typography
+                            variant="h2"
+                            gutterBottom
+                            className={classes.notificationTitle}
+                          >
+                            We want to hear from you!
+                          </Typography>
+
+                          <Typography variant="body1" gutterBottom>
+                            Let us know how we can make Tab for a Cause even
+                            better by filling out this quick survey.
+                          </Typography>
+                          <br />
+                          <Typography variant="body1" gutterBottom>
+                            Thanks for your help!
+                          </Typography>
+                        </div>
+                      }
+                      buttons={
+                        <div className={classes.notificationButtonsWrapper}>
+                          <Link
+                            to="https://docs.google.com/forms/d/e/1FAIpQLSeXMUUPmIJ6hnETY770VWPcbAsxjDNV23LkBKEIA3bY-nV3MA/viewform"
+                            target="_blank"
+                          >
+                            <Button variant="contained">Take Survey</Button>
+                          </Link>
+                        </div>
+                      }
+                      includeClose
+                      onClose={notif.onDismiss}
+                    />
+                  ) : null} */}
+            {userGlobalId && shouldShowSfacExtensionPrompt ? (
+              <SfacExtensionSellNotification
+                userId={userGlobalId}
+                browser={browser}
+              />
+            ) : null}
+            {userGlobalId && showSFACNotification ? (
+              <SearchForACauseSellNotification
+                userId={userGlobalId}
+                onLearnMore={() => setShowSFACSellModalMode('normal')}
+                onNoThanks={() => setShowSFACSellModalMode('hard-sell')}
+                onSwitchToSearchForACause={() =>
+                  setSearchInputTooltip(
+                    'Great! You can always switch your search engine here later on.'
+                  )
+                }
+              />
             ) : null}
           </div>
           <div className={classes.centerContainer}>
