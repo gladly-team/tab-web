@@ -3,6 +3,7 @@ import { shallow } from 'enzyme'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import PetsIcon from '@material-ui/icons/Pets'
 import FavoriteIcon from '@material-ui/icons/Favorite'
+import TransgenderIcon from '@mui/icons-material/Transgender'
 import {
   mdiJellyfish,
   mdiHandshake,
@@ -130,5 +131,15 @@ describe('CauseIcon component', () => {
     const svgIcon = wrapper.find(SvgIcon)
     const pathD = svgIcon.find('path').prop('d')
     expect(pathD).toEqual(mdiAccountHeart)
+  })
+
+  it('returns the transgender icon', () => {
+    const CauseIcon = require('src/components/CauseIcon').default
+    const defaultMockProps = {
+      ...getMockProps(),
+      icon: 'transgender',
+    }
+    const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
+    expect(wrapper.find(TransgenderIcon).exists()).toEqual(true)
   })
 })
