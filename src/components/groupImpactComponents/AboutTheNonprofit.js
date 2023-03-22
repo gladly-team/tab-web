@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper'
 import Typography from '@material-ui/core/Typography'
 import Launch from '@mui/icons-material/Launch'
 import Link from 'src/components/Link'
+import Markdown from 'src/components/Markdown'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -79,7 +80,7 @@ const AboutTheNonprofit = ({ charity }) => {
           <img src={image} alt="charity" />
         </div>
         <div className={classes.contentRight}>
-          <Typography className={classes.description}>{description}</Typography>
+          <Markdown className={classes.description}>{description}</Markdown>
           <Link className={classes.link} to={website}>
             Link
             <Launch className={classes.launch} />

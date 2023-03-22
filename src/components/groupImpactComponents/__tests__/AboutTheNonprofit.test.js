@@ -2,6 +2,7 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
 import Link from 'src/components/Link'
+import Markdown from 'src/components/Markdown'
 
 const getMockProps = () => ({
   charity: {
@@ -37,7 +38,11 @@ describe('AboutTheNonprofit component', () => {
 
     const typography = wrapper.find(Typography)
     expect(typography.at(2).text()).toEqual(mockProps.charity.name)
-    expect(typography.at(3).text()).toEqual(mockProps.charity.description)
+
+    const markdown = wrapper.find(Markdown)
+    expect(markdown.at(0).prop('children')).toEqual(
+      mockProps.charity.description
+    )
 
     expect(wrapper.find('img').first().prop('src')).toEqual(
       mockProps.charity.image
