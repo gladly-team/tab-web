@@ -29,6 +29,11 @@ personHeart.args = {
   icon: 'person-heart',
 }
 
+export const transgender = Template.bind({})
+transgender.args = {
+  icon: 'transgender',
+}
+
 export const noMatch = Template.bind({})
 noMatch.args = {
   icon: undefined,
