@@ -192,7 +192,7 @@ describe('about.js', () => {
   })
 
   it('renders group impact specific content if impact type is group', () => {
-    expect.assertions(5)
+    expect.assertions(6)
     const AboutPage = require('src/pages/about').default
     const defaultMockData = getMockDataResponse()
     useData.mockReturnValue({
@@ -223,5 +223,7 @@ describe('about.js', () => {
     expect(impactMetricList.at(0).prop('charityName')).toEqual(
       defaultMockData.user.cause.charity.name
     )
+    const aboutTheCause = wrapper.find(AboutTheCause)
+    expect(aboutTheCause.exists()).toBe(false)
   })
 })

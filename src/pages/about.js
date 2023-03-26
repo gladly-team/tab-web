@@ -79,7 +79,9 @@ const AboutPage = ({ data: fallbackData }) => {
     <SettingsPage>
       {fetchInProgress ? null : (
         <div classes={classes.content}>
-          <AboutTheCause cause={cause} />
+          {cause.impactType !== CAUSE_IMPACT_TYPES.group && (
+            <AboutTheCause cause={cause} />
+          )}
           {cause.impactType === CAUSE_IMPACT_TYPES.group && (
             <div className={classes.groupImpactContent}>
               <ImpactMetricList
