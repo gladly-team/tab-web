@@ -30,6 +30,7 @@ import SquadCounter from 'src/components/SquadCounter'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 import SfacActivityContainer from 'src/components/SfacActivityContainer'
+import Notification from 'src/components/Notification'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -38,6 +39,7 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Chip from '@material-ui/core/Chip'
+import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -638,7 +640,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
   // Determine if we should show any notifications. Currently, each
   // notification is is configured on a one-off basis here (UI) and in the
   // backend (enabling/disabling).
-  const [, setNotifsToShow] = useState([])
+  const [notificationsToShow, setNotifsToShow] = useState([])
   useEffect(() => {
     const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
     const onNotificationClose = (code) => {
@@ -670,10 +672,14 @@ const Index = ({ data: fallbackData, userAgent }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(notifications), isDataFresh])
 
-  // // Our notification
-  // const notif = notificationsToShow.find(
-  //   (res) => res.code === 'user-survey-march-2023'
-  // )
+  // Our notification
+  let notif = notificationsToShow.find(
+    (res) => res.code === 'shfac-notify-launch'
+  )
+
+  if (notif && notif.variation !== 'Experiment') {
+    notif = null
+  }
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -904,43 +910,38 @@ const Index = ({ data: fallbackData, userAgent }) => {
            * that appear via the UserImpact component.
            */}
           <div className={classes.notificationsContainer}>
-            {/* {notif ? (
-                    <Notification
-                      className={classes.notification}
-                      text={
-                        <div className={classes.notificationText}>
-                          <Typography
-                            variant="h2"
-                            gutterBottom
-                            className={classes.notificationTitle}
-                          >
-                            We want to hear from you!
-                          </Typography>
+            {notif ? (
+              <Notification
+                className={classes.notification}
+                text={
+                  <div className={classes.notificationText}>
+                    <Typography
+                      variant="h2"
+                      gutterBottom
+                      className={classes.notificationTitle}
+                    >
+                      Raise money for charity by shopping online!
+                    </Typography>
 
-                          <Typography variant="body1" gutterBottom>
-                            Let us know how we can make Tab for a Cause even
-                            better by filling out this quick survey.
-                          </Typography>
-                          <br />
-                          <Typography variant="body1" gutterBottom>
-                            Thanks for your help!
-                          </Typography>
-                        </div>
-                      }
-                      buttons={
-                        <div className={classes.notificationButtonsWrapper}>
-                          <Link
-                            to="https://docs.google.com/forms/d/e/1FAIpQLSeXMUUPmIJ6hnETY770VWPcbAsxjDNV23LkBKEIA3bY-nV3MA/viewform"
-                            target="_blank"
-                          >
-                            <Button variant="contained">Take Survey</Button>
-                          </Link>
-                        </div>
-                      }
-                      includeClose
-                      onClose={notif.onDismiss}
-                    />
-                  ) : null} */}
+                    <Typography variant="body1" gutterBottom>
+                      Try our newest project, Shop for a Cause, to get discounts
+                      at 10,000+ online stores while raising even more money for
+                      your favorite charities. Just like Tabbing it is free,
+                      easy, and impactful ♥️
+                    </Typography>
+                  </div>
+                }
+                buttons={
+                  <div className={classes.notificationButtonsWrapper}>
+                    <Link to="https://shop.gladly.io/" target="_blank">
+                      <Button variant="contained">Learn More</Button>
+                    </Link>
+                  </div>
+                }
+                includeClose
+                onClose={notif.onDismiss}
+              />
+            ) : null}
             {userGlobalId && shouldShowSfacExtensionPrompt ? (
               <SfacExtensionSellNotification
                 userId={userGlobalId}
