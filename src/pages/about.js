@@ -42,7 +42,7 @@ const getRelayQuery = ({ AuthUser }) => {
             charity {
               name
               image
-              description
+              longformDescription
               website
               impactMetrics {
                 impactTitle
@@ -111,7 +111,7 @@ AboutPage.propTypes = {
         charity: PropTypes.shape({
           name: PropTypes.string.isRequired,
           image: PropTypes.string.isRequired,
-          description: PropTypes.string.isRequired,
+          longformDescription: PropTypes.string.isRequired,
           website: PropTypes.string.isRequired,
           impactMetrics: PropTypes.arrayOf(
             PropTypes.shape({
