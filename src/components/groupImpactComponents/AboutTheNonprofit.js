@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 const AboutTheNonprofit = ({ charity }) => {
-  const { name, image, description, website } = charity
+  const { name, image, longformDescription, website } = charity
   const classes = useStyles()
 
   return (
@@ -80,7 +80,9 @@ const AboutTheNonprofit = ({ charity }) => {
           <img src={image} alt="charity" />
         </div>
         <div className={classes.contentRight}>
-          <Markdown className={classes.description}>{description}</Markdown>
+          <Markdown className={classes.description}>
+            {longformDescription}
+          </Markdown>
           <Link className={classes.link} to={website}>
             Link
             <Launch className={classes.launch} />
@@ -95,7 +97,7 @@ AboutTheNonprofit.propTypes = {
   charity: PropTypes.shape({
     name: PropTypes.string,
     image: PropTypes.string,
-    description: PropTypes.string,
+    longformDescription: PropTypes.string,
     website: PropTypes.string,
   }).isRequired,
 }
