@@ -24,7 +24,7 @@ const Template = (args) => {
 
 export const inGroupImpactSidebar = Template.bind({})
 inGroupImpactSidebar.args = {
-  progress: 25,
+  progress: [25],
   width: 64,
   borderRadius: 32,
   showMarkers: true,
@@ -33,7 +33,7 @@ inGroupImpactSidebar.parameters = {}
 
 export const inCollapsedSidebar = Template.bind({})
 inCollapsedSidebar.args = {
-  progress: 30,
+  progress: [30],
   width: 8,
   borderRadius: 0,
   showMarkers: false,
@@ -42,20 +42,30 @@ inCollapsedSidebar.parameters = {}
 
 export const animated = Template.bind({})
 animated.args = {
-  progress: 80,
+  progress: [80],
   width: 8,
   borderRadius: 0,
   showMarkers: false,
-  startingProgress: 30,
+  startingProgress: [30],
 }
 animated.parameters = {}
 
 export const animatedDownwards = Template.bind({})
 animatedDownwards.args = {
-  progress: 30,
+  progress: [30],
   width: 8,
   borderRadius: 0,
   showMarkers: false,
-  startingProgress: 80,
+  startingProgress: [80],
 }
 animatedDownwards.parameters = {}
+
+export const multipleValues = Template.bind({})
+multipleValues.args = {
+  progress: [50, 30],
+  width: 64,
+  borderRadius: 32,
+  showMarkers: false,
+  colors: ['primary', 'red'],
+}
+multipleValues.parameters = {}

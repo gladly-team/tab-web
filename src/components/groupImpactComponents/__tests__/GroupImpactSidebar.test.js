@@ -96,13 +96,13 @@ describe('GroupImpactSidebar component', () => {
     )
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('progress')
-    ).toEqual(
+    ).toEqual([
       Math.round(
         100 *
           (mockProps.groupImpactMetric.dollarProgress /
             mockProps.groupImpactMetric.dollarGoal)
-      )
-    )
+      ),
+    ])
   })
 
   it('toggles sidebar on clicks', () => {
@@ -188,13 +188,13 @@ describe('GroupImpactSidebar component', () => {
     )
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('progress')
-    ).toEqual(
+    ).toEqual([
       Math.round(
         100 *
           (mockProps.lastGroupImpactMetric.dollarProgress /
             mockProps.lastGroupImpactMetric.dollarGoal)
-      )
-    )
+      ),
+    ])
 
     const button = wrapper.find(Button).at(2)
     button.first().simulate('click', {
@@ -219,13 +219,13 @@ describe('GroupImpactSidebar component', () => {
     )
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('progress')
-    ).toEqual(
+    ).toEqual([
       Math.round(
         100 *
           (mockProps.groupImpactMetric.dollarProgress /
             mockProps.groupImpactMetric.dollarGoal)
-      )
-    )
+      ),
+    ])
 
     expect(mockProps.nextGoalButtonClickHandler).toHaveBeenCalled()
   })

@@ -248,7 +248,7 @@ const GroupImpactSidebar = ({
       <Slide direction="right" in={isOpen}>
         <Box onClick={toggleOpen} className={classes.expandedWrapper}>
           <VerticalLinearProgress
-            progress={progress}
+            progress={[progress]}
             width={64}
             borderRadius={32}
             showMarkers
@@ -352,7 +352,7 @@ const GroupImpactSidebar = ({
           <Stars className={classes.pullTabStar} />
         </div>
         <VerticalLinearProgress
-          progress={progress}
+          progress={[progress]}
           width={isClosedHover ? 24 : 8}
           borderRadius={0}
           showMarkers={false}
