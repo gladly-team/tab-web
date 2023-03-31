@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { Stars } from '@mui/icons-material'
 
-const useAnimationStyles = ({ endProgress, borderRadius, width }) => {
+const useAnimationStyles = ({ endProgress, borderRadius, width, colors }) => {
   const classes = makeStyles((theme) => ({
     linearProgressRoot: {
       borderRadius,
@@ -12,11 +12,22 @@ const useAnimationStyles = ({ endProgress, borderRadius, width }) => {
       transition: 'width .3s',
       height: '100%',
     },
+    ...endProgress.reduce(
+      (accum, val, index) => ({
+        ...accum,
+        [`linearProgressBar${index}`]: {
+          borderRadius,
+          transform: `translateY(${100 - val}%) !important`,
+          backgroundColor: colors[index],
+        },
+      }),
+      {}
+    ),
 
-    linearProgressBar: {
+    /* linearProgressBar: {
       borderRadius,
       transform: `translateY(${100 - endProgress}%) !important`,
-    },
+    }, */
     linearProgress: {
       gridRowStart: 1,
       gridColumnStart: 1,
@@ -68,6 +79,9 @@ const useAnimationStyles = ({ endProgress, borderRadius, width }) => {
       width: '30px',
       height: '30px',
     },
+    invisible: {
+      backgroundColor: 'transparent',
+    },
   }))
   return classes()
 }
@@ -78,8 +92,14 @@ const VerticalLinearProgress = ({
   borderRadius,
   width,
   startingProgress,
+  colors,
 }) => {
-  const [endProgress, setEndProgress] = useState(startingProgress || progress)
+  const [endProgress, setEndProgress] = useState(
+    progress.map(
+      (progressVal, index) =>
+        (startingProgress && startingProgress[index]) || progressVal
+    )
+  )
 
   useEffect(() => {
     setEndProgress(progress)
@@ -92,19 +112,26 @@ const VerticalLinearProgress = ({
     endProgress,
     borderRadius,
     width,
+    colors,
   })
+
+  const linearProgresses = endProgress.map((progressVal, index) => (
+    <LinearProgress
+      className={classes.linearProgress}
+      classes={{
+        root: classes.linearProgressRoot,
+        bar: classes[`linearProgressBar${index}`],
+        bar1Determinate: classes.innerBar,
+        ...(index > 0 && { determinate: classes.invisible }),
+      }}
+      variant="determinate"
+      value={progressVal}
+      key={progressVal}
+    />
+  ))
   return (
     <div className={classes.wrapper}>
-      <LinearProgress
-        className={classes.linearProgress}
-        classes={{
-          root: classes.linearProgressRoot,
-          bar: classes.linearProgressBar,
-          bar1Determinate: classes.innerBar,
-        }}
-        variant="determinate"
-        value={endProgress}
-      />
+      {linearProgresses}
       {showMarkers && (
         <div className={classes.markers}>
           <div className={classes.completedMarker}>
@@ -122,16 +149,18 @@ const VerticalLinearProgress = ({
 
 VerticalLinearProgress.displayName = 'VerticalLinearProgress'
 VerticalLinearProgress.propTypes = {
-  progress: PropTypes.number.isRequired,
+  progress: PropTypes.arrayOf(PropTypes.number).isRequired,
   showMarkers: PropTypes.bool,
   borderRadius: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
-  startingProgress: PropTypes.number,
+  startingProgress: PropTypes.arrayOf(PropTypes.number),
+  colors: PropTypes.arrayOf(PropTypes.string),
 }
 
 VerticalLinearProgress.defaultProps = {
   showMarkers: false,
   startingProgress: null,
+  colors: ['primary'],
 }
 
 export default VerticalLinearProgress

@@ -6,10 +6,11 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import { Stars } from '@mui/icons-material'
 
 const getMockProps = () => ({
-  progress: 25,
+  progress: [25, 50],
   width: 64,
   borderRadius: 32,
   showMarkers: false,
+  colors: ['brown', 'red'],
 })
 
 afterEach(() => {
@@ -31,8 +32,9 @@ describe('VerticalLinearProgress component', () => {
       require('src/components/VerticalLinearProgress').default
     const mockProps = getMockProps()
     const wrapper = shallow(<VerticalLinearProgress {...mockProps} />)
-    const linearProgress = wrapper.find(LinearProgress).first()
-    expect(linearProgress.prop('value')).toEqual(mockProps.progress)
+    const linearProgress = wrapper.find(LinearProgress)
+    expect(linearProgress.at(0).prop('value')).toEqual(mockProps.progress[0])
+    expect(linearProgress.at(1).prop('value')).toEqual(mockProps.progress[1])
   })
 
   it('does not show markers if that showMarkers is false', () => {
@@ -59,14 +61,24 @@ describe('VerticalLinearProgress component', () => {
       require('src/components/VerticalLinearProgress').default
     const mockProps = {
       ...getMockProps(),
-      startingProgress: 20,
+      startingProgress: [20, 40],
     }
     const wrapper = shallow(<VerticalLinearProgress {...mockProps} />)
-    const linearProgress = wrapper.find(LinearProgress).first()
-    expect(linearProgress.prop('value')).toEqual(mockProps.startingProgress)
+    const linearProgress = wrapper.find(LinearProgress)
+    expect(linearProgress.at(0).prop('value')).toEqual(
+      mockProps.startingProgress[0]
+    )
+    expect(linearProgress.at(1).prop('value')).toEqual(
+      mockProps.startingProgress[1]
+    )
 
     const wrapperMounted = mount(<VerticalLinearProgress {...mockProps} />)
-    const linearProgressMounted = wrapperMounted.find(LinearProgress).first()
-    expect(linearProgressMounted.prop('value')).toEqual(mockProps.progress)
+    const linearProgressMounted = wrapperMounted.find(LinearProgress)
+    expect(linearProgressMounted.at(0).prop('value')).toEqual(
+      mockProps.progress[0]
+    )
+    expect(linearProgressMounted.at(1).prop('value')).toEqual(
+      mockProps.progress[1]
+    )
   })
 })
