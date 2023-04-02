@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
   name: {
     paddingBottom: theme.spacing(2),
@@ -65,41 +66,51 @@ const useStyles = makeStyles((theme) => ({
     height: 16,
   },
 }))
-const AboutTheNonprofit = ({ charity }) => {
-  const { name, image, longformDescription, website } = charity
+const AboutTheNonprofit = ({ charities }) => {
   const classes = useStyles()
+  const nonprofits = charities.map((charity) => {
+    const { id, name, image, longformDescription, website } = charity
+    return (
+      <div key={id}>
+        <hr />
+        <div className={classes.content}>
+          <div className={classes.contentLeft}>
+            <Typography className={classes.name}>{name}</Typography>
+            <img src={image} alt="charity" />
+          </div>
+          <div className={classes.contentRight}>
+            <Markdown className={classes.description}>
+              {longformDescription}
+            </Markdown>
+            <Link className={classes.link} to={website}>
+              Link
+              <Launch className={classes.launch} />
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
+  })
 
   return (
     <Paper className={classes.paper}>
       <Typography className={classes.title}>About the Nonprofits</Typography>
-      <Typography className={classes.subtitle}>Organization</Typography>
-      <hr />
-      <div className={classes.content}>
-        <div className={classes.contentLeft}>
-          <Typography className={classes.name}>{name}</Typography>
-          <img src={image} alt="charity" />
-        </div>
-        <div className={classes.contentRight}>
-          <Markdown className={classes.description}>
-            {longformDescription}
-          </Markdown>
-          <Link className={classes.link} to={website}>
-            Link
-            <Launch className={classes.launch} />
-          </Link>
-        </div>
-      </div>
+      <Typography className={classes.subtitle}>Organizations</Typography>
+      {nonprofits}
     </Paper>
   )
 }
 
 AboutTheNonprofit.propTypes = {
-  charity: PropTypes.shape({
-    name: PropTypes.string,
-    image: PropTypes.string,
-    longformDescription: PropTypes.string,
-    website: PropTypes.string,
-  }).isRequired,
+  charities: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      image: PropTypes.string,
+      longformDescription: PropTypes.string,
+      website: PropTypes.string,
+    })
+  ).isRequired,
 }
 
 export default AboutTheNonprofit

@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 700,
   },
 }))
-const ImpactMetricList = ({ charityName, impactMetrics }) => {
+const ImpactMetricList = ({ impactMetrics }) => {
   const classes = useStyles()
 
   return (
@@ -81,7 +81,7 @@ const ImpactMetricList = ({ charityName, impactMetrics }) => {
                   <span className={classes.rowBold}>{row.metricTitle}</span>
                 </TableCell>
                 <TableCell>
-                  <span className={classes.rowBold}>{charityName}</span>
+                  <span className={classes.rowBold}>{row.charityName}</span>
                 </TableCell>
               </TableRow>
             ))}
@@ -93,12 +93,12 @@ const ImpactMetricList = ({ charityName, impactMetrics }) => {
 }
 
 ImpactMetricList.propTypes = {
-  charityName: PropTypes.string.isRequired,
   impactMetrics: PropTypes.arrayOf(
     PropTypes.shape({
       impactTitle: PropTypes.string,
       description: PropTypes.string,
       metricTitle: PropTypes.string,
+      charityName: PropTypes.string,
     })
   ).isRequired,
 }

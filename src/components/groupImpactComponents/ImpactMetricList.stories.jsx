@@ -27,7 +27,6 @@ const Template = (args) => {
 
 export const list = Template.bind({})
 list.args = {
-  charityName: 'Partners in Health',
   impactMetrics: [
     {
       id: 'nQUobFEFe',
@@ -40,6 +39,7 @@ list.args = {
       whyValuableDescription:
         'Community health workers provide quality health care to those who might not otherwise have access.',
       active: false,
+      charityName: 'Partners in Health',
     },
     {
       id: 'mhwYA7KbK',
@@ -52,6 +52,7 @@ list.args = {
       whyValuableDescription:
         'This prenatal care helps ensure a safe pregnancy for an impoverished mother-to-be.',
       active: false,
+      charityName: 'Partners in Health',
     },
   ],
 }

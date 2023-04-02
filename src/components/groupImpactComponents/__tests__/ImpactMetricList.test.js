@@ -4,7 +4,6 @@ import Typography from '@material-ui/core/Typography'
 import Markdown from 'src/components/Markdown'
 
 const getMockProps = () => ({
-  charityName: 'Partners in Health',
   impactMetrics: [
     {
       id: 'nQUobFEFe',
@@ -17,6 +16,7 @@ const getMockProps = () => ({
       whyValuableDescription:
         'Community health workers provide quality health care to those who might not otherwise have access.',
       active: false,
+      charityName: 'Partners in Health',
     },
     {
       id: 'mhwYA7KbK',
@@ -29,6 +29,7 @@ const getMockProps = () => ({
       whyValuableDescription:
         'This prenatal care helps ensure a safe pregnancy for an impoverished mother-to-be.',
       active: false,
+      charityName: 'Partners in Health',
     },
   ],
 })
@@ -60,7 +61,7 @@ describe('ImpactMetricList component', () => {
         impactMetric.description
       )
       expect(cells.find('span').at(0).text()).toEqual(impactMetric.metricTitle)
-      expect(cells.find('span').at(1).text()).toEqual(mockProps.charityName)
+      expect(cells.find('span').at(1).text()).toEqual(impactMetric.charityName)
     }
   })
 })
