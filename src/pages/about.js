@@ -39,7 +39,8 @@ const getRelayQuery = ({ AuthUser }) => {
               primaryColor
               secondaryColor
             }
-            charity {
+            charities {
+              id
               name
               image
               longformDescription
@@ -75,6 +76,17 @@ const AboutPage = ({ data: fallbackData }) => {
     setTheme({ primaryColor, secondaryColor })
   }, [setTheme, primaryColor, secondaryColor])
 
+  const impactMetrics =
+    cause.charities &&
+    cause.charities.reduce((accumulator, charity) => {
+      const valueImpactMetrics = charity.impactMetrics.map((val) => {
+        const copy = { ...val }
+        copy.charityName = charity.name
+        return copy
+      })
+      return [...accumulator, ...valueImpactMetrics]
+    }, [])
+
   return (
     <SettingsPage>
       {fetchInProgress ? null : (
@@ -84,11 +96,8 @@ const AboutPage = ({ data: fallbackData }) => {
           )}
           {cause.impactType === CAUSE_IMPACT_TYPES.group && (
             <div className={classes.groupImpactContent}>
-              <ImpactMetricList
-                impactMetrics={cause.charity.impactMetrics}
-                charityName={cause.charity.name}
-              />
-              <AboutTheNonprofit charity={cause.charity} />
+              <ImpactMetricList impactMetrics={impactMetrics} />
+              <AboutTheNonprofit charities={cause.charities} />
             </div>
           )}
         </div>
@@ -108,19 +117,22 @@ AboutPage.propTypes = {
           secondaryColor: PropTypes.string.isRequired,
         }).isRequired,
         impactType: PropTypes.string.isRequired,
-        charity: PropTypes.shape({
-          name: PropTypes.string.isRequired,
-          image: PropTypes.string.isRequired,
-          longformDescription: PropTypes.string.isRequired,
-          website: PropTypes.string.isRequired,
-          impactMetrics: PropTypes.arrayOf(
-            PropTypes.shape({
-              impactTitle: PropTypes.string,
-              description: PropTypes.string,
-              metricTitle: PropTypes.string,
-            })
-          ),
-        }).isRequired,
+        charities: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            name: PropTypes.string.isRequired,
+            image: PropTypes.string.isRequired,
+            longformDescription: PropTypes.string.isRequired,
+            website: PropTypes.string.isRequired,
+            impactMetrics: PropTypes.arrayOf(
+              PropTypes.shape({
+                impactTitle: PropTypes.string,
+                description: PropTypes.string,
+                metricTitle: PropTypes.string,
+              })
+            ),
+          })
+        ).isRequired,
       }),
     }).isRequired,
   }),

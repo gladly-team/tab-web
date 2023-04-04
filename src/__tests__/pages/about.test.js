@@ -29,45 +29,49 @@ const getMockDataResponse = () => ({
         primaryColor: '#FF0000',
         secondaryColor: 'CCC',
       },
-      charity: {
-        name: 'Charity',
-        image:
-          'https://dev-tab2017-media.gladly.io/img/charities/charity-post-donation-images/bwhi.jpg',
-        longformDescription: `Partners In Health’s mission is to provide a preferential option for the poor in health care. By establishing long-term relationships with sister organizations based in settings of poverty, Partners In Health strives to achieve two overarching goals: to bring the benefits of modern medical science to those most in need of them and to serve as an antidote to despair.
+      charities: [
+        {
+          id: 'charity-id',
+          name: 'Charity',
+          image:
+            'https://dev-tab2017-media.gladly.io/img/charities/charity-post-donation-images/bwhi.jpg',
+          longformDescription: `Partners In Health’s mission is to provide a preferential option for the poor in health care. By establishing long-term relationships with sister organizations based in settings of poverty, Partners In Health strives to achieve two overarching goals: to bring the benefits of modern medical science to those most in need of them and to serve as an antidote to despair.
 
     They draw on the resources of the world’s leading medical and academic institutions and on the lived experience of the world’s most impoverished communities. At its root, their mission is both medical and moral. It is based on solidarity, rather than charity alone.
     
     When their patients are ill and have no access to care, their team of health professionals, scholars, and activists will do whatever it takes to make them well.
     
     Partners In Health has used a community-based model to provide health care and support for the last 30 years and now serves millions of patients across 12 countries.`,
-        website: 'https://www.pih.org/',
-        impactMetrics: [
-          {
-            id: 'nQUobFEFe',
-            charityId: 'cb7ab7e4-bda6-4fdf-825a-30db05911705', // Partners in Health
-            dollarAmount: 5e6, // $5
-            impactTitle: 'Provide 1 home visit from a community health worker',
-            metricTitle: '1 home visit',
-            description:
-              'Living in the communities in which they work, community health workers are trusted neighbors who know their community best and use their linguistic, cultural, and technical expertise.\n\nThis provides access to care for people who might not otherwise have it.',
-            whyValuableDescription:
-              'Community health workers provide quality health care to those who might not otherwise have access.',
-            active: false,
-          },
-          {
-            id: 'mhwYA7KbK',
-            charityId: 'cb7ab7e4-bda6-4fdf-825a-30db05911705', // Partners in Health
-            dollarAmount: 60e6, // $60
-            impactTitle: 'Provide prenatal care for one woman',
-            metricTitle: 'prenatal care',
-            description:
-              'Provide prenatal care to one impoverished mother-to-be--and ensure her pregnancy stays safe.',
-            whyValuableDescription:
-              'This prenatal care helps ensure a safe pregnancy for an impoverished mother-to-be.',
-            active: false,
-          },
-        ],
-      },
+          website: 'https://www.pih.org/',
+          impactMetrics: [
+            {
+              id: 'nQUobFEFe',
+              charityId: 'cb7ab7e4-bda6-4fdf-825a-30db05911705', // Partners in Health
+              dollarAmount: 5e6, // $5
+              impactTitle:
+                'Provide 1 home visit from a community health worker',
+              metricTitle: '1 home visit',
+              description:
+                'Living in the communities in which they work, community health workers are trusted neighbors who know their community best and use their linguistic, cultural, and technical expertise.\n\nThis provides access to care for people who might not otherwise have it.',
+              whyValuableDescription:
+                'Community health workers provide quality health care to those who might not otherwise have access.',
+              active: false,
+            },
+            {
+              id: 'mhwYA7KbK',
+              charityId: 'cb7ab7e4-bda6-4fdf-825a-30db05911705', // Partners in Health
+              dollarAmount: 60e6, // $60
+              impactTitle: 'Provide prenatal care for one woman',
+              metricTitle: 'prenatal care',
+              description:
+                'Provide prenatal care to one impoverished mother-to-be--and ensure her pregnancy stays safe.',
+              whyValuableDescription:
+                'This prenatal care helps ensure a safe pregnancy for an impoverished mother-to-be.',
+              active: false,
+            },
+          ],
+        },
+      ],
       landingPagePath: '/foo',
     },
   },
@@ -192,7 +196,7 @@ describe('about.js', () => {
   })
 
   it('renders group impact specific content if impact type is group', () => {
-    expect.assertions(6)
+    expect.assertions(5)
     const AboutPage = require('src/pages/about').default
     const defaultMockData = getMockDataResponse()
     useData.mockReturnValue({
@@ -212,16 +216,17 @@ describe('about.js', () => {
 
     const aboutTheNonprofit = wrapper.find(AboutTheNonprofit)
     expect(aboutTheNonprofit.length).toEqual(1)
-    expect(aboutTheNonprofit.at(0).prop('charity')).toEqual(
-      defaultMockData.user.cause.charity
+    expect(aboutTheNonprofit.at(0).prop('charities')).toEqual(
+      defaultMockData.user.cause.charities
     )
     const impactMetricList = wrapper.find(ImpactMetricList)
     expect(impactMetricList.length).toEqual(1)
     expect(impactMetricList.at(0).prop('impactMetrics')).toEqual(
-      defaultMockData.user.cause.charity.impactMetrics
-    )
-    expect(impactMetricList.at(0).prop('charityName')).toEqual(
-      defaultMockData.user.cause.charity.name
+      defaultMockData.user.cause.charities[0].impactMetrics.map((val) => {
+        const copy = { ...val }
+        copy.charityName = defaultMockData.user.cause.charities[0].name
+        return copy
+      })
     )
     const aboutTheCause = wrapper.find(AboutTheCause)
     expect(aboutTheCause.exists()).toBe(false)
