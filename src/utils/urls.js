@@ -104,3 +104,4 @@ export const termsURL = 'https://tab.gladly.io/terms'
 export const jobsURL = 'https://tab.gladly.io/jobs'
 
 export const searchLandingURL = 'https://search.gladly.io/'
+export const shopLandingURL = 'https://shop.gladly.io/'
