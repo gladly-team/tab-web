@@ -14,11 +14,12 @@ import Slide from '@material-ui/core/Slide'
 // import HealthAndSafetyOutlined from '@mui/icons-material/HealthAndSafetyOutlined'
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import Link from 'src/components/Link'
-import { aboutURL, searchLandingURL } from 'src/utils/urls'
+import { aboutURL, shopLandingURL } from 'src/utils/urls' // searchLandingURL
 import clsx from 'clsx'
 import {
   GROUP_IMPACT_SIDEBAR_STATE,
-  SFAC_ACTIVITY_STATES,
+
+  // SFAC_ACTIVITY_STATES,
 } from 'src/utils/constants'
 import gtag from 'ga-gtag'
 import { windowOpenTop } from 'src/utils/navigation'
@@ -160,6 +161,14 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     borderRadius: '8px',
   },
+  shopUpsell: {
+    backgroundColor: lighten(theme.palette.primary.main, 0.62),
+    padding: theme.spacing(1),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    borderRadius: '8px',
+  },
   yesButton: {
     marginTop: theme.spacing(1),
     fontWeight: '700',
@@ -173,7 +182,8 @@ const GroupImpactSidebar = ({
   nextGoalButtonClickHandler,
   lastGroupImpactMetric,
   openHandler,
-  sfacActivityState,
+
+  // sfacActivityState,
 }) => {
   const [isOpen, setIsOpen] = useState(open)
   const [displaySidebarText, setDisplaySidebarText] = useState(true)
@@ -190,11 +200,19 @@ const GroupImpactSidebar = ({
     Math.round(100 * (dollarProgress / dollarGoal)),
     100
   )
-  const onYesClick = () => {
+
+  // const onYesClick = () => {
+  //   gtag('event', 'group_impact_sidebar', {
+  //     interaction: 'click_search_upsell',
+  //   })
+  //   windowOpenTop(searchLandingURL)
+  // }
+
+  const onYesShopClick = () => {
     gtag('event', 'group_impact_sidebar', {
-      interaction: 'click_search_upsell',
+      interaction: 'click_shop_upsell',
     })
-    windowOpenTop(searchLandingURL)
+    windowOpenTop(shopLandingURL)
   }
 
   useEffect(() => {
@@ -313,7 +331,7 @@ const GroupImpactSidebar = ({
                   Start Next Goal
                 </Button>
               )}
-              {sfacActivityState !== SFAC_ACTIVITY_STATES.ACTIVE && (
+              {/* {sfacActivityState !== SFAC_ACTIVITY_STATES.ACTIVE && (
                 <div className={classes.sfacUpsell}>
                   <Typography>
                     You could triple your impact by raising money each time you
@@ -328,7 +346,21 @@ const GroupImpactSidebar = ({
                     Learn More
                   </Button>
                 </div>
-              )}
+              )} */}
+              <div className={classes.shopUpsell}>
+                <Typography>
+                  You could triple your impact by raising money each time you
+                  shop online. Try out our newest project: Shop for a Cause
+                  today!
+                </Typography>
+                <Button
+                  onClick={onYesShopClick}
+                  className={classes.yesButton}
+                  variant="contained"
+                >
+                  Learn More
+                </Button>
+              </div>
             </div>
           </Fade>
         </Box>
@@ -384,7 +416,8 @@ GroupImpactSidebar.propTypes = {
   }),
   nextGoalButtonClickHandler: PropTypes.func,
   openHandler: PropTypes.func,
-  sfacActivityState: PropTypes.string,
+
+  // sfacActivityState: PropTypes.string,
 }
 
 GroupImpactSidebar.defaultProps = {
@@ -392,7 +425,8 @@ GroupImpactSidebar.defaultProps = {
   nextGoalButtonClickHandler: () => {},
   openHandler: () => {},
   lastGroupImpactMetric: null,
-  sfacActivityState: null,
+
+  // sfacActivityState: null,
 }
 
 export default GroupImpactSidebar

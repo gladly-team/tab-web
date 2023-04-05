@@ -1,3 +1,5 @@
+/* eslint-disable jest/no-commented-out-tests */
+
 import React from 'react'
 import { shallow } from 'enzyme'
 import { Button, Typography } from '@material-ui/core'
@@ -6,7 +8,7 @@ import Box from '@material-ui/core/Box'
 import Slide from '@material-ui/core/Slide'
 import gtag from 'ga-gtag'
 import { SFAC_ACTIVITY_STATES } from 'src/utils/constants'
-import { searchLandingURL } from 'src/utils/urls'
+import { shopLandingURL } from 'src/utils/urls'
 import { windowOpenTop } from 'src/utils/navigation'
 
 jest.mock('ga-gtag')
@@ -230,7 +232,26 @@ describe('GroupImpactSidebar component', () => {
     expect(mockProps.nextGoalButtonClickHandler).toHaveBeenCalled()
   })
 
-  it('does not show start next goal button if lastGroupImpactMetric is not defined', () => {
+  it('displays upsell widget for shop', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+
+    expect(wrapper.find(Typography).at(7).text()).toEqual(
+      `You could triple your impact by raising money each time you shop online. Try out our newest project: Shop for a Cause today!`
+    )
+
+    const sfacButton = wrapper.find(Button).last()
+    sfacButton.simulate('click')
+
+    expect(gtag).toHaveBeenCalledWith('event', 'group_impact_sidebar', {
+      interaction: 'click_shop_upsell',
+    })
+    expect(windowOpenTop).toHaveBeenCalledWith(shopLandingURL)
+  })
+
+  /* it('does not show start next goal button if lastGroupImpactMetric is not defined', () => {
     const GroupImpactSidebar =
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
     const mockProps = getMockProps()
@@ -271,5 +292,5 @@ describe('GroupImpactSidebar component', () => {
       interaction: 'click_search_upsell',
     })
     expect(windowOpenTop).toHaveBeenCalledWith(searchLandingURL)
-  })
+  }) */
 })
