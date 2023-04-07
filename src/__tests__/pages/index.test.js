@@ -459,7 +459,7 @@ describe('index.js', () => {
     expect(wrapper.find(UserImpactContainer).prop('disabled')).toBe(true)
   })
 
-  it('does not include the UserImpactContainer if cause is not impact, displays info button instead', () => {
+  it('does not include the UserImpactContainer if cause is not individual impact, displays info button instead', () => {
     expect.assertions(1)
     showDevelopmentOnlyMissionsFeature.mockReturnValue(true)
     const IndexPage = require('src/pages/index').default
@@ -1626,7 +1626,44 @@ describe('index.js: hardcoded notifications', () => {
     )
   })
 
-  it('does not display GroupImpactContainer if group impact is enabled', async () => {
+  it('displays GroupImpactContainer if individual and group impact is enabled', async () => {
+    expect.assertions(2)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          cause: {
+            ...defaultMockProps.data.user.cause,
+            impactType: CAUSE_IMPACT_TYPES.individual_and_group,
+            groupImpactMetric: {
+              id: 'abcd',
+              dollarProgress: 28e5,
+              dollarGoal: 5e6,
+              impactMetric: {
+                impactTitle:
+                  'Provide 1 home visit from a community health worker',
+                whyValuableDescription:
+                  'Community health workers provide quality health care to those who might not otherwise have access.',
+              },
+            },
+          },
+        },
+      },
+    }
+    useData.mockReturnValue({ data: mockProps.data })
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+
+    expect(wrapper.find(GroupImpactContainer).exists()).toBe(true)
+    expect(wrapper.find(GroupImpactContainer).prop('user')).toEqual(
+      mockProps.data.user
+    )
+  })
+
+  it('does not display GroupImpactContainer if group impact is not enabled', async () => {
     expect.assertions(1)
     const IndexPage = require('src/pages/index').default
     const defaultMockProps = getMockProps()
@@ -1634,6 +1671,39 @@ describe('index.js: hardcoded notifications', () => {
     const wrapper = shallow(<IndexPage {...defaultMockProps} />)
 
     expect(wrapper.find(GroupImpactContainer).exists()).toBe(false)
+  })
+
+  it('shows the impact counter and updates impact when in a mission if impact is individual and group', () => {
+    expect.assertions(1)
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    const mockProps = {
+      ...defaultMockProps,
+      data: {
+        ...defaultMockProps.data,
+        user: {
+          ...defaultMockProps.data.user,
+          cause: {
+            ...defaultMockProps.data.user.cause,
+            impactType: CAUSE_IMPACT_TYPES.individual_and_group,
+            groupImpactMetric: {
+              id: 'abcd',
+              dollarProgress: 28e5,
+              dollarGoal: 5e6,
+              impactMetric: {
+                impactTitle:
+                  'Provide 1 home visit from a community health worker',
+                whyValuableDescription:
+                  'Community health workers provide quality health care to those who might not otherwise have access.',
+              },
+            },
+          },
+        },
+      },
+    }
+    useData.mockReturnValue(mockProps)
+    const wrapper = shallow(<IndexPage {...mockProps} />)
+    expect(wrapper.find(UserImpactContainer)).toHaveLength(1)
   })
 })
 

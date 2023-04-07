@@ -231,4 +231,41 @@ describe('about.js', () => {
     const aboutTheCause = wrapper.find(AboutTheCause)
     expect(aboutTheCause.exists()).toBe(false)
   })
+
+  it('renders group impact specific content if impact type is group_and_individual', () => {
+    expect.assertions(5)
+    const AboutPage = require('src/pages/about').default
+    const defaultMockData = getMockDataResponse()
+    useData.mockReturnValue({
+      data: {
+        ...defaultMockData,
+        user: {
+          ...defaultMockData.user,
+          cause: {
+            ...defaultMockData.user.cause,
+            impactType: CAUSE_IMPACT_TYPES.individual_and_group,
+          },
+        },
+      },
+    })
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AboutPage {...mockProps} />)
+
+    const aboutTheNonprofit = wrapper.find(AboutTheNonprofit)
+    expect(aboutTheNonprofit.length).toEqual(1)
+    expect(aboutTheNonprofit.at(0).prop('charities')).toEqual(
+      defaultMockData.user.cause.charities
+    )
+    const impactMetricList = wrapper.find(ImpactMetricList)
+    expect(impactMetricList.length).toEqual(1)
+    expect(impactMetricList.at(0).prop('impactMetrics')).toEqual(
+      defaultMockData.user.cause.charities[0].impactMetrics.map((val) => {
+        const copy = { ...val }
+        copy.charityName = defaultMockData.user.cause.charities[0].name
+        return copy
+      })
+    )
+    const aboutTheCause = wrapper.find(AboutTheCause)
+    expect(aboutTheCause.exists()).toBe(false)
+  })
 })
