@@ -560,7 +560,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
         !searchbarSfacPrompt && showSfacExtensionPrompt
       )
       setShouldShowSearchbarSFACPrompt(
-        searchbarSfacPrompt && !(impactType === CAUSE_IMPACT_TYPES.group)
+        searchbarSfacPrompt &&
+          !(
+            impactType === CAUSE_IMPACT_TYPES.group ||
+            impactType === CAUSE_IMPACT_TYPES.individual_and_group
+          )
       )
     }
   }, [
@@ -615,7 +619,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
       // should show ads or not).
       incrementTabsOpenedToday()
 
-      if (impactType === CAUSE_IMPACT_TYPES.individual) {
+      if (
+        impactType === CAUSE_IMPACT_TYPES.individual ||
+        impactType === CAUSE_IMPACT_TYPES.individual_and_group
+      ) {
         // this might seem confusing.  Right now we handle logging mission impact in the log tab mutation
         // but we use update impact to update v4 impact if a user is not in a mission
         // in the future we should handle both mission impact and individual v4 impact
@@ -814,7 +821,8 @@ const Index = ({ data: fallbackData, userAgent }) => {
                   {showSfacIcon && searchActivityNotificationSupported ? (
                     <SfacActivityContainer user={user} />
                   ) : null}
-                  {impactType === CAUSE_IMPACT_TYPES.individual ? (
+                  {impactType === CAUSE_IMPACT_TYPES.individual ||
+                  impactType === CAUSE_IMPACT_TYPES.individual_and_group ? (
                     <UserImpactContainer
                       userId={userGlobalId}
                       userImpact={userImpact}
@@ -1037,7 +1045,8 @@ const Index = ({ data: fallbackData, userAgent }) => {
             ) : null}
           </div>
           <div className={classes.groupImpactContainer}>
-            {impactType === CAUSE_IMPACT_TYPES.group && (
+            {(impactType === CAUSE_IMPACT_TYPES.group ||
+              impactType === CAUSE_IMPACT_TYPES.individual_and_group) && (
               <GroupImpactContainer user={user} />
             )}
           </div>

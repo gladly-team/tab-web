@@ -91,10 +91,12 @@ const AboutPage = ({ data: fallbackData }) => {
     <SettingsPage>
       {fetchInProgress ? null : (
         <div classes={classes.content}>
-          {cause.impactType !== CAUSE_IMPACT_TYPES.group && (
-            <AboutTheCause cause={cause} />
-          )}
-          {cause.impactType === CAUSE_IMPACT_TYPES.group && (
+          {cause.impactType !== CAUSE_IMPACT_TYPES.group &&
+            cause.impactType !== CAUSE_IMPACT_TYPES.individual_and_group && (
+              <AboutTheCause cause={cause} />
+            )}
+          {(cause.impactType === CAUSE_IMPACT_TYPES.group ||
+            cause.impactType === CAUSE_IMPACT_TYPES.individual_and_group) && (
             <div className={classes.groupImpactContent}>
               <ImpactMetricList impactMetrics={impactMetrics} />
               <AboutTheNonprofit charities={cause.charities} />
