@@ -684,7 +684,12 @@ const Index = ({ data: fallbackData, userAgent }) => {
     (res) => res.code === 'shfac-notify-launch'
   )
 
-  if (notif && notif.variation !== 'Experiment') {
+  if (
+    notif &&
+    notif.variation !== 'Version1' &&
+    notif.variation !== 'Version2' &&
+    notif.variation !== 'Version3'
+  ) {
     notif = null
   }
 
@@ -918,7 +923,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
            * that appear via the UserImpact component.
            */}
           <div className={classes.notificationsContainer}>
-            {notif ? (
+            {notif && notif.variation === 'Version1' ? (
               <Notification
                 className={classes.notification}
                 text={
@@ -928,21 +933,33 @@ const Index = ({ data: fallbackData, userAgent }) => {
                       gutterBottom
                       className={classes.notificationTitle}
                     >
-                      Raise money for charity by shopping online!
+                      Introducing: Shop for a Cause
                     </Typography>
-
                     <Typography variant="body1" gutterBottom>
-                      Try our newest project, Shop for a Cause, to get discounts
-                      at 10,000+ online stores while raising even more money for
-                      your favorite charities. Just like Tabbing it is free,
-                      easy, and impactful ♥️
+                      We are excited to officially launch{' '}
+                      <Link
+                        to={
+                          'https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec'
+                        }
+                        target="_blank"
+                        style={{ color: '#9d4ba3' }}
+                      >
+                        Shop for a Cause
+                      </Link>
+                      ! Now, you can raise even more money for charity when you
+                      shop online. Like Tab for a Cause, it is simple, free, and
+                      impactful. It takes 10 seconds to get started, try it out
+                      today!
                     </Typography>
                   </div>
                 }
                 buttons={
                   <div className={classes.notificationButtonsWrapper}>
-                    <Link to="https://shop.gladly.io/" target="_blank">
-                      <Button variant="contained">Learn More</Button>
+                    <Link
+                      to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
+                      target="_blank"
+                    >
+                      <Button variant="contained">Add to Chrome</Button>
                     </Link>
                   </div>
                 }
@@ -950,6 +967,107 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 onClose={notif.onDismiss}
               />
             ) : null}
+
+            {notif && notif.variation === 'Version2' ? (
+              <Notification
+                className={classes.notification}
+                text={
+                  <div className={classes.notificationText}>
+                    <Typography
+                      variant="h2"
+                      gutterBottom
+                      className={classes.notificationTitle}
+                    >
+                      Introducing: Shop for a Cause
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      We are excited to officially launch{' '}
+                      <Link
+                        to={
+                          'https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec'
+                        }
+                        target="_blank"
+                        style={{ color: '#9d4ba3' }}
+                      >
+                        Shop for a Cause
+                      </Link>
+                      ! Now, you can raise even more money for charity when you
+                      shop online. Like Tab for a Cause, it is simple, free, and
+                      impactful. It takes 10 seconds to get started, try it out
+                      today!
+                    </Typography>
+                  </div>
+                }
+                buttons={
+                  <div className={classes.notificationButtonsWrapper}>
+                    <Link
+                      to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
+                      target="_blank"
+                    >
+                      <Button variant="contained">Add to Chrome</Button>
+                    </Link>
+                  </div>
+                }
+                includeClose
+                onClose={notif.onDismiss}
+              />
+            ) : null}
+
+            {notif && notif.variation === 'Version3' ? (
+              <Notification
+                className={classes.notification}
+                text={
+                  <div className={classes.notificationText}>
+                    <Typography
+                      variant="h2"
+                      gutterBottom
+                      className={classes.notificationTitle}
+                    >
+                      Shop for a Cause
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      When Amazon{' '}
+                      <Link
+                        to={
+                          'https://www.npr.org/2023/01/19/1149993013/amazon-amazonsmile-charity-donation-program'
+                        }
+                        target="_blank"
+                        style={{ color: '#9d4ba3' }}
+                      >
+                        shutdown their Smile program
+                      </Link>{' '}
+                      to focus on more profit, it was a huge loss to charities.
+                      In response, we are proud to present{' '}
+                      <Link
+                        to={
+                          'https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec'
+                        }
+                        target="_blank"
+                        style={{ color: '#9d4ba3' }}
+                      >
+                        Shop for a Cause
+                      </Link>
+                      , our newest extension that raises money for charity as
+                      you shop online at over 10,000 partner stores. It is
+                      simple, free, and impactful &hearts;.
+                    </Typography>
+                  </div>
+                }
+                buttons={
+                  <div className={classes.notificationButtonsWrapper}>
+                    <Link
+                      to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
+                      target="_blank"
+                    >
+                      <Button variant="contained">Add to Chrome</Button>
+                    </Link>
+                  </div>
+                }
+                includeClose
+                onClose={notif.onDismiss}
+              />
+            ) : null}
+
             {userGlobalId && shouldShowSfacExtensionPrompt ? (
               <SfacExtensionSellNotification
                 userId={userGlobalId}
