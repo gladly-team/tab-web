@@ -938,9 +938,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                     <Typography variant="body1" gutterBottom>
                       We are excited to officially launch{' '}
                       <Link
-                        to={
-                          'https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec'
-                        }
+                        to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
                         target="_blank"
                         style={{ color: '#9d4ba3' }}
                       >
@@ -983,9 +981,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                     <Typography variant="body1" gutterBottom>
                       We are excited to officially launch{' '}
                       <Link
-                        to={
-                          'https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec'
-                        }
+                        to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
                         target="_blank"
                         style={{ color: '#9d4ba3' }}
                       >
@@ -1028,9 +1024,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                     <Typography variant="body1" gutterBottom>
                       When Amazon{' '}
                       <Link
-                        to={
-                          'https://www.npr.org/2023/01/19/1149993013/amazon-amazonsmile-charity-donation-program'
-                        }
+                        to="https://www.npr.org/2023/01/19/1149993013/amazon-amazonsmile-charity-donation-program"
                         target="_blank"
                         style={{ color: '#9d4ba3' }}
                       >
@@ -1039,9 +1033,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                       to focus on more profit, it was a huge loss to charities.
                       In response, we are proud to present{' '}
                       <Link
-                        to={
-                          'https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec'
-                        }
+                        to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
                         target="_blank"
                         style={{ color: '#9d4ba3' }}
                       >
