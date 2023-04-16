@@ -30,6 +30,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const GroupImpactWrapper = ({ user }) => {
+  const { cause } = user
+  const { groupImpactMetric } = cause
+
+  // Do not display anything if there is no groupImpactMetric
+  if (groupImpactMetric === null) {
+    return null
+  }
+
+  return <GroupImpact user={user} />
+}
+
 const GroupImpact = ({ user }) => {
   const { cause } = user
   const { groupImpactMetric } = cause
@@ -193,4 +205,22 @@ GroupImpact.propTypes = {
 
 GroupImpact.defaultProps = {}
 
-export default GroupImpact
+GroupImpactWrapper.propTypes = {
+  user: PropTypes.shape({
+    cause: PropTypes.shape({
+      groupImpactMetric: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        dollarProgress: PropTypes.number.isRequired,
+        dollarGoal: PropTypes.number.isRequired,
+        impactMetric: PropTypes.shape({
+          impactTitle: PropTypes.string.isRequired,
+          whyValuableDescription: PropTypes.string.isRequired,
+        }),
+      }),
+    }).isRequired,
+  }).isRequired,
+}
+
+GroupImpactWrapper.defaultProps = {}
+
+export default GroupImpactWrapper
