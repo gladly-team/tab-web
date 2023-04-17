@@ -938,7 +938,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                     <Typography variant="body1" gutterBottom>
                       We are excited to officially launch{' '}
                       <Link
-                        to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
+                        to="https://shop.gladly.io/"
                         target="_blank"
                         style={{ color: '#9d4ba3' }}
                       >
@@ -953,10 +953,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 }
                 buttons={
                   <div className={classes.notificationButtonsWrapper}>
-                    <Link
-                      to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
-                      target="_blank"
-                    >
+                    <Link to="https://shop.gladly.io/" target="_blank">
                       <Button variant="contained">Add to Chrome</Button>
                     </Link>
                   </div>
@@ -981,7 +978,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                     <Typography variant="body1" gutterBottom>
                       We are excited to officially launch{' '}
                       <Link
-                        to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
+                        to="https://shop.gladly.io/"
                         target="_blank"
                         style={{ color: '#9d4ba3' }}
                       >
@@ -1033,7 +1030,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                       to focus on more profit, it was a huge loss to charities.
                       In response, we are proud to present{' '}
                       <Link
-                        to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
+                        to="https://shop.gladly.io/"
                         target="_blank"
                         style={{ color: '#9d4ba3' }}
                       >
@@ -1047,10 +1044,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 }
                 buttons={
                   <div className={classes.notificationButtonsWrapper}>
-                    <Link
-                      to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
-                      target="_blank"
-                    >
+                    <Link to="https://shop.gladly.io/" target="_blank">
                       <Button variant="contained">Add to Chrome</Button>
                     </Link>
                   </div>
