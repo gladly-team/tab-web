@@ -90,7 +90,7 @@ describe('GroupImpactSidebar component', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
     expect(wrapper.find(Typography).at(2).text()).toEqual(
-      `${Math.round(
+      `${Math.floor(
         100 *
           (mockProps.groupImpactMetric.dollarProgress /
             mockProps.groupImpactMetric.dollarGoal)
@@ -99,7 +99,7 @@ describe('GroupImpactSidebar component', () => {
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('progress')
     ).toEqual([
-      Math.round(
+      Math.floor(
         100 *
           (mockProps.groupImpactMetric.dollarProgress /
             mockProps.groupImpactMetric.dollarGoal)
@@ -213,7 +213,7 @@ describe('GroupImpactSidebar component', () => {
     )
 
     expect(wrapper.find(Typography).at(2).text()).toEqual(
-      `${Math.round(
+      `${Math.floor(
         100 *
           (mockProps.groupImpactMetric.dollarProgress /
             mockProps.groupImpactMetric.dollarGoal)
@@ -222,7 +222,7 @@ describe('GroupImpactSidebar component', () => {
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('progress')
     ).toEqual([
-      Math.round(
+      Math.floor(
         100 *
           (mockProps.groupImpactMetric.dollarProgress /
             mockProps.groupImpactMetric.dollarGoal)
