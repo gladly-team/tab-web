@@ -196,9 +196,9 @@ const GroupImpactSidebar = ({
     : groupImpactMetric
   const { impactTitle, whyValuableDescription } = impactMetric
   const classes = useStyles()
-  const progress = Math.min(
-    Math.round(100 * (dollarProgress / dollarGoal)),
-    100
+  const progress = Math.max(
+    Math.min(Math.floor(100 * (dollarProgress / dollarGoal)), 100),
+    1
   )
 
   // const onYesClick = () => {
@@ -275,7 +275,7 @@ const GroupImpactSidebar = ({
             <div className={classes.sidebarText}>
               <div className={classes.goalText}>
                 <Typography className={classes.robotoBold} variant="h5">
-                  GOAL
+                  GROUP GOAL
                 </Typography>
                 {groupImpactSidebarState ? (
                   <span className={classes.badge}>
