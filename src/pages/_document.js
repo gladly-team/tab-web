@@ -114,14 +114,6 @@ class CustomDocument extends Document {
               src="https://www.facebook.com/tr?id=1813501258922708&ev=PageView&noscript=1"
             />
           </noscript>
-
-          {/* Admiral */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `(function(o,_name){function n(){(n.q=n.q||[]).push(arguments)}n.v=1,o[_name]=o[_name]||n;!(function(o,t,n,c){function e(n){(function(){try{return(localStorage.getItem("v4ac1eiZr0")||"").split(",")[4]>0}catch(o){}return!1})()&&(n=o[t].pubads())&&n.setTargeting("admiral-engaged","true")}(c=o[t]=o[t]||{}).cmd=c.cmd||[],typeof c.pubads===n?e():typeof c.cmd.unshift===n?c.cmd.unshift(e):c.cmd.push(e)})(window,"googletag","function");})(window,String.fromCharCode(97,100,109,105,114,97,108));`,
-            }}
-          />
-
           <Main />
           <NextScript />
 
