@@ -23,6 +23,8 @@ import ToggleButton from '@material-ui/lab/ToggleButton'
 import SetUserCauseMutation from 'src/utils/mutations/SetUserCauseMutation'
 import CauseIcon from 'src/components/CauseIcon'
 import Tooltip from '@material-ui/core/Tooltip'
+import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
+import Switch from '@material-ui/core/Switch'
 
 jest.mock('next-offline/runtime')
 jest.mock('tab-cmp')
@@ -41,6 +43,9 @@ jest.mock('src/utils/hooks/useCustomTheming')
 jest.mock('src/utils/mutations/SetUserCauseMutation')
 // eslint-disable-next-line react/prop-types
 jest.mock('src/components/CauseIcon', () => ({ icon }) => <div icon={icon} />)
+jest.mock('src/utils/localStorageFeaturesManager', () => ({
+  getFeatureValue: jest.fn(),
+}))
 
 const getMockDataResponse = () => ({
   user: {
@@ -116,9 +121,19 @@ describe('account.js', () => {
     const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
+    const content = wrapper.at(0).dive().find(Paper).at(1)
     const title = content.childAt(0).find(Typography).first()
     expect(title.text()).toEqual('Account')
+  })
+
+  it('has an "New Tab Page" title', () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AccountPage {...mockProps} />)
+    const content = wrapper.at(0).dive().find(Paper).at(0)
+    const title = content.childAt(0).find(Typography).first()
+    expect(title.text()).toEqual('New Tab Page')
   })
 
   it('has a logout button', () => {
@@ -227,7 +242,7 @@ describe('account.js', () => {
     useData.mockReturnValue({ data: undefined })
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
+    const content = wrapper.at(0).dive().find(Paper).at(1)
     const accountItem = content.childAt(2).dive()
     expect(accountItem.find(Typography).first().text()).toEqual('Username')
     expect(accountItem.find(Typography).at(1).text()).toEqual('...')
@@ -239,7 +254,7 @@ describe('account.js', () => {
     useData.mockReturnValue({ data: getMockDataResponse() })
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
+    const content = wrapper.at(0).dive().find(Paper).at(1)
     const accountItem = content.childAt(2).dive()
     expect(accountItem.find(Typography).first().text()).toEqual('Username')
     expect(accountItem.find(Typography).at(1).text()).toEqual('IAmFake')
@@ -251,7 +266,7 @@ describe('account.js', () => {
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
+    const content = wrapper.at(0).dive().find(Paper).at(1)
     const accountItem = content.childAt(3)
     expect(accountItem.type()).toEqual(Divider)
   })
@@ -262,7 +277,7 @@ describe('account.js', () => {
     useData.mockReturnValue({ data: undefined })
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
+    const content = wrapper.at(0).dive().find(Paper).at(1)
     const accountItem = content.childAt(4).dive()
     expect(accountItem.find(Typography).first().text()).toEqual('Email')
     expect(accountItem.find(Typography).at(1).text()).toEqual('...')
@@ -274,7 +289,7 @@ describe('account.js', () => {
     useData.mockReturnValue({ data: getMockDataResponse() })
     const mockProps = getMockProps()
     const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
+    const content = wrapper.at(0).dive().find(Paper).at(1)
     const accountItem = content.childAt(4).dive()
     expect(accountItem.find(Typography).first().text()).toEqual('Email')
     expect(accountItem.find(Typography).at(1).text()).toEqual(
@@ -288,9 +303,20 @@ describe('account.js', () => {
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
     const wrapper = shallow(<AccountPage {...mockProps} />)
-    const content = wrapper.at(0).dive().find(Paper).first()
+    const content = wrapper.at(0).dive().find(Paper).at(1)
     const accountItem = content.childAt(5)
     expect(accountItem.type()).toEqual(Divider)
+  })
+
+  it('displays a Bookmarks Toggle after Switch Cause if there is cause', () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account').default
+    const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
+    localStorageFeaturesManager.getFeatureValue.mockReturnValue(true)
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const content = wrapper.find(Switch)
+    expect(content.length).toEqual(1)
   })
 })
 

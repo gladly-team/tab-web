@@ -28,6 +28,9 @@ import useCustomTheming from 'src/utils/hooks/useCustomTheming'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 import CauseIcon from 'src/components/CauseIcon'
+import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
+import { LAUNCH_BOOKMARKS } from 'src/utils/experiments'
+import Switch from '@material-ui/core/Switch'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -290,8 +293,64 @@ const Account = ({ data: fallbackData }) => {
       setWindowLocation(dashboardURL)
     }
   }
+
+  const [bookmarks, setBookmarks] = useState(false)
+  const handleBookmarks = () => {
+    setBookmarks(!bookmarks)
+  }
+
   return (
     <SettingsPage>
+      <Paper elevation={1} className={classes.contentContainer}>
+        <div className={classes.titleContainer}>
+          <Typography variant="h5" className={classes.title}>
+            New Tab Page
+          </Typography>
+        </div>
+        <Divider />
+        <AccountItem
+          name="Switch Cause"
+          actionButton={
+            <ToggleButtonGroup
+              color="primary"
+              value={currentCauseId}
+              exclusive
+              onChange={switchCause}
+            >
+              {causeNodes.map(
+                ({
+                  node: { causeId: causeIdGlobal, icon, name: causeName },
+                }) => (
+                  <TooltipToggleButton
+                    key={causeIdGlobal}
+                    value={causeIdGlobal}
+                    TooltipProps={{ title: `Tab for ${causeName}` }}
+                  >
+                    <CauseIcon icon={icon} />
+                  </TooltipToggleButton>
+                )
+              )}
+            </ToggleButtonGroup>
+          }
+          testId="switch-cause"
+        />
+        {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) && (
+          <Divider />
+        )}
+        {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) && (
+          <AccountItem
+            name="Bookmarks"
+            actionButton={
+              <Switch
+                checked={bookmarks}
+                onChange={handleBookmarks}
+                color="primary"
+              />
+            }
+            testId="switch-cause"
+          />
+        )}
+      </Paper>
       <Paper elevation={1} className={classes.contentContainer}>
         <div className={classes.titleContainer}>
           <Typography variant="h5" className={classes.title}>
@@ -404,35 +463,6 @@ const Account = ({ data: fallbackData }) => {
             </div>
           }
           testId="revert-v4"
-        />
-        {/* Advanced Section of Profile Removed in commit associated with this comment */}
-        {/* TODO: @workaround/tab-generalization */}
-        <Divider />
-        <AccountItem
-          name="Switch Cause"
-          actionButton={
-            <ToggleButtonGroup
-              color="primary"
-              value={currentCauseId}
-              exclusive
-              onChange={switchCause}
-            >
-              {causeNodes.map(
-                ({
-                  node: { causeId: causeIdGlobal, icon, name: causeName },
-                }) => (
-                  <TooltipToggleButton
-                    key={causeIdGlobal}
-                    value={causeIdGlobal}
-                    TooltipProps={{ title: `Tab for ${causeName}` }}
-                  >
-                    <CauseIcon icon={icon} />
-                  </TooltipToggleButton>
-                )
-              )}
-            </ToggleButtonGroup>
-          }
-          testId="switch-cause"
         />
       </Paper>
     </SettingsPage>
