@@ -34,6 +34,7 @@ open.args = {
   open: true,
   groupImpactMetric: {
     dollarProgress: 28e5,
+    dollarProgressFromTab: 14e5,
     dollarGoal: 5e6,
     impactMetric: {
       impactTitle: 'Provide 1 home visit from a community health worker',

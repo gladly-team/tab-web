@@ -8,7 +8,7 @@ export default createFragmentContainer(GroupImpact, {
         groupImpactMetric {
           id
           dollarProgress
-          dollarGoal
+          dollarProgressFromTab
           impactMetric {
             impactTitle
             whyValuableDescription

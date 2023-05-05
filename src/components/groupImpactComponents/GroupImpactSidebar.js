@@ -191,15 +191,20 @@ const GroupImpactSidebar = ({
     !!lastGroupImpactMetric
   )
   const [isClosedHover, setIsClosedHover] = useState(false)
-  const { dollarProgress, dollarGoal, impactMetric } = displayingOldGoal
-    ? lastGroupImpactMetric
-    : groupImpactMetric
+  const { dollarProgress, dollarGoal, dollarProgressFromTab, impactMetric } =
+    displayingOldGoal ? lastGroupImpactMetric : groupImpactMetric
   const { impactTitle, whyValuableDescription } = impactMetric
   const classes = useStyles()
-  const progress = Math.max(
+  const totalProgress = Math.max(
     Math.min(Math.floor(100 * (dollarProgress / dollarGoal)), 100),
     1
   )
+  const tabDollarProgress =
+    dollarProgressFromTab &&
+    Math.max(
+      Math.min(Math.floor(100 * (dollarProgressFromTab / dollarGoal)), 100),
+      1
+    )
 
   // const onYesClick = () => {
   //   gtag('event', 'group_impact_sidebar', {
@@ -266,10 +271,15 @@ const GroupImpactSidebar = ({
       <Slide direction="right" in={isOpen}>
         <Box onClick={toggleOpen} className={classes.expandedWrapper}>
           <VerticalLinearProgress
-            progress={[progress]}
+            progress={
+              tabDollarProgress
+                ? [totalProgress, tabDollarProgress]
+                : [totalProgress]
+            }
             width={64}
             borderRadius={32}
             showMarkers
+            colors={['primary', 'red']}
           />
           <Fade in={displaySidebarText} timeout={500}>
             <div className={classes.sidebarText}>
@@ -288,7 +298,7 @@ const GroupImpactSidebar = ({
               </div>
               <Typography variant="body2">{impactTitle}</Typography>
               <Typography className={classes.robotoBold} variant="h3">
-                {progress}%
+                {totalProgress}%
               </Typography>
               <Typography variant="body2">completed</Typography>
               <Divider className={classes.divider} />
@@ -379,12 +389,12 @@ const GroupImpactSidebar = ({
           }
         >
           <Typography variant="body2" className={classes.pullTabProgress}>
-            {progress}%
+            {totalProgress}%
           </Typography>
           <Stars className={classes.pullTabStar} />
         </div>
         <VerticalLinearProgress
-          progress={[progress]}
+          progress={[totalProgress]}
           width={isClosedHover ? 24 : 8}
           borderRadius={0}
           showMarkers={false}
@@ -400,6 +410,7 @@ GroupImpactSidebar.propTypes = {
   groupImpactSidebarState: PropTypes.string,
   groupImpactMetric: PropTypes.shape({
     dollarProgress: PropTypes.number.isRequired,
+    dollarProgressFromTab: PropTypes.number,
     dollarGoal: PropTypes.number.isRequired,
     impactMetric: PropTypes.shape({
       impactTitle: PropTypes.string.isRequired,
@@ -408,6 +419,7 @@ GroupImpactSidebar.propTypes = {
   }).isRequired,
   lastGroupImpactMetric: PropTypes.shape({
     dollarProgress: PropTypes.number.isRequired,
+    dollarProgressFromTab: PropTypes.number,
     dollarGoal: PropTypes.number.isRequired,
     impactMetric: PropTypes.shape({
       impactTitle: PropTypes.string.isRequired,
