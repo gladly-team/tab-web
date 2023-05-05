@@ -58,7 +58,8 @@ const GroupImpact = ({ user }) => {
     GROUP_IMPACT_SIDEBAR_STATE.NORMAL
   )
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { id, dollarGoal, impactMetric } = groupImpactMetric
+  const { id, dollarGoal, dollarProgressFromSearch, impactMetric } =
+    groupImpactMetric
   const { impactTitle, impactCountPerMetric, whyValuableDescription } =
     impactMetric
 
@@ -85,6 +86,7 @@ const GroupImpact = ({ user }) => {
     const newGroupImpactMetric = {
       id,
       dollarProgress: dollarGoal,
+      dollarProgressFromSearch,
       dollarGoal,
       impactMetric: {
         impactTitle,
@@ -98,7 +100,13 @@ const GroupImpact = ({ user }) => {
     localStorageManager.setItem(COMPLETED_GROUP_IMPACT_VIEWS, 0)
     localStorageManager.setItem(CURRENT_GROUP_IMPACT_VIEWS, 0)
     setSidebarMode(GROUP_IMPACT_SIDEBAR_STATE.NEW)
-  }, [id, dollarGoal, impactTitle, whyValuableDescription])
+  }, [
+    id,
+    dollarGoal,
+    dollarProgressFromSearch,
+    impactTitle,
+    whyValuableDescription,
+  ])
 
   useEffect(() => {
     if (lastGroupImpactMetric.id === null) {
@@ -196,6 +204,7 @@ GroupImpact.propTypes = {
       groupImpactMetric: PropTypes.shape({
         id: PropTypes.string.isRequired,
         dollarProgress: PropTypes.number.isRequired,
+        dollarProgressFromSearch: PropTypes.number.isRequired,
         dollarGoal: PropTypes.number.isRequired,
         impactMetric: PropTypes.shape({
           impactTitle: PropTypes.string.isRequired,
@@ -216,6 +225,7 @@ GroupImpactWrapper.propTypes = {
       groupImpactMetric: PropTypes.shape({
         id: PropTypes.string.isRequired,
         dollarProgress: PropTypes.number.isRequired,
+        dollarProgressFromSearch: PropTypes.number.isRequired,
         dollarGoal: PropTypes.number.isRequired,
         impactMetric: PropTypes.shape({
           impactTitle: PropTypes.string.isRequired,

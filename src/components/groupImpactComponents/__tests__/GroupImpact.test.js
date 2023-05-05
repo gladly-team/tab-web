@@ -24,6 +24,7 @@ const getMockProps = () => ({
       groupImpactMetric: {
         id: 'abcd',
         dollarProgress: 250,
+        dollarProgressFromSearch: 125,
         dollarGoal: 600,
         impactMetric: {
           impactTitle: 'impact-title',
@@ -73,6 +74,7 @@ describe('GroupImpact component', () => {
       {
         id: 'bcde',
         dollarProgress: 28e5,
+        dollarProgressFromSearch: 125,
         dollarGoal: 5e6,
         impactMetric: {
           impactTitle: 'Provide 1 home visit from a community health worker',
@@ -95,6 +97,7 @@ describe('GroupImpact component', () => {
       {
         id: 'bcde',
         dollarProgress: 28e5,
+        dollarProgressFromSearch: 125,
         dollarGoal: 5e6,
         impactMetric: {
           impactTitle: 'Provide 1 home visit from a community health worker',
@@ -117,6 +120,7 @@ describe('GroupImpact component', () => {
       {
         id: 'abcd',
         dollarProgress: 28e5,
+        dollarProgressFromSearch: 125,
         dollarGoal: 5e6,
         impactMetric: {
           impactTitle: 'Provide 1 home visit from a community health worker',
@@ -138,6 +142,7 @@ describe('GroupImpact component', () => {
     const lastGroupImpactMetric = {
       id: 'bcde',
       dollarProgress: 28e5,
+      dollarProgressFromSearch: 125,
       dollarGoal: 5e6,
       impactMetric: {
         impactTitle: 'Provide 1 home visit from a community health worker',
@@ -170,6 +175,7 @@ describe('GroupImpact component', () => {
     const lastGroupImpactMetric = {
       id: 'bcde',
       dollarProgress: 28e5,
+      dollarProgressFromSearch: 125,
       dollarGoal: 5e6,
       impactMetric: {
         impactTitle: 'Provide 1 home visit from a community health worker',
@@ -277,6 +283,7 @@ describe('GroupImpact component', () => {
     const lastGroupImpactMetric = {
       id: 'bcde',
       dollarProgress: 28e5,
+      dollarProgressFromSearch: 125,
       dollarGoal: 5e6,
       impactMetric: {
         impactTitle: 'Provide 1 home visit from a community health worker',
@@ -313,6 +320,7 @@ describe('GroupImpact component', () => {
     const lastGroupImpactMetric = {
       id: 'bcde',
       dollarProgress: 28e5,
+      dollarProgressFromSearch: 125,
       dollarGoal: 5e6,
       impactMetric: {
         impactTitle: 'Provide 1 home visit from a community health worker',

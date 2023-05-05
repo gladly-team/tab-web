@@ -104,6 +104,9 @@ const useAnimationStyles = ({ endProgress, borderRadius, width, colors }) => {
     invisible: {
       backgroundColor: 'transparent',
     },
+    tooltips: {
+      zIndex: '9999999 !important',
+    },
   }))
   return classes()
 }
@@ -168,12 +171,12 @@ const VerticalLinearProgress = ({
         </div>
       )}
       {icons.map((icon, index) => (
-        <div
-          className={classes[`iconWrapper${index}`]}
-          key={icon.constructor.name}
-        >
+        <div className={classes[`iconWrapper${index}`]} key={tooltips[index]}>
           <Tooltip
             title={`This portion of the goal was contributed by revenue coming from ${tooltips[index]}`}
+            classes={{
+              popper: classes.tooltips,
+            }}
           >
             <IconButton className={classes[`icon${index}`]}>
               {cloneElement(icon, {

@@ -5,6 +5,7 @@ import { mount, shallow } from 'enzyme'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { Stars } from '@mui/icons-material'
 import SearchIcon from '@material-ui/icons/Search'
+import Tooltip from '@material-ui/core/Tooltip'
 
 const getMockProps = () => ({
   progress: [25, 50],
@@ -90,8 +91,10 @@ describe('VerticalLinearProgress component', () => {
       ...getMockProps(),
       startingProgress: [20, 40],
       icons: [<SearchIcon />],
+      tooltips: ['abc'],
     }
     const wrapper = shallow(<VerticalLinearProgress {...mockProps} />)
     expect(wrapper.find(SearchIcon).exists()).toEqual(true)
+    expect(wrapper.find(Tooltip).exists()).toEqual(true)
   })
 })
