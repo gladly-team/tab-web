@@ -251,6 +251,71 @@ describe('GroupImpactSidebar component', () => {
     expect(windowOpenTop).toHaveBeenCalledWith(shopLandingURL)
   })
 
+  it('does not display group impact metric count if not applicable', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+
+    expect(
+      wrapper.find('[data-test-id="groupImpactMetricCount"]').length
+    ).toEqual(0)
+  })
+
+  it('does display group impact metric count if applicable', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = {
+      ...getMockProps(),
+      groupImpactMetric: {
+        dollarProgressFromTab: 125,
+        dollarProgress: 250,
+        dollarGoal: 600,
+        impactMetric: {
+          impactTitle: '{{count}} impact-title {{multiple}}',
+          whyValuableDescription: 'why-valuable-description',
+          impactCountPerMetric: 5,
+        },
+      },
+      groupImpactMetricCount: 5,
+    }
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+
+    const impactMetricCount = wrapper
+      .find('[data-test-id="groupImpactMetricCount"]')
+      .find(Typography)
+    expect(impactMetricCount.at(0).text()).toEqual(
+      'Tabbers like you have helped 25 impact-title true.'
+    )
+  })
+
+  it('does display correct group impact metric count if applicable', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = {
+      ...getMockProps(),
+      groupImpactMetric: {
+        dollarProgressFromTab: 125,
+        dollarProgress: 250,
+        dollarGoal: 600,
+        impactMetric: {
+          impactTitle: '{{count}} impact-title {{multiple}}',
+          whyValuableDescription: 'why-valuable-description',
+          impactCountPerMetric: 1,
+        },
+      },
+      groupImpactMetricCount: 1,
+    }
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+
+    const impactMetricCount = wrapper
+      .find('[data-test-id="groupImpactMetricCount"]')
+      .find(Typography)
+    expect(impactMetricCount.at(0).text()).toEqual(
+      'Tabbers like you have helped 1 impact-title false.'
+    )
+  })
+
   /* it('does not show start next goal button if lastGroupImpactMetric is not defined', () => {
     const GroupImpactSidebar =
       require('src/components/groupImpactComponents/GroupImpactSidebar').default

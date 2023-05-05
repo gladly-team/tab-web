@@ -45,6 +45,7 @@
     "firebase": "^8.2.2",
     "firebase-admin": "^9.4.2",
     "ga-gtag": "^1.1.7",
+    "handlebars": "^4.7.7",
     "lodash": "^4.17.21",
     "mdi-material-ui": "^5.11.0",
     "moment": "^2.29.4",

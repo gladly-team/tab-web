@@ -44,7 +44,7 @@ const GroupImpactWrapper = ({ user }) => {
 
 const GroupImpact = ({ user }) => {
   const { cause } = user
-  const { groupImpactMetric } = cause
+  const { groupImpactMetric, groupImpactMetricCount } = cause
   const classes = useStyles()
 
   // Locking groupImpactMetric so it does not change on other action on the page.
@@ -166,6 +166,7 @@ const GroupImpact = ({ user }) => {
             : () => {}
         }
         openHandler={toggleSidebar}
+        groupImpactMetricCount={groupImpactMetricCount}
       />
       {sidebarMode !== GROUP_IMPACT_SIDEBAR_STATE.NORMAL && (
         <Slide direction="right" in={!sidebarOpen}>
@@ -199,6 +200,7 @@ GroupImpact.propTypes = {
           whyValuableDescription: PropTypes.string.isRequired,
         }),
       }).isRequired,
+      groupImpactMetricCount: PropTypes.number,
     }).isRequired,
   }).isRequired,
 }
@@ -215,8 +217,10 @@ GroupImpactWrapper.propTypes = {
         impactMetric: PropTypes.shape({
           impactTitle: PropTypes.string.isRequired,
           whyValuableDescription: PropTypes.string.isRequired,
+          impactCountPerMetric: PropTypes.number,
         }),
       }),
+      groupImpactMetricCount: PropTypes.number,
     }).isRequired,
   }).isRequired,
 }

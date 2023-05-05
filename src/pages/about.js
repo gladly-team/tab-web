@@ -49,6 +49,7 @@ const getRelayQuery = ({ AuthUser }) => {
                 impactTitle
                 description
                 metricTitle
+                impactCountPerMetric
               }
             }
           }
