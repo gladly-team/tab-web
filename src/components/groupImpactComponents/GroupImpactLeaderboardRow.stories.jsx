@@ -36,3 +36,16 @@ normal.args = {
     shopDollarContribution: 123,
   },
 }
+
+export const selected = Template.bind({})
+selected.args = {
+  selected: true,
+  position: 13567,
+  username: 'cat_lover',
+  userGroupImpactMetric: {
+    dollarContribution: 12345,
+    tabDollarContribution: 11111,
+    searchDollarContribution: 1111,
+    shopDollarContribution: 123,
+  },
+}

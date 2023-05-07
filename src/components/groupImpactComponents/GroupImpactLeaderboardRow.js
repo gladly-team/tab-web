@@ -68,11 +68,15 @@ const useStyles = makeStyles((theme) => ({
   impactPoints: {
     marginLeft: 'auto',
   },
+  selected: {
+    backgroundColor: defaultTheme.palette.primary.main,
+  },
 }))
 const GroupImpactLeaderboardRow = ({
   position,
   username,
   userGroupImpactMetric,
+  selected,
 }) => {
   const classes = useStyles()
   const {
@@ -82,7 +86,11 @@ const GroupImpactLeaderboardRow = ({
     shopDollarContribution,
   } = userGroupImpactMetric
   return (
-    <div className={classes.wrapper}>
+    <div
+      className={
+        selected ? clsx(classes.wrapper, classes.selected) : classes.wrapper
+      }
+    >
       <div className={classes.numberIcon}>
         <Typography variant="h5">{position}</Typography>
       </div>
@@ -91,17 +99,17 @@ const GroupImpactLeaderboardRow = ({
           {username}
         </Typography>
         <div className={classes.impactIcons}>
-          {tabDollarContribution && (
+          {(tabDollarContribution || tabDollarContribution > 0) && (
             <div className={clsx(classes.tabIcon, classes.iconWrapper)}>
               <TabIcon className={classes.icon} />
             </div>
           )}
-          {searchDollarContribution && (
+          {(searchDollarContribution || searchDollarContribution > 0) && (
             <div className={clsx(classes.searchIcon, classes.iconWrapper)}>
               <SearchIcon className={classes.icon} />
             </div>
           )}
-          {shopDollarContribution && (
+          {(shopDollarContribution || shopDollarContribution > 0) && (
             <div className={clsx(classes.shopIcon, classes.iconWrapper)}>
               <ShoppingCartIcon className={classes.icon} />
             </div>
@@ -121,6 +129,7 @@ const GroupImpactLeaderboardRow = ({
 }
 
 GroupImpactLeaderboardRow.propTypes = {
+  selected: PropTypes.bool,
   position: PropTypes.number.isRequired,
   username: PropTypes.string.isRequired,
   userGroupImpactMetric: PropTypes.shape({
@@ -129,6 +138,10 @@ GroupImpactLeaderboardRow.propTypes = {
     searchDollarContribution: PropTypes.number,
     shopDollarContribution: PropTypes.number,
   }).isRequired,
+}
+
+GroupImpactLeaderboardRow.defaultProps = {
+  selected: false,
 }
 
 export default GroupImpactLeaderboardRow
