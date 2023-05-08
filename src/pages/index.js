@@ -460,7 +460,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
       setShouldRenderAds(true)
     }
   }, [])
+
   const { app, user, userImpact } = data || {}
+
   const {
     id: userId,
     currentMission,
@@ -474,8 +476,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
     searches,
     showSfacIcon,
   } = user || {}
+
   const { theme, onboarding, causeId, impactType, landingPagePhrase } =
     cause || {}
+
   const { primaryColor, secondaryColor } = theme || {}
 
   const growthbook = useGrowthBook()
@@ -1078,7 +1082,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
           </div>
 
           {/* Mother's day 2023 Promo */}
-          {user && <MothersDay2023 user={user} />}
+          {user.userId && <MothersDay2023 user={user} />}
 
           <div className={classes.centerContainer}>
             <div className={classes.searchBarContainer}>
