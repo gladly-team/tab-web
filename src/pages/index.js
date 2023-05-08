@@ -31,6 +31,7 @@ import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 import SfacActivityContainer from 'src/components/SfacActivityContainer'
 import Notification from 'src/components/Notification'
+import MothersDay2023 from 'src/components/promos/MothersDay2023'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -366,6 +367,7 @@ const getRelayQuery = async ({ AuthUser }) => {
         }
         user(userId: $userId) {
           id
+          userId
           email
           hasViewedIntroFlow
           tabs
@@ -380,6 +382,7 @@ const getRelayQuery = async ({ AuthUser }) => {
             landingPagePath
             landingPagePhrase
             name
+            nameForShop
             onboarding {
               steps {
                 title
@@ -457,7 +460,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
       setShouldRenderAds(true)
     }
   }, [])
+
   const { app, user, userImpact } = data || {}
+
   const {
     id: userId,
     currentMission,
@@ -471,8 +476,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
     searches,
     showSfacIcon,
   } = user || {}
+
   const { theme, onboarding, causeId, impactType, landingPagePhrase } =
     cause || {}
+
   const { primaryColor, secondaryColor } = theme || {}
 
   const growthbook = useGrowthBook()
@@ -1073,6 +1080,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
               />
             ) : null}
           </div>
+
+          {/* Mother's day 2023 Promo */}
+          {user.userId && <MothersDay2023 user={user} />}
+
           <div className={classes.centerContainer}>
             <div className={classes.searchBarContainer}>
               <Logo
