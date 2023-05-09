@@ -19,9 +19,8 @@ const contStyles = {
   marginLeft: 'auto',
   marginRight: 'auto',
   width: 600,
-  height: 30,
-  marginTop: 100,
-  marginBottom: -200,
+  marginTop: 0,
+  marginBottom: 60,
   zIndex: 100000,
 }
 
@@ -68,7 +67,7 @@ const MothersDay2023 = ({ user }) => {
 
   return (
     <>
-      {show && false && (
+      {show && (
         <div style={contStyles}>
           <Card>
             <CardContent
