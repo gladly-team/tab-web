@@ -1081,11 +1081,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
             ) : null}
           </div>
 
-          {/* Mother's day 2023 Promo */}
-          {user.userId && <MothersDay2023 user={user} />}
-
           <div className={classes.centerContainer}>
             <div className={classes.searchBarContainer}>
+              {/* Mother's day 2023 Promo */}
+              {user.userId && <MothersDay2023 user={user} />}
+
               <Logo
                 includeText
                 color={enableBackgroundImages ? 'white' : null}
