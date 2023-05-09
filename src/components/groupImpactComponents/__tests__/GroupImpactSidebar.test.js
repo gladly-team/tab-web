@@ -17,6 +17,7 @@ jest.mock('src/utils/navigation')
 const getMockProps = () => ({
   groupImpactSidebarState: 'badge-text',
   groupImpactMetric: {
+    dollarProgressFromTab: 125,
     dollarProgress: 250,
     dollarGoal: 600,
     impactMetric: {
@@ -104,6 +105,11 @@ describe('GroupImpactSidebar component', () => {
           (mockProps.groupImpactMetric.dollarProgress /
             mockProps.groupImpactMetric.dollarGoal)
       ),
+      Math.floor(
+        100 *
+          (mockProps.groupImpactMetric.dollarProgressFromTab /
+            mockProps.groupImpactMetric.dollarGoal)
+      ),
     ])
   })
 
@@ -163,6 +169,7 @@ describe('GroupImpactSidebar component', () => {
       nextGoalButtonClickHandler: jest.fn(),
       lastGroupImpactMetric: {
         dollarProgress: 5e6,
+        dollarProgressForTab: 2e6,
         dollarGoal: 5e6,
         impactMetric: {
           impactTitle: 'Provide 1 home visit from a community health worker',
@@ -225,6 +232,11 @@ describe('GroupImpactSidebar component', () => {
       Math.floor(
         100 *
           (mockProps.groupImpactMetric.dollarProgress /
+            mockProps.groupImpactMetric.dollarGoal)
+      ),
+      Math.floor(
+        100 *
+          (mockProps.groupImpactMetric.dollarProgressFromTab /
             mockProps.groupImpactMetric.dollarGoal)
       ),
     ])
