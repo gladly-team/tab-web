@@ -68,7 +68,7 @@ const MothersDay2023 = ({ user }) => {
 
   return (
     <>
-      {show && (
+      {show && false && (
         <div style={contStyles}>
           <Card>
             <CardContent
