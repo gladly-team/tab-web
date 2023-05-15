@@ -31,7 +31,6 @@ import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 import SfacActivityContainer from 'src/components/SfacActivityContainer'
 import Notification from 'src/components/Notification'
-import MothersDay2023 from 'src/components/promos/MothersDay2023'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -1084,7 +1083,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
           <div className={classes.centerContainer}>
             <div className={classes.searchBarContainer}>
               {/* Mother's day 2023 Promo */}
-              {user.userId && <MothersDay2023 user={user} />}
+              {/* {user.userId && <MothersDay2023 user={user} />} */}
 
               <Logo
                 includeText
