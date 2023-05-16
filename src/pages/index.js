@@ -687,7 +687,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
   // Our notification
   let notif = notificationsToShow.find(
-    (res) => res.code === 'shfac-notify-launch'
+    (res) => res.code === 'shfac-notify-launch-v2'
   )
 
   if (
