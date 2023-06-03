@@ -6,6 +6,7 @@ import { Typography } from '@material-ui/core'
 import { ArrowForwardIos } from '@material-ui/icons'
 import { GROUP_IMPACT_SIDEBAR_STATE } from 'src/utils/constants'
 import gtag from 'ga-gtag'
+import Handlebars from 'handlebars'
 import Notification from '../Notification'
 
 const useStyles = makeStyles((theme) => ({
@@ -62,7 +63,13 @@ const GroupGoalNotification = ({
   onNextGoal,
   onGoalStarted,
   impactTitle,
+  impactCountPerMetric,
 }) => {
+  const impactTitleTemplate = Handlebars.compile(impactTitle)
+  const impactTitleCompiled = impactTitleTemplate({
+    count: impactCountPerMetric,
+    multiple: impactCountPerMetric > 1,
+  })
   const classes = useStyles()
   const onDetailsHandler = useCallback(() => {
     gtag('event', 'group_impact_notification', {
@@ -97,7 +104,7 @@ const GroupGoalNotification = ({
             {mode === GROUP_IMPACT_SIDEBAR_STATE.COMPLETED
               ? 'COMPLETED'
               : 'GOAL STARTED'}
-            : {impactTitle}
+            : {impactTitleCompiled}
           </Typography>
         }
         buttons={
@@ -143,6 +150,7 @@ GroupGoalNotification.propTypes = {
   onNextGoal: PropTypes.func.isRequired,
   onGoalStarted: PropTypes.func.isRequired,
   impactTitle: PropTypes.string.isRequired,
+  impactCountPerMetric: PropTypes.number.isRequired,
 }
 
 export default GroupGoalNotification

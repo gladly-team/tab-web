@@ -59,7 +59,8 @@ const GroupImpact = ({ user }) => {
   )
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const { id, dollarGoal, impactMetric } = groupImpactMetric
-  const { impactTitle, whyValuableDescription } = impactMetric
+  const { impactTitle, impactCountPerMetric, whyValuableDescription } =
+    impactMetric
 
   const toggleSidebar = () => {
     setSidebarOpen((prev) => !prev)
@@ -179,6 +180,7 @@ const GroupImpact = ({ user }) => {
                 onDetails={openSidebar}
                 onNextGoal={beginNewGoal}
                 onGoalStarted={onGoalStarted}
+                impactCountPerMetric={impactCountPerMetric}
               />
             </div>
           </Fade>
@@ -198,6 +200,7 @@ GroupImpact.propTypes = {
         impactMetric: PropTypes.shape({
           impactTitle: PropTypes.string.isRequired,
           whyValuableDescription: PropTypes.string.isRequired,
+          impactCountPerMetric: PropTypes.number.isRequired,
         }),
       }).isRequired,
       groupImpactMetricCount: PropTypes.number,

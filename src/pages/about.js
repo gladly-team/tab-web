@@ -132,6 +132,7 @@ AboutPage.propTypes = {
                 impactTitle: PropTypes.string,
                 description: PropTypes.string,
                 metricTitle: PropTypes.string,
+                impactCountPerMetric: PropTypes.number,
               })
             ),
           })
