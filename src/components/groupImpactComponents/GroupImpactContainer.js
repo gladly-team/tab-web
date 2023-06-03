@@ -12,8 +12,10 @@ export default createFragmentContainer(GroupImpact, {
           impactMetric {
             impactTitle
             whyValuableDescription
+            impactCountPerMetric
           }
         }
+        groupImpactMetricCount
       }
       sfacActivityState
     }

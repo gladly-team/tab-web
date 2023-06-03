@@ -56,6 +56,7 @@ const getMockDataResponse = () => ({
               whyValuableDescription:
                 'Community health workers provide quality health care to those who might not otherwise have access.',
               active: false,
+              impactCountPerMetric: 3,
             },
             {
               id: 'mhwYA7KbK',
@@ -68,6 +69,7 @@ const getMockDataResponse = () => ({
               whyValuableDescription:
                 'This prenatal care helps ensure a safe pregnancy for an impoverished mother-to-be.',
               active: false,
+              impactCountPerMetric: 3,
             },
           ],
         },

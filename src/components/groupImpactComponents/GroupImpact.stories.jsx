@@ -43,6 +43,7 @@ celebration.args = {
           impactTitle: 'Provide 1 home visit from a community health worker',
           whyValuableDescription:
             'Community health workers provide quality health care to those who might not otherwise have access.',
+          impactCountPerMetric: 3,
         },
       },
     },
@@ -64,6 +65,7 @@ celebration.decorators = [
         impactTitle: 'Provide 1 home visit from a community health worker',
         whyValuableDescription:
           'Community health workers provide quality health care to those who might not otherwise have access.',
+        impactCountPerMetric: 3,
       },
     })
     return <Story />
@@ -82,6 +84,7 @@ completedToNew.args = {
           impactTitle: 'Provide 1 home visit from a community health worker',
           whyValuableDescription:
             'Community health workers provide quality health care to those who might not otherwise have access.',
+          impactCountPerMetric: 3,
         },
       },
     },
@@ -98,6 +101,7 @@ completedToNew.decorators = [
         impactTitle: 'Provide 1 home visit from a community health worker',
         whyValuableDescription:
           'Community health workers provide quality health care to those who might not otherwise have access.',
+        impactCountPerMetric: 3,
       },
     })
     return <Story />
@@ -116,6 +120,7 @@ newGoal.args = {
           impactTitle: 'Provide 1 home visit from a community health worker',
           whyValuableDescription:
             'Community health workers provide quality health care to those who might not otherwise have access.',
+          impactCountPerMetric: 3,
         },
       },
     },
@@ -143,6 +148,7 @@ standardView.args = {
           impactTitle: 'Provide 1 home visit from a community health worker',
           whyValuableDescription:
             'Community health workers provide quality health care to those who might not otherwise have access.',
+          impactCountPerMetric: 3,
         },
       },
     },
@@ -170,6 +176,7 @@ standardViewWithNoOldGoal.args = {
           impactTitle: 'Provide 1 home visit from a community health worker',
           whyValuableDescription:
             'Community health workers provide quality health care to those who might not otherwise have access.',
+          impactCountPerMetric: 3,
         },
       },
     },

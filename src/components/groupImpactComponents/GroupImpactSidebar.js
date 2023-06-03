@@ -24,6 +24,7 @@ import {
 import gtag from 'ga-gtag'
 import { windowOpenTop } from 'src/utils/navigation'
 import { lighten } from '@material-ui/core'
+import Handlebars from 'handlebars'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 
 const useStyles = makeStyles((theme) => ({
@@ -173,6 +174,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     fontWeight: '700',
   },
+  countText: {
+    fontWeight: '700',
+  },
+  groupImpactMetricCount: {
+    marginTop: 'auto',
+  },
 }))
 
 const GroupImpactSidebar = ({
@@ -182,6 +189,7 @@ const GroupImpactSidebar = ({
   nextGoalButtonClickHandler,
   lastGroupImpactMetric,
   openHandler,
+  groupImpactMetricCount,
 
   // sfacActivityState,
 }) => {
@@ -194,7 +202,8 @@ const GroupImpactSidebar = ({
   const { dollarProgress, dollarGoal, impactMetric } = displayingOldGoal
     ? lastGroupImpactMetric
     : groupImpactMetric
-  const { impactTitle, whyValuableDescription } = impactMetric
+  const { impactTitle, whyValuableDescription, impactCountPerMetric } =
+    impactMetric
   const classes = useStyles()
   const progress = Math.max(
     Math.min(Math.floor(100 * (dollarProgress / dollarGoal)), 100),
@@ -261,6 +270,25 @@ const GroupImpactSidebar = ({
     wrapperWidthClass = classes.pullTabCollapsed
   }
 
+  const impactTitleTemplate = Handlebars.compile(impactTitle)
+  const impactTitleCompiled = impactTitleTemplate({
+    count: impactCountPerMetric,
+    multiple: impactCountPerMetric > 1,
+  })
+
+  let historicImpactTitleString =
+    groupImpactMetricCount &&
+    impactTitleTemplate({
+      count: impactCountPerMetric * groupImpactMetricCount,
+      multiple: impactCountPerMetric * groupImpactMetricCount > 1,
+    })
+
+  if (historicImpactTitleString) {
+    historicImpactTitleString =
+      historicImpactTitleString.charAt(0).toLowerCase() +
+      historicImpactTitleString.slice(1)
+  }
+
   return (
     <div className={clsx(wrapperWidthClass, classes.wrapper)}>
       <Slide direction="right" in={isOpen}>
@@ -286,7 +314,7 @@ const GroupImpactSidebar = ({
                   <ArrowBackIos className={classes.closeButtonIcon} />
                 </Button>
               </div>
-              <Typography variant="body2">{impactTitle}</Typography>
+              <Typography variant="body2">{impactTitleCompiled}</Typography>
               <Typography className={classes.robotoBold} variant="h3">
                 {progress}%
               </Typography>
@@ -361,6 +389,16 @@ const GroupImpactSidebar = ({
                   Learn More
                 </Button>
               </div>
+              {groupImpactMetricCount && groupImpactMetricCount > 0 && (
+                <div
+                  data-test-id="groupImpactMetricCount"
+                  className={classes.groupImpactMetricCount}
+                >
+                  <Typography className={classes.countText}>
+                    Tabbers like you have helped {historicImpactTitleString}.
+                  </Typography>
+                </div>
+              )}
             </div>
           </Fade>
         </Box>
@@ -404,6 +442,7 @@ GroupImpactSidebar.propTypes = {
     impactMetric: PropTypes.shape({
       impactTitle: PropTypes.string.isRequired,
       whyValuableDescription: PropTypes.string.isRequired,
+      impactCountPerMetric: PropTypes.number,
     }),
   }).isRequired,
   lastGroupImpactMetric: PropTypes.shape({
@@ -412,10 +451,12 @@ GroupImpactSidebar.propTypes = {
     impactMetric: PropTypes.shape({
       impactTitle: PropTypes.string.isRequired,
       whyValuableDescription: PropTypes.string.isRequired,
+      impactCountPerMetric: PropTypes.number,
     }),
   }),
   nextGoalButtonClickHandler: PropTypes.func,
   openHandler: PropTypes.func,
+  groupImpactMetricCount: PropTypes.number,
 
   // sfacActivityState: PropTypes.string,
 }
@@ -425,6 +466,7 @@ GroupImpactSidebar.defaultProps = {
   nextGoalButtonClickHandler: () => {},
   openHandler: () => {},
   lastGroupImpactMetric: null,
+  groupImpactMetricCount: null,
 
   // sfacActivityState: null,
 }

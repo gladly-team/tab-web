@@ -13,11 +13,13 @@ const Template = (args) => <GroupGoalNotification {...args} />
 export const completed = Template.bind({})
 completed.args = {
   mode: GROUP_IMPACT_SIDEBAR_STATE.COMPLETED,
-  impactTitle: 'Fund two visits from a community healthworker',
+  impactTitle: 'Fund {{count}} visits from a community healthworker',
+  impactCountPerMetric: 3,
 }
 
 export const started = Template.bind({})
 started.args = {
   mode: GROUP_IMPACT_SIDEBAR_STATE.NEW,
-  impactTitle: 'Fund two visits from a community healthworker',
+  impactTitle: 'Fund {{count}} visits from a community healthworker',
+  impactCountPerMetric: 3,
 }

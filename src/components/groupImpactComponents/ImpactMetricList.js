@@ -9,6 +9,7 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
 import Typography from '@material-ui/core/Typography'
+import Handlebars from 'handlebars'
 import Markdown from '../Markdown'
 
 const useStyles = makeStyles((theme) => ({
@@ -63,28 +64,35 @@ const ImpactMetricList = ({ impactMetrics }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {impactMetrics.map((row) => (
-              <TableRow
-                key={row.id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell sx={{ paddingLeft: 0 }} component="th" scope="row">
-                  <Typography className={classes.rowBold}>
-                    {row.impactTitle}
-                  </Typography>
-                  <br />
-                  <Markdown className={classes.description}>
-                    {row.description}
-                  </Markdown>
-                </TableCell>
-                <TableCell>
-                  <span className={classes.rowBold}>{row.metricTitle}</span>
-                </TableCell>
-                <TableCell>
-                  <span className={classes.rowBold}>{row.charityName}</span>
-                </TableCell>
-              </TableRow>
-            ))}
+            {impactMetrics.map((row) => {
+              const impactTitleTemplate = Handlebars.compile(row.impactTitle)
+              const impactTitleCompiled = impactTitleTemplate({
+                count: row.impactCountPerMetric,
+                multiple: row.impactCountPerMetric > 1,
+              })
+              return (
+                <TableRow
+                  key={row.id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                  <TableCell sx={{ paddingLeft: 0 }} component="th" scope="row">
+                    <Typography className={classes.rowBold}>
+                      {impactTitleCompiled}
+                    </Typography>
+                    <br />
+                    <Markdown className={classes.description}>
+                      {row.description}
+                    </Markdown>
+                  </TableCell>
+                  <TableCell>
+                    <span className={classes.rowBold}>{row.metricTitle}</span>
+                  </TableCell>
+                  <TableCell>
+                    <span className={classes.rowBold}>{row.charityName}</span>
+                  </TableCell>
+                </TableRow>
+              )
+            })}
           </TableBody>
         </Table>
       </TableContainer>

@@ -49,6 +49,7 @@ const getRelayQuery = ({ AuthUser }) => {
                 impactTitle
                 description
                 metricTitle
+                impactCountPerMetric
               }
             }
           }
@@ -131,6 +132,7 @@ AboutPage.propTypes = {
                 impactTitle: PropTypes.string,
                 description: PropTypes.string,
                 metricTitle: PropTypes.string,
+                impactCountPerMetric: PropTypes.number,
               })
             ),
           })

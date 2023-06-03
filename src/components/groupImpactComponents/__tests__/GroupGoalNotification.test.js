@@ -13,7 +13,8 @@ const getMockProps = () => ({
   onDetails: jest.fn(),
   onNextGoal: jest.fn(),
   onGoalStarted: jest.fn(),
-  impactTitle: 'impact title',
+  impactTitle: 'impact title {{count}}',
+  impactCountPerMetric: 5,
 })
 
 describe('GroupGoalNotification component', () => {
@@ -40,7 +41,7 @@ describe('GroupGoalNotification component', () => {
     const mockProps = getMockProps()
     const wrapper = mount(<GroupGoalNotification {...mockProps} />)
     expect(wrapper.find(Typography).first().text()).toEqual(
-      `COMPLETED: ${mockProps.impactTitle}`
+      `COMPLETED: impact title 5`
     )
   })
 
@@ -53,7 +54,7 @@ describe('GroupGoalNotification component', () => {
     }
     const wrapper = mount(<GroupGoalNotification {...mockProps} />)
     expect(wrapper.find(Typography).first().text()).toEqual(
-      `GOAL STARTED: ${mockProps.impactTitle}`
+      `GOAL STARTED: impact title 5`
     )
   })
 

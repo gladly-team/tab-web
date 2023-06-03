@@ -28,6 +28,7 @@ const getMockProps = () => ({
         impactMetric: {
           impactTitle: 'impact-title',
           whyValuableDescription: 'why-valuable-description',
+          impactCountPerMetric: 5,
         },
       },
     },
@@ -77,6 +78,7 @@ describe('GroupImpact component', () => {
           impactTitle: 'Provide 1 home visit from a community health worker',
           whyValuableDescription:
             'Community health workers provide quality health care to those who might not otherwise have access.',
+          impactCountPerMetric: 5,
         },
       }
     )
@@ -98,6 +100,7 @@ describe('GroupImpact component', () => {
           impactTitle: 'Provide 1 home visit from a community health worker',
           whyValuableDescription:
             'Community health workers provide quality health care to those who might not otherwise have access.',
+          impactCountPerMetric: 5,
         },
       }
     )
@@ -119,6 +122,7 @@ describe('GroupImpact component', () => {
           impactTitle: 'Provide 1 home visit from a community health worker',
           whyValuableDescription:
             'Community health workers provide quality health care to those who might not otherwise have access.',
+          impactCountPerMetric: 5,
         },
       }
     )
@@ -139,6 +143,7 @@ describe('GroupImpact component', () => {
         impactTitle: 'Provide 1 home visit from a community health worker',
         whyValuableDescription:
           'Community health workers provide quality health care to those who might not otherwise have access.',
+        impactCountPerMetric: 5,
       },
     }
     localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
@@ -170,6 +175,7 @@ describe('GroupImpact component', () => {
         impactTitle: 'Provide 1 home visit from a community health worker',
         whyValuableDescription:
           'Community health workers provide quality health care to those who might not otherwise have access.',
+        impactCountPerMetric: 5,
       },
     }
     localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
