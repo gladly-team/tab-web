@@ -16,6 +16,7 @@ import {
 } from 'next-firebase-auth'
 import moment from 'moment'
 import { useGrowthBook } from '@growthbook/growthbook-react'
+import gtag from 'ga-gtag'
 
 // custom components
 import Achievement from 'src/components/Achievement'
@@ -98,6 +99,7 @@ import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotification'
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
+import ShopFullPage from 'src/components/promos/ShopFullPage'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -661,6 +663,8 @@ const Index = ({ data: fallbackData, userAgent }) => {
       setNotifsToShow((notifsToShow) =>
         notifsToShow.filter((notif) => notif.code !== code)
       )
+
+      gtag('event', 'shop_full_page_2023_dismiss', { version: 'Version1' })
     }
     const hasDismissedNotif = (notif) =>
       localStorageMgr.getItem(getNotifDismissKey(notif.code)) === 'true'
@@ -687,7 +691,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
   // Our notification
   let notif = notificationsToShow.find(
-    (res) => res.code === 'shfac-notify-launch-v2'
+    (res) => res.code === 'shfac-notify-launch-fullpage'
   )
 
   if (
@@ -939,89 +943,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
                       gutterBottom
                       className={classes.notificationTitle}
                     >
-                      Introducing: Shop for a Cause
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                      We are excited to officially launch{' '}
-                      <Link
-                        to="https://shop.gladly.io/"
-                        target="_blank"
-                        style={{ color: '#9d4ba3' }}
-                      >
-                        Shop for a Cause
-                      </Link>
-                      ! Now, you can raise even more money for charity when you
-                      shop online. Like Tab for a Cause, it is simple, free, and
-                      impactful. It takes 10 seconds to get started, try it out
-                      today!
-                    </Typography>
-                  </div>
-                }
-                buttons={
-                  <div className={classes.notificationButtonsWrapper}>
-                    <Link to="https://shop.gladly.io/" target="_blank">
-                      <Button variant="contained">Add to Chrome</Button>
-                    </Link>
-                  </div>
-                }
-                includeClose
-                onClose={notif.onDismiss}
-              />
-            ) : null}
-
-            {notif && notif.variation === 'Version2' ? (
-              <Notification
-                className={classes.notification}
-                text={
-                  <div className={classes.notificationText}>
-                    <Typography
-                      variant="h2"
-                      gutterBottom
-                      className={classes.notificationTitle}
-                    >
-                      Introducing: Shop for a Cause
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                      We are excited to officially launch{' '}
-                      <Link
-                        to="https://shop.gladly.io/"
-                        target="_blank"
-                        style={{ color: '#9d4ba3' }}
-                      >
-                        Shop for a Cause
-                      </Link>
-                      ! Now, you can raise even more money for charity when you
-                      shop online. Like Tab for a Cause, it is simple, free, and
-                      impactful. It takes 10 seconds to get started, try it out
-                      today!
-                    </Typography>
-                  </div>
-                }
-                buttons={
-                  <div className={classes.notificationButtonsWrapper}>
-                    <Link
-                      to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
-                      target="_blank"
-                    >
-                      <Button variant="contained">Add to Chrome</Button>
-                    </Link>
-                  </div>
-                }
-                includeClose
-                onClose={notif.onDismiss}
-              />
-            ) : null}
-
-            {notif && notif.variation === 'Version3' ? (
-              <Notification
-                className={classes.notification}
-                text={
-                  <div className={classes.notificationText}>
-                    <Typography
-                      variant="h2"
-                      gutterBottom
-                      className={classes.notificationTitle}
-                    >
                       Shop for a Cause
                     </Typography>
                     <Typography variant="body1" gutterBottom>
@@ -1165,6 +1086,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
             )}
           </div>
         </>
+      )}
+
+      {/* Full Page Promo */}
+      {user && user.userId && notif && notif.variation && (
+        <ShopFullPage user={user} variation={notif.variation} />
       )}
     </div>
   )
