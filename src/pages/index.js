@@ -16,6 +16,7 @@ import {
 } from 'next-firebase-auth'
 import moment from 'moment'
 import { useGrowthBook } from '@growthbook/growthbook-react'
+import gtag from 'ga-gtag'
 
 // custom components
 import Achievement from 'src/components/Achievement'
@@ -30,6 +31,7 @@ import SquadCounter from 'src/components/SquadCounter'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 import SfacActivityContainer from 'src/components/SfacActivityContainer'
+import Notification from 'src/components/Notification'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -38,6 +40,7 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Chip from '@material-ui/core/Chip'
+import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -660,6 +663,8 @@ const Index = ({ data: fallbackData, userAgent }) => {
       setNotifsToShow((notifsToShow) =>
         notifsToShow.filter((notif) => notif.code !== code)
       )
+
+      gtag('event', 'shop_full_page_2023_dismiss', { version: 'Version1' })
     }
     const hasDismissedNotif = (notif) =>
       localStorageMgr.getItem(getNotifDismissKey(notif.code)) === 'true'
@@ -686,7 +691,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
   // Our notification
   let notif = notificationsToShow.find(
-    (res) => res.code === 'shfac-notify-launch-v2'
+    (res) => res.code === 'shfac-notify-launch-fullpage'
   )
 
   if (
@@ -928,90 +933,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
            * that appear via the UserImpact component.
            */}
           <div className={classes.notificationsContainer}>
-            {/* {notif && notif.variation === 'Version1' ? (
-              <Notification
-                className={classes.notification}
-                text={
-                  <div className={classes.notificationText}>
-                    <Typography
-                      variant="h2"
-                      gutterBottom
-                      className={classes.notificationTitle}
-                    >
-                      Introducing: Shop for a Cause
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                      We are excited to officially launch{' '}
-                      <Link
-                        to="https://shop.gladly.io/"
-                        target="_blank"
-                        style={{ color: '#9d4ba3' }}
-                      >
-                        Shop for a Cause
-                      </Link>
-                      ! Now, you can raise even more money for charity when you
-                      shop online. Like Tab for a Cause, it is simple, free, and
-                      impactful. It takes 10 seconds to get started, try it out
-                      today!
-                    </Typography>
-                  </div>
-                }
-                buttons={
-                  <div className={classes.notificationButtonsWrapper}>
-                    <Link to="https://shop.gladly.io/" target="_blank">
-                      <Button variant="contained">Add to Chrome</Button>
-                    </Link>
-                  </div>
-                }
-                includeClose
-                onClose={notif.onDismiss}
-              />
-            ) : null}
-
-            {notif && notif.variation === 'Version2' ? (
-              <Notification
-                className={classes.notification}
-                text={
-                  <div className={classes.notificationText}>
-                    <Typography
-                      variant="h2"
-                      gutterBottom
-                      className={classes.notificationTitle}
-                    >
-                      Introducing: Shop for a Cause
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                      We are excited to officially launch{' '}
-                      <Link
-                        to="https://shop.gladly.io/"
-                        target="_blank"
-                        style={{ color: '#9d4ba3' }}
-                      >
-                        Shop for a Cause
-                      </Link>
-                      ! Now, you can raise even more money for charity when you
-                      shop online. Like Tab for a Cause, it is simple, free, and
-                      impactful. It takes 10 seconds to get started, try it out
-                      today!
-                    </Typography>
-                  </div>
-                }
-                buttons={
-                  <div className={classes.notificationButtonsWrapper}>
-                    <Link
-                      to="https://chrome.google.com/webstore/detail/shop-for-a-cause/jcdheojflbakgpllgipljegddpfaofec"
-                      target="_blank"
-                    >
-                      <Button variant="contained">Add to Chrome</Button>
-                    </Link>
-                  </div>
-                }
-                includeClose
-                onClose={notif.onDismiss}
-              />
-            ) : null}
-
-            {notif && notif.variation === 'Version3' ? (
+            {notif && notif.variation === 'Version1' ? (
               <Notification
                 className={classes.notification}
                 text={
@@ -1057,7 +979,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 includeClose
                 onClose={notif.onDismiss}
               />
-            ) : null} */}
+            ) : null}
 
             {userGlobalId && shouldShowSfacExtensionPrompt ? (
               <SfacExtensionSellNotification
@@ -1167,7 +1089,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
       )}
 
       {/* Full Page Promo */}
-      {user && user.userId && <ShopFullPage user={user} variation="Version3" />}
+      {user && user.userId && notif && notif.variation && (
+        <ShopFullPage user={user} variation={notif.variation} />
+      )}
     </div>
   )
 }
