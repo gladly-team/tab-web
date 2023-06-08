@@ -1,5 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import SearchIcon from '@material-ui/icons/Search'
+import TabIcon from '@material-ui/icons/Tab'
 import VerticalLinearProgress from './VerticalLinearProgress'
 
 export default {
@@ -69,3 +71,15 @@ multipleValues.args = {
   colors: ['primary', 'red'],
 }
 multipleValues.parameters = {}
+
+export const multipleValuesWithIcons = Template.bind({})
+multipleValuesWithIcons.args = {
+  progress: [18, 9],
+  width: 64,
+  borderRadius: 32,
+  showMarkers: false,
+  colors: ['primary', 'red'],
+  icons: [<TabIcon />, <SearchIcon />],
+  tooltips: ['Tabs', 'Searches'],
+}
+multipleValuesWithIcons.parameters = {}
