@@ -1,8 +1,9 @@
-import { LinearProgress, Typography } from '@material-ui/core'
-import React, { useEffect, useState } from 'react'
+import { LinearProgress, Tooltip, Typography } from '@material-ui/core'
+import React, { cloneElement, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import { Stars } from '@mui/icons-material'
+import IconButton from '@material-ui/core/IconButton'
 
 const useAnimationStyles = ({ endProgress, borderRadius, width, colors }) => {
   const classes = makeStyles((theme) => ({
@@ -19,6 +20,27 @@ const useAnimationStyles = ({ endProgress, borderRadius, width, colors }) => {
           borderRadius,
           transform: `translateY(${100 - val}%) !important`,
           backgroundColor: colors[index],
+        },
+        [`icon${index}`]: {
+          width: '24px',
+          backgroundColor: 'white',
+          height: '24px',
+          borderRadius: '24px',
+        },
+        [`iconWrapper${index}`]: {
+          width,
+          gridRowStart: 1,
+          gridColumnStart: 1,
+          height: '100%',
+          transform: `translateY(${101 - val}%) !important`,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          zIndex: 100,
+        },
+        [`iconInner${index}`]: {
+          width: '18px',
+          height: '18px',
         },
       }),
       {}
@@ -93,6 +115,8 @@ const VerticalLinearProgress = ({
   width,
   startingProgress,
   colors,
+  icons,
+  tooltips,
 }) => {
   const [endProgress, setEndProgress] = useState(
     progress.map(
@@ -143,6 +167,22 @@ const VerticalLinearProgress = ({
           <div className={classes.dummyDiv} />
         </div>
       )}
+      {icons.map((icon, index) => (
+        <div
+          className={classes[`iconWrapper${index}`]}
+          key={icon.constructor.name}
+        >
+          <Tooltip
+            title={`This portion of the goal was contributed by revenue coming from ${tooltips[index]}`}
+          >
+            <IconButton className={classes[`icon${index}`]}>
+              {cloneElement(icon, {
+                className: classes[`iconInner${index}`],
+              })}
+            </IconButton>
+          </Tooltip>
+        </div>
+      ))}
     </div>
   )
 }
@@ -155,12 +195,16 @@ VerticalLinearProgress.propTypes = {
   width: PropTypes.number.isRequired,
   startingProgress: PropTypes.arrayOf(PropTypes.number),
   colors: PropTypes.arrayOf(PropTypes.string),
+  icons: PropTypes.arrayOf(PropTypes.node),
+  tooltips: PropTypes.arrayOf(PropTypes.string),
 }
 
 VerticalLinearProgress.defaultProps = {
   showMarkers: false,
   startingProgress: null,
   colors: ['primary'],
+  icons: [],
+  tooltips: [],
 }
 
 export default VerticalLinearProgress

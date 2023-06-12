@@ -4,6 +4,7 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import { Stars } from '@mui/icons-material'
+import SearchIcon from '@material-ui/icons/Search'
 
 const getMockProps = () => ({
   progress: [25, 50],
@@ -80,5 +81,17 @@ describe('VerticalLinearProgress component', () => {
     expect(linearProgressMounted.at(1).prop('value')).toEqual(
       mockProps.progress[1]
     )
+  })
+
+  it('displays icons if they are listed', () => {
+    const VerticalLinearProgress =
+      require('src/components/VerticalLinearProgress').default
+    const mockProps = {
+      ...getMockProps(),
+      startingProgress: [20, 40],
+      icons: [<SearchIcon />],
+    }
+    const wrapper = shallow(<VerticalLinearProgress {...mockProps} />)
+    expect(wrapper.find(SearchIcon).exists()).toEqual(true)
   })
 })
