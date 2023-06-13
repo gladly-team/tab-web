@@ -173,7 +173,7 @@ const VerticalLinearProgress = ({
       {icons.map((icon, index) => (
         <div className={classes[`iconWrapper${index}`]} key={tooltips[index]}>
           <Tooltip
-            title={`This portion of the goal was contributed by revenue coming from ${tooltips[index]}`}
+            title={`${tooltips[index]}`}
             classes={{
               popper: classes.tooltips,
             }}

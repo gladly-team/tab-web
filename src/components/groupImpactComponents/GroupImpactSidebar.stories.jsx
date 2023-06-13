@@ -130,3 +130,37 @@ withCount.args = {
   groupImpactMetricCount: 5,
   groupImpactSidebarState: GROUP_IMPACT_SIDEBAR_STATE.COMPLETED,
 }
+
+export const almostDone = Template.bind({})
+almostDone.args = {
+  open: true,
+  groupImpactMetric: {
+    dollarProgress: 4.9e6,
+    dollarProgressFromSearch: 4.8e6,
+    dollarGoal: 5e6,
+    impactMetric: {
+      impactTitle: 'Provide 2 home visits from a community health worker',
+      whyValuableDescription:
+        'Community health workers provide quality health care to those who might not otherwise have access.',
+    },
+  },
+  groupImpactMetricCount: 5,
+  groupImpactSidebarState: GROUP_IMPACT_SIDEBAR_STATE.COMPLETED,
+}
+
+export const almostDoneTwo = Template.bind({})
+almostDoneTwo.args = {
+  open: true,
+  groupImpactMetric: {
+    dollarProgress: 4.8e6,
+    dollarProgressFromSearch: 1e5,
+    dollarGoal: 5e6,
+    impactMetric: {
+      impactTitle: 'Provide 2 home visits from a community health worker',
+      whyValuableDescription:
+        'Community health workers provide quality health care to those who might not otherwise have access.',
+    },
+  },
+  groupImpactMetricCount: 5,
+  groupImpactSidebarState: GROUP_IMPACT_SIDEBAR_STATE.COMPLETED,
+}

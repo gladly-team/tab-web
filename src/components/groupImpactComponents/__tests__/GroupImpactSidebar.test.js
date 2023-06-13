@@ -152,7 +152,10 @@ describe('GroupImpactSidebar component', () => {
     ])
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('tooltips')
-    ).toEqual(['tabs', 'searches'])
+    ).toEqual([
+      `25% of funds was raised by tabs opened through Tab for a Cause`,
+      `16% of funds was raised by searches through Search for a Cause`,
+    ])
     expect(wrapper.find(VerticalLinearProgress).at(1).prop('progress')).toEqual(
       [
         Math.floor(
@@ -201,7 +204,10 @@ describe('GroupImpactSidebar component', () => {
     ])
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('tooltips')
-    ).toEqual(['tabs', 'searches'])
+    ).toEqual([
+      `2% of funds was raised by tabs opened through Tab for a Cause`,
+      `1% of funds was raised by searches through Search for a Cause`,
+    ])
     expect(wrapper.find(VerticalLinearProgress).at(1).prop('progress')).toEqual(
       [3, 1]
     )

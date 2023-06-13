@@ -215,9 +215,15 @@ const GroupImpactSidebar = ({
     )
   const searchDisplayProgress =
     dollarProgressFromSearch &&
-    Math.max(
-      Math.min(Math.floor(100 * (dollarProgressFromSearch / dollarGoal)), 100),
-      8
+    Math.min(
+      Math.max(
+        Math.min(
+          Math.floor(100 * (dollarProgressFromSearch / dollarGoal)),
+          100
+        ),
+        8
+      ),
+      92
     )
   const totalDisplayProgress = Math.max(
     Math.min(Math.floor(100 * (dollarProgress / dollarGoal)), 100),
@@ -324,8 +330,17 @@ const GroupImpactSidebar = ({
               defaultTheme.palette.colors.tab,
               defaultTheme.palette.colors.search,
             ]}
-            icons={[<TabIcon />, <SearchIcon />]}
-            tooltips={['tabs', 'searches']}
+            icons={
+              searchDisplayProgress
+                ? [<TabIcon />, <SearchIcon />]
+                : [<TabIcon />]
+            }
+            tooltips={[
+              `${
+                totalProgress - searchDollarProgress
+              }% of funds was raised by tabs opened through Tab for a Cause`,
+              `${searchDollarProgress}% of funds was raised by searches through Search for a Cause`,
+            ]}
           />
           <Fade in={displaySidebarText} timeout={500}>
             <div className={classes.sidebarText}>
