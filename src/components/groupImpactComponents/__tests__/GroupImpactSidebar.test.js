@@ -10,6 +10,8 @@ import gtag from 'ga-gtag'
 import { SFAC_ACTIVITY_STATES } from 'src/utils/constants'
 import { shopLandingURL } from 'src/utils/urls'
 import { windowOpenTop } from 'src/utils/navigation'
+import SearchIcon from '@material-ui/icons/Search'
+import TabIcon from '@material-ui/icons/Tab'
 
 jest.mock('ga-gtag')
 jest.mock('src/utils/navigation')
@@ -105,6 +107,110 @@ describe('GroupImpactSidebar component', () => {
             mockProps.groupImpactMetric.dollarGoal)
       ),
     ])
+  })
+
+  it('displays correct progress bar with search', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = {
+      ...getMockProps(),
+      groupImpactMetric: {
+        dollarProgress: 250,
+        dollarProgressFromSearch: 100,
+        dollarGoal: 600,
+        impactMetric: {
+          impactTitle: 'impact-title',
+          whyValuableDescription: 'why-valuable-description',
+        },
+      },
+    }
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+    expect(wrapper.find(Typography).at(2).text()).toEqual(
+      `${Math.floor(
+        100 *
+          (mockProps.groupImpactMetric.dollarProgress /
+            mockProps.groupImpactMetric.dollarGoal)
+      )}%`
+    )
+    expect(
+      wrapper.find(VerticalLinearProgress).first().prop('progress')
+    ).toEqual([
+      Math.floor(
+        100 *
+          (mockProps.groupImpactMetric.dollarProgress /
+            mockProps.groupImpactMetric.dollarGoal)
+      ),
+      Math.floor(
+        100 *
+          (mockProps.groupImpactMetric.dollarProgressFromSearch /
+            mockProps.groupImpactMetric.dollarGoal)
+      ),
+    ])
+    expect(wrapper.find(VerticalLinearProgress).first().prop('icons')).toEqual([
+      <TabIcon />,
+      <SearchIcon />,
+    ])
+    expect(
+      wrapper.find(VerticalLinearProgress).first().prop('tooltips')
+    ).toEqual([
+      `25% of funds was raised by tabs opened through Tab for a Cause`,
+      `16% of funds was raised by searches through Search for a Cause`,
+    ])
+    expect(wrapper.find(VerticalLinearProgress).at(1).prop('progress')).toEqual(
+      [
+        Math.floor(
+          100 *
+            (mockProps.groupImpactMetric.dollarProgress /
+              mockProps.groupImpactMetric.dollarGoal)
+        ),
+        Math.floor(
+          100 *
+            (mockProps.groupImpactMetric.dollarProgressFromSearch /
+              mockProps.groupImpactMetric.dollarGoal)
+        ),
+      ]
+    )
+  })
+
+  it('displays correct progress bar with search too small', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = {
+      ...getMockProps(),
+      groupImpactMetric: {
+        dollarProgress: 20,
+        dollarProgressFromSearch: 6,
+        dollarGoal: 600,
+        impactMetric: {
+          impactTitle: 'impact-title',
+          whyValuableDescription: 'why-valuable-description',
+        },
+      },
+    }
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+    expect(wrapper.find(Typography).at(2).text()).toEqual(
+      `${Math.floor(
+        100 *
+          (mockProps.groupImpactMetric.dollarProgress /
+            mockProps.groupImpactMetric.dollarGoal)
+      )}%`
+    )
+    expect(
+      wrapper.find(VerticalLinearProgress).first().prop('progress')
+    ).toEqual([16, 8])
+    expect(wrapper.find(VerticalLinearProgress).first().prop('icons')).toEqual([
+      <TabIcon />,
+      <SearchIcon />,
+    ])
+    expect(
+      wrapper.find(VerticalLinearProgress).first().prop('tooltips')
+    ).toEqual([
+      `2% of funds was raised by tabs opened through Tab for a Cause`,
+      `1% of funds was raised by searches through Search for a Cause`,
+    ])
+    expect(wrapper.find(VerticalLinearProgress).at(1).prop('progress')).toEqual(
+      [3, 1]
+    )
   })
 
   it('toggles sidebar on clicks', () => {
@@ -268,7 +374,7 @@ describe('GroupImpactSidebar component', () => {
     const mockProps = {
       ...getMockProps(),
       groupImpactMetric: {
-        dollarProgressFromTab: 125,
+        dollarProgressFromSearch: 125,
         dollarProgress: 250,
         dollarGoal: 600,
         impactMetric: {
@@ -295,7 +401,7 @@ describe('GroupImpactSidebar component', () => {
     const mockProps = {
       ...getMockProps(),
       groupImpactMetric: {
-        dollarProgressFromTab: 125,
+        dollarProgressFromSearch: 125,
         dollarProgress: 250,
         dollarGoal: 600,
         impactMetric: {

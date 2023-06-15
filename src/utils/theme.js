@@ -27,6 +27,9 @@ const defaultThemeObject = {
       subtitleGrey: '#828282',
       disabledGrey: '#BDBDBD',
       blue1: '#6EA6E7',
+      shop: '#FF596F',
+      search: '#4AB4B4',
+      tab: TFAC_ORIGINAL_PURPLE,
     },
 
     // this is a custom theme palette color for the index page

@@ -25,11 +25,14 @@ import gtag from 'ga-gtag'
 import { windowOpenTop } from 'src/utils/navigation'
 import { lighten } from '@material-ui/core'
 import Handlebars from 'handlebars'
+import defaultTheme from 'src/utils/theme'
+import SearchIcon from '@material-ui/icons/Search'
+import TabIcon from '@material-ui/icons/Tab'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    height: '100%',
+    height: 'inherit',
     display: 'grid',
     gridTemplateColumns: '1fr',
     transition: 'width .3s',
@@ -54,12 +57,13 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     cursor: 'pointer',
     position: 'relative',
+    maxHeight: '100vh',
   },
   collapsedWrapper: {
     gridRowStart: 1,
     gridColumnStart: 1,
     top: 0,
-    height: '100%',
+    height: 'inherit',
     paddingTop: theme.spacing(2),
     cursor: 'pointer',
     display: 'flex',
@@ -199,13 +203,34 @@ const GroupImpactSidebar = ({
     !!lastGroupImpactMetric
   )
   const [isClosedHover, setIsClosedHover] = useState(false)
-  const { dollarProgress, dollarGoal, impactMetric } = displayingOldGoal
-    ? lastGroupImpactMetric
-    : groupImpactMetric
+  const { dollarProgress, dollarGoal, dollarProgressFromSearch, impactMetric } =
+    displayingOldGoal ? lastGroupImpactMetric : groupImpactMetric
   const { impactTitle, whyValuableDescription, impactCountPerMetric } =
     impactMetric
   const classes = useStyles()
-  const progress = Math.max(
+  const searchDollarProgress =
+    dollarProgressFromSearch &&
+    Math.max(
+      Math.min(Math.floor(100 * (dollarProgressFromSearch / dollarGoal)), 100),
+      1
+    )
+  const searchDisplayProgress =
+    dollarProgressFromSearch &&
+    Math.min(
+      Math.max(
+        Math.min(
+          Math.floor(100 * (dollarProgressFromSearch / dollarGoal)),
+          100
+        ),
+        8
+      ),
+      92
+    )
+  const totalDisplayProgress = Math.max(
+    Math.min(Math.floor(100 * (dollarProgress / dollarGoal)), 100),
+    (searchDisplayProgress || 0) + 8
+  )
+  const totalProgress = Math.max(
     Math.min(Math.floor(100 * (dollarProgress / dollarGoal)), 100),
     1
   )
@@ -294,10 +319,29 @@ const GroupImpactSidebar = ({
       <Slide direction="right" in={isOpen}>
         <Box onClick={toggleOpen} className={classes.expandedWrapper}>
           <VerticalLinearProgress
-            progress={[progress]}
+            progress={
+              searchDisplayProgress
+                ? [totalDisplayProgress, searchDisplayProgress]
+                : [totalDisplayProgress]
+            }
             width={64}
             borderRadius={32}
-            showMarkers
+            showMarkers={false}
+            colors={[
+              defaultTheme.palette.colors.tab,
+              defaultTheme.palette.colors.search,
+            ]}
+            icons={
+              searchDisplayProgress
+                ? [<TabIcon />, <SearchIcon />]
+                : [<TabIcon />]
+            }
+            tooltips={[
+              `${
+                totalProgress - searchDollarProgress
+              }% of funds was raised by tabs opened through Tab for a Cause`,
+              `${searchDollarProgress}% of funds was raised by searches through Search for a Cause`,
+            ]}
           />
           <Fade in={displaySidebarText} timeout={500}>
             <div className={classes.sidebarText}>
@@ -316,7 +360,7 @@ const GroupImpactSidebar = ({
               </div>
               <Typography variant="body2">{impactTitleCompiled}</Typography>
               <Typography className={classes.robotoBold} variant="h3">
-                {progress}%
+                {totalProgress}%
               </Typography>
               <Typography variant="body2">completed</Typography>
               <Divider className={classes.divider} />
@@ -394,7 +438,7 @@ const GroupImpactSidebar = ({
                   data-test-id="groupImpactMetricCount"
                   className={classes.groupImpactMetricCount}
                 >
-                  <Typography className={classes.countText}>
+                  <Typography>
                     Tabbers like you have helped {historicImpactTitleString}.
                   </Typography>
                 </div>
@@ -417,12 +461,20 @@ const GroupImpactSidebar = ({
           }
         >
           <Typography variant="body2" className={classes.pullTabProgress}>
-            {progress}%
+            {totalProgress}%
           </Typography>
           <Stars className={classes.pullTabStar} />
         </div>
         <VerticalLinearProgress
-          progress={[progress]}
+          progress={
+            searchDollarProgress
+              ? [totalProgress, searchDollarProgress]
+              : [totalProgress]
+          }
+          colors={[
+            defaultTheme.palette.colors.tab,
+            defaultTheme.palette.colors.search,
+          ]}
           width={isClosedHover ? 24 : 8}
           borderRadius={0}
           showMarkers={false}
@@ -438,6 +490,7 @@ GroupImpactSidebar.propTypes = {
   groupImpactSidebarState: PropTypes.string,
   groupImpactMetric: PropTypes.shape({
     dollarProgress: PropTypes.number.isRequired,
+    dollarProgressFromSearch: PropTypes.number,
     dollarGoal: PropTypes.number.isRequired,
     impactMetric: PropTypes.shape({
       impactTitle: PropTypes.string.isRequired,
@@ -447,6 +500,7 @@ GroupImpactSidebar.propTypes = {
   }).isRequired,
   lastGroupImpactMetric: PropTypes.shape({
     dollarProgress: PropTypes.number.isRequired,
+    dollarProgressFromSearch: PropTypes.number,
     dollarGoal: PropTypes.number.isRequired,
     impactMetric: PropTypes.shape({
       impactTitle: PropTypes.string.isRequired,
