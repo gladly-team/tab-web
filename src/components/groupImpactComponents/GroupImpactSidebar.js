@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(3),
     cursor: 'pointer',
     position: 'relative',
+    maxHeight: '100vh',
   },
   collapsedWrapper: {
     gridRowStart: 1,
