@@ -1089,7 +1089,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
       )}
 
       {/* Full Page Promo */}
-      {user && user.userId && <ShopFullPage user={user} variation="Version3" />}
+      {user && user.userId && notif && notif.variation && (
+        <ShopFullPage user={user} variation={notif.variation} />
+      )}
     </div>
   )
 }
