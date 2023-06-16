@@ -31,7 +31,6 @@ import SquadCounter from 'src/components/SquadCounter'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 import SfacActivityContainer from 'src/components/SfacActivityContainer'
-import Notification from 'src/components/Notification'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -40,7 +39,6 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Chip from '@material-ui/core/Chip'
-import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -656,6 +654,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
   // notification is is configured on a one-off basis here (UI) and in the
   // backend (enabling/disabling).
   const [notificationsToShow, setNotifsToShow] = useState([])
+
   useEffect(() => {
     const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
     const onNotificationClose = (code) => {
@@ -933,7 +932,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
            * that appear via the UserImpact component.
            */}
           <div className={classes.notificationsContainer}>
-            {notif && notif.variation === 'Version1' ? (
+            {/* {notif && notif.variation === 'Version1' ? (
               <Notification
                 className={classes.notification}
                 text={
@@ -979,7 +978,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 includeClose
                 onClose={notif.onDismiss}
               />
-            ) : null}
+            ) : null} */}
 
             {userGlobalId && shouldShowSfacExtensionPrompt ? (
               <SfacExtensionSellNotification
@@ -987,6 +986,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 browser={browser}
               />
             ) : null}
+
             {userGlobalId && showSFACNotification ? (
               <SearchForACauseSellNotification
                 userId={userGlobalId}
@@ -1089,9 +1089,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
       )}
 
       {/* Full Page Promo */}
-      {user && user.userId && notif && notif.variation && (
-        <ShopFullPage user={user} variation={notif.variation} />
-      )}
+      {user && user.userId && <ShopFullPage user={user} variation="Version3" />}
     </div>
   )
 }

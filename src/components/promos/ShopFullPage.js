@@ -25,7 +25,7 @@ if (isBrowser) {
 }
 
 const ShopFullPage = ({ user, variation }) => {
-  const [show, setShow] = useState(true)
+  const [show, setShow] = useState(false)
   const [version, setVersion] = useState(variation)
   const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
 
