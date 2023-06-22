@@ -1,6 +1,6 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
-import { Typography } from '@material-ui/core'
+import { Button, Typography } from '@material-ui/core'
 import GroupImpactLeaderboardRow from '../GroupImpactLeaderboardRow'
 
 const getMockProps = () => ({
@@ -59,6 +59,7 @@ const getMockProps = () => ({
       },
     },
   ],
+  onClose: jest.fn(),
 })
 
 describe('GroupImpactLeaderboard component', () => {
@@ -153,5 +154,15 @@ describe('GroupImpactLeaderboard component', () => {
     const typographies = wrapper.find(Typography)
 
     expect(typographies.length).toEqual(1)
+  })
+
+  it('calls onClose handler when clicked', () => {
+    const GroupImpactLeaderboard =
+      require('src/components/groupImpactComponents/GroupImpactLeaderboard').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<GroupImpactLeaderboard {...mockProps} />)
+    wrapper.find(Button).first().simulate('click')
+
+    expect(mockProps.onClose).toHaveBeenCalled()
   })
 })

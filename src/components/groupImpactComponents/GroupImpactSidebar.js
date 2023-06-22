@@ -28,7 +28,10 @@ import Handlebars from 'handlebars'
 import defaultTheme from 'src/utils/theme'
 import SearchIcon from '@material-ui/icons/Search'
 import TabIcon from '@material-ui/icons/Tab'
+import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
+import { GROUP_IMPACT_LEADERBOARD } from 'src/utils/experiments'
 import VerticalLinearProgress from '../VerticalLinearProgress'
+import GroupImpactLeaderboard from './GroupImpactLeaderboard'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -39,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
   },
   expanded: {
     width: 400,
+  },
+  expandedWithLeaderboard: {
+    width: 900,
   },
   closed: {
     width: 0,
@@ -53,8 +59,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    paddingTop: theme.spacing(3),
-    paddingBottom: theme.spacing(3),
     cursor: 'pointer',
     position: 'relative',
     maxHeight: '100vh',
@@ -74,6 +78,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    paddingTop: theme.spacing(3),
   },
   sidebarButtons: {
     width: '100%',
@@ -183,6 +188,18 @@ const useStyles = makeStyles((theme) => ({
   },
   groupImpactMetricCount: {
     marginTop: 'auto',
+    paddingBottom: theme.spacing(3),
+  },
+  sidebarContent: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  leaderboard: {
+    maxHeight: '100%',
+  },
+  paddingTopBottom: {
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
   },
 }))
 
@@ -194,6 +211,8 @@ const GroupImpactSidebar = ({
   lastGroupImpactMetric,
   openHandler,
   groupImpactMetricCount,
+  leaderboard,
+  userId,
 
   // sfacActivityState,
 }) => {
@@ -288,7 +307,13 @@ const GroupImpactSidebar = ({
     e.stopPropagation()
   }
 
-  let wrapperWidthClass = classes.expanded
+  const isLeaderboardEnabled = localStorageFeaturesManager.getFeatureValue(
+    GROUP_IMPACT_LEADERBOARD
+  )
+  let wrapperWidthClass =
+    !leaderboard || !isLeaderboardEnabled
+      ? classes.expanded
+      : classes.expandedWithLeaderboard
   if (!isOpen && isClosedHover) {
     wrapperWidthClass = classes.pullTabExpanded
   } else if (!isOpen) {
@@ -318,69 +343,77 @@ const GroupImpactSidebar = ({
     <div className={clsx(wrapperWidthClass, classes.wrapper)}>
       <Slide direction="right" in={isOpen}>
         <Box onClick={toggleOpen} className={classes.expandedWrapper}>
-          <VerticalLinearProgress
-            progress={
-              searchDisplayProgress
-                ? [totalDisplayProgress, searchDisplayProgress]
-                : [totalDisplayProgress]
-            }
-            width={64}
-            borderRadius={32}
-            showMarkers={false}
-            colors={[
-              defaultTheme.palette.colors.tab,
-              defaultTheme.palette.colors.search,
-            ]}
-            icons={
-              searchDisplayProgress
-                ? [<TabIcon />, <SearchIcon />]
-                : [<TabIcon />]
-            }
-            tooltips={[
-              `${
-                totalProgress - searchDollarProgress
-              }% of funds raised by tabs opened through Tab for a Cause`,
-              `${searchDollarProgress}% of funds raised by searches through Search for a Cause`,
-            ]}
-          />
+          <div className={classes.paddingTopBottom}>
+            <VerticalLinearProgress
+              progress={
+                searchDisplayProgress
+                  ? [totalDisplayProgress, searchDisplayProgress]
+                  : [totalDisplayProgress]
+              }
+              width={64}
+              borderRadius={32}
+              showMarkers={false}
+              colors={[
+                defaultTheme.palette.colors.tab,
+                defaultTheme.palette.colors.search,
+              ]}
+              icons={
+                searchDisplayProgress
+                  ? [<TabIcon />, <SearchIcon />]
+                  : [<TabIcon />]
+              }
+              tooltips={[
+                `${
+                  totalProgress - searchDollarProgress
+                }% of funds raised by tabs opened through Tab for a Cause`,
+                `${searchDollarProgress}% of funds raised by searches through Search for a Cause`,
+              ]}
+            />
+          </div>
           <Fade in={displaySidebarText} timeout={500}>
-            <div className={classes.sidebarText}>
-              <div className={classes.goalText}>
-                <Typography className={classes.robotoBold} variant="h5">
-                  GROUP GOAL
+            <div className={classes.sidebarContent}>
+              <div className={classes.sidebarText}>
+                <div className={classes.goalText}>
+                  <Typography className={classes.robotoBold} variant="h5">
+                    GROUP GOAL
+                  </Typography>
+                  {groupImpactSidebarState ? (
+                    <span className={classes.badge}>
+                      {groupImpactSidebarState}
+                    </span>
+                  ) : null}
+                  {(!leaderboard || !isLeaderboardEnabled) && (
+                    <Button
+                      onClick={toggleOpen}
+                      className={classes.closeButton}
+                    >
+                      <ArrowBackIos className={classes.closeButtonIcon} />
+                    </Button>
+                  )}
+                </div>
+                <Typography variant="body2">{impactTitleCompiled}</Typography>
+                <Typography className={classes.robotoBold} variant="h3">
+                  {totalProgress}%
                 </Typography>
-                {groupImpactSidebarState ? (
-                  <span className={classes.badge}>
-                    {groupImpactSidebarState}
-                  </span>
-                ) : null}
-                <Button onClick={toggleOpen} className={classes.closeButton}>
-                  <ArrowBackIos className={classes.closeButtonIcon} />
-                </Button>
-              </div>
-              <Typography variant="body2">{impactTitleCompiled}</Typography>
-              <Typography className={classes.robotoBold} variant="h3">
-                {totalProgress}%
-              </Typography>
-              <Typography variant="body2">completed</Typography>
-              <Divider className={classes.divider} />
-              <Typography className={classes.robotoBold} variant="h6">
-                How this Helps
-              </Typography>
-              <Typography>{whyValuableDescription}</Typography>
-              <Divider className={classes.divider} />
-              <div className={classes.sidebarButtons}>
-                <Link to={aboutURL}>
-                  <Button className={classes.sidebarButton}>
-                    <div className={classes.buttonContent}>
-                      <InfoIcon />
-                      <Typography className={classes.sidebarButtonText}>
-                        About the Cause
-                      </Typography>
-                    </div>
-                  </Button>
-                </Link>
-                {/* <Button className={classes.sidebarButton}>
+                <Typography variant="body2">completed</Typography>
+                <Divider className={classes.divider} />
+                <Typography className={classes.robotoBold} variant="h6">
+                  How this Helps
+                </Typography>
+                <Typography>{whyValuableDescription}</Typography>
+                <Divider className={classes.divider} />
+                <div className={classes.sidebarButtons}>
+                  <Link to={aboutURL}>
+                    <Button className={classes.sidebarButton}>
+                      <div className={classes.buttonContent}>
+                        <InfoIcon />
+                        <Typography className={classes.sidebarButtonText}>
+                          About the Cause
+                        </Typography>
+                      </div>
+                    </Button>
+                  </Link>
+                  {/* <Button className={classes.sidebarButton}>
             <div className={classes.buttonContent}>
               <StarsOutlined />
               <Typography className={classes.sidebarButtonText}>Impact</Typography>
@@ -392,18 +425,18 @@ const GroupImpactSidebar = ({
               <Typography className={classes.sidebarButtonText}>Nonprofits</Typography>
             </div>
             </Button> */}
-              </div>
-              <Divider className={classes.divider} />
-              {displayingOldGoal && (
-                <Button
-                  className={classes.nextGoalButton}
-                  variant="contained"
-                  onClick={onClickNextGoalButton}
-                >
-                  Start Next Goal
-                </Button>
-              )}
-              {/* {sfacActivityState !== SFAC_ACTIVITY_STATES.ACTIVE && (
+                </div>
+                <Divider className={classes.divider} />
+                {displayingOldGoal && (
+                  <Button
+                    className={classes.nextGoalButton}
+                    variant="contained"
+                    onClick={onClickNextGoalButton}
+                  >
+                    Start Next Goal
+                  </Button>
+                )}
+                {/* {sfacActivityState !== SFAC_ACTIVITY_STATES.ACTIVE && (
                 <div className={classes.sfacUpsell}>
                   <Typography>
                     You could triple your impact by raising money each time you
@@ -419,28 +452,38 @@ const GroupImpactSidebar = ({
                   </Button>
                 </div>
               )} */}
-              <div className={classes.shopUpsell}>
-                <Typography>
-                  You could triple your impact by raising money each time you
-                  shop online. Try out our newest project: Shop for a Cause
-                  today!
-                </Typography>
-                <Button
-                  onClick={onYesShopClick}
-                  className={classes.yesButton}
-                  variant="contained"
-                >
-                  Learn More
-                </Button>
-              </div>
-              {groupImpactMetricCount && groupImpactMetricCount > 0 && (
-                <div
-                  data-test-id="groupImpactMetricCount"
-                  className={classes.groupImpactMetricCount}
-                >
+                <div className={classes.shopUpsell}>
                   <Typography>
-                    Tabbers like you have helped {historicImpactTitleString}.
+                    You could triple your impact by raising money each time you
+                    shop online. Try out our newest project: Shop for a Cause
+                    today!
                   </Typography>
+                  <Button
+                    onClick={onYesShopClick}
+                    className={classes.yesButton}
+                    variant="contained"
+                  >
+                    Learn More
+                  </Button>
+                </div>
+                {groupImpactMetricCount && groupImpactMetricCount > 0 && (
+                  <div
+                    data-test-id="groupImpactMetricCount"
+                    className={classes.groupImpactMetricCount}
+                  >
+                    <Typography>
+                      Tabbers like you have helped {historicImpactTitleString}.
+                    </Typography>
+                  </div>
+                )}
+              </div>
+              {leaderboard && isLeaderboardEnabled && (
+                <div className={classes.leaderboard}>
+                  <GroupImpactLeaderboard
+                    leaderboardEntries={leaderboard}
+                    userId={userId}
+                    onClose={toggleOpen}
+                  />
                 </div>
               )}
             </div>
@@ -486,6 +529,7 @@ const GroupImpactSidebar = ({
 
 GroupImpactSidebar.displayName = 'GroupImpactSidebar'
 GroupImpactSidebar.propTypes = {
+  userId: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   groupImpactSidebarState: PropTypes.string,
   groupImpactMetric: PropTypes.shape({
@@ -511,6 +555,21 @@ GroupImpactSidebar.propTypes = {
   nextGoalButtonClickHandler: PropTypes.func,
   openHandler: PropTypes.func,
   groupImpactMetricCount: PropTypes.number,
+  leaderboard: PropTypes.arrayOf(
+    PropTypes.shape({
+      position: PropTypes.number,
+      user: PropTypes.shape({
+        username: PropTypes.string,
+        id: PropTypes.string,
+      }),
+      userGroupImpactMetric: PropTypes.shape({
+        dollarContribution: PropTypes.number.isRequired,
+        tabDollarContribution: PropTypes.number,
+        searchDollarContribution: PropTypes.number,
+        shopDollarContribution: PropTypes.number,
+      }),
+    })
+  ),
 
   // sfacActivityState: PropTypes.string,
 }
@@ -521,6 +580,7 @@ GroupImpactSidebar.defaultProps = {
   openHandler: () => {},
   lastGroupImpactMetric: null,
   groupImpactMetricCount: null,
+  leaderboard: null,
 
   // sfacActivityState: null,
 }

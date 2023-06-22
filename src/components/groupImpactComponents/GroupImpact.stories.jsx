@@ -34,6 +34,7 @@ const Template = (args) => {
 export const celebration = Template.bind({})
 celebration.args = {
   user: {
+    id: 'bcde',
     cause: {
       groupImpactMetric: {
         id: 'abcd',
@@ -75,6 +76,7 @@ celebration.decorators = [
 export const completedToNew = Template.bind({})
 completedToNew.args = {
   user: {
+    id: 'bcde',
     cause: {
       groupImpactMetric: {
         id: 'abcd',
@@ -111,6 +113,7 @@ completedToNew.decorators = [
 export const newGoal = Template.bind({})
 newGoal.args = {
   user: {
+    id: 'bcde',
     cause: {
       groupImpactMetric: {
         id: 'abcd',
@@ -139,6 +142,7 @@ newGoal.decorators = [
 export const standardView = Template.bind({})
 standardView.args = {
   user: {
+    id: 'bcde',
     cause: {
       groupImpactMetric: {
         id: 'abcd',
@@ -167,6 +171,7 @@ standardView.decorators = [
 export const standardViewWithNoOldGoal = Template.bind({})
 standardViewWithNoOldGoal.args = {
   user: {
+    id: 'bcde',
     cause: {
       groupImpactMetric: {
         id: 'abcd',
