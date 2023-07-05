@@ -82,8 +82,8 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   divider: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
+    marginTop: theme.spacing(1.5),
+    marginBottom: theme.spacing(1.5),
   },
   buttonContent: {
     display: 'flex',
@@ -339,8 +339,8 @@ const GroupImpactSidebar = ({
             tooltips={[
               `${
                 totalProgress - searchDollarProgress
-              }% of funds was raised by tabs opened through Tab for a Cause`,
-              `${searchDollarProgress}% of funds was raised by searches through Search for a Cause`,
+              }% of funds raised by tabs opened through Tab for a Cause`,
+              `${searchDollarProgress}% of funds raised by searches through Search for a Cause`,
             ]}
           />
           <Fade in={displaySidebarText} timeout={500}>
@@ -475,7 +475,7 @@ const GroupImpactSidebar = ({
             defaultTheme.palette.colors.tab,
             defaultTheme.palette.colors.search,
           ]}
-          width={isClosedHover ? 24 : 8}
+          width={isClosedHover ? 24 : 16}
           borderRadius={0}
           showMarkers={false}
         />
