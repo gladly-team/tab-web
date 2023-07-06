@@ -153,8 +153,8 @@ describe('GroupImpactSidebar component', () => {
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('tooltips')
     ).toEqual([
-      `25% of funds was raised by tabs opened through Tab for a Cause`,
-      `16% of funds was raised by searches through Search for a Cause`,
+      `25% of funds raised by tabs opened through Tab for a Cause`,
+      `16% of funds raised by searches through Search for a Cause`,
     ])
     expect(wrapper.find(VerticalLinearProgress).at(1).prop('progress')).toEqual(
       [
@@ -205,8 +205,8 @@ describe('GroupImpactSidebar component', () => {
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('tooltips')
     ).toEqual([
-      `2% of funds was raised by tabs opened through Tab for a Cause`,
-      `1% of funds was raised by searches through Search for a Cause`,
+      `2% of funds raised by tabs opened through Tab for a Cause`,
+      `1% of funds raised by searches through Search for a Cause`,
     ])
     expect(wrapper.find(VerticalLinearProgress).at(1).prop('progress')).toEqual(
       [3, 1]
@@ -253,7 +253,7 @@ describe('GroupImpactSidebar component', () => {
     }
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
 
-    expect(wrapper.find(VerticalLinearProgress).at(1).prop('width')).toEqual(8)
+    expect(wrapper.find(VerticalLinearProgress).at(1).prop('width')).toEqual(16)
 
     wrapper.find(Box).at(1).simulate('mouseover')
     wrapper.update()
