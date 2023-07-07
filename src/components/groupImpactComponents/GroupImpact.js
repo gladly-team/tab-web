@@ -43,7 +43,7 @@ const GroupImpactWrapper = ({ user }) => {
 }
 
 const GroupImpact = ({ user }) => {
-  const { cause } = user
+  const { cause, leaderboard, id: userId } = user
   const { groupImpactMetric, groupImpactMetricCount } = cause
   const classes = useStyles()
 
@@ -176,6 +176,8 @@ const GroupImpact = ({ user }) => {
         }
         openHandler={toggleSidebar}
         groupImpactMetricCount={groupImpactMetricCount}
+        leaderboard={leaderboard}
+        userId={userId}
       />
       {sidebarMode !== GROUP_IMPACT_SIDEBAR_STATE.NORMAL && (
         <Slide direction="right" in={!sidebarOpen}>
@@ -200,6 +202,7 @@ const GroupImpact = ({ user }) => {
 
 GroupImpact.propTypes = {
   user: PropTypes.shape({
+    id: PropTypes.string.isRequired,
     cause: PropTypes.shape({
       groupImpactMetric: PropTypes.shape({
         id: PropTypes.string.isRequired,
@@ -214,6 +217,19 @@ GroupImpact.propTypes = {
       }).isRequired,
       groupImpactMetricCount: PropTypes.number,
     }).isRequired,
+    leaderboard: PropTypes.shape({
+      position: PropTypes.number,
+      user: PropTypes.shape({
+        username: PropTypes.string,
+        id: PropTypes.string,
+      }),
+      userGroupImpactMetric: PropTypes.shape({
+        dollarContribution: PropTypes.number.isRequired,
+        tabDollarContribution: PropTypes.number,
+        searchDollarContribution: PropTypes.number,
+        shopDollarContribution: PropTypes.number,
+      }),
+    }),
   }).isRequired,
 }
 
@@ -235,6 +251,19 @@ GroupImpactWrapper.propTypes = {
       }),
       groupImpactMetricCount: PropTypes.number,
     }).isRequired,
+    leaderboard: PropTypes.shape({
+      position: PropTypes.number,
+      user: PropTypes.shape({
+        username: PropTypes.string,
+        id: PropTypes.string,
+      }),
+      userGroupImpactMetric: PropTypes.shape({
+        dollarContribution: PropTypes.number.isRequired,
+        tabDollarContribution: PropTypes.number,
+        searchDollarContribution: PropTypes.number,
+        shopDollarContribution: PropTypes.number,
+      }),
+    }),
   }).isRequired,
 }
 

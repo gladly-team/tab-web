@@ -3,24 +3,46 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import Divider from '@material-ui/core/Divider'
+import Button from '@material-ui/core/Button'
+import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import GroupImpactLeaderboardRow from './GroupImpactLeaderboardRow'
 
 const useStyles = makeStyles((theme) => ({
   title: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
+    paddingLeft: theme.spacing(3),
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   leaderboard: {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    width: '500px',
+    borderLeft: '1px solid grey',
   },
   ellipses: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
+    paddingLeft: theme.spacing(3),
     paddingTop: theme.spacing(0),
+  },
+  robotoBold: {
+    fontFamily: 'Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif',
+    fontWeight: 900,
+  },
+  closeButton: {
+    borderRadius: '8px',
+    marginLeft: 'auto',
+  },
+  closeButtonIcon: {
+    width: 30,
+    height: 30,
+    marginRight: '-16px',
   },
 }))
 
-const Leaderboard = ({ leaderboardEntries, userId }) => {
+const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
   const classes = useStyles()
   const displayLeaderboardEntries = leaderboardEntries.map((entry) => (
     <div key={`${entry.user.username}_${entry.position}`}>
@@ -47,7 +69,7 @@ const Leaderboard = ({ leaderboardEntries, userId }) => {
             key={`${nextPosition}_${currentPosition}`}
             className={classes.ellipses}
           >
-            <Typography variant="h2">...</Typography>
+            <Typography variant="h3">...</Typography>
           </div>
         )
       }
@@ -57,8 +79,14 @@ const Leaderboard = ({ leaderboardEntries, userId }) => {
   return (
     <div className={classes.leaderboard}>
       <div className={classes.title}>
-        <Typography variant="h3">Leaderboard</Typography>
+        <Typography variant="h5" className={classes.robotoBold}>
+          LEADERBOARD
+        </Typography>
+        <Button onClick={onClose} className={classes.closeButton}>
+          <ArrowBackIos className={classes.closeButtonIcon} />
+        </Button>
       </div>
+
       {entriesWithEllipses}
     </div>
   )
@@ -81,6 +109,11 @@ Leaderboard.propTypes = {
       }).isRequired,
     })
   ).isRequired,
+  onClose: PropTypes.func,
+}
+
+Leaderboard.defaultProps = {
+  onClose: () => {},
 }
 
 export default Leaderboard

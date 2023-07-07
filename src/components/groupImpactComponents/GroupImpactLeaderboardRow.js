@@ -7,6 +7,8 @@ import SearchIcon from '@material-ui/icons/Search'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import clsx from 'clsx'
 import defaultTheme from 'src/utils/theme'
+import { lighten } from '@material-ui/core'
+import Tooltip from '@material-ui/core/Tooltip'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -69,7 +71,10 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
   },
   selected: {
-    backgroundColor: defaultTheme.palette.primary.main,
+    backgroundColor: lighten(theme.palette.primary.main, 0.62),
+  },
+  tooltips: {
+    zIndex: '9999999 !important',
   },
 }))
 const GroupImpactLeaderboardRow = ({
@@ -101,17 +106,38 @@ const GroupImpactLeaderboardRow = ({
         <div className={classes.impactIcons}>
           {(tabDollarContribution || tabDollarContribution > 0) && (
             <div className={clsx(classes.tabIcon, classes.iconWrapper)}>
-              <TabIcon className={classes.icon} />
+              <Tooltip
+                title="This user uses Tab for a Cause"
+                classes={{
+                  popper: classes.tooltips,
+                }}
+              >
+                <TabIcon className={classes.icon} />
+              </Tooltip>
             </div>
           )}
           {(searchDollarContribution || searchDollarContribution > 0) && (
             <div className={clsx(classes.searchIcon, classes.iconWrapper)}>
-              <SearchIcon className={classes.icon} />
+              <Tooltip
+                title="This user uses Search for a Cause"
+                classes={{
+                  popper: classes.tooltips,
+                }}
+              >
+                <SearchIcon className={classes.icon} />
+              </Tooltip>
             </div>
           )}
           {(shopDollarContribution || shopDollarContribution > 0) && (
             <div className={clsx(classes.shopIcon, classes.iconWrapper)}>
-              <ShoppingCartIcon className={classes.icon} />
+              <Tooltip
+                title="This user uses Shop for a Cause"
+                classes={{
+                  popper: classes.tooltips,
+                }}
+              >
+                <ShoppingCartIcon className={classes.icon} />
+              </Tooltip>
             </div>
           )}
         </div>

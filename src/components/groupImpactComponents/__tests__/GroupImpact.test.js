@@ -20,6 +20,7 @@ jest.mock('ga-gtag')
 
 const getMockProps = () => ({
   user: {
+    id: 'user-id',
     cause: {
       groupImpactMetric: {
         id: 'abcd',

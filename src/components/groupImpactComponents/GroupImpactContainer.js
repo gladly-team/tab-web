@@ -4,6 +4,7 @@ import GroupImpact from 'src/components/groupImpactComponents/GroupImpact'
 export default createFragmentContainer(GroupImpact, {
   user: graphql`
     fragment GroupImpactContainer_user on User {
+      id
       cause {
         groupImpactMetric {
           id
@@ -19,6 +20,20 @@ export default createFragmentContainer(GroupImpact, {
         groupImpactMetricCount
       }
       sfacActivityState
+      leaderboard {
+        position
+        user {
+          username
+          id
+        }
+        userGroupImpactMetric {
+          userId
+          dollarContribution
+          tabDollarContribution
+          searchDollarContribution
+          shopDollarContribution
+        }
+      }
     }
   `,
 })
