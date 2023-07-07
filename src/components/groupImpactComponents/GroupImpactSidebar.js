@@ -307,9 +307,9 @@ const GroupImpactSidebar = ({
     e.stopPropagation()
   }
 
-  const isLeaderboardEnabled = localStorageFeaturesManager.getFeatureValue(
-    GROUP_IMPACT_LEADERBOARD
-  )
+  const isLeaderboardEnabled =
+    localStorageFeaturesManager.getFeatureValue(GROUP_IMPACT_LEADERBOARD) ===
+    'true'
   let wrapperWidthClass =
     !leaderboard || !isLeaderboardEnabled
       ? classes.expanded

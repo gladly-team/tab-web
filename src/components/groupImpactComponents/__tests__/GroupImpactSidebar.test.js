@@ -448,7 +448,7 @@ describe('GroupImpactSidebar component', () => {
   })
 
   it('does not render a leaderboard if feature is false', () => {
-    localStorageFeaturesManager.getFeatureValue.mockReturnValue(false)
+    localStorageFeaturesManager.getFeatureValue.mockReturnValue('false')
     const GroupImpactSidebar =
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
     const mockProps = {
@@ -497,8 +497,8 @@ describe('GroupImpactSidebar component', () => {
     expect(wrapper.find(GroupImpactLeaderboard).exists()).toEqual(false)
   })
 
-  it('renders a leaderboard if feature is false', () => {
-    localStorageFeaturesManager.getFeatureValue.mockReturnValue(true)
+  it('renders a leaderboard if feature is true', () => {
+    localStorageFeaturesManager.getFeatureValue.mockReturnValue('true')
     const GroupImpactSidebar =
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
     const mockProps = {
