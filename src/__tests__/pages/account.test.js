@@ -313,7 +313,7 @@ describe('account.js', () => {
     const AccountPage = require('src/pages/account').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: getMockDataResponse() })
-    localStorageFeaturesManager.getFeatureValue.mockReturnValue(true)
+    localStorageFeaturesManager.getFeatureValue.mockReturnValue('true')
     const wrapper = mount(<AccountPage {...mockProps} />)
     const content = wrapper.find(Switch)
     expect(content.length).toEqual(1)

@@ -334,10 +334,10 @@ const Account = ({ data: fallbackData }) => {
           }
           testId="switch-cause"
         />
-        {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) && (
-          <Divider />
-        )}
-        {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) && (
+        {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) !==
+          'false' && <Divider />}
+        {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) !==
+          'false' && (
           <AccountItem
             name="Bookmarks"
             actionButton={
