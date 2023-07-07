@@ -98,7 +98,8 @@ import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotification'
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
-import ShopFullPage from 'src/components/promos/ShopFullPage'
+
+// import ShopFullPage from 'src/components/promos/ShopFullPage'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -690,18 +691,22 @@ const Index = ({ data: fallbackData, userAgent }) => {
   }, [JSON.stringify(notifications), isDataFresh])
 
   // Our notification
-  let notif = notificationsToShow.find(
-    (res) => res.code === 'shfac-notify-launch-fullpage'
+  const notif = notificationsToShow.find(
+    (res) => res.code === 'shfac-notify-prime-day-2023'
   )
 
-  if (
-    notif &&
-    notif.variation !== 'Version1' &&
-    notif.variation !== 'Version2' &&
-    notif.variation !== 'Version3'
-  ) {
-    notif = null
-  }
+  // let notif = notificationsToShow.find(
+  //   (res) => res.code === 'shfac-notify-launch-fullpage'
+  // )
+
+  // if (
+  //   notif &&
+  //   notif.variation !== 'Version1' &&
+  //   notif.variation !== 'Version2' &&
+  //   notif.variation !== 'Version3'
+  // ) {
+  //   notif = null
+  // }
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -1005,7 +1010,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
           <div className={classes.centerContainer}>
             <div className={classes.searchBarContainer}>
               {/* Prime day 2023 Promo */}
-              {user.userId && <PrimeDay2023 user={user} />}
+              {user.userId && notif && <PrimeDay2023 user={user} />}
 
               <Logo
                 includeText
@@ -1090,9 +1095,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
       )}
 
       {/* Full Page Promo */}
-      {user && user.userId && notif && notif.variation && (
+      {/* {user && user.userId && notif && notif.variation && (
         <ShopFullPage user={user} variation={notif.variation} />
-      )}
+      )} */}
     </div>
   )
 }

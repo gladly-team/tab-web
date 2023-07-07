@@ -45,7 +45,7 @@ const PrimeDay2023 = ({ user }) => {
     e.stopPropagation()
     e.nativeEvent.stopImmediatePropagation()
     gtag('event', 'prime_day_2023_dismiss')
-    localStorageMgr.setItem(getNotifDismissKey('mothers-day-2023'), true)
+    localStorageMgr.setItem(getNotifDismissKey('prime-day-2023'), true)
     setShow(false)
     return false
   }
@@ -95,12 +95,28 @@ const PrimeDay2023 = ({ user }) => {
                 align="center"
                 style={{ marginTop: 20 }}
               >
-                Mother's Day Is Almost Here!
+                Skip Prime Day, Support Charity
               </Typography>
 
               <Typography variant="body1" gutterBottom align="center">
-                8 great gift suggestions that will also raise money for{' '}
-                {user.cause.nameForShop || 'Charity'}
+                Since Amazon killed{' '}
+                <a
+                  href="https://www.npr.org/2023/01/19/1149993013/amazon-amazonsmile-charity-donation-program"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Amazon Smile
+                </a>{' '}
+                we got you covered with{' '}
+                <a
+                  href="https://shop.gladly.io"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Shop for a Cause
+                </a>
+                . Click below to shop and raise money for{' '}
+                {user.cause.nameForShop || 'Charity'}.
               </Typography>
 
               <Button
