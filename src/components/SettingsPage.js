@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box',
     display: 'flex',
     justifyContent: 'center',
+    flexDirection: 'column',
   },
   menuItem: {
     display: 'block',
