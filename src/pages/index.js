@@ -31,6 +31,7 @@ import SquadCounter from 'src/components/SquadCounter'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 import SfacActivityContainer from 'src/components/SfacActivityContainer'
+import PrimeDay2023 from 'src/components/promos/PrimeDay2023'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -1003,8 +1004,8 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
           <div className={classes.centerContainer}>
             <div className={classes.searchBarContainer}>
-              {/* Mother's day 2023 Promo */}
-              {/* {user.userId && <MothersDay2023 user={user} />} */}
+              {/* Prime day 2023 Promo */}
+              {user.userId && <PrimeDay2023 user={user} />}
 
               <Logo
                 includeText
