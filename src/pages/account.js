@@ -31,6 +31,8 @@ import CauseIcon from 'src/components/CauseIcon'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import { LAUNCH_BOOKMARKS } from 'src/utils/experiments'
 import Switch from '@material-ui/core/Switch'
+import localStorageMgr from 'src/utils/localstorage-mgr'
+import { STORAGE_NEW_USER_IS_TAB_V4_BETA } from 'src/utils/constants'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -275,6 +277,9 @@ const Account = ({ data: fallbackData }) => {
     })
 
     if (response.ok) {
+      // Clear local storage.
+      localStorageMgr.removeItem(STORAGE_NEW_USER_IS_TAB_V4_BETA)
+
       // On beta status change, remove cached data.
       await clearAllServiceWorkerCaches()
 

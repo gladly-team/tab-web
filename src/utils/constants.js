@@ -38,6 +38,7 @@ export const COMPLETED_GROUP_IMPACT_VIEWS =
   'tab.user.groupImpactMetric.completedGroupImpactViews'
 export const CURRENT_GROUP_IMPACT_VIEWS =
   'tab.user.groupImpactMetric.currentGroupImpactViews'
+export const STORAGE_NEW_USER_IS_TAB_V4_BETA = 'tab.newUser.isTabV4Enabled'
 
 export const CHROME_BROWSER = 'chrome'
 export const FIREFOX_BROWSER = 'firefox'
