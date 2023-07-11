@@ -193,6 +193,7 @@ const useStyles = makeStyles((theme) => ({
   sidebarContent: {
     display: 'flex',
     flexDirection: 'row',
+    overflowY: 'auto',
   },
   leaderboard: {
     maxHeight: '100%',
