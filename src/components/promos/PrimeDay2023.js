@@ -88,7 +88,6 @@ const PrimeDay2023 = ({ user }) => {
               >
                 <CloseIcon sx={{ color: '#fff', width: 28, height: 28 }} />
               </IconButton>
-
               <Typography
                 variant="h4"
                 gutterBottom
@@ -97,7 +96,6 @@ const PrimeDay2023 = ({ user }) => {
               >
                 Skip Prime Day, Support Charity
               </Typography>
-
               <Typography variant="body1" gutterBottom align="center">
                 Since Amazon killed{' '}
                 <a
@@ -106,8 +104,8 @@ const PrimeDay2023 = ({ user }) => {
                   rel="noreferrer"
                 >
                   Amazon Smile
-                </a>{' '}
-                we got you covered with{' '}
+                </a>
+                , we launched a better version:{' '}
                 <a
                   href="https://shop.gladly.io"
                   target="_blank"
@@ -118,7 +116,6 @@ const PrimeDay2023 = ({ user }) => {
                 . Click below to shop and raise money for{' '}
                 {user.cause.nameForShop || 'Charity'}.
               </Typography>
-
               <Button
                 variant="contained"
                 color="primary"
