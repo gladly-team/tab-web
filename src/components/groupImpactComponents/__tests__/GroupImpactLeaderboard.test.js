@@ -62,6 +62,10 @@ const getMockProps = () => ({
   onClose: jest.fn(),
 })
 
+beforeEach(() => {
+  process.env.EST_MONEY_RAISED_PER_TAB = 0.00001
+})
+
 describe('GroupImpactLeaderboard component', () => {
   it('renders without error', () => {
     const GroupImpactLeaderboard =
@@ -100,7 +104,7 @@ describe('GroupImpactLeaderboard component', () => {
     const wrapper = shallow(<GroupImpactLeaderboard {...mockProps} />)
     const typographies = wrapper.find(Typography)
 
-    expect(typographies.at(1).text()).toEqual('...')
+    expect(typographies.at(5).text()).toEqual('...')
   })
 
   it('displays no ellipses if there is a gap in positions', () => {
@@ -153,7 +157,7 @@ describe('GroupImpactLeaderboard component', () => {
     const wrapper = shallow(<GroupImpactLeaderboard {...mockProps} />)
     const typographies = wrapper.find(Typography)
 
-    expect(typographies.length).toEqual(1)
+    expect(typographies.length).toEqual(5)
   })
 
   it('calls onClose handler when clicked', () => {

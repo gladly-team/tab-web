@@ -16,6 +16,10 @@ const getMockProps = () => ({
   },
 })
 
+beforeEach(() => {
+  process.env.EST_MONEY_RAISED_PER_TAB = 0.00001
+})
+
 describe('GroupImpactLeaderboardRow component', () => {
   it('renders without error', () => {
     const GroupImpactLeaderboardRow =
@@ -35,9 +39,7 @@ describe('GroupImpactLeaderboardRow component', () => {
 
     expect(typographies.first().text()).toEqual(mockProps.position.toString())
     expect(typographies.at(1).text()).toEqual(mockProps.username)
-    expect(typographies.at(2).text()).toEqual(
-      mockProps.userGroupImpactMetric.dollarContribution.toString()
-    )
+    expect(typographies.at(2).text()).toEqual('1,235')
 
     expect(wrapper.find(TabIcon).length).toEqual(1)
     expect(wrapper.find(SearchIcon).length).toEqual(1)
