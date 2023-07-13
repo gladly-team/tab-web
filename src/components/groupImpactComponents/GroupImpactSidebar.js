@@ -151,9 +151,11 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(0.5),
   },
   pullTabCollapsed: {
+    maxWidth: 76,
     width: 76,
   },
   pullTabExpanded: {
+    maxWidth: 84,
     width: 84,
   },
   pullTabProgress: {
@@ -493,7 +495,11 @@ const GroupImpactSidebar = ({
       </Slide>
       <Box
         onClick={toggleOpen}
-        className={classes.collapsedWrapper}
+        className={
+          isClosedHover
+            ? clsx(classes.collapsedWrapper, classes.pullTabExpanded)
+            : clsx(classes.collapsedWrapper, classes.pullTabCollapsed)
+        }
         onMouseOver={() => setIsClosedHover(true)}
         onMouseOut={() => setIsClosedHover(false)}
       >
