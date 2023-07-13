@@ -9,6 +9,7 @@ import clsx from 'clsx'
 import defaultTheme from 'src/utils/theme'
 import { lighten } from '@material-ui/core'
 import Tooltip from '@material-ui/core/Tooltip'
+import { getEstimatedMoneyRaisedPerTab } from 'src/utils/misc'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -17,6 +18,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     justifyContent: 'flex-start',
     padding: theme.spacing(2),
+    alignItems: 'center',
   },
   column: {
     display: 'flex',
@@ -56,17 +58,6 @@ const useStyles = makeStyles((theme) => ({
   bold: {
     fontWeight: '700',
   },
-  numberIcon: {
-    width: '80px',
-    height: '80px',
-    borderRadius: '100%',
-    backgroundColor: defaultTheme.palette.colors.tab,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: theme.spacing(1),
-    color: 'white',
-  },
   impactPoints: {
     marginLeft: 'auto',
   },
@@ -76,6 +67,10 @@ const useStyles = makeStyles((theme) => ({
   tooltips: {
     zIndex: '9999999 !important',
   },
+  position: {
+    marginRight: theme.spacing(2),
+    width: '90px',
+  },
 }))
 const GroupImpactLeaderboardRow = ({
   position,
@@ -83,6 +78,10 @@ const GroupImpactLeaderboardRow = ({
   userGroupImpactMetric,
   selected,
 }) => {
+  const estimatedMicroUsdsPerTab = Math.max(
+    getEstimatedMoneyRaisedPerTab() * 10 ** 6,
+    1
+  )
   const classes = useStyles()
   const {
     dollarContribution,
@@ -90,15 +89,18 @@ const GroupImpactLeaderboardRow = ({
     searchDollarContribution,
     shopDollarContribution,
   } = userGroupImpactMetric
+  const impactPoints = Math.ceil(
+    dollarContribution / estimatedMicroUsdsPerTab
+  ).toLocaleString('en-US')
   return (
     <div
       className={
         selected ? clsx(classes.wrapper, classes.selected) : classes.wrapper
       }
     >
-      <div className={classes.numberIcon}>
-        <Typography variant="h5">{position}</Typography>
-      </div>
+      <Typography className={classes.position} variant="h5">
+        {position}
+      </Typography>
       <div className={classes.column}>
         <Typography className={classes.bold} variant="h6">
           {username}
@@ -146,9 +148,8 @@ const GroupImpactLeaderboardRow = ({
         className={clsx(classes.impactPoints, classes.column, classes.center)}
       >
         <Typography className={classes.bold} variant="h6">
-          {dollarContribution}
+          {impactPoints}
         </Typography>
-        <Typography variant="h6">Impact Points</Typography>
       </div>
     </div>
   )
