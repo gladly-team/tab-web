@@ -57,6 +57,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     width: '90px',
   },
+  subtitle: {
+    marginBottom: theme.spacing(2),
+  },
 }))
 
 const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
@@ -100,7 +103,7 @@ const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
           <Typography variant="h5" className={classes.robotoBold}>
             LEADERBOARD
           </Typography>
-          <Typography variant="body2">
+          <Typography variant="body2" className={classes.subtitle}>
             Impact points earned for this group goal by opening tabs, searching,
             and/or shopping
           </Typography>
