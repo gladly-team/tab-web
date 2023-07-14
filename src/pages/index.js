@@ -31,7 +31,7 @@ import SquadCounter from 'src/components/SquadCounter'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 import SfacActivityContainer from 'src/components/SfacActivityContainer'
-import PrimeDay2023 from 'src/components/promos/PrimeDay2023'
+import Momentum from 'src/components/directDonateComponents/Momentum'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -655,10 +655,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
   // Determine if we should show any notifications. Currently, each
   // notification is is configured on a one-off basis here (UI) and in the
   // backend (enabling/disabling).
-  const [notificationsToShow, setNotifsToShow] = useState([])
+  const [, setNotifsToShow] = useState([])
 
   useEffect(() => {
     const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
+
     const onNotificationClose = (code) => {
       localStorageMgr.setItem(getNotifDismissKey(code), 'true')
       setNotifsToShow((notifsToShow) =>
@@ -667,6 +668,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
       gtag('event', 'shop_full_page_2023_dismiss', { version: 'Version1' })
     }
+
     const hasDismissedNotif = (notif) =>
       localStorageMgr.getItem(getNotifDismissKey(notif.code)) === 'true'
 
@@ -690,10 +692,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(notifications), isDataFresh])
 
-  // Our notification
-  const notif = notificationsToShow.find(
-    (res) => res.code === 'shfac-notify-prime-day-2023'
-  )
+  // // Our notification
+  // const notif = notificationsToShow.find(
+  //   (res) => res.code === 'shfac-notify-prime-day-2023'
+  // )
 
   // let notif = notificationsToShow.find(
   //   (res) => res.code === 'shfac-notify-launch-fullpage'
@@ -1009,8 +1011,8 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
           <div className={classes.centerContainer}>
             <div className={classes.searchBarContainer}>
-              {/* Prime day 2023 Promo */}
-              {user.userId && notif && <PrimeDay2023 user={user} />}
+              {/* Momentum Direct Donate */}
+              {user.userId && <Momentum user={user} />}
 
               <Logo
                 includeText
