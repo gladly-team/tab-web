@@ -63,7 +63,7 @@ const getMockProps = () => ({
 })
 
 beforeEach(() => {
-  process.env.EST_MONEY_RAISED_PER_TAB = 0.00001
+  process.env.NEXT_EST_MONEY_RAISED_PER_TAB = 0.00001
 })
 
 describe('GroupImpactLeaderboard component', () => {

@@ -58,7 +58,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
     cursor: 'pointer',
     position: 'relative',
     maxHeight: '100vh',
