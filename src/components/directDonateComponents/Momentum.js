@@ -49,6 +49,13 @@ const Momentum = ({ user }) => {
     return false
   }
 
+  if (
+    user.cause.nameForShop !== 'Shelter Cats' &&
+    user.cause.nameForShop !== 'Reproductive Health'
+  ) {
+    return null
+  }
+
   // useEffect(() => {
   //   const dissNotif =
   //     localStorageMgr.getItem(getNotifDismissKey('momentum')) || false
@@ -84,31 +91,87 @@ const Momentum = ({ user }) => {
               >
                 <CloseIcon sx={{ color: '#fff', width: 28, height: 28 }} />
               </IconButton>
-              <Typography
-                variant="h4"
-                gutterBottom
-                align="center"
-                style={{ marginTop: 20 }}
-              >
-                Donate Directly to {user.cause.nameForShop || 'Charity'}
-              </Typography>
-              <Typography variant="body1" gutterBottom align="center">
-                By donating directly, 100% of your funds goes to supporting{' '}
-                {user.cause.nameForShop || 'Charity'}.
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{
-                  marginTop: 10,
-                  marginBottom: 10,
-                  width: 250,
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                }}
-              >
-                Donate Directly
-              </Button>
+
+              {user.cause.nameForShop === 'Shelter Cats' && (
+                <>
+                  <Typography
+                    variant="h4"
+                    gutterBottom
+                    align="center"
+                    style={{ marginTop: 20 }}
+                  >
+                    Automatically Help <br /> Even More Shelter Cats
+                  </Typography>
+                  <Typography variant="body1" gutterBottom align="center">
+                    We’re putting together a team of shelter cat heroes that are
+                    willing to chip in $1 each time a shelter cat is put up for
+                    adoption on Petfinder. The money raised will go directly to{' '}
+                    <a
+                      href="https://greatergood.org/jackson-galaxy#catpawsitive"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Greater Good
+                    </a>{' '}
+                    and will work to ensure 1000s of shelter cats have better
+                    lives!
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{
+                      marginTop: 10,
+                      marginBottom: 10,
+                      width: 250,
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                    }}
+                  >
+                    Join the Team
+                  </Button>
+                </>
+              )}
+
+              {user.cause.nameForShop === 'Reproductive Health' && (
+                <>
+                  <Typography
+                    variant="h4"
+                    gutterBottom
+                    align="center"
+                    style={{ marginTop: 20 }}
+                  >
+                    Help Fight For <br /> Reproductive Health Rights
+                  </Typography>
+                  <Typography variant="body1" gutterBottom align="center">
+                    We’re putting together a team to fight for reproductive
+                    rights by chipping in a few dollars directly to the{' '}
+                    <a
+                      href="https://reproductiverights.org"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Center for Reproductive Rights
+                    </a>{' '}
+                    each time new anti-abortion legislation is proposed. Let’s
+                    make it clear where the public stands on access to
+                    reproductive healthcare and help disincentivize proposing
+                    these harmful bills.
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{
+                      marginTop: 10,
+                      marginBottom: 10,
+                      width: 250,
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                    }}
+                  >
+                    Join the Team
+                  </Button>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>
