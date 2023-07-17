@@ -5,15 +5,16 @@ import PropTypes from 'prop-types'
 import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
+import clsx from 'clsx'
 import GroupImpactLeaderboardRow from './GroupImpactLeaderboardRow'
 
 const useStyles = makeStyles((theme) => ({
   title: {
     padding: theme.spacing(1),
-    paddingLeft: theme.spacing(3),
+    paddingLeft: theme.spacing(2),
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'start',
   },
   leaderboard: {
     height: '100%',
@@ -39,6 +40,25 @@ const useStyles = makeStyles((theme) => ({
     width: 30,
     height: 30,
     marginRight: '-16px',
+  },
+  positionRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'flex-start',
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    alignItems: 'center',
+  },
+  impactPoints: {
+    marginLeft: 'auto',
+  },
+  position: {
+    marginRight: theme.spacing(2),
+    width: '90px',
+  },
+  subtitle: {
+    marginBottom: theme.spacing(2),
   },
 }))
 
@@ -79,14 +99,37 @@ const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
   return (
     <div className={classes.leaderboard}>
       <div className={classes.title}>
-        <Typography variant="h5" className={classes.robotoBold}>
-          LEADERBOARD
-        </Typography>
+        <div>
+          <Typography variant="h5" className={classes.robotoBold}>
+            LEADERBOARD
+          </Typography>
+          <Typography variant="body2" className={classes.subtitle}>
+            Impact points earned for this group goal by opening tabs, searching,
+            and/or shopping
+          </Typography>
+        </div>
+
         <Button onClick={onClose} className={classes.closeButton}>
           <ArrowBackIos className={classes.closeButtonIcon} />
         </Button>
       </div>
-
+      <div className={classes.positionRow}>
+        <Typography className={classes.position} variant="h6">
+          Position
+        </Typography>
+        <div className={classes.column}>
+          <Typography className={classes.bold} variant="h6">
+            Username
+          </Typography>
+        </div>
+        <Typography
+          className={clsx(classes.bold, classes.impactPoints)}
+          variant="h6"
+        >
+          Impact Points
+        </Typography>
+      </div>
+      <Divider />
       {entriesWithEllipses}
     </div>
   )

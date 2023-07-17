@@ -25,6 +25,8 @@ import CauseIcon from 'src/components/CauseIcon'
 import Tooltip from '@material-ui/core/Tooltip'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import Switch from '@material-ui/core/Switch'
+import localStorageMgr from 'src/utils/localstorage-mgr'
+import { STORAGE_NEW_USER_IS_TAB_V4_BETA } from 'src/utils/constants'
 
 jest.mock('next-offline/runtime')
 jest.mock('tab-cmp')
@@ -46,6 +48,7 @@ jest.mock('src/components/CauseIcon', () => ({ icon }) => <div icon={icon} />)
 jest.mock('src/utils/localStorageFeaturesManager', () => ({
   getFeatureValue: jest.fn(),
 }))
+jest.mock('src/utils/localstorage-mgr', () => ({ removeItem: jest.fn() }))
 
 const getMockDataResponse = () => ({
   user: {
@@ -453,6 +456,20 @@ describe('account.js: button to revert to classic Tab for a Cause', () => {
     revertButton.simulate('click')
     await flushAllPromises()
     expect(clearAllServiceWorkerCaches).toHaveBeenCalled()
+  })
+
+  it('clicking the "revert" button clears local storage', async () => {
+    expect.assertions(1)
+    const AccountPage = require('src/pages/account').default
+    const mockProps = getMockProps()
+    useData.mockReturnValue({ data: getMockDataResponse() })
+    const wrapper = mount(<AccountPage {...mockProps} />)
+    const revertButton = getRevertButton(wrapper)
+    revertButton.simulate('click')
+    await flushAllPromises()
+    expect(localStorageMgr.removeItem).toHaveBeenCalledWith(
+      STORAGE_NEW_USER_IS_TAB_V4_BETA
+    )
   })
 
   it('clicking the "revert" button unregisters the service worker', async () => {
