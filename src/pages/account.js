@@ -36,7 +36,6 @@ import { STORAGE_NEW_USER_IS_TAB_V4_BETA } from 'src/utils/constants'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
-    width: '100%',
     margin: theme.spacing(2),
   },
   titleContainer: {
