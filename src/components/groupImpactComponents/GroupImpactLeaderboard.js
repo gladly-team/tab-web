@@ -1,4 +1,5 @@
-import { Typography } from '@material-ui/core'
+import Link from 'src/components/Link'
+import Typography from '@material-ui/core/Typography'
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
@@ -6,6 +7,7 @@ import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import clsx from 'clsx'
+import { groupImpactLeaderboardFAQ } from 'src/utils/urls'
 import GroupImpactLeaderboardRow from './GroupImpactLeaderboardRow'
 
 const useStyles = makeStyles((theme) => ({
@@ -60,6 +62,9 @@ const useStyles = makeStyles((theme) => ({
   subtitle: {
     marginBottom: theme.spacing(2),
   },
+  link: {
+    color: theme.palette.primary.main,
+  },
 }))
 
 const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
@@ -105,7 +110,10 @@ const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
           </Typography>
           <Typography variant="body2" className={classes.subtitle}>
             Impact points earned for this group goal by opening tabs, searching,
-            and/or shopping
+            and/or shopping.{' '}
+            <Link to={groupImpactLeaderboardFAQ}>
+              <span className={classes.link}>Learn More</span>
+            </Link>
           </Typography>
         </div>
 
