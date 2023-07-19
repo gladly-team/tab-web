@@ -69,17 +69,34 @@ const useStyles = makeStyles((theme) => ({
 
 const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
   const classes = useStyles()
-  const displayLeaderboardEntries = leaderboardEntries.map((entry) => (
-    <div key={`${entry.user.username}_${entry.position}`}>
-      <GroupImpactLeaderboardRow
-        selected={userId === entry.user.id}
-        position={entry.position}
-        username={entry.user.username}
-        userGroupImpactMetric={entry.userGroupImpactMetric}
-      />
-      <Divider />
-    </div>
-  ))
+  const displayLeaderboardEntries = []
+  let maxDollarContributionSeen = 0
+  for (let i = leaderboardEntries.length - 1; i >= 0; i -= 1) {
+    const entry = leaderboardEntries[i]
+    let userGroupImpactMetric = null
+    if (
+      entry.userGroupImpactMetric.dollarContribution < maxDollarContributionSeen
+    ) {
+      userGroupImpactMetric = {
+        ...entry.userGroupImpactMetric,
+        dollarContribution: maxDollarContributionSeen,
+      }
+    } else {
+      userGroupImpactMetric = entry.userGroupImpactMetric
+      maxDollarContributionSeen = entry.userGroupImpactMetric.dollarContribution
+    }
+    displayLeaderboardEntries.unshift(
+      <div key={`${entry.user.username}_${entry.position}`}>
+        <GroupImpactLeaderboardRow
+          selected={userId === entry.user.id}
+          position={entry.position}
+          username={entry.user.username}
+          userGroupImpactMetric={userGroupImpactMetric}
+        />
+        <Divider />
+      </div>
+    )
+  }
 
   const entriesWithEllipses = []
   for (let i = 0; i < displayLeaderboardEntries.length; i += 1) {
