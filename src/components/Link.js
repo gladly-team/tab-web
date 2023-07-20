@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events,  jsx-a11y/no-static-element-interactions */
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
@@ -13,7 +14,7 @@ const useStyles = makeStyles(() => ({
 }))
 
 const Link = (props) => {
-  const { children, className, target, to = '', style } = props
+  const { children, className, target, to = '', style, stopPropagation } = props
   const classes = useStyles()
   const [destInternal, setDestInternal] = useState(true)
 
@@ -41,9 +42,14 @@ const Link = (props) => {
     anchorTarget = destInternal ? undefined : '_top'
   }
 
+  const stopPropagationHandler = (e) => {
+    e.stopPropagation()
+  }
+
   return (
     <NextJsLink href={to}>
       <a
+        onClick={stopPropagation ? stopPropagationHandler : undefined}
         target={anchorTarget}
         className={clsx(classes.anchor, className)}
         style={style}
@@ -68,12 +74,14 @@ Link.propTypes = {
   // Allow object type for style.
   // eslint-disable-next-line react/forbid-prop-types
   style: PropTypes.object,
+  stopPropagation: PropTypes.bool,
 }
 
 Link.defaultProps = {
   className: '',
   target: undefined,
   style: {},
+  stopPropagation: false,
 }
 
 export default Link
