@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core'
 import React from 'react'
 
 import { groupImpactLeaderboardFAQ } from 'src/utils/urls'
@@ -9,18 +10,28 @@ export default {
 }
 
 const Template = (args) => <Link {...args} />
-
 export const demo = Template.bind({})
 demo.args = {
   to: groupImpactLeaderboardFAQ,
   children: 'Hello',
-  stopPropagation: true,
   target: '_blank',
 }
 
-export const demoWithProp = Template.bind({})
-demoWithProp.args = {
+const TemplateWithHandler = (args) => {
+  const clickHandler = () => {
+    // eslint-disable-next-line no-console
+    console.log('click handler')
+  }
+  return (
+    <Box onClick={clickHandler}>
+      <Link {...args} />
+    </Box>
+  )
+}
+export const demoStopPropagation = TemplateWithHandler.bind({})
+demoStopPropagation.args = {
   to: groupImpactLeaderboardFAQ,
   children: 'Hello',
+  stopPropagation: true,
   target: '_blank',
 }
