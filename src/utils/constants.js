@@ -65,3 +65,7 @@ export const GROUP_IMPACT_SIDEBAR_STATE = {
   NEW: 'NEW',
   COMPLETED: 'COMPLETED',
 }
+
+// Widget Types:
+export const WIDGET_TYPE_BOOKMARKS = 'bookmarks'
+export const WIDGET_TYPE_TODOS = 'todos'
