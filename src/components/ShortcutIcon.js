@@ -14,8 +14,8 @@ import Link from 'src/components/Link'
 const useStyles = makeStyles((theme) => ({
   button: {
     height: '150px',
-    width: '96px',
-    maxWidth: '96px',
+    width: '110px',
+    maxWidth: '110px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
