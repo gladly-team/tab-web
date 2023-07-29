@@ -4,9 +4,16 @@ import { AddCircleOutline } from '@mui/icons-material'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import { KeyboardArrowDown } from '@material-ui/icons'
 import ShortcutIcon from './ShortcutIcon'
 
 const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   button: {
     height: '150px',
     width: '110px',
@@ -35,8 +42,15 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  openButton: {
+    color: 'white',
+  },
 }))
-const FrontpageShortcutList = ({ bookmarks, addShortcutClick }) => {
+const FrontpageShortcutList = ({
+  bookmarks,
+  addShortcutClick,
+  openHandler,
+}) => {
   const classes = useStyles()
   const shortcutIcons = bookmarks
     .slice(-4)
@@ -48,16 +62,21 @@ const FrontpageShortcutList = ({ bookmarks, addShortcutClick }) => {
       />
     ))
   return (
-    <div className={classes.shortcutList}>
-      {shortcutIcons}
-      <Button
-        className={classes.button}
-        onClick={addShortcutClick}
-        classes={{ label: classes.label }}
-      >
-        <AddCircleOutline className={classes.addCircle} />
-        <Typography className={classes.overflow}>Add Shortcut</Typography>
-      </Button>
+    <div className={classes.wrapper}>
+      <div className={classes.shortcutList}>
+        {shortcutIcons}
+        <Button
+          className={classes.button}
+          onClick={addShortcutClick}
+          classes={{ label: classes.label }}
+        >
+          <AddCircleOutline className={classes.addCircle} />
+          <Typography className={classes.overflow}>Add Shortcut</Typography>
+        </Button>
+      </div>
+      <IconButton onClick={openHandler} className={classes.openButton}>
+        <KeyboardArrowDown />
+      </IconButton>
     </div>
   )
 }
@@ -69,6 +88,7 @@ FrontpageShortcutList.propTypes = {
     })
   ),
   addShortcutClick: PropTypes.func.isRequired,
+  openHandler: PropTypes.func.isRequired,
 }
 FrontpageShortcutList.defaultProps = {
   bookmarks: [],
