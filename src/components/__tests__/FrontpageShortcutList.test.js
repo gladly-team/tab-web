@@ -1,6 +1,7 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import Button from '@material-ui/core/Button'
+import { IconButton } from '@material-ui/core'
 import ShortcutIcon from '../ShortcutIcon'
 
 const getMockProps = () => ({
@@ -31,6 +32,7 @@ const getMockProps = () => ({
     },
   ],
   addShortcutClick: jest.fn(),
+  openHandler: jest.fn(),
 })
 
 describe('FrontpageShortcutList component', () => {
@@ -69,5 +71,17 @@ describe('FrontpageShortcutList component', () => {
     button.simulate('click')
 
     expect(mockProps.addShortcutClick).toHaveBeenCalled()
+  })
+
+  it('calls open handler button click', () => {
+    const FrontpageShortcutList =
+      require('src/components/FrontpageShortcutList').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<FrontpageShortcutList {...mockProps} />)
+
+    wrapper.find(IconButton).simulate('click')
+    wrapper.update()
+
+    expect(mockProps.openHandler).toHaveBeenCalled()
   })
 })
