@@ -15280,7 +15280,7 @@ synchronous-promise@^2.0.15:
   resolved "https://registry.yarnpkg.com/synchronous-promise/-/synchronous-promise-2.0.16.tgz#669b75e86b4295fdcc1bb0498de9ac1af6fd51a9"
   integrity sha512-qImOD23aDfnIDNqlG1NOehdB9IYsn1V9oByPjKY1nakv2MQYCEMyX033/q+aEtYCpmYK1cv2+NTmlH+ra6GA5A==
 
-tab-ads@^1.1.10:
+tab-ads@^1.1.12:
   version "1.1.12"
   resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.12.tgz#787e9a0cd773bce6d5b2f6d4f684ebd25e891dc8"
   integrity sha512-+GyoqM6Dw+/k57flZtLJL3wBXJZdcGWspOL+lG7hdm+FtSobhb3yU6QcYJKxSTfDyHgZsu9EkZulrwe7bNEuCA==
