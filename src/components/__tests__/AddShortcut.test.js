@@ -83,4 +83,16 @@ describe('AddShortcut component', () => {
 
     expect(() => wrapper.find(Button).at(1).simulate('click')).not.toThrow()
   })
+
+  it('puts default values when for name and url', async () => {
+    const AddShortcut = require('src/components/AddShortcut').default
+    const name = 'name'
+    const url = 'url'
+    const wrapper = mount(<AddShortcut existingName={name} existingUrl={url} />)
+
+    const textFields = wrapper.find(TextField)
+
+    expect(textFields.at(0).prop('value')).toEqual(name)
+    expect(textFields.at(1).prop('value')).toEqual(url)
+  })
 })

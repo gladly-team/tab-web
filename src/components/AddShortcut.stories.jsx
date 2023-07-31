@@ -33,3 +33,9 @@ const Template = (args) => {
 
 export const basic = Template.bind({})
 basic.args = {}
+
+export const existingValues = Template.bind({})
+existingValues.args = {
+  existingName: 'Google',
+  existingUrl: 'http://www.google.com',
+}
