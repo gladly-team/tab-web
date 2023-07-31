@@ -71,6 +71,14 @@ const ShortcutIcon = ({ onEdit, onDelete, text, url, id }) => {
   const [hover, setHover] = useState(false)
   const classes = useStyles()
   const firstLettersText = getFirstTwoLetters(text)
+  const onDeleteHandler = (event) => {
+    onDelete(id)
+    event.preventDefault()
+  }
+  const onEditHandler = (event) => {
+    onEdit(id, text, url)
+    event.preventDefault()
+  }
   return (
     <Link to={url}>
       <div
@@ -82,14 +90,11 @@ const ShortcutIcon = ({ onEdit, onDelete, text, url, id }) => {
           <div className={classes.buttons}>
             <IconButton
               className={classes.miniButton}
-              onClick={() => onDelete(id)}
+              onClick={onDeleteHandler}
             >
               <DeleteIcon />
             </IconButton>
-            <IconButton
-              className={classes.miniButton}
-              onClick={() => onEdit(id, text, url)}
-            >
+            <IconButton className={classes.miniButton} onClick={onEditHandler}>
               <EditIcon />
             </IconButton>
           </div>

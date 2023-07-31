@@ -16,6 +16,7 @@ afterEach(() => {
 })
 
 const getMockProps = () => ({
+  existingId: 'abcd',
   onCancel: jest.fn(),
   onSave: jest.fn(),
 })
@@ -69,7 +70,11 @@ describe('AddShortcut component', () => {
     saveButton.simulate('click')
 
     wrapper.update()
-    expect(mockProps.onSave).toHaveBeenCalledWith('test', 'test.com')
+    expect(mockProps.onSave).toHaveBeenCalledWith(
+      mockProps.existingId,
+      'test',
+      'test.com'
+    )
     expect(wrapper.find(Notification).first().prop('open')).toEqual(false)
   })
 

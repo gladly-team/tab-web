@@ -34,7 +34,13 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
 }))
-const AddShortcut = ({ onCancel, onSave, existingName, existingUrl }) => {
+const AddShortcut = ({
+  onCancel,
+  onSave,
+  existingName,
+  existingUrl,
+  existingId,
+}) => {
   const [open, setOpen] = useState(true)
   const [name, setName] = useState(existingName)
   const [url, setUrl] = useState(existingUrl)
@@ -46,7 +52,7 @@ const AddShortcut = ({ onCancel, onSave, existingName, existingUrl }) => {
     setOpen(false)
   }
   const onSaveClick = () => {
-    onSave(name, url)
+    onSave(existingId, name, url)
     setName('')
     setUrl('')
     setOpen(false)
@@ -119,6 +125,7 @@ AddShortcut.propTypes = {
   onSave: PropTypes.func,
   existingName: PropTypes.string,
   existingUrl: PropTypes.string,
+  existingId: PropTypes.string,
 }
 
 AddShortcut.defaultProps = {
@@ -126,6 +133,7 @@ AddShortcut.defaultProps = {
   onSave: () => {},
   existingName: '',
   existingUrl: '',
+  existingId: null,
 }
 
 export default AddShortcut
