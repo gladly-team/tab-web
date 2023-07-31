@@ -56,11 +56,6 @@ class CustomDocument extends Document {
                 `,
             }}
           />
-          {/* Index Exchange */}
-          <script
-            async
-            src="//js-sec.indexww.com/ht/p/189508-208262485043658.js"
-          />
           {/**
            * End: Ads code.
            */}
