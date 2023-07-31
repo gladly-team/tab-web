@@ -29,10 +29,12 @@ export const standard = Template.bind({})
 standard.args = {
   bookmarks: [
     {
+      id: 'abcd',
       name: 'google',
       link: 'https://www.google.com',
     },
     {
+      id: 'bcde',
       name: 'espn',
       link: 'https://www.espn.com',
     },
