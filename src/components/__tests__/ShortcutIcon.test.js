@@ -8,6 +8,7 @@ import IconButton from '@material-ui/core/IconButton'
 const getMockProps = () => ({
   text: 'Google Googledy',
   url: 'https://www.google.com',
+  id: 'abcd',
   onEdit: jest.fn(),
   onDelete: jest.fn(),
 })
@@ -56,10 +57,14 @@ describe('ShortcutIcon component', () => {
     wrapper.find(Fade).simulate('mouseover')
 
     wrapper.find(IconButton).first().simulate('click')
-    expect(mockProps.onDelete).toHaveBeenCalled()
+    expect(mockProps.onDelete).toHaveBeenCalledWith(mockProps.id)
 
     wrapper.find(IconButton).at(1).simulate('click')
-    expect(mockProps.onEdit).toHaveBeenCalled()
+    expect(mockProps.onEdit).toHaveBeenCalledWith(
+      mockProps.id,
+      mockProps.text,
+      mockProps.url
+    )
   })
 
   it('default handlers do not throw', () => {

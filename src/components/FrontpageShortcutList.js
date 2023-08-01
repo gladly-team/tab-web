@@ -59,6 +59,7 @@ const FrontpageShortcutList = ({
         key={bookmark.link}
         text={bookmark.name}
         url={bookmark.link}
+        id={bookmark.id}
       />
     ))
   return (

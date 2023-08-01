@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     color: 'white',
   },
 }))
-const ShortcutIcon = ({ onEdit, onDelete, text, url }) => {
+const ShortcutIcon = ({ onEdit, onDelete, text, url, id }) => {
   const getFirstTwoLetters = (str) => {
     const words = str.split(' ')
     const firstLetters = words.map((word) => word.charAt(0))
@@ -80,10 +80,16 @@ const ShortcutIcon = ({ onEdit, onDelete, text, url }) => {
       >
         <Fade in={hover}>
           <div className={classes.buttons}>
-            <IconButton className={classes.miniButton} onClick={onDelete}>
+            <IconButton
+              className={classes.miniButton}
+              onClick={() => onDelete(id)}
+            >
               <DeleteIcon />
             </IconButton>
-            <IconButton className={classes.miniButton} onClick={onEdit}>
+            <IconButton
+              className={classes.miniButton}
+              onClick={() => onEdit(id, text, url)}
+            >
               <EditIcon />
             </IconButton>
           </div>
@@ -102,6 +108,7 @@ ShortcutIcon.propTypes = {
   onDelete: PropTypes.func,
   text: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
 }
 
 ShortcutIcon.defaultProps = {

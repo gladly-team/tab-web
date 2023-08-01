@@ -7,26 +7,32 @@ import ShortcutIcon from '../ShortcutIcon'
 const getMockProps = () => ({
   bookmarks: [
     {
+      id: 'abcd',
       name: 'google',
       link: 'https://www.google.com',
     },
     {
+      id: 'bcde',
       name: 'espn',
       link: 'https://www.espn.com',
     },
     {
+      id: 'cdef',
       name: 'google2',
       link: 'https://www.google2.com',
     },
     {
+      id: 'defg',
       name: 'espn2',
       link: 'https://www.espn2.com',
     },
     {
+      id: 'efgh',
       name: 'google3',
       link: 'https://www.google3.com',
     },
     {
+      id: 'fghi',
       name: 'espn3',
       link: 'https://www.espn3.com',
     },
