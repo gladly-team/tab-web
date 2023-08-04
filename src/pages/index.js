@@ -39,6 +39,7 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Chip from '@material-ui/core/Chip'
+import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -98,6 +99,7 @@ import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotification'
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
 import ShopFullPage from 'src/components/promos/ShopFullPage'
+import Notification from 'src/components/Notification'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -702,6 +704,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
     notif = null
   }
 
+  // Our survey notification
+  const surveyNotif = notificationsToShow.find(
+    (res) => res.code === 'user-survey-august-2023'
+  )
+
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
   // any data server-side, in which case we'll fetch data in
@@ -932,6 +939,44 @@ const Index = ({ data: fallbackData, userAgent }) => {
            * that appear via the UserImpact component.
            */}
           <div className={classes.notificationsContainer}>
+            {surveyNotif ? (
+              <Notification
+                className={classes.notification}
+                text={
+                  <div className={classes.notificationText}>
+                    <Typography
+                      variant="h2"
+                      gutterBottom
+                      className={classes.notificationTitle}
+                    >
+                      We want to hear from you!
+                    </Typography>
+
+                    <Typography variant="body1" gutterBottom>
+                      We'd love your feedback via this quick (&lt;2 min) survey
+                      to help improve Tab for a Cause!
+                    </Typography>
+                    <br />
+                    <Typography variant="body1" gutterBottom>
+                      Thanks for your help!
+                    </Typography>
+                  </div>
+                }
+                buttons={
+                  <div className={classes.notificationButtonsWrapper}>
+                    <Link
+                      to="https://forms.gle/u6wpP3teLpBB4yZP6"
+                      target="_blank"
+                    >
+                      <Button variant="contained">Take Survey</Button>
+                    </Link>
+                  </div>
+                }
+                includeClose
+                onClose={surveyNotif.onDismiss}
+              />
+            ) : null}
+
             {/* {notif && notif.variation === 'Version1' ? (
               <Notification
                 className={classes.notification}
