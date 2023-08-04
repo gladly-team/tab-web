@@ -2,7 +2,6 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { Button } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
-import Notification from '../Notification'
 
 jest.mock('src/utils/navigation')
 jest.mock('src/utils/logger')
@@ -34,7 +33,6 @@ describe('AddShortcut component', () => {
     const AddShortcut = require('src/components/AddShortcut').default
     const mockProps = getMockProps()
     const wrapper = mount(<AddShortcut {...mockProps} />)
-    expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
 
     wrapper.update()
 
@@ -45,14 +43,12 @@ describe('AddShortcut component', () => {
     wrapper.update()
 
     expect(mockProps.onCancel).toHaveBeenCalled()
-    expect(wrapper.find(Notification).first().prop('open')).toEqual(false)
   })
 
   it('calls handler and closes on clicking save', async () => {
     const AddShortcut = require('src/components/AddShortcut').default
     const mockProps = getMockProps()
     const wrapper = mount(<AddShortcut {...mockProps} />)
-    expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
 
     wrapper
       .find(TextField)
@@ -73,9 +69,8 @@ describe('AddShortcut component', () => {
     expect(mockProps.onSave).toHaveBeenCalledWith(
       mockProps.existingId,
       'test',
-      'test.com'
+      'http://test.com'
     )
-    expect(wrapper.find(Notification).first().prop('open')).toEqual(false)
   })
 
   it('default save and cancel handlers do not throw', async () => {

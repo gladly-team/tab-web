@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { AddCircleOutline } from '@mui/icons-material'
 import { makeStyles } from '@material-ui/core/styles'
@@ -8,8 +8,8 @@ import IconButton from '@material-ui/core/IconButton'
 import { KeyboardArrowDown } from '@material-ui/icons'
 import UpdateWidgetDataMutation from 'src/utils/mutations/UpdateWidgetDataMutation'
 import { WIDGET_TYPE_BOOKMARKS } from 'src/utils/constants'
-import { nanoid } from 'nanoid'
-import { Modal } from '@material-ui/core'
+import { v4 as uuid } from 'uuid'
+import { Backdrop } from '@material-ui/core'
 import ShortcutIcon from './ShortcutIcon'
 import AddShortcut from './AddShortcut'
 
@@ -50,18 +50,36 @@ const useStyles = makeStyles((theme) => ({
   openButton: {
     color: 'white',
   },
+  addShortcutModal: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10001,
+  },
+  addShortcutWrapper: {
+    width: '400px',
+  },
 }))
 const FrontpageShortcutList = ({ openHandler, user }) => {
   const { widgets: { edges: widgetNodes = [] } = {} } = user
-  const bookmarkWidget = widgetNodes.find(
-    (widgetNode) => widgetNode.node.type === WIDGET_TYPE_BOOKMARKS
-  )
-  const bookmarksData =
-    bookmarkWidget && bookmarkWidget.node.data
-      ? JSON.parse(bookmarkWidget.node.data).bookmarks || []
-      : []
+  const [bookmarks, setBookmarks] = useState([])
+  const [bookmarkWidget, setBookmarkWidget] = useState(null)
+
+  useEffect(() => {
+    setBookmarkWidget(
+      widgetNodes.find(
+        (widgetNode) => widgetNode.node.type === WIDGET_TYPE_BOOKMARKS
+      )
+    )
+    const bookmarksData =
+      bookmarkWidget && bookmarkWidget.node.data
+        ? JSON.parse(bookmarkWidget.node.data).bookmarks || []
+        : []
+    setBookmarks(bookmarksData)
+  }, [widgetNodes, bookmarkWidget])
+
   const [addShortcutWidgetOpen, setAddShortcutWidgetOpen] = useState(false)
-  const [bookmarks, setBookmarks] = useState(bookmarksData)
 
   const saveBookmark = async (id, name, link) => {
     const existingIndex = bookmarks.findIndex((bookmark) => bookmark.id === id)
@@ -102,9 +120,9 @@ const FrontpageShortcutList = ({ openHandler, user }) => {
     )
   }
 
-  const [currentId, setCurrentId] = useState(null)
-  const [currentName, setCurrentName] = useState(null)
-  const [currentUrl, setCurrentUrl] = useState(null)
+  const [currentId, setCurrentId] = useState('')
+  const [currentName, setCurrentName] = useState('')
+  const [currentUrl, setCurrentUrl] = useState('')
 
   const onShortcutEdit = (id, text, url) => {
     setCurrentId(id)
@@ -114,7 +132,7 @@ const FrontpageShortcutList = ({ openHandler, user }) => {
   }
 
   const onNewShortcut = () => {
-    setCurrentId(nanoid(6))
+    setCurrentId(uuid())
     setCurrentName('')
     setCurrentUrl('')
     setAddShortcutWidgetOpen(true)
@@ -154,7 +172,7 @@ const FrontpageShortcutList = ({ openHandler, user }) => {
       <IconButton onClick={openHandler} className={classes.openButton}>
         <KeyboardArrowDown />
       </IconButton>
-      <Modal
+      <Backdrop
         open={addShortcutWidgetOpen}
         className={classes.addShortcutModal}
         data-test-id="add-shortcut-modal"
@@ -168,7 +186,7 @@ const FrontpageShortcutList = ({ openHandler, user }) => {
             existingUrl={currentUrl}
           />
         </div>
-      </Modal>
+      </Backdrop>
     </div>
   )
 }

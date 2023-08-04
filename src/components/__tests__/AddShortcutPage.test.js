@@ -1,11 +1,12 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
-import { Button, IconButton, Modal } from '@material-ui/core'
+import { Button, IconButton } from '@material-ui/core'
 import { accountURL } from 'src/utils/urls'
 import { WIDGET_TYPE_BOOKMARKS } from 'src/utils/constants'
 import { act } from 'react-dom/test-utils'
 import UpdateWidgetDataMutation from 'src/utils/mutations/UpdateWidgetDataMutation'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
+import { v4 as uuid } from 'uuid'
 import ShortcutIcon from '../ShortcutIcon'
 import { goTo } from '../../utils/navigation'
 import SearchInput from '../SearchInput'
@@ -15,7 +16,8 @@ const mockTestNanoId = 'a23456789'
 jest.mock('src/utils/navigation')
 jest.mock('src/utils/logger')
 jest.mock('src/utils/mutations/UpdateWidgetDataMutation')
-jest.mock('nanoid', () => ({ nanoid: () => mockTestNanoId }))
+jest.mock('uuid')
+uuid.mockReturnValue(mockTestNanoId)
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -165,11 +167,7 @@ describe('AddShortcutPage component', () => {
     const wrapper = mount(<AddShortcutPage {...mockProps} />)
 
     expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
+      wrapper.find('[data-test-id="add-shortcut-modal"]').first().prop('open')
     ).toEqual(false)
 
     const addShortcutButton = wrapper
@@ -181,11 +179,7 @@ describe('AddShortcutPage component', () => {
     wrapper.update()
 
     expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
+      wrapper.find('[data-test-id="add-shortcut-modal"]').first().prop('open')
     ).toEqual(true)
   })
 
@@ -195,11 +189,7 @@ describe('AddShortcutPage component', () => {
     const wrapper = mount(<AddShortcutPage {...mockProps} />)
 
     expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
+      wrapper.find('[data-test-id="add-shortcut-modal"]').first().prop('open')
     ).toEqual(false)
 
     act(() => {
@@ -208,11 +198,7 @@ describe('AddShortcutPage component', () => {
     wrapper.update()
 
     expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
+      wrapper.find('[data-test-id="add-shortcut-modal"]').first().prop('open')
     ).toEqual(true)
   })
 
@@ -231,7 +217,6 @@ describe('AddShortcutPage component', () => {
 
     const addShortcutModal = wrapper
       .find('[data-test-id="add-shortcut-modal"]')
-      .find(Modal)
       .first()
     addShortcutModal
       .find('input')
@@ -261,12 +246,8 @@ describe('AddShortcutPage component', () => {
     wrapper.update()
     expect(wrapper.find(ShortcutIcon).length).toEqual(3)
     expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
-    ).toBe(false)
+      wrapper.find('[data-test-id="add-shortcut-modal"]').first().prop('open')
+    ).toEqual(false)
   })
 
   it('edit bookmark flow works', async () => {
@@ -280,7 +261,6 @@ describe('AddShortcutPage component', () => {
 
     const addShortcutModal = wrapper
       .find('[data-test-id="add-shortcut-modal"]')
-      .find(Modal)
       .first()
     addShortcutModal
       .find('input')
@@ -310,12 +290,8 @@ describe('AddShortcutPage component', () => {
     wrapper.update()
     expect(wrapper.find(ShortcutIcon).length).toEqual(2)
     expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
-    ).toBe(false)
+      wrapper.find('[data-test-id="add-shortcut-modal"]').first().prop('open')
+    ).toEqual(false)
   })
 
   it('delete bookmark flow works', async () => {
@@ -339,12 +315,8 @@ describe('AddShortcutPage component', () => {
     wrapper.update()
     expect(wrapper.find(ShortcutIcon).length).toEqual(1)
     expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
-    ).toBe(false)
+      wrapper.find('[data-test-id="add-shortcut-modal"]').first().prop('open')
+    ).toEqual(false)
   })
 
   it('cancel add shortcut closes it', async () => {
@@ -362,17 +334,12 @@ describe('AddShortcutPage component', () => {
 
     const addShortcutModal = wrapper
       .find('[data-test-id="add-shortcut-modal"]')
-      .find(Modal)
       .first()
-    addShortcutModal.find(Button).at(1).simulate('click')
+    addShortcutModal.find(Button).at(0).simulate('click')
 
     wrapper.update()
     expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
-    ).toBe(false)
+      wrapper.find('[data-test-id="add-shortcut-modal"]').first().prop('open')
+    ).toEqual(false)
   })
 })
