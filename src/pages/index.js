@@ -99,6 +99,7 @@ import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotification'
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
 import ShopFullPage from 'src/components/promos/ShopFullPage'
+import SearchFullPage from 'src/components/promos/SearchFullPage'
 import Notification from 'src/components/Notification'
 
 const useStyles = makeStyles((theme) => ({
@@ -704,6 +705,20 @@ const Index = ({ data: fallbackData, userAgent }) => {
     notif = null
   }
 
+  // Our notification
+  let notifSearch = notificationsToShow.find(
+    (res) => res.code === 'sfac-notify-fullpage-aug'
+  )
+
+  if (
+    notifSearch &&
+    notifSearch.variation !== 'Version1' &&
+    notifSearch.variation !== 'Version2' &&
+    notifSearch.variation !== 'Version3'
+  ) {
+    notifSearch = null
+  }
+
   // Our survey notification
   const surveyNotif = notificationsToShow.find(
     (res) => res.code === 'user-survey-august-2023'
@@ -1132,10 +1147,12 @@ const Index = ({ data: fallbackData, userAgent }) => {
           </div>
         </>
       )}
-
       {/* Full Page Promo */}
       {user && user.userId && notif && notif.variation && (
         <ShopFullPage user={user} variation={notif.variation} />
+      )}
+      {user && user.userId && notifSearch && notifSearch.variation && (
+        <SearchFullPage user={user} variation={notifSearch.variation} />
       )}
     </div>
   )
