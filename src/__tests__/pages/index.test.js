@@ -10,6 +10,7 @@ import {
   STORAGE_NEW_USER_CAUSE_ID,
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   CAUSE_IMPACT_TYPES,
+  WIDGET_TYPE_BOOKMARKS,
 } from 'src/utils/constants'
 import {
   showMockAchievements,
@@ -59,6 +60,8 @@ import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import moment from 'moment'
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
+import AddShortcutPageContainer from 'src/components/AddShortcutPageContainer'
+import FrontpageShortcutListContainer from 'src/components/FrontpageShortcutListContainer'
 
 jest.mock('uuid')
 uuid.mockReturnValue('some-uuid')
@@ -165,6 +168,20 @@ const getMockProps = () => ({
       notifications: [],
       searches: 10,
       showSfacIcon: false,
+      widgets: {
+        edges: [
+          {
+            node: {
+              enabled: true,
+              id: 'abcde',
+              type: WIDGET_TYPE_BOOKMARKS,
+              data: JSON.stringify({
+                bookmarks: [],
+              }),
+            },
+          },
+        ],
+      },
     },
     userImpact: {
       userId: 'asdf',
@@ -195,6 +212,7 @@ beforeEach(() => {
   useDoesBrowserSupportSearchExtension.mockReturnValue(true)
   useBrowserName.mockReturnValue('chrome')
   MockDate.set(moment(mockNow))
+  localStorageFeaturesManager.getFeatureValue.mockReturnValue('false')
 })
 
 afterEach(() => {
@@ -1556,7 +1574,7 @@ describe('index.js: hardcoded notifications', () => {
     const IndexPage = require('src/pages/index').default
     const mockProps = getMockProps()
     useData.mockReturnValue({ data: mockProps.data, isDataFresh: true })
-    const wrapper = mount(<IndexPage {...mockProps} />)
+    const wrapper = shallow(<IndexPage {...mockProps} />)
     const notification = wrapper.find(Notification)
     expect(notification.exists()).not.toBe(true)
   })
@@ -1707,6 +1725,18 @@ describe('index.js: hardcoded notifications', () => {
     useData.mockReturnValue(mockProps)
     const wrapper = shallow(<IndexPage {...mockProps} />)
     expect(wrapper.find(UserImpactContainer)).toHaveLength(1)
+  })
+
+  it('does display shortcut components if applicable', async () => {
+    expect.assertions(2)
+    localStorageFeaturesManager.getFeatureValue.mockReturnValue('true')
+    const IndexPage = require('src/pages/index').default
+    const defaultMockProps = getMockProps()
+    useData.mockReturnValue({ data: defaultMockProps.data })
+    const wrapper = mount(<IndexPage {...defaultMockProps} />)
+
+    expect(wrapper.find(AddShortcutPageContainer).exists()).toBe(true)
+    expect(wrapper.find(FrontpageShortcutListContainer).exists()).toBe(true)
   })
 })
 
