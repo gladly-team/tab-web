@@ -1562,6 +1562,33 @@ describe('index.js', () => {
   })
 })
 
+it('does display shortcut components if applicable', async () => {
+  localStorageFeaturesManager.getFeatureValue.mockReturnValue('true')
+  const IndexPage = require('src/pages/index').default
+  const defaultMockProps = getMockProps()
+  useData.mockReturnValue({ data: defaultMockProps.data })
+  const wrapper = mount(<IndexPage {...defaultMockProps} />)
+
+  expect(wrapper.find(FrontpageShortcutListContainer).exists()).toBe(true)
+
+  wrapper
+    .find(FrontpageShortcutListContainer)
+    .find(IconButton)
+    .simulate('click')
+
+  expect(wrapper.find(AddShortcutPageContainer).exists()).toBe(true)
+})
+
+it('does not shortcut components if applicable', async () => {
+  const IndexPage = require('src/pages/index').default
+  const defaultMockProps = getMockProps()
+  useData.mockReturnValue({ data: defaultMockProps.data })
+  const wrapper = mount(<IndexPage {...defaultMockProps} />)
+
+  expect(wrapper.find(FrontpageShortcutListContainer).exists()).toBe(false)
+  expect(wrapper.find(AddShortcutPageContainer).exists()).toBe(false)
+})
+
 /* END: core tests */
 
 /* START: notification tests */
@@ -1725,18 +1752,6 @@ describe('index.js: hardcoded notifications', () => {
     useData.mockReturnValue(mockProps)
     const wrapper = shallow(<IndexPage {...mockProps} />)
     expect(wrapper.find(UserImpactContainer)).toHaveLength(1)
-  })
-
-  it('does display shortcut components if applicable', async () => {
-    expect.assertions(2)
-    localStorageFeaturesManager.getFeatureValue.mockReturnValue('true')
-    const IndexPage = require('src/pages/index').default
-    const defaultMockProps = getMockProps()
-    useData.mockReturnValue({ data: defaultMockProps.data })
-    const wrapper = mount(<IndexPage {...defaultMockProps} />)
-
-    expect(wrapper.find(AddShortcutPageContainer).exists()).toBe(true)
-    expect(wrapper.find(FrontpageShortcutListContainer).exists()).toBe(true)
   })
 })
 

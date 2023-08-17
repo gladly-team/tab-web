@@ -1,6 +1,6 @@
 /* eslint no-useless-escape: 0 */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
@@ -59,6 +59,8 @@ const AddShortcut = ({
 }) => {
   const [name, setName] = useState(existingName)
   const [url, setUrl] = useState(existingUrl)
+  useEffect(() => setName(existingName), [existingName])
+  useEffect(() => setUrl(existingUrl), [existingUrl])
   const classes = useStyles()
   const onCancelClick = () => {
     setName('')

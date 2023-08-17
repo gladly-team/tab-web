@@ -203,7 +203,7 @@ const AddShortcutPage = ({ app, user, userId, closeHandler }) => {
 
   return (
     <Backdrop open className={classes.backdrop}>
-      <div className={classes.content}>
+      <div className={classes.content} data-test-id="add-shortcut-page">
         <div className={classes.topContent}>
           <div className={classes.topBar}>
             <Logo style={{ height: 40 }} color="white" />

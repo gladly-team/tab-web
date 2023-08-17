@@ -106,6 +106,7 @@ import Notification from 'src/components/Notification'
 import AddShortcutPageContainer from 'src/components/AddShortcutPageContainer'
 import FrontpageShortcutListContainer from 'src/components/FrontpageShortcutListContainer'
 import Modal from '@material-ui/core/Modal'
+import { Box } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -987,12 +988,14 @@ const Index = ({ data: fallbackData, userAgent }) => {
               'false' &&
               bookmarkWidgetEnabled && (
                 <Modal open={addShortcutPageOpen}>
-                  <AddShortcutPageContainer
-                    user={user}
-                    app={app}
-                    userId={userId}
-                    closeHandler={closeAddShortcutPage}
-                  />
+                  <Box>
+                    <AddShortcutPageContainer
+                      user={user}
+                      app={app}
+                      userId={userId}
+                      closeHandler={closeAddShortcutPage}
+                    />
+                  </Box>
                 </Modal>
               )}
           </div>
