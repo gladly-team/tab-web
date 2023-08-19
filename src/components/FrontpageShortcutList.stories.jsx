@@ -28,6 +28,7 @@ const Template = (args) => {
 }
 export const standard = Template.bind({})
 standard.args = {
+  userId: 'userId',
   user: {
     widgets: {
       edges: [
@@ -68,6 +69,31 @@ standard.args = {
                 },
                 {
                   id: 'ghij',
+                  name: 'google4',
+                  link: 'https://www.google2.com',
+                },
+                {
+                  id: 'hijk',
+                  name: 'google2',
+                  link: 'https://www.google2.com',
+                },
+                {
+                  id: 'ijkl',
+                  name: 'espn2',
+                  link: 'https://www.espn2.com',
+                },
+                {
+                  id: 'jklm',
+                  name: 'google3',
+                  link: 'https://www.google.com',
+                },
+                {
+                  id: 'klmn',
+                  name: 'espn3',
+                  link: 'https://www.espn.com',
+                },
+                {
+                  id: 'lmno',
                   name: 'google4',
                   link: 'https://www.google2.com',
                 },

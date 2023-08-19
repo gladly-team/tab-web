@@ -63,14 +63,15 @@ const AddShortcut = ({
   useEffect(() => setUrl(existingUrl), [existingUrl])
   const classes = useStyles()
   const onCancelClick = () => {
-    setName('')
-    setUrl('')
+    setName(existingName)
+    setUrl(existingUrl)
     onCancel()
   }
   const onSaveClick = () => {
-    onSave(existingId, name, addProtocolToURLIfNeeded(url))
-    setName('')
-    setUrl('')
+    const newUrl = addProtocolToURLIfNeeded(url)
+    onSave(existingId, name, newUrl)
+    setName(name)
+    setUrl(newUrl)
   }
   const changeName = (e) => {
     setName(e.target.value)
@@ -88,7 +89,8 @@ const AddShortcut = ({
             gutterBottom
             color="primary"
           >
-            Add Shortcut
+            {existingName === '' && existingUrl === '' ? 'Add' : 'Edit'}{' '}
+            Shortcut
           </Typography>
           <hr />
           <div className={classes.urlFields}>

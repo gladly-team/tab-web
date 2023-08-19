@@ -256,7 +256,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
   frontpageShortcutList: {
-    zIndex: 1e4,
+    zIndex: 1.4e3,
   },
   logo: {
     height: 50,
@@ -984,8 +984,8 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 <div className={classes.timelineBar} />
               </Link>
             ) : null}
-            {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) !==
-              'false' &&
+            {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) ===
+              'true' &&
               bookmarkWidgetEnabled && (
                 <Modal open={addShortcutPageOpen}>
                   <Box>

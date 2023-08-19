@@ -55,6 +55,31 @@ const getMockBookmarks = () => [
     name: 'google4',
     link: 'https://www.google2.com',
   },
+  {
+    id: 'hijk',
+    name: 'google2',
+    link: 'https://www.google2.com',
+  },
+  {
+    id: 'ijkl',
+    name: 'espn2',
+    link: 'https://www.espn2.com',
+  },
+  {
+    id: 'jklm',
+    name: 'google3',
+    link: 'https://www.google.com',
+  },
+  {
+    id: 'klmn',
+    name: 'espn3',
+    link: 'https://www.espn.com',
+  },
+  {
+    id: 'lmno',
+    name: 'google4',
+    link: 'https://www.google2.com',
+  },
 ]
 const getMockProps = () => ({
   userId: 'userId',
@@ -86,7 +111,7 @@ describe('FrontpageShortcutList component', () => {
     }).not.toThrow()
   })
 
-  it('displays up to four icons for links', () => {
+  it('displays up to nine icons for links', () => {
     const FrontpageShortcutList =
       require('src/components/FrontpageShortcutList').default
     const mockProps = getMockProps()
@@ -95,8 +120,8 @@ describe('FrontpageShortcutList component', () => {
 
     const shortcutIcons = wrapper.find(ShortcutIcon)
 
-    expect(shortcutIcons.length).toEqual(4)
-    for (let i = 0; i < 4; i += 1) {
+    expect(shortcutIcons.length).toEqual(9)
+    for (let i = 0; i < 9; i += 1) {
       const shortcutIcon = shortcutIcons.at(i)
       expect(shortcutIcon.prop('text')).toEqual(bookmarks[i + 3].name)
       expect(shortcutIcon.prop('url')).toEqual(bookmarks[i + 3].link)
@@ -191,7 +216,7 @@ describe('FrontpageShortcutList component', () => {
       })
     )
     wrapper.update()
-    expect(wrapper.find(ShortcutIcon).length).toEqual(4)
+    expect(wrapper.find(ShortcutIcon).length).toEqual(9)
     expect(wrapper.find(Backdrop).first().prop('open')).toBe(false)
   })
 
@@ -230,16 +255,19 @@ describe('FrontpageShortcutList component', () => {
       })
     )
     wrapper.update()
-    expect(wrapper.find(ShortcutIcon).length).toEqual(4)
+    expect(wrapper.find(ShortcutIcon).length).toEqual(9)
     expect(wrapper.find(Backdrop).first().prop('open')).toBe(false)
   })
 
-  it('delete bookmark flow works', async () => {
+  it('delete bookmark flow works if confirmed', async () => {
     const FrontpageShortcutList =
       require('src/components/FrontpageShortcutList').default
     const mockProps = getMockProps()
     const wrapper = mount(<FrontpageShortcutList {...mockProps} />)
     const mockBookmarks = getMockBookmarks()
+
+    wrapper.find(ShortcutIcon).at(0).find(IconButton).at(0).simulate('click')
+    wrapper.update()
 
     wrapper.find(ShortcutIcon).at(0).find(IconButton).at(0).simulate('click')
     wrapper.update()
@@ -255,7 +283,7 @@ describe('FrontpageShortcutList component', () => {
     )
 
     wrapper.update()
-    expect(wrapper.find(ShortcutIcon).length).toEqual(4)
+    expect(wrapper.find(ShortcutIcon).length).toEqual(9)
     expect(wrapper.find(Backdrop).first().prop('open')).toBe(false)
   })
 
