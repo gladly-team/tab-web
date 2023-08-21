@@ -56,6 +56,9 @@ const defaultThemeObject = {
   shape: {
     borderRadius: 12,
   },
+  zIndex: {
+    modal: 100000001,
+  },
   overrides: {
     MuiAppBar: {
       root: {

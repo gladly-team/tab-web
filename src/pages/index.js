@@ -77,6 +77,7 @@ import {
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   NOTIF_DISMISS_PREFIX,
   CAUSE_IMPACT_TYPES,
+  WIDGET_TYPE_BOOKMARKS,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -90,6 +91,7 @@ import { getFeatureValue } from 'src/utils/growthbookUtils'
 import {
   YAHOO_SEARCH_NEW_USERS_V2,
   SEARCHBAR_SFAC_EXTENSION_PROMPT,
+  LAUNCH_BOOKMARKS,
 } from 'src/utils/experiments'
 import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
 import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
@@ -101,6 +103,10 @@ import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpa
 import ShopFullPage from 'src/components/promos/ShopFullPage'
 import SearchFullPage from 'src/components/promos/SearchFullPage'
 import Notification from 'src/components/Notification'
+import AddShortcutPageContainer from 'src/components/AddShortcutPageContainer'
+import FrontpageShortcutListContainer from 'src/components/FrontpageShortcutListContainer'
+import Modal from '@material-ui/core/Modal'
+import { Box } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -249,6 +255,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 1e4, // must be higher than all content besides ads and modal
     margin: theme.spacing(1),
   },
+  frontpageShortcutList: {
+    zIndex: 1e4,
+  },
   logo: {
     height: 50,
     margin: theme.spacing(0.5),
@@ -366,6 +375,7 @@ const getRelayQuery = async ({ AuthUser }) => {
         app {
           ...MoneyRaisedContainer_app
           ...SearchInputContainer_app
+          ...AddShortcutPageContainer_app
         }
         user(userId: $userId) {
           id
@@ -414,6 +424,21 @@ const getRelayQuery = async ({ AuthUser }) => {
           }
           searches
           showSfacIcon
+          searchEngine {
+            engineId
+            inputPrompt
+            searchUrlPersonalized
+          }
+          widgets {
+            edges {
+              node {
+                id
+                name
+                type
+                enabled
+              }
+            }
+          }
           ...MoneyRaisedContainer_user
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
@@ -423,6 +448,8 @@ const getRelayQuery = async ({ AuthUser }) => {
           ...SearchInputContainer_user
           ...SfacActivityContainer_user
           ...GroupImpactContainer_user
+          ...AddShortcutPageContainer_user
+          ...FrontpageShortcutListContainer_user
         }
       }
     `,
@@ -477,6 +504,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
     showSfacExtensionPrompt,
     searches,
     showSfacIcon,
+    widgets: { edges: widgetNodes = [] } = {},
   } = user || {}
 
   const { theme, onboarding, causeId, impactType, landingPagePhrase } =
@@ -658,6 +686,14 @@ const Index = ({ data: fallbackData, userAgent }) => {
   // backend (enabling/disabling).
   const [notificationsToShow, setNotifsToShow] = useState([])
 
+  const [addShortcutPageOpen, setAddShortcutPageOpen] = useState(false)
+  const openAddShortcutPage = () => setAddShortcutPageOpen(true)
+  const closeAddShortcutPage = () => setAddShortcutPageOpen(false)
+  const bookmarkWidget = widgetNodes.find(
+    (widgetNode) => widgetNode.node.type === WIDGET_TYPE_BOOKMARKS
+  )
+  const bookmarkWidgetEnabled = bookmarkWidget && bookmarkWidget.node.enabled
+
   useEffect(() => {
     const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
     const onNotificationClose = (code) => {
@@ -797,6 +833,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
     setJustFinishedIntroFlow(true)
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
+
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {shouldShowSearchbarSFACPrompt && userGlobalId ? (
@@ -947,6 +984,20 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 <div className={classes.timelineBar} />
               </Link>
             ) : null}
+            {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) !==
+              'false' &&
+              bookmarkWidgetEnabled && (
+                <Modal open={addShortcutPageOpen}>
+                  <Box>
+                    <AddShortcutPageContainer
+                      user={user}
+                      app={app}
+                      userId={userId}
+                      closeHandler={closeAddShortcutPage}
+                    />
+                  </Box>
+                </Modal>
+              )}
           </div>
           {/**
            * TODO: consolidate all notifications here to manage
@@ -1089,6 +1140,17 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 onSearchInputClick={onSearchInputClick}
                 tooltip={showSearchInputTooltip}
               />
+              {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) !==
+                'false' &&
+                bookmarkWidgetEnabled && (
+                  <div className={classes.frontpageShortcutList}>
+                    <FrontpageShortcutListContainer
+                      userId={userId}
+                      user={user}
+                      openHandler={openAddShortcutPage}
+                    />
+                  </div>
+                )}
             </div>
           </div>
           <div className={classes.adsContainer}>

@@ -318,17 +318,22 @@ const Account = ({ data: fallbackData }) => {
     }
   }
 
-  // TODO: @jedtan Refactor into separate component if needed
-  const bookmarkWidget = widgetNodes.find(
-    (widgetNode) => widgetNode.node.type === WIDGET_TYPE_BOOKMARKS
-  )
-  const [bookmarks, setBookmarks] = useState(
-    !!(bookmarkWidget && bookmarkWidget.node.enabled)
-  )
+  const [bookmarks, setBookmarks] = useState(false)
+  const [bookmarkWidget, setBookmarkWidget] = useState(null)
   const handleBookmarks = async (event) => {
     setBookmarks(event.target.checked)
     await UpdateWidgetEnabledMutation(user, bookmarkWidget.node, !bookmarks)
   }
+
+  // TODO: @jedtan Refactor into separate component if needed
+  useEffect(() => {
+    setBookmarkWidget(
+      widgetNodes.find(
+        (widgetNode) => widgetNode.node.type === WIDGET_TYPE_BOOKMARKS
+      )
+    )
+    setBookmarks(!!(bookmarkWidget && bookmarkWidget.node.enabled))
+  }, [widgetNodes, bookmarkWidget])
 
   return (
     <SettingsPage>

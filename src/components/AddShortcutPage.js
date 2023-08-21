@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
-import { Backdrop, Modal, Typography } from '@material-ui/core'
+import { Backdrop, Typography } from '@material-ui/core'
 import shortcutImage from 'src/assets/images/shortcut.png'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import SearchInput from 'src/components/SearchInput'
@@ -15,8 +15,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { goTo } from 'src/utils/navigation'
 import { accountURL } from 'src/utils/urls'
 import UpdateWidgetDataMutation from 'src/utils/mutations/UpdateWidgetDataMutation'
-import { nanoid } from 'nanoid'
 import { WIDGET_TYPE_BOOKMARKS } from 'src/utils/constants'
+import { v4 as uuid } from 'uuid'
 import AddShortcut from './AddShortcut'
 import ShortcutIcon from './ShortcutIcon'
 
@@ -79,6 +79,8 @@ const useStyles = makeStyles((theme) => ({
   },
   backdrop: {
     width: '100vw',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    position: 'absolute',
   },
   buttonRoot: {
     padding: '0px',
@@ -103,6 +105,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 1,
   },
   addShortcutWrapper: {
     width: '400px',
@@ -169,9 +172,9 @@ const AddShortcutPage = ({ app, user, userId, closeHandler }) => {
     goTo(accountURL)
   }
 
-  const [currentId, setCurrentId] = useState(null)
-  const [currentName, setCurrentName] = useState(null)
-  const [currentUrl, setCurrentUrl] = useState(null)
+  const [currentId, setCurrentId] = useState('')
+  const [currentName, setCurrentName] = useState('')
+  const [currentUrl, setCurrentUrl] = useState('')
 
   const onShortcutEdit = (id, text, url) => {
     setCurrentId(id)
@@ -181,7 +184,7 @@ const AddShortcutPage = ({ app, user, userId, closeHandler }) => {
   }
 
   const onNewShortcut = () => {
-    setCurrentId(nanoid(6))
+    setCurrentId(uuid())
     setCurrentName('')
     setCurrentUrl('')
     setAddShortcutWidgetOpen(true)
@@ -200,7 +203,7 @@ const AddShortcutPage = ({ app, user, userId, closeHandler }) => {
 
   return (
     <Backdrop open className={classes.backdrop}>
-      <div className={classes.content}>
+      <div className={classes.content} data-test-id="add-shortcut-page">
         <div className={classes.topContent}>
           <div className={classes.topBar}>
             <Logo style={{ height: 40 }} color="white" />
@@ -259,7 +262,7 @@ const AddShortcutPage = ({ app, user, userId, closeHandler }) => {
           <KeyboardArrowDownIcon />
         </IconButton>
       </div>
-      <Modal
+      <Backdrop
         open={addShortcutWidgetOpen}
         className={classes.addShortcutModal}
         data-test-id="add-shortcut-modal"
@@ -273,7 +276,7 @@ const AddShortcutPage = ({ app, user, userId, closeHandler }) => {
             existingUrl={currentUrl}
           />
         </div>
-      </Modal>
+      </Backdrop>
     </Backdrop>
   )
 }

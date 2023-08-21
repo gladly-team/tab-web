@@ -80,7 +80,7 @@ const ShortcutIcon = ({ onEdit, onDelete, text, url, id }) => {
     event.preventDefault()
   }
   return (
-    <Link to={url}>
+    <Link to={url} target="_blank">
       <div
         className={hover ? clsx(classes.button, classes.hover) : classes.button}
         onMouseOver={() => setHover(true)}

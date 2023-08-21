@@ -1,17 +1,19 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import Button from '@material-ui/core/Button'
-import { Modal, IconButton } from '@material-ui/core'
+import { IconButton, Backdrop } from '@material-ui/core'
 import { WIDGET_TYPE_BOOKMARKS } from 'src/utils/constants'
 import flushAllPromises from 'src/utils/testHelpers/flushAllPromises'
 import UpdateWidgetDataMutation from 'src/utils/mutations/UpdateWidgetDataMutation'
 import { act } from 'react-dom/test-utils'
+import { v4 as uuid } from 'uuid'
 import ShortcutIcon from '../ShortcutIcon'
 
 const mockTestNanoId = 'a23456789'
 
 jest.mock('src/utils/mutations/UpdateWidgetDataMutation')
-jest.mock('nanoid', () => ({ nanoid: () => mockTestNanoId }))
+jest.mock('uuid')
+uuid.mockReturnValue(mockTestNanoId)
 
 afterEach(() => {
   jest.clearAllMocks()
@@ -88,7 +90,7 @@ describe('FrontpageShortcutList component', () => {
     const FrontpageShortcutList =
       require('src/components/FrontpageShortcutList').default
     const mockProps = getMockProps()
-    const wrapper = shallow(<FrontpageShortcutList {...mockProps} />)
+    const wrapper = mount(<FrontpageShortcutList {...mockProps} />)
     const bookmarks = getMockBookmarks()
 
     const shortcutIcons = wrapper.find(ShortcutIcon)
@@ -119,13 +121,7 @@ describe('FrontpageShortcutList component', () => {
     const mockProps = getMockProps()
     const wrapper = mount(<FrontpageShortcutList {...mockProps} />)
 
-    expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
-    ).toEqual(false)
+    expect(wrapper.find(Backdrop).first().prop('open')).toEqual(false)
 
     const addShortcutButton = wrapper
       .find('[data-test-id="add-shortcut"]')
@@ -135,13 +131,7 @@ describe('FrontpageShortcutList component', () => {
     addShortcutButton.simulate('click')
     wrapper.update()
 
-    expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
-    ).toEqual(true)
+    expect(wrapper.find(Backdrop).first().prop('open')).toEqual(true)
   })
 
   it('opens AddShortcut modal when Shortcut icon is clicked', () => {
@@ -150,26 +140,14 @@ describe('FrontpageShortcutList component', () => {
     const mockProps = getMockProps()
     const wrapper = mount(<FrontpageShortcutList {...mockProps} />)
 
-    expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
-    ).toEqual(false)
+    expect(wrapper.find(Backdrop).first().prop('open')).toEqual(false)
 
     act(() => {
       wrapper.find(ShortcutIcon).at(0).prop('onEdit')()
     })
     wrapper.update()
 
-    expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
-    ).toEqual(true)
+    expect(wrapper.find(Backdrop).first().prop('open')).toEqual(true)
   })
 
   it('adds bookmark flow works', async () => {
@@ -186,10 +164,7 @@ describe('FrontpageShortcutList component', () => {
     addShortcutButton.simulate('click')
     wrapper.update()
 
-    const addShortcutModal = wrapper
-      .find('[data-test-id="add-shortcut-modal"]')
-      .find(Modal)
-      .first()
+    const addShortcutModal = wrapper.find(Backdrop).first()
     addShortcutModal
       .find('input')
       .at(0)
@@ -217,13 +192,7 @@ describe('FrontpageShortcutList component', () => {
     )
     wrapper.update()
     expect(wrapper.find(ShortcutIcon).length).toEqual(4)
-    expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
-    ).toBe(false)
+    expect(wrapper.find(Backdrop).first().prop('open')).toBe(false)
   })
 
   it('edit bookmark flow works', async () => {
@@ -236,10 +205,7 @@ describe('FrontpageShortcutList component', () => {
     wrapper.find(ShortcutIcon).at(0).find(IconButton).at(1).simulate('click')
     wrapper.update()
 
-    const addShortcutModal = wrapper
-      .find('[data-test-id="add-shortcut-modal"]')
-      .find(Modal)
-      .first()
+    const addShortcutModal = wrapper.find(Backdrop).first()
     addShortcutModal
       .find('input')
       .at(0)
@@ -265,13 +231,7 @@ describe('FrontpageShortcutList component', () => {
     )
     wrapper.update()
     expect(wrapper.find(ShortcutIcon).length).toEqual(4)
-    expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
-    ).toBe(false)
+    expect(wrapper.find(Backdrop).first().prop('open')).toBe(false)
   })
 
   it('delete bookmark flow works', async () => {
@@ -296,13 +256,7 @@ describe('FrontpageShortcutList component', () => {
 
     wrapper.update()
     expect(wrapper.find(ShortcutIcon).length).toEqual(4)
-    expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
-    ).toBe(false)
+    expect(wrapper.find(Backdrop).first().prop('open')).toBe(false)
   })
 
   it('cancel add shortcut closes it', async () => {
@@ -319,19 +273,10 @@ describe('FrontpageShortcutList component', () => {
     addShortcutButton.simulate('click')
     wrapper.update()
 
-    const addShortcutModal = wrapper
-      .find('[data-test-id="add-shortcut-modal"]')
-      .find(Modal)
-      .first()
-    addShortcutModal.find(Button).at(1).simulate('click')
+    const addShortcutModal = wrapper.find(Backdrop).first()
+    addShortcutModal.find(Button).at(0).simulate('click')
 
     wrapper.update()
-    expect(
-      wrapper
-        .find('[data-test-id="add-shortcut-modal"]')
-        .find(Modal)
-        .first()
-        .prop('open')
-    ).toBe(false)
+    expect(wrapper.find(Backdrop).first().prop('open')).toBe(false)
   })
 })

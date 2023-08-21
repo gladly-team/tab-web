@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+/* eslint no-useless-escape: 0 */
+
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
@@ -34,6 +36,20 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
 }))
+
+const addProtocolToURLIfNeeded = (url) => {
+  const hasProtocol = (s) => {
+    const regexp =
+      /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+    return regexp.test(s)
+  }
+
+  if (!hasProtocol(url)) {
+    return `http://${url}`
+  }
+  return url
+}
+
 const AddShortcut = ({
   onCancel,
   onSave,
@@ -41,21 +57,20 @@ const AddShortcut = ({
   existingUrl,
   existingId,
 }) => {
-  const [open, setOpen] = useState(true)
   const [name, setName] = useState(existingName)
   const [url, setUrl] = useState(existingUrl)
+  useEffect(() => setName(existingName), [existingName])
+  useEffect(() => setUrl(existingUrl), [existingUrl])
   const classes = useStyles()
   const onCancelClick = () => {
     setName('')
     setUrl('')
     onCancel()
-    setOpen(false)
   }
   const onSaveClick = () => {
-    onSave(existingId, name, url)
+    onSave(existingId, name, addProtocolToURLIfNeeded(url))
     setName('')
     setUrl('')
-    setOpen(false)
   }
   const changeName = (e) => {
     setName(e.target.value)
@@ -65,7 +80,6 @@ const AddShortcut = ({
   }
   return (
     <Notification
-      open={open}
       text={
         <span className={classes.text}>
           <Typography
