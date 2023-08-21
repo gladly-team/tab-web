@@ -2,9 +2,10 @@ import React, { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import DashboardPopover from 'src/components/DashboardPopover'
-import SfacActivityButton from 'src/components/SfacActivityButton'
+import BadgeButton from 'src/components/BadgeButton'
 import SfacActivityNotification from 'src/components/SfacActivityNotification'
 import { SFAC_ACTIVITY_STATES } from 'src/utils/constants'
+import SearchIcon from '@material-ui/icons/Search'
 
 const useStyles = makeStyles(() => ({
   popover: {
@@ -28,12 +29,13 @@ const SfacActivity = ({
   const [isPopoverOpen, setIsPopoverOpen] = useState(false)
   return (
     <div>
-      <SfacActivityButton
+      <BadgeButton
         active={sfacActivityState === SFAC_ACTIVITY_STATES.ACTIVE}
         onClick={() => {
           setIsPopoverOpen(true)
         }}
         ref={buttonRef}
+        icon={<SearchIcon />}
       />
       <DashboardPopover
         open={isPopoverOpen}
