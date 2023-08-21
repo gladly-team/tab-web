@@ -9,17 +9,15 @@ import IconButton from '@material-ui/core/IconButton'
 import Fade from '@material-ui/core/Fade'
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
+import CheckIcon from '@material-ui/icons/Check'
 import Link from 'src/components/Link'
+import CloseIcon from '@material-ui/icons/Close'
 
 const useStyles = makeStyles((theme) => ({
   button: {
     height: '150px',
     width: '110px',
     maxWidth: '110px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
     borderRadius: '10px',
     padding: theme.spacing(1),
   },
@@ -39,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       color: 'white',
     },
+    color: '#cccccc',
   },
   letterIcon: {
     width: '70px',
@@ -61,6 +60,25 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(1),
     color: 'white',
   },
+  link: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  deleteText: {
+    color: 'white',
+    textAlign: 'center',
+  },
+  confirmDialog: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 }))
 const ShortcutIcon = ({ onEdit, onDelete, text, url, id }) => {
   const getFirstTwoLetters = (str) => {
@@ -69,10 +87,19 @@ const ShortcutIcon = ({ onEdit, onDelete, text, url, id }) => {
     return firstLetters.slice(0, 2).join('')
   }
   const [hover, setHover] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
   const classes = useStyles()
   const firstLettersText = getFirstTwoLetters(text)
-  const onDeleteHandler = (event) => {
+  const onDeleteConfirmHandler = (event) => {
     onDelete(id)
+    event.preventDefault()
+  }
+  const onDeleteRejectHandler = (event) => {
+    setConfirmDelete(false)
+    event.preventDefault()
+  }
+  const onDeleteHandler = (event) => {
+    setConfirmDelete(true)
     event.preventDefault()
   }
   const onEditHandler = (event) => {
@@ -80,31 +107,54 @@ const ShortcutIcon = ({ onEdit, onDelete, text, url, id }) => {
     event.preventDefault()
   }
   return (
-    <Link to={url} target="_blank">
-      <div
-        className={hover ? clsx(classes.button, classes.hover) : classes.button}
-        onMouseOver={() => setHover(true)}
-        onMouseOut={() => setHover(false)}
-      >
-        <Fade in={hover}>
+    <div
+      className={hover ? clsx(classes.button, classes.hover) : classes.button}
+      onMouseOver={() => setHover(true)}
+      onMouseOut={() => setHover(false)}
+    >
+      {confirmDelete ? (
+        <div className={classes.confirmDialog}>
           <div className={classes.buttons}>
             <IconButton
               className={classes.miniButton}
-              onClick={onDeleteHandler}
+              onClick={onDeleteConfirmHandler}
             >
-              <DeleteIcon />
+              <CheckIcon />
             </IconButton>
-            <IconButton className={classes.miniButton} onClick={onEditHandler}>
-              <EditIcon />
+            <IconButton
+              className={classes.miniButton}
+              onClick={onDeleteRejectHandler}
+            >
+              <CloseIcon />
             </IconButton>
           </div>
-        </Fade>
-        <div className={classes.letterIcon}>
-          <Typography variant="h6">{firstLettersText}</Typography>
+          <Typography className={classes.deleteText}>Confirm Delete</Typography>
         </div>
-        <Typography className={classes.overflow}>{text}</Typography>
-      </div>
-    </Link>
+      ) : (
+        <Link to={url} target="_blank" className={classes.link}>
+          <Fade in={hover}>
+            <div className={classes.buttons}>
+              <IconButton
+                className={classes.miniButton}
+                onClick={onDeleteHandler}
+              >
+                <DeleteIcon />
+              </IconButton>
+              <IconButton
+                className={classes.miniButton}
+                onClick={onEditHandler}
+              >
+                <EditIcon />
+              </IconButton>
+            </div>
+          </Fade>
+          <div className={classes.letterIcon}>
+            <Typography variant="h6">{firstLettersText}</Typography>
+          </div>
+          <Typography className={classes.overflow}>{text}</Typography>
+        </Link>
+      )}
+    </div>
   )
 }
 

@@ -303,6 +303,9 @@ describe('AddShortcutPage component', () => {
     wrapper.find(ShortcutIcon).at(0).find(IconButton).at(0).simulate('click')
     wrapper.update()
 
+    wrapper.find(ShortcutIcon).at(0).find(IconButton).at(0).simulate('click')
+    wrapper.update()
+
     await flushAllPromises()
     expect(UpdateWidgetDataMutation).toHaveBeenCalledWith(
       mockProps.user,

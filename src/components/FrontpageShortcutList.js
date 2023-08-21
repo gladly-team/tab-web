@@ -34,6 +34,8 @@ const useStyles = makeStyles((theme) => ({
   shortcutList: {
     display: 'flex',
     flexDirection: 'row',
+    maxWidth: '550px',
+    flexWrap: 'wrap',
   },
   addCircle: {
     marginTop: '24px',
@@ -144,7 +146,7 @@ const FrontpageShortcutList = ({ openHandler, user }) => {
 
   const classes = useStyles()
   const shortcutIcons = bookmarks
-    .slice(-4)
+    .slice(-9)
     .map((bookmark) => (
       <ShortcutIcon
         key={bookmark.id}
