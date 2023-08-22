@@ -15280,10 +15280,9 @@ synchronous-promise@^2.0.15:
   resolved "https://registry.yarnpkg.com/synchronous-promise/-/synchronous-promise-2.0.16.tgz#669b75e86b4295fdcc1bb0498de9ac1af6fd51a9"
   integrity sha512-qImOD23aDfnIDNqlG1NOehdB9IYsn1V9oByPjKY1nakv2MQYCEMyX033/q+aEtYCpmYK1cv2+NTmlH+ra6GA5A==
 
-tab-ads@^1.1.14:
-  version "1.1.14"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.14.tgz#f0884419ba15843f20deee8769feb79e3353757e"
-  integrity sha512-mcKuqH7ueUZBp7g9PmptlgaPWdGt0/TCLKsgXjMJpa6v/cKcNc0OV9h/v+JED9Us4vTrOwRAE3sowkEb9T1fXw==
+"tab-ads@git+https://github.com/gladly-team/tab-ads.git#spicer/add-index-video":
+  version "1.1.15"
+  resolved "git+https://github.com/gladly-team/tab-ads.git#673e71429c5da67cd8186de4da9aae4cf44f857b"
   dependencies:
     lodash "^4.17.21"
 
