@@ -100,6 +100,8 @@ const AddShortcut = ({
               label="Name"
               value={name}
               onChange={changeName}
+              error={name.length === 0}
+              helperText={name.length === 0 && 'Bookmark name cannot be empty.'}
               className={classes.textField}
             />
             <TextField
@@ -108,6 +110,8 @@ const AddShortcut = ({
               label="URL"
               value={url}
               onChange={changeUrl}
+              error={url.length === 0}
+              helperText={url.length === 0 && 'URL cannot be empty.'}
               className={classes.textField}
             />
           </div>
@@ -126,6 +130,7 @@ const AddShortcut = ({
             onClick={onSaveClick}
             className={classes.yesButton}
             variant="contained"
+            disabled={name.length === 0 || url.length === 0}
             disableElevation
           >
             Save
