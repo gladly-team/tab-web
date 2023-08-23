@@ -4,6 +4,7 @@ import { Typography } from '@material-ui/core'
 import TabIcon from '@material-ui/icons/Tab'
 import SearchIcon from '@material-ui/icons/Search'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import GroupAddIcon from '@material-ui/icons/GroupAdd'
 
 const getMockProps = () => ({
   position: 13567,
@@ -13,6 +14,7 @@ const getMockProps = () => ({
     tabDollarContribution: 11111,
     searchDollarContribution: 1111,
     shopDollarContribution: 123,
+    referralDollarContribution: 123,
   },
 })
 
@@ -44,6 +46,7 @@ describe('GroupImpactLeaderboardRow component', () => {
     expect(wrapper.find(TabIcon).length).toEqual(1)
     expect(wrapper.find(SearchIcon).length).toEqual(1)
     expect(wrapper.find(ShoppingCartIcon).length).toEqual(1)
+    expect(wrapper.find(GroupAddIcon).length).toEqual(1)
   })
 
   it('does not display icons if value is 0 or null', () => {
@@ -63,5 +66,6 @@ describe('GroupImpactLeaderboardRow component', () => {
     expect(wrapper.find(TabIcon).length).toEqual(1)
     expect(wrapper.find(SearchIcon).length).toEqual(0)
     expect(wrapper.find(ShoppingCartIcon).length).toEqual(0)
+    expect(wrapper.find(GroupAddIcon).length).toEqual(0)
   })
 })

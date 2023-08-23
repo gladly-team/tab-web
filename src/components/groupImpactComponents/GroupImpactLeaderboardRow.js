@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography'
 import TabIcon from '@material-ui/icons/Tab'
 import SearchIcon from '@material-ui/icons/Search'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import GroupAddIcon from '@material-ui/icons/GroupAdd'
 import clsx from 'clsx'
 import defaultTheme from 'src/utils/theme'
 import { lighten } from '@material-ui/core'
@@ -45,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
   },
   shopIcon: {
     backgroundColor: defaultTheme.palette.colors.shop,
+  },
+  referralIcon: {
+    backgroundColor: defaultTheme.palette.colors.referral,
   },
   impactIcons: {
     display: 'flex',
@@ -88,6 +92,7 @@ const GroupImpactLeaderboardRow = ({
     tabDollarContribution,
     searchDollarContribution,
     shopDollarContribution,
+    referralDollarContribution,
   } = userGroupImpactMetric
   const impactPoints = Math.ceil(
     dollarContribution / estimatedMicroUsdsPerTab
@@ -142,6 +147,18 @@ const GroupImpactLeaderboardRow = ({
               </Tooltip>
             </div>
           )}
+          {(referralDollarContribution || referralDollarContribution > 0) && (
+            <div className={clsx(classes.referralIcon, classes.iconWrapper)}>
+              <Tooltip
+                title="This user has referred other users"
+                classes={{
+                  popper: classes.tooltips,
+                }}
+              >
+                <GroupAddIcon className={classes.icon} />
+              </Tooltip>
+            </div>
+          )}
         </div>
       </div>
       <div
@@ -164,6 +181,7 @@ GroupImpactLeaderboardRow.propTypes = {
     tabDollarContribution: PropTypes.number,
     searchDollarContribution: PropTypes.number,
     shopDollarContribution: PropTypes.number,
+    referralDollarContribution: PropTypes.number,
   }).isRequired,
 }
 

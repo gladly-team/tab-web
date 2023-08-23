@@ -17,6 +17,7 @@ const getMockProps = () => ({
         tabDollarContribution: 1000,
         searchDollarContribution: 4000,
         shopDollarContribution: 5000,
+        referralDollarContribution: 1000,
       },
     },
     {
@@ -30,6 +31,7 @@ const getMockProps = () => ({
         tabDollarContribution: 1000,
         searchDollarContribution: 4000,
         shopDollarContribution: 4000,
+        referralDollarContribution: 1000,
       },
     },
     {
@@ -43,6 +45,7 @@ const getMockProps = () => ({
         tabDollarContribution: 120,
         searchDollarContribution: 3000,
         shopDollarContribution: 3000,
+        referralDollarContribution: 1000,
       },
     },
     {
@@ -56,6 +59,7 @@ const getMockProps = () => ({
         tabDollarContribution: 0,
         searchDollarContribution: 3000,
         shopDollarContribution: 3000,
+        referralDollarContribution: 1000,
       },
     },
   ],
@@ -114,6 +118,7 @@ describe('GroupImpactLeaderboard component', () => {
             tabDollarContribution: 1000,
             searchDollarContribution: 4000,
             shopDollarContribution: 5000,
+            referralDollarContribution: 1000,
           },
         },
         {
@@ -127,6 +132,7 @@ describe('GroupImpactLeaderboard component', () => {
             tabDollarContribution: 1000,
             searchDollarContribution: 4000,
             shopDollarContribution: 4000,
+            referralDollarContribution: 1000,
           },
         },
         {
@@ -140,6 +146,7 @@ describe('GroupImpactLeaderboard component', () => {
             tabDollarContribution: 120,
             searchDollarContribution: 3000,
             shopDollarContribution: 3000,
+            referralDollarContribution: 1000,
           },
         },
         {
@@ -153,6 +160,7 @@ describe('GroupImpactLeaderboard component', () => {
             tabDollarContribution: 0,
             searchDollarContribution: 3000,
             shopDollarContribution: 3000,
+            referralDollarContribution: 1000,
           },
         },
         {
@@ -166,6 +174,7 @@ describe('GroupImpactLeaderboard component', () => {
             tabDollarContribution: 0,
             searchDollarContribution: 3000,
             shopDollarContribution: 3000,
+            referralDollarContribution: 1000,
           },
         },
       ],
