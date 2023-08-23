@@ -29,6 +29,7 @@ const defaultThemeObject = {
       blue1: '#6EA6E7',
       shop: '#FF596F',
       search: '#4AB4B4',
+      referral: '#5094FB',
       tab: TFAC_ORIGINAL_PURPLE,
     },
 

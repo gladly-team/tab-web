@@ -178,6 +178,7 @@ Leaderboard.propTypes = {
         tabDollarContribution: PropTypes.number,
         searchDollarContribution: PropTypes.number,
         shopDollarContribution: PropTypes.number,
+        referralDollarContribution: PropTypes.number,
       }).isRequired,
     })
   ).isRequired,
