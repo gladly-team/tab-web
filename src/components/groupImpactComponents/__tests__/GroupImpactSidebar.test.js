@@ -176,6 +176,41 @@ describe('GroupImpactSidebar component', () => {
     )
   })
 
+  it('displays correct progress bar above 100% with search', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = {
+      ...getMockProps(),
+      groupImpactMetric: {
+        dollarProgress: 650,
+        dollarProgressFromSearch: 100,
+        dollarGoal: 600,
+        impactMetric: {
+          impactTitle: 'impact-title',
+          whyValuableDescription: 'why-valuable-description',
+        },
+      },
+    }
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+    expect(wrapper.find(Typography).at(2).text()).toEqual('108%')
+    expect(
+      wrapper.find(VerticalLinearProgress).first().prop('progress')
+    ).toEqual([100, 16])
+    expect(wrapper.find(VerticalLinearProgress).first().prop('icons')).toEqual([
+      <TabIcon />,
+      <SearchIcon />,
+    ])
+    expect(
+      wrapper.find(VerticalLinearProgress).first().prop('tooltips')
+    ).toEqual([
+      `84% of funds raised by tabs opened through Tab for a Cause`,
+      `16% of funds raised by searches through Search for a Cause`,
+    ])
+    expect(wrapper.find(VerticalLinearProgress).at(1).prop('progress')).toEqual(
+      [100, 16]
+    )
+  })
+
   it('displays correct progress bar with search too small', () => {
     const GroupImpactSidebar =
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
