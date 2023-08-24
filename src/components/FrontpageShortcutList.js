@@ -82,6 +82,9 @@ const FrontpageShortcutList = ({ openHandler, user }) => {
   }, [widgetNodes, bookmarkWidget])
 
   const [addShortcutWidgetOpen, setAddShortcutWidgetOpen] = useState(false)
+  const [currentId, setCurrentId] = useState('')
+  const [currentName, setCurrentName] = useState('')
+  const [currentUrl, setCurrentUrl] = useState('')
 
   const saveBookmark = async (id, name, link) => {
     const existingIndex = bookmarks.findIndex((bookmark) => bookmark.id === id)
@@ -105,6 +108,9 @@ const FrontpageShortcutList = ({ openHandler, user }) => {
     }
     setBookmarks(newBookmarks)
     setAddShortcutWidgetOpen(false)
+    setCurrentId(id)
+    setCurrentName(name)
+    setCurrentUrl(link)
     await UpdateWidgetDataMutation(
       user,
       bookmarkWidget.node,
@@ -121,10 +127,6 @@ const FrontpageShortcutList = ({ openHandler, user }) => {
       JSON.stringify({ bookmarks: newBookmarks })
     )
   }
-
-  const [currentId, setCurrentId] = useState('')
-  const [currentName, setCurrentName] = useState('')
-  const [currentUrl, setCurrentUrl] = useState('')
 
   const onShortcutEdit = (id, text, url) => {
     setCurrentId(id)

@@ -125,6 +125,9 @@ const AddShortcutPage = ({ app, user, userId, closeHandler }) => {
       : []
   const [addShortcutWidgetOpen, setAddShortcutWidgetOpen] = useState(false)
   const [bookmarks, setBookmarks] = useState(bookmarksData)
+  const [currentId, setCurrentId] = useState('')
+  const [currentName, setCurrentName] = useState('')
+  const [currentUrl, setCurrentUrl] = useState('')
   const shortcutWidgetCancel = () => {
     setAddShortcutWidgetOpen(false)
   }
@@ -150,6 +153,9 @@ const AddShortcutPage = ({ app, user, userId, closeHandler }) => {
     }
     setBookmarks(newBookmarks)
     setAddShortcutWidgetOpen(false)
+    setCurrentId(id)
+    setCurrentName(name)
+    setCurrentUrl(link)
     await UpdateWidgetDataMutation(
       user,
       bookmarkWidget.node,
@@ -171,10 +177,6 @@ const AddShortcutPage = ({ app, user, userId, closeHandler }) => {
   const onSettingsClick = () => {
     goTo(accountURL)
   }
-
-  const [currentId, setCurrentId] = useState('')
-  const [currentName, setCurrentName] = useState('')
-  const [currentUrl, setCurrentUrl] = useState('')
 
   const onShortcutEdit = (id, text, url) => {
     setCurrentId(id)
