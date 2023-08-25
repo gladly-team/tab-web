@@ -255,6 +255,10 @@ const GroupImpactSidebar = ({
     Math.min(Math.floor(100 * (dollarProgress / dollarGoal)), 100),
     1
   )
+  const absoluteProgress = Math.max(
+    Math.floor(100 * (dollarProgress / dollarGoal)),
+    1
+  )
 
   // const onYesClick = () => {
   //   gtag('event', 'group_impact_sidebar', {
@@ -395,7 +399,7 @@ const GroupImpactSidebar = ({
                 </div>
                 <Typography variant="body2">{impactTitleCompiled}</Typography>
                 <Typography className={classes.robotoBold} variant="h3">
-                  {totalProgress}%
+                  {absoluteProgress}%
                 </Typography>
                 <Typography variant="body2">completed</Typography>
                 <Divider className={classes.divider} />
@@ -510,7 +514,7 @@ const GroupImpactSidebar = ({
           }
         >
           <Typography variant="body2" className={classes.pullTabProgress}>
-            {totalProgress}%
+            {absoluteProgress}%
           </Typography>
           <Stars className={classes.pullTabStar} />
         </div>

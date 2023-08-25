@@ -175,6 +175,24 @@ almostDoneTwo.args = {
   groupImpactSidebarState: GROUP_IMPACT_SIDEBAR_STATE.COMPLETED,
 }
 
+export const aboveMax = Template.bind({})
+aboveMax.args = {
+  userId: 'bcde',
+  open: true,
+  groupImpactMetric: {
+    dollarProgress: 5.6e6,
+    dollarProgressFromSearch: 1e5,
+    dollarGoal: 5e6,
+    impactMetric: {
+      impactTitle: 'Provide 2 home visits from a community health worker',
+      whyValuableDescription:
+        'Community health workers provide quality health care to those who might not otherwise have access.',
+    },
+  },
+  groupImpactMetricCount: 5,
+  groupImpactSidebarState: GROUP_IMPACT_SIDEBAR_STATE.COMPLETED,
+}
+
 export const withLeaderboard = Template.bind({})
 localStorageFeaturesManager.setFeatures([
   {
