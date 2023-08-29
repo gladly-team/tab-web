@@ -28,8 +28,6 @@ import Handlebars from 'handlebars'
 import defaultTheme from 'src/utils/theme'
 import SearchIcon from '@material-ui/icons/Search'
 import TabIcon from '@material-ui/icons/Tab'
-import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
-import { GROUP_IMPACT_LEADERBOARD } from 'src/utils/experiments'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 import GroupImpactLeaderboard from './GroupImpactLeaderboard'
 
@@ -313,13 +311,9 @@ const GroupImpactSidebar = ({
     e.stopPropagation()
   }
 
-  const isLeaderboardEnabled =
-    localStorageFeaturesManager.getFeatureValue(GROUP_IMPACT_LEADERBOARD) ===
-    'true'
-  let wrapperWidthClass =
-    !leaderboard || !isLeaderboardEnabled
-      ? classes.expanded
-      : classes.expandedWithLeaderboard
+  let wrapperWidthClass = !leaderboard
+    ? classes.expanded
+    : classes.expandedWithLeaderboard
   if (!isOpen && isClosedHover) {
     wrapperWidthClass = classes.pullTabExpanded
   } else if (!isOpen) {
@@ -388,7 +382,7 @@ const GroupImpactSidebar = ({
                       {groupImpactSidebarState}
                     </span>
                   ) : null}
-                  {(!leaderboard || !isLeaderboardEnabled) && (
+                  {!leaderboard && (
                     <Button
                       onClick={toggleOpen}
                       className={classes.closeButton}
@@ -483,7 +477,7 @@ const GroupImpactSidebar = ({
                   </div>
                 )}
               </div>
-              {leaderboard && isLeaderboardEnabled && (
+              {leaderboard && (
                 <div className={classes.leaderboard}>
                   <GroupImpactLeaderboard
                     leaderboardEntries={leaderboard}
