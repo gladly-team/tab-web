@@ -7,9 +7,9 @@ import localStorageMgr from 'src/utils/localstorage-mgr'
 import { NOTIF_DISMISS_PREFIX } from 'src/utils/constants'
 import gtag from 'ga-gtag'
 
-const promoKey = 'shop-full-page-2023-aug'
+const promoKey = 'search-full-page-2023-aug'
 const isBrowser = typeof window !== 'undefined'
-const iframeBaseUrl = 'https://tab.gladly.io/promos/full-page-shop-2023/'
+const iframeBaseUrl = 'https://tab.gladly.io/promos/full-page-search-2023/'
 
 const params = {
   version: null,
@@ -24,7 +24,7 @@ if (isBrowser) {
   params.version = p.version || null
 }
 
-const ShopFullPage = ({ user, variation }) => {
+const SearchFullPage = ({ user, variation }) => {
   const [show, setShow] = useState(false)
   const [version, setVersion] = useState(variation)
   const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
@@ -89,9 +89,9 @@ const ShopFullPage = ({ user, variation }) => {
   )
 }
 
-ShopFullPage.displayName = 'ShopFullPage'
+SearchFullPage.displayName = 'SearchFullPage'
 
-ShopFullPage.propTypes = {
+SearchFullPage.propTypes = {
   user: PropTypes.shape({
     userId: PropTypes.string,
     cause: PropTypes.shape({
@@ -101,6 +101,6 @@ ShopFullPage.propTypes = {
   variation: PropTypes.string.isRequired,
 }
 
-ShopFullPage.defaultProps = {}
+SearchFullPage.defaultProps = {}
 
-export default ShopFullPage
+export default SearchFullPage

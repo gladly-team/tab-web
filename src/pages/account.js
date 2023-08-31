@@ -32,7 +32,11 @@ import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import { LAUNCH_BOOKMARKS } from 'src/utils/experiments'
 import Switch from '@material-ui/core/Switch'
 import localStorageMgr from 'src/utils/localstorage-mgr'
-import { STORAGE_NEW_USER_IS_TAB_V4_BETA } from 'src/utils/constants'
+import {
+  STORAGE_NEW_USER_IS_TAB_V4_BETA,
+  WIDGET_TYPE_BOOKMARKS,
+} from 'src/utils/constants'
+import UpdateWidgetEnabledMutation from 'src/utils/mutations/UpdateWidgetEnabledMutation'
 
 const useStyles = makeStyles((theme) => ({
   contentContainer: {
@@ -136,6 +140,16 @@ const getRelayQuery = ({ AuthUser }) => {
               secondaryColor
             }
           }
+          widgets {
+            edges {
+              node {
+                id
+                name
+                type
+                enabled
+              }
+            }
+          }
         }
         app {
           causes(first: 50, filters: { isAvailableToSelect: true }) {
@@ -183,7 +197,13 @@ const Account = ({ data: fallbackData }) => {
   const fetchInProgress = !data
   const { user, app } = data || {}
   const { causes: { edges: causeNodes = [] } = {} } = app || {}
-  const { id: userId, email, username, cause } = user || {}
+  const {
+    id: userId,
+    email,
+    username,
+    cause,
+    widgets: { edges: widgetNodes = [] } = {},
+  } = user || {}
   const { theme, causeId, name = '' } = cause || {}
   const { primaryColor, secondaryColor } = theme || {}
   const classes = useStyles()
@@ -299,9 +319,21 @@ const Account = ({ data: fallbackData }) => {
   }
 
   const [bookmarks, setBookmarks] = useState(false)
-  const handleBookmarks = () => {
-    setBookmarks(!bookmarks)
+  const [bookmarkWidget, setBookmarkWidget] = useState(null)
+  const handleBookmarks = async (event) => {
+    setBookmarks(event.target.checked)
+    await UpdateWidgetEnabledMutation(user, bookmarkWidget.node, !bookmarks)
   }
+
+  // TODO: @jedtan Refactor into separate component if needed
+  useEffect(() => {
+    setBookmarkWidget(
+      widgetNodes.find(
+        (widgetNode) => widgetNode.node.type === WIDGET_TYPE_BOOKMARKS
+      )
+    )
+    setBookmarks(!!(bookmarkWidget && bookmarkWidget.node.enabled))
+  }, [widgetNodes, bookmarkWidget])
 
   return (
     <SettingsPage>
@@ -319,6 +351,7 @@ const Account = ({ data: fallbackData }) => {
               color="primary"
               value={currentCauseId}
               exclusive
+              checked={bookmarks}
               onChange={switchCause}
             >
               {causeNodes.map(
@@ -487,6 +520,16 @@ Account.propTypes = {
         }),
         name: PropTypes.string,
       }),
+      widgets: PropTypes.shape({
+        edges: PropTypes.arrayOf(
+          PropTypes.shape({
+            id: PropTypes.string,
+            enabled: PropTypes.bool,
+            name: PropTypes.string,
+            type: PropTypes.string,
+          })
+        ),
+      }).isRequired,
     }),
   }),
 }

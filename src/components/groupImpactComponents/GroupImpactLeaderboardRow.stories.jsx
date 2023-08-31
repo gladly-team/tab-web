@@ -30,10 +30,11 @@ normal.args = {
   position: 13567,
   username: 'cat_lover',
   userGroupImpactMetric: {
-    dollarContribution: 12345,
+    dollarContribution: 13345,
     tabDollarContribution: 11111,
     searchDollarContribution: 1111,
     shopDollarContribution: 123,
+    referralDollarContribution: 1000,
   },
 }
 
@@ -43,9 +44,10 @@ selected.args = {
   position: 13567,
   username: 'cat_lover',
   userGroupImpactMetric: {
-    dollarContribution: 12345,
+    dollarContribution: 13345,
     tabDollarContribution: 11111,
     searchDollarContribution: 1111,
     shopDollarContribution: 123,
+    referralDollarContribution: 1000,
   },
 }

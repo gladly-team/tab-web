@@ -32,6 +32,7 @@ export default createFragmentContainer(GroupImpact, {
           tabDollarContribution
           searchDollarContribution
           shopDollarContribution
+          referralDollarContribution
         }
       }
     }

@@ -60,8 +60,18 @@ export const SFAC_ACTIVITY_STATES = {
   INACTIVE: 'inactive',
 }
 
+export const SHAC_ACTIVITY_STATES = {
+  NEW: 'new',
+  ACTIVE: 'active',
+  INACTIVE: 'inactive',
+}
+
 export const GROUP_IMPACT_SIDEBAR_STATE = {
   NORMAL: '',
   NEW: 'NEW',
   COMPLETED: 'COMPLETED',
 }
+
+// Widget Types:
+export const WIDGET_TYPE_BOOKMARKS = 'bookmarks'
+export const WIDGET_TYPE_TODOS = 'todos'

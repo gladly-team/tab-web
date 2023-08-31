@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import DashboardPopover from 'src/components/DashboardPopover'
 import BadgeButton from 'src/components/BadgeButton'
-import SfacActivityNotification from 'src/components/SfacActivityNotification'
-import { SFAC_ACTIVITY_STATES } from 'src/utils/constants'
-import SearchIcon from '@material-ui/icons/Search'
+import ShacActivityNotification from 'src/components/ShacActivityNotification'
+import { SHAC_ACTIVITY_STATES } from 'src/utils/constants'
+import { ShoppingCart } from '@mui/icons-material'
 
 const useStyles = makeStyles(() => ({
   popover: {
@@ -20,8 +20,8 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const SfacActivity = ({
-  user: { cause = {}, searches, searchesToday, sfacActivityState },
+const ShacActivity = ({
+  user: { cause = {}, shacTotalEarned, shacActivityState },
 }) => {
   const classes = useStyles()
   const { name: causeName } = cause
@@ -30,12 +30,12 @@ const SfacActivity = ({
   return (
     <div>
       <BadgeButton
-        active={sfacActivityState === SFAC_ACTIVITY_STATES.ACTIVE}
+        active={shacActivityState === SHAC_ACTIVITY_STATES.ACTIVE}
         onClick={() => {
           setIsPopoverOpen(true)
         }}
         ref={buttonRef}
-        icon={<SearchIcon />}
+        icon={<ShoppingCart />}
       />
       <DashboardPopover
         open={isPopoverOpen}
@@ -50,11 +50,10 @@ const SfacActivity = ({
           },
         }}
       >
-        <SfacActivityNotification
+        <ShacActivityNotification
           className={classes.popoverContent}
-          activityState={sfacActivityState}
-          searchesToday={searchesToday || 0}
-          totalSearches={searches || 0}
+          activityState={shacActivityState}
+          totalEarned={shacTotalEarned || 0}
           impactName={causeName}
         />
       </DashboardPopover>
@@ -62,17 +61,16 @@ const SfacActivity = ({
   )
 }
 
-SfacActivity.propTypes = {
+ShacActivity.propTypes = {
   user: PropTypes.shape({
     cause: PropTypes.shape({
       name: PropTypes.string.isRequired,
     }).isRequired,
-    searches: PropTypes.number.isRequired,
-    searchesToday: PropTypes.number.isRequired,
-    sfacActivityState: PropTypes.string.isRequired,
+    shacTotalEarned: PropTypes.number.isRequired,
+    shacActivityState: PropTypes.string.isRequired,
   }).isRequired,
 }
 
-SfacActivity.defaultProps = {}
+ShacActivity.defaultProps = {}
 
-export default SfacActivity
+export default ShacActivity

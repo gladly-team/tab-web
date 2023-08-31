@@ -28,8 +28,6 @@ import Handlebars from 'handlebars'
 import defaultTheme from 'src/utils/theme'
 import SearchIcon from '@material-ui/icons/Search'
 import TabIcon from '@material-ui/icons/Tab'
-import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
-import { GROUP_IMPACT_LEADERBOARD } from 'src/utils/experiments'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 import GroupImpactLeaderboard from './GroupImpactLeaderboard'
 
@@ -255,6 +253,10 @@ const GroupImpactSidebar = ({
     Math.min(Math.floor(100 * (dollarProgress / dollarGoal)), 100),
     1
   )
+  const absoluteProgress = Math.max(
+    Math.floor(100 * (dollarProgress / dollarGoal)),
+    1
+  )
 
   // const onYesClick = () => {
   //   gtag('event', 'group_impact_sidebar', {
@@ -309,13 +311,9 @@ const GroupImpactSidebar = ({
     e.stopPropagation()
   }
 
-  const isLeaderboardEnabled =
-    localStorageFeaturesManager.getFeatureValue(GROUP_IMPACT_LEADERBOARD) ===
-    'true'
-  let wrapperWidthClass =
-    !leaderboard || !isLeaderboardEnabled
-      ? classes.expanded
-      : classes.expandedWithLeaderboard
+  let wrapperWidthClass = !leaderboard
+    ? classes.expanded
+    : classes.expandedWithLeaderboard
   if (!isOpen && isClosedHover) {
     wrapperWidthClass = classes.pullTabExpanded
   } else if (!isOpen) {
@@ -384,7 +382,7 @@ const GroupImpactSidebar = ({
                       {groupImpactSidebarState}
                     </span>
                   ) : null}
-                  {(!leaderboard || !isLeaderboardEnabled) && (
+                  {!leaderboard && (
                     <Button
                       onClick={toggleOpen}
                       className={classes.closeButton}
@@ -395,7 +393,7 @@ const GroupImpactSidebar = ({
                 </div>
                 <Typography variant="body2">{impactTitleCompiled}</Typography>
                 <Typography className={classes.robotoBold} variant="h3">
-                  {totalProgress}%
+                  {absoluteProgress}%
                 </Typography>
                 <Typography variant="body2">completed</Typography>
                 <Divider className={classes.divider} />
@@ -479,7 +477,7 @@ const GroupImpactSidebar = ({
                   </div>
                 )}
               </div>
-              {leaderboard && isLeaderboardEnabled && (
+              {leaderboard && (
                 <div className={classes.leaderboard}>
                   <GroupImpactLeaderboard
                     leaderboardEntries={leaderboard}
@@ -510,7 +508,7 @@ const GroupImpactSidebar = ({
           }
         >
           <Typography variant="body2" className={classes.pullTabProgress}>
-            {totalProgress}%
+            {absoluteProgress}%
           </Typography>
           <Stars className={classes.pullTabStar} />
         </div>
@@ -573,6 +571,7 @@ GroupImpactSidebar.propTypes = {
         tabDollarContribution: PropTypes.number,
         searchDollarContribution: PropTypes.number,
         shopDollarContribution: PropTypes.number,
+        referralDollarContribution: PropTypes.number,
       }),
     })
   ),

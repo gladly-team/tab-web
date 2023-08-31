@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react'
 import ShortcutIcon from './ShortcutIcon'
 
@@ -19,6 +20,9 @@ const Template = (args) => <ShortcutIcon {...args} />
 
 export const basic = Template.bind({})
 basic.args = {
+  id: 'abcd',
   text: 'Google Googledy',
   url: 'https://www.google.com',
+  onEdit: () => console.log('onEdit'),
+  onDelete: () => console.log('onDelete'),
 }
