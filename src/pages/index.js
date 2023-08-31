@@ -729,7 +729,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
   // Our notification
   let notif = notificationsToShow.find(
-    (res) => res.code === 'shfac-notify-fullpage-aug'
+    (res) => res.code === 'shfac-notify-fullpage-sept'
   )
 
   if (
