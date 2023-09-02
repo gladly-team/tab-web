@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     maxWidth: '550px',
     flexWrap: 'wrap',
+    zIndex: 1.4e3,
   },
   addCircle: {
     marginTop: '24px',
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
   addShortcutWrapper: {
     width: '400px',
+    position: 'relative',
   },
 }))
 const FrontpageShortcutList = ({ openHandler, user }) => {

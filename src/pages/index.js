@@ -255,9 +255,6 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 1e4, // must be higher than all content besides ads and modal
     margin: theme.spacing(1),
   },
-  frontpageShortcutList: {
-    zIndex: 1.4e3,
-  },
   logo: {
     height: 50,
     margin: theme.spacing(0.5),
@@ -1143,7 +1140,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
               {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) !==
                 'false' &&
                 bookmarkWidgetEnabled && (
-                  <div className={classes.frontpageShortcutList}>
+                  <div>
                     <FrontpageShortcutListContainer
                       userId={userId}
                       user={user}
