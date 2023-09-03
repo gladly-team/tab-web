@@ -28,10 +28,11 @@ import Handlebars from 'handlebars'
 import defaultTheme from 'src/utils/theme'
 import SearchIcon from '@material-ui/icons/Search'
 import TabIcon from '@material-ui/icons/Tab'
-import VerticalLinearProgress from '../VerticalLinearProgress'
-import GroupImpactLeaderboard from './GroupImpactLeaderboard'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
+import VerticalLinearProgress from '../VerticalLinearProgress'
+import GroupImpactLeaderboard from './GroupImpactLeaderboard'
+import GroupImpactContributionWidget from './GroupImpactContributionWidget'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -201,10 +202,29 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    borderLeft: '1px solid grey',
   },
   paddingTopBottom: {
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
+  },
+  topBar: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    position: 'relative',
+    alignItems: 'center',
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+  toggleGroup: {
+    position: 'absolute',
+
+    /* new */
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '256px',
   },
 }))
 
@@ -219,6 +239,7 @@ const GroupImpactSidebar = ({
   leaderboard,
   userId,
   groupImpactHistory,
+
   // sfacActivityState,
 }) => {
   const [isOpen, setIsOpen] = useState(open)
@@ -227,6 +248,11 @@ const GroupImpactSidebar = ({
     !!lastGroupImpactMetric
   )
   const [isClosedHover, setIsClosedHover] = useState(false)
+  const [selectedMode, setSelectedMode] = useState('leaderboard')
+  const handleChange = (event, newValue) => {
+    setSelectedMode(newValue)
+    event.stopPropagation()
+  }
   const { dollarProgress, dollarGoal, dollarProgressFromSearch, impactMetric } =
     displayingOldGoal ? lastGroupImpactMetric : groupImpactMetric
   const { impactTitle, whyValuableDescription, impactCountPerMetric } =
@@ -484,19 +510,43 @@ const GroupImpactSidebar = ({
               </div>
               {leaderboard && (
                 <div className={classes.leaderboard}>
-                  <ToggleButtonGroup
-                    color="primary"
-                    exclusive
-                    aria-label="Platform"
-                  >
-                    <ToggleButton value="web">Leaderboard</ToggleButton>
-                    <ToggleButton value="android">My Previous Stats</ToggleButton>
-                  </ToggleButtonGroup>
-                  <GroupImpactLeaderboard
-                    leaderboardEntries={leaderboard}
-                    userId={userId}
-                    onClose={toggleOpen}
-                  />
+                  {groupImpactHistory && (
+                    <div className={classes.topBar}>
+                      <ToggleButtonGroup
+                        color="primary"
+                        exclusive
+                        aria-label="Platform"
+                        className={classes.toggleGroup}
+                        value={selectedMode}
+                        onChange={handleChange}
+                      >
+                        <ToggleButton value="leaderboard">
+                          Leaderboard
+                        </ToggleButton>
+                        <ToggleButton value="previous-stats">
+                          Previous Stats
+                        </ToggleButton>
+                      </ToggleButtonGroup>
+                      <Button
+                        onClick={toggleOpen}
+                        className={classes.closeButton}
+                      >
+                        <ArrowBackIos className={classes.closeButtonIcon} />
+                      </Button>
+                    </div>
+                  )}
+
+                  {selectedMode === 'leaderboard' ? (
+                    <GroupImpactLeaderboard
+                      leaderboardEntries={leaderboard}
+                      userId={userId}
+                      onClose={groupImpactHistory ? undefined : toggleOpen}
+                    />
+                  ) : (
+                    <GroupImpactContributionWidget
+                      groupImpactHistory={groupImpactHistory || []}
+                    />
+                  )}
                 </div>
               )}
             </div>
@@ -588,14 +638,17 @@ GroupImpactSidebar.propTypes = {
       }),
     })
   ),
-  groupImpactHistory: PropTypes.arrayOf(PropTypes.shape({
-    dollarContribution: PropTypes.number.isRequired,
-    tabDollarContribution: PropTypes.number,
-    searchDollarContribution: PropTypes.number,
-    shopDollarContribution: PropTypes.number,
-    referralDollarContribution: PropTypes.number,
-    dateStarted: PropTypes.string, 
-  }))
+  groupImpactHistory: PropTypes.arrayOf(
+    PropTypes.shape({
+      dollarContribution: PropTypes.number.isRequired,
+      tabDollarContribution: PropTypes.number,
+      searchDollarContribution: PropTypes.number,
+      shopDollarContribution: PropTypes.number,
+      referralDollarContribution: PropTypes.number,
+      dateStarted: PropTypes.string,
+    })
+  ),
+
   // sfacActivityState: PropTypes.string,
 }
 
@@ -606,6 +659,7 @@ GroupImpactSidebar.defaultProps = {
   lastGroupImpactMetric: null,
   groupImpactMetricCount: null,
   leaderboard: null,
+  groupImpactHistory: null,
 
   // sfacActivityState: null,
 }

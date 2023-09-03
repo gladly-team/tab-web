@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     width: '500px',
-    borderLeft: '1px solid grey',
   },
   ellipses: {
     padding: theme.spacing(1),
@@ -127,7 +126,7 @@ const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
           </Typography>
           <Typography variant="body2" className={classes.subtitle}>
             Impact points earned for this group goal by opening tabs, searching,
-            referring other users and/or shopping.{' '}
+            and/or shopping.{' '}
             <Link
               to={groupImpactLeaderboardFAQ}
               target="_blank"
@@ -138,9 +137,11 @@ const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
           </Typography>
         </div>
 
-        <Button onClick={onClose} className={classes.closeButton}>
-          <ArrowBackIos className={classes.closeButtonIcon} />
-        </Button>
+        {onClose && (
+          <Button onClick={onClose} className={classes.closeButton}>
+            <ArrowBackIos className={classes.closeButtonIcon} />
+          </Button>
+        )}
       </div>
       <div className={classes.positionRow}>
         <Typography className={classes.position} variant="h6">
@@ -186,7 +187,7 @@ Leaderboard.propTypes = {
 }
 
 Leaderboard.defaultProps = {
-  onClose: () => {},
+  onClose: null,
 }
 
 export default Leaderboard

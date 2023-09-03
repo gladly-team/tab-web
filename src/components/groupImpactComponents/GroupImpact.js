@@ -232,14 +232,16 @@ GroupImpact.propTypes = {
         referralDollarContribution: PropTypes.number,
       }),
     }),
-    groupImpactHistory: PropTypes.arrayOf(PropTypes.shape({
-      dollarContribution: PropTypes.number.isRequired,
-      tabDollarContribution: PropTypes.number,
-      searchDollarContribution: PropTypes.number,
-      shopDollarContribution: PropTypes.number,
-      referralDollarContribution: PropTypes.number,
-      dateStarted: PropTypes.string, 
-    }))
+    groupImpactHistory: PropTypes.arrayOf(
+      PropTypes.shape({
+        dollarContribution: PropTypes.number.isRequired,
+        tabDollarContribution: PropTypes.number,
+        searchDollarContribution: PropTypes.number,
+        shopDollarContribution: PropTypes.number,
+        referralDollarContribution: PropTypes.number,
+        dateStarted: PropTypes.string,
+      })
+    ),
   }).isRequired,
 }
 
@@ -275,15 +277,17 @@ GroupImpactWrapper.propTypes = {
         referralDollarContribution: PropTypes.number,
       }),
     }),
+    groupImpactHistory: PropTypes.arrayOf(
+      PropTypes.shape({
+        dollarContribution: PropTypes.number.isRequired,
+        tabDollarContribution: PropTypes.number,
+        searchDollarContribution: PropTypes.number,
+        shopDollarContribution: PropTypes.number,
+        referralDollarContribution: PropTypes.number,
+        dateStarted: PropTypes.string,
+      })
+    ),
   }).isRequired,
-  groupImpactHistory: PropTypes.arrayOf(PropTypes.shape({
-    dollarContribution: PropTypes.number.isRequired,
-    tabDollarContribution: PropTypes.number,
-    searchDollarContribution: PropTypes.number,
-    shopDollarContribution: PropTypes.number,
-    referralDollarContribution: PropTypes.number,
-    dateStarted: PropTypes.string, 
-  }))
 }
 
 GroupImpactWrapper.defaultProps = {}
