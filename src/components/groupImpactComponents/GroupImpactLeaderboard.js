@@ -127,7 +127,7 @@ const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
           </Typography>
           <Typography variant="body2" className={classes.subtitle}>
             Impact points earned for this group goal by opening tabs, searching,
-            and/or shopping.{' '}
+            referring other users and/or shopping.{' '}
             <Link
               to={groupImpactLeaderboardFAQ}
               target="_blank"

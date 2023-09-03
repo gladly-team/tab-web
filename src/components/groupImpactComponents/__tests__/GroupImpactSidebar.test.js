@@ -12,12 +12,10 @@ import { shopLandingURL } from 'src/utils/urls'
 import { windowOpenTop } from 'src/utils/navigation'
 import SearchIcon from '@material-ui/icons/Search'
 import TabIcon from '@material-ui/icons/Tab'
-import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import GroupImpactLeaderboard from '../GroupImpactLeaderboard'
 
 jest.mock('ga-gtag')
 jest.mock('src/utils/navigation')
-jest.mock('src/utils/localStorageFeaturesManager')
 
 const getMockProps = () => ({
   userId: 'user-id',
@@ -482,58 +480,7 @@ describe('GroupImpactSidebar component', () => {
     expect(wrapper.find(GroupImpactLeaderboard).exists()).toEqual(false)
   })
 
-  it('does not render a leaderboard if feature is false', () => {
-    localStorageFeaturesManager.getFeatureValue.mockReturnValue('false')
-    const GroupImpactSidebar =
-      require('src/components/groupImpactComponents/GroupImpactSidebar').default
-    const mockProps = {
-      ...getMockProps(),
-      groupImpactMetric: {
-        dollarProgressFromSearch: 125,
-        dollarProgress: 250,
-        dollarGoal: 600,
-        impactMetric: {
-          impactTitle: '{{count}} impact-title {{multiple}}',
-          whyValuableDescription: 'why-valuable-description',
-          impactCountPerMetric: 1,
-        },
-      },
-      groupImpactMetricCount: 1,
-      leaderboard: [
-        {
-          position: 1,
-          user: {
-            id: 'abcd',
-            username: 'cat_lover',
-          },
-          userGroupImpactMetric: {
-            dollarContribution: 10000,
-            tabDollarContribution: 1000,
-            searchDollarContribution: 4000,
-            shopDollarContribution: 5000,
-          },
-        },
-        {
-          position: 2,
-          user: {
-            id: 'bcde',
-            username: 'tree_lover',
-          },
-          userGroupImpactMetric: {
-            dollarContribution: 9000,
-            tabDollarContribution: 1000,
-            searchDollarContribution: 4000,
-            shopDollarContribution: 4000,
-          },
-        },
-      ],
-    }
-    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
-    expect(wrapper.find(GroupImpactLeaderboard).exists()).toEqual(false)
-  })
-
-  it('renders a leaderboard if feature is true', () => {
-    localStorageFeaturesManager.getFeatureValue.mockReturnValue('true')
+  it('renders a leaderboard if applicable', () => {
     const GroupImpactSidebar =
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
     const mockProps = {

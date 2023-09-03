@@ -376,7 +376,7 @@ const Account = ({ data: fallbackData }) => {
         {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) !==
           'false' && (
           <AccountItem
-            name="Bookmarks"
+            name="Shortcuts"
             actionButton={
               <Switch
                 checked={bookmarks}

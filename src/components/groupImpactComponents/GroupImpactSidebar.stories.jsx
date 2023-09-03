@@ -5,8 +5,6 @@ import {
   GROUP_IMPACT_SIDEBAR_STATE,
   SFAC_ACTIVITY_STATES,
 } from 'src/utils/constants'
-import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
-import { GROUP_IMPACT_LEADERBOARD } from 'src/utils/experiments'
 import GroupImpactSidebar from './GroupImpactSidebar'
 
 export default {
@@ -194,12 +192,6 @@ aboveMax.args = {
 }
 
 export const withLeaderboard = Template.bind({})
-localStorageFeaturesManager.setFeatures([
-  {
-    featureName: GROUP_IMPACT_LEADERBOARD,
-    variation: true,
-  },
-])
 withLeaderboard.args = {
   userId: 'bcde',
   open: true,
