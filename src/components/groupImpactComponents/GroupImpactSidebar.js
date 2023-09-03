@@ -30,6 +30,8 @@ import SearchIcon from '@material-ui/icons/Search'
 import TabIcon from '@material-ui/icons/Tab'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 import GroupImpactLeaderboard from './GroupImpactLeaderboard'
+import ToggleButton from '@material-ui/lab/ToggleButton'
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -196,6 +198,9 @@ const useStyles = makeStyles((theme) => ({
   },
   leaderboard: {
     maxHeight: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   paddingTopBottom: {
     paddingTop: theme.spacing(3),
@@ -213,7 +218,7 @@ const GroupImpactSidebar = ({
   groupImpactMetricCount,
   leaderboard,
   userId,
-
+  groupImpactHistory,
   // sfacActivityState,
 }) => {
   const [isOpen, setIsOpen] = useState(open)
@@ -479,6 +484,14 @@ const GroupImpactSidebar = ({
               </div>
               {leaderboard && (
                 <div className={classes.leaderboard}>
+                  <ToggleButtonGroup
+                    color="primary"
+                    exclusive
+                    aria-label="Platform"
+                  >
+                    <ToggleButton value="web">Leaderboard</ToggleButton>
+                    <ToggleButton value="android">My Previous Stats</ToggleButton>
+                  </ToggleButtonGroup>
                   <GroupImpactLeaderboard
                     leaderboardEntries={leaderboard}
                     userId={userId}
@@ -575,7 +588,14 @@ GroupImpactSidebar.propTypes = {
       }),
     })
   ),
-
+  groupImpactHistory: PropTypes.arrayOf(PropTypes.shape({
+    dollarContribution: PropTypes.number.isRequired,
+    tabDollarContribution: PropTypes.number,
+    searchDollarContribution: PropTypes.number,
+    shopDollarContribution: PropTypes.number,
+    referralDollarContribution: PropTypes.number,
+    dateStarted: PropTypes.string, 
+  }))
   // sfacActivityState: PropTypes.string,
 }
 
