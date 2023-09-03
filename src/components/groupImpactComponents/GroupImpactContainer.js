@@ -35,14 +35,6 @@ export default createFragmentContainer(GroupImpact, {
           referralDollarContribution
         }
       }
-      groupImpactHistory {
-        dollarContribution
-        tabDollarContribution
-        searchDollarContribution
-        shopDollarContribution
-        referralDollarContribution
-        dateStarted
-      }
     }
   `,
 })
