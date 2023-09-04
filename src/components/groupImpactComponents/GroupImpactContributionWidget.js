@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     width: '500px',
-    borderLeft: '1px solid grey',
   },
   robotoBold: {
     fontFamily: 'Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif',
