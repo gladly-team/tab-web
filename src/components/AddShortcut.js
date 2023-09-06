@@ -50,6 +50,14 @@ const addProtocolToURLIfNeeded = (url) => {
   return url
 }
 
+const isValidUrl = (urlString) => {
+  try {
+    return Boolean(new URL(urlString))
+  } catch (e) {
+    return false
+  }
+}
+
 const AddShortcut = ({
   onCancel,
   onSave,
@@ -59,6 +67,8 @@ const AddShortcut = ({
 }) => {
   const [name, setName] = useState(existingName)
   const [url, setUrl] = useState(existingUrl)
+  const [nameError, setNameError] = useState(null)
+  const [urlError, setUrlError] = useState(null)
   useEffect(() => setName(existingName), [existingName])
   useEffect(() => setUrl(existingUrl), [existingUrl])
   const classes = useStyles()
@@ -67,17 +77,49 @@ const AddShortcut = ({
     setUrl(existingUrl)
     onCancel()
   }
+  const validateName = (newName) => {
+    let newNameError
+    if (newName.length === 0) {
+      newNameError = 'Shortcut name cannot be empty.'
+    } else {
+      newNameError = null
+    }
+    setNameError(newNameError)
+    return newNameError
+  }
+  const validateUrl = (newUrl) => {
+    let newUrlError
+    if (newUrl.length === 0) {
+      newUrlError = 'URL cannot be empty.'
+    } else if (!isValidUrl(addProtocolToURLIfNeeded(newUrl))) {
+      newUrlError = 'URL is not valid.'
+    } else {
+      newUrlError = null
+    }
+    setUrlError(newUrlError)
+    return newUrlError
+  }
+  const validateForm = () => {
+    const newNameError = validateName(name)
+    const newUrlError = validateUrl(url)
+    return newNameError || newUrlError
+  }
   const onSaveClick = () => {
     const newUrl = addProtocolToURLIfNeeded(url)
+    if (validateForm()) {
+      return
+    }
     onSave(existingId, name, newUrl)
     setName(name)
     setUrl(newUrl)
   }
   const changeName = (e) => {
     setName(e.target.value)
+    validateName(e.target.value)
   }
   const changeUrl = (e) => {
     setUrl(e.target.value)
+    validateUrl(e.target.value)
   }
   return (
     <Notification
@@ -100,8 +142,8 @@ const AddShortcut = ({
               label="Name"
               value={name}
               onChange={changeName}
-              error={name.length === 0}
-              helperText={name.length === 0 && 'Bookmark name cannot be empty.'}
+              error={!!nameError}
+              helperText={nameError}
               className={classes.textField}
             />
             <TextField
@@ -110,8 +152,8 @@ const AddShortcut = ({
               label="URL"
               value={url}
               onChange={changeUrl}
-              error={url.length === 0}
-              helperText={url.length === 0 && 'URL cannot be empty.'}
+              error={!!urlError}
+              helperText={urlError}
               className={classes.textField}
             />
           </div>
@@ -130,8 +172,8 @@ const AddShortcut = ({
             onClick={onSaveClick}
             className={classes.yesButton}
             variant="contained"
-            disabled={name.length === 0 || url.length === 0}
             disableElevation
+            disabled={!!(nameError || urlError)}
           >
             Save
           </Button>
