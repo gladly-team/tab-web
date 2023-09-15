@@ -29,6 +29,16 @@ describe('ShortcutIcon component', () => {
     expect(wrapper.find(Link).prop('to')).toEqual(mockProps.url)
   })
 
+  it('has an https link with url property', () => {
+    const ShortcutIcon = require('src/components/ShortcutIcon').default
+    const mockProps = {
+      ...getMockProps(),
+      url: 'www.google.com',
+    }
+    const wrapper = mount(<ShortcutIcon {...mockProps} />)
+    expect(wrapper.find(Link).prop('to')).toEqual('http://www.google.com')
+  })
+
   it('displays abbreviated version of link name along with full title', () => {
     const ShortcutIcon = require('src/components/ShortcutIcon').default
     const mockProps = getMockProps()

@@ -12,6 +12,7 @@ import EditIcon from '@material-ui/icons/Edit'
 import CheckIcon from '@material-ui/icons/Check'
 import Link from 'src/components/Link'
 import CloseIcon from '@material-ui/icons/Close'
+import { addProtocolToURLIfNeeded } from 'src/utils/urls'
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -131,7 +132,11 @@ const ShortcutIcon = ({ onEdit, onDelete, text, url, id }) => {
           <Typography className={classes.deleteText}>Confirm Delete</Typography>
         </div>
       ) : (
-        <Link to={url} target="_blank" className={classes.link}>
+        <Link
+          to={addProtocolToURLIfNeeded(url)}
+          target="_blank"
+          className={classes.link}
+        >
           <Fade in={hover}>
             <div className={classes.buttons}>
               <IconButton
