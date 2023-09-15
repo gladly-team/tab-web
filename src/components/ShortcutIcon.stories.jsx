@@ -26,3 +26,12 @@ basic.args = {
   onEdit: () => console.log('onEdit'),
   onDelete: () => console.log('onDelete'),
 }
+
+export const withoutHttps = Template.bind({})
+withoutHttps.args = {
+  id: 'abcd',
+  text: 'Google Googledy',
+  url: 'www.google.com',
+  onEdit: () => console.log('onEdit'),
+  onDelete: () => console.log('onDelete'),
+}

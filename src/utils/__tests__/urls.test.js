@@ -35,3 +35,10 @@ describe('Urls: getSquadsLink', () => {
     )
   })
 })
+
+describe('addProtocolToURLIfNeeded', () => {
+  it('appends https if applicable', () => {
+    const { addProtocolToURLIfNeeded } = require('src/utils/urls')
+    expect(addProtocolToURLIfNeeded('test-user')).toBe('http://test-user')
+  })
+})

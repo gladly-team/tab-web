@@ -1,3 +1,5 @@
+/* eslint no-useless-escape: 0 */
+
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import { withBasePath } from 'src/utils/navigationUtils'
 import { MEDIA_ENDPOINT } from 'src/utils/constants'
@@ -108,3 +110,16 @@ export const shopLandingURL = 'https://shop.gladly.io/'
 
 export const groupImpactLeaderboardFAQ =
   'https://gladly.zendesk.com/hc/en-us/articles/17622871939725-Leaderboards'
+
+export const addProtocolToURLIfNeeded = (url) => {
+  const hasProtocol = (s) => {
+    const regexp =
+      /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+    return regexp.test(s)
+  }
+
+  if (!hasProtocol(url)) {
+    return `http://${url}`
+  }
+  return url
+}

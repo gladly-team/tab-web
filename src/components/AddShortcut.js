@@ -1,11 +1,10 @@
-/* eslint no-useless-escape: 0 */
-
 import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
 import { Typography } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
+import { addProtocolToURLIfNeeded } from 'src/utils/urls'
 import Notification from './Notification'
 
 const useStyles = makeStyles((theme) => ({
@@ -36,19 +35,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
 }))
-
-const addProtocolToURLIfNeeded = (url) => {
-  const hasProtocol = (s) => {
-    const regexp =
-      /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-    return regexp.test(s)
-  }
-
-  if (!hasProtocol(url)) {
-    return `http://${url}`
-  }
-  return url
-}
 
 const isValidUrl = (urlString) => {
   try {
