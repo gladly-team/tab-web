@@ -7,6 +7,7 @@ import { ArrowForwardIos } from '@material-ui/icons'
 import { GROUP_IMPACT_SIDEBAR_STATE } from 'src/utils/constants'
 import gtag from 'ga-gtag'
 import Handlebars from 'handlebars'
+import moment from 'moment'
 import Notification from '../Notification'
 
 const useStyles = makeStyles((theme) => ({
@@ -64,6 +65,7 @@ const GroupGoalNotification = ({
   onGoalStarted,
   impactTitle,
   impactCountPerMetric,
+  dateStarted,
 }) => {
   const impactTitleTemplate = Handlebars.compile(impactTitle)
   const impactTitleCompiled = impactTitleTemplate({
@@ -93,6 +95,10 @@ const GroupGoalNotification = ({
     onGoalStarted()
   }, [mode, onGoalStarted])
 
+  const dateStartedMoment = dateStarted && moment(dateStarted).format('l')
+  const startingString = `${
+    mode === GROUP_IMPACT_SIDEBAR_STATE.COMPLETED ? 'COMPLETED' : 'GOAL STARTED'
+  }${dateStarted ? ` - Week of ${dateStartedMoment}` : ''}`
   return (
     <div className={classes.wrapper}>
       <Notification
@@ -101,10 +107,7 @@ const GroupGoalNotification = ({
         open={open}
         text={
           <Typography className={classes.notificationText} variant="body2">
-            {mode === GROUP_IMPACT_SIDEBAR_STATE.COMPLETED
-              ? 'COMPLETED'
-              : 'GOAL STARTED'}
-            : {impactTitleCompiled}
+            {startingString}: {impactTitleCompiled}
           </Typography>
         }
         buttons={
@@ -151,6 +154,11 @@ GroupGoalNotification.propTypes = {
   onGoalStarted: PropTypes.func.isRequired,
   impactTitle: PropTypes.string.isRequired,
   impactCountPerMetric: PropTypes.number.isRequired,
+  dateStarted: PropTypes.string,
+}
+
+GroupGoalNotification.defaultProps = {
+  dateStarted: null,
 }
 
 export default GroupGoalNotification

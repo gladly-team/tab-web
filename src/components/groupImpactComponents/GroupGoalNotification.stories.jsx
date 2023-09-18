@@ -22,4 +22,5 @@ started.args = {
   mode: GROUP_IMPACT_SIDEBAR_STATE.NEW,
   impactTitle: 'Fund {{count}} visits from a community healthworker',
   impactCountPerMetric: 3,
+  dateStarted: '2020-01-10T10:00:00.000Z',
 }

@@ -154,6 +154,8 @@ standardView.args = {
             'Community health workers provide quality health care to those who might not otherwise have access.',
           impactCountPerMetric: 3,
         },
+        dateStarted: '2020-01-10T10:00:00.000Z',
+        dateExpires: '2020-07-10T10:00:00.000Z',
       },
     },
   },

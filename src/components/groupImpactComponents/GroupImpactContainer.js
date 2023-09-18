@@ -16,6 +16,8 @@ export default createFragmentContainer(GroupImpact, {
             whyValuableDescription
             impactCountPerMetric
           }
+          dateStarted
+          dateExpires
         }
         groupImpactMetricCount
       }
