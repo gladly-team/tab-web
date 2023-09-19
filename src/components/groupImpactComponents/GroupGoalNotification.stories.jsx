@@ -34,4 +34,3 @@ startedWithDate.args = {
   impactCountPerMetric: 3,
   dateStarted: '2020-01-10T10:00:00.000Z',
 }
-

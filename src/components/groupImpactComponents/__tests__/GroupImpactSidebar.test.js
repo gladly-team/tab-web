@@ -12,8 +12,8 @@ import { shopLandingURL } from 'src/utils/urls'
 import { windowOpenTop } from 'src/utils/navigation'
 import SearchIcon from '@material-ui/icons/Search'
 import TabIcon from '@material-ui/icons/Tab'
-import GroupImpactLeaderboard from '../GroupImpactLeaderboard'
 import Countdown from 'react-countdown'
+import GroupImpactLeaderboard from '../GroupImpactLeaderboard'
 
 jest.mock('ga-gtag')
 jest.mock('src/utils/navigation')
@@ -502,7 +502,9 @@ describe('GroupImpactSidebar component', () => {
     }
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
     expect(wrapper.find(Countdown).exists()).toEqual(true)
-    expect(wrapper.find(Countdown).prop('dateExpires')).toEqual(mockProps.dateExpires)
+    expect(wrapper.find(Countdown).prop('dateExpires')).toEqual(
+      mockProps.dateExpires
+    )
     expect(wrapper.find(Typography).first().text()).toEqual('WEEKLY GROUP GOAL')
   })
 

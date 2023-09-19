@@ -437,7 +437,9 @@ const GroupImpactSidebar = ({
                     precision={3}
                     renderer={({ hours, days }) => (
                       <Typography className={classes.robotoBold}>
-                        {`${days > 0 ? `${days} Days` : ``} ${hours > 0 ? `${hours} Hours` : ``} ${days > 0 || hours > 0 ? ` Left`: ``}`}
+                        {`${days > 0 ? `${days} Days` : ``} ${
+                          hours > 0 ? `${hours} Hours` : ``
+                        } ${days > 0 || hours > 0 ? ` Left` : ``}`}
                       </Typography>
                     )}
                   />
