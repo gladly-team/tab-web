@@ -436,9 +436,8 @@ const GroupImpactSidebar = ({
                     intervalDelay={0}
                     precision={3}
                     renderer={({ hours, days }) => (
-                      <Typography>
-                        `${days > 0 ? `${days}days` : ``} $
-                        {hours > 0 ? `${hours}hours` : ``}`
+                      <Typography className={classes.robotoBold}>
+                        {`${days > 0 ? `${days} Days` : ``} ${hours > 0 ? `${hours} Hours` : ``} ${days > 0 || hours > 0 ? ` Left`: ``}`}
                       </Typography>
                     )}
                   />
@@ -629,6 +628,7 @@ GroupImpactSidebar.propTypes = {
       whyValuableDescription: PropTypes.string.isRequired,
       impactCountPerMetric: PropTypes.number,
     }),
+    dateExpires: PropTypes.string,
   }).isRequired,
   lastGroupImpactMetric: PropTypes.shape({
     dollarProgress: PropTypes.number.isRequired,
@@ -639,6 +639,7 @@ GroupImpactSidebar.propTypes = {
       whyValuableDescription: PropTypes.string.isRequired,
       impactCountPerMetric: PropTypes.number,
     }),
+    dateExpires: PropTypes.string,
   }),
   nextGoalButtonClickHandler: PropTypes.func,
   openHandler: PropTypes.func,

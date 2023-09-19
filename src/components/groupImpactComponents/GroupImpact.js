@@ -185,6 +185,7 @@ const GroupImpact = ({ user }) => {
         leaderboard={leaderboard}
         userId={userId}
         groupImpactHistory={groupImpactHistory}
+        dateExpires={dateExpires}
       />
       {sidebarMode !== GROUP_IMPACT_SIDEBAR_STATE.NORMAL && (
         <Slide direction="right" in={!sidebarOpen}>
