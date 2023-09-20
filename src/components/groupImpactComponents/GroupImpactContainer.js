@@ -16,6 +16,8 @@ export default createFragmentContainer(GroupImpact, {
             whyValuableDescription
             impactCountPerMetric
           }
+          dateStarted
+          dateExpires
         }
         groupImpactMetricCount
       }
@@ -34,6 +36,14 @@ export default createFragmentContainer(GroupImpact, {
           shopDollarContribution
           referralDollarContribution
         }
+      }
+      groupImpactHistory {
+        dollarContribution
+        tabDollarContribution
+        searchDollarContribution
+        shopDollarContribution
+        referralDollarContribution
+        dateStarted
       }
     }
   `,

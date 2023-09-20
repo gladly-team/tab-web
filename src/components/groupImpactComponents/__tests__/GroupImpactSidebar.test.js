@@ -12,6 +12,7 @@ import { shopLandingURL } from 'src/utils/urls'
 import { windowOpenTop } from 'src/utils/navigation'
 import SearchIcon from '@material-ui/icons/Search'
 import TabIcon from '@material-ui/icons/Tab'
+import Countdown from 'react-countdown'
 import GroupImpactLeaderboard from '../GroupImpactLeaderboard'
 
 jest.mock('ga-gtag')
@@ -68,11 +69,12 @@ describe('GroupImpactSidebar component', () => {
     expect(wrapper.find('span').exists()).toBe(false)
   })
 
-  it('displays impactTitle', () => {
+  it('displays group goal and impactTitle', () => {
     const GroupImpactSidebar =
       require('src/components/groupImpactComponents/GroupImpactSidebar').default
     const mockProps = getMockProps()
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+    expect(wrapper.find(Typography).first().text()).toEqual('GROUP GOAL')
     expect(wrapper.find(Typography).at(1).text()).toEqual(
       mockProps.groupImpactMetric.impactMetric.impactTitle
     )
@@ -478,6 +480,32 @@ describe('GroupImpactSidebar component', () => {
     }
     const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
     expect(wrapper.find(GroupImpactLeaderboard).exists()).toEqual(false)
+  })
+
+  it('renders weekly group goal text if applicable', () => {
+    const GroupImpactSidebar =
+      require('src/components/groupImpactComponents/GroupImpactSidebar').default
+    const mockProps = {
+      ...getMockProps(),
+      groupImpactMetric: {
+        dollarProgressFromSearch: 125,
+        dollarProgress: 250,
+        dollarGoal: 600,
+        impactMetric: {
+          impactTitle: '{{count}} impact-title {{multiple}}',
+          whyValuableDescription: 'why-valuable-description',
+          impactCountPerMetric: 1,
+        },
+        dateExpires: '2023-09-23T10:00:00.000Z',
+      },
+      groupImpactMetricCount: 1,
+    }
+    const wrapper = shallow(<GroupImpactSidebar {...mockProps} />)
+    expect(wrapper.find(Countdown).exists()).toEqual(true)
+    expect(wrapper.find(Countdown).prop('dateExpires')).toEqual(
+      mockProps.dateExpires
+    )
+    expect(wrapper.find(Typography).first().text()).toEqual('WEEKLY GROUP GOAL')
   })
 
   it('renders a leaderboard if applicable', () => {

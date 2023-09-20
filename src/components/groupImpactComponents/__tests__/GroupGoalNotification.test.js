@@ -100,4 +100,18 @@ describe('GroupGoalNotification component', () => {
       mode: GROUP_IMPACT_SIDEBAR_STATE.NEW,
     })
   })
+
+  it('displays correct string if dateStarted valid is correct', () => {
+    const GroupGoalNotification =
+      require('src/components/groupImpactComponents/GroupGoalNotification').default
+    const mockProps = {
+      ...getMockProps(),
+      dateStarted: '2020-01-10T10:00:00.000Z',
+      mode: GROUP_IMPACT_SIDEBAR_STATE.NEW,
+    }
+    const wrapper = mount(<GroupGoalNotification {...mockProps} />)
+    expect(wrapper.find(Typography).first().text()).toEqual(
+      `GOAL STARTED - Week of 1/10/2020: impact title 5`
+    )
+  })
 })

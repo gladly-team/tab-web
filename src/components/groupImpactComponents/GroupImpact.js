@@ -58,8 +58,14 @@ const GroupImpact = ({ user }) => {
     GROUP_IMPACT_SIDEBAR_STATE.NORMAL
   )
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { id, dollarGoal, dollarProgressFromSearch, impactMetric } =
-    groupImpactMetric
+  const {
+    id,
+    dollarGoal,
+    dollarProgressFromSearch,
+    impactMetric,
+    dateStarted,
+    dateExpires,
+  } = groupImpactMetric
   const { impactTitle, impactCountPerMetric, whyValuableDescription } =
     impactMetric
 
@@ -179,6 +185,7 @@ const GroupImpact = ({ user }) => {
         leaderboard={leaderboard}
         userId={userId}
         groupImpactHistory={groupImpactHistory}
+        dateExpires={dateExpires}
       />
       {sidebarMode !== GROUP_IMPACT_SIDEBAR_STATE.NORMAL && (
         <Slide direction="right" in={!sidebarOpen}>
@@ -192,6 +199,7 @@ const GroupImpact = ({ user }) => {
                 onNextGoal={beginNewGoal}
                 onGoalStarted={onGoalStarted}
                 impactCountPerMetric={impactCountPerMetric}
+                dateStarted={dateExpires ? dateStarted : null}
               />
             </div>
           </Fade>
@@ -215,6 +223,8 @@ GroupImpact.propTypes = {
           whyValuableDescription: PropTypes.string.isRequired,
           impactCountPerMetric: PropTypes.number.isRequired,
         }),
+        dateStarted: PropTypes.string,
+        dateExpires: PropTypes.string,
       }).isRequired,
       groupImpactMetricCount: PropTypes.number,
     }).isRequired,
@@ -260,6 +270,8 @@ GroupImpactWrapper.propTypes = {
           whyValuableDescription: PropTypes.string.isRequired,
           impactCountPerMetric: PropTypes.number,
         }),
+        dateStarted: PropTypes.string,
+        dateExpires: PropTypes.string,
       }),
       groupImpactMetricCount: PropTypes.number,
     }).isRequired,

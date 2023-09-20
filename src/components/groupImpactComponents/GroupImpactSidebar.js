@@ -30,6 +30,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import TabIcon from '@material-ui/icons/Tab'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
+import Countdown from 'react-countdown'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 import GroupImpactLeaderboard from './GroupImpactLeaderboard'
 import GroupImpactContributionWidget from './GroupImpactContributionWidget'
@@ -253,8 +254,15 @@ const GroupImpactSidebar = ({
     setSelectedMode(newValue)
     event.stopPropagation()
   }
-  const { dollarProgress, dollarGoal, dollarProgressFromSearch, impactMetric } =
-    displayingOldGoal ? lastGroupImpactMetric : groupImpactMetric
+
+  const {
+    dollarProgress,
+    dollarGoal,
+    dollarProgressFromSearch,
+    impactMetric,
+    dateExpires,
+  } = displayingOldGoal ? lastGroupImpactMetric : groupImpactMetric
+
   const { impactTitle, whyValuableDescription, impactCountPerMetric } =
     impactMetric
   const classes = useStyles()
@@ -406,7 +414,7 @@ const GroupImpactSidebar = ({
               <div className={classes.sidebarText}>
                 <div className={classes.goalText}>
                   <Typography className={classes.robotoBold} variant="h5">
-                    GROUP GOAL
+                    {`${dateExpires ? 'WEEKLY ' : ''}GROUP GOAL`}
                   </Typography>
                   {groupImpactSidebarState ? (
                     <span className={classes.badge}>
@@ -422,6 +430,20 @@ const GroupImpactSidebar = ({
                     </Button>
                   )}
                 </div>
+                {dateExpires && (
+                  <Countdown
+                    date={dateExpires}
+                    intervalDelay={0}
+                    precision={3}
+                    renderer={({ hours, days }) => (
+                      <Typography className={classes.robotoBold}>
+                        {`${days > 0 ? `${days} Days` : ``} ${
+                          hours > 0 ? `${hours} Hours` : ``
+                        } ${days > 0 || hours > 0 ? ` Left` : ``}`}
+                      </Typography>
+                    )}
+                  />
+                )}
                 <Typography variant="body2">{impactTitleCompiled}</Typography>
                 <Typography className={classes.robotoBold} variant="h3">
                   {absoluteProgress}%
@@ -608,6 +630,7 @@ GroupImpactSidebar.propTypes = {
       whyValuableDescription: PropTypes.string.isRequired,
       impactCountPerMetric: PropTypes.number,
     }),
+    dateExpires: PropTypes.string,
   }).isRequired,
   lastGroupImpactMetric: PropTypes.shape({
     dollarProgress: PropTypes.number.isRequired,
@@ -618,6 +641,7 @@ GroupImpactSidebar.propTypes = {
       whyValuableDescription: PropTypes.string.isRequired,
       impactCountPerMetric: PropTypes.number,
     }),
+    dateExpires: PropTypes.string,
   }),
   nextGoalButtonClickHandler: PropTypes.func,
   openHandler: PropTypes.func,

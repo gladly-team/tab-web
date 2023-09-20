@@ -382,4 +382,77 @@ describe('GroupImpact component', () => {
     const wrapper = mount(<GroupImpact {...mockProps} />)
     expect(wrapper.find(GroupGoalNotification).exists()).toEqual(false)
   })
+
+  it('displays values correctly if timeboxed', () => {
+    const GroupImpact =
+      require('src/components/groupImpactComponents/GroupImpact').default
+    const mockProps = {
+      user: {
+        id: 'user-id',
+        cause: {
+          groupImpactMetric: {
+            id: 'abcd',
+            dollarProgress: 250,
+            dollarProgressFromSearch: 125,
+            dollarGoal: 600,
+            impactMetric: {
+              impactTitle: 'impact-title',
+              whyValuableDescription: 'why-valuable-description',
+              impactCountPerMetric: 5,
+            },
+            dateStarted: '2023-09-19T10:00:00.000Z',
+            dateExpires: '2023-09-23T10:00:00.000Z',
+          },
+        },
+      },
+    }
+
+    localstorageManager.getNumericItem.mockReturnValue(0)
+    localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
+      mockProps.user.cause.groupImpactMetric
+    )
+    const wrapper = mount(<GroupImpact {...mockProps} />)
+    expect(
+      wrapper.find(GroupGoalNotification).first().prop('dateStarted')
+    ).toEqual(mockProps.user.cause.groupImpactMetric.dateStarted)
+    expect(wrapper.find(GroupImpactSidebar).prop('dateExpires')).toEqual(
+      mockProps.user.cause.groupImpactMetric.dateExpires
+    )
+  })
+
+  it('displays values correctly if not timeboxed', () => {
+    const GroupImpact =
+      require('src/components/groupImpactComponents/GroupImpact').default
+    const mockProps = {
+      user: {
+        id: 'user-id',
+        cause: {
+          groupImpactMetric: {
+            id: 'abcd',
+            dollarProgress: 250,
+            dollarProgressFromSearch: 125,
+            dollarGoal: 600,
+            impactMetric: {
+              impactTitle: 'impact-title',
+              whyValuableDescription: 'why-valuable-description',
+              impactCountPerMetric: 5,
+            },
+            dateStarted: '2023-09-19T10:00:00.000Z',
+          },
+        },
+      },
+    }
+
+    localstorageManager.getNumericItem.mockReturnValue(0)
+    localstorageGroupImpactManager.getLastSeenGroupImpactMetric.mockReturnValue(
+      mockProps.user.cause.groupImpactMetric
+    )
+    const wrapper = mount(<GroupImpact {...mockProps} />)
+    expect(
+      wrapper.find(GroupGoalNotification).first().prop('dateStarted')
+    ).toEqual(null)
+    expect(wrapper.find(GroupImpactSidebar).prop('dateExpires')).toEqual(
+      undefined
+    )
+  })
 })
