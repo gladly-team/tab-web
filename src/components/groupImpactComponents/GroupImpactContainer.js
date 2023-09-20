@@ -20,14 +20,6 @@ export default createFragmentContainer(GroupImpact, {
           dateExpires
         }
         groupImpactMetricCount
-        groupImpactHistory {
-          dollarContribution
-          tabDollarContribution
-          searchDollarContribution
-          shopDollarContribution
-          referralDollarContribution
-          dateStarted
-        }
       }
       sfacActivityState
       leaderboard {
@@ -44,6 +36,14 @@ export default createFragmentContainer(GroupImpact, {
           shopDollarContribution
           referralDollarContribution
         }
+      }
+      groupImpactHistory {
+        dollarContribution
+        tabDollarContribution
+        searchDollarContribution
+        shopDollarContribution
+        referralDollarContribution
+        dateStarted
       }
     }
   `,
