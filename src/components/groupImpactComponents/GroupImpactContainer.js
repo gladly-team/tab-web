@@ -20,6 +20,14 @@ export default createFragmentContainer(GroupImpact, {
           dateExpires
         }
         groupImpactMetricCount
+        groupImpactHistory {
+          dollarContribution
+          tabDollarContribution
+          searchDollarContribution
+          shopDollarContribution
+          referralDollarContribution
+          dateStarted
+        }
       }
       sfacActivityState
       leaderboard {
