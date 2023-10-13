@@ -4,6 +4,7 @@ import PetsIcon from '@material-ui/icons/Pets'
 import FavoriteIcon from '@material-ui/icons/Favorite'
 import SvgIcon from '@material-ui/core/SvgIcon'
 import TransgenderIcon from '@mui/icons-material/Transgender'
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'
 import {
   mdiJellyfish,
   mdiHandshake,
@@ -22,6 +23,7 @@ const MEDICAL_BAG = 'medical-bag'
 const FOOD_APPLE = 'food-apple'
 const WATER = 'water'
 const PERSON_HEART = 'person-heart'
+const MONEY = 'money'
 const TRANSGENDER = 'transgender'
 
 const iconOptions = [
@@ -34,6 +36,7 @@ const iconOptions = [
   WATER,
   PERSON_HEART,
   TRANSGENDER,
+  MONEY,
 ]
 
 const CauseIcon = ({ icon, className }) => {
@@ -125,6 +128,9 @@ const CauseIcon = ({ icon, className }) => {
           />
         </SvgIcon>
       )
+      break
+    case MONEY:
+      iconComp = <AttachMoneyIcon className={className} />
       break
     case TRANSGENDER:
       iconComp = <TransgenderIcon className={className} />
