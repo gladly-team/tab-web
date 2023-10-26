@@ -7,7 +7,7 @@ import localStorageMgr from 'src/utils/localstorage-mgr'
 import { NOTIF_DISMISS_PREFIX } from 'src/utils/constants'
 import gtag from 'ga-gtag'
 
-const promoKey = 'search-full-page-2023-aug'
+const promoKey = 'search-full-page-2023-nov'
 const isBrowser = typeof window !== 'undefined'
 const iframeBaseUrl = 'https://tab.gladly.io/promos/full-page-search-2023/'
 
