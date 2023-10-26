@@ -726,7 +726,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
   // Our notification
   let notif = notificationsToShow.find(
-    (res) => res.code === 'shfac-notify-fullpage-sept'
+    (res) => res.code === 'shfac-notify-fullpage-nov'
   )
 
   if (
@@ -740,7 +740,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
   // Our notification
   let notifSearch = notificationsToShow.find(
-    (res) => res.code === 'sfac-notify-fullpage-aug'
+    (res) => res.code === 'sfac-notify-fullpage-nov'
   )
 
   if (
