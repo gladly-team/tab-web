@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import localStorageMgr from 'src/utils/localstorage-mgr'
+import { windowOpenTop } from 'src/utils/navigation'
 import { NOTIF_DISMISS_PREFIX } from 'src/utils/constants'
 
 const contStyles = {
@@ -32,6 +33,13 @@ const November2023NoShopUser = ({ user }) => {
     localStorageMgr.setItem(getNotifDismissKey('november-2023-no-shop'), true)
     setShow(false)
     return false
+  }
+
+  const buttonClick = () => {
+    // gtag('event', 'group_impact_sidebar', {
+    //   interaction: 'click_shop_upsell',
+    // })
+    windowOpenTop('http://shop.gladly.io')
   }
 
   useEffect(() => {
@@ -103,6 +111,7 @@ const November2023NoShopUser = ({ user }) => {
               </Typography>
 
               <Button
+                onClick={buttonClick}
                 variant="contained"
                 color="primary"
                 style={{
