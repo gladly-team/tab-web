@@ -107,6 +107,9 @@ import AddShortcutPageContainer from 'src/components/AddShortcutPageContainer'
 import FrontpageShortcutListContainer from 'src/components/FrontpageShortcutListContainer'
 import Modal from '@material-ui/core/Modal'
 import { Box } from '@material-ui/core'
+import November2023NoShopUser from 'src/components/promos/November2023NoShopUser'
+
+const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -384,6 +387,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           joined
           showYahooPrompt
           showSfacExtensionPrompt
+          shopSignupTimestamp
           cause {
             causeId
             impactType
@@ -637,6 +641,23 @@ const Index = ({ data: fallbackData, userAgent }) => {
     }
   }, [showYahooPrompt, interactedWithSFACNotification, features, searches])
 
+  // Figure out margin of search
+  const [searchMargin, setSearchMargin] = useState(0)
+
+  useEffect(() => {
+    if (!user) {
+      return
+    }
+
+    if (!user.shopSignupTimestamp) {
+      if (
+        !localStorageMgr.getItem(getNotifDismissKey('november-2023-no-shop'))
+      ) {
+        setSearchMargin(-250)
+      }
+    }
+  }, [user])
+
   // set the causeId in local storage for tab ads
   useEffect(() => {
     localStorageMgr.setItem(STORAGE_NEW_USER_CAUSE_ID, causeId)
@@ -692,7 +713,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const bookmarkWidgetEnabled = bookmarkWidget && bookmarkWidget.node.enabled
 
   useEffect(() => {
-    const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
+    // const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
     const onNotificationClose = (code) => {
       localStorageMgr.setItem(getNotifDismissKey(code), 'true')
       setNotifsToShow((notifsToShow) =>
@@ -1109,7 +1130,15 @@ const Index = ({ data: fallbackData, userAgent }) => {
             ) : null}
           </div>
 
-          <div className={classes.centerContainer}>
+          {/* November No Shop User 2023 Promo */}
+          {user.userId && !user.shopSignupTimestamp && (
+            <November2023NoShopUser user={user} />
+          )}
+
+          <div
+            className={classes.centerContainer}
+            style={{ marginTop: searchMargin }}
+          >
             <div className={classes.searchBarContainer}>
               {/* Prime day 2023 Promo */}
               {/* {user.userId && notif && <PrimeDay2023 user={user} />} */}

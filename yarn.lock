@@ -15315,10 +15315,10 @@ synchronous-promise@^2.0.15:
   resolved "https://registry.yarnpkg.com/synchronous-promise/-/synchronous-promise-2.0.16.tgz#669b75e86b4295fdcc1bb0498de9ac1af6fd51a9"
   integrity sha512-qImOD23aDfnIDNqlG1NOehdB9IYsn1V9oByPjKY1nakv2MQYCEMyX033/q+aEtYCpmYK1cv2+NTmlH+ra6GA5A==
 
-tab-ads@^1.1.20:
-  version "1.1.20"
-  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.20.tgz#b3ef70a03127f746171daf81fa7d6461c9767977"
-  integrity sha512-dagHnOnf4827hQRmDZ+thvldFac5CuY7pEVSsVO/iJ+02xYc7/g2wn3d4wyQUifXjwf8AJBVCpEerckZAKANgA==
+tab-ads@^1.1.23:
+  version "1.1.23"
+  resolved "https://registry.yarnpkg.com/tab-ads/-/tab-ads-1.1.23.tgz#aa02b7ce727d42ef0310cbb56b56e1b982090cc1"
+  integrity sha512-hhWhLGoUiuZDokqMG37yDzgfUMZUuDh9K/AlU2yLSBWL/1ZIif5jqCISHp3P9NG6u8TGS1L/Lt/pBCF6oav3EA==
   dependencies:
     lodash "^4.17.21"
 
