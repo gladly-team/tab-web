@@ -653,7 +653,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
       if (
         !localStorageMgr.getItem(getNotifDismissKey('november-2023-no-shop'))
       ) {
-        setSearchMargin(-250)
+        setSearchMargin(-160)
       }
     }
   }, [user])
