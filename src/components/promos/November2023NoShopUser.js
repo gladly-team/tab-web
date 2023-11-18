@@ -87,7 +87,7 @@ const November2023NoShopUser = ({ user }) => {
               </Typography>
 
               <Typography variant="body1" gutterBottom align="center">
-                Expand your giving this holiday season by using{' '}
+                Double your impact when you shop this holiday season with{' '}
                 <a
                   href="http://shop.gladly.io"
                   target="_blank"
@@ -95,11 +95,9 @@ const November2023NoShopUser = ({ user }) => {
                 >
                   Shop for a Cause
                 </a>
-                , allowing you to make a positive impact with every purchase,
-                and double the joy of giving back while you shop. As a bonus,
-                everyone who activates Shop for a Cause on one of our over
-                10,000 partner shops in November will be entered into a drawing
-                for two $100 Visa gift cards (
+                . Simply add the extension, activate the offers, and shop. As a
+                bonus for activating an offer, you’ll be entered into a drawing
+                for one of two $100 Visa gift cards (
                 <a
                   href="https://gladly.zendesk.com/hc/en-us/articles/21341815958541-Black-Friday-2023-100-Gift-Card-Giveaway-Details"
                   target="_blank"
