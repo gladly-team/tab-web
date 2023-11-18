@@ -241,7 +241,7 @@ const useStyles = makeStyles((theme) => ({
     background: grey['300'],
   },
   centerContainer: {
-    //height: '100%',
+    // height: '100%',
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
