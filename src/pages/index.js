@@ -107,6 +107,8 @@ import AddShortcutPageContainer from 'src/components/AddShortcutPageContainer'
 import FrontpageShortcutListContainer from 'src/components/FrontpageShortcutListContainer'
 import Modal from '@material-ui/core/Modal'
 import { Box } from '@material-ui/core'
+
+import November2023ShopUser from 'src/components/promos/November2023ShopUser'
 import November2023NoShopUser from 'src/components/promos/November2023NoShopUser'
 
 const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
@@ -1142,6 +1144,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
             <div className={classes.searchBarContainer}>
               {/* Prime day 2023 Promo */}
               {/* {user.userId && notif && <PrimeDay2023 user={user} />} */}
+
+              {/* November Shop User 2023 Promo */}
+              {user.userId && user.shopSignupTimestamp && (
+                <November2023ShopUser user={user} />
+              )}
 
               <Logo
                 includeText
