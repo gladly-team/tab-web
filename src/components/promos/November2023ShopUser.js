@@ -115,6 +115,8 @@ const November2023ShopUser = ({ user }) => {
           <Card>
             <CardContent
               style={{
+                padding: 5,
+                paddingBottom: 15,
                 display: 'flex',
                 justifyContent: 'center',
                 flexDirection: 'column',

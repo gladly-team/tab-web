@@ -16,7 +16,7 @@ const contStyles = {
   marginLeft: 'auto',
   marginRight: 'auto',
   width: 700,
-  marginTop: 60,
+  marginTop: 10,
   marginBottom: 20,
   zIndex: 100000,
 }
