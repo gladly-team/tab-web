@@ -36,9 +36,7 @@ const November2023NoShopUser = ({ user }) => {
   }
 
   const buttonClick = () => {
-    // gtag('event', 'group_impact_sidebar', {
-    //   interaction: 'click_shop_upsell',
-    // })
+    gtag('event', 'november_2023_no_shop_user_button_click')
     windowOpenTop('http://shop.gladly.io')
   }
 
