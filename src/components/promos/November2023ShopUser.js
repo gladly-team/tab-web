@@ -31,8 +31,8 @@ const contStyles = {
   position: 'relative',
   marginLeft: 'auto',
   marginRight: 'auto',
-  width: 700,
-  marginTop: 40,
+  width: 750,
+  marginTop: 10,
   marginBottom: 20,
   zIndex: 100000,
 }
@@ -132,15 +132,15 @@ const November2023ShopUser = ({ user }) => {
               </IconButton>
 
               <Typography
-                variant="h4"
+                variant="h5"
                 gutterBottom
                 align="center"
                 style={{ marginTop: 20 }}
               >
-                Give back during your <br /> Holiday Shopping
+                Give back during your Holiday Shopping
               </Typography>
 
-              <Typography variant="body1" gutterBottom align="center">
+              <Typography variant="body2" gutterBottom align="center">
                 Raise money for {user.cause.nameForShop || 'Charity'} when you
                 shop these Black Friday deals–you can earn up to 10% back! As a
                 bonus for activating an offer, you’ll be entered into a drawing
@@ -163,7 +163,7 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={LegoLogo} width="100" alt="" />
+                    <img src={LegoLogo} alt="Lego" />
                   </a>
                   <a
                     className={styles.hoverable}
@@ -171,7 +171,7 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={WalmartLogo} width="100" alt="" />
+                    <img src={WalmartLogo} alt="Walmart" />
                   </a>
                   <a
                     className={styles.hoverable}
@@ -179,7 +179,7 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={SephoraLogo} width="100" alt="" />
+                    <img src={SephoraLogo} alt="Sephora" />
                   </a>
                 </Box>
               )}
@@ -192,7 +192,7 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={UltraBeautyLogo} width="100" alt="" />
+                    <img src={UltraBeautyLogo} alt="Ulta" />
                   </a>
                   <a
                     className={styles.hoverable}
@@ -200,7 +200,7 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={ThriftBooksLogo} width="100" alt="" />
+                    <img src={ThriftBooksLogo} alt="Thriftbooks" />
                   </a>
                   <a
                     className={styles.hoverable}
@@ -208,7 +208,7 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={OldNavyLogo} width="100" alt="" />
+                    <img src={OldNavyLogo} alt="Oldnavy" />
                   </a>
                 </Box>
               )}
@@ -221,7 +221,7 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={KiwicoLogo} width="100" alt="" />
+                    <img src={KiwicoLogo} alt="Kiwico" />
                   </a>
                   <a
                     className={styles.hoverable}
@@ -229,7 +229,7 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={SamsungLogo} width="100" alt="" />
+                    <img src={SamsungLogo} alt="Samsung" />
                   </a>{' '}
                   <a
                     className={styles.hoverable}
@@ -237,7 +237,7 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={SonosLogo} width="100" alt="" />
+                    <img src={SonosLogo} alt="Sonos" />
                   </a>{' '}
                 </Box>
               )}
@@ -250,7 +250,7 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={MacysLogo} width="100" alt="" />
+                    <img src={MacysLogo} alt="Macys" />
                   </a>{' '}
                   <a
                     className={styles.hoverable}
@@ -258,7 +258,7 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={MicrosoftLogo} width="100" alt="" />
+                    <img src={MicrosoftLogo} alt="Microsoft" />
                   </a>
                   <a
                     className={styles.hoverable}
@@ -266,7 +266,7 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={ZulilyLogo} width="100" alt="" />
+                    <img src={ZulilyLogo} alt="Zulily" />
                   </a>
                 </Box>
               )}

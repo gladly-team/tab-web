@@ -254,6 +254,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     minWidth: 500,
     maxWidth: 800,
+    marginTop: '60px',
   },
   searchBar: {
     position: 'relative',
@@ -642,23 +643,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
       setSearchInputTooltip('You can switch your search engine here.')
     }
   }, [showYahooPrompt, interactedWithSFACNotification, features, searches])
-
-  // Figure out margin of search
-  const [searchMargin, setSearchMargin] = useState(0)
-
-  useEffect(() => {
-    if (!user) {
-      return
-    }
-
-    if (!user.shopSignupTimestamp) {
-      if (
-        !localStorageMgr.getItem(getNotifDismissKey('november-2023-no-shop'))
-      ) {
-        setSearchMargin(-160)
-      }
-    }
-  }, [user])
 
   // set the causeId in local storage for tab ads
   useEffect(() => {
@@ -1132,18 +1116,15 @@ const Index = ({ data: fallbackData, userAgent }) => {
             ) : null}
           </div>
 
-          {/* November No Shop User 2023 Promo */}
-          {user.userId && !user.shopSignupTimestamp && (
-            <November2023NoShopUser user={user} />
-          )}
-
-          <div
-            className={classes.centerContainer}
-            style={{ marginTop: searchMargin }}
-          >
+          <div className={classes.centerContainer}>
             <div className={classes.searchBarContainer}>
               {/* Prime day 2023 Promo */}
               {/* {user.userId && notif && <PrimeDay2023 user={user} />} */}
+
+              {/* November No Shop User 2023 Promo */}
+              {user.userId && !user.shopSignupTimestamp && (
+                <November2023NoShopUser user={user} />
+              )}
 
               {/* November Shop User 2023 Promo */}
               {user.userId && user.shopSignupTimestamp && (

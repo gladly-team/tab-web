@@ -16,8 +16,8 @@ const contStyles = {
   marginLeft: 'auto',
   marginRight: 'auto',
   width: 700,
-  marginTop: 20,
-  marginBottom: 0,
+  marginTop: 60,
+  marginBottom: 20,
   zIndex: 100000,
 }
 
@@ -78,7 +78,7 @@ const November2023NoShopUser = ({ user }) => {
               </IconButton>
 
               <Typography
-                variant="h4"
+                variant="h6"
                 gutterBottom
                 align="center"
                 style={{ marginTop: 20 }}
@@ -86,7 +86,7 @@ const November2023NoShopUser = ({ user }) => {
                 Win $100 by Giving Back during Black Friday and Cyber Monday
               </Typography>
 
-              <Typography variant="body1" gutterBottom align="center">
+              <Typography variant="body2" gutterBottom align="center">
                 Double your impact when you shop this holiday season with{' '}
                 <a
                   href="http://shop.gladly.io"
