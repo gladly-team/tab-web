@@ -25,7 +25,7 @@ import ZulilyLogo from 'src/assets/promos/zulily.png'
 import styles from './November2023ShopUser.module.css'
 
 const batchKey = 'november-2023-shop-batch'
-const baseUrl = 'https://wild.link/e?d=54321'
+const baseUrl = 'https://wild.link/e?d=20397233'
 
 const contStyles = {
   position: 'relative',
@@ -160,7 +160,9 @@ const November2023ShopUser = ({ user }) => {
               {batch === 1 && (
                 <Box sx={imageGroupStyles}>
                   <a
-                    href={`${baseUrl}&c=5482116&UUID=${user.userId}&url=https://www.lego.com/`}
+                    href={`${baseUrl}&c=5482116&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent('https://www.lego.com/')}`}
                     className={styles.hoverable}
                     target="_blank"
                     rel="noreferrer"
@@ -169,7 +171,9 @@ const November2023ShopUser = ({ user }) => {
                   </a>
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5483936&UUID=${user.userId}&url=https://www.walmart.com/`}
+                    href={`${baseUrl}&c=5483936&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent('https://www.walmart.com/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -177,7 +181,9 @@ const November2023ShopUser = ({ user }) => {
                   </a>
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5481985&UUID=${user.userId}&url=https://www.sephora.com/`}
+                    href={`${baseUrl}&c=5481985&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent('https://www.sephora.com/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -190,7 +196,9 @@ const November2023ShopUser = ({ user }) => {
                 <Box sx={imageGroupStyles}>
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5483579&UUID=${user.userId}&url=https://www.ulta.com/`}
+                    href={`${baseUrl}&c=5483579&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent('https://www.ulta.com/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -198,7 +206,11 @@ const November2023ShopUser = ({ user }) => {
                   </a>
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=144406&UUID=${user.userId}&url=https://www.thriftbooks.com/`}
+                    href={`${baseUrl}&c=144406&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent(
+                      'https://www.thriftbooks.com/'
+                    )}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -206,7 +218,9 @@ const November2023ShopUser = ({ user }) => {
                   </a>
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5480737&UUID=${user.userId}&url=https://oldnavy.gap.com/`}
+                    href={`${baseUrl}&c=5480737&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent('https://oldnavy.gap.com/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -219,7 +233,9 @@ const November2023ShopUser = ({ user }) => {
                 <Box sx={imageGroupStyles}>
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5479361&UUID=${user.userId}&url=https://www.kiwico.com/`}
+                    href={`${baseUrl}&c=5479361&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent('https://www.kiwico.com/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -227,7 +243,9 @@ const November2023ShopUser = ({ user }) => {
                   </a>
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5481855&UUID=${user.userId}&url=https://www.samsung.com/`}
+                    href={`${baseUrl}&c=5481855&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent('https://www.samsung.com/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -235,7 +253,9 @@ const November2023ShopUser = ({ user }) => {
                   </a>{' '}
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5482453&UUID=${user.userId}&url=https://www.sonos.com/`}
+                    href={`${baseUrl}&c=5482453&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent('https://www.sonos.com/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -248,7 +268,9 @@ const November2023ShopUser = ({ user }) => {
                 <Box sx={imageGroupStyles}>
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5479868&UUID=${user.userId}&url=https://www.macys.com/`}
+                    href={`${baseUrl}&c=5479868&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent('https://www.macys.com/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -256,7 +278,9 @@ const November2023ShopUser = ({ user }) => {
                   </a>{' '}
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5482649&UUID=${user.userId}&url=https://www.microsoft.com/`}
+                    href={`${baseUrl}&c=5482649&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent('https://www.microsoft.com/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -264,7 +288,9 @@ const November2023ShopUser = ({ user }) => {
                   </a>
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5484304&UUID=${user.userId}&url=https://shop.zulily.com/`}
+                    href={`${baseUrl}&c=5484304&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent('https://shop.zulily.com/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
