@@ -13,15 +13,16 @@ import { NOTIF_DISMISS_PREFIX } from 'src/utils/constants'
 import LegoLogo from 'src/assets/promos/lego.png'
 import WalmartLogo from 'src/assets/promos/walmart.png'
 import SephoraLogo from 'src/assets/promos/sephora.png'
-import UltraBeautyLogo from 'src/assets/promos/ultra-beauty.png'
 import ThriftBooksLogo from 'src/assets/promos/thriftbooks.png'
-import OldNavyLogo from 'src/assets/promos/oldnavy.png'
 import KiwicoLogo from 'src/assets/promos/kiwico.png'
 import SamsungLogo from 'src/assets/promos/samsung.png'
 import SonosLogo from 'src/assets/promos/sonos.png'
-import MacysLogo from 'src/assets/promos/macys.png'
-import MicrosoftLogo from 'src/assets/promos/microsoft.png'
-import ZulilyLogo from 'src/assets/promos/zulily.png'
+import horseLogo from 'src/assets/promos/horse.png'
+import allExpressLogo from 'src/assets/promos/allexpress.png'
+import glossierLogo from 'src/assets/promos/glossier.png'
+import bookshopLogo from 'src/assets/promos/bookshop.png'
+import lowesLogo from 'src/assets/promos/lowes.png'
+
 import styles from './November2023ShopUser.module.css'
 
 const batchKey = 'november-2023-shop-batch'
@@ -196,13 +197,15 @@ const November2023ShopUser = ({ user }) => {
                 <Box sx={imageGroupStyles}>
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5483579&tc=${
+                    href={`${baseUrl}&c=5475597&tc=${
                       user.userId
-                    }&url=${encodeURIComponent('https://www.ulta.com/')}`}
+                    }&url=${encodeURIComponent(
+                      'https://www.backcountry.com/'
+                    )}`}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={UltraBeautyLogo} alt="Ulta" />
+                    <img src={horseLogo} width="100" alt="BackCountry" />
                   </a>
                   <a
                     className={styles.hoverable}
@@ -214,17 +217,17 @@ const November2023ShopUser = ({ user }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={ThriftBooksLogo} alt="Thriftbooks" />
+                    <img src={ThriftBooksLogo} width="100" alt="ThriftBooks" />
                   </a>
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5480737&tc=${
+                    href={`${baseUrl}&c=5475228&tc=${
                       user.userId
-                    }&url=${encodeURIComponent('https://oldnavy.gap.com/')}`}
+                    }&url=${encodeURIComponent('https://www.aliexpress.us/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={OldNavyLogo} alt="Oldnavy" />
+                    <img src={allExpressLogo} width="100" alt="AliExpress" />
                   </a>
                 </Box>
               )}
@@ -268,34 +271,34 @@ const November2023ShopUser = ({ user }) => {
                 <Box sx={imageGroupStyles}>
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5479868&tc=${
+                    href={`${baseUrl}&c=5478249&tc=${
                       user.userId
-                    }&url=${encodeURIComponent('https://www.macys.com/')}`}
+                    }&url=${encodeURIComponent('https://www.glossier.com/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={MacysLogo} alt="Macys" />
+                    <img src={glossierLogo} width="100" alt="Glossier" />
+                  </a>
+                  <a
+                    className={styles.hoverable}
+                    href={`${baseUrl}&c=145193&tc=${
+                      user.userId
+                    }&url=${encodeURIComponent('https://bookshop.org/')}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <img src={bookshopLogo} width="100" alt="BookShop" />
                   </a>{' '}
                   <a
                     className={styles.hoverable}
-                    href={`${baseUrl}&c=5482649&tc=${
+                    href={`${baseUrl}&c=5479801&tc=${
                       user.userId
-                    }&url=${encodeURIComponent('https://www.microsoft.com/')}`}
+                    }&url=${encodeURIComponent('https://www.lowes.com/')}`}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    <img src={MicrosoftLogo} alt="Microsoft" />
-                  </a>
-                  <a
-                    className={styles.hoverable}
-                    href={`${baseUrl}&c=5484304&tc=${
-                      user.userId
-                    }&url=${encodeURIComponent('https://shop.zulily.com/')}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    <img src={ZulilyLogo} alt="Zulily" />
-                  </a>
+                    <img src={lowesLogo} width="100" alt="Lowes" />
+                  </a>{' '}
                 </Box>
               )}
             </CardContent>
