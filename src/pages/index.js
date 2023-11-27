@@ -109,8 +109,6 @@ import FrontpageShortcutListContainer from 'src/components/FrontpageShortcutList
 import Modal from '@material-ui/core/Modal'
 import { Box } from '@material-ui/core'
 
-import November2023ShopUser from 'src/components/promos/November2023ShopUser'
-
 const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
 
 const useStyles = makeStyles((theme) => ({
