@@ -2,7 +2,6 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { Button } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
-import Notification from '../Notification'
 
 jest.mock('src/utils/navigation')
 jest.mock('src/utils/logger')
@@ -16,6 +15,7 @@ afterEach(() => {
 })
 
 const getMockProps = () => ({
+  existingId: 'abcd',
   onCancel: jest.fn(),
   onSave: jest.fn(),
 })
@@ -33,7 +33,6 @@ describe('AddShortcut component', () => {
     const AddShortcut = require('src/components/AddShortcut').default
     const mockProps = getMockProps()
     const wrapper = mount(<AddShortcut {...mockProps} />)
-    expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
 
     wrapper.update()
 
@@ -44,14 +43,12 @@ describe('AddShortcut component', () => {
     wrapper.update()
 
     expect(mockProps.onCancel).toHaveBeenCalled()
-    expect(wrapper.find(Notification).first().prop('open')).toEqual(false)
   })
 
   it('calls handler and closes on clicking save', async () => {
     const AddShortcut = require('src/components/AddShortcut').default
     const mockProps = getMockProps()
     const wrapper = mount(<AddShortcut {...mockProps} />)
-    expect(wrapper.find(Notification).first().prop('open')).toEqual(true)
 
     wrapper
       .find(TextField)
@@ -69,8 +66,11 @@ describe('AddShortcut component', () => {
     saveButton.simulate('click')
 
     wrapper.update()
-    expect(mockProps.onSave).toHaveBeenCalledWith('test', 'test.com')
-    expect(wrapper.find(Notification).first().prop('open')).toEqual(false)
+    expect(mockProps.onSave).toHaveBeenCalledWith(
+      mockProps.existingId,
+      'test',
+      'http://test.com'
+    )
   })
 
   it('default save and cancel handlers do not throw', async () => {
@@ -82,5 +82,17 @@ describe('AddShortcut component', () => {
     wrapper = mount(<AddShortcut />)
 
     expect(() => wrapper.find(Button).at(1).simulate('click')).not.toThrow()
+  })
+
+  it('puts default values when for name and url', async () => {
+    const AddShortcut = require('src/components/AddShortcut').default
+    const name = 'name'
+    const url = 'url'
+    const wrapper = mount(<AddShortcut existingName={name} existingUrl={url} />)
+
+    const textFields = wrapper.find(TextField)
+
+    expect(textFields.at(0).prop('value')).toEqual(name)
+    expect(textFields.at(1).prop('value')).toEqual(url)
   })
 })

@@ -17,6 +17,7 @@ const getMockProps = () => ({
         tabDollarContribution: 1000,
         searchDollarContribution: 4000,
         shopDollarContribution: 5000,
+        referralDollarContribution: 1000,
       },
     },
     {
@@ -30,6 +31,7 @@ const getMockProps = () => ({
         tabDollarContribution: 1000,
         searchDollarContribution: 4000,
         shopDollarContribution: 4000,
+        referralDollarContribution: 1000,
       },
     },
     {
@@ -43,6 +45,7 @@ const getMockProps = () => ({
         tabDollarContribution: 120,
         searchDollarContribution: 3000,
         shopDollarContribution: 3000,
+        referralDollarContribution: 1000,
       },
     },
     {
@@ -56,6 +59,7 @@ const getMockProps = () => ({
         tabDollarContribution: 0,
         searchDollarContribution: 3000,
         shopDollarContribution: 3000,
+        referralDollarContribution: 1000,
       },
     },
   ],
@@ -63,7 +67,7 @@ const getMockProps = () => ({
 })
 
 beforeEach(() => {
-  process.env.EST_MONEY_RAISED_PER_TAB = 0.00001
+  process.env.NEXT_PUBLIC_EST_MONEY_RAISED_PER_TAB = 0.00001
 })
 
 describe('GroupImpactLeaderboard component', () => {
@@ -91,6 +95,104 @@ describe('GroupImpactLeaderboard component', () => {
       expect(row.prop('userGroupImpactMetric')).toEqual(
         leaderboardEntry.userGroupImpactMetric
       )
+      expect(row.prop('selected')).toEqual(
+        mockProps.userId === leaderboardEntry.user.id
+      )
+    }
+  })
+
+  it('displays a GroupImpactLeaderboardRow for each leaderboard entry with descending dollarContributionAmounts', () => {
+    const GroupImpactLeaderboard =
+      require('src/components/groupImpactComponents/GroupImpactLeaderboard').default
+    const mockProps = {
+      userId: 'cdef',
+      leaderboardEntries: [
+        {
+          position: 1,
+          user: {
+            id: 'abcd',
+            username: 'cat_lover',
+          },
+          userGroupImpactMetric: {
+            dollarContribution: 10000,
+            tabDollarContribution: 1000,
+            searchDollarContribution: 4000,
+            shopDollarContribution: 5000,
+            referralDollarContribution: 1000,
+          },
+        },
+        {
+          position: 2,
+          user: {
+            id: 'bcde',
+            username: 'tree_lover',
+          },
+          userGroupImpactMetric: {
+            dollarContribution: 12000,
+            tabDollarContribution: 1000,
+            searchDollarContribution: 4000,
+            shopDollarContribution: 4000,
+            referralDollarContribution: 1000,
+          },
+        },
+        {
+          position: 150,
+          user: {
+            id: 'cdef',
+            username: 'its_me',
+          },
+          userGroupImpactMetric: {
+            dollarContribution: 6120,
+            tabDollarContribution: 120,
+            searchDollarContribution: 3000,
+            shopDollarContribution: 3000,
+            referralDollarContribution: 1000,
+          },
+        },
+        {
+          position: 151,
+          user: {
+            id: 'defg',
+            username: 'its_not_me',
+          },
+          userGroupImpactMetric: {
+            dollarContribution: 6500,
+            tabDollarContribution: 0,
+            searchDollarContribution: 3000,
+            shopDollarContribution: 3000,
+            referralDollarContribution: 1000,
+          },
+        },
+        {
+          position: 152,
+          user: {
+            id: 'defg',
+            username: 'its_not_me2',
+          },
+          userGroupImpactMetric: {
+            dollarContribution: 7000,
+            tabDollarContribution: 0,
+            searchDollarContribution: 3000,
+            shopDollarContribution: 3000,
+            referralDollarContribution: 1000,
+          },
+        },
+      ],
+      onClose: jest.fn(),
+    }
+    const expectedDollarContributions = [12000, 12000, 7000, 7000, 7000]
+    const wrapper = mount(<GroupImpactLeaderboard {...mockProps} />)
+    const rows = wrapper.find(GroupImpactLeaderboardRow)
+
+    for (let i = 0; i < rows.length; i += 1) {
+      const row = rows.at(i)
+      const leaderboardEntry = mockProps.leaderboardEntries[i]
+      expect(row.prop('position')).toEqual(leaderboardEntry.position)
+      expect(row.prop('username')).toEqual(leaderboardEntry.user.username)
+      expect(row.prop('userGroupImpactMetric')).toEqual({
+        ...leaderboardEntry.userGroupImpactMetric,
+        dollarContribution: expectedDollarContributions[i],
+      })
       expect(row.prop('selected')).toEqual(
         mockProps.userId === leaderboardEntry.user.id
       )

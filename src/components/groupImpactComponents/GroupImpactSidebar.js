@@ -28,10 +28,11 @@ import Handlebars from 'handlebars'
 import defaultTheme from 'src/utils/theme'
 import SearchIcon from '@material-ui/icons/Search'
 import TabIcon from '@material-ui/icons/Tab'
-import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
-import { GROUP_IMPACT_LEADERBOARD } from 'src/utils/experiments'
+import ToggleButton from '@material-ui/lab/ToggleButton'
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import VerticalLinearProgress from '../VerticalLinearProgress'
 import GroupImpactLeaderboard from './GroupImpactLeaderboard'
+import GroupImpactContributionWidget from './GroupImpactContributionWidget'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -58,7 +59,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
     cursor: 'pointer',
     position: 'relative',
     maxHeight: '100vh',
@@ -199,10 +199,32 @@ const useStyles = makeStyles((theme) => ({
   },
   leaderboard: {
     maxHeight: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    borderLeft: '1px solid grey',
   },
   paddingTopBottom: {
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(3),
+  },
+  topBar: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    position: 'relative',
+    alignItems: 'center',
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
+  toggleGroup: {
+    position: 'absolute',
+
+    /* new */
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '256px',
   },
 }))
 
@@ -216,6 +238,7 @@ const GroupImpactSidebar = ({
   groupImpactMetricCount,
   leaderboard,
   userId,
+  groupImpactHistory,
 
   // sfacActivityState,
 }) => {
@@ -225,6 +248,11 @@ const GroupImpactSidebar = ({
     !!lastGroupImpactMetric
   )
   const [isClosedHover, setIsClosedHover] = useState(false)
+  const [selectedMode, setSelectedMode] = useState('leaderboard')
+  const handleChange = (event, newValue) => {
+    setSelectedMode(newValue)
+    event.stopPropagation()
+  }
   const { dollarProgress, dollarGoal, dollarProgressFromSearch, impactMetric } =
     displayingOldGoal ? lastGroupImpactMetric : groupImpactMetric
   const { impactTitle, whyValuableDescription, impactCountPerMetric } =
@@ -254,6 +282,10 @@ const GroupImpactSidebar = ({
   )
   const totalProgress = Math.max(
     Math.min(Math.floor(100 * (dollarProgress / dollarGoal)), 100),
+    1
+  )
+  const absoluteProgress = Math.max(
+    Math.floor(100 * (dollarProgress / dollarGoal)),
     1
   )
 
@@ -310,13 +342,9 @@ const GroupImpactSidebar = ({
     e.stopPropagation()
   }
 
-  const isLeaderboardEnabled =
-    localStorageFeaturesManager.getFeatureValue(GROUP_IMPACT_LEADERBOARD) ===
-    'true'
-  let wrapperWidthClass =
-    !leaderboard || !isLeaderboardEnabled
-      ? classes.expanded
-      : classes.expandedWithLeaderboard
+  let wrapperWidthClass = !leaderboard
+    ? classes.expanded
+    : classes.expandedWithLeaderboard
   if (!isOpen && isClosedHover) {
     wrapperWidthClass = classes.pullTabExpanded
   } else if (!isOpen) {
@@ -385,7 +413,7 @@ const GroupImpactSidebar = ({
                       {groupImpactSidebarState}
                     </span>
                   ) : null}
-                  {(!leaderboard || !isLeaderboardEnabled) && (
+                  {!leaderboard && (
                     <Button
                       onClick={toggleOpen}
                       className={classes.closeButton}
@@ -396,7 +424,7 @@ const GroupImpactSidebar = ({
                 </div>
                 <Typography variant="body2">{impactTitleCompiled}</Typography>
                 <Typography className={classes.robotoBold} variant="h3">
-                  {totalProgress}%
+                  {absoluteProgress}%
                 </Typography>
                 <Typography variant="body2">completed</Typography>
                 <Divider className={classes.divider} />
@@ -480,13 +508,45 @@ const GroupImpactSidebar = ({
                   </div>
                 )}
               </div>
-              {leaderboard && isLeaderboardEnabled && (
+              {leaderboard && (
                 <div className={classes.leaderboard}>
-                  <GroupImpactLeaderboard
-                    leaderboardEntries={leaderboard}
-                    userId={userId}
-                    onClose={toggleOpen}
-                  />
+                  {groupImpactHistory && (
+                    <div className={classes.topBar}>
+                      <ToggleButtonGroup
+                        color="primary"
+                        exclusive
+                        aria-label="Platform"
+                        className={classes.toggleGroup}
+                        value={selectedMode}
+                        onChange={handleChange}
+                      >
+                        <ToggleButton value="leaderboard">
+                          Leaderboard
+                        </ToggleButton>
+                        <ToggleButton value="previous-stats">
+                          Previous Stats
+                        </ToggleButton>
+                      </ToggleButtonGroup>
+                      <Button
+                        onClick={toggleOpen}
+                        className={classes.closeButton}
+                      >
+                        <ArrowBackIos className={classes.closeButtonIcon} />
+                      </Button>
+                    </div>
+                  )}
+
+                  {selectedMode === 'leaderboard' ? (
+                    <GroupImpactLeaderboard
+                      leaderboardEntries={leaderboard}
+                      userId={userId}
+                      onClose={groupImpactHistory ? undefined : toggleOpen}
+                    />
+                  ) : (
+                    <GroupImpactContributionWidget
+                      groupImpactHistory={groupImpactHistory || []}
+                    />
+                  )}
                 </div>
               )}
             </div>
@@ -511,7 +571,7 @@ const GroupImpactSidebar = ({
           }
         >
           <Typography variant="body2" className={classes.pullTabProgress}>
-            {totalProgress}%
+            {absoluteProgress}%
           </Typography>
           <Stars className={classes.pullTabStar} />
         </div>
@@ -574,7 +634,18 @@ GroupImpactSidebar.propTypes = {
         tabDollarContribution: PropTypes.number,
         searchDollarContribution: PropTypes.number,
         shopDollarContribution: PropTypes.number,
+        referralDollarContribution: PropTypes.number,
       }),
+    })
+  ),
+  groupImpactHistory: PropTypes.arrayOf(
+    PropTypes.shape({
+      dollarContribution: PropTypes.number.isRequired,
+      tabDollarContribution: PropTypes.number,
+      searchDollarContribution: PropTypes.number,
+      shopDollarContribution: PropTypes.number,
+      referralDollarContribution: PropTypes.number,
+      dateStarted: PropTypes.string,
     })
   ),
 
@@ -588,6 +659,7 @@ GroupImpactSidebar.defaultProps = {
   lastGroupImpactMetric: null,
   groupImpactMetricCount: null,
   leaderboard: null,
+  groupImpactHistory: null,
 
   // sfacActivityState: null,
 }

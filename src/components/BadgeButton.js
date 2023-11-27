@@ -1,9 +1,8 @@
-import React, { forwardRef } from 'react'
+import React, { cloneElement, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import Badge from '@material-ui/core/Badge'
-import SearchIcon from '@material-ui/icons/Search'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import IconButton from '@material-ui/core/IconButton'
 import DoNotDisturbOnIcon from '@mui/icons-material/DoNotDisturbOn'
@@ -47,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SfacActivityButton = forwardRef(({ active, onClick }, ref) => {
+const BadgeButton = forwardRef(({ active, onClick, icon }, ref) => {
   const classes = useStyles()
 
   return (
@@ -70,17 +69,20 @@ const SfacActivityButton = forwardRef(({ active, onClick }, ref) => {
       }
     >
       <IconButton className={classes.button} onClick={onClick}>
-        <SearchIcon className={classes.searchIcon} />
+        {cloneElement(icon, {
+          className: classes.searchIcon,
+        })}
       </IconButton>
     </Badge>
   )
 })
 
-SfacActivityButton.propTypes = {
+BadgeButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   active: PropTypes.bool.isRequired,
+  icon: PropTypes.node.isRequired,
 }
 
-SfacActivityButton.defaultProps = {}
+BadgeButton.defaultProps = {}
 
-export default SfacActivityButton
+export default BadgeButton

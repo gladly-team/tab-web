@@ -43,7 +43,7 @@ const GroupImpactWrapper = ({ user }) => {
 }
 
 const GroupImpact = ({ user }) => {
-  const { cause, leaderboard, id: userId } = user
+  const { cause, leaderboard, id: userId, groupImpactHistory } = user
   const { groupImpactMetric, groupImpactMetricCount } = cause
   const classes = useStyles()
 
@@ -178,6 +178,7 @@ const GroupImpact = ({ user }) => {
         groupImpactMetricCount={groupImpactMetricCount}
         leaderboard={leaderboard}
         userId={userId}
+        groupImpactHistory={groupImpactHistory}
       />
       {sidebarMode !== GROUP_IMPACT_SIDEBAR_STATE.NORMAL && (
         <Slide direction="right" in={!sidebarOpen}>
@@ -228,8 +229,19 @@ GroupImpact.propTypes = {
         tabDollarContribution: PropTypes.number,
         searchDollarContribution: PropTypes.number,
         shopDollarContribution: PropTypes.number,
+        referralDollarContribution: PropTypes.number,
       }),
     }),
+    groupImpactHistory: PropTypes.arrayOf(
+      PropTypes.shape({
+        dollarContribution: PropTypes.number.isRequired,
+        tabDollarContribution: PropTypes.number,
+        searchDollarContribution: PropTypes.number,
+        shopDollarContribution: PropTypes.number,
+        referralDollarContribution: PropTypes.number,
+        dateStarted: PropTypes.string,
+      })
+    ),
   }).isRequired,
 }
 
@@ -262,8 +274,19 @@ GroupImpactWrapper.propTypes = {
         tabDollarContribution: PropTypes.number,
         searchDollarContribution: PropTypes.number,
         shopDollarContribution: PropTypes.number,
+        referralDollarContribution: PropTypes.number,
       }),
     }),
+    groupImpactHistory: PropTypes.arrayOf(
+      PropTypes.shape({
+        dollarContribution: PropTypes.number.isRequired,
+        tabDollarContribution: PropTypes.number,
+        searchDollarContribution: PropTypes.number,
+        shopDollarContribution: PropTypes.number,
+        referralDollarContribution: PropTypes.number,
+        dateStarted: PropTypes.string,
+      })
+    ),
   }).isRequired,
 }
 

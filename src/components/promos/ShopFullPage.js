@@ -7,7 +7,7 @@ import localStorageMgr from 'src/utils/localstorage-mgr'
 import { NOTIF_DISMISS_PREFIX } from 'src/utils/constants'
 import gtag from 'ga-gtag'
 
-const promoKey = 'shop-full-page-2023'
+const promoKey = 'shop-full-page-2023-nov'
 const isBrowser = typeof window !== 'undefined'
 const iframeBaseUrl = 'https://tab.gladly.io/promos/full-page-shop-2023/'
 
@@ -34,7 +34,7 @@ const ShopFullPage = ({ user, variation }) => {
   const onClose = () => {
     setShow(false)
     localStorageMgr.setItem(getNotifDismissKey(promoKey), true)
-    gtag('event', 'shop_full_page_2023_dismiss', { version })
+    gtag('event', `${promoKey}-dismiss`, { version })
   }
 
   // Set version
@@ -67,10 +67,6 @@ const ShopFullPage = ({ user, variation }) => {
     // eslint-disable-next-line no-undef
     return () => window.removeEventListener('message', handler)
   }, [onClose, user])
-
-  if (version !== 'Version2' && version !== 'Version3') {
-    return null
-  }
 
   return (
     <Modal open={show} style={{ zIndex: 100000000, backgroundColor: '#fff' }}>

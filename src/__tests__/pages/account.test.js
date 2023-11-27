@@ -27,6 +27,7 @@ import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import Switch from '@material-ui/core/Switch'
 import localStorageMgr from 'src/utils/localstorage-mgr'
 import { STORAGE_NEW_USER_IS_TAB_V4_BETA } from 'src/utils/constants'
+import UpdateWidgetEnabledMutation from 'src/utils/mutations/UpdateWidgetEnabledMutation'
 
 jest.mock('next-offline/runtime')
 jest.mock('tab-cmp')
@@ -49,6 +50,7 @@ jest.mock('src/utils/localStorageFeaturesManager', () => ({
   getFeatureValue: jest.fn(),
 }))
 jest.mock('src/utils/localstorage-mgr', () => ({ removeItem: jest.fn() }))
+jest.mock('src/utils/mutations/UpdateWidgetEnabledMutation')
 
 const getMockDataResponse = () => ({
   user: {
@@ -61,6 +63,17 @@ const getMockDataResponse = () => ({
         secondaryColor: 'CCC',
       },
       name: 'Cats',
+    },
+    widgets: {
+      edges: [
+        {
+          node: {
+            id: 'fake-widget-id-bookmarks',
+            type: 'bookmarks',
+            enabled: false,
+          },
+        },
+      ],
     },
   },
   app: {
@@ -320,6 +333,54 @@ describe('account.js', () => {
     const wrapper = mount(<AccountPage {...mockProps} />)
     const content = wrapper.find(Switch)
     expect(content.length).toEqual(1)
+  })
+
+  it('updates Bookmarks widget data and calls mutation if applicable user', async () => {
+    expect.assertions(3)
+    const AccountPage = require('src/pages/account').default
+    const mockProps = getMockProps()
+    const defaultMockData = getMockDataResponse()
+    useData.mockReturnValue({ data: defaultMockData })
+    localStorageFeaturesManager.getFeatureValue.mockReturnValue('true')
+    const wrapper = mount(<AccountPage {...mockProps} />)
+
+    expect(wrapper.find(Switch).first().prop('checked')).toEqual(false)
+
+    await act(async () => {
+      wrapper.find(Switch).first().prop('onChange')({
+        target: { checked: true },
+      })
+      await flushAllPromises()
+      wrapper.update()
+    })
+
+    expect(UpdateWidgetEnabledMutation).toHaveBeenCalledWith(
+      defaultMockData.user,
+      {
+        id: 'fake-widget-id-bookmarks',
+        type: 'bookmarks',
+        enabled: false,
+      },
+      true
+    )
+
+    await act(async () => {
+      wrapper.find(Switch).first().prop('onChange')({
+        target: { checked: true },
+      })
+      await flushAllPromises()
+      wrapper.update()
+    })
+
+    expect(UpdateWidgetEnabledMutation).toHaveBeenCalledWith(
+      defaultMockData.user,
+      {
+        id: 'fake-widget-id-bookmarks',
+        type: 'bookmarks',
+        enabled: false,
+      },
+      false
+    )
   })
 })
 

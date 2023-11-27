@@ -40,6 +40,7 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Chip from '@material-ui/core/Chip'
+import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -77,6 +78,7 @@ import {
   HAS_SEEN_SEARCH_V2_TOOLTIP,
   NOTIF_DISMISS_PREFIX,
   CAUSE_IMPACT_TYPES,
+  WIDGET_TYPE_BOOKMARKS,
 } from 'src/utils/constants'
 import OnboardingFlow from 'src/components/OnboardingFlow'
 import { accountCreated, newTabView } from 'src/utils/events'
@@ -90,6 +92,7 @@ import { getFeatureValue } from 'src/utils/growthbookUtils'
 import {
   YAHOO_SEARCH_NEW_USERS_V2,
   SEARCHBAR_SFAC_EXTENSION_PROMPT,
+  LAUNCH_BOOKMARKS,
 } from 'src/utils/experiments'
 import SfacExtensionSellNotification from 'src/components/SfacExtensionSellNotification'
 import useDoesBrowserSupportSearchExtension from 'src/utils/hooks/useDoesBrowserSupportSearchExtension'
@@ -98,8 +101,17 @@ import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotification'
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
+import ShopFullPage from 'src/components/promos/ShopFullPage'
+import SearchFullPage from 'src/components/promos/SearchFullPage'
+import Notification from 'src/components/Notification'
+import AddShortcutPageContainer from 'src/components/AddShortcutPageContainer'
+import FrontpageShortcutListContainer from 'src/components/FrontpageShortcutListContainer'
+import Modal from '@material-ui/core/Modal'
+import { Box } from '@material-ui/core'
 
-// import ShopFullPage from 'src/components/promos/ShopFullPage'
+import November2023ShopUser from 'src/components/promos/November2023ShopUser'
+
+const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -229,7 +241,7 @@ const useStyles = makeStyles((theme) => ({
     background: grey['300'],
   },
   centerContainer: {
-    height: '100%',
+    // height: '100%',
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
@@ -242,6 +254,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     minWidth: 500,
     maxWidth: 800,
+    marginTop: '60px',
   },
   searchBar: {
     position: 'relative',
@@ -365,6 +378,7 @@ const getRelayQuery = async ({ AuthUser }) => {
         app {
           ...MoneyRaisedContainer_app
           ...SearchInputContainer_app
+          ...AddShortcutPageContainer_app
         }
         user(userId: $userId) {
           id
@@ -376,6 +390,7 @@ const getRelayQuery = async ({ AuthUser }) => {
           joined
           showYahooPrompt
           showSfacExtensionPrompt
+          shopSignupTimestamp
           cause {
             causeId
             impactType
@@ -413,6 +428,21 @@ const getRelayQuery = async ({ AuthUser }) => {
           }
           searches
           showSfacIcon
+          searchEngine {
+            engineId
+            inputPrompt
+            searchUrlPersonalized
+          }
+          widgets {
+            edges {
+              node {
+                id
+                name
+                type
+                enabled
+              }
+            }
+          }
           ...MoneyRaisedContainer_user
           ...UserBackgroundImageContainer_user
           ...UserImpactContainer_user
@@ -422,6 +452,8 @@ const getRelayQuery = async ({ AuthUser }) => {
           ...SearchInputContainer_user
           ...SfacActivityContainer_user
           ...GroupImpactContainer_user
+          ...AddShortcutPageContainer_user
+          ...FrontpageShortcutListContainer_user
         }
       }
     `,
@@ -476,6 +508,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
     showSfacExtensionPrompt,
     searches,
     showSfacIcon,
+    widgets: { edges: widgetNodes = [] } = {},
   } = user || {}
 
   const { theme, onboarding, causeId, impactType, landingPagePhrase } =
@@ -655,11 +688,17 @@ const Index = ({ data: fallbackData, userAgent }) => {
   // Determine if we should show any notifications. Currently, each
   // notification is is configured on a one-off basis here (UI) and in the
   // backend (enabling/disabling).
-  const [, setNotifsToShow] = useState([])
+  const [notificationsToShow, setNotifsToShow] = useState([])
+
+  const [addShortcutPageOpen, setAddShortcutPageOpen] = useState(false)
+  const openAddShortcutPage = () => setAddShortcutPageOpen(true)
+  const closeAddShortcutPage = () => setAddShortcutPageOpen(false)
+  const bookmarkWidget = widgetNodes.find(
+    (widgetNode) => widgetNode.node.type === WIDGET_TYPE_BOOKMARKS
+  )
+  const bookmarkWidgetEnabled = bookmarkWidget && bookmarkWidget.node.enabled
 
   useEffect(() => {
-    const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
-
     const onNotificationClose = (code) => {
       localStorageMgr.setItem(getNotifDismissKey(code), 'true')
       setNotifsToShow((notifsToShow) =>
@@ -692,23 +731,38 @@ const Index = ({ data: fallbackData, userAgent }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(notifications), isDataFresh])
 
-  // // Our notification
-  // const notif = notificationsToShow.find(
-  //   (res) => res.code === 'shfac-notify-prime-day-2023'
-  // )
+  // Our notification
+  let notif = notificationsToShow.find(
+    (res) => res.code === 'shfac-notify-fullpage-nov'
+  )
 
-  // let notif = notificationsToShow.find(
-  //   (res) => res.code === 'shfac-notify-launch-fullpage'
-  // )
+  if (
+    notif &&
+    notif.variation !== 'Version1' &&
+    notif.variation !== 'Version2' &&
+    notif.variation !== 'Version3'
+  ) {
+    notif = null
+  }
 
-  // if (
-  //   notif &&
-  //   notif.variation !== 'Version1' &&
-  //   notif.variation !== 'Version2' &&
-  //   notif.variation !== 'Version3'
-  // ) {
-  //   notif = null
-  // }
+  // Our notification
+  let notifSearch = notificationsToShow.find(
+    (res) => res.code === 'sfac-notify-fullpage-nov'
+  )
+
+  if (
+    notifSearch &&
+    notifSearch.variation !== 'Version1' &&
+    notifSearch.variation !== 'Version2' &&
+    notifSearch.variation !== 'Version3'
+  ) {
+    notifSearch = null
+  }
+
+  // Our survey notification
+  const surveyNotif = notificationsToShow.find(
+    (res) => res.code === 'user-survey-august-2023'
+  )
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -783,6 +837,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
     setJustFinishedIntroFlow(true)
   }
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
+
   return (
     <div className={classes.pageContainer} data-test-id="new-tab-page">
       {shouldShowSearchbarSFACPrompt && userGlobalId ? (
@@ -933,6 +988,20 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 <div className={classes.timelineBar} />
               </Link>
             ) : null}
+            {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) ===
+              'true' &&
+              bookmarkWidgetEnabled && (
+                <Modal open={addShortcutPageOpen}>
+                  <Box>
+                    <AddShortcutPageContainer
+                      user={user}
+                      app={app}
+                      userId={userId}
+                      closeHandler={closeAddShortcutPage}
+                    />
+                  </Box>
+                </Modal>
+              )}
           </div>
           {/**
            * TODO: consolidate all notifications here to manage
@@ -940,6 +1009,44 @@ const Index = ({ data: fallbackData, userAgent }) => {
            * that appear via the UserImpact component.
            */}
           <div className={classes.notificationsContainer}>
+            {surveyNotif ? (
+              <Notification
+                className={classes.notification}
+                text={
+                  <div className={classes.notificationText}>
+                    <Typography
+                      variant="h2"
+                      gutterBottom
+                      className={classes.notificationTitle}
+                    >
+                      We want to hear from you!
+                    </Typography>
+
+                    <Typography variant="body1" gutterBottom>
+                      We'd love your feedback via this quick (&lt;2 min) survey
+                      to help improve Tab for a Cause!
+                    </Typography>
+                    <br />
+                    <Typography variant="body1" gutterBottom>
+                      Thanks for your help!
+                    </Typography>
+                  </div>
+                }
+                buttons={
+                  <div className={classes.notificationButtonsWrapper}>
+                    <Link
+                      to="https://forms.gle/u6wpP3teLpBB4yZP6"
+                      target="_blank"
+                    >
+                      <Button variant="contained">Take Survey</Button>
+                    </Link>
+                  </div>
+                }
+                includeClose
+                onClose={surveyNotif.onDismiss}
+              />
+            ) : null}
+
             {/* {notif && notif.variation === 'Version1' ? (
               <Notification
                 className={classes.notification}
@@ -1014,6 +1121,12 @@ const Index = ({ data: fallbackData, userAgent }) => {
               {/* Momentum Direct Donate */}
               {user.userId && <Momentum user={user} />}
 
+              {/* Prime day 2023 Promo */}
+              {/* {user.userId && notif && <PrimeDay2023 user={user} />} */}
+
+              {/* November Shop User 2023 Promo */}
+              {/* user.userId && <November2023ShopUser user={user} /> */}
+
               <Logo
                 includeText
                 color={enableBackgroundImages ? 'white' : null}
@@ -1037,6 +1150,17 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 onSearchInputClick={onSearchInputClick}
                 tooltip={showSearchInputTooltip}
               />
+              {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) !==
+                'false' &&
+                bookmarkWidgetEnabled && (
+                  <div>
+                    <FrontpageShortcutListContainer
+                      userId={userId}
+                      user={user}
+                      openHandler={openAddShortcutPage}
+                    />
+                  </div>
+                )}
             </div>
           </div>
           <div className={classes.adsContainer}>
@@ -1095,11 +1219,13 @@ const Index = ({ data: fallbackData, userAgent }) => {
           </div>
         </>
       )}
-
       {/* Full Page Promo */}
-      {/* {user && user.userId && notif && notif.variation && (
+      {user && user.userId && notif && notif.variation && (
         <ShopFullPage user={user} variation={notif.variation} />
-      )} */}
+      )}
+      {user && user.userId && notifSearch && notifSearch.variation && (
+        <SearchFullPage user={user} variation={notifSearch.variation} />
+      )}
     </div>
   )
 }

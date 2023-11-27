@@ -1,4 +1,5 @@
-import { Typography } from '@material-ui/core'
+import Link from 'src/components/Link'
+import Typography from '@material-ui/core/Typography'
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
@@ -6,6 +7,7 @@ import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import clsx from 'clsx'
+import { groupImpactLeaderboardFAQ } from 'src/utils/urls'
 import GroupImpactLeaderboardRow from './GroupImpactLeaderboardRow'
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     width: '500px',
-    borderLeft: '1px solid grey',
   },
   ellipses: {
     padding: theme.spacing(1),
@@ -57,21 +58,44 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     width: '90px',
   },
+  subtitle: {
+    marginBottom: theme.spacing(2),
+  },
+  link: {
+    color: theme.palette.primary.main,
+  },
 }))
 
 const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
   const classes = useStyles()
-  const displayLeaderboardEntries = leaderboardEntries.map((entry) => (
-    <div key={`${entry.user.username}_${entry.position}`}>
-      <GroupImpactLeaderboardRow
-        selected={userId === entry.user.id}
-        position={entry.position}
-        username={entry.user.username}
-        userGroupImpactMetric={entry.userGroupImpactMetric}
-      />
-      <Divider />
-    </div>
-  ))
+  const displayLeaderboardEntries = []
+  let maxDollarContributionSeen = 0
+  for (let i = leaderboardEntries.length - 1; i >= 0; i -= 1) {
+    const entry = leaderboardEntries[i]
+    let userGroupImpactMetric = null
+    if (
+      entry.userGroupImpactMetric.dollarContribution < maxDollarContributionSeen
+    ) {
+      userGroupImpactMetric = {
+        ...entry.userGroupImpactMetric,
+        dollarContribution: maxDollarContributionSeen,
+      }
+    } else {
+      userGroupImpactMetric = entry.userGroupImpactMetric
+      maxDollarContributionSeen = entry.userGroupImpactMetric.dollarContribution
+    }
+    displayLeaderboardEntries.unshift(
+      <div key={`${entry.user.username}_${entry.position}`}>
+        <GroupImpactLeaderboardRow
+          selected={userId === entry.user.id}
+          position={entry.position}
+          username={entry.user.username}
+          userGroupImpactMetric={userGroupImpactMetric}
+        />
+        <Divider />
+      </div>
+    )
+  }
 
   const entriesWithEllipses = []
   for (let i = 0; i < displayLeaderboardEntries.length; i += 1) {
@@ -100,15 +124,24 @@ const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
           <Typography variant="h5" className={classes.robotoBold}>
             LEADERBOARD
           </Typography>
-          <Typography variant="body2">
+          <Typography variant="body2" className={classes.subtitle}>
             Impact points earned for this group goal by opening tabs, searching,
-            and/or shopping
+            and/or shopping.{' '}
+            <Link
+              to={groupImpactLeaderboardFAQ}
+              target="_blank"
+              stopPropagation
+            >
+              <span className={classes.link}>Learn More</span>
+            </Link>
           </Typography>
         </div>
 
-        <Button onClick={onClose} className={classes.closeButton}>
-          <ArrowBackIos className={classes.closeButtonIcon} />
-        </Button>
+        {onClose && (
+          <Button onClick={onClose} className={classes.closeButton}>
+            <ArrowBackIos className={classes.closeButtonIcon} />
+          </Button>
+        )}
       </div>
       <div className={classes.positionRow}>
         <Typography className={classes.position} variant="h6">
@@ -146,6 +179,7 @@ Leaderboard.propTypes = {
         tabDollarContribution: PropTypes.number,
         searchDollarContribution: PropTypes.number,
         shopDollarContribution: PropTypes.number,
+        referralDollarContribution: PropTypes.number,
       }).isRequired,
     })
   ).isRequired,
@@ -153,7 +187,7 @@ Leaderboard.propTypes = {
 }
 
 Leaderboard.defaultProps = {
-  onClose: () => {},
+  onClose: null,
 }
 
 export default Leaderboard
