@@ -238,7 +238,7 @@ const useStyles = makeStyles((theme) => ({
     background: grey['300'],
   },
   centerContainer: {
-    // height: '100%',
+    height: '100%',
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
@@ -251,7 +251,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     minWidth: 500,
     maxWidth: 800,
-    marginTop: '60px',
   },
   searchBar: {
     position: 'relative',
