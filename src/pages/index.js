@@ -108,8 +108,6 @@ import FrontpageShortcutListContainer from 'src/components/FrontpageShortcutList
 import Modal from '@material-ui/core/Modal'
 import { Box } from '@material-ui/core'
 
-import November2023ShopUser from 'src/components/promos/November2023ShopUser'
-
 const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
 
 const useStyles = makeStyles((theme) => ({
@@ -1121,7 +1119,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
               {/* {user.userId && notif && <PrimeDay2023 user={user} />} */}
 
               {/* November Shop User 2023 Promo */}
-              {user.userId && <November2023ShopUser user={user} />}
+              {/* user.userId && <November2023ShopUser user={user} /> */}
 
               <Logo
                 includeText
