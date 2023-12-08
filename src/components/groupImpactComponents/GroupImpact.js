@@ -58,8 +58,13 @@ const GroupImpact = ({ user }) => {
     GROUP_IMPACT_SIDEBAR_STATE.NORMAL
   )
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const { id, dollarGoal, dollarProgressFromSearch, impactMetric } =
-    groupImpactMetric
+  const {
+    id,
+    dollarGoal,
+    dollarProgressFromSearch,
+    dollarProgressFromShop,
+    impactMetric,
+  } = groupImpactMetric
   const { impactTitle, impactCountPerMetric, whyValuableDescription } =
     impactMetric
 
@@ -87,6 +92,7 @@ const GroupImpact = ({ user }) => {
       id,
       dollarProgress: dollarGoal,
       dollarProgressFromSearch,
+      dollarProgressFromShop,
       dollarGoal,
       impactMetric: {
         impactTitle,
@@ -104,6 +110,7 @@ const GroupImpact = ({ user }) => {
     id,
     dollarGoal,
     dollarProgressFromSearch,
+    dollarProgressFromShop,
     impactTitle,
     whyValuableDescription,
   ])
@@ -209,6 +216,7 @@ GroupImpact.propTypes = {
         id: PropTypes.string.isRequired,
         dollarProgress: PropTypes.number.isRequired,
         dollarProgressFromSearch: PropTypes.number.isRequired,
+        dollarProgressFromShop: PropTypes.number.isRequired,
         dollarGoal: PropTypes.number.isRequired,
         impactMetric: PropTypes.shape({
           impactTitle: PropTypes.string.isRequired,
@@ -254,6 +262,7 @@ GroupImpactWrapper.propTypes = {
         id: PropTypes.string.isRequired,
         dollarProgress: PropTypes.number.isRequired,
         dollarProgressFromSearch: PropTypes.number.isRequired,
+        dollarProgressFromShop: PropTypes.number.isRequired,
         dollarGoal: PropTypes.number.isRequired,
         impactMetric: PropTypes.shape({
           impactTitle: PropTypes.string.isRequired,
