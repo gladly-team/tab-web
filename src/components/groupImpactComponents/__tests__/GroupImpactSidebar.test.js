@@ -12,6 +12,7 @@ import { shopLandingURL } from 'src/utils/urls'
 import { windowOpenTop } from 'src/utils/navigation'
 import SearchIcon from '@material-ui/icons/Search'
 import TabIcon from '@material-ui/icons/Tab'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import GroupImpactLeaderboard from '../GroupImpactLeaderboard'
 
 jest.mock('ga-gtag')
@@ -119,6 +120,7 @@ describe('GroupImpactSidebar component', () => {
       groupImpactMetric: {
         dollarProgress: 250,
         dollarProgressFromSearch: 100,
+        dollarProgressFromShop: 0,
         dollarGoal: 600,
         impactMetric: {
           impactTitle: 'impact-title',
@@ -147,16 +149,23 @@ describe('GroupImpactSidebar component', () => {
           (mockProps.groupImpactMetric.dollarProgressFromSearch /
             mockProps.groupImpactMetric.dollarGoal)
       ),
+      Math.floor(
+        100 *
+          (mockProps.groupImpactMetric.dollarProgressFromShop /
+            mockProps.groupImpactMetric.dollarGoal)
+      ),
     ])
     expect(wrapper.find(VerticalLinearProgress).first().prop('icons')).toEqual([
       <TabIcon />,
       <SearchIcon />,
+      <ShoppingCartIcon />,
     ])
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('tooltips')
     ).toEqual([
       `25% of funds raised by tabs opened through Tab for a Cause`,
       `16% of funds raised by searches through Search for a Cause`,
+      `0% of funds raised by shopping through Shop for a Cause`,
     ])
     expect(wrapper.find(VerticalLinearProgress).at(1).prop('progress')).toEqual(
       [
@@ -170,6 +179,7 @@ describe('GroupImpactSidebar component', () => {
             (mockProps.groupImpactMetric.dollarProgressFromSearch /
               mockProps.groupImpactMetric.dollarGoal)
         ),
+        0,
       ]
     )
   })
@@ -182,6 +192,7 @@ describe('GroupImpactSidebar component', () => {
       groupImpactMetric: {
         dollarProgress: 650,
         dollarProgressFromSearch: 100,
+        dollarProgressFromShop: 0,
         dollarGoal: 600,
         impactMetric: {
           impactTitle: 'impact-title',
@@ -193,19 +204,21 @@ describe('GroupImpactSidebar component', () => {
     expect(wrapper.find(Typography).at(2).text()).toEqual('108%')
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('progress')
-    ).toEqual([100, 16])
+    ).toEqual([100, 16, 0])
     expect(wrapper.find(VerticalLinearProgress).first().prop('icons')).toEqual([
       <TabIcon />,
       <SearchIcon />,
+      <ShoppingCartIcon />,
     ])
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('tooltips')
     ).toEqual([
       `84% of funds raised by tabs opened through Tab for a Cause`,
       `16% of funds raised by searches through Search for a Cause`,
+      `0% of funds raised by shopping through Shop for a Cause`,
     ])
     expect(wrapper.find(VerticalLinearProgress).at(1).prop('progress')).toEqual(
-      [100, 16]
+      [100, 16, 0]
     )
   })
 
@@ -217,6 +230,7 @@ describe('GroupImpactSidebar component', () => {
       groupImpactMetric: {
         dollarProgress: 20,
         dollarProgressFromSearch: 6,
+        dollarProgressFromShop: 0,
         dollarGoal: 600,
         impactMetric: {
           impactTitle: 'impact-title',
@@ -234,19 +248,21 @@ describe('GroupImpactSidebar component', () => {
     )
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('progress')
-    ).toEqual([16, 8])
+    ).toEqual([16, 8, 0])
     expect(wrapper.find(VerticalLinearProgress).first().prop('icons')).toEqual([
       <TabIcon />,
       <SearchIcon />,
+      <ShoppingCartIcon />,
     ])
     expect(
       wrapper.find(VerticalLinearProgress).first().prop('tooltips')
     ).toEqual([
       `2% of funds raised by tabs opened through Tab for a Cause`,
       `1% of funds raised by searches through Search for a Cause`,
+      `0% of funds raised by shopping through Shop for a Cause`,
     ])
     expect(wrapper.find(VerticalLinearProgress).at(1).prop('progress')).toEqual(
-      [3, 1]
+      [3, 1, 0]
     )
   })
 
@@ -412,6 +428,7 @@ describe('GroupImpactSidebar component', () => {
       ...getMockProps(),
       groupImpactMetric: {
         dollarProgressFromSearch: 125,
+        dollarProgressFromShop: 0,
         dollarProgress: 250,
         dollarGoal: 600,
         impactMetric: {
@@ -439,6 +456,7 @@ describe('GroupImpactSidebar component', () => {
       ...getMockProps(),
       groupImpactMetric: {
         dollarProgressFromSearch: 125,
+        dollarProgressFromShop: 0,
         dollarProgress: 250,
         dollarGoal: 600,
         impactMetric: {
@@ -466,6 +484,7 @@ describe('GroupImpactSidebar component', () => {
       ...getMockProps(),
       groupImpactMetric: {
         dollarProgressFromSearch: 125,
+        dollarProgressFromShop: 0,
         dollarProgress: 250,
         dollarGoal: 600,
         impactMetric: {
@@ -487,6 +506,7 @@ describe('GroupImpactSidebar component', () => {
       ...getMockProps(),
       groupImpactMetric: {
         dollarProgressFromSearch: 125,
+        dollarProgressFromShop: 0,
         dollarProgress: 250,
         dollarGoal: 600,
         impactMetric: {

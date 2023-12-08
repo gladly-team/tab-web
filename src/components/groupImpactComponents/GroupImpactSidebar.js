@@ -26,6 +26,7 @@ import { windowOpenTop } from 'src/utils/navigation'
 import { lighten } from '@material-ui/core'
 import Handlebars from 'handlebars'
 import defaultTheme from 'src/utils/theme'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import SearchIcon from '@material-ui/icons/Search'
 import TabIcon from '@material-ui/icons/Tab'
 import ToggleButton from '@material-ui/lab/ToggleButton'
@@ -253,15 +254,27 @@ const GroupImpactSidebar = ({
     setSelectedMode(newValue)
     event.stopPropagation()
   }
-  const { dollarProgress, dollarGoal, dollarProgressFromSearch, impactMetric } =
-    displayingOldGoal ? lastGroupImpactMetric : groupImpactMetric
+  const {
+    dollarProgress,
+    dollarGoal,
+    dollarProgressFromSearch,
+    dollarProgressFromShop,
+    impactMetric,
+  } = displayingOldGoal ? lastGroupImpactMetric : groupImpactMetric
   const { impactTitle, whyValuableDescription, impactCountPerMetric } =
     impactMetric
   const classes = useStyles()
+
   const searchDollarProgress =
     dollarProgressFromSearch &&
     Math.max(
       Math.min(Math.floor(100 * (dollarProgressFromSearch / dollarGoal)), 100),
+      1
+    )
+  const shopDollarProgress =
+    dollarProgressFromShop &&
+    Math.max(
+      Math.min(Math.floor(100 * (dollarProgressFromShop / dollarGoal)), 100),
       1
     )
   const searchDisplayProgress =
@@ -276,9 +289,18 @@ const GroupImpactSidebar = ({
       ),
       92
     )
+  const shopDisplayProgress =
+    dollarProgressFromShop &&
+    Math.min(
+      Math.max(
+        Math.min(Math.floor(100 * (dollarProgressFromShop / dollarGoal)), 100),
+        8
+      ),
+      92
+    )
   const totalDisplayProgress = Math.max(
     Math.min(Math.floor(100 * (dollarProgress / dollarGoal)), 100),
-    (searchDisplayProgress || 0) + 8
+    (searchDisplayProgress || 0) + (shopDisplayProgress || 0) + 8
   )
   const totalProgress = Math.max(
     Math.min(Math.floor(100 * (dollarProgress / dollarGoal)), 100),
@@ -377,8 +399,12 @@ const GroupImpactSidebar = ({
           <div className={classes.paddingTopBottom}>
             <VerticalLinearProgress
               progress={
-                searchDisplayProgress
-                  ? [totalDisplayProgress, searchDisplayProgress]
+                searchDisplayProgress || shopDisplayProgress
+                  ? [
+                      totalDisplayProgress,
+                      searchDisplayProgress,
+                      shopDisplayProgress,
+                    ]
                   : [totalDisplayProgress]
               }
               width={64}
@@ -387,17 +413,19 @@ const GroupImpactSidebar = ({
               colors={[
                 defaultTheme.palette.colors.tab,
                 defaultTheme.palette.colors.search,
+                defaultTheme.palette.colors.shop,
               ]}
               icons={
-                searchDisplayProgress
-                  ? [<TabIcon />, <SearchIcon />]
+                searchDisplayProgress || shopDisplayProgress
+                  ? [<TabIcon />, <SearchIcon />, <ShoppingCartIcon />]
                   : [<TabIcon />]
               }
               tooltips={[
                 `${
-                  totalProgress - searchDollarProgress
+                  totalProgress - searchDollarProgress - shopDollarProgress
                 }% of funds raised by tabs opened through Tab for a Cause`,
                 `${searchDollarProgress}% of funds raised by searches through Search for a Cause`,
+                `${shopDollarProgress}% of funds raised by shopping through Shop for a Cause`,
               ]}
             />
           </div>
@@ -578,12 +606,13 @@ const GroupImpactSidebar = ({
         <VerticalLinearProgress
           progress={
             searchDollarProgress
-              ? [totalProgress, searchDollarProgress]
+              ? [totalProgress, searchDollarProgress, shopDollarProgress]
               : [totalProgress]
           }
           colors={[
             defaultTheme.palette.colors.tab,
             defaultTheme.palette.colors.search,
+            defaultTheme.palette.colors.shop,
           ]}
           width={isClosedHover ? 24 : 16}
           borderRadius={0}

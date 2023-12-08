@@ -36,6 +36,7 @@ open.args = {
   groupImpactMetric: {
     dollarProgress: 28e5,
     dollarProgressFromSearch: 14e5,
+    dollarProgressFromShop: 0,
     dollarGoal: 5e6,
     impactMetric: {
       impactTitle: 'Provide 1 home visit from a community health worker',
@@ -53,6 +54,7 @@ openTooLittle.args = {
   groupImpactMetric: {
     dollarProgress: 2e5,
     dollarProgressFromSearch: 1e5,
+    dollarProgressFromShop: 0,
     dollarGoal: 5e6,
     impactMetric: {
       impactTitle: 'Provide 1 home visit from a community health worker',
@@ -144,6 +146,7 @@ almostDone.args = {
   groupImpactMetric: {
     dollarProgress: 4.9e6,
     dollarProgressFromSearch: 4.8e6,
+    dollarProgressFromShop: 0,
     dollarGoal: 5e6,
     impactMetric: {
       impactTitle: 'Provide 2 home visits from a community health worker',
@@ -162,6 +165,7 @@ almostDoneTwo.args = {
   groupImpactMetric: {
     dollarProgress: 4.8e6,
     dollarProgressFromSearch: 1e5,
+    dollarProgressFromShop: 0,
     dollarGoal: 5e6,
     impactMetric: {
       impactTitle: 'Provide 2 home visits from a community health worker',
@@ -180,6 +184,7 @@ aboveMax.args = {
   groupImpactMetric: {
     dollarProgress: 5.6e6,
     dollarProgressFromSearch: 1e5,
+    dollarProgressFromShop: 0,
     dollarGoal: 5e6,
     impactMetric: {
       impactTitle: 'Provide 2 home visits from a community health worker',
@@ -198,6 +203,7 @@ withLeaderboard.args = {
   groupImpactMetric: {
     dollarProgress: 4.8e6,
     dollarProgressFromSearch: 1e5,
+    dollarProgressFromShop: 0,
     dollarGoal: 5e6,
     impactMetric: {
       impactTitle: 'Provide 2 home visits from a community health worker',
@@ -322,6 +328,7 @@ withLeaderboardAndGroupImpactHistory.args = {
   groupImpactMetric: {
     dollarProgress: 4.8e6,
     dollarProgressFromSearch: 1e5,
+    dollarProgressFromShop: 0,
     dollarGoal: 5e6,
     impactMetric: {
       impactTitle: 'Provide 2 home visits from a community health worker',
