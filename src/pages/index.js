@@ -39,7 +39,8 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Chip from '@material-ui/core/Chip'
-import Button from '@material-ui/core/Button'
+
+// import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -102,7 +103,9 @@ import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotif
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
 import ShopFullPage from 'src/components/promos/ShopFullPage'
 import SearchFullPage from 'src/components/promos/SearchFullPage'
-import Notification from 'src/components/Notification'
+
+// import Notification from 'src/components/Notification'
+
 import AddShortcutPageContainer from 'src/components/AddShortcutPageContainer'
 import FrontpageShortcutListContainer from 'src/components/FrontpageShortcutListContainer'
 import Modal from '@material-ui/core/Modal'
@@ -755,10 +758,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
     notifSearch = null
   }
 
-  // Our survey notification
-  const surveyNotif = notificationsToShow.find(
-    (res) => res.code === 'user-survey-december-2023'
-  )
+  // // Our survey notification
+  // const surveyNotif = notificationsToShow.find(
+  //   (res) => res.code === 'user-survey-december-2023'
+  // )
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -1005,7 +1008,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
            * that appear via the UserImpact component.
            */}
           <div className={classes.notificationsContainer}>
-            {surveyNotif ? (
+            {/* surveyNotif ? (
               <Notification
                 className={classes.notification}
                 text={
@@ -1023,9 +1026,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
                       your feedback. Thanks for Tabbing!
                     </Typography>
                     <br />
-                    {/* <Typography variant="body1" gutterBottom>
+                    <Typography variant="body1" gutterBottom>
                       Thanks for your help!
-                    </Typography> */}
+                    </Typography>
                   </div>
                 }
                 buttons={
@@ -1041,7 +1044,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 includeClose
                 onClose={surveyNotif.onDismiss}
               />
-            ) : null}
+            ) : null */}
 
             {/* {notif && notif.variation === 'Version1' ? (
               <Notification
