@@ -1651,6 +1651,7 @@ describe('index.js: hardcoded notifications', () => {
               id: 'abcd',
               dollarProgress: 28e5,
               dollarProgressFromSearch: 14e5,
+              dollarProgressFromShop: 0,
               dollarGoal: 5e6,
               impactMetric: {
                 impactTitle:
@@ -1689,6 +1690,7 @@ describe('index.js: hardcoded notifications', () => {
               id: 'abcd',
               dollarProgress: 28e5,
               dollarProgressFromSearch: 14e5,
+              dollarProgressFromShop: 0,
               dollarGoal: 5e6,
               impactMetric: {
                 impactTitle:
@@ -1737,6 +1739,7 @@ describe('index.js: hardcoded notifications', () => {
               id: 'abcd',
               dollarProgress: 28e5,
               dollarProgressFromSearch: 14e5,
+              dollarProgressFromShop: 0,
               dollarGoal: 5e6,
               impactMetric: {
                 impactTitle:

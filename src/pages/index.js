@@ -40,7 +40,8 @@ import Typography from '@material-ui/core/Typography'
 import IconButton from '@material-ui/core/IconButton'
 import SettingsIcon from '@material-ui/icons/Settings'
 import Chip from '@material-ui/core/Chip'
-import Button from '@material-ui/core/Button'
+
+// import Button from '@material-ui/core/Button'
 
 // utils
 import withDataSSR from 'src/utils/pageWrappers/withDataSSR'
@@ -103,7 +104,9 @@ import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotif
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
 import ShopFullPage from 'src/components/promos/ShopFullPage'
 import SearchFullPage from 'src/components/promos/SearchFullPage'
-import Notification from 'src/components/Notification'
+
+// import Notification from 'src/components/Notification'
+
 import AddShortcutPageContainer from 'src/components/AddShortcutPageContainer'
 import FrontpageShortcutListContainer from 'src/components/FrontpageShortcutListContainer'
 import Modal from '@material-ui/core/Modal'
@@ -239,7 +242,7 @@ const useStyles = makeStyles((theme) => ({
     background: grey['300'],
   },
   centerContainer: {
-    // height: '100%',
+    height: '100%',
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
@@ -252,7 +255,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     minWidth: 500,
     maxWidth: 800,
-    marginTop: '60px',
   },
   searchBar: {
     position: 'relative',
@@ -757,10 +759,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
     notifSearch = null
   }
 
-  // Our survey notification
-  const surveyNotif = notificationsToShow.find(
-    (res) => res.code === 'user-survey-august-2023'
-  )
+  // // Our survey notification
+  // const surveyNotif = notificationsToShow.find(
+  //   (res) => res.code === 'user-survey-december-2023'
+  // )
 
   // Don't load the page until there is data. Data won't exist
   // if the user doesn't have auth cookies and thus doesn't fetch
@@ -1007,7 +1009,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
            * that appear via the UserImpact component.
            */}
           <div className={classes.notificationsContainer}>
-            {surveyNotif ? (
+            {/* surveyNotif ? (
               <Notification
                 className={classes.notification}
                 text={
@@ -1017,12 +1019,12 @@ const Index = ({ data: fallbackData, userAgent }) => {
                       gutterBottom
                       className={classes.notificationTitle}
                     >
-                      We want to hear from you!
+                      Time for the 2023 Survey!
                     </Typography>
 
                     <Typography variant="body1" gutterBottom>
-                      We'd love your feedback via this quick (&lt;2 min) survey
-                      to help improve Tab for a Cause!
+                      Help decide what is next for Tab for a Cause by providing
+                      your feedback. Thanks for Tabbing!
                     </Typography>
                     <br />
                     <Typography variant="body1" gutterBottom>
@@ -1033,17 +1035,17 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 buttons={
                   <div className={classes.notificationButtonsWrapper}>
                     <Link
-                      to="https://forms.gle/u6wpP3teLpBB4yZP6"
+                      to="https://docs.google.com/forms/d/e/1FAIpQLScnsvTq8s3oSOzD9jaCCYcsa-LbNPQyIZDU9lSVSJWIMPeNWg/viewform"
                       target="_blank"
                     >
-                      <Button variant="contained">Take Survey</Button>
+                      <Button variant="contained">Take the Survey</Button>
                     </Link>
                   </div>
                 }
                 includeClose
                 onClose={surveyNotif.onDismiss}
               />
-            ) : null}
+            ) : null */}
 
             {/* {notif && notif.variation === 'Version1' ? (
               <Notification
