@@ -323,47 +323,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-if (isClientSide()) {
-  // Load ads immediately on the client side when we parse
-  // this file rather than waiting for component mount.
-  const loadAds = () => {
-    try {
-      const setGAMDevKey = isGAMDevEnvironment()
+// if (isClientSide()) {
+//   // Load ads immediately on the client side when we parse
+//   // this file rather than waiting for component mount.
+//   const loadAds = () => {
+//     try {
+//       const setGAMDevKey = isGAMDevEnvironment()
 
-      fetchAds({
-        adUnits: Object.values(getAdUnits()),
-        pageLevelKeyValues: {
-          v4: 'true',
-          causeId: localStorageMgr.getCauseForGAM(),
-          ...(setGAMDevKey && { dev: 'true' }),
-        },
-        auctionTimeout: 1000,
-        bidderTimeout: 700,
-        consent: {
-          enabled: true,
+//       fetchAds({
+//         adUnits: Object.values(getAdUnits()),
+//         pageLevelKeyValues: {
+//           v4: 'true',
+//           causeId: localStorageMgr.getCauseForGAM(),
+//           ...(setGAMDevKey && { dev: 'true' }),
+//         },
+//         auctionTimeout: 1000,
+//         bidderTimeout: 700,
+//         consent: {
+//           enabled: true,
 
-          // Time to wait for the consent management platform (CMP) to respond.
-          // If the CMP does not respond in this time, ad auctions may be cancelled.
-          // The tab-cmp package aims to make the CMP respond much more quickly
-          // than this after the user's first page load.
-          timeout: 500,
-        },
-        publisher: {
-          pageUrl: getCurrentURL(),
-        },
-        logLevel: 'error',
-        onError: (e) => {
-          logger.error(e)
-        },
-        disableAds: !areAdsEnabled(),
-        useMockAds: showMockAds(),
-      })
-    } catch (e) {
-      logger.error(e)
-    }
-  }
-  loadAds()
-}
+//           // Time to wait for the consent management platform (CMP) to respond.
+//           // If the CMP does not respond in this time, ad auctions may be cancelled.
+//           // The tab-cmp package aims to make the CMP respond much more quickly
+//           // than this after the user's first page load.
+//           timeout: 500,
+//         },
+//         publisher: {
+//           pageUrl: getCurrentURL(),
+//         },
+//         logLevel: 'error',
+//         onError: (e) => {
+//           logger.error(e)
+//         },
+//         disableAds: !areAdsEnabled(),
+//         useMockAds: showMockAds(),
+//       })
+//     } catch (e) {
+//       logger.error(e)
+//     }
+//   }
+//   loadAds()
+// }
 
 const getRelayQuery = async ({ AuthUser }) => {
   // If the user is not authenticated, don't try to fetch data
