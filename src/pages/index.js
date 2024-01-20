@@ -6,7 +6,7 @@ import { isNil } from 'lodash/lang'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
-import { AdComponent, fetchAds } from 'tab-ads'
+import { AdComponent } from 'tab-ads'
 import { v4 as uuid } from 'uuid'
 import { get } from 'lodash/object'
 import {
@@ -17,6 +17,7 @@ import {
 import moment from 'moment'
 import { useGrowthBook } from '@growthbook/growthbook-react'
 import gtag from 'ga-gtag'
+import { goTo } from 'src/utils/navigation'
 
 // custom components
 import Achievement from 'src/components/Achievement'
@@ -53,14 +54,7 @@ import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntroFlowMutation'
-import { getCurrentURL, goTo } from 'src/utils/navigation'
-import {
-  getAdUnits,
-  areAdsEnabled,
-  showMockAds,
-  isGAMDevEnvironment,
-  incrementTabsOpenedToday,
-} from 'src/utils/adHelpers'
+import { getAdUnits, incrementTabsOpenedToday } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import { aboutURL, accountURL, achievementsURL } from 'src/utils/urls'
 import {
@@ -323,47 +317,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-if (isClientSide()) {
-  // Load ads immediately on the client side when we parse
-  // this file rather than waiting for component mount.
-  const loadAds = () => {
-    try {
-      const setGAMDevKey = isGAMDevEnvironment()
+// if (isClientSide()) {
+//   // Load ads immediately on the client side when we parse
+//   // this file rather than waiting for component mount.
+//   const loadAds = () => {
+//     try {
+//       const setGAMDevKey = isGAMDevEnvironment()
 
-      fetchAds({
-        adUnits: Object.values(getAdUnits()),
-        pageLevelKeyValues: {
-          v4: 'true',
-          causeId: localStorageMgr.getCauseForGAM(),
-          ...(setGAMDevKey && { dev: 'true' }),
-        },
-        auctionTimeout: 1000,
-        bidderTimeout: 700,
-        consent: {
-          enabled: true,
+//       fetchAds({
+//         adUnits: Object.values(getAdUnits()),
+//         pageLevelKeyValues: {
+//           v4: 'true',
+//           causeId: localStorageMgr.getCauseForGAM(),
+//           ...(setGAMDevKey && { dev: 'true' }),
+//         },
+//         auctionTimeout: 1000,
+//         bidderTimeout: 700,
+//         consent: {
+//           enabled: true,
 
-          // Time to wait for the consent management platform (CMP) to respond.
-          // If the CMP does not respond in this time, ad auctions may be cancelled.
-          // The tab-cmp package aims to make the CMP respond much more quickly
-          // than this after the user's first page load.
-          timeout: 500,
-        },
-        publisher: {
-          pageUrl: getCurrentURL(),
-        },
-        logLevel: 'error',
-        onError: (e) => {
-          logger.error(e)
-        },
-        disableAds: !areAdsEnabled(),
-        useMockAds: showMockAds(),
-      })
-    } catch (e) {
-      logger.error(e)
-    }
-  }
-  loadAds()
-}
+//           // Time to wait for the consent management platform (CMP) to respond.
+//           // If the CMP does not respond in this time, ad auctions may be cancelled.
+//           // The tab-cmp package aims to make the CMP respond much more quickly
+//           // than this after the user's first page load.
+//           timeout: 500,
+//         },
+//         publisher: {
+//           pageUrl: getCurrentURL(),
+//         },
+//         logLevel: 'error',
+//         onError: (e) => {
+//           logger.error(e)
+//         },
+//         disableAds: !areAdsEnabled(),
+//         useMockAds: showMockAds(),
+//       })
+//     } catch (e) {
+//       logger.error(e)
+//     }
+//   }
+//   loadAds()
+// }
 
 const getRelayQuery = async ({ AuthUser }) => {
   // If the user is not authenticated, don't try to fetch data
@@ -477,6 +471,19 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
+
+  // No scolling on this home page.
+  useEffect(() => {
+    // Add the style when the component mounts
+    // eslint-disable-next-line no-undef
+    document.body.style.overflow = 'hidden'
+
+    // Revert back to the initial style when the component unmounts
+    return () => {
+      // eslint-disable-next-line no-undef
+      document.body.style.overflow = ''
+    }
+  }, [])
 
   // Determine which ad units we'll show only once, on mount,
   // because the ads have already been fetched and won't change.
