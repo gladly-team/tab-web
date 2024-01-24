@@ -116,6 +116,10 @@ const nextConfig = {
             key: 'Service-Worker-Allowed',
             value: `${basePath}/`, // e.g., /newtab/
           },
+          { 
+            key: "Access-Control-Allow-Origin", 
+            value: "*" 
+          },
         ],
       },
     ]
