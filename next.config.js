@@ -119,7 +119,7 @@ const nextConfig = {
         ],
       },
       {
-        source: '/*',
+        source: '/(.*)',
         headers: [
           { 
             key: "Access-Control-Allow-Origin", 
