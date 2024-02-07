@@ -107,6 +107,7 @@ export const jobsURL = 'https://tab.gladly.io/jobs'
 
 export const searchLandingURL = 'https://search.gladly.io/'
 export const shopLandingURL = 'https://shop.gladly.io/'
+export const tabLandingURL = 'https://tab.gladly.io/'
 
 export const groupImpactLeaderboardFAQ =
   'https://gladly.zendesk.com/hc/en-us/articles/17622871939725-Leaderboards'
