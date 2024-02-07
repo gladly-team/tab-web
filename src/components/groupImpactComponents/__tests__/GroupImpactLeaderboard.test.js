@@ -259,7 +259,7 @@ describe('GroupImpactLeaderboard component', () => {
     const wrapper = shallow(<GroupImpactLeaderboard {...mockProps} />)
     const typographies = wrapper.find(Typography)
 
-    expect(typographies.length).toEqual(5)
+    expect(typographies.length).toEqual(8)
   })
 
   it('calls onClose handler when clicked', () => {

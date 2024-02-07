@@ -63,7 +63,7 @@ class CustomDocument extends Document {
           {/* Google Analytics V4 Tag */}
           <script
             async
-            src="https://www.googletagmanager.com/gtag/js?id=G-LDFLQCKVHG"
+            src="https://www.googletagmanager.com/gtag/js?id=G-Z4JZQERBJY"
           />
           <script
             key="gtag-global-ga4"
@@ -72,8 +72,8 @@ class CustomDocument extends Document {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-LDFLQCKVHG');
-            gtag('config', 'G-LDFLQCKVHG',{'tfac_app_version':'v4'});
+            gtag('config', 'G-Z4JZQERBJY');
+            gtag('config', 'G-Z4JZQERBJY',{'tfac_app_version':'v4'});
             `,
             }}
           />

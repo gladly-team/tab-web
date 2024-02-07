@@ -5,9 +5,18 @@ import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
+import TabIcon from '@material-ui/icons/Tab'
+import SearchIcon from '@material-ui/icons/Search'
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
 import ArrowBackIos from '@material-ui/icons/ArrowBackIos'
 import clsx from 'clsx'
-import { groupImpactLeaderboardFAQ } from 'src/utils/urls'
+import {
+  groupImpactLeaderboardFAQ,
+  tabLandingURL,
+  searchLandingURL,
+  shopLandingURL,
+} from 'src/utils/urls'
+import defaultTheme from 'src/utils/theme'
 import GroupImpactLeaderboardRow from './GroupImpactLeaderboardRow'
 
 const useStyles = makeStyles((theme) => ({
@@ -47,8 +56,17 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'flex-start',
-    paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    alignItems: 'center',
+  },
+  positionRowBoard: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'flex-start',
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(1),
     alignItems: 'center',
   },
   impactPoints: {
@@ -63,6 +81,39 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     color: theme.palette.primary.main,
+  },
+  iconWrapper: {
+    height: '24px',
+    width: '24px',
+    borderRadius: '24px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: theme.spacing(0.5),
+  },
+  tabIcon: {
+    backgroundColor: defaultTheme.palette.colors.tab,
+  },
+  searchIcon: {
+    backgroundColor: defaultTheme.palette.colors.search,
+  },
+  shopIcon: {
+    backgroundColor: defaultTheme.palette.colors.shop,
+  },
+  referralIcon: {
+    backgroundColor: defaultTheme.palette.colors.referral,
+  },
+  impactIcons: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  icon: {
+    height: '16px',
+    width: '16px',
+    color: 'white',
+  },
+  legendCont: {
+    marginTop: theme.spacing(2),
   },
 }))
 
@@ -161,6 +212,60 @@ const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
       </div>
       <Divider />
       {entriesWithEllipses}
+
+      <div className={classes.legendCont}>
+        <div className={classes.positionRowBoard}>
+          <div className={clsx(classes.tabIcon, classes.iconWrapper)}>
+            <TabIcon className={classes.icon} />
+          </div>
+          <Typography variant="body2">
+            Points earned by opening tabs with{' '}
+            <Link to={tabLandingURL} target="_blank" stopPropagation>
+              <span className={classes.link}>Tab for a Cause</span>
+            </Link>
+            .
+          </Typography>
+        </div>
+
+        <div className={classes.positionRowBoard}>
+          <div className={clsx(classes.searchIcon, classes.iconWrapper)}>
+            <SearchIcon className={classes.icon} />
+          </div>
+          <Typography variant="body2">
+            Earn 10x more points by searching with{' '}
+            <Link to={searchLandingURL} target="_blank" stopPropagation>
+              <span className={classes.link}>Search for a Cause</span>
+            </Link>
+            .
+          </Typography>
+        </div>
+
+        <div className={classes.positionRowBoard}>
+          <div className={clsx(classes.shopIcon, classes.iconWrapper)}>
+            <ShoppingCartIcon className={classes.icon} />
+          </div>
+          <Typography variant="body2">
+            Earn unlimited points by shopping with{' '}
+            <Link to={shopLandingURL} target="_blank" stopPropagation>
+              <span className={classes.link}>Shop for a Cause</span>
+            </Link>
+            .
+          </Typography>
+        </div>
+
+        {/* <div className={classes.positionRowBoard}>
+          <div className={clsx(classes.referralIcon, classes.iconWrapper)}>
+            <GroupAddIcon className={classes.icon} />
+          </div>
+          <Typography variant="body1">
+            Earn unlimited points by shopping with{' '}
+            <Link to={getReferralUrl()} target="_blank" stopPropagation>
+              <span className={classes.link}>Shop for a Cause</span>
+            </Link>
+            .
+          </Typography>
+        </div> */}
+      </div>
     </div>
   )
 }
