@@ -18,7 +18,7 @@ class CustomDocument extends Document {
           <link rel="apple-touch-icon" href={Logo192Apple} />
           <TabCMPHeadElements />
         </Head>
-        <body style={{ margin: 0, padding: 0 }}>
+        <body style={{ margin: 0, padding: 0 }} className="v4">
           {/**
            * Begin: Ads code.
            * See: https://github.com/gladly-team/tab-ads#html-tags
