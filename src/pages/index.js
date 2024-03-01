@@ -2,11 +2,9 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { flowRight } from 'lodash/util'
-import { isNil } from 'lodash/lang'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { graphql } from 'react-relay'
-import { AdComponent } from 'tab-ads'
 import { v4 as uuid } from 'uuid'
 import { get } from 'lodash/object'
 import {
@@ -52,9 +50,8 @@ import localStorageMgr from 'src/utils/localstorage-mgr'
 
 import LogTabMutation from 'src/utils/mutations/LogTabMutation'
 import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
-import LogUserRevenueMutation from 'src/utils/mutations/LogUserRevenueMutation'
 import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntroFlowMutation'
-import { getAdUnits, incrementTabsOpenedToday } from 'src/utils/adHelpers'
+import { incrementTabsOpenedToday } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
 import { aboutURL, accountURL, achievementsURL } from 'src/utils/urls'
 import {
@@ -63,7 +60,6 @@ import {
   showDevelopmentOnlyMissionsFeature,
   showInternalOnly,
 } from 'src/utils/featureFlags'
-import logger from 'src/utils/logger'
 import FullPageLoader from 'src/components/FullPageLoader'
 import useData from 'src/utils/hooks/useData'
 import {
@@ -317,48 +313,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-// if (isClientSide()) {
-//   // Load ads immediately on the client side when we parse
-//   // this file rather than waiting for component mount.
-//   const loadAds = () => {
-//     try {
-//       const setGAMDevKey = isGAMDevEnvironment()
-
-//       fetchAds({
-//         adUnits: Object.values(getAdUnits()),
-//         pageLevelKeyValues: {
-//           v4: 'true',
-//           causeId: localStorageMgr.getCauseForGAM(),
-//           ...(setGAMDevKey && { dev: 'true' }),
-//         },
-//         auctionTimeout: 1000,
-//         bidderTimeout: 700,
-//         consent: {
-//           enabled: true,
-
-//           // Time to wait for the consent management platform (CMP) to respond.
-//           // If the CMP does not respond in this time, ad auctions may be cancelled.
-//           // The tab-cmp package aims to make the CMP respond much more quickly
-//           // than this after the user's first page load.
-//           timeout: 500,
-//         },
-//         publisher: {
-//           pageUrl: getCurrentURL(),
-//         },
-//         logLevel: 'error',
-//         onError: (e) => {
-//           logger.error(e)
-//         },
-//         disableAds: !areAdsEnabled(),
-//         useMockAds: showMockAds(),
-//       })
-//     } catch (e) {
-//       logger.error(e)
-//     }
-//   }
-//   loadAds()
-// }
-
 const getRelayQuery = async ({ AuthUser }) => {
   // If the user is not authenticated, don't try to fetch data
   // for this page. We won't render the page until data exists.
@@ -482,21 +436,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
     return () => {
       // eslint-disable-next-line no-undef
       document.body.style.overflow = ''
-    }
-  }, [])
-
-  // Determine which ad units we'll show only once, on mount,
-  // because the ads have already been fetched and won't change.
-  const [adUnits, setAdUnits] = useState([])
-  useEffect(() => {
-    setAdUnits(getAdUnits())
-  }, [])
-
-  // Only render ads if we are on the client side.
-  const [shouldRenderAds, setShouldRenderAds] = useState(false)
-  useEffect(() => {
-    if (isClientSide()) {
-      setShouldRenderAds(true)
     }
   }, [])
 
@@ -780,63 +719,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
   // Determine if we should show mission content.
   const missionsFeatureEnabled = showDevelopmentOnlyMissionsFeature(email)
-
-  // Data to provide the onAdDisplayed callback
-  const adContext = {
-    user,
-    tabId,
-  }
-
-  /*
-   * A handler for AdComponents' onAdDisplayed callbacks, which receives
-   * info about the displayed ad.
-   * @param {Object|null} displayedAdInfo - A DisplayedAdInfo from tab-ads. See:
-   *   https://github.com/gladly-team/tab-ads/blob/master/src/utils/DisplayedAdInfo.js
-   * @param {Object} context - Additional info to help with revenue logging
-   * @param {Object} context.user - The user object
-   * @param {String} context.user.id - The user ID
-   * @param {String} context.tabId - A UUID for this page load
-   * @return {undefined}
-   */
-  const onAdDisplayed = (displayedAdInfo, context) => {
-    // No ad was shown.
-    if (!displayedAdInfo) {
-      return
-    }
-
-    const { revenue, encodedRevenue, GAMAdvertiserId, GAMAdUnitId, adSize } =
-      displayedAdInfo
-
-    // Log the revenue from the ad.
-    LogUserRevenueMutation({
-      userId: context.user.id,
-      revenue,
-      ...(encodedRevenue && {
-        encodedRevenue: {
-          encodingType: 'AMAZON_CPM',
-          encodedValue: encodedRevenue,
-        },
-      }),
-      dfpAdvertiserId: GAMAdvertiserId.toString(),
-      adSize,
-
-      // Only send aggregationOperation value if we have more than one
-      // revenue value
-      aggregationOperation:
-        !isNil(revenue) && !isNil(encodedRevenue) ? 'MAX' : null,
-      tabId: context.tabId,
-      adUnitCode: GAMAdUnitId,
-    })
-  }
-
-  /*
-   * Log any errors the occur in the Ad components.
-   * @param {Object} e - The error
-   * @return {undefined}
-   */
-  const onAdError = (e) => {
-    logger.error(e)
-  }
 
   const onCompletedOnboarding = async () => {
     await SetHasViewedIntroFlowMutation({ enabled: true, userId: userGlobalId })
@@ -1168,51 +1050,35 @@ const Index = ({ data: fallbackData, userAgent }) => {
           </div>
           <div className={classes.adsContainer}>
             <div className={classes.adsContainerRectangles}>
-              {adUnits.rectangleAdSecondary && shouldRenderAds ? (
-                <AdComponent
-                  adId={adUnits.rectangleAdSecondary.adId}
-                  onAdDisplayed={(displayedAdInfo) => {
-                    onAdDisplayed(displayedAdInfo, adContext)
-                  }}
-                  onError={onAdError}
-                  style={{
-                    display: 'flex',
-                    minWidth: 300,
-                    overflow: 'visible',
-                  }}
-                />
-              ) : null}
-              {adUnits.rectangleAdPrimary && shouldRenderAds ? (
-                <AdComponent
-                  adId={adUnits.rectangleAdPrimary.adId}
-                  onAdDisplayed={(displayedAdInfo) => {
-                    onAdDisplayed(displayedAdInfo, adContext)
-                  }}
-                  onError={onAdError}
-                  style={{
-                    display: 'flex',
-                    minWidth: 300,
-                    overflow: 'visible',
-                    marginTop: 10,
-                  }}
-                />
-              ) : null}
+              <div
+                id="raptive-content-ad-1"
+                style={{
+                  display: 'flex',
+                  minWidth: 300,
+                  overflow: 'visible',
+                }}
+              />
+
+              <div
+                id="raptive-content-ad-2"
+                style={{
+                  display: 'flex',
+                  minWidth: 300,
+                  overflow: 'visible',
+                  marginTop: 10,
+                }}
+              />
             </div>
-            {adUnits.leaderboard && shouldRenderAds ? (
-              <div className={classes.adContainerLeaderboard}>
-                <AdComponent
-                  adId={adUnits.leaderboard.adId}
-                  onAdDisplayed={(displayedAdInfo) => {
-                    onAdDisplayed(displayedAdInfo, adContext)
-                  }}
-                  onError={onAdError}
-                  style={{
-                    overflow: 'visible',
-                    minWidth: 728,
-                  }}
-                />
-              </div>
-            ) : null}
+
+            <div className={classes.adContainerLeaderboard}>
+              <div
+                id="raptive-content-ad-3"
+                style={{
+                  overflow: 'visible',
+                  minWidth: 728,
+                }}
+              />
+            </div>
           </div>
           <div className={classes.groupImpactContainer}>
             {(impactType === CAUSE_IMPACT_TYPES.group ||
