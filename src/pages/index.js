@@ -244,6 +244,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     minWidth: 500,
     maxWidth: 800,
+    zIndex: 1e4, // must be higher than all content besides ads and modal
   },
   searchBar: {
     position: 'relative',
