@@ -140,7 +140,7 @@ const useStyles = makeStyles((theme) => ({
     alignContent: 'flex-start',
     height: '100%',
     position: 'relative',
-    zIndex: 100,
+    zIndex: 1e6, // must be higher than all content besides ads and modal
   },
   groupImpactContainer: {
     zIndex: 1e6,
