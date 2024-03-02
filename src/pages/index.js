@@ -154,6 +154,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
+    zIndex: 1e6, // must be higher than all content besides ads and modal
   },
   userMenuContainer: {
     alignSelf: 'flex-end',
