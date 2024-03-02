@@ -140,7 +140,7 @@ const useStyles = makeStyles((theme) => ({
     alignContent: 'flex-start',
     height: '100%',
     position: 'relative',
-    zIndex: 100,
+    zIndex: 1e6, // must be higher than all content besides ads and modal
   },
   groupImpactContainer: {
     zIndex: 1e6,
@@ -154,6 +154,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-end',
+    zIndex: 1e6, // must be higher than all content besides ads and modal
   },
   userMenuContainer: {
     alignSelf: 'flex-end',
@@ -244,6 +245,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     minWidth: 500,
     maxWidth: 800,
+    zIndex: 1e4, // must be higher than all content besides ads and modal
   },
   searchBar: {
     position: 'relative',
