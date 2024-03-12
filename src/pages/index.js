@@ -1,5 +1,6 @@
 // libraries
 import React, { useCallback, useEffect, useState } from 'react'
+import Head from 'next/head'
 import PropTypes from 'prop-types'
 import { flowRight } from 'lodash/util'
 import clsx from 'clsx'
@@ -16,6 +17,7 @@ import moment from 'moment'
 import { useGrowthBook } from '@growthbook/growthbook-react'
 import gtag from 'ga-gtag'
 import { goTo } from 'src/utils/navigation'
+import Raptive from 'src/components/head/Raptive'
 
 // custom components
 import Achievement from 'src/components/Achievement'
@@ -428,7 +430,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
 
-  // No scolling on this home page.
+  // No scrolling on this home page.
   useEffect(() => {
     // Add the style when the component mounts
     // eslint-disable-next-line no-undef
@@ -729,177 +731,182 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const showIntro = !get(user, 'hasViewedIntroFlow') && !justFinishedIntroFlow
 
   return (
-    <div className={classes.pageContainer} data-test-id="new-tab-page">
-      {shouldShowSearchbarSFACPrompt && userGlobalId ? (
-        <SearchbarSFACSellNotification
-          className={classes.searchbarNotification}
-          userId={userGlobalId}
-          browser={browser}
-        />
-      ) : null}
-      {showIntro ? (
-        <div className={classes.OnboardingFlow}>
-          <div
-            style={{
-              padding: '20px 40px',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-            }}
-          >
-            <Logo style={{ height: 40 }} includeText causeId={causeId} />
-          </div>
-          <OnboardingFlow
-            onComplete={onCompletedOnboarding}
-            showMissionSlide={!!missionId}
-            onboarding={onboarding}
+    <>
+      <Head>
+        <Raptive causeId={causeId} />
+      </Head>
+
+      <div className={classes.pageContainer} data-test-id="new-tab-page">
+        {shouldShowSearchbarSFACPrompt && userGlobalId ? (
+          <SearchbarSFACSellNotification
+            className={classes.searchbarNotification}
+            userId={userGlobalId}
+            browser={browser}
           />
-        </div>
-      ) : (
-        <>
-          {enableBackgroundImages ? (
-            <UserBackgroundImageContainer user={user} />
-          ) : null}
-          <div className={classes.fullContainer}>
-            <div className={classes.topContainer}>
-              <div className={classes.topRightContainer}>
-                <div className={classes.userMenuContainer}>
-                  {missionsFeatureEnabled ? (
-                    <MissionHubButton status={missionStatus} />
-                  ) : (
-                    <InviteFriendsIconContainer user={user} />
-                  )}
-                  {missionsFeatureEnabled &&
-                  (missionStatus === 'started' ||
-                    missionStatus === 'completed') ? (
-                    <SquadCounter
-                      progress={Math.floor((tabCount / tabGoal) * 100)}
-                    />
-                  ) : null}
-                  {userGlobalId ? (
-                    <SearchForACauseSellModal
-                      userId={userGlobalId}
-                      hardSell={showSFACSellModalMode === 'hard-sell'}
-                      open={showSFACSellModalMode !== null}
-                      onAccept={onSFACSellModalAccept}
-                      onClose={() => setShowSFACSellModalMode(null)}
-                    />
-                  ) : null}
-                  {showSfacIcon && searchActivityNotificationSupported ? (
-                    <SfacActivityContainer user={user} />
-                  ) : null}
-                  {impactType === CAUSE_IMPACT_TYPES.individual ||
-                  impactType === CAUSE_IMPACT_TYPES.individual_and_group ? (
-                    <UserImpactContainer
-                      userId={userGlobalId}
-                      userImpact={userImpact}
-                      user={user}
-                      disabled={
-                        missionsFeatureEnabled &&
-                        (missionStatus === 'started' ||
-                          missionStatus === 'completed')
-                      }
-                    />
-                  ) : (
-                    <Link to={aboutURL}>
-                      <IconButton>
-                        <InfoIcon
-                          className={clsx(
-                            classes.userMenuItem,
-                            classes.settingsIcon
-                          )}
-                        />
-                      </IconButton>
-                    </Link>
-                  )}
-                  <div className={classes.moneyRaisedContainer}>
-                    <Typography
-                      variant="h5"
-                      className={clsx(classes.userMenuItem)}
-                    >
-                      {growthbook.feature('test-feature').value ? (
-                        <p>Welcome to our site!</p>
-                      ) : null}
-                      <MoneyRaisedContainer app={app} user={user} />
-                    </Typography>
-                  </div>
-                  <div className={classes.settingsIconContainer}>
-                    <Link to={accountURL}>
-                      <IconButton>
-                        <SettingsIcon
-                          className={clsx(
-                            classes.userMenuItem,
-                            classes.settingsIcon
-                          )}
-                        />
-                      </IconButton>
-                    </Link>
+        ) : null}
+        {showIntro ? (
+          <div className={classes.OnboardingFlow}>
+            <div
+              style={{
+                padding: '20px 40px',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+              }}
+            >
+              <Logo style={{ height: 40 }} includeText causeId={causeId} />
+            </div>
+            <OnboardingFlow
+              onComplete={onCompletedOnboarding}
+              showMissionSlide={!!missionId}
+              onboarding={onboarding}
+            />
+          </div>
+        ) : (
+          <>
+            {enableBackgroundImages ? (
+              <UserBackgroundImageContainer user={user} />
+            ) : null}
+            <div className={classes.fullContainer}>
+              <div className={classes.topContainer}>
+                <div className={classes.topRightContainer}>
+                  <div className={classes.userMenuContainer}>
+                    {missionsFeatureEnabled ? (
+                      <MissionHubButton status={missionStatus} />
+                    ) : (
+                      <InviteFriendsIconContainer user={user} />
+                    )}
+                    {missionsFeatureEnabled &&
+                    (missionStatus === 'started' ||
+                      missionStatus === 'completed') ? (
+                      <SquadCounter
+                        progress={Math.floor((tabCount / tabGoal) * 100)}
+                      />
+                    ) : null}
+                    {userGlobalId ? (
+                      <SearchForACauseSellModal
+                        userId={userGlobalId}
+                        hardSell={showSFACSellModalMode === 'hard-sell'}
+                        open={showSFACSellModalMode !== null}
+                        onAccept={onSFACSellModalAccept}
+                        onClose={() => setShowSFACSellModalMode(null)}
+                      />
+                    ) : null}
+                    {showSfacIcon && searchActivityNotificationSupported ? (
+                      <SfacActivityContainer user={user} />
+                    ) : null}
+                    {impactType === CAUSE_IMPACT_TYPES.individual ||
+                    impactType === CAUSE_IMPACT_TYPES.individual_and_group ? (
+                      <UserImpactContainer
+                        userId={userGlobalId}
+                        userImpact={userImpact}
+                        user={user}
+                        disabled={
+                          missionsFeatureEnabled &&
+                          (missionStatus === 'started' ||
+                            missionStatus === 'completed')
+                        }
+                      />
+                    ) : (
+                      <Link to={aboutURL}>
+                        <IconButton>
+                          <InfoIcon
+                            className={clsx(
+                              classes.userMenuItem,
+                              classes.settingsIcon
+                            )}
+                          />
+                        </IconButton>
+                      </Link>
+                    )}
+                    <div className={classes.moneyRaisedContainer}>
+                      <Typography
+                        variant="h5"
+                        className={clsx(classes.userMenuItem)}
+                      >
+                        {growthbook.feature('test-feature').value ? (
+                          <p>Welcome to our site!</p>
+                        ) : null}
+                        <MoneyRaisedContainer app={app} user={user} />
+                      </Typography>
+                    </div>
+                    <div className={classes.settingsIconContainer}>
+                      <Link to={accountURL}>
+                        <IconButton>
+                          <SettingsIcon
+                            className={clsx(
+                              classes.userMenuItem,
+                              classes.settingsIcon
+                            )}
+                          />
+                        </IconButton>
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
+              {showAchievements ? (
+                <Link
+                  to={achievementsURL}
+                  className={classes.achievementsContainer}
+                  data-test-id="achievements"
+                >
+                  <Achievement
+                    className={classes.achievement}
+                    impactText="Plant 1 tree"
+                    status="inProgress"
+                    taskText="Open tabs 5 days in a row"
+                    deadlineTime={dayjs().add(3, 'days').toISOString()}
+                    progress={{
+                      currentNumber: 2,
+                      targetNumber: 5,
+                      visualizationType: 'checkmarks',
+                    }}
+                  />
+                  <Achievement
+                    badgeClassName={classes.achievementBadge}
+                    badgeOnly
+                    impactText="Plant 1 tree"
+                    status="failure"
+                    taskText="Recruit 1 friend"
+                    completedTime={dayjs().subtract(2, 'days').toISOString()}
+                    deadlineTime={dayjs().subtract(2, 'days').toISOString()}
+                  />
+                  <Achievement
+                    badgeClassName={classes.achievementBadge}
+                    badgeOnly
+                    impactText="Plant 1 tree"
+                    status="success"
+                    taskText="Open 100 tabs"
+                    completedTime={dayjs().subtract(5, 'days').toISOString()}
+                    deadlineTime={dayjs().subtract(5, 'days').toISOString()}
+                  />
+                  <div /> {/* take up a spacing unit */}
+                  <div className={classes.timelineBar} />
+                </Link>
+              ) : null}
+              {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) ===
+                'true' &&
+                bookmarkWidgetEnabled && (
+                  <Modal open={addShortcutPageOpen}>
+                    <Box>
+                      <AddShortcutPageContainer
+                        user={user}
+                        app={app}
+                        userId={userId}
+                        closeHandler={closeAddShortcutPage}
+                      />
+                    </Box>
+                  </Modal>
+                )}
             </div>
-            {showAchievements ? (
-              <Link
-                to={achievementsURL}
-                className={classes.achievementsContainer}
-                data-test-id="achievements"
-              >
-                <Achievement
-                  className={classes.achievement}
-                  impactText="Plant 1 tree"
-                  status="inProgress"
-                  taskText="Open tabs 5 days in a row"
-                  deadlineTime={dayjs().add(3, 'days').toISOString()}
-                  progress={{
-                    currentNumber: 2,
-                    targetNumber: 5,
-                    visualizationType: 'checkmarks',
-                  }}
-                />
-                <Achievement
-                  badgeClassName={classes.achievementBadge}
-                  badgeOnly
-                  impactText="Plant 1 tree"
-                  status="failure"
-                  taskText="Recruit 1 friend"
-                  completedTime={dayjs().subtract(2, 'days').toISOString()}
-                  deadlineTime={dayjs().subtract(2, 'days').toISOString()}
-                />
-                <Achievement
-                  badgeClassName={classes.achievementBadge}
-                  badgeOnly
-                  impactText="Plant 1 tree"
-                  status="success"
-                  taskText="Open 100 tabs"
-                  completedTime={dayjs().subtract(5, 'days').toISOString()}
-                  deadlineTime={dayjs().subtract(5, 'days').toISOString()}
-                />
-                <div /> {/* take up a spacing unit */}
-                <div className={classes.timelineBar} />
-              </Link>
-            ) : null}
-            {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) ===
-              'true' &&
-              bookmarkWidgetEnabled && (
-                <Modal open={addShortcutPageOpen}>
-                  <Box>
-                    <AddShortcutPageContainer
-                      user={user}
-                      app={app}
-                      userId={userId}
-                      closeHandler={closeAddShortcutPage}
-                    />
-                  </Box>
-                </Modal>
-              )}
-          </div>
-          {/**
-           * TODO: consolidate all notifications here to manage
-           * visible state. Right now, these will overlay the ones
-           * that appear via the UserImpact component.
-           */}
-          <div className={classes.notificationsContainer}>
-            {/* surveyNotif ? (
+            {/**
+             * TODO: consolidate all notifications here to manage
+             * visible state. Right now, these will overlay the ones
+             * that appear via the UserImpact component.
+             */}
+            <div className={classes.notificationsContainer}>
+              {/* surveyNotif ? (
               <Notification
                 className={classes.notification}
                 text={
@@ -937,7 +944,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
               />
             ) : null */}
 
-            {/* {notif && notif.variation === 'Version1' ? (
+              {/* {notif && notif.variation === 'Version1' ? (
               <Notification
                 className={classes.notification}
                 text={
@@ -985,119 +992,121 @@ const Index = ({ data: fallbackData, userAgent }) => {
               />
             ) : null} */}
 
-            {userGlobalId && shouldShowSfacExtensionPrompt ? (
-              <SfacExtensionSellNotification
-                userId={userGlobalId}
-                browser={browser}
-              />
-            ) : null}
+              {userGlobalId && shouldShowSfacExtensionPrompt ? (
+                <SfacExtensionSellNotification
+                  userId={userGlobalId}
+                  browser={browser}
+                />
+              ) : null}
 
-            {userGlobalId && showSFACNotification ? (
-              <SearchForACauseSellNotification
-                userId={userGlobalId}
-                onLearnMore={() => setShowSFACSellModalMode('normal')}
-                onNoThanks={() => setShowSFACSellModalMode('hard-sell')}
-                onSwitchToSearchForACause={() =>
-                  setSearchInputTooltip(
-                    'Great! You can always switch your search engine here later on.'
-                  )
-                }
-              />
-            ) : null}
-          </div>
-
-          <div className={classes.centerContainer}>
-            <div className={classes.searchBarContainer}>
-              {/* Prime day 2023 Promo */}
-              {/* {user.userId && notif && <PrimeDay2023 user={user} />} */}
-
-              {/* November Shop User 2023 Promo */}
-              {/* user.userId && <November2023ShopUser user={user} /> */}
-
-              <Logo
-                includeText
-                color={enableBackgroundImages ? 'white' : null}
-                className={classes.logo}
-              />
-              <Chip
-                label={landingPagePhrase}
-                className={classes.supportingChip}
-                color="primary"
-                size="small"
-                onClick={() => {
-                  goTo(aboutURL)
-                }}
-              />
-              <SearchInputContainer
-                userId={userId}
-                className={classes.searchBar}
-                app={app}
-                user={user}
-                onSearchSelectMoreInfoClick={onSearchSelectMoreInfoClick}
-                onSearchInputClick={onSearchInputClick}
-                tooltip={showSearchInputTooltip}
-              />
-              {localStorageFeaturesManager.getFeatureValue(LAUNCH_BOOKMARKS) !==
-                'false' &&
-                bookmarkWidgetEnabled && (
-                  <div>
-                    <FrontpageShortcutListContainer
-                      userId={userId}
-                      user={user}
-                      openHandler={openAddShortcutPage}
-                    />
-                  </div>
-                )}
-            </div>
-          </div>
-          <div className={classes.adsContainer}>
-            <div className={classes.adsContainerRectangles}>
-              <div
-                id="raptive-content-ad-1"
-                style={{
-                  display: 'flex',
-                  minWidth: 300,
-                  overflow: 'visible',
-                }}
-              />
-
-              <div
-                id="raptive-content-ad-2"
-                style={{
-                  display: 'flex',
-                  minWidth: 300,
-                  overflow: 'visible',
-                  marginTop: 10,
-                }}
-              />
+              {userGlobalId && showSFACNotification ? (
+                <SearchForACauseSellNotification
+                  userId={userGlobalId}
+                  onLearnMore={() => setShowSFACSellModalMode('normal')}
+                  onNoThanks={() => setShowSFACSellModalMode('hard-sell')}
+                  onSwitchToSearchForACause={() =>
+                    setSearchInputTooltip(
+                      'Great! You can always switch your search engine here later on.'
+                    )
+                  }
+                />
+              ) : null}
             </div>
 
-            <div className={classes.adContainerLeaderboard}>
-              <div
-                id="raptive-content-ad-3"
-                style={{
-                  overflow: 'visible',
-                  minWidth: 728,
-                }}
-              />
+            <div className={classes.centerContainer}>
+              <div className={classes.searchBarContainer}>
+                {/* Prime day 2023 Promo */}
+                {/* {user.userId && notif && <PrimeDay2023 user={user} />} */}
+
+                {/* November Shop User 2023 Promo */}
+                {/* user.userId && <November2023ShopUser user={user} /> */}
+
+                <Logo
+                  includeText
+                  color={enableBackgroundImages ? 'white' : null}
+                  className={classes.logo}
+                />
+                <Chip
+                  label={landingPagePhrase}
+                  className={classes.supportingChip}
+                  color="primary"
+                  size="small"
+                  onClick={() => {
+                    goTo(aboutURL)
+                  }}
+                />
+                <SearchInputContainer
+                  userId={userId}
+                  className={classes.searchBar}
+                  app={app}
+                  user={user}
+                  onSearchSelectMoreInfoClick={onSearchSelectMoreInfoClick}
+                  onSearchInputClick={onSearchInputClick}
+                  tooltip={showSearchInputTooltip}
+                />
+                {localStorageFeaturesManager.getFeatureValue(
+                  LAUNCH_BOOKMARKS
+                ) !== 'false' &&
+                  bookmarkWidgetEnabled && (
+                    <div>
+                      <FrontpageShortcutListContainer
+                        userId={userId}
+                        user={user}
+                        openHandler={openAddShortcutPage}
+                      />
+                    </div>
+                  )}
+              </div>
             </div>
-          </div>
-          <div className={classes.groupImpactContainer}>
-            {(impactType === CAUSE_IMPACT_TYPES.group ||
-              impactType === CAUSE_IMPACT_TYPES.individual_and_group) && (
-              <GroupImpactContainer user={user} />
-            )}
-          </div>
-        </>
-      )}
-      {/* Full Page Promo */}
-      {user && user.userId && notif && notif.variation && (
-        <ShopFullPage user={user} variation={notif.variation} />
-      )}
-      {user && user.userId && notifSearch && notifSearch.variation && (
-        <SearchFullPage user={user} variation={notifSearch.variation} />
-      )}
-    </div>
+            <div className={classes.adsContainer}>
+              <div className={classes.adsContainerRectangles}>
+                <div
+                  id="raptive-content-ad-1"
+                  style={{
+                    display: 'flex',
+                    minWidth: 300,
+                    overflow: 'visible',
+                  }}
+                />
+
+                <div
+                  id="raptive-content-ad-2"
+                  style={{
+                    display: 'flex',
+                    minWidth: 300,
+                    overflow: 'visible',
+                    marginTop: 10,
+                  }}
+                />
+              </div>
+
+              <div className={classes.adContainerLeaderboard}>
+                <div
+                  id="raptive-content-ad-3"
+                  style={{
+                    overflow: 'visible',
+                    minWidth: 728,
+                  }}
+                />
+              </div>
+            </div>
+            <div className={classes.groupImpactContainer}>
+              {(impactType === CAUSE_IMPACT_TYPES.group ||
+                impactType === CAUSE_IMPACT_TYPES.individual_and_group) && (
+                <GroupImpactContainer user={user} />
+              )}
+            </div>
+          </>
+        )}
+        {/* Full Page Promo */}
+        {user && user.userId && notif && notif.variation && (
+          <ShopFullPage user={user} variation={notif.variation} />
+        )}
+        {user && user.userId && notifSearch && notifSearch.variation && (
+          <SearchFullPage user={user} variation={notifSearch.variation} />
+        )}
+      </div>
+    </>
   )
 }
 
