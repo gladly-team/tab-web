@@ -140,7 +140,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'flex-end',
     alignContent: 'flex-start',
-    height: '100%',
     position: 'relative',
     zIndex: 1e6, // must be higher than all content besides ads and modal
   },
@@ -276,9 +275,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'row-reverse', // swap to move ads to opposite side
     bottom: 0,
     right: 0,
-    left: 0,
     pointerEvents: 'none', // don't block the main page
     zIndex: 1.5e3,
+    width: 350,
+    minHeight: 600,
   },
   adsContainerRectangles: {
     display: 'flex',
@@ -767,9 +767,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
             {enableBackgroundImages ? (
               <UserBackgroundImageContainer user={user} />
             ) : null}
-            <div className={classes.fullContainer}>
-              <div className={classes.topContainer}>
-                <div className={classes.topRightContainer}>
+            <div className={classes.fullContainer} id="full-container">
+              <div className={classes.topContainer} id="top-container">
+                <div className={classes.topRightContainer} id="right-container">
                   <div className={classes.userMenuContainer}>
                     {missionsFeatureEnabled ? (
                       <MissionHubButton status={missionStatus} />
