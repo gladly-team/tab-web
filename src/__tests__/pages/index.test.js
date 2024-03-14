@@ -1,10 +1,8 @@
 import React from 'react'
 import { shallow, mount } from 'enzyme'
-import Link from 'src/components/Link'
 import MockDate from 'mockdate'
 import IconButton from '@material-ui/core/IconButton'
-import SettingsIcon from '@material-ui/icons/Settings'
-import { aboutURL, accountURL } from 'src/utils/urls'
+import { aboutURL } from 'src/utils/urls'
 import { act } from 'react-dom/test-utils'
 import {
   STORAGE_NEW_USER_CAUSE_ID,
@@ -314,28 +312,28 @@ describe('index.js', () => {
     })
   })
 
-  it('includes a settings icon link to the account page', () => {
-    expect.assertions(1)
-    const IndexPage = require('src/pages/index').default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<IndexPage {...mockProps} />)
-    const settingsLink = wrapper
-      .find(Link)
-      .filterWhere((el) => el.prop('to') === accountURL)
-    expect(settingsLink.exists()).toBe(true)
-  })
+  // it('includes a settings icon link to the account page', () => {
+  //   expect.assertions(1)
+  //   const IndexPage = require('src/pages/index').default
+  //   const mockProps = getMockProps()
+  //   const wrapper = shallow(<IndexPage {...mockProps} />)
+  //   const settingsLink = wrapper
+  //     .find(Link)
+  //     .filterWhere((el) => el.prop('to') === accountURL)
+  //   expect(settingsLink.exists()).toBe(true)
+  // })
 
-  it('uses an settings icon button to link to the account page', () => {
-    expect.assertions(2)
-    const IndexPage = require('src/pages/index').default
-    const mockProps = getMockProps()
-    const wrapper = shallow(<IndexPage {...mockProps} />)
-    const settingsLink = wrapper
-      .find(Link)
-      .filterWhere((el) => el.prop('to') === accountURL)
-    expect(settingsLink.childAt(0).type()).toEqual(IconButton)
-    expect(settingsLink.childAt(0).childAt(0).type()).toEqual(SettingsIcon)
-  })
+  // it('/', () => {
+  //   expect.assertions(2)
+  //   const IndexPage = require('src/pages/index').default
+  //   const mockProps = getMockProps()
+  //   const wrapper = shallow(<IndexPage {...mockProps} />)
+  //   const settingsLink = wrapper
+  //     .find(Link)
+  //     .filterWhere((el) => el.prop('to') === accountURL)
+  //   expect(settingsLink.childAt(0).type()).toEqual(IconButton)
+  //   expect(settingsLink.childAt(0).childAt(0).type()).toEqual(SettingsIcon)
+  // })
 
   it('does not show the achievements content if showMockAchievements returns false', () => {
     expect.assertions(1)

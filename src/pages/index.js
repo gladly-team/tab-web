@@ -55,7 +55,7 @@ import UpdateImpactMutation from 'src/utils/mutations/UpdateImpactMutation'
 import SetHasViewedIntroFlowMutation from 'src/utils/mutations/SetHasViewedIntroFlowMutation'
 import { incrementTabsOpenedToday } from 'src/utils/adHelpers'
 import { isClientSide } from 'src/utils/ssr'
-import { aboutURL, accountURL, achievementsURL } from 'src/utils/urls'
+import { aboutURL, achievementsURL } from 'src/utils/urls'
 import {
   showMockAchievements,
   showBackgroundImages,
@@ -808,7 +808,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                         }
                       />
                     ) : (
-                      <Link to={aboutURL}>
+                      <a href="/newtab/about">
                         <IconButton>
                           <InfoIcon
                             className={clsx(
@@ -817,7 +817,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                             )}
                           />
                         </IconButton>
-                      </Link>
+                      </a>
                     )}
                     <div className={classes.moneyRaisedContainer}>
                       <Typography
@@ -831,7 +831,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                       </Typography>
                     </div>
                     <div className={classes.settingsIconContainer}>
-                      <Link to={accountURL}>
+                      <a href="/newtab/account">
                         <IconButton>
                           <SettingsIcon
                             className={clsx(
@@ -840,7 +840,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                             )}
                           />
                         </IconButton>
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </div>
