@@ -1058,8 +1058,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
                   )}
               </div>
             </div>
-            <div className={classes.adsContainer}>
-              <div className={classes.adsContainerRectangles}>
+            <div className={classes.adsContainer} id="ads-container">
+              <div
+                className={classes.adsContainerRectangles}
+                id="ads-container-rectangles"
+              >
                 <div
                   id="raptive-content-ad-1"
                   style={{
@@ -1080,7 +1083,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 />
               </div>
 
-              <div className={classes.adContainerLeaderboard}>
+              <div
+                className={classes.adContainerLeaderboard}
+                id="ads-container-leaderboard"
+              >
                 <div
                   id="raptive-content-ad-3"
                   style={{
