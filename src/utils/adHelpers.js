@@ -1,6 +1,3 @@
-/* globals window */
-
-import { getAvailableAdUnits } from 'tab-ads'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import moment from 'moment'
 import localStorageMgr from './localstorage-mgr'
@@ -21,8 +18,6 @@ try {
     'Environment variables NEXT_PUBLIC_ADS_ENABLED and NEXT_PUBLIC_ADS_USE_MOCK_ADS must be set.'
   )
 }
-
-const DEFAULT_NUMBER_OF_ADS = 2
 
 /**
  * Get the count of tabs opened today (UTC day) from localStorage. If no
@@ -124,54 +119,6 @@ export const incrementTabsOpenedToday = () => {
     // Reset the date and tab count
     setLastTabOpenedDateInLocalStorage()
     setTabCountInLocalStorage(1)
-  }
-}
-
-// TODO: implement
-/**
- * Determine if we should show only one ad. We'll show one ad to
- * users for the first X hours after they join.
- * @return {Boolean} Whether to show one ad.
- */
-const shouldShowOneAd = () => false
-
-/**
- * Determine if we should show three ads based on screen size.
- * @return {Boolean} Whether to show one ad.
- */
-const shouldShowThreeAds = () => !window.innerHeight || window.innerHeight > 700
-
-/**
- * Return an object of ad units we should display. This returns ad units
- * even if ads are disabled.
- * @return {Object} AdUnitsInfo
- * @return {Object|null} AdUnitsInfo.leaderboard - a tab-ads ad unit
- *   definition for the 728x90 ad, or null if we shouldn't show that
- *   ad unit
- * @return {Object|null} AdUnitsInfo.rectangleAdPrimary - a tab-ads
- *   ad unit definition for the first 300x250 ad, or null if we
- *   shouldn't show that ad unit
- * @return {Object|null} AdUnitsInfo.rectangleAdSecondary - a tab-ads
- *   ad unit definition for the second 300x250 ad, or null if we
- *   shouldn't show that ad unit
- */
-export const getAdUnits = () => {
-  let numberOfAdsToShow
-  if (hasUserReachedMaxTabsToday()) {
-    numberOfAdsToShow = 0
-  } else if (shouldShowOneAd()) {
-    numberOfAdsToShow = 1
-  } else if (shouldShowThreeAds()) {
-    numberOfAdsToShow = 3
-  } else {
-    numberOfAdsToShow = DEFAULT_NUMBER_OF_ADS
-  }
-  const { leaderboard, rectangleAdPrimary, rectangleAdSecondary } =
-    getAvailableAdUnits()
-  return {
-    ...(numberOfAdsToShow > 0 && { leaderboard }),
-    ...(numberOfAdsToShow > 1 && { rectangleAdPrimary }),
-    ...(numberOfAdsToShow > 2 && { rectangleAdSecondary }),
   }
 }
 

@@ -19,47 +19,6 @@ class CustomDocument extends Document {
           <TabCMPHeadElements />
         </Head>
         <body style={{ margin: 0, padding: 0 }} className="v4">
-          {/**
-           * Begin: Ads code.
-           * See: https://github.com/gladly-team/tab-ads#html-tags
-           */}
-          {/* Google Publisher Tag */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                var googletag = window.googletag || {}
-                googletag.cmd = googletag.cmd || []
-                googletag.cmd.push(() => {
-                  googletag.pubads().disableInitialLoad()
-                  googletag.pubads().setTagForChildDirectedTreatment(0)
-                })
-                var gads = document.createElement('script')
-                gads.async = true
-                gads.type = 'text/javascript'
-                var useSSL = document.location.protocol === 'https:'
-                gads.src = (useSSL ? 'https:' : 'http:') +
-                  '//www.googletagservices.com/tag/js/gpt.js'
-                var head = document.getElementsByTagName('head')[0]
-                head.appendChild(gads)
-              `,
-            }}
-          />
-          {/* Amazon apstag */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                try {
-                  !function(a9,a,p,s,t,A,g){if(a[a9])return;function q(c,r){a[a9]._Q.push([c,r])}a[a9]={init:function(){q("i",arguments)},fetchBids:function(){q("f",arguments)},setDisplayBids:function(){},targetingKeys:function(){return[]},_Q:[]};A=p.createElement(s);A.async=!0;A.src=t;g=p.getElementsByTagName(s)[0];g.parentNode.insertBefore(A,g)}("apstag",window,document,"script","//c.amazon-adsystem.com/aax2/apstag.js");
-                } catch(e) {
-                  console.error(e)
-                }
-                `,
-            }}
-          />
-          {/**
-           * End: Ads code.
-           */}
-
           {/* Google Analytics V4 Tag */}
           <script
             async

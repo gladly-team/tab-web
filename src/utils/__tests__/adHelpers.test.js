@@ -7,11 +7,9 @@ import {
   STORAGE_TABS_LAST_TAB_OPENED_DATE,
   STORAGE_TABS_RECENT_DAY_COUNT,
 } from '../constants'
-import localStorageFeaturesManager from '../localStorageFeaturesManager'
 
 // jest.mock('js/utils/feature-flags')
 // jest.mock('js/utils/experiments')
-jest.mock('tab-ads')
 jest.mock('../localstorage-mgr', () => ({
   getItem: jest.fn(),
   setItem: jest.fn(),
@@ -165,76 +163,5 @@ describe('Tab Tracking Methods', () => {
       STORAGE_TABS_RECENT_DAY_COUNT,
       1
     )
-  })
-})
-
-describe('adHelpers: getAdUnits', () => {
-  it('returns three ads if test returns true and screen large enough', () => {
-    localStorageFeaturesManager.getFeatureValue.mockReturnValue('true')
-    const { getAdUnits } = require('../adHelpers')
-    expect(getAdUnits()).toEqual({
-      leaderboard: {
-        // The long leaderboard ad.
-        adId: 'div-gpt-ad-1464385677836-0',
-        adUnitId: '/43865596/HBTL',
-        sizes: [[728, 90]],
-      },
-      rectangleAdPrimary: {
-        // The primary rectangle ad (bottom-right).
-        adId: 'div-gpt-ad-1464385742501-0',
-        adUnitId: '/43865596/HBTR',
-        sizes: [[300, 250]],
-      },
-      rectangleAdSecondary: {
-        // The second rectangle ad (right side, above the first).
-        adId: 'div-gpt-ad-1539903223131-0',
-        adUnitId: '/43865596/HBTR2',
-        sizes: [[300, 250]],
-      },
-    })
-  })
-  it('returns two ads if test returns true and screen too small', () => {
-    localStorageFeaturesManager.getFeatureValue.mockReturnValue('true')
-    window.innerHeight = 400
-    const { getAdUnits } = require('../adHelpers')
-    expect(getAdUnits()).toEqual({
-      leaderboard: {
-        // The long leaderboard ad.
-        adId: 'div-gpt-ad-1464385677836-0',
-        adUnitId: '/43865596/HBTL',
-        sizes: [[728, 90]],
-      },
-      rectangleAdPrimary: {
-        // The primary rectangle ad (bottom-right).
-        adId: 'div-gpt-ad-1464385742501-0',
-        adUnitId: '/43865596/HBTR',
-        sizes: [[300, 250]],
-      },
-    })
-  })
-  it('returns three ads if test returns true and window height undefined', () => {
-    localStorageFeaturesManager.getFeatureValue.mockReturnValue('true')
-    window.innerHeight = undefined
-    const { getAdUnits } = require('../adHelpers')
-    expect(getAdUnits()).toEqual({
-      leaderboard: {
-        // The long leaderboard ad.
-        adId: 'div-gpt-ad-1464385677836-0',
-        adUnitId: '/43865596/HBTL',
-        sizes: [[728, 90]],
-      },
-      rectangleAdPrimary: {
-        // The primary rectangle ad (bottom-right).
-        adId: 'div-gpt-ad-1464385742501-0',
-        adUnitId: '/43865596/HBTR',
-        sizes: [[300, 250]],
-      },
-      rectangleAdSecondary: {
-        // The second rectangle ad (right side, above the first).
-        adId: 'div-gpt-ad-1539903223131-0',
-        adUnitId: '/43865596/HBTR2',
-        sizes: [[300, 250]],
-      },
-    })
   })
 })
