@@ -32,6 +32,7 @@ import SquadCounter from 'src/components/SquadCounter'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 import SfacActivityContainer from 'src/components/SfacActivityContainer'
+import Momentum from 'src/components/Momentum'
 
 // material components
 import { makeStyles } from '@material-ui/core/styles'
@@ -233,12 +234,10 @@ const useStyles = makeStyles((theme) => ({
     background: grey['300'],
   },
   centerContainer: {
-    height: '100%',
-    width: '100%',
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: 220, // for visually-appealing vertical centering
   },
   searchBarContainer: {
     display: 'flex',
@@ -1014,6 +1013,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
             </div>
 
             <div className={classes.centerContainer}>
+              {/* Momentum Direct Donate */}
+              {user.userId && <Momentum user={user} />}
+
               <div className={classes.searchBarContainer}>
                 {/* Prime day 2023 Promo */}
                 {/* {user.userId && notif && <PrimeDay2023 user={user} />} */}
