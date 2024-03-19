@@ -112,7 +112,7 @@ const Momentum = ({ user }) => {
                     </a>{' '}
                     feature). Giving cash is effective, evidence-backed, and
                     empowering. Will you join our group of Tabbers amplifying
-                    their impact with a monthly cash donation?
+                    this impact with a monthly cash donation?
                   </Typography>
                   <Button
                     variant="contained"
