@@ -430,6 +430,31 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const showAchievements = showMockAchievements()
   const enableBackgroundImages = showBackgroundImages()
 
+  const logTabWithV5 = async () => {
+    const userToken = localStorageMgr.getItem('access_token')
+
+    // This should not happen
+    if (!userToken) {
+      return
+    }
+
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${userToken}`,
+    }
+
+    fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/tab/log`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({}),
+    })
+  }
+
+  useEffect(() => {
+    logTabWithV5()
+  }, [])
+
   // No scrolling on this home page.
   useEffect(() => {
     // Add the style when the component mounts
