@@ -5,6 +5,7 @@ import { Environment, Network, RecordSource, Store } from 'relay-runtime'
 import { isServerSide } from 'src/utils/ssr'
 import logger from 'src/utils/logger'
 import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
+import localStorageManager from 'src/utils/localstorage-mgr'
 
 try {
   ensureValuesAreDefined(process.env.NEXT_PUBLIC_RELAY_ENDPOINT)
@@ -86,6 +87,8 @@ const createFetchQuery = ({ getIdToken }) => {
       const { currentUser } = firebase.auth()
       if (currentUser) {
         token = await currentUser.getIdToken()
+
+        localStorageManager.setItem('access_token', token)
       }
     }
 
