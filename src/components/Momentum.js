@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import gtag from 'ga-gtag'
 import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button'
@@ -19,9 +19,9 @@ const contStyles = {
   marginLeft: 'auto',
   marginRight: 'auto',
   width: 650,
-  marginTop: 10,
+  marginTop: 70,
   marginBottom: 20,
-  zIndex: 100000,
+  zIndex: 1000000,
 }
 
 const Momentum = ({ user }) => {
@@ -53,25 +53,23 @@ const Momentum = ({ user }) => {
     return null
   }
 
-  // useEffect(() => {
-  //   const dissNotif =
-  //     localStorageMgr.getItem(getNotifDismissKey('momentum')) || false
+  useEffect(() => {
+    const dissNotif =
+      localStorageMgr.getItem(getNotifDismissKey('momentum')) || false
 
-  //   if (!dissNotif) {
-  //     setShow(true)
-  //   } else {
-  //     setShow(false)
-  //   }
-  // }, [user])
+    if (!dissNotif) {
+      setShow(true)
+    } else {
+      setShow(false)
+    }
+  })
 
   return (
     <>
       {show && (
         <div style={contStyles} id="momentum-container">
-          <script src="https://donation-form-static.givemomentum.com/widget.js" />
           <Card>
             <CardContent
-              onClick={onOpen}
               style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -84,6 +82,8 @@ const Momentum = ({ user }) => {
                   position: 'absolute',
                   right: 10,
                   top: 0,
+                  zIndex: 100000,
+                  cursor: 'pointer',
                 }}
               >
                 <CloseIcon sx={{ color: '#fff', width: 28, height: 28 }} />
@@ -97,12 +97,19 @@ const Momentum = ({ user }) => {
                     align="center"
                     style={{ marginTop: 20 }}
                   >
-                    Send life-changing cash directly <br /> to someone in
-                    poverty
+                    Send cash directly <br /> to someone in poverty{' '}
                   </Typography>
                   <Typography variant="body1" gutterBottom align="center">
-                    Cash transfers empower people in extreme poverty to choose
-                    how best to <br /> improve their lives (check out their{' '}
+                    100% of your donation will support{' '}
+                    <a
+                      href="https://live.givedirectly.org/"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      GiveDirectly's
+                    </a>{' '}
+                    work to deliver <br /> cash transfers to families in need
+                    (check out their{' '}
                     <a
                       href="https://www.npr.org/2024/01/10/1197956397/give-directly-universal-basic-income-poverty-kenya"
                       target="_blank"
@@ -110,11 +117,13 @@ const Momentum = ({ user }) => {
                     >
                       Planet Money
                     </a>{' '}
-                    feature). Giving cash is effective, evidence-backed, and
-                    empowering. Will you join our group of Tabbers amplifying
-                    this impact with a monthly cash donation?
+                    feature). <br /> <br /> Giving cash is effective,
+                    evidence-backed, and empowering.
+                    <br /> Will you join other Tabbers making a monthly cash
+                    donation?
                   </Typography>
                   <Button
+                    onClick={onOpen}
                     variant="contained"
                     color="primary"
                     style={{
@@ -263,11 +272,17 @@ const Momentum = ({ user }) => {
 
               {user.cause.nameForShop === 'Ending Poverty' && (
                 <Typography variant="body1" gutterBottom align="center">
-                  100% of your donation will support GiveDirectly’s work to
-                  deliver cash directly to families in need, no strings
-                  attached. <br /> A donation of just $20/month for a year could
-                  help a family buy a plot of land, install a pump for clean
-                  water, build a home, or more.
+                  A donation of just $20/month for a year could help a family
+                  buy a plot of land, install a pump for clean water, build a
+                  home, and{' '}
+                  <a
+                    href="https://live.givedirectly.org/"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    more
+                  </a>
+                  .
                 </Typography>
               )}
               <iframe

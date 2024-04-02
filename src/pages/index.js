@@ -235,9 +235,12 @@ const useStyles = makeStyles((theme) => ({
   },
   centerContainer: {
     display: 'flex',
+    position: 'relative',
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'scroll',
+    height: '100vh',
   },
   searchBarContainer: {
     display: 'flex',
@@ -1012,7 +1015,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
               ) : null}
             </div>
 
-            <div className={classes.centerContainer}>
+            <div className={classes.centerContainer} id="center-container">
               {/* Momentum Direct Donate */}
               {user.userId && <Momentum user={user} />}
 
