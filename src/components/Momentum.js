@@ -49,10 +49,6 @@ const Momentum = ({ user }) => {
     return false
   }
 
-  if (user.cause.nameForShop !== 'Ending Poverty') {
-    return null
-  }
-
   useEffect(() => {
     const dissNotif =
       localStorageMgr.getItem(getNotifDismissKey('momentum')) || false
@@ -62,7 +58,11 @@ const Momentum = ({ user }) => {
     } else {
       setShow(false)
     }
-  })
+  }, [setShow])
+
+  if (user.cause.nameForShop !== 'Ending Poverty') {
+    return null
+  }
 
   return (
     <>
