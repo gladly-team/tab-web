@@ -239,7 +239,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'scroll',
     height: '100vh',
   },
   searchBarContainer: {
