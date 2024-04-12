@@ -43,7 +43,7 @@ const GroupImpactWrapper = ({ user }) => {
 }
 
 const GroupImpact = ({ user }) => {
-  const { cause, leaderboard, id: userId, groupImpactHistory } = user
+  const { cause, id: userId, groupImpactHistory } = user
   const { groupImpactMetric, groupImpactMetricCount } = cause
   const classes = useStyles()
 
@@ -183,7 +183,7 @@ const GroupImpact = ({ user }) => {
         }
         openHandler={toggleSidebar}
         groupImpactMetricCount={groupImpactMetricCount}
-        leaderboard={leaderboard}
+        leaderboard={null}
         userId={userId}
         groupImpactHistory={groupImpactHistory}
       />
