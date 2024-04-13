@@ -97,8 +97,9 @@ import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotif
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
 import ShopFullPage from 'src/components/promos/ShopFullPage'
 import SearchFullPage from 'src/components/promos/SearchFullPage'
+import Notification from 'src/components/notification/Notification'
 
-// import Notification from 'src/components/Notification'
+// import NotificationOld from 'src/components/Notification'
 
 import AddShortcutPageContainer from 'src/components/AddShortcutPageContainer'
 import FrontpageShortcutListContainer from 'src/components/FrontpageShortcutListContainer'
@@ -975,6 +976,41 @@ const Index = ({ data: fallbackData, userAgent }) => {
              * that appear via the UserImpact component.
              */}
             <div className={classes.notificationsContainer}>
+              <Notification slot="top-right" user={user} />
+
+              {/* <NotificationOld
+                className={classes.notification}
+                text={
+                  <div className={classes.notificationText}>
+                    <Typography
+                      variant="h2"
+                      gutterBottom
+                      className={classes.notificationTitle}
+                    >
+                      Time for the 2023 Survey!
+                    </Typography>
+
+                    <Typography variant="body1" gutterBottom>
+                      Help decide what is next for Tab for a Cause by providing
+                      your feedback. Thanks for Tabbing!
+                    </Typography>
+                    <br />
+                    <Typography variant="body1" gutterBottom>
+                      Thanks for your help!
+                    </Typography>
+                  </div>
+                }
+                buttons={
+                  <div className={classes.notificationButtonsWrapper}>
+                    <Link
+                      to="https://docs.google.com/forms/d/e/1FAIpQLScnsvTq8s3oSOzD9jaCCYcsa-LbNPQyIZDU9lSVSJWIMPeNWg/viewform"
+                      target="_blank"
+                    ></Link>
+                  </div>
+                }
+                includeClose
+              /> */}
+
               {/* surveyNotif ? (
               <Notification
                 className={classes.notification}
