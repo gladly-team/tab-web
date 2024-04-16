@@ -32,7 +32,9 @@ import SquadCounter from 'src/components/SquadCounter'
 import CustomThemeHOC from 'src/utils/pageWrappers/CustomThemeHOC'
 import withGoogleAnalyticsProperties from 'src/utils/pageWrappers/withGoogleAnalyticsProperties'
 import SfacActivityContainer from 'src/components/SfacActivityContainer'
-import Momentum from 'src/components/Momentum'
+
+// import Momentum from 'src/components/Momentum'
+
 import Leaderboard from 'src/components/Leaderboard'
 
 // material components
@@ -1120,7 +1122,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
 
             <div className={classes.centerContainer} id="center-container">
               {/* Momentum Direct Donate */}
-              {user.userId && <Momentum user={user} />}
+              {/* {user.userId && <Momentum user={user} /> */}
 
               {/* Leaderboard */}
               {user.userId && (
