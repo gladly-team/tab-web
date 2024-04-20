@@ -766,6 +766,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
     setShowLeaderboardFunc(false)
   }
 
+  const openLeaderboard = () => {
+    setShowLeaderboardFunc(true)
+  }
+
   return (
     <>
       <Head>
@@ -864,9 +868,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                           backgroundColor: 'white',
                           boxShadow: '0px 2px 4px grey',
                         }}
-                        onClick={() =>
-                          setShowLeaderboardFunc(!showLeaderboardFunc)
-                        }
+                        onClick={openLeaderboard}
                       >
                         <div
                           style={{ display: 'flex', flexDirection: 'column' }}
@@ -978,7 +980,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
              * that appear via the UserImpact component.
              */}
             <div className={classes.notificationsContainer}>
-              <Notification slot="top-right" user={user} />
+              <Notification
+                slot="top-right"
+                user={user}
+                onOpenLeaderboard={openLeaderboard}
+              />
 
               {/* <NotificationOld
                 className={classes.notification}
