@@ -3,6 +3,7 @@ import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import { apiLogin, apiLogout, authURL, dashboardURL } from 'src/utils/urls'
 import { CUSTOM_HEADER_NAME } from 'src/utils/middleware/constants'
 import logger from 'src/utils/logger'
+import { setCookie } from 'cookies-next'
 
 try {
   ensureValuesAreDefined([
@@ -26,6 +27,13 @@ const tokenChangedHandler = async (authUser) => {
   // If the user is authed, call login to set a cookie.
   if (authUser.id) {
     const userToken = await authUser.getIdToken()
+
+    // This is used by v5 of our app as cloudfront does not support cookies with dots in them.
+    const currentDate = new Date()
+    const nextYearDate = new Date(currentDate)
+    nextYearDate.setFullYear(currentDate.getFullYear() + 1)
+    setCookie('TabAuthToken', userToken, { expires: nextYearDate })
+
     response = await fetch(apiLogin, {
       method: 'POST',
       headers: {
