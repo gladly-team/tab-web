@@ -5,8 +5,7 @@ import Modal from '@material-ui/core/Modal'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 
-const iframeUrl =
-  'https://snowy-stream-wljibw2liswn.vapor-farm-g1.com/newtab/leaderboard?user_id='
+const iframeUrl = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/leaderboard?user_id=`
 
 const Leaderboard = ({ user, openWidgetFunc, onCloseFunc }) => {
   const [openWidget, setOpenWidget] = useState(false)

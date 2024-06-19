@@ -78,7 +78,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
     <>
       {show && (
         <iframe
-          src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/newtab/notifications?user_id=${user.userId}&slot=${slot}&override=${sParams.NotificationOverride}`}
+          src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/notifications?user_id=${user.userId}&slot=${slot}&override=${sParams.NotificationOverride}`}
           title={`notification-${slot}`}
           style={{ marginTop: '10px', marginBottom: '10px' }}
           width="100%"
