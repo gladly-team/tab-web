@@ -27,6 +27,7 @@ if (isBrowser) {
 // Example Overrides: ?notification-override=leaderboard-change-flat
 // Example Overrides: ?notification-override=leaderboard-change-down
 // Example Overrides: ?notification-override=leaderboard-change-up
+// Example Overrides: ?notification-override=vote-america-boot-up-june-2024&version=Version1
 const Notification = ({ slot, user, onOpenLeaderboard }) => {
   const [show, setShow] = useState(true)
   const [height, setHeight] = useState(0)
