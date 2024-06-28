@@ -1146,6 +1146,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 {/* November Shop User 2023 Promo */}
                 {/* user.userId && <November2023ShopUser user={user} /> */}
 
+                <div style={{ marginBottom: 20 }}>
+                  <Notification slot="top-center" user={user} />
+                </div>
+
                 <Logo
                   includeText
                   color={enableBackgroundImages ? 'white' : null}
