@@ -13,6 +13,7 @@ import {
   mdiFoodApple,
   mdiWater,
   mdiAccountHeart,
+  mdiVote,
 } from '@mdi/js'
 
 const PAW = 'paw'
@@ -25,6 +26,7 @@ const WATER = 'water'
 const PERSON_HEART = 'person-heart'
 const MONEY = 'money'
 const TRANSGENDER = 'transgender'
+const VOTE = 'vote'
 
 const iconOptions = [
   PAW,
@@ -37,6 +39,7 @@ const iconOptions = [
   PERSON_HEART,
   TRANSGENDER,
   MONEY,
+  VOTE,
 ]
 
 const CauseIcon = ({ icon, className }) => {
@@ -112,6 +115,18 @@ const CauseIcon = ({ icon, className }) => {
             fillRule="evenodd"
             clipRule="evenodd"
             d={mdiWater}
+            fill="inherit"
+          />
+        </SvgIcon>
+      )
+      break
+    case VOTE:
+      iconComp = (
+        <SvgIcon className={className}>
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d={mdiVote}
             fill="inherit"
           />
         </SvgIcon>
