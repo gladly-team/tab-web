@@ -1240,6 +1240,9 @@ const Index = ({ data: fallbackData, userAgent }) => {
         {user && user.userId && notifSearch && notifSearch.variation && (
           <SearchFullPage user={user} variation={notifSearch.variation} />
         )}
+        {user && user.userId && (
+          <Notification slot="modal-center" user={user} />
+        )}
       </div>
     </>
   )
