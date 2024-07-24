@@ -171,6 +171,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
             position: 'absolute',
             backgroundColor: '#fff',
             zIndex: 100000000,
+            overflow: 'hidden',
           }}
         >
           <div style={{ height: '100%' }}>
@@ -188,7 +189,11 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
                 id={`notification-${slot}`}
                 src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/notifications?user_id=${user.userId}&slot=${slot}&override=${sParams.NotificationOverride}&version=${sParams.Version}`}
                 title={`notification-${slot}`}
-                style={{ marginTop: '10px', marginBottom: '10px' }}
+                style={{
+                  marginTop: '10px',
+                  marginBottom: '10px',
+                  border: 'none',
+                }}
                 width="100%"
                 height="100%"
                 frameBorder="0"
