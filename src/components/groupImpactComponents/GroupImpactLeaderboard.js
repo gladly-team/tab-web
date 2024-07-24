@@ -173,7 +173,7 @@ const Leaderboard = ({ leaderboardEntries, userId, onClose }) => {
       <div className={classes.title}>
         <div>
           <Typography variant="h5" className={classes.robotoBold}>
-            LEADERBOARD
+            WEEKLY LEADERBOARD
           </Typography>
           <Typography variant="body2" className={classes.subtitle}>
             Impact points earned for this group goal by opening tabs, searching,
