@@ -8,11 +8,6 @@ import CloseIcon from '@material-ui/icons/Close'
 const iframeUrl = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/leaderboard?user_id=`
 
 const Leaderboard = ({ user, openWidgetFunc, onCloseFunc }) => {
-  // Not a browser, so we can't render the widget.
-  if (typeof window === 'undefined') {
-    return null
-  }
-
   const [openWidget, setOpenWidget] = useState(false)
 
   const onOpen = () => {
