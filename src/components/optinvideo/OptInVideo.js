@@ -84,11 +84,11 @@ const OptInVideo = ({ user }) => {
         open={showModal}
         style={{
           height: 650,
+          maxWidth: 1000,
           marginTop: 'auto',
           marginBottom: 'auto',
           marginLeft: 'auto',
           marginRight: 'auto',
-          maxWidth: 1000,
           position: 'absolute',
           backgroundColor: '#fff',
           zIndex: 100000000,
@@ -118,8 +118,6 @@ const OptInVideo = ({ user }) => {
               src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/iframe/opt-in-video?user_id=${user.userId}&override=${sParams.NotificationOverride}`}
               title="optin-video-modal-iframe"
               style={{
-                marginTop: '10px',
-                marginBottom: '10px',
                 border: 'none',
               }}
               width="100%"

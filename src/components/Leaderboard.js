@@ -8,6 +8,11 @@ import CloseIcon from '@material-ui/icons/Close'
 const iframeUrl = `${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/leaderboard?user_id=`
 
 const Leaderboard = ({ user, openWidgetFunc, onCloseFunc }) => {
+  // Not a browser, so we can't render the widget.
+  if (typeof window === 'undefined') {
+    return null
+  }
+
   const [openWidget, setOpenWidget] = useState(false)
 
   const onOpen = () => {
@@ -19,6 +24,39 @@ const Leaderboard = ({ user, openWidgetFunc, onCloseFunc }) => {
     setOpenWidget(false)
     onCloseFunc()
     gtag('event', 'leaderboard_close')
+  }
+
+  //
+  // Function to handle received messages from the iframe
+  //
+  function receiveMessage(event) {
+    // TODO(spicer): Add origin check for added security
+    // if (event.origin !== 'http://127.0.0.1:9000') return
+
+    // Check if the message is for us. If not, ignore it.
+    if (typeof event.data.show === 'undefined') return
+
+    // Check if the message is for us. If not, ignore it.
+    if (event.data.slot !== 'leaderboard') {
+      return
+    }
+
+    // If the message from iframe to close.
+    if (!event.data.show) {
+      onClose()
+    }
+  }
+
+  // Set up the event listener
+  if (typeof window !== 'undefined') {
+    // eslint-disable-next-line no-undef
+    window.addEventListener(
+      'message',
+      (event) => {
+        receiveMessage(event)
+      },
+      false
+    )
   }
 
   // If you need to call the function automatically when the parent says so:
@@ -36,7 +74,7 @@ const Leaderboard = ({ user, openWidgetFunc, onCloseFunc }) => {
     <>
       {iframeUrl && (
         <Modal
-          id="momentum-modal"
+          id="leaderboard-modal"
           open={openWidget}
           style={{
             top: 10,
