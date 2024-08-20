@@ -876,7 +876,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
                       </a>
                     )}
 
-                    {user && sParams.OptInOverride && (
+                    {user && (
                       <>
                         <iframe
                           title="opt-in-video"
