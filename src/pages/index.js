@@ -99,7 +99,6 @@ import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotif
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
 import ShopFullPage from 'src/components/promos/ShopFullPage'
 import SearchFullPage from 'src/components/promos/SearchFullPage'
-import OptInVideo from 'src/components/optinvideo/OptInVideo'
 import Notification from 'src/components/notification/Notification'
 
 // import NotificationOld from 'src/components/Notification'
