@@ -877,26 +877,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
                     )}
 
                     {user && (
-                      <>
-                        <iframe
-                          title="opt-in-video"
-                          frameBorder="0"
-                          allowtransparency="true"
-                          src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/iframe/opt-in-video?show=icon&user_id=${user.userId}&override=${sParams.OptInOverride}`}
-                          style={{
-                            height: 40,
-                            width: 40,
-                            border: 'none',
-                            marginRight: 10,
-                            backgroundColor: 'transparent',
-                          }}
-                        />
-
-                        <OptInVideo user={user} />
-                      </>
-                    )}
-
-                    {user && (
                       <IconButton
                         style={{
                           height: 40,
