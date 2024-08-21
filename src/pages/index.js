@@ -99,6 +99,7 @@ import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotif
 import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
 import ShopFullPage from 'src/components/promos/ShopFullPage'
 import SearchFullPage from 'src/components/promos/SearchFullPage'
+import OptInVideo from 'src/components/optinvideo/OptInVideo'
 import Notification from 'src/components/notification/Notification'
 
 // import NotificationOld from 'src/components/Notification'
@@ -873,6 +874,26 @@ const Index = ({ data: fallbackData, userAgent }) => {
                           />
                         </IconButton>
                       </a>
+                    )}
+
+                    {user && (
+                      <>
+                        <iframe
+                          title="opt-in-video"
+                          frameBorder="0"
+                          allowtransparency="true"
+                          src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/iframe/opt-in-video?show=icon&user_id=${user.userId}&override=${sParams.OptInOverride}`}
+                          style={{
+                            height: 40,
+                            width: 40,
+                            border: 'none',
+                            marginRight: 10,
+                            backgroundColor: 'transparent',
+                          }}
+                        />
+
+                        <OptInVideo user={user} />
+                      </>
                     )}
 
                     {user && (
