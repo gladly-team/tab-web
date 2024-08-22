@@ -7,21 +7,6 @@ import Modal from '@material-ui/core/Modal'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 
-const isBrowser = typeof window !== 'undefined'
-
-const sParams = {
-  NotificationOverride: null,
-}
-
-if (isBrowser) {
-  // eslint-disable-next-line no-undef
-  const p = new Proxy(new URLSearchParams(window.location.search), {
-    get: (searchParams, prop) => searchParams.get(prop),
-  })
-
-  sParams.NotificationOverride = p['opt-in-override'] || ''
-}
-
 // Example Overrides: ?opt-in-override={any user id}
 const OptInVideo = ({ user }) => {
   const [showModal, setShowModal] = useState(false)
@@ -115,7 +100,7 @@ const OptInVideo = ({ user }) => {
           >
             <iframe
               id="optin-video-modal-iframe"
-              src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/iframe/opt-in-video?user_id=${user.userId}&override=${sParams.NotificationOverride}`}
+              src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/iframe/opt-in-video?user_id=${user.userId}`}
               title="optin-video-modal-iframe"
               style={{
                 border: 'none',

@@ -100,6 +100,7 @@ import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpa
 import ShopFullPage from 'src/components/promos/ShopFullPage'
 import SearchFullPage from 'src/components/promos/SearchFullPage'
 import Notification from 'src/components/notification/Notification'
+import OptInVideo from 'src/components/optinvideo/OptInVideo'
 
 // import NotificationOld from 'src/components/Notification'
 
@@ -107,8 +108,6 @@ import AddShortcutPageContainer from 'src/components/AddShortcutPageContainer'
 import FrontpageShortcutListContainer from 'src/components/FrontpageShortcutListContainer'
 import Modal from '@material-ui/core/Modal'
 import { Box } from '@material-ui/core'
-
-const isBrowser = typeof window !== 'undefined'
 
 const getNotifDismissKey = (code) => `${NOTIF_DISMISS_PREFIX}.${code}`
 
@@ -772,19 +771,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
     setShowLeaderboardFunc(true)
   }
 
-  const sParams = {
-    OptInOverride: null,
-  }
-
-  if (isBrowser) {
-    // eslint-disable-next-line no-undef
-    const p = new Proxy(new URLSearchParams(window.location.search), {
-      get: (searchParams, prop) => searchParams.get(prop),
-    })
-
-    sParams.OptInOverride = p['opt-in-override'] || ''
-  }
-
   return (
     <>
       <Head>
@@ -873,6 +859,26 @@ const Index = ({ data: fallbackData, userAgent }) => {
                           />
                         </IconButton>
                       </a>
+                    )}
+
+                    {user && (
+                      <>
+                        <iframe
+                          title="opt-in-video"
+                          frameBorder="0"
+                          allowtransparency="true"
+                          src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/iframe/opt-in-video?show=icon&user_id=${user.userId}`}
+                          style={{
+                            height: 40,
+                            width: 40,
+                            border: 'none',
+                            marginRight: 10,
+                            backgroundColor: 'transparent',
+                          }}
+                        />
+
+                        <OptInVideo user={user} />
+                      </>
                     )}
 
                     {user && (
