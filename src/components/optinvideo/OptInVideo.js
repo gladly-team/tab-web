@@ -27,6 +27,12 @@ const OptInVideo = ({ user }) => {
   const onClose = () => {
     setShowModal(false)
     gtag('event', 'optin-video_modal_close')
+
+    // Wait 1 second and refesh the page.
+    setTimeout(() => {
+      // eslint-disable-next-line no-undef
+      window.location.reload()
+    }, 1000)
   }
 
   //
