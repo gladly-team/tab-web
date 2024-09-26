@@ -437,24 +437,38 @@ const Index = ({ data: fallbackData, userAgent }) => {
   const enableBackgroundImages = showBackgroundImages()
 
   const logTabWithV5 = async () => {
-    const userToken = localStorageMgr.getItem('access_token')
+    try {
+      const userToken = localStorageMgr.getItem('access_token')
 
-    // This should not happen
-    if (!userToken) {
-      return
+      // This should not happen
+      if (!userToken) {
+        return
+      }
+
+      const headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userToken}`,
+      }
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/tab/log`,
+        {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({}),
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+    } catch (error) {
+      console.error(
+        'logTabWithV5: There was a problem with the fetch operation:',
+        error
+      )
     }
-
-    const headers = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${userToken}`,
-    }
-
-    fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/api/v1/tab/log`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({}),
-    })
   }
 
   useEffect(() => {
