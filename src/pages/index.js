@@ -464,10 +464,11 @@ const Index = ({ data: fallbackData, userAgent }) => {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
     } catch (error) {
-      console.error(
-        'logTabWithV5: There was a problem with the fetch operation:',
-        error
-      )
+      // // eslint-disable-next-line no-console
+      // console.error(
+      //   'logTabWithV5: There was a problem with the fetch operation:',
+      //   error
+      // )
     }
   }
 
