@@ -5,7 +5,7 @@
   "scripts": {
     "go": "yarn run dev",
     "dev": "NODE_ENV=development next dev --port 3001",
-    "build": "NODE_ENV=test yarn run test && NODE_ENV=production yarn run relay && next build",
+    "build": "NODE_ENV=production yarn run relay && next build",
     "start": "NODE_ENV=production next start --port 3001",
     "test": "yarn run relay && yarn run lint && yarn run jest --testPathIgnorePatterns=e2e -w 1",
     "test:e2e": "dotenv-extended --defaults=./.env --path=./.env.local yarn run jest e2e-tests.test.js",
