@@ -295,6 +295,9 @@ const Account = ({ data: fallbackData }) => {
       body: JSON.stringify({ optIn: isOptedIn }),
     })
 
+    // eslint-disable-next-line no-undef
+    document.cookie = 'tabV4OptIn=enabled; Max-Age=-99999999;'
+
     if (response.ok) {
       // Clear local storage.
       localStorageMgr.removeItem(STORAGE_NEW_USER_IS_TAB_V4_BETA)
@@ -305,8 +308,6 @@ const Account = ({ data: fallbackData }) => {
       // If opting out, unregister the service worker.
       if (!isOptedIn) {
         unregister()
-        // eslint-disable-next-line no-undef
-        document.cookie = 'tabV4OptIn=enabled; Max-Age=-99999999;'
       }
 
       // Set the "v4 beta enabled" flag to false on the user's
