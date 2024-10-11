@@ -113,6 +113,12 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
           }
           break
 
+        // Reload the entire page.
+        case 'reload-page':
+          // eslint-disable-next-line no-undef
+          window.location.reload()
+          break
+
         // Default do nothing
         default:
           break
