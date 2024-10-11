@@ -283,9 +283,6 @@ const Account = ({ data: fallbackData }) => {
   // Switching to classic tab page.
   const [isRevertingToClassicTab, setIsRevertingToClassicTab] = useState(false)
   const setBetaOptIn = async (isOptedIn) => {
-    // eslint-disable-next-line no-undef
-    document.cookie = 'tabV4OptIn=enabled; Max-Age=-99999999;'
-
     const response = await fetch(apiBetaOptIn, {
       method: 'POST',
       headers: {
