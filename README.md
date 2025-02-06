@@ -4,7 +4,7 @@
 
 The easiest way to do good every day. **[Join in](https://tab.gladly.io)**
 
-## Getting Started
+## Getting Started!
 
 This repo contains the latest web app. See [gladly-team/tab](https://github.com/gladly-team/tab) for most backend services.
 
