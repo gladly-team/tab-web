@@ -96,7 +96,6 @@ import useBrowserName from 'src/utils/hooks/useBrowserName'
 import { isSearchActivityComponentSupported } from 'src/utils/browserSupport'
 import localStorageFeaturesManager from 'src/utils/localStorageFeaturesManager'
 import SearchbarSFACSellNotification from 'src/components/SearchbarSFACSellNotification'
-import GroupImpactContainer from 'src/components/groupImpactComponents/GroupImpactContainer'
 import ShopFullPage from 'src/components/promos/ShopFullPage'
 import SearchFullPage from 'src/components/promos/SearchFullPage'
 import Notification from 'src/components/notification/Notification'
@@ -148,14 +147,6 @@ const useStyles = makeStyles((theme) => ({
     alignContent: 'flex-start',
     position: 'relative',
     zIndex: 1e6, // must be higher than all content besides ads and modal
-  },
-  groupImpactContainer: {
-    zIndex: 1e6,
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    marginRight: 'auto',
-    height: '100%',
   },
   topRightContainer: {
     display: 'flex',
@@ -408,7 +399,6 @@ const getRelayQuery = async ({ AuthUser }) => {
           ...EmailInviteDialogContainer_user
           ...SearchInputContainer_user
           ...SfacActivityContainer_user
-          ...GroupImpactContainer_user
           ...AddShortcutPageContainer_user
           ...FrontpageShortcutListContainer_user
         }
@@ -1291,12 +1281,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
                   }}
                 />
               </div>
-            </div>
-            <div className={classes.groupImpactContainer}>
-              {(impactType === CAUSE_IMPACT_TYPES.group ||
-                impactType === CAUSE_IMPACT_TYPES.individual_and_group) && (
-                <GroupImpactContainer user={user} />
-              )}
             </div>
           </>
         )}
