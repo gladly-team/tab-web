@@ -14,6 +14,11 @@ paw.args = {
   icon: 'paw',
 }
 
+export const dog = Template.bind({})
+dog.args = {
+  icon: 'dog',
+}
+
 export const jellyfish = Template.bind({})
 jellyfish.args = {
   icon: 'jellyfish',
@@ -32,6 +37,11 @@ personHeart.args = {
 export const transgender = Template.bind({})
 transgender.args = {
   icon: 'transgender',
+}
+
+export const hurricane = Template.bind({})
+hurricane.args = {
+  icon: 'hurricane',
 }
 
 export const noMatch = Template.bind({})

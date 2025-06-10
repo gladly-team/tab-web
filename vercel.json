@@ -5,7 +5,5 @@
   "alias": ["dev-tab-web"],
   "cleanUrls": true,
   "trailingSlash": true,
-  "rewrites": [
-    { "source": "/v4/(.*)", "destination": "/newtab/$1" }
-  ]
+  "rewrites": [{ "source": "/v4/(.*)", "destination": "/newtab/$1" }]
 }

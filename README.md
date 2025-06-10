@@ -1,6 +1,5 @@
 [![codecov](https://codecov.io/gh/gladly-team/tab-web/branch/master/graph/badge.svg?token=Hbjg2dNtLv)](https://codecov.io/gh/gladly-team/tab-web)
 
-
 # [Tab for a Cause](https://tab.gladly.io/)
 
 The easiest way to do good every day. **[Join in](https://tab.gladly.io)**
@@ -13,12 +12,12 @@ This repo contains the latest web app. See [gladly-team/tab](https://github.com/
 2. `cd tab-web`
 3. `yarn`
 4. Set up local secret environment varables
-    1. Copy `.env.local.info` to `.env.local`
-    2. Set `FIREBASE_PRIVATE_KEY` to the staging environment key
-    3. Set cookie secrets to sufficiently long, random strings
+   1. Copy `.env.local.info` to `.env.local`
+   2. Set `FIREBASE_PRIVATE_KEY` to the staging environment key
+   3. Set cookie secrets to sufficiently long, random strings
 5. Create a user (by default, this repo relies on a cloud backend)
-    1. Visit [this staging environment](https://dev-tab2017.gladly.io/newtab/)
-    2. Sign up with **username and email**, not 3rd-party auth
+   1. Visit [this staging environment](https://dev-tab2017.gladly.io/newtab/)
+   2. Sign up with **username and email**, not 3rd-party auth
 6. `yarn go`
 7. Visit `http://localhost:3001` and sign in with the user you created above
 

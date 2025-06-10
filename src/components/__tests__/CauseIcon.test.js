@@ -12,6 +12,8 @@ import {
   mdiFoodApple,
   mdiWater,
   mdiAccountHeart,
+  mdiWeatherHurricane,
+  mdiDogSide,
 } from '@mdi/js'
 
 const getMockProps = () => ({
@@ -35,6 +37,18 @@ describe('CauseIcon component', () => {
     }
     const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
     expect(wrapper.find(PetsIcon).exists()).toEqual(true)
+  })
+
+  it('returns the dog icon', () => {
+    const CauseIcon = require('src/components/CauseIcon').default
+    const defaultMockProps = {
+      ...getMockProps(),
+      icon: 'dog',
+    }
+    const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
+    const svgIcon = wrapper.find(SvgIcon)
+    const pathD = svgIcon.find('path').prop('d')
+    expect(pathD).toEqual(mdiDogSide)
   })
 
   it('returns the heart icon when an unsupported icon name is passed', () => {
@@ -141,5 +155,17 @@ describe('CauseIcon component', () => {
     }
     const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
     expect(wrapper.find(TransgenderIcon).exists()).toEqual(true)
+  })
+
+  it('returns the hurricane icon', () => {
+    const CauseIcon = require('src/components/CauseIcon').default
+    const defaultMockProps = {
+      ...getMockProps(),
+      icon: 'hurricane',
+    }
+    const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
+    const svgIcon = wrapper.find(SvgIcon)
+    const pathD = svgIcon.find('path').prop('d')
+    expect(pathD).toEqual(mdiWeatherHurricane)
   })
 })

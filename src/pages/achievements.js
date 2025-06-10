@@ -121,7 +121,7 @@ const Achievements = () => {
             taskText="Open tabs"
             completionTime={dayjs().subtract(16, 'days').toISOString()}
             // eslint-disable-next-line prettier/prettier
-            
+
             // progress={{
             //   currentNumber: 772,
             //   targetNumber: 1000,
@@ -140,7 +140,7 @@ const Achievements = () => {
             taskText="Open 100 tabs"
             completionTime={dayjs().subtract(21, 'days').toISOString()}
             // eslint-disable-next-line prettier/prettier
-            
+
             // progress={{
             //   currentNumber: 100,
             //   targetNumber: 100,

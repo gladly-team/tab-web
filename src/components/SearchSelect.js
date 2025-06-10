@@ -186,12 +186,15 @@ const SearchSelect = ({
               </Typography>
             </div>
           )}
-          {searchEngineNode.node.isCharitable && !yahooPaidSearchRewardOptIn && (
-            <Typography align="left" className={classes.linkTextWrapper}>
-              <span className={classes.impactLinkText}>Earn More Impact </span>
-              ❤️
-            </Typography>
-          )}
+          {searchEngineNode.node.isCharitable &&
+            !yahooPaidSearchRewardOptIn && (
+              <Typography align="left" className={classes.linkTextWrapper}>
+                <span className={classes.impactLinkText}>
+                  Earn More Impact{' '}
+                </span>
+                ❤️
+              </Typography>
+            )}
           {searchEngineNode.node.isCharitable ? (
             <Typography
               className={classes.impactCopy}
