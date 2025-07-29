@@ -871,7 +871,6 @@ const Index = ({ data: fallbackData, userAgent }) => {
                         <iframe
                           title="opt-in-video"
                           frameBorder="0"
-                          allowtransparency="true"
                           src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/iframe/opt-in-video?show=icon&user_id=${user.userId}`}
                           style={{
                             height: 40,
