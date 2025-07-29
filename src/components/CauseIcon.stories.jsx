@@ -19,6 +19,11 @@ dog.args = {
   icon: 'dog',
 }
 
+export const cow = Template.bind({})
+cow.args = {
+  icon: 'cow',
+}
+
 export const jellyfish = Template.bind({})
 jellyfish.args = {
   icon: 'jellyfish',

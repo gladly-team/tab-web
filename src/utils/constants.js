@@ -4,6 +4,7 @@ export const INTL_CAT_DAY_END_2021_NOTIFICATION =
   'tab.user.hasSeenintlCatDayEnd2021Notification'
 export const LANDING_PAGE_PATH_SEAS = '/teamseas/'
 export const LANDING_PAGE_PATH_CATS = '/cats/'
+export const LANDING_PAGE_PATH_ANIMALS = '/animals/'
 export const MEDIA_ENDPOINT = process.env.NEXT_PUBLIC_MEDIA_ENDPOINT
 
 export const NOTIF_DISMISS_PREFIX = 'tab.user.dismissedNotif'
@@ -28,6 +29,7 @@ export const STORAGE_DOGS_CAUSE_ID = 'FtiPvpU1p'
 export const STORAGE_SEAS_CAUSE_ID = 'SGa6zohkY'
 export const STORAGE_BLACK_EQUITY_CAUSE_ID = 'q1FFsAhbV'
 export const STORAGE_TREES_CAUSE_ID = 'tdU_PsRIM'
+export const STORAGE_ENDING_ANIMAL_SUFFERING_CAUSE_ID = 'a5f8d2c9e'
 export const STORAGE_TABS_RECENT_DAY_COUNT = 'tab.user.lastTabDay.count'
 export const STORAGE_TABS_LAST_TAB_OPENED_DATE = 'tab.user.lastTabDay.date'
 export const STORAGE_FEATURES = 'tab.user.features'

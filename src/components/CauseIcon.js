@@ -16,10 +16,12 @@ import {
   mdiVote,
   mdiWeatherHurricane,
   mdiDogSide,
+  mdiCow,
 } from '@mdi/js'
 
 const PAW = 'paw'
 const DOG = 'dog'
+const COW = 'cow'
 const JELLYFISH = 'jellyfish'
 const HANDSHAKE = 'handshake'
 const PINE_TREE = 'pine-tree'
@@ -35,6 +37,7 @@ const HURRICANE = 'hurricane'
 const iconOptions = [
   PAW,
   DOG,
+  COW,
   JELLYFISH,
   HANDSHAKE,
   PINE_TREE,
@@ -61,6 +64,18 @@ const CauseIcon = ({ icon, className }) => {
             fillRule="evenodd"
             clipRule="evenodd"
             d={mdiDogSide}
+            fill="inherit"
+          />
+        </SvgIcon>
+      )
+      break
+    case COW:
+      iconComp = (
+        <SvgIcon className={className}>
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d={mdiCow}
             fill="inherit"
           />
         </SvgIcon>

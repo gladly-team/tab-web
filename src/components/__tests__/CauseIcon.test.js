@@ -14,6 +14,7 @@ import {
   mdiAccountHeart,
   mdiWeatherHurricane,
   mdiDogSide,
+  mdiCow,
 } from '@mdi/js'
 
 const getMockProps = () => ({
@@ -49,6 +50,18 @@ describe('CauseIcon component', () => {
     const svgIcon = wrapper.find(SvgIcon)
     const pathD = svgIcon.find('path').prop('d')
     expect(pathD).toEqual(mdiDogSide)
+  })
+
+  it('returns the cow icon', () => {
+    const CauseIcon = require('src/components/CauseIcon').default
+    const defaultMockProps = {
+      ...getMockProps(),
+      icon: 'cow',
+    }
+    const wrapper = shallow(<CauseIcon {...defaultMockProps} />)
+    const svgIcon = wrapper.find(SvgIcon)
+    const pathD = svgIcon.find('path').prop('d')
+    expect(pathD).toEqual(mdiCow)
   })
 
   it('returns the heart icon when an unsupported icon name is passed', () => {
