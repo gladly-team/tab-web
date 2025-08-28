@@ -52,7 +52,7 @@ In the future, we can consider adding session-based CSRF tokens for defense in d
 
 ### Deployment
 
-**Vercel runs unit tests and deploys**
+**Vercel runs unit tests and deploy**
 
 - Our Vercel project, [tab-web](https://vercel.com/gladly-team/tab-web), builds on commit push
 - The "dev" Git branch is mapped to our "dev" environment
