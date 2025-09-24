@@ -3,6 +3,8 @@ import { shallow } from 'enzyme'
 import Typography from '@material-ui/core/Typography'
 import Logo from 'src/components/Logo'
 import FirebaseAuth from 'src/components/FirebaseAuth'
+import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
+import useData from 'src/utils/hooks/useData'
 
 jest.mock('src/utils/pageWrappers/withRelay')
 jest.mock('src/components/FirebaseAuth', () => () => (
@@ -11,14 +13,29 @@ jest.mock('src/components/FirebaseAuth', () => () => (
 jest.mock('src/components/FullPageLoader', () => () => (
   <div data-test-id="full-page-loader-mock" />
 ))
+jest.mock('src/components/FullPageLoader', () => () => (
+  <div data-test-id="full-page-loader-mock" />
+))
 jest.mock('src/components/Logo')
 jest.mock('src/utils/pageWrappers/withSentry')
+jest.mock('src/utils/hooks/useData')
+
+const getMockProps = () => ({
+  data: {
+    app: {
+      moneyRaised: 846892.02,
+      dollarsPerDayRate: 602.12,
+    },
+  },
+})
+
+beforeEach(() => {
+  useData.mockReturnValue({ data: getMockProps().data })
+})
 
 afterEach(() => {
   jest.clearAllMocks()
 })
-
-const getMockProps = () => ({})
 
 describe('auth.js', () => {
   it('renders without error', () => {
@@ -43,7 +60,7 @@ describe('auth.js', () => {
     const AuthPage = require('src/pages/auth').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AuthPage {...mockProps} />)
-    expect(wrapper.find(Typography).first().text()).toEqual(
+    expect(wrapper.find(Typography).at(1).text()).toEqual(
       '"One of the simplest ways to raise money"'
     )
   })
@@ -53,7 +70,7 @@ describe('auth.js', () => {
     const AuthPage = require('src/pages/auth').default
     const mockProps = getMockProps()
     const wrapper = shallow(<AuthPage {...mockProps} />)
-    expect(wrapper.find(Typography).at(1).text()).toEqual('- USA Today')
+    expect(wrapper.find(Typography).last().text()).toEqual('- USA Today')
   })
 
   it('includes the FirebaseAuth component', async () => {
@@ -62,5 +79,28 @@ describe('auth.js', () => {
     const mockProps = getMockProps()
     const wrapper = shallow(<AuthPage {...mockProps} />)
     expect(wrapper.find(FirebaseAuth).exists()).toBe(true)
+  })
+
+  it('includes the MoneyRaisedContainer component', async () => {
+    expect.assertions(1)
+    const AuthPage = require('src/pages/auth.js').default
+    const mockProps = getMockProps()
+    const wrapper = shallow(<AuthPage {...mockProps} />)
+    expect(wrapper.find(MoneyRaisedContainer).exists()).toBe(true)
+  })
+
+  it('passes the expected getRelayQuery function to `useData`', async () => {
+    expect.assertions(1)
+    const AuthPage = require('src/pages/auth.js').default
+    const mockProps = {
+      ...getMockProps(),
+      data: { ...getMockProps().data, some: 'stuff' },
+    }
+    shallow(<AuthPage {...mockProps} />)
+    const useDataArg = useData.mock.calls[0][0]
+    const queryInfo = await useDataArg.getRelayQuery()
+    expect(queryInfo).toMatchObject({
+      query: expect.any(Object),
+    })
   })
 })
