@@ -218,7 +218,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
           id={`notification-modal-${slot}`}
           open={openWidget}
           style={{
-            height: '850px',
+            height: '900px',
             maxWidth: '565px',
             top: 10,
             left: 0,
