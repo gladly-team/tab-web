@@ -1,5 +1,5 @@
 /* eslint react/no-danger: 0 */
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 /**
@@ -11,16 +11,23 @@ import PropTypes from 'prop-types'
  * @returns {React.Component} Script tags for the selected ad provider
  */
 export default function Ads({ causeId }) {
-  // Check if BuySellAds is selected to conditionally render CSS
-  let showBuySellAdsCss = false
-  if (typeof window !== 'undefined') {
-    try {
-      const bucket = localStorage.getItem('tab_ad_provider_bucket_v3')
-      showBuySellAdsCss = bucket === 'buysellads'
-    } catch (e) {
-      // Silent fail - default to not showing CSS
+  // Use state to track if BuySellAds CSS should be shown
+  const [showBuySellAdsCss, setShowBuySellAdsCss] = useState(false)
+
+  // Check localStorage on client side after component mounts
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const bucket = localStorage.getItem('tab_ad_provider_bucket_v3')
+        const shouldShow = bucket === 'buysellads'
+        setShowBuySellAdsCss(shouldShow)
+        // Debug logging
+        console.log('[BuySellAds CSS] Bucket:', bucket, 'Show CSS:', shouldShow)
+      } catch (e) {
+        console.error('[BuySellAds CSS] Error checking localStorage:', e)
+      }
     }
-  }
+  }, []) // Empty dependency array means this runs once on mount
 
   return (
     <>
@@ -30,7 +37,7 @@ export default function Ads({ causeId }) {
           dangerouslySetInnerHTML={{
             __html: `
               @media only screen and (min-width: 0px) and (min-height: 0px) {
-                div[id^="bsa-zone_1754918740585-0_123456"] {
+                div[id^="bsa-zone_1754918740585-0"] {
                   min-width: 300px;
                   min-height: 50px;
                   margin-bottom: 30px;
@@ -38,7 +45,7 @@ export default function Ads({ causeId }) {
               }
 
               @media only screen and (min-width: 880px) and (min-height: 0px) {
-                div[id^="bsa-zone_1754918740585-0_123456"] {
+                div[id^="bsa-zone_1754918740585-0"] {
                   min-width: 250px;
                   min-height: 250px;
                   margin-bottom: 30px;
@@ -46,7 +53,7 @@ export default function Ads({ causeId }) {
               }
 
               @media only screen and (min-width: 0px) and (min-height: 0px) {
-                div[id^="bsa-zone_1755538933410-5_123456"] {
+                div[id^="bsa-zone_1755538933410-5"] {
                   min-width: 300px;
                   min-height: 50px;
                   margin-bottom: 130px;
@@ -54,7 +61,7 @@ export default function Ads({ causeId }) {
               }
 
               @media only screen and (min-width: 880px) and (min-height: 0px) {
-                div[id^="bsa-zone_1755538933410-5_123456"] {
+                div[id^="bsa-zone_1755538933410-5"] {
                   min-width: 250px;
                   min-height: 250px;
                   margin-bottom: 150px;
@@ -62,14 +69,14 @@ export default function Ads({ causeId }) {
               }
 
               @media only screen and (min-width: 0px) and (min-height: 0px) {
-                div[id^="bsa-zone_1754918586325-1_123456"] {
+                div[id^="bsa-zone_1754918586325-1"] {
                   min-width: 300px;
                   min-height: 50px;
                 }
               }
 
               @media only screen and (min-width: 880px) and (min-height: 0px) {
-                div[id^="bsa-zone_1754918586325-1_123456"] {
+                div[id^="bsa-zone_1754918586325-1"] {
                   min-width: 468px;
                   min-height: 60px;
                 }
