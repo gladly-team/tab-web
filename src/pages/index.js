@@ -17,7 +17,7 @@ import moment from 'moment'
 import { useGrowthBook } from '@growthbook/growthbook-react'
 import gtag from 'ga-gtag'
 import { goTo } from 'src/utils/navigation'
-import Raptive from 'src/components/head/Raptive'
+import Ads from 'src/components/head/ads'
 
 // custom components
 import Achievement from 'src/components/Achievement'
@@ -779,7 +779,7 @@ const Index = ({ data: fallbackData, userAgent }) => {
   return (
     <>
       <Head>
-        <Raptive causeId={causeId} />
+        <Ads causeId={causeId} />
       </Head>
 
       <div className={classes.pageContainer} data-test-id="new-tab-page">
