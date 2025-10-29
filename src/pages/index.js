@@ -1248,6 +1248,10 @@ const Index = ({ data: fallbackData, userAgent }) => {
                 className={classes.adsContainerRectangles}
                 id="ads-container-rectangles"
               >
+                <div id="bsa-zone_1754918740585-0_123456"></div>
+
+                <div id="bsa-zone_1755538933410-5_123456"></div>
+
                 <div
                   id="raptive-content-ad-1"
                   style={{
