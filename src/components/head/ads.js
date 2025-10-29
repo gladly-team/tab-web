@@ -11,8 +11,73 @@ import PropTypes from 'prop-types'
  * @returns {React.Component} Script tags for the selected ad provider
  */
 export default function Ads({ causeId }) {
+  // Check if BuySellAds is selected to conditionally render CSS
+  let showBuySellAdsCss = false
+  if (typeof window !== 'undefined') {
+    try {
+      const bucket = localStorage.getItem('tab_ad_provider_bucket_v3')
+      showBuySellAdsCss = bucket === 'buysellads'
+    } catch (e) {
+      // Silent fail - default to not showing CSS
+    }
+  }
+
   return (
     <>
+      {/* Conditionally render CSS for BuySellAds */}
+      {showBuySellAdsCss && (
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              @media only screen and (min-width: 0px) and (min-height: 0px) {
+                div[id^="bsa-zone_1754918740585-0_123456"] {
+                  min-width: 300px;
+                  min-height: 50px;
+                  margin-bottom: 30px;
+                }
+              }
+
+              @media only screen and (min-width: 880px) and (min-height: 0px) {
+                div[id^="bsa-zone_1754918740585-0_123456"] {
+                  min-width: 250px;
+                  min-height: 250px;
+                  margin-bottom: 30px;
+                }
+              }
+
+              @media only screen and (min-width: 0px) and (min-height: 0px) {
+                div[id^="bsa-zone_1755538933410-5_123456"] {
+                  min-width: 300px;
+                  min-height: 50px;
+                  margin-bottom: 130px;
+                }
+              }
+
+              @media only screen and (min-width: 880px) and (min-height: 0px) {
+                div[id^="bsa-zone_1755538933410-5_123456"] {
+                  min-width: 250px;
+                  min-height: 250px;
+                  margin-bottom: 150px;
+                }
+              }
+
+              @media only screen and (min-width: 0px) and (min-height: 0px) {
+                div[id^="bsa-zone_1754918586325-1_123456"] {
+                  min-width: 300px;
+                  min-height: 50px;
+                }
+              }
+
+              @media only screen and (min-width: 880px) and (min-height: 0px) {
+                div[id^="bsa-zone_1754918586325-1_123456"] {
+                  min-width: 468px;
+                  min-height: 60px;
+                }
+              }
+            `,
+          }}
+        />
+      )}
       <script
         dangerouslySetInnerHTML={{
           __html: `(function(w, d) {
@@ -171,57 +236,6 @@ export default function Ads({ causeId }) {
                     value: causeId || 'legacy'
                   })
                 })
-
-                // Add CSS styles for BuySellAds containers
-                var style = document.createElement('style')
-                style.innerHTML = \`
-                  @media only screen and (min-width: 0px) and (min-height: 0px) {
-                    div[id^="bsa-zone_1754918740585-0_123456"] {
-                      min-width: 300px;
-                      min-height: 50px;
-                      margin-bottom: 30px;
-                    }
-                  }
-
-                  @media only screen and (min-width: 880px) and (min-height: 0px) {
-                    div[id^="bsa-zone_1754918740585-0_123456"] {
-                      min-width: 250px;
-                      min-height: 250px;
-                      margin-bottom: 30px;
-                    }
-                  }
-
-                  @media only screen and (min-width: 0px) and (min-height: 0px) {
-                    div[id^="bsa-zone_1755538933410-5_123456"] {
-                      min-width: 300px;
-                      min-height: 50px;
-                      margin-bottom: 130px;
-                    }
-                  }
-
-                  @media only screen and (min-width: 880px) and (min-height: 0px) {
-                    div[id^="bsa-zone_1755538933410-5_123456"] {
-                      min-width: 250px;
-                      min-height: 250px;
-                      margin-bottom: 150px;
-                    }
-                  }
-
-                  @media only screen and (min-width: 0px) and (min-height: 0px) {
-                    div[id^="bsa-zone_1754918586325-1_123456"] {
-                      min-width: 300px;
-                      min-height: 50px;
-                    }
-                  }
-
-                  @media only screen and (min-width: 880px) and (min-height: 0px) {
-                    div[id^="bsa-zone_1754918586325-1_123456"] {
-                      min-width: 468px;
-                      min-height: 60px;
-                    }
-                  }
-                \`
-                document.head.appendChild(style)
               }
             }
           })();`,
