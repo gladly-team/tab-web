@@ -106,12 +106,6 @@ export default function Ads({ causeId }) {
                 '| Testing mode - Use ?ads=buysellads or ?ads=raptive in URL to switch'
               )
 
-              // Store the bucket in window for access in the second script
-              w.tabAdsProvider = {
-                bucket: adBucket,
-                causeId: '${causeId}'
-              }
-
               // Send log to Better Stack with 500ms delay to not block ads
               setTimeout(function() {
                 sendBetterStackLog(adBucket, '${causeId}')
@@ -143,38 +137,29 @@ export default function Ads({ causeId }) {
                   queue: []
                 }
               }
-            })(window, document);`,
-        }}
-      />
 
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `(function() {
-            // Set up targeting based on which ad provider was selected
-            if (window.tabAdsProvider) {
-              var bucket = window.tabAdsProvider.bucket
-              var causeId = window.tabAdsProvider.causeId
+              // Set up targeting based on which ad provider was selected
+              var causeId = '${causeId}'
 
-              if (bucket === 'raptive' && window.adthrive) {
+              if (adBucket === 'raptive' && w.adthrive) {
                 // Set Raptive targeting for cause
-                window.adthrive.cmd.push(function() {
-                  window.adthrive.siteAds.targeting.push({
+                w.adthrive.cmd.push(function() {
+                  w.adthrive.siteAds.targeting.push({
                     key: 'at_custom_1',
                     value: causeId
                   })
                 })
-              } else if (bucket === 'buysellads' && window.optimize) {
+              } else if (adBucket === 'buysellads' && w.optimize) {
                 // Set BuySellAds targeting for cause
-                window.optimize.queue.push(function() {
-                  window.optimize.customTargeting = window.optimize.customTargeting || []
-                  window.optimize.customTargeting.push({
+                w.optimize.queue.push(function() {
+                  w.optimize.customTargeting = w.optimize.customTargeting || []
+                  w.optimize.customTargeting.push({
                     key: 'cause',
                     value: causeId || 'legacy'
                   })
                 })
               }
-            }
-          })();`,
+            })(window, document);`,
         }}
       />
     </>

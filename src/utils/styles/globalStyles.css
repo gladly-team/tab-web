@@ -16,7 +16,7 @@
 /* BuySellAds Ad Zone Styles */
 /* Zone 1: bsa-zone_1754918740585-0 */
 @media only screen and (min-width: 0px) and (min-height: 0px) {
-  div[id^="bsa-zone_1754918740585-0"] {
+  div[id^='bsa-zone_1754918740585-0'] {
     min-width: 300px;
     min-height: 50px;
     margin-bottom: 30px;
@@ -24,7 +24,7 @@
 }
 
 @media only screen and (min-width: 880px) and (min-height: 0px) {
-  div[id^="bsa-zone_1754918740585-0"] {
+  div[id^='bsa-zone_1754918740585-0'] {
     min-width: 250px;
     min-height: 250px;
     margin-bottom: 30px;
@@ -33,7 +33,7 @@
 
 /* Zone 2: bsa-zone_1755538933410-5 */
 @media only screen and (min-width: 0px) and (min-height: 0px) {
-  div[id^="bsa-zone_1755538933410-5"] {
+  div[id^='bsa-zone_1755538933410-5'] {
     min-width: 300px;
     min-height: 50px;
     margin-bottom: 130px;
@@ -41,7 +41,7 @@
 }
 
 @media only screen and (min-width: 880px) and (min-height: 0px) {
-  div[id^="bsa-zone_1755538933410-5"] {
+  div[id^='bsa-zone_1755538933410-5'] {
     min-width: 250px;
     min-height: 250px;
     margin-bottom: 150px;
@@ -50,14 +50,14 @@
 
 /* Zone 3: bsa-zone_1754918586325-1 */
 @media only screen and (min-width: 0px) and (min-height: 0px) {
-  div[id^="bsa-zone_1754918586325-1"] {
+  div[id^='bsa-zone_1754918586325-1'] {
     min-width: 300px;
     min-height: 50px;
   }
 }
 
 @media only screen and (min-width: 880px) and (min-height: 0px) {
-  div[id^="bsa-zone_1754918586325-1"] {
+  div[id^='bsa-zone_1754918586325-1'] {
     min-width: 468px;
     min-height: 60px;
   }
