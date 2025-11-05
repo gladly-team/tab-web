@@ -71,31 +71,6 @@ export default function Ads({ causeId }) {
                 return bucket
               }
 
-              // Function to send log to Better Stack
-              function sendBetterStackLog(adBucket, causeId) {
-                try {
-                  var timestamp = new Date().toISOString()
-                  var logData = {
-                    dt: timestamp,
-                    message: 'Ad bucket selected: ' + adBucket,
-                    ad_bucket: adBucket,
-                    page: 'newtab',
-                    cause_id: causeId || 'unknown'
-                  }
-
-                  // Send the log request
-                  var xhr = new XMLHttpRequest()
-                  xhr.open('POST', 'https://s1506080.eu-nbg-2.betterstackdata.com', true)
-                  xhr.setRequestHeader('Content-Type', 'application/json')
-                  xhr.setRequestHeader('Authorization', 'Bearer WTPPGq3DeQX21uKuHhyTseMN')
-                  xhr.send(JSON.stringify(logData))
-
-                  console.log('[Better Stack] Logging ad bucket:', adBucket, 'for cause:', causeId)
-                } catch (e) {
-                  console.error('[Better Stack] Failed to send log:', e)
-                }
-              }
-
               // Check URL parameters first to see if we need to update the ad provider
               checkAndSetAdProviderFromURL()
 
@@ -105,11 +80,6 @@ export default function Ads({ causeId }) {
                 adBucket,
                 '| Testing mode - Use ?ads=buysellads or ?ads=raptive in URL to switch'
               )
-
-              // Send log to Better Stack with 500ms delay to not block ads
-              setTimeout(function() {
-                sendBetterStackLog(adBucket, '${causeId}')
-              }, 500)
 
               if (adBucket === 'raptive') {
                 // Load Raptive Ads (50% of users)
