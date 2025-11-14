@@ -127,6 +127,7 @@ export default function Ads({ causeId }) {
                     key: 'cause',
                     value: causeId || 'legacy'
                   })
+                  w.optimize.pushAll()
                 })
               }
             })(window, document);`,
