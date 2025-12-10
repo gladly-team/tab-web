@@ -161,7 +161,6 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
           id={`notification-hidden-${slot}`}
           src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/v5/notifications?user_id=${user.userId}&slot=${slot}&override=${sParams.NotificationOverride}&version=${sParams.Version}`}
           title={`notification-hidden-${slot}`}
-          style={{ marginTop: '10px', marginBottom: '10px' }}
           frameBorder="0"
         />
       )}
