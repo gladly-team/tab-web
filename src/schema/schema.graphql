@@ -557,6 +557,15 @@ type BackgroundImage implements Node {
   timestamp: String
 }
 
+"""User's background configuration that replaces the legacy backgroundImage system"""
+type BackgroundConfig {
+  """The type of background: daily, photo, color, or custom"""
+  type: String
+
+  """For color type: the hex color value"""
+  color: String
+}
+
 """Campaigns (or "charity spotlights") shown to users."""
 type Campaign {
   """The ID of the campaign"""
@@ -812,6 +821,9 @@ type User implements Node {
 
   """Users's background image"""
   backgroundImage: BackgroundImage
+
+  """User's background configuration (replaces legacy backgroundImage system)"""
+  backgroundConfig: BackgroundConfig
 
   """
   A user's cause-specific impact for the cause they are currently supporting

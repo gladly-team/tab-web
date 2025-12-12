@@ -37,6 +37,15 @@ const useStyles = makeStyles(() => ({
     left: 0,
     zIndex: 'auto',
   },
+  backgroundColor: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    zIndex: 'auto',
+    backgroundColor: ({ backgroundColor }) => backgroundColor || '#000',
+  },
   previousImage: {
     backgroundImage: ({ previousImage }) =>
       previousImage ? `url(${previousImage.imageURL})` : 'none',
@@ -69,11 +78,26 @@ const useStyles = makeStyles(() => ({
     transition: 'opacity 1000ms',
   },
 }))
+
+/**
+ * Renders the user's background - either a solid color or an image.
+ * If backgroundConfig.type is 'color', displays the specified color.
+ * Otherwise, displays the daily rotating background image.
+ *
+ * @param {Object} props - Component props
+ * @param {Object} props.user - User object containing background settings
+ * @returns {JSX.Element} Background component
+ */
 const UserBackgroundImage = ({ user }) => {
   const {
     backgroundImage: { timestamp: backgroundImageTimestamp, imageURL },
+    backgroundConfig,
     id: userId,
   } = user
+
+  // Check if we should render a solid color background
+  const isColorBackground = backgroundConfig?.type === 'color'
+
   const [backgroundImages, setBackgroundImages] = useState([
     { imageURL, preloaded: true },
   ])
@@ -113,8 +137,23 @@ const UserBackgroundImage = ({ user }) => {
   }, [backgroundImageTimestamp, userId])
   const previousImage = backgroundImages[0]
   const latestImage = backgroundImages[backgroundImages.length - 1]
-  const classes = useStyles({ previousImage, latestImage })
+  const classes = useStyles({
+    previousImage,
+    latestImage,
+    backgroundColor: backgroundConfig?.color,
+  })
 
+  // Render solid color background if backgroundConfig.type is 'color'
+  if (isColorBackground) {
+    return (
+      <div className={wrapperClassName}>
+        <div className={classes.backgroundColor} />
+        <div className={classes.tint} />
+      </div>
+    )
+  }
+
+  // Render image background (default behavior)
   return (
     <div className={wrapperClassName}>
       <img
@@ -161,6 +200,10 @@ UserBackgroundImage.propTypes = {
     backgroundImage: PropTypes.shape({
       imageURL: PropTypes.string,
       timestamp: PropTypes.string,
+    }),
+    backgroundConfig: PropTypes.shape({
+      type: PropTypes.string,
+      color: PropTypes.string,
     }),
     id: PropTypes.string.isRequired,
   }).isRequired,
