@@ -9,6 +9,10 @@ export default createFragmentContainer(UserBackgroundImage, {
         imageURL
         timestamp
       }
+      backgroundConfig {
+        type
+        color
+      }
     }
   `,
 })
