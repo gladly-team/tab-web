@@ -178,6 +178,13 @@ const SettingsPage = (props) => {
         <div className={classes.sidebarContentContainer}>
           <List className={classes.list}>
             <SettingsMenuItem to={accountURL}>Account</SettingsMenuItem>
+            <SettingsMenuItem
+              to="https://tab.gladly.io/v5/account/background"
+              IconComponent={OpenInNew}
+              target="_blank"
+            >
+              Background
+            </SettingsMenuItem>
             <SettingsMenuItem to={aboutURL}>About the Cause</SettingsMenuItem>
             <Divider className={classes.divider} />
             <SettingsMenuItem
