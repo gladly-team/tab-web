@@ -109,7 +109,11 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
 
     // See if we have any actions
     if (event.data.action) {
-      console.log('[Notification] Action received:', event.data.action, event.data)
+      console.log(
+        '[Notification] Action received:',
+        event.data.action,
+        event.data
+      )
       switch (event.data.action) {
         case 'leaderboard-open':
           if (onOpenLeaderboard) {
@@ -143,7 +147,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
     }
 
     // Log or use the received message
-    // console.log('Received message from child:', event.data, event.origin)
+    console.log('Received message from child:', event.data, event.origin)
   }
 
   // Set up the event listener
