@@ -122,6 +122,14 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
           window.location.reload()
           break
 
+        // Redirect to a specified URL.
+        case 'redirect':
+          if (event.data.url) {
+            // eslint-disable-next-line no-undef
+            window.location.href = event.data.url
+          }
+          break
+
         // Default do nothing
         default:
           break
