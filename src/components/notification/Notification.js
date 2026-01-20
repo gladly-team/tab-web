@@ -109,11 +109,6 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
 
     // See if we have any actions
     if (event.data.action) {
-      console.log(
-        '[Notification] Action received:',
-        event.data.action,
-        event.data
-      )
       switch (event.data.action) {
         case 'leaderboard-open':
           if (onOpenLeaderboard) {
@@ -129,10 +124,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
 
         // Redirect to a specified URL.
         case 'redirect':
-          console.log('[Notification] Redirect action received')
-          console.log('[Notification] URL:', event.data.url)
           if (event.data.url) {
-            console.log('[Notification] Redirecting to:', event.data.url)
             // eslint-disable-next-line no-undef
             window.location.href = event.data.url
           } else {
@@ -147,7 +139,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
     }
 
     // Log or use the received message
-    console.log('Received message from child:', event.data, event.origin)
+    // console.log('Received message from child:', event.data, event.origin)
   }
 
   // Set up the event listener
