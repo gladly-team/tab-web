@@ -181,6 +181,9 @@ const SettingsPage = (props) => {
             <SettingsMenuItem to="https://tab.gladly.io/v5/account/background">
               Background
             </SettingsMenuItem>
+            <SettingsMenuItem to="https://tab.gladly.io/v5/account/earnings">
+              Shop Earnings
+            </SettingsMenuItem>
             <SettingsMenuItem to={aboutURL}>About the Cause</SettingsMenuItem>
             <Divider className={classes.divider} />
             <SettingsMenuItem
