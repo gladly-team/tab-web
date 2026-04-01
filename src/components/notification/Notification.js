@@ -128,6 +128,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
             // eslint-disable-next-line no-undef
             window.location.href = event.data.url
           } else {
+            // eslint-disable-next-line no-console
             console.log('[Notification] No URL provided for redirect')
           }
           break
@@ -181,7 +182,7 @@ const Notification = ({ slot, user, onOpenLeaderboard }) => {
           id={`notification-modal-${slot}`}
           open={showModal}
           style={{
-            height: height,
+            height,
             marginTop: 'auto',
             marginBottom: 'auto',
             marginLeft: 'auto',
