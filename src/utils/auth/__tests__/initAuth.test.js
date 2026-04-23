@@ -6,6 +6,7 @@ import { CUSTOM_HEADER_NAME } from 'src/utils/middleware/constants'
 
 jest.mock('next-firebase-auth')
 jest.mock('src/utils/logger')
+jest.mock('cookies-next')
 
 beforeEach(() => {
   process.env.COOKIE_SECURE_SAME_SITE_NONE = 'true'
@@ -56,6 +57,29 @@ describe('initAuth.js', () => {
     initAuth()
     const config = initNFA.mock.calls[0][0]
     expect(config).toHaveProperty('tokenChangedHandler')
+  })
+
+  test('tokenChangedHandler deletes the legacy TabAuthToken cookie on every invocation', async () => {
+    // v5 used to read TabAuthToken (a duplicate of the Firebase ID token
+    // that we set client-side). v5 now reads TabAuth.AuthUserTokens directly,
+    // so we delete the legacy cookie to free up request-header space.
+    expect.assertions(2)
+    const { init: initNFA } = require('next-firebase-auth')
+    const { deleteCookie } = require('cookies-next')
+    const initAuth = require('src/utils/auth/initAuth').default
+    initAuth()
+    fetch.mockResolvedValue(getMockFetchResponse())
+    const config = initNFA.mock.calls[0][0]
+
+    // Authed branch
+    await config.tokenChangedHandler(getMockAuthUser())
+    expect(deleteCookie).toHaveBeenCalledWith('TabAuthToken', { path: '/' })
+
+    deleteCookie.mockClear()
+
+    // Unauthed branch
+    await config.tokenChangedHandler({})
+    expect(deleteCookie).toHaveBeenCalledWith('TabAuthToken', { path: '/' })
   })
 
   test('tokenChangedHandler calls login endpoint and sets custom header', async () => {
