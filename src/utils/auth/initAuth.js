@@ -3,7 +3,7 @@ import ensureValuesAreDefined from 'src/utils/ensureValuesAreDefined'
 import { apiLogin, apiLogout, authURL, dashboardURL } from 'src/utils/urls'
 import { CUSTOM_HEADER_NAME } from 'src/utils/middleware/constants'
 import logger from 'src/utils/logger'
-import { setCookie } from 'cookies-next'
+import { deleteCookie } from 'cookies-next'
 
 try {
   ensureValuesAreDefined([
@@ -24,15 +24,18 @@ const useSecureSameSiteNone =
 const tokenChangedHandler = async (authUser) => {
   let response
 
+  // Delete the legacy TabAuthToken cookie that was previously set client-side
+  // for v5's benefit. v5 now reads the Firebase ID token directly from the
+  // dotted TabAuth.AuthUserTokens cookie that next-firebase-auth manages
+  // server-side via apiLogin, so the duplicate cookie is no longer needed.
+  // The cookie was originally set with a 1-year expiry, so we explicitly
+  // delete it on every tokenChangedHandler invocation to clear it from
+  // existing browsers.
+  deleteCookie('TabAuthToken', { path: '/' })
+
   // If the user is authed, call login to set a cookie.
   if (authUser.id) {
     const userToken = await authUser.getIdToken()
-
-    // This is used by v5 of our app as cloudfront does not support cookies with dots in them.
-    const currentDate = new Date()
-    const nextYearDate = new Date(currentDate)
-    nextYearDate.setFullYear(currentDate.getFullYear() + 1)
-    setCookie('TabAuthToken', userToken, { expires: nextYearDate })
 
     response = await fetch(apiLogin, {
       method: 'POST',
