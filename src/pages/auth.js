@@ -8,6 +8,10 @@ import grey from '@material-ui/core/colors/grey'
 import Typography from '@material-ui/core/Typography'
 import FirebaseAuth from 'src/components/FirebaseAuth'
 import Logo from 'src/components/Logo'
+import useData from 'src/utils/hooks/useData'
+import MoneyRaisedContainer from 'src/components/MoneyRaisedContainer'
+import { graphql } from 'react-relay'
+import PropTypes from 'prop-types'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -36,13 +40,40 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 'bold',
   },
   quoteAttribution: {},
+  topContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignContent: 'flex-start',
+  },
 }))
 
-const Auth = () => {
+const getRelayQuery = () => ({
+  query: graphql`
+    query authQuery {
+      app {
+        ...MoneyRaisedContainer_app
+      }
+    }
+  `,
+})
+
+const Auth = ({ data: initialData }) => {
   const classes = useStyles()
+  const { data } = useData({ getRelayQuery, initialData })
+  const fetchInProgress = !data
+  console.log(fetchInProgress)
+  const { app } = data || {}
   return (
     <div className={classes.container}>
-      <Logo includeText className={classes.logo} />
+      { !fetchInProgress &&
+        <div className={classes.topContainer}>
+          <Logo includeText className={classes.logo} />
+          <Typography variant="h5">
+            <MoneyRaisedContainer app={app} />
+          </Typography>
+        </div>
+      }
       <div className={classes.loginContainer}>
         <FirebaseAuth />
       </div>
@@ -70,9 +101,15 @@ const Auth = () => {
 
 Auth.displayName = 'Auth'
 
-Auth.propTypes = {}
+Auth.propTypes = {
+  data: PropTypes.shape({
+    app: PropTypes.shape({}).isRequired,
+  }),
+}
 
-Auth.defaultProps = {}
+Auth.defaultProps = {
+  data: undefined,
+}
 
 export default flowRight([
   withAuthUser({
